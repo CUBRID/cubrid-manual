@@ -34,10 +34,10 @@ BLOCK은 프로시저/함수와 마찬가지로 Exception 처리 구조를 가�
         [ DECLARE <seq_of_declare_specs> ] <body>
 
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
-    <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
-    <seq_of_handlers> ::= <handler> [ <handler> ... ]
-    <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
+    <seq_of_statements> ::= <statement> ; { <statement> ; }...
+    <seq_of_handlers> ::= <handler> { <handler> }...
+    <handler> ::= WHEN <exception_name> { OR <exeption_name> }... THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
 
@@ -110,7 +110,7 @@ COMMIT, ROLLBACK, TRUNCATE 문은 프로그램의 실행문으로서 직접 사�
         | <open_for_statement>
 
     <open_statement> ::= OPEN <cursor> [ <function_argument> ]
-    <fetch_statement> ::= FETCH <cursor_expression> INTO <identifier> [ , <identifier>, ... ]
+    <fetch_statement> ::= FETCH <cursor_expression> INTO <identifier> { , <identifier> }...
     <close_statement> ::= CLOSE <cursor_expression>
 
     <open_for_statement> ::= OPEN <identifier> FOR <select_statement>
@@ -227,9 +227,9 @@ INTO 절을 포함한 경우 SELECT 문의 조회 결과는 단 한 건의 결�
 
     <execute_immediate> ::=
         EXECUTE IMMEDIATE <dynamic_sql> { [ <into_clause> ] [ <using_clause> ] | <using_clause> <into_clause> }
-        <using_clause> ::= USING <using_element> [ , <using_element>, ... ]
+        <using_clause> ::= USING <using_element> { , <using_element> }...
         <using_element> ::= [ IN ] <expression>
-        <into_clause> ::= INTO <identifier> [ , <identifier>, ... ]
+        <into_clause> ::= INTO <identifier> { , <identifier> }...
 
 
 * *dynamic_sql*: 문자열 타입을 갖는 표현식. 표현식은 SQL 규약에 맞는 SQL 구문 문자열을 계산 결과로 가져야 한다.
@@ -388,7 +388,7 @@ RETURN
 
     <procedure_call> ::=
         <identifier> [ <function_argument> ]
-    <function_argument> ::= ( [ <expression> [ , <expression>, ... ] ] )
+    <function_argument> ::= ( [ <expression> { , <expression> }... ] )
 
 이름 *identifier*\로 지정된 프로시저를 인자 *function_argument*\를 주어 호출한다.
 인자 개수와 각각의 타입은 해당 프로시저의 선언과 일치해야 한다.
@@ -422,7 +422,7 @@ IF
 ::
 
     <if_statement> ::=
-        IF <expression> THEN <seq_of_statements> [ <elsif_part> [ <elsif_part> ... ] ] [ <else_part> ] END IF
+        IF <expression> THEN <seq_of_statements> [ <elsif_part> { <elsif_part> }... ] [ <else_part> ] END IF
     <elsif_part> ::= ELSIF <expression> THEN <seq_of_statements>
     <else_part> ::= ELSE <seq_of_statements>
 

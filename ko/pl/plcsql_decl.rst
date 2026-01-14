@@ -9,7 +9,7 @@
 
 ::
 
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
     <declare_spec> ::=
           <variable_decl>
         | <constant_decl>
@@ -71,14 +71,14 @@
 .. code-block:: sql
 
     CREATE OR REPLACE PROCEDURE poo(a INT) AS
-    
+
         PROCEDURE inner AS
             i INT := a;
             a NUMERIC;
         BEGIN
             ...
         END;
-    
+
     BEGIN
         ...
     END;
@@ -198,7 +198,7 @@ Exception 선언
     <cursor_decl> ::=
         CURSOR <identifier> [ ( <seq_of_cursor_parameters> ) ] IS <select_statement> ;
 
-    <seq_of_cursor_parameters> ::= <cursor_parameter> [, <cursor_parameter>, ...]
+    <seq_of_cursor_parameters> ::= <cursor_parameter> { , <cursor_parameter> }...
     <cursor_parameter> ::= <identifier> [ IN ] <type_spec>
     <type_spec> ::=
           <builtin_type>
@@ -270,7 +270,7 @@ Exception 선언
     <inner_function_decl> ::=
         FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec> { IS | AS } [ <seq_of_declare_specs> ] <body> ;
 
-    <seq_of_parameters> ::= [ <parameter> [, <parameter> ...] ]
+    <seq_of_parameters> ::= [ <parameter> { , <parameter> }... ]
     <parameter> ::= <identifier> [ { IN | IN OUT | INOUT | OUT } ] <type_spec> [ COMMENT 'param_comment_string' ]
     <type_spec> ::=
           <builtin_type>
@@ -279,10 +279,10 @@ Exception 선언
         | <table>%ROWTYPE
         | <cursor>%ROWTYPE
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
-    <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
-    <seq_of_handlers> ::= <handler> [ <handler> ... ]
-    <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
+    <seq_of_statements> ::= <statement> ; { <statement> ; }...
+    <seq_of_handlers> ::= <handler> { <handler> }...
+    <handler> ::= WHEN <exception_name> { OR <exeption_name> }... THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
 * *parameter*: 인자는 IN, IN OUT, INOUT, OUT 네 가지 경우로 선언할 수 있다. IN OUT과 INOUT은 동일한 효과를 갖는다.

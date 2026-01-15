@@ -125,7 +125,7 @@ OS Environment
     *  THP (Transparent Huge Pages) is a Linux kernel feature (supported since kernel version 2.6.38) that is enabled by default in many Linux environments to improve memory management efficiency. It automatically combines small memory pages (4 KB) into larger pages (typically 2 MB), thereby reducing TLB (Translation Lookaside Buffer) overhead.
 
        However, in DBMS environments such as CUBRID, the automatic memory compaction and page migration mechanisms of THP may lead to increased system CPU usage (sys CPU) and memory allo    cation latency, which can negatively impact performance. Therefore, to ensure stable and predictable service behavior, disabling THP by setting it to never is strongly recommended. 
-    *  THP 활성화 상태 확인
+    *  Checking THP Enablement Status
 
       :: 
 
@@ -134,7 +134,7 @@ OS Environment
          
          disabled) [root]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
 
-    *  THP 조각 모음(defrag) 상태 확인
+    *  Checking THP Defragmentation Status
 
       :: 
 

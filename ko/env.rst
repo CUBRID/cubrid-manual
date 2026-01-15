@@ -120,14 +120,24 @@ OS 환경 변수
 
          예) export LD_PRELOAD=/usr/lib64/jemalloc.so.1
 
-    *  **THP (Transparent Huge Pages)** 는 리눅스 커널 기능으로 Red Hat Enterprise Linux 및 그 파생 배포판(CentOS 등)을 포함한 리눅스 OS에서 기본적으로 지원되며,커널 버전 2.6.38 이후부터 도입되어 일반적으로 활성화되어 있다.이는 메모리 관리 효율을 높이기 위해 작은 메모리 페이지(4KB)를 큰 페이지(보통 2MB)로 자동 결합하여 TLB(Translation Lookaside Buffer) 오버헤드를 줄이지만, CUBRID에서는 특정 워크로드에서 성능 문제를 일으킬 수 있어 **비활성화를 권고** 하고 있다
+    *  **THP (Transparent Huge Pages)** 는 리눅스 커널 기능(2.6.38 이상) 환경에서 메모리 관리 효율을 높이기 위해 기본적으로 활성화되어 있는 기능이다. 작은 메모리 페이지(4KB)를 큰 페이지(보통 2MB)로 자동 결합하여 TLB(Translation Lookaside Buffer) 오버헤드를 줄여준다. 하지만 CUBRID와 같은 DBMS 환경에서는 THP의 자동 메모리 재배치 과정에서 **CPU 점유율 급증 (sys cpu)** 이나 **메모리 할당 지연** 이 발생하여 성능 저하의 원인이 될 수 있으므로, 안정적인 서비스를 위해 **THP 비활성화(never)** 를 권고한다.
+    *  THP 활성화 상태 확인
 
       :: 
 
          예) [root]# cat /sys/kernel/mm/transparent_hugepage/enabled
+             [always] madvise never
+         
+         비활성방법) [root]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+    *  THP 조각 모음(defrag) 상태 확인
+
+      :: 
+
+         예) [root]# cat /sys/kernel/mm/transparent_hugepage/defrag
              always madvise [never]
-             [root]# cat /sys/kernel/mm/transparent_hugepage/defrag
-             always madvise [never]
+
+         비활성방법) [root]# echo never > /sys/kernel/mm/transparent_hugepage/defrag
  
 
 환경 변수 설정

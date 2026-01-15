@@ -12,7 +12,7 @@ unloaddb.sh 스크립트
 ====================
 
 **unloaddb** 의 실행 시간을 단축하기 위해서 서로 다른 테이블을 언로드 하기 위한 **cubrid unloaddb** 명령어를 동시에 여러 개 실행할 수 있다. 
-**unloaddb.sh** 은 이러한 과정을 자동화해주는 shell script이다.
+**unloaddb.sh** 은 이러한 과정을 자동화해주는 shell script로, $CUBRID/share/scripts 에서 찾을 수 있다.
 
 다수의 자식 process에게 균등하게 unloaddb의 부하를 배분하여 실행시키기 위해서 unloadb.sh은 catalog에서 언로드 대상 테이블들의 크기 정보를 가져온다 (DBA 권한 필요). 
 
@@ -115,6 +115,7 @@ restore_to_newdb.sh 스크립트
 
 사용자 실수나 시스템 오류로 데이터 복구가 필요한 경우, “백업본”을 이용해 운영 중인 서버에 복구를 진행해야 한다.  이때 추가 계정 생성이나 엔진 설치 등 번거로운 작업이 선행되어야 하는 불편함이 있다.
 restore_to_newdb.sh 스크립트는 별도의 추가 작업 없이, CUBRID가 설치된 기존 운영 환경에서 백업본을 사용해 신규 DB 이름으로 복구할 수 있도록 지원한다.
+스크립트 위치는 $CUBRID/share/scripts 에서 찾을 수 있다.
 
 .. warning::
 

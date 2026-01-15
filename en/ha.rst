@@ -649,9 +649,13 @@ Configuring this parameter can prevent split-brain, a phenomenon in which two ma
 
 However, the "ping check" does not work if the ICMP protocol is disabled. CUBRID provides **ha_tcp_ping_hosts** as an alternative to address this.
 
+This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
+
 **ha_tcp_ping_hosts**
 
 **ha_tcp_ping_hosts** is a parameter that can be used as an alternative to **ha_ping_hosts** when the ICMP protocol is disabled. **ha_tcp_ping_hosts** works like **ha_ping_hosts** except that the TCP layer is used instead of the IP layer for the "ping check". The default is **NULL**. A comma(,) is used to separate individual host names, and a colon(:) is used to separate a host name and a port number. So, the format of this parameter is like "ha_tcp_ping_hosts=host1:port1,host2:port2". In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in **ha_tcp_ping_hosts** and the firewall must not block the requests. **ha_tcp_ping_hosts** is ignored if the **ha_ping_hosts** is also set.
+
+This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
 Replication
 ^^^^^^^^^^^

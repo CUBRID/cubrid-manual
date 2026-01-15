@@ -131,7 +131,6 @@ OS Environment
 
          ex) [root]# cat /sys/kernel/mm/transparent_hugepage/enabled
              [always] madvise never
-         
          disabled) [root]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
 
     *  Checking THP Defragmentation Status
@@ -140,7 +139,6 @@ OS Environment
 
          ex) [root]# cat /sys/kernel/mm/transparent_hugepage/defrag
              always madvise [never]
-
          disabled) [root]# echo never > /sys/kernel/mm/transparent_hugepage/defrag
 
 

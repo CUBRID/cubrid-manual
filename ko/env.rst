@@ -127,7 +127,6 @@ OS 환경 변수
 
          예) [root]# cat /sys/kernel/mm/transparent_hugepage/enabled
              [always] madvise never
-         
          비활성방법) [root]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
 
     *  THP 조각 모음(defrag) 상태 확인
@@ -136,7 +135,6 @@ OS 환경 변수
 
          예) [root]# cat /sys/kernel/mm/transparent_hugepage/defrag
              always madvise [never]
-
          비활성방법) [root]# echo never > /sys/kernel/mm/transparent_hugepage/defrag
  
 

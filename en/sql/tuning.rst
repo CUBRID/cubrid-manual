@@ -1009,7 +1009,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 .. _parallel-hint:
 
-*   **PARALLEL** ( *degree* ): This is a hint to enable parallel query execution (parallel heap scan, parallel uncorrelated subquery execution, parallel hash join, parallel sort) and specify the degree of parallelism. *degree* must be an integer value of 2 or higher, indicating the number of worker threads to use for parallel processing. For more details, see :ref:`parallel-query`.
+*   **PARALLEL** ( *degree* ): This is a hint to enable parallel query execution (parallel heap scan, parallel subquery execution, parallel hash join, parallel sort) and specify the degree of parallelism. *degree* must be an integer value of 0 or higher, indicating the number of worker threads to use for parallel processing. When set to 0 or 1, parallel processing is disabled. For more details, see :ref:`parallel-query`.
 
     .. code-block:: sql
 
@@ -1025,7 +1025,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 .. _no-parallel-subquery:
 
-*   **NO_PARALLEL_SUBQUERY**: This is a hint to disable parallel execution of uncorrelated subqueries. For more details, see :ref:`parallel-query`.
+*   **NO_PARALLEL_SUBQUERY**: This is a hint to disable parallel execution of subqueries. For more details, see :ref:`parallel-query`.
 
     .. code-block:: sql
 
@@ -4731,7 +4731,7 @@ The cached query is shown as **query_string** in the middle of the result screen
 
 When executing a query using :ref:`query profiling <query-profiling>`\, profiling information for the uncorrelated subquery cache is displayed as sub-information of the subquery to which the uncorrelated subquery cache is applied.
 
-The following is an example of subquery cache profiling information displayed when executing an uncorrelated subquery.
+The following is an example of subquery cache profiling information displayed when executing a subquery.
 
 ::
 

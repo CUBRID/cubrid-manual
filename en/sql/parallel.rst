@@ -1,8 +1,8 @@
 
 .. _parallel-query:
 
-Parallel Query Processing
-==========================
+Parallel Execution
+==================
 
 CUBRID provides parallel query execution capabilities to efficiently process large amounts of data. Parallel query execution can significantly improve query performance by using multiple worker threads to perform tasks concurrently.
 
@@ -12,7 +12,7 @@ Overview
 Parallel queries provide the following key features:
 
 *   **Parallel Heap Scan**: Improves heap table scanning performance by using multiple worker threads when scanning large amounts of data.
-*   **Parallel Uncorrelated Subquery Execution**: Executes uncorrelated subqueries that can run independently using multiple worker threads simultaneously.
+*   **Parallel Subquery Execution**: Executes subqueries that can run independently using multiple worker threads simultaneously.
 *   **Parallel Hash Join**: Performs hash join operations in parallel.
 *   **Parallel Sort**: Performs sorting operations in parallel.
 
@@ -62,7 +62,6 @@ Parallel heap scan is not supported if any of the following apply:
 
 *   When not the first table in a JOIN
 *   When it is a correlated subquery
-*   When there is a subquery in the condition clause
 
 .. note::
 
@@ -81,23 +80,14 @@ Parallel heap scan is not supported if any of the following apply:
     FROM large_table;
 
     -- When using index scan
-    SELECT /*+ PARALLEL(4) USE_IDX */ * 
+    SELECT /*+ PARALLEL(4) */ * 
     FROM large_table 
-    WHERE indexed_column = 100;
+    WHERE indexed_column = 100 using index idx_large_table_indexed_column;
 
     -- SELECT FOR UPDATE
     SELECT /*+ PARALLEL(4) */ * 
     FROM large_table 
     FOR UPDATE;
-
-    -- Correlated subquery
-    SELECT * 
-    FROM orders o
-    WHERE EXISTS (
-        SELECT 1 
-        FROM order_items oi 
-        WHERE oi.order_id = o.id AND oi.quantity > 10
-    );
 
     -- Using session variables
     SET @user_id = 123;
@@ -299,25 +289,25 @@ COUNT optimization shows rows as 0 because the result is a single row, and the a
 Parallel Subquery Execution
 ----------------------------
 
-Parallel Uncorrelated Subquery Execution is a feature that improves query performance by using multiple worker threads to simultaneously execute uncorrelated subqueries that can run independently.
+Parallel Subquery Execution is a feature that improves query performance by using multiple worker threads to simultaneously execute subqueries that can run independently.
 
 Subquery Execution Overview
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Since uncorrelated subqueries can be executed independently of the outer query, when there are multiple subqueries, executing them in parallel can reduce overall query execution time. Each subquery is executed in an independent worker thread, and when all subqueries are completed, the results are integrated to generate the final result.
+Since subqueries can be executed independently of the outer query, when there are multiple subqueries, executing them in parallel can reduce overall query execution time. Each subquery is executed in an independent worker thread, and when all subqueries are completed, the results are integrated to generate the final result.
 
-Parallel execution of uncorrelated subqueries is possible if the :ref:`parallelism <parallelism>` parameter is set to 2 or higher, or if the degree of parallelism is specified to 2 or higher using the **PARALLEL** ( *degree* ) hint.
+Parallel execution of subqueries is possible if the :ref:`parallelism <parallelism>` parameter is set to 2 or higher, or if the degree of parallelism is specified to 2 or higher using the **PARALLEL** ( *degree* ) hint.
 
-The **NO_PARALLEL_SUBQUERY** hint can be used to disable parallel execution of uncorrelated subqueries.
+The **NO_PARALLEL_SUBQUERY** hint can be used to disable parallel execution of subqueries.
 
 Execution Conditions
 ^^^^^^^^^^^^^^^^^^^^
 
-Parallel execution of uncorrelated subqueries is possible when all of the following conditions are met:
+Parallel execution of subqueries is possible when all of the following conditions are met:
 
 *   The :ref:`max_parallel_workers <max_parallel_workers>` parameter is set to 2 or higher, and available worker threads exist
 *   The :ref:`parallelism <parallelism>` parameter is set to 2 or higher, or a **PARALLEL** (2) or higher hint is specified
-*   The uncorrelated subquery is connected to the top-level XASL
+*   The subquery is connected to the top-level XASL
 *   The **NO_PARALLEL_SUBQUERY** hint is not used
 
 .. code-block:: sql
@@ -325,7 +315,7 @@ Parallel execution of uncorrelated subqueries is possible when all of the follow
     -- parallelism parameter setting (cubrid.conf)
     -- parallelism=4
 
-    -- Uncorrelated subquery parallel execution example
+    -- Subquery parallel execution example
     SELECT *
     FROM orders
     WHERE customer_id IN (
@@ -340,19 +330,23 @@ Parallel execution of uncorrelated subqueries is possible when all of the follow
     FROM orders
     WHERE customer_id IN (
         SELECT customer_id FROM customers WHERE region = 'Asia'
+    )
+    AND product_id IN (
+        SELECT product_id FROM products WHERE category = 'Electronics'
     );
 
 Cases Not Applied
 ^^^^^^^^^^^^^^^^^
 
-Parallel execution of uncorrelated subqueries is not applied if any of the following apply:
+Parallel execution of subqueries is not applied if any of the following apply:
 
-*   The uncorrelated subquery is not directly connected to the top-level query (such as subqueries inside nested subqueries)
+*   The subquery is not directly connected to the top-level query (such as subqueries inside nested subqueries)
 *   CTE (Common Table Expression) recursive part exists or there are references between CTEs
-*   References between uncorrelated subqueries exist due to derived tables (inline views), etc.
+*   References between subqueries exist due to derived tables (inline views), etc.
 *   Object DBMS features are used (such as path expressions, etc.)
 *   **JSON_TABLE** or SET type table scans are included
 *   The subquery condition clause contains stored procedures (Java SP)
+*   When it is a correlated subquery
 
 .. code-block:: sql
 
@@ -405,9 +399,9 @@ Parallel execution of uncorrelated subqueries is not applied if any of the follo
 Subquery Performance Considerations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Parallel execution of uncorrelated subqueries has significant performance improvements in the following cases:
+Parallel execution of subqueries has significant performance improvements in the following cases:
 
-*   When multiple independent uncorrelated subqueries exist
+*   When multiple independent subqueries exist
 *   When each subquery's execution time is sufficiently long
 *   When sufficient CPU cores are available
 *   When subquery result size is appropriate
@@ -422,7 +416,7 @@ On the other hand, performance may degrade in the following cases:
 Related Parameters
 ^^^^^^^^^^^^^^^^^^
 
-To effectively use parallel execution of uncorrelated subqueries, the following parameters should be set appropriately:
+To effectively use parallel execution of subqueries, the following parameters should be set appropriately:
 
 *   :ref:`max_parallel_workers <max_parallel_workers>`: Maximum number of parallel workers across the server
 *   :ref:`parallelism <parallelism>`: Default degree of parallelism
@@ -436,7 +430,7 @@ To effectively use parallel execution of uncorrelated subqueries, the following 
 Subquery Trace Information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When parallel execution of uncorrelated subqueries is used, parallel processing information is output to :ref:`SQL trace <query-profiling>`.
+When parallel execution of subqueries is used, parallel processing information is output to :ref:`SQL trace <query-profiling>`.
 
 .. code-block:: sql
 
@@ -467,9 +461,9 @@ When parallel execution of uncorrelated subqueries is used, parallel processing 
                     SCAN (table: dba.products), (heap time: 0, fetch: 3, ioread: 0, readrows: 500, rows: 125)
                     ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
-Uncorrelated subquery parallel execution SQL trace is output in the following format:
+Subquery parallel execution SQL trace is output in the following format:
 
-*   **SUBQUERY (uncorrelated)**: Indicates uncorrelated subquery execution
+*   **SUBQUERY (uncorrelated)**: Indicates subquery execution
 *   **parallel workers**: Number of worker threads used for parallel execution
 *   **time**: Time spent on parallel execution (milliseconds)
 *   Each subquery is displayed as an independent SELECT, and execution statistics for each are output
@@ -591,11 +585,11 @@ The degree of parallelism for parallel sort is determined according to throughpu
 Subquery Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Parallel execution of uncorrelated subqueries is activated when multiple subqueries exist that do not reference each other's results.
+Parallel execution of subqueries is activated when multiple subqueries exist that do not reference each other's results.
 
 *   The degree of parallelism is fixed at 2
 *   Parallel execution is possible when each subquery can run independently and does not reference each other's results
-*   When multiple independent uncorrelated subqueries exist, the effect of parallel execution is significant
+*   When multiple independent subqueries exist, the effect of parallel execution is significant
 
 .. code-block:: sql
 

@@ -1,7 +1,7 @@
 
-*************************
-Parallel Query Processing
-*************************
+******************
+Parallel Execution
+******************
 
 .. toctree::
     :maxdepth: 2

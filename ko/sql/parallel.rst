@@ -1,33 +1,33 @@
 
 .. _parallel-query:
 
-병렬 질의 처리
+병렬 실행
 ==============
 
-CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 쿼리 실행 기능을 제공한다. 병렬 쿼리 실행은 여러 워커 스레드를 사용하여 작업을 동시에 수행함으로써 쿼리 성능을 크게 향상시킬 수 있다.
+CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 질의 실행 기능을 제공한다. 병렬 질의 실행은 여러 워커 스레드를 사용하여 작업을 동시에 수행함으로써 쿼리 성능을 크게 향상시킬 수 있다.
 
 개요
 ----
 
-병렬 쿼리는 다음과 같은 주요 기능을 제공한다:
+병렬 질의는 다음과 같은 주요 기능을 제공한다:
 
 *   **병렬 힙 스캔(Parallel Heap Scan)**: 대량의 데이터를 스캔할 때 여러 워커 스레드를 사용하여 힙 테이블의 스캔 성능을 향상시킨다.
-*   **병렬 비상관부질의 실행(Parallel Uncorrelated Subquery Execution)**: 서로 독립적으로 실행 가능한 비상관 부질의들을 여러 워커 스레드를 사용하여 동시에 실행한다.
+*   **병렬 부질의 실행(Parallel Uncorrelated Subquery Execution)**: 서로 독립적으로 실행 가능한 부질의들을 여러 워커 스레드를 사용하여 동시에 실행한다.
 *   **병렬 해시 조인(Parallel Hash Join)**: 해시 조인 작업을 병렬로 수행한다.
 *   **병렬 정렬(Parallel Sort)**: 정렬 작업을 병렬로 수행한다.
 
 설정 방법
 ^^^^^^^^^
 
-병렬 쿼리 실행은 다음과 같이 설정할 수 있다:
+병렬 질의 실행은 다음과 같이 설정할 수 있다:
 
-*   :ref:`parallelism <parallelism>` 파라미터를 2 이상으로 설정하면 조건을 만족하는 쿼리에서 병렬 쿼리 실행이 자동으로 활성화될 수 있다.
+*   :ref:`parallelism <parallelism>` 파라미터를 2 이상으로 설정하면 조건을 만족하는 쿼리에서 병렬 질의 실행이 자동으로 활성화될 수 있다.
 *   **PARALLEL** ( *degree* ) 힌트를 사용하여 쿼리별로 병렬 처리 정도를 명시적으로 지정할 수 있다. *degree* 는 2 이상의 정수 값이어야 하며, 사용할 워커 스레드의 수를 의미한다.
 *   :ref:`max_parallel_workers <max_parallel_workers>` 파라미터는 서버 전역에서 동시에 실행 가능한 병렬 워커 스레드의 최대 개수를 설정한다(기본값: 100).
 
 .. note::
 
-    max_parallel_workers와 parallelism 파라미터는 기본값이 각각 100과 4로 설정되어 있어 별도 설정 없이도 병렬 쿼리를 사용할 수 있다.
+    max_parallel_workers와 parallelism 파라미터는 기본값이 각각 100과 4로 설정되어 있어 별도 설정 없이도 병렬 질의를 사용할 수 있다.
 
 .. _parallel-heap-scan:
 
@@ -64,11 +64,10 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 쿼�
 
 *   JOIN 첫번째 테이블이 아닌 경우
 *   상관 부질의인 경우
-*   조건절에 부질의가 있는 경우
 
 .. note::
 
-    max_parallel_workers와 parallelism 파라미터의 기본값은 별도의 설정 없이도 병렬 쿼리를 사용할 수 있도록 구성되어 있다. 필요에 따라 cubrid.conf 파일에서 해당 값을 조정할 수 있다. ::
+    max_parallel_workers와 parallelism 파라미터의 기본값은 별도의 설정 없이도 병렬 질의를 사용할 수 있도록 구성되어 있다. 필요에 따라 cubrid.conf 파일에서 해당 값을 조정할 수 있다. ::
 
         # cubrid.conf
         max_parallel_workers=200  # 기본값: 100
@@ -83,23 +82,14 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 쿼�
     FROM large_table;
 
     -- 인덱스 스캔 사용 시
-    SELECT /*+ PARALLEL(4) USE_IDX */ * 
+    SELECT /*+ PARALLEL(4) */ * 
     FROM large_table 
-    WHERE indexed_column = 100;
+    WHERE indexed_column = 100 using index idx_large_table_indexed_column;
 
     -- SELECT FOR UPDATE
     SELECT /*+ PARALLEL(4) */ * 
     FROM large_table 
     FOR UPDATE;
-
-    -- 상관 부질의
-    SELECT * 
-    FROM orders o
-    WHERE EXISTS (
-        SELECT 1 
-        FROM order_items oi 
-        WHERE oi.order_id = o.id AND oi.quantity > 10
-    );
 
     -- 세션 변수 사용
     SET @user_id = 123;
@@ -127,7 +117,7 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 쿼�
 *   인덱스 스캔이 더 효율적인 경우
 *   시스템 리소스(CPU, 메모리)가 부족한 경우
 
-병렬 쿼리 사용 시에는 :ref:`max_parallel_workers <max_parallel_workers>` 파라미터를 적절히 설정하여 시스템 리소스 경쟁을 방지해야 한다. 일반적으로 CPU 코어 수 정도로 설정하는 것을 권장한다.
+병렬 질의 사용 시에는 :ref:`max_parallel_workers <max_parallel_workers>` 파라미터를 적절히 설정하여 시스템 리소스 경쟁을 방지해야 한다. 일반적으로 CPU 코어 수 정도로 설정하는 것을 권장한다.
 
 힙 스캔 최적화 (Mergeable List)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -299,28 +289,28 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 
 .. _parallel-subquery-execution:
 
-비상관 부질의 병렬 실행
+부질의 병렬 실행
 ------------------------
 
-비상관 부질의 병렬 실행(Parallel Uncorrelated Subquery Execution)은 서로 독립적으로 실행 가능한 비상관 부질의(uncorrelated subquery)들을 여러 워커 스레드를 사용하여 동시에 실행함으로써 쿼리 성능을 향상시키는 기능이다.
+부질의 병렬 실행(Parallel Subquery Execution)은 서로 독립적으로 실행 가능한 부질의(subquery)들을 여러 워커 스레드를 사용하여 동시에 실행함으로써 쿼리 성능을 향상시키는 기능이다.
 
 부질의 실행 개요
 ^^^^^^^^^^^^^^^^
 
-비상관 부질의는 외부 쿼리와 독립적으로 실행될 수 있으므로, 여러 부질의가 있는 경우 이들을 병렬로 실행하면 전체 쿼리 실행 시간을 단축할 수 있다. 각 부질의는 독립적인 워커 스레드에서 실행되며, 모든 부질의의 실행이 완료되면 결과가 통합되어 최종 결과를 생성한다.
+부질의는 외부 쿼리와 독립적으로 실행될 수 있으므로, 여러 부질의가 있는 경우 이들을 병렬로 실행하면 전체 쿼리 실행 시간을 단축할 수 있다. 각 부질의는 독립적인 워커 스레드에서 실행되며, 모든 부질의의 실행이 완료되면 결과가 통합되어 최종 결과를 생성한다.
 
-:ref:`parallelism <parallelism>` 파라미터가 2 이상으로 설정되어 있거나, **PARALLEL** ( *degree* ) 힌트를 사용하여 병렬 정도를 2 이상으로 지정하면 비상관 부질의의 병렬 실행이 가능하다.
+:ref:`parallelism <parallelism>` 파라미터가 2 이상으로 설정되어 있거나, **PARALLEL** ( *degree* ) 힌트를 사용하여 병렬 정도를 2 이상으로 지정하면 부질의의 병렬 실행이 가능하다.
 
-**NO_PARALLEL_SUBQUERY** 힌트를 사용하면 비상관 부질의의 병렬 실행을 비활성화할 수 있다.
+**NO_PARALLEL_SUBQUERY** 힌트를 사용하면 부질의의 병렬 실행을 비활성화할 수 있다.
 
 실행 조건
 ^^^^^^^^^
 
-다음 조건을 모두 만족할 때 비상관 부질의의 병렬 실행이 가능하다:
+다음 조건을 모두 만족할 때 부질의의 병렬 실행이 가능하다:
 
 *   :ref:`max_parallel_workers <max_parallel_workers>` 파라미터가 2 이상으로 설정되어 있고, 사용 가능한 워커 스레드가 있는 경우
 *   :ref:`parallelism <parallelism>` 파라미터가 2 이상으로 설정되어 있거나, **PARALLEL** (2) 이상의 힌트가 명시된 경우
-*   비상관 부질의가 top-level XASL에 연결되어 있는 경우
+*   부질의가 top-level XASL에 연결되어 있는 경우
 *   **NO_PARALLEL_SUBQUERY** 힌트가 사용되지 않은 경우
 
 .. code-block:: sql
@@ -328,7 +318,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
     -- parallelism 파라미터 설정 (cubrid.conf)
     -- parallelism=4
 
-    -- 비상관 부질의 병렬 실행 예제
+    -- 부질의 병렬 실행 예제
     SELECT *
     FROM orders
     WHERE customer_id IN (
@@ -343,19 +333,23 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
     FROM orders
     WHERE customer_id IN (
         SELECT customer_id FROM customers WHERE region = 'Asia'
+    )
+    AND product_id IN (
+        SELECT product_id FROM products WHERE category = 'Electronics'
     );
 
 적용되지 않는 경우
 ^^^^^^^^^^^^^^^^^^
 
-다음 중 하나라도 해당되면 비상관 부질의의 병렬 실행이 적용되지 않는다:
+다음 중 하나라도 해당되면 부질의의 병렬 실행이 적용되지 않는다:
 
-*   비상관 부질의가 최상위 레벨 쿼리에 직접 연결되지 않은 경우 (중첩된 부질의 내부의 부질의 등)
+*   부질의가 최상위 레벨 쿼리에 직접 연결되지 않은 경우 (중첩된 부질의 내부의 부질의 등)
 *   CTE(Common Table Expression)의 recursive 부분이 존재하거나 CTE 간 참조가 있는 경우
-*   derived table(인라인 뷰) 등에 의해 비상관 부질의 간 참조가 존재하는 경우
+*   derived table(인라인 뷰) 등에 의해 부질의 간 참조가 존재하는 경우
 *   Object DBMS 기능을 사용하는 경우 (path expression 등)
 *   JSON_TABLE이나 SET 타입 테이블의 스캔이 포함된 경우
 *   부질의 조건절에 저장 프로시저(Java SP)가 포함된 경우
+*   상관 부질의인 경우
 
 .. code-block:: sql
 
@@ -408,9 +402,9 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 부질의 성능 고려사항
 ^^^^^^^^^^^^^^^^^^^^
 
-비상관 부질의의 병렬 실행은 다음과 같은 경우에 성능 향상 효과가 크다:
+부질의의 병렬 실행은 다음과 같은 경우에 성능 향상 효과가 크다:
 
-*   복수의 독립적인 비상관 부질의가 존재하는 경우
+*   복수의 독립적인 부질의가 존재하는 경우
 *   각 부질의의 실행 시간이 충분히 긴 경우
 *   CPU 코어가 충분히 사용 가능한 경우
 *   부질의 결과 크기가 적절한 경우
@@ -425,7 +419,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 관련 파라미터
 ^^^^^^^^^^^^^
 
-비상관 부질의의 병렬 실행을 효과적으로 사용하려면 다음 파라미터들을 적절히 설정해야 한다:
+부질의의 병렬 실행을 효과적으로 사용하려면 다음 파라미터들을 적절히 설정해야 한다:
 
 *   :ref:`max_parallel_workers <max_parallel_workers>`: 서버 전역의 최대 병렬 워커 수
 *   :ref:`parallelism <parallelism>`: 기본 병렬 처리 정도
@@ -439,7 +433,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 부질의 추적 정보
 ^^^^^^^^^^^^^^^^
 
-비상관 부질의의 병렬 실행이 사용되면 :ref:`SQL 트레이스 <query-profiling>`\에 병렬 처리 정보가 출력된다.
+부질의의 병렬 실행이 사용되면 :ref:`SQL 트레이스 <query-profiling>`\에 병렬 처리 정보가 출력된다.
 
 .. code-block:: sql
 
@@ -470,9 +464,9 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
                     SCAN (table: dba.products), (heap time: 0, fetch: 3, ioread: 0, readrows: 500, rows: 125)
                     ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
-비상관 부질의 병렬 실행 SQL 트레이스는 다음과 같은 형식으로 출력된다:
+부질의 병렬 실행 SQL 트레이스는 다음과 같은 형식으로 출력된다:
 
-*   **SUBQUERY (uncorrelated)**: 비상관 부질의 실행 표시
+*   **SUBQUERY (uncorrelated)**: 부질의 실행 표시
 *   **parallel workers**: 병렬 실행에 사용된 워커 스레드의 수
 *   **time**: 병렬 실행에 소요된 시간 (밀리초)
 *   각 부질의는 독립적인 SELECT로 표시되며, 각각의 실행 통계가 출력된다
@@ -481,13 +475,13 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 
 .. _parallel-query-throughput-rules:
 
-병렬 쿼리 처리량 규칙
+병렬 질의 처리량 규칙
 ---------------------
 
 처리량 규칙 개요
 ^^^^^^^^^^^^^^^^
 
-병렬 쿼리 실행은 높은 성능을 제공하지만, 동시에 서버 자원을 많이 소모한다. 소수의 쿼리가 병렬 실행으로 서버 자원을 과도하게 선점하면 다른 다수의 쿼리 성능이 저하될 수 있다. 이를 방지하기 위해 CUBRID는 병렬 실행의 효과가 큰 쿼리만 선별하여 병렬 실행을 허용하는 처리량 규칙을 적용한다.
+병렬 질의 실행은 높은 성능을 제공하지만, 동시에 서버 자원을 많이 소모한다. 소수의 쿼리가 병렬 실행으로 서버 자원을 과도하게 선점하면 다른 다수의 쿼리 성능이 저하될 수 있다. 이를 방지하기 위해 CUBRID는 병렬 실행의 효과가 큰 쿼리만 선별하여 병렬 실행을 허용하는 처리량 규칙을 적용한다.
 
 각 병렬 연산의 실제 병렬 처리 수준은 다음 요인에 따라 결정된다:
 
@@ -594,11 +588,11 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 부질의 처리량 규칙
 ^^^^^^^^^^^^^^^^^^
 
-비상관 부질의(Uncorrelated Subquery)의 병렬 실행은 서로의 결과를 참조하지 않는 복수의 부질의가 존재할 때 활성화된다.
+부질의(Subquery)의 병렬 실행은 서로의 결과를 참조하지 않는 복수의 부질의가 존재할 때 활성화된다.
 
 *   병렬 처리 수준은 2로 고정된다
 *   각 부질의가 독립적으로 실행 가능하고 서로의 결과를 참조하지 않는 경우 병렬 실행이 가능하다
-*   여러 독립적인 비상관 부질의가 존재하는 경우 병렬 실행의 효과가 크다
+*   여러 독립적인 부질의가 존재하는 경우 병렬 실행의 효과가 크다
 
 .. code-block:: sql
 
@@ -619,7 +613,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 병렬 스레드 풀이 부족하면 일부 연산만 병렬로 수행하거나, 병렬 실행을 전혀 수행하지 못할 수 있다.
 
 *   :ref:`max_parallel_workers <max_parallel_workers>` 파라미터로 전역 워커 풀의 최대 개수를 설정한다
-*   각 서버 스레드는 병렬 쿼리 실행 전에 필요한 워커 수를 미리 예약하고, 작업 완료 후 해제한다
+*   각 서버 스레드는 병렬 질의 실행 전에 필요한 워커 수를 미리 예약하고, 작업 완료 후 해제한다
 *   예약에 실패할 경우 일반적인 단일 스레드 실행 방식으로 쿼리가 수행된다
 *   쿼리 전체에서 사용되는 병렬 처리 수준의 합은 :ref:`parallelism <parallelism>` 파라미터 값을 넘을 수 있으나, :ref:`max_parallel_workers <max_parallel_workers>` 값을 초과할 수는 없다
 
@@ -632,7 +626,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 처리량 성능 고려사항
 ^^^^^^^^^^^^^^^^^^^^
 
-병렬 쿼리 처리량 규칙을 통한 최적화:
+병렬 질의 처리량 규칙을 통한 최적화:
 
 *   작은 테이블에 대한 불필요한 병렬 실행을 방지하여 오버헤드를 줄인다
 *   테이블 크기에 비례하여 병렬 처리 수준을 자동으로 조정한다
@@ -641,7 +635,7 @@ COUNT 최적화는 결과 행이 하나이므로 rows가 0으로 표시되며, �
 
 권장 설정:
 
-*   **max_parallel_workers**: 동시 실행 가능한 병렬 쿼리 수와 각 쿼리의 평균 병렬 처리 수준을 고려하여 설정
+*   **max_parallel_workers**: 동시 실행 가능한 병렬 질의 수와 각 쿼리의 평균 병렬 처리 수준을 고려하여 설정
 *   **parallelism**: 시스템의 물리 코어 수를 고려하여 설정 (보통 4~8 정도가 적절)
 *   대용량 테이블이 많은 환경에서는 **max_parallel_workers** 값을 높게 설정
 *   소규모 테이블이 많은 환경에서는 기본값 사용을 권장

@@ -4,26 +4,26 @@
 Parallel Execution
 ==================
 
-CUBRID provides parallel query execution capabilities to efficiently process large amounts of data. Parallel query execution can significantly improve query performance by using multiple worker threads to perform tasks concurrently.
+CUBRID provides parallel query execution capabilities to efficiently process large amounts of data. Parallel query execution divides a single query into multiple work units, which are then processed by multiple worker threads simultaneously, dramatically reducing response time.
 
 Overview
 --------
 
 Parallel queries provide the following key features:
 
-*   **Parallel Heap Scan**: Improves heap table scanning performance by using multiple worker threads when scanning large amounts of data.
-*   **Parallel Subquery Execution**: Executes subqueries that can run independently using multiple worker threads simultaneously.
-*   **Parallel Hash Join**: Performs hash join operations in parallel.
-*   **Parallel Sort**: Performs sorting operations in parallel.
+*   **Parallel Heap Scan**: Multiple worker threads divide and scan heap regions, improving large table scanning performance.
+*   **Parallel Subquery Execution**: Independent subqueries (uncorrelated subqueries) are processed simultaneously by individual workers, improving query response time.
+*   **Parallel Hash Join**: Parallelizes both the build and probe phases, improving response time during hash join operations.
+*   **Parallel Sort**: Divides data to be sorted among multiple worker threads, sorts in parallel, then merges the results, improving sort response time.
 
 Configuration
 ^^^^^^^^^^^^^
 
-Parallel query execution can be configured as follows:
+Parallel query execution can be controlled through system parameters and SQL hints.
 
-*   Setting the :ref:`parallelism <parallelism>` parameter to 2 or higher can automatically enable parallel query execution for queries that meet the conditions.
-*   Use the **PARALLEL** ( *degree* ) hint to explicitly specify the degree of parallelism for each query. *degree* must be an integer value of 2 or higher, indicating the number of worker threads to use.
-*   The :ref:`max_parallel_workers <max_parallel_workers>` parameter sets the maximum number of parallel worker threads that can be executed simultaneously across the server (default: 100).
+*   Setting the :ref:`parallelism <parallelism>` parameter to 2 or higher enables the optimizer to determine parallel query execution during query processing.
+*   Use the **PARALLEL** ( *degree* ) hint to explicitly specify the degree of parallelism for each query. *degree* is the number of workers to use and must be an integer value of 2 or higher. Hint-specified values take precedence over the parallelism parameter setting.
+*   The :ref:`max_parallel_workers <max_parallel_workers>` parameter sets the maximum number of parallel worker threads that can be executed simultaneously across the entire server (default: 100).
 
 .. note::
 
@@ -34,38 +34,47 @@ Parallel query execution can be configured as follows:
 Parallel Heap Scan
 ------------------
 
-Parallel Heap Scan is a feature that improves heap table scanning performance by using multiple worker threads when scanning large amounts of data. Performance can be significantly improved over single-threaded heap scanning, especially when processing large amounts of data with low selectivity (approximately less than 0.05).
+Parallel Heap Scan is a feature that improves heap table scanning performance by using multiple worker threads when scanning large amounts of data. Performance can be significantly improved over single-threaded heap scanning, especially when selectivity is low (typically 0.05 or less) and processing large amounts of data.
 
 Heap Scan Overview
 ^^^^^^^^^^^^^^^^^^
 
-Parallel heap scan distributes table pages to multiple worker threads for concurrent scanning, and each worker thread processes its assigned pages independently. The processed results are collected through a result queue, and the main thread integrates these results to generate the final result.
+Parallel heap scan divides large tables into logical units for simultaneous scanning by multiple worker threads, with each worker thread independently scanning assigned pages while processing filter conditions (predicates). The processed results are collected through a result queue, and the main thread integrates these results to generate the final result and returns it to the user.
 
-The **NO_PARALLEL_HEAP_SCAN** hint can be used to disable parallel heap scan.
+The **NO_PARALLEL_HEAP_SCAN** hint can be used to disable parallel heap scan. When used together with the **PARALLEL** hint, the **NO_PARALLEL_HEAP_SCAN** hint takes precedence.
 
 .. note::
 
-    The actual degree of parallelism for parallel heap scan is automatically determined by throughput rules. For more details, see :ref:`parallel-query-throughput-rules`.
+    The actual degree of parallelism for parallel heap scan is automatically optimized by throughput rules within the user-configured upper limit. For more details, see :ref:`parallel-query-throughput-rules`.
 
 Constraints
 ^^^^^^^^^^^
 
-Parallel heap scan is not supported if any of the following apply:
+If any of the following conditions apply, parallel heap scan is not supported and executes in single-threaded mode:
 
 *   Statements that do not support concurrent processing
 
-    *    JavaSP, Serial, session variables, Recursive CTE, Connect By, object DBMS features
+    *    When using stored procedures (JavaSP, PL/CSQL)
 
-*   Cases requiring lock (X-LOCK) acquisition such as update
+    *    When referencing session variables
+  
+    *    When using Recursive CTE or Connect By clauses
+  
+    *    When using CUBRID object DBMS specific features
 
-    *    for update, incr(), update statement, merge statement
+*   Cases requiring exclusive lock (X-LOCK) acquisition
 
-*   When not the first table in a JOIN
+    *    SELECT ... FOR UPDATE clause
+    *    When using incr() function
+    *    update, delete, merge statements
+
+*   When not the first (driving) table in a JOIN
 *   When it is a correlated subquery
+*   When reading data through index scan
 
 .. note::
 
-    The default values of the max_parallel_workers and parallelism parameters are configured to allow parallel queries without additional settings. You can adjust these values in the cubrid.conf file as needed. ::
+    The default values of the max_parallel_workers and parallelism parameters provide defaults that allow parallel queries without additional settings. Performance can be further optimized by modifying these values in the cubrid.conf file according to system resources and application workload. ::
 
         # cubrid.conf
         max_parallel_workers=200  # default: 100
@@ -104,25 +113,25 @@ Heap Scan Performance Considerations
 
 Parallel heap scan has significant performance improvements in the following cases:
 
-*   When large amounts of data need to be scanned (more effective with more table pages)
+*   When large table data needs to be scanned (more effective with more table pages)
 *   When selectivity is low (approximately 0.05 or less)
 *   When sufficient CPU cores are available
 *   When CPU processing is the bottleneck rather than disk I/O
 
 On the other hand, performance may degrade in the following cases:
 
-*   When scanning small amounts of data
+*   When scanning small table data
 *   When index scan is more efficient
 *   When system resources (CPU, memory) are insufficient
 
-When using parallel queries, the :ref:`max_parallel_workers <max_parallel_workers>` parameter should be set appropriately to prevent system resource contention. It is generally recommended to set it to about the number of CPU cores.
+When using parallel queries, the :ref:`max_parallel_workers <max_parallel_workers>` parameter should be set appropriately to prevent system resource contention. It is generally recommended to set it to the level of the actual physical CPU core count.
 
 Heap Scan Optimization (Mergeable List)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Parallel heap scan is optimized using the "mergeable list" method when certain conditions are met. In this method, temporary result files created by each worker thread are returned directly as final results without a separate merge process, significantly improving performance.
+Parallel heap scan operates with "mergeable list" optimization when certain conditions are met. In this method, each worker thread does not pass temporary results to the main thread but directly returns the final processed results to the main thread, significantly improving processing performance.
 
-Especially when processing large amounts of data (approximately 10 million records or more) with 8 or more cores, it shows much faster performance than the existing method (receiving results one by one from each thread, row-by-row).
+Especially when processing large amounts of data (approximately 10 million records or more) with 8 or more cores, it shows much faster performance than the row-by-row method (receiving results one by one from each thread).
 
 **Constraints**
 
@@ -130,9 +139,9 @@ When the following conditions are met, the mergeable list optimization is not ap
 
 *   When the heap scan includes conditions that cannot be evaluated while scanning the target table
 *   When performing hash aggregation (hash group by)
-*   When there is a JavaSP in the select-list
+*   When there is a stored procedure (JavaSP or PL/CSQL) in the select-list
 *   When ROWNUM is used
-*   When performing topn_sort
+*   When performing topn_sort (sorting to extract top N)
 *   When there is a LIMIT clause
 *   When result_cache is enabled
 
@@ -183,21 +192,21 @@ When the following conditions are met, the mergeable list optimization is not ap
 COUNT Optimization
 """"""""""""""""""
 
-Parallel heap scan provides special optimization for **COUNT(\*)**, **COUNT(column)**, and **COUNT(DISTINCT column)** aggregate functions. This optimization works by having each worker thread perform a local count and finally merging the results.
+Parallel heap scan provides special optimization mechanisms for **COUNT(\*)**, **COUNT(column)**, and **COUNT(DISTINCT column)** aggregate functions, which are the most frequently used. This method works by having each worker thread first calculate intermediate counts within their scanned range, and then finally summing the results.
 
 **Conditions for COUNT Optimization**
 
 COUNT-specific optimization is applied when all of the following conditions are met:
 
 *   Contains only **COUNT(\*)**, **COUNT(column)**, or **COUNT(DISTINCT column)** aggregate functions
-*   No ROWNUM or JavaSP in the condition clause
+*   No ROWNUM or stored procedures in the condition clause
 *   Simple query without other joins or subqueries
 
 **COUNT Optimization Operation**
 
-*   **COUNT(\*)**: Each worker increments a simple counter, and finally all counts are summed
-*   **COUNT(column)**: Each worker counts only non-NULL values, and finally sums them
-*   **COUNT(DISTINCT column)**: Each worker stores values in a separate list file to remove duplicates, and finally connects all lists to calculate the total DISTINCT count
+*   **COUNT(\*)**: Each worker increments a simple counter, and finally the main thread sums all worker counts
+*   **COUNT(column)**: Each worker counts only non-NULL values, and finally the main thread sums all worker counts
+*   **COUNT(DISTINCT column)**: Each worker stores values in a separate list file to remove duplicates and passes them on, and the main thread merges all lists received from workers to calculate the total DISTINCT count
 
 **COUNT Optimization Examples**
 
@@ -222,12 +231,12 @@ COUNT-specific optimization is applied when all of the following conditions are 
 
 .. note::
 
-    COUNT optimization is applied to simple COUNT queries, and when used with other aggregate functions (SUM, AVG, etc.) or when complex joins are included, the general parallel heap scan method (mergeable list or row-by-row) is used.
+    COUNT optimization is a specialized optimization for simple aggregation. When used with other aggregate functions (SUM, AVG, etc.) or when complex joins are included, it is not applied and processing uses the general parallel heap scan method (mergeable list or row-by-row).
 
 Heap Scan SQL Trace
 ^^^^^^^^^^^^^^^^^^^^
 
-When parallel heap scan is used, parallel processing information is output to :ref:`SQL trace <query-profiling>`.
+When parallel heap scan is performed, parallel processing details are additionally output in the :ref:`SQL trace <query-profiling>` results.
 
 .. code-block:: sql
 
@@ -245,7 +254,7 @@ When parallel heap scan is used, parallel processing information is output to :r
                  (parallel workers: 8, heap time: 2390..2395, readrows: 1249989..1250011, 
                   rows: 1249989..1250011, gather: mergeable list)
 
-Parallel heap scan SQL trace is output in the following format:
+The description of parallel heap scan trace output items is as follows:
 
 *   **parallel workers**: Number of worker threads used
 *   **heap time**: Range of heap scan time for each worker (min..max, milliseconds)
@@ -257,7 +266,7 @@ Parallel heap scan SQL trace is output in the following format:
     * **row-by-row**: Basic method that collects and merges each worker's results one by one
     * **count**: COUNT-specific optimization method where each worker performs local counting and merges final results
 
-**gather: mergeable list** or **gather: count** indicates that parallel heap scan optimization is applied, showing better performance.
+When the **gather** item shows **mergeable list** or **count**, it indicates that parallel heap scan optimization is applied, showing better performance.
 
 .. note::
 
@@ -294,7 +303,7 @@ Parallel Subquery Execution is a feature that improves query performance by usin
 Subquery Execution Overview
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Since subqueries can be executed independently of the outer query, when there are multiple subqueries, executing them in parallel can reduce overall query execution time. Each subquery is executed in an independent worker thread, and when all subqueries are completed, the results are integrated to generate the final result.
+Since subqueries can be executed independently of other subqueries, when there are multiple subqueries, executing them in parallel can reduce overall query response time. Each subquery is executed in an independent worker thread, and when all subqueries are completed, the results are merged to generate the final result.
 
 Parallel execution of subqueries is possible if the :ref:`parallelism <parallelism>` parameter is set to 2 or higher, or if the degree of parallelism is specified to 2 or higher using the **PARALLEL** ( *degree* ) hint.
 
@@ -307,7 +316,7 @@ Parallel execution of subqueries is possible when all of the following condition
 
 *   The :ref:`max_parallel_workers <max_parallel_workers>` parameter is set to 2 or higher, and available worker threads exist
 *   The :ref:`parallelism <parallelism>` parameter is set to 2 or higher, or a **PARALLEL** (2) or higher hint is specified
-*   The subquery is connected to the top-level XASL
+*   The subquery is directly connected to the top-level query (top-level XASL)
 *   The **NO_PARALLEL_SUBQUERY** hint is not used
 
 .. code-block:: sql
@@ -338,14 +347,14 @@ Parallel execution of subqueries is possible when all of the following condition
 Cases Not Applied
 ^^^^^^^^^^^^^^^^^
 
-Parallel execution of subqueries is not applied if any of the following apply:
+Parallel execution of subqueries is not applied if any of the following conditions apply:
 
 *   The subquery is not directly connected to the top-level query (such as subqueries inside nested subqueries)
 *   CTE (Common Table Expression) recursive part exists or there are references between CTEs
 *   References between subqueries exist due to derived tables (inline views), etc.
 *   Object DBMS features are used (such as path expressions, etc.)
 *   **JSON_TABLE** or SET type table scans are included
-*   The subquery condition clause contains stored procedures (Java SP)
+*   The subquery condition clause contains stored procedures
 *   When it is a correlated subquery
 
 .. code-block:: sql
@@ -404,7 +413,6 @@ Parallel execution of subqueries has significant performance improvements in the
 *   When multiple independent subqueries exist
 *   When each subquery's execution time is sufficiently long
 *   When sufficient CPU cores are available
-*   When subquery result size is appropriate
 
 On the other hand, performance may degrade in the following cases:
 
@@ -430,7 +438,7 @@ To effectively use parallel execution of subqueries, the following parameters sh
 Subquery Trace Information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When parallel execution of subqueries is used, parallel processing information is output to :ref:`SQL trace <query-profiling>`.
+When parallel execution of subqueries is performed, parallel processing details are additionally output in the :ref:`SQL trace <query-profiling>` results.
 
 .. code-block:: sql
 
@@ -461,7 +469,7 @@ When parallel execution of subqueries is used, parallel processing information i
                     SCAN (table: dba.products), (heap time: 0, fetch: 3, ioread: 0, readrows: 500, rows: 125)
                     ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
-Subquery parallel execution SQL trace is output in the following format:
+The description of subquery parallel execution SQL trace output items is as follows:
 
 *   **SUBQUERY (uncorrelated)**: Indicates subquery execution
 *   **parallel workers**: Number of worker threads used for parallel execution
@@ -478,7 +486,7 @@ Parallel Query Throughput Rules
 Throughput Rules Overview
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-While parallel query execution provides high performance, it also consumes significant server resources. If a small number of queries excessively occupy server resources through parallel execution, the performance of other queries may degrade. To prevent this, CUBRID applies throughput rules to selectively allow parallel execution only for queries with significant parallel execution benefits.
+While parallel query execution dramatically reduces query response time, it also consumes significant server resources (CPU, memory, I/O, etc.). If a small number of queries excessively occupy server resources through parallel execution, the performance of other queries may degrade. To prevent this, CUBRID applies **throughput rules** to selectively allow parallel execution only for queries with significant parallel execution benefits.
 
 The actual degree of parallelism for each parallel operation is determined by the following factors:
 
@@ -507,20 +515,21 @@ The degree of parallelism is determined according to the number of pages in the 
    :header: "Number of Pages", "Throughput", "Throughput Rule Calculation"
    :widths: 15, 15, 15
 
-   "4,096", "64 MB", "2"
-   "8,192", "128 MB", "3"
-   "16,384", "256 MB", "4"
-   "32,768", "512 MB", "5"
-   "65,536", "1.0 GB", "6"
-   "131,072", "2.0 GB", "7"
-   "262,144", "4.0 GB", "8"
-   "524,288", "8.0 GB", "9"
-   "1,048,576", "16.0 GB", "10"
-   "2,097,152", "32.0 GB", "11"
-   "4,194,304", "64.0 GB", "12"
-   "8,388,608", "128.0 GB", "13"
+   "2,048", "32 MB", "2"
+   "4,096", "64 MB", "3"
+   "8,192", "128 MB", "4"
+   "16,384", "256 MB", "5"
+   "32,768", "512 MB", "6"
+   "65,536", "1.0 GB", "7"
+   "131,072", "2.0 GB", "8"
+   "262,144", "4.0 GB", "9"
+   "524,288", "8.0 GB", "10"
+   "1,048,576", "16.0 GB", "11"
+   "2,097,152", "32.0 GB", "12"
+   "4,194,304", "64.0 GB", "13"
+   "8,388,608", "128.0 GB", "14"
 
-Starting from 4,096 pages, the degree calculated by throughput rule increases by 1 each time the number of pages doubles from the previous increase threshold.
+Starting from 2,048 pages, the degree of parallelism calculated by throughput rule increases by 1 each time the number of pages doubles from the previous increase threshold.
 
 **The degree of parallelism determined by throughput rules cannot exceed the :ref:`parallelism <parallelism>` parameter value:**
 
@@ -534,7 +543,7 @@ For example, when parallelism=4 (default):
 
 .. note::
 
-    When the degree of parallelism is explicitly specified using the **PARALLEL** hint, throughput rules are not applied and the hint value is used.
+    When the degree of parallelism is explicitly specified using the **PARALLEL** hint, the throughput rules are not applied and the hint value is used.
 
 **Example**
 
@@ -609,8 +618,8 @@ Worker Thread Pool Management
 
 If the parallel thread pool is insufficient, only some operations may be performed in parallel, or parallel execution may not be performed at all.
 
-*   Set the maximum number of global worker pools with the :ref:`max_parallel_workers <max_parallel_workers>` parameter
-*   Each server thread reserves the required number of workers before parallel query execution and releases them after task completion
+*   Set the maximum thread count for the global parallel processing worker pool with the :ref:`max_parallel_workers <max_parallel_workers>` parameter
+*   Each worker thread reserves the required number of parallel workers from the parallel worker pool before parallel query execution, and returns them after task completion
 *   If the reservation fails, the query is executed in the normal single-threaded manner
 *   The sum of the degrees of parallelism used in the entire query can exceed the :ref:`parallelism <parallelism>` parameter value, but cannot exceed the :ref:`max_parallel_workers <max_parallel_workers>` value
 

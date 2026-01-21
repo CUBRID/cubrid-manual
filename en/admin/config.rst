@@ -744,13 +744,13 @@ The following are parameters related to the memory used by the database server o
 
 **max_parallel_workers**
 
-    **max_parallel_workers** is a parameter that sets the maximum number of parallel query worker threads that can be executed simultaneously across the server. The default value is **100**, the minimum value is **0**, and the maximum value is **1000**.
+    **max_parallel_workers** is a parameter that sets the maximum number of parallel query worker threads that can be executed simultaneously across the entire server. The default value is **100**, the minimum value is **0**, and the maximum value is **1000**.
 
-    If this parameter is set to **0**, the parallel query feature is disabled. When set to 2 or higher, various parallel query features such as Parallel Heap Scan, Parallel Subquery Execution, Parallel Hash Join, and Parallel Sort can be used.
+    If this parameter is set to **0**, the parallel query feature is disabled. When set to **2 or higher**, various parallel processing features such as Parallel Heap Scan, Parallel Subquery Execution, Parallel Hash Join, and Parallel Sort can be used.
 
-    The server manages parallel query execution through a global worker pool. Whether multiple sessions execute parallel queries simultaneously or a single session performs multiple parallel operations, the total number of parallel workers used across the server cannot exceed the **max_parallel_workers** value.
+    The server manages parallel query execution through a **global worker pool**. Even when multiple sessions simultaneously request parallel queries or complex parallel operations are performed within a single session, the total number of active parallel workers across the entire server cannot exceed the **max_parallel_workers** value.
 
-    Each server thread reserves the required number of workers from the global parallel query worker manager before executing a parallel query, and releases them after the task is completed. If the reservation fails, the query is executed in the normal single-threaded manner.
+    Each server thread reserves the required number of workers through the **parallel query worker manager** before query execution, and releases them immediately upon task completion. If reservation fails due to insufficient available workers, the query is executed in the normal single-threaded manner.
 
     For more details on parallel query execution, see :ref:`parallel-query`.
 
@@ -760,11 +760,11 @@ The following are parameters related to the memory used by the database server o
 
     .. note::
 
-        To use the parallel query feature, sufficient CPU cores and memory resources must be secured. If the **max_parallel_workers** value is too large, performance may degrade due to system resource contention.
+        Parallel queries are effective in environments with sufficient CPU cores and memory. If the **max_parallel_workers** value is excessively large compared to the actual number of physical cores, performance may degrade due to system resource contention.
 
     .. note::
 
-        During parallel query execution, each worker thread uses independent memory and resources, so increasing the degree of parallelism increases memory usage.
+        Each worker thread in parallel queries uses independent resources (such as memory), so the overall server memory usage increases as the number of parallel workers used grows.
     
     .. note::
 
@@ -774,15 +774,15 @@ The following are parameters related to the memory used by the database server o
 
 **parallelism**
 
-    **parallelism** is a parameter that sets the upper limit of the degree of parallelism that can be applied to a single parallel operation during parallel query execution. The default value is **4**, the minimum value is **0**, and the maximum value is **MIN(32, number of system cores)**.
+    **parallelism** is a parameter that sets the upper limit of the **degree of parallelism** that can be allocated to a single parallel operation. The default value is **4**, the minimum value is **0**, and the maximum value is **MIN(32, number of system CPU cores)**.
 
-    If this parameter is set to **0**, parallel execution is disabled unless the **PARALLEL** hint is explicitly specified in the query. When set to 2 or higher, parallel execution for Parallel Heap Scan, Parallel Hash Join, Parallel Sort, subqueries, and more can be automatically enabled.
+    If this parameter is set to **0** or **1**, all queries without the **PARALLEL** hint are executed in single-threaded mode. When set to **2 or higher**, the optimizer automatically applies parallel execution to operations (scan, hash join, sort, subquery, etc.) where parallel processing is determined to be efficient.
 
-    The actual degree of parallelism for each parallel operation is determined by hints or throughput rules, and the degree of parallelism calculated by throughput rules cannot exceed this parameter value.
+    The actual degree of parallelism applied during query execution follows these rules:
 
-    However, the degree of parallelism specified by hints can exceed this parameter value, but cannot exceed the maximum allowed value (the smaller of 32 or the number of system cores).
+    When the **PARALLEL(N)** hint is used, it ignores this parameter value and attempts to allocate N workers. However, it cannot exceed the maximum allowed value (the smaller of 32 or the number of system cores).
 
-    The sum of the degrees of parallelism used in the entire query can exceed this parameter value, but the total number of parallel workers across the server cannot exceed the :ref:`max_parallel_workers <max_parallel_workers>` value.
+    Without hints, the number of workers allocated to individual parallel operations cannot exceed this parameter value. However, if a single query has a structure that performs multiple parallel operations simultaneously, the total number of parallel workers used by that query may exceed this parameter value. The total number of parallel workers across the entire server cannot exceed the :ref:`max_parallel_workers <max_parallel_workers>` value.
 
     You can redefine the degree of parallelism for each query using the **PARALLEL** ( *degree* ) hint. For more details, see :ref:`parallel-query`.
 
@@ -792,15 +792,15 @@ The following are parameters related to the memory used by the database server o
 
     .. note::
 
-        The **parallelism** parameter sets the upper limit of parallel execution, but the actual parallel execution and its degree are determined by throughput rules, table size, :ref:`max_parallel_workers <max_parallel_workers>` settings, and other factors.
+        The **parallelism** parameter sets the upper limit for individual parallel operations, but the actual parallel execution and its degree for an entire query are determined by throughput rules, table size, :ref:`max_parallel_workers <max_parallel_workers>` settings, and other factors.
 
     .. note::
 
-        Setting a high degree of parallelism may improve performance, but excessively high values can cause performance degradation due to system resource contention.
+        Setting a high degree of parallelism may improve individual query performance, but excessively high values can degrade overall system performance due to resource contention.
     
     .. note::
 
-        The maximum value of this parameter is limited to the smaller of the number of physical cores and 32, ensuring the efficiency of parallel execution.
+        The maximum value of this parameter is automatically limited to the smaller of the number of physical cores and 32, preventing individual parallel operations from excessively occupying server resources and ensuring overall system stability.
 
 **max_subquery_cache_size**
 

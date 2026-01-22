@@ -594,10 +594,10 @@ The degree of parallelism for parallel sort is determined according to throughpu
 Subquery Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Parallel execution of subqueries is activated when multiple subqueries exist that do not reference each other's results.
+Parallel execution of subqueries is activated when multiple subqueries have an independent structure where they do not reference each other's results.
 
-*   The degree of parallelism is fixed at 2
-*   Parallel execution is possible when each subquery can run independently and does not reference each other's results
+*   The degree of parallelism for subquery parallel execution is fixed at 2. For example, even if there are 4 independent subqueries within a query, the system allocates 2 parallel workers for processing.
+*   Whether each subquery is executed in parallel is determined by the "throughput rules".
 *   When multiple independent subqueries exist, the effect of parallel execution is significant
 
 .. code-block:: sql

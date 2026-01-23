@@ -124,7 +124,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | Category                      | Parameter Name                      | Applied                 | Session | Type     | Default Value                  | Dynamic Change        |
 +===============================+=====================================+=========================+=========+==========+================================+=======================+
-| :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        |         | int      | 1523                           |                       |
+| :ref:`connection-parameters`  | cubrid_port_id                      | client/server parameter |         | int      | 1523                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | check_peer_alive                    | client/server parameter | O       | string   | both                           | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -139,16 +139,16 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        |         | byte     | 32,768 *                       |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | index_scan_oid_buffer_size          | server parameter        |         | byte     | 4 *                            |                       |
+|                               | index_scan_oid_buffer_size          | server parameter        |         | byte     | 4 *                            | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_agg_hash_size                   | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | max_hash_list_scan_size             | server parameter        |         | byte     | 8,388,608(8M)                  |                       |
+|                               | max_hash_list_scan_size             | client/server parameter | O       | byte     | 8,388,608(8M)                  | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_subquery_cache_size             | server parameter        |         | byte     | 2,097,152(2M)                  | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          |                       |
+|                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | temp_file_memory_size_in_pages      | server parameter        |         | int      | 4                              |                       |
@@ -157,7 +157,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`disk-parameters`        | db_volume_size                      | server parameter        |         | byte     | 512M                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | dont_reuse_heap_file                | server parameter        |         | bool     | no                             |                       |
+|                               | dont_reuse_heap_file                | server parameter        |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | log_volume_size                     | server parameter        |         | byte     | 512M                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -165,13 +165,13 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | temp_volume_path                    | server parameter        |         | string   | NULL                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | unfill_factor                       | server parameter        |         | float    | 0.1                            |                       |
+|                               | unfill_factor                       | server parameter        |         | float    | 0.1                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | volume_extension_path               | server parameter        |         | string   | NULL                           |                       |
+|                               | volume_extension_path               | server parameter        |         | string   | NULL                           | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | double_write_buffer_size            | server parameter        |         | byte     | 2,097,152(2M)                  |                       |
+|                               | double_write_buffer_size            | server parameter        |         | byte     | 2,097,152(2M)                  | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | data_file_os_advise                 | server parameter        |         | int      | 0                              |                       |
+|                               | data_file_os_advise                 | server parameter        |         | int      | 0                              | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter |         | string   | DEFAULT                        | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -191,7 +191,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | isolation_level                     | client parameter        | O       | int      | 4                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | lock_escalation                     | server parameter        |         | int      | 100,000                        |                       |
+|                               | lock_escalation                     | server parameter        |         | int      | 100,000                        | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | lock_timeout                        | client parameter        | O       | msec     | -1                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -201,7 +201,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | background_archiving                | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | checkpoint_every_size               | server parameter        |         | byte     | 100,000 *                      |                       |
+|                               | checkpoint_every_size               | server parameter        |         | byte     | 100,000 *                      | DBA only              |
 |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | checkpoint_interval                 | server parameter        |         | msec     | 6min                           | DBA only              |
@@ -229,7 +229,7 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | ddl_audit_log_size                  | client parameter        |         | byte     | 10M                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`transaction-parameters` | async_commit                        | server parameter        |         | bool     | no                             |                       |
+| :ref:`transaction-parameters` | async_commit                        | server parameter        |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | group_commit_interval_in_msecs      | server parameter        |         | msec     | 0                              | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -255,9 +255,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | default_week_format                 | client/server parameter | O       | int      | 0                              | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | group_concat_max_len                | server parameter        | O       | byte     | 1,024                          | DBA only              |
+|                               | group_concat_max_len                | server parameter        |         | byte     | 1,024                          | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | intl_check_input_string             | client parameter        | O       | bool     | no                             | available             |
+|                               | intl_check_input_string             | client parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | intl_collation                      | client parameter        | O       | string   |                                | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -265,15 +265,15 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | intl_number_lang                    | client parameter        | O       | string   |                                | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | json_max_array_idx                  | server parameter        | O       | int      | 65,536                         | available             |
+|                               | json_max_array_idx                  | server parameter        |         | int      | 65,536                         | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_query_per_tran                  | server parameter        |         | int      | 100                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | no_backslash_escapes                | client parameter        |         | bool     | yes                            |                       |
+|                               | no_backslash_escapes                | client/server parameter | O       | bool     | yes                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | only_full_group_by                  | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | oracle_compat_number_behavior       | server parameter        |         | bool     | no                             |                       |
+|                               | oracle_compat_number_behavior       | client/server parameter |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | oracle_style_empty_string           | client parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -289,9 +289,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | string_max_size_bytes               | client/server parameter | O       | byte     | 1,048,576                      | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | unicode_input_normalization         | client parameter        | O       | bool     | no                             | available             |
+|                               | unicode_input_normalization         | client parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | unicode_output_normalization        | client parameter        | O       | bool     | no                             | available             |
+|                               | unicode_output_normalization        | client parameter        |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | update_use_attribute_references     | client parameter        | O       | bool     | no                             | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -305,13 +305,13 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_worker_timeout_seconds       | server parameter        |         | int      | 300                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | loaddb_worker_count                 | server parameter        |         | int      | 8                              |                       |
+|                               | loaddb_worker_count                 | server parameter        |         | int      | 8                              | DBA only              |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`timezone-parameters`    | server_timezone                     | server parameter        |         | string   | OS timezone                    | available             |
+| :ref:`timezone-parameters`    | server_timezone                     | client/server parameter |         | string   | OS timezone                    |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | timezone                            | client/server parameter | O       | string   | the value of server_timezone   | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | tz_leap_second_support              | server parameter        |         | bool     | no                             | available             |
+|                               | tz_leap_second_support              | client/server parameter |         | bool     | no                             |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter |         | int      | 1,000                          |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -333,21 +333,21 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | csql_history_num                    | client parameter        | O       | int      | 50                             | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`ha-parameters`          | ha_mode                             | server parameter        |         | string   | off                            |                       |
+| :ref:`ha-parameters`          | ha_mode                             | client/server parameter |         | string   | off                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`other-parameters`       | access_ip_control                   | server parameter        |         | bool     | no                             |                       |
+| :ref:`other-parameters`       | access_ip_control                   | server parameter        |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | access_ip_control_file              | server parameter        |         | string   |                                |                       |
+|                               | access_ip_control_file              | server parameter        |         | string   |                                | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | agg_hash_respect_order              | client parameter        | O       | bool     | yes                            | available             |
+|                               | agg_hash_respect_order              | client parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | auto_restart_server                 | server parameter        | O       | bool     | yes                            | DBA only              |
+|                               | auto_restart_server                 | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | enable_string_compression           | client/server parameter |         | bool     | yes                            |                       |
+|                               | enable_string_compression           | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | index_scan_in_oid_order             | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | index_unfill_factor                 | server parameter        |         | float    | 0.05                           |                       |
+|                               | index_unfill_factor                 | server parameter        |         | float    | 0.05                           | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | stored_procedure                    | server parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -357,11 +357,11 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | stored_procedure_vm_options         | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | multi_range_optimization_limit      | server parameter        | O       | int      | 100                            | DBA only              |
+|                               | multi_range_optimization_limit      | client parameter        | O       | int      | 100                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | optimizer_enable_merge_join         | client parameter        | O       | bool     | no                             | available             |
+|                               | optimizer_enable_merge_join         | client parameter        |         | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | use_stat_estimation                 | server parameter        |         | bool     | no                             |                       |
+|                               | use_stat_estimation                 | server parameter        |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | server                              | server parameter        |         | string   |                                |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -371,30 +371,30 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_limit_max_count                | client parameter        | O       | int      | 1,000                          | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | sql_trace_slow                      | server parameter        | O       | msec     | -1                             | DBA only              |
+|                               | sql_trace_slow                      | server parameter        |         | msec     | -1                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | sql_trace_execution_plan            | server parameter        | O       | bool     | no                             | DBA only              |
+|                               | sql_trace_execution_plan            | server parameter        |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | use_orderby_sort_limit              | server parameter        | O       | bool     | yes                            | DBA only              |
+|                               | use_orderby_sort_limit              | server parameter        |         | bool     | yes                            | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | vacuum_prefetch_log_mode            | server parameter        |         | int      | 1                              | DBA only              |
+|                               | vacuum_prefetch_log_mode            | server parameter        |         | int      | 1                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | vacuum_prefetch_log_buffer_size     | server parameter        |         | int      | 3200 *                         | DBA only              |
+|                               | vacuum_prefetch_log_buffer_size     | server parameter        |         | int      | 3200 *                         |                       |
 |                               |                                     |                         |         |          | :ref:`log_page_size <lpg>`     |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | data_buffer_neighbor_flush_pages    | server parameter        |         | int      | 8                              | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | data_buffer_neighbor_flush_nondirty | server parameter        |         | bool     | no                             | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | tde_keys_file_path                  | server parameter        |         | string   | NULL                           |                       |
+|                               | tde_keys_file_path                  | client/server parameter |         | string   | NULL                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | tde_default_algorithm               | server parameter        |         | string   | AES                            |                       |
+|                               | tde_default_algorithm               | client/server parameter |         | string   | AES                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | recovery_progress_logging_interval  | server parameter        |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | supplemental_log                    | client/server parameter |         | int      | 0                              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | regexp_engine                       | client/server parameter |         | string   | re2                            | available             |
+|                               | regexp_engine                       | client/server parameter | O       | string   | re2                            | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | vacuum_ovfp_check_threshold         | server parameter        |         | int      | 1000                           |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -402,9 +402,9 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | deduplicate_key_level               | client/server parameter |         | int      | -1                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | print_index_detail                  | client/server parameter |         | bool     | no                             |                       |
+|                               | print_index_detail                  | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | enable_memory_monitoring            | client/server parameter |         | bool     | no                             |                       |
+|                               | enable_memory_monitoring            | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | flashback_timeout                   | client parameter        |         | int      | 300                            |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+

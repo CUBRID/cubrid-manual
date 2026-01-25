@@ -258,46 +258,49 @@ Or you can use CSQL interpreter by running ;sc command.
 Partition Pruning
 ========================================
 
-Partition pruning is an optimization techniques that limits the scope of a search on a partitioned table by eliminating partitions based on the partitioning key predicates in the WHERE clause.
-By excluding partitions that are guaranteed not to contain relevant data, disk I/O and scan costs are reduced, leading to improved query performance.
+Partition pruning is an optimization technique used when accessing a partitioned table to minimize the scope of partitions to be processed.
+By excluding partitions that are guaranteed not to contain records satisfying the predicate,
+disk I/O and scan costs are reduced, leading to improved query performance.
 
-The application of partition pruning is not determined during the query compilation stage, but during the query execution preparation stage by analyzing the values used for the partitioning key predicates.
-Therefore, even for the same query statement, whether partition pruning is applied may vary depending on the actual values used for the partitioning key.
+Partition pruning is not performed at the query compilation stage.
+Instead, it is performed at the open stage of query execution by evaluating the partition key predicate.
+Consequently, the applicability of partition pruning may vary even for the same query statement,
+depending on the bound values included in the partition key predicate.
 
-Since partition pruning is determined during the query execution preparation stage, whether partition pruning is applied is not displayed in the query execution plan.
-The application of partition pruning can be verified through the query profiling results after query execution.
-
+Whether partition pruning was performed is not displayed in the query execution plan.
+Instead, it can be verified through the query profiling output after query execution.
 For more details on query profiling, see :ref:`Query Profiling <query-profiling>`.
 
 .. note::
 
-  In versions order than CUBRID 9.0, partition pruning was performed during the query compilation stage.
-  Starting with CUBRID 9.0, partition pruning is performed during the query execution preparation stage by analyzing the actual values.
+  In versions older than CUBRID 9.0, partition pruning was performed at the query compilation stage.
+  Starting with CUBRID 9.0, it is performed at the open stage of query execution.
 
-.. rubric:: Comparison Operators Supporting Partition Pruning by Partitioning Method
+.. rubric:: Supported Comparison Operators for Partition Pruning by Partitioning Method
 
 .. list-table::
   :header-rows: 1
   :widths: 20 20 60
 
   * - Partitioning Method
-    - Equality predicate
-    - Range predicate
+    - Equality Predicate
+    - Range Predicate
   * - Range Partitioning
     - ``=``, ``IN``
     - ``<``, ``<=``, ``>``, ``>=``, ``BETWEEN``
   * - List Partitioning
     - ``=``, ``IN``
-    - Not Supported
+    - Not supported
   * - Hash Partitioning
     - ``=``, ``IN``
-    - Not Supported
+    - Not supported
 
-.. rubric:: Cases Where Partition Pruning Is Not Applied
+.. rubric:: Cases Where Partition Pruning Is Not Performed
 
-- When the partitioning key predicate in the WHERE clause differs from the expression defined as the partitioning key, or if the order of arguments does not match even when the expression is identical.
-- When using a comparison operator that is not supported for partition pruning by the specific partitioning method.
-- When the value of the partitioning key predicate cannot be determined at the query execution preparation stage.
+- If the partition key predicate included in the **WHERE** clause differs from the expression defined as the partitioning key,
+  or if the order of arguments does not match even when the expression is identical.
+- If comparison operators not supported for partition pruning by the partitioning method are used.
+- If the value of the partition key predicate cannot be determined at the open stage of query execution.
 
 .. rubric:: Accessing Specific Partitions Directly
 
@@ -307,19 +310,27 @@ For more details on query profiling, see :ref:`Query Profiling <query-profiling>
 
   ... FROM [<schema_name>.]<partition_table_name> PARTITION (<partition_name>) [AS <alias_name>] ...
 
-Even if there is no partitioning key predicate in the WHERE clause or partition pruning is not applicable, specific partitions can be queried by using the PARTITION clause or by specifying the partition name directly.
-This method operates in the same way as querying a general table, allowing the application of certain optimization techniques that are otherwise restricted for partitioned tables.
-However, since the query scope is fixed to the specified partition, records matching the condition in other partitions will be excluded from the search, potentially resulting in incorrect results.
+Individual partitions can be accessed by using the **PARTITION** clause or by specifying partition names directly.
+This method is available even if a partition key predicate is not included in the the **WHERE** clause or partition pruning is not performed.
+In such cases, the executor handles the partition as a non-partitioned table,
+allowing the application of certain optimization techniques that are otherwise restricted for partitioned tables.
 
-A target partition can also be specified in INSERT and UPDATE statements, but an error occurs if the record does not belong to the specified partition.
-In particular, explicitly specifying a partition for INSERT statements offers no performance benefit and is therefore not recommended.
+However, caution is required because the access scope is fixed to the designated partition.
+Records satisfying the predicate are excluded from retrieval even if they exist in other partitions,
+potentially resulting in incorrect results.
 
-Furthermore, accessing partitions directly bypasses the operational advantages provided by partitioned tables.
-Querying the partitioned table ensures that applications do not need modification even if the partition configuration changes,
-whereas explicitly specifying partitions loses this flexibility.
-Therefore, unless there is a specific purpose, it is recommended to access data through the partitioned table.
+A target partition can also be specified in **INSERT** and **UPDATE** statements.
+Care must be taken because an error occurs if the record to be processed does not meet the mapping criteria of the specified partition,
+potentially resulting in a statement failure.
+In particular, explicitly specifying a partition for **INSERT** statements is not recommended because it provides no additional performance advantage.
 
-For details on optimization techniques that cannot be applied to partitioned tables, see :ref:`Restrictions on Partitioned Tables <partitioning-notes>`.
+Directly accessing a partition prevents the utilization of the operational benefits provided by partitioned tables.
+Accessing data at the table level ensures that applications do not require modification even if the partition configuration changes,
+allowing the system to maintain long-term flexibility.
+Because explicit partition specification eliminates this flexibility,
+we recommend accessing data through the partitioned table unless there is a particular requirement.
+
+For details on optimization techniques otherwise restricted for partitioned tables, see :ref:`Restrictions on Partitioned Tables <partitioning-notes>`.
 
 .. _example_partition-pruning_query-profiling:
 
@@ -327,12 +338,8 @@ For details on optimization techniques that cannot be applied to partitioned tab
 
 In this example, we explore whether partition pruning is applied by checking the query profiling output.
 
-The query below includes a partitioning key predicate in the WHERE clause, which matches the partitioning key expression defined during table creation.
-Since range partitioning supports partition pruning for range predicates, partition pruning is applicable.
-However, because the decision is made during the query execution preparation stage, the execution plan alone does not indicate whether pruning occurred.
-
 In the following query,
-a partitioning key predicate is included in the WHERE clause, and it is identical to the expression defined in the CREATE TABLE statement.
+a partitioning key predicate is included in the **WHERE** clause, and it is identical to the expression defined in the **CREATE TABLE** statement.
 Additionally, partition pruning can be applied because range partitioning supports pruning for range predicates.
 However, its application cannot be verified through the execution plan alone because partition pruning is determined at the open stage of query execution.
 
@@ -348,8 +355,10 @@ However, its application cannot be verified through the execution plan alone bec
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
+
+  create index i_olympic_range_host_nation on olympic_range (host_nation);
 
   update statistics on olympic_range;
 
@@ -377,15 +386,16 @@ However, its application cannot be verified through the execution plan alone bec
   Join graph nodes:
   node[0]: public.olympic_range o(25/6) (sargs 0 1) (loc 0)
   Join graph terms:
-  term[0]: o.host_nation='USA' (sel 0.0555556) (sarg term) (not-join eligible) (loc 0)
+  term[0]: o.host_nation='USA' (sel 0.0555556) (sarg term) (not-join eligible) (indexable host_nation[0]) (loc 0)
   term[1]: o.host_year range (1990 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (loc 0)
   
   Query plan:
   
-  sscan
+  iscan
       class: o node[0]
-      sargs: term[0] AND term[1]
-      cost:  6 card 1
+      index: i_olympic_range_host_nation term[0]
+      sargs: term[1]
+      cost:  3 card 1
   
   Query stmt:
   
@@ -398,12 +408,13 @@ However, its application cannot be verified through the execution plan alone bec
            1996  'USA'                 'Atlanta'             'Izzy'
 
 Upon checking the profiling output after query execution,
-we can observe that scans for individual partitions are displayed as PARTITION entries under the SCAN entry.
-The SCAN entry displays scan information for the entire partitioned table,
-while each PARTITION entry shows scan information for its respective partition.
-Any partition that does not appear as a PARTITION entry has been excluded from the scan target.
-In this example, only the before_2000 and latest partitions were scanned
-because they satisfy the predicate that o.host_year is greater than 1990, which is included in the WHERE clause.
+we can observe that scans for individual partitions are displayed as **PARTITION** entries under the **SCAN** entry.
+The **SCAN** entry displays scan information for the entire partitioned table,
+while each **PARTITION** entry shows scan information for its respective partition.
+Any partition that does not appear as a **PARTITION** entry has been excluded from the scan target.
+
+In this example, only the ``before_2000`` and ``latest`` partitions were scanned
+because they satisfy the ``s.nation_code = 'KOR'`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: sql
@@ -413,18 +424,18 @@ All other partitions were successfully excluded from the scan target.
 .. code-block:: text
 
   Query Plan:
-    TABLE SCAN (o)
+    INDEX SCAN (o.i_olympic_range_host_nation) (key range: o.host_nation= ?:1 )
   
     rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range] o where (o.host_year> ?:0 ) and o.host_nation= ?:1
   
   Trace Statistics:
-    SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
-      SCAN (table: public.olympic_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 7, rows: 1)
-             PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 1)        
-             PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 1, ioread: 0, readrows: 2, rows: 0)
+    SELECT (time: 0, fetch: 10, fetch_time: 0, ioread: 0)
+      SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 0, fetch: 6, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 0, rows: 1)
+             PARTITION (index: public.olympic_range__p__before_2000.i_olympic_range_host_nation), (btree time: 0, fetch: 4, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 0, rows: 1)
+             PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
 
 In the following query,
-partition pruning is not applied because no partitioning key predicate is included in the WHERE clause.
+partition pruning is not applied because no partitioning key predicate is included in the **WHERE** clause.
 
 .. code-block:: sql
 
@@ -447,30 +458,30 @@ partition pruning is not applied because no partitioning key predicate is includ
            1996  'USA'                 'Atlanta'             'Izzy'
 
 Upon checking the profiling output after query execution,
-we can observe that scans for all partitions are displayed as PARTITION entries under the SCAN entry because partition pruning was not applied.
+we can observe that scans for all partitions are displayed as **PARTITION** entries under the **SCAN** entry because partition pruning was not applied.
 
 .. code-block:: text
   
   Trace Statistics:
-    SELECT (time: 0, fetch: 12, fetch_time: 0, ioread: 0)
-      SCAN (table: public.olympic_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 25, rows: 1)
-             PARTITION (table: public.olympic_range__p__before_1920), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)        
-             PARTITION (table: public.olympic_range__p__before_1940), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)        
-             PARTITION (table: public.olympic_range__p__before_1960), (heap time: 0, fetch: 1, ioread: 0, readrows: 3, rows: 0)        
-             PARTITION (table: public.olympic_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)        
-             PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 1)        
-             PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 1, ioread: 0, readrows: 2, rows: 0)
+    SELECT (time: 1, fetch: 24, fetch_time: 1, ioread: 0)
+      SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 1, fetch: 16, ioread: 0, readkeys: 3, filteredkeys: 3, rows: 4) (lookup time: 1, rows: 1)
+             PARTITION (index: public.olympic_range__p__before_1920.i_olympic_range_host_nation), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_1940.i_olympic_range_host_nation), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_1960.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_1980.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_2000.i_olympic_range_host_nation), (btree time: 1, fetch: 4, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 1, rows: 1)
+             PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
 
 .. _example_partition-pruning_arithmetic-expression:
 
 .. rubric:: Example 2. Partition Pruning for Arithmetic Expression Partition Keys
 
 In this example, we explore whether partition pruning is applied to a partition key defined by an arithmetic expression,
-focusing on two cases: using the identical expression in the WHERE clause, and reordering the arguments within that expression.
+focusing on two cases: using the identical expression in the **WHERE** clause, and reordering the arguments within that expression.
 
 In the following query,
-a partitioning key predicate using an arithmetic expression is included in the WHERE clause,
-and it is identical to the expression defined in the CREATE TABLE statement.
+a partitioning key predicate using an arithmetic expression is included in the **WHERE** clause,
+and it is identical to the expression defined in the **CREATE TABLE** statement.
 Additionally, partition pruning can be applied because range partitioning supports pruning for range predicates.
 
 .. code-block:: sql
@@ -485,7 +496,7 @@ Additionally, partition pruning can be applied because range partitioning suppor
       partition before_1985 values less than (1985),
       partition before_2005 values less than (2005),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   update statistics on olympic_arith_range;
@@ -516,8 +527,8 @@ Additionally, partition pruning can be applied because range partitioning suppor
            1988  'Korea'               'Seoul'               'HODORI'
 
 Upon checking the profiling output after query execution,
-we can observe that only the before_1985 and before_2005 partitions were scanned
-because they satisfy the predicate that o.host_year + 5 is between 1975 and 1995, which is included in the WHERE clause.
+we can observe that only the ``before_1985`` and ``before_2005`` partitions were scanned
+because they satisfy the ``o.host_year + 5 between 1975 and 1995`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: text
@@ -558,7 +569,7 @@ partition pruning cannot be applied because the order of the arguments does not 
            1988  'Korea'               'Seoul'               'HODORI'
 
 Upon checking the profiling output after query execution,
-we can observe that scans for all partitions are displayed as PARTITION entries under the SCAN entry because partition pruning was not applied.
+we can observe that scans for all partitions are displayed as **PARTITION** entries under the **SCAN** entry because partition pruning was not applied.
 
 .. code-block:: text
 
@@ -578,11 +589,11 @@ we can observe that scans for all partitions are displayed as PARTITION entries 
 .. rubric:: Example 3. Partition Pruning for Functional Expression Partition Keys
 
 In this example, we explore whether partition pruning is applied to a partition key defined by a functional expression,
-focusing on two cases: using the identical expression in the WHERE clause, and using only the source column without the functional expression.
+focusing on two cases: using the identical expression in the **WHERE** clause, and using only the source column without the functional expression.
 
 In the following query,
-a partitioning key predicate using a functional expression is included in the WHERE clause,
-and it is identical to the expression defined in the CREATE TABLE statement.
+a partitioning key predicate using a functional expression is included in the **WHERE** clause,
+and it is identical to the expression defined in the **CREATE TABLE** statement.
 Additionally, partition pruning can be applied because range partitioning supports pruning for range predicates.
 
 .. code-block:: sql
@@ -597,7 +608,7 @@ Additionally, partition pruning can be applied because range partitioning suppor
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   update statistics on olympic_func_range;
@@ -628,8 +639,8 @@ Additionally, partition pruning can be applied because range partitioning suppor
            1988  'Korea'               'Seoul'               'HODORI'
 
 Upon checking the profiling output after query execution,
-we can observe that only the before_1980 and before_2000 partitions were scanned
-because they satisfy the predicate that YEAR(o.opening_date) is between 1970 and 1990, which is included in the WHERE clause.
+we can observe that only the ``before_1980`` and ``before_2000`` partitions were scanned
+because they satisfy the ``YEAR (o.opening_date) between 1970 and 1990`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: text
@@ -641,7 +652,7 @@ All other partitions were successfully excluded from the scan target.
              PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)   
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
-Partition pruning can be applied even if the source column is used in the WHERE clause instead of the functional expression
+Partition pruning can be applied even if the source column is used instead of the functional expression
 because the functional expression defined as the partition key guarantees the same sort order as the source column.
 
 .. code-block:: sql
@@ -670,8 +681,8 @@ because the functional expression defined as the partition key guarantees the sa
             1988  'Korea'               'Seoul'               'HODORI'
 
 Upon checking the profiling output after query execution,
-we can observe that partition pruning was applied because the YEAR function guarantees the same sort order as the source column,
-even though the functional expression defining the partition key was not directly included in the WHERE clause.
+we can observe that partition pruning was applied because the **YEAR** function guarantees the same sort order as the source column,
+even though the functional expression defining the partition key was not directly included in the **WHERE** clause.
 
 .. code-block:: text
 
@@ -682,9 +693,9 @@ even though the functional expression defining the partition key was not directl
              PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)   
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
-we can observe that only the before_1980 and before_2000 partitions were scanned
-because o.opening_date guarantees the same sort order as YEAR(o.opening_date), even though o.opening_date is included in the WHERE clause.
-These partitions satisfy the predicate that YEAR(o.opening_date) is between YEAR('1970-01-01') and YEAR('1990-12-31').
+we can observe that only the ``before_1980`` and ``before_2000`` partitions were scanned
+because ``o.opening_date`` guarantees the same sort order as ``YEAR(o.opening_date)``, even though ``o.opening_date`` is included.
+These partitions satisfy the ``YEAR(o.opening_date) between YEAR('1970-01-01') and YEAR('1990-12-31')`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. _example_partition-pruning_list:
@@ -692,10 +703,10 @@ All other partitions were successfully excluded from the scan target.
 .. rubric:: Example 4. Partition Pruning for List Partitioning
 
 In this example, we explore whether partition pruning is applied to a table created using list partitioning,
-focusing on two cases: using an equality predicate in the WHERE clause, and using a range predicate.
+focusing on two cases: using an equality predicate in the **WHERE** clause, and using a range predicate.
 
 In the following query,
-a partitioning key predicate is included in the WHERE clause, and it is identical to the expression defined in the CREATE TABLE statement.
+a partitioning key predicate is included in the **WHERE** clause, and it is identical to the expression defined in the **CREATE TABLE** statement.
 Additionally, partition pruning can be applied because list partitioning supports pruning for equality predicates.
 
 .. code-block:: sql
@@ -709,7 +720,7 @@ Additionally, partition pruning can be applied because list partitioning support
       partition p1996 values IN (1996),
       partition p2000 values IN (2000),
       partition p2004 values IN (2004)
-  )
+    )
   as (select * from participant);
 
   update statistics on participant_list;
@@ -738,8 +749,8 @@ Additionally, partition pruning can be applied because list partitioning support
            1996  'USA'                          44
 
 Upon checking the profiling output after query execution,
-we can observe that only the p1988 and p1996 partitions were scanned
-because they satisfy the predicate that p.host_year is 1988 or 1996, which is included in the WHERE clause.
+we can observe that only the ``p1988`` and ``p1996`` partitions were scanned
+because they satisfy the ``p.host_year in (1988, 1996)`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: text
@@ -778,9 +789,9 @@ because list partitioning supports pruning only for equality predicates.
            1992  'EUN'                          45
 
 Upon checking the profiling output after query execution,
-we can observe that scans for all partitions are displayed as PARTITION entries under the SCAN entry because partition pruning was not applied.
+we can observe that scans for all partitions are displayed as **PARTITION** entries under the **SCAN** entry because partition pruning was not applied.
 
-Based on the values of each partition, the p1996, p2000, and p2004 partitions appear to be targets for exclusion from the scan.
+Based on the values of each partition, the ``p1996``, ``p2000``, and ``p2004`` partitions appear to be targets for exclusion from the scan.
 However, specific partitions cannot be excluded from the scan target by a range predicate
 because list partitioning is not structured to arrange values in a sorted order.
 
@@ -801,10 +812,10 @@ because list partitioning is not structured to arrange values in a sorted order.
 .. rubric:: Example 5. Partition Pruning for Hash Partitioning
 
 In this example, we explore whether partition pruning is applied to a table created using hash partitioning,
-focusing on two cases: using an equality predicate in the WHERE clause, and using an inequality predicate.
+focusing on two cases: using an equality predicate in the **WHERE** clause, and using an inequality predicate.
 
 In the following query,
-a partitioning key predicate is included in the WHERE clause, and it is identical to the expression defined in the CREATE TABLE statement.
+a partitioning key predicate is included in the **WHERE** clause, and it is identical to the expression defined in the **CREATE TABLE** statement.
 Additionally, partition pruning can be applied because hash partitioning supports pruning for equality predicates.
 
 .. code-block:: sql
@@ -840,8 +851,8 @@ Additionally, partition pruning can be applied because hash partitioning support
     'KOR'                 'Seoul Olympic Stadium'       100000
 
 Upon checking the profiling output after query execution,
-we can observe that only the p2 partition was scanned
-because it satisfies the predicate that s.nation_code is 'KOR', which is included in the WHERE clause.
+we can observe that only the ``p2`` partition was scanned
+because it satisfies the ``s.nation_code = 'KOR'`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: text
@@ -877,11 +888,11 @@ because hash partitioning supports pruning only for equality predicates.
     'AUS'                 'Olympic Stadium'          115600
 
 Upon checking the profiling output after query execution,
-we can observe that scans for all partitions are displayed as PARTITION entries under the SCAN entry because partition pruning was not applied.
+we can observe that scans for all partitions are displayed as **PARTITION** entries under the **SCAN** entry because partition pruning was not applied.
 
-In the previous query, where s.nation_code was equal to 'KOR', only the p2 partition was scanned.
-Although the p2 partition might appear to be a candidate for exclusion under an inequality predicate,
-the p2 partition cannot be excluded because records with values other than 'KOR' may be included in the same partition.
+In the previous query, only the ``p2`` partition was scanned because it satisfies the ``s.nation_code = 'KOR'`` predicate.
+Although the ``p2`` partition might appear to be a candidate for exclusion under an inequality predicate,
+the ``p2`` partition cannot be excluded because records satisfying the ``s.nation_code != 'KOR'`` predicate may be included in that partition.
 
 .. code-block:: text
 
@@ -918,7 +929,7 @@ because those values are not determinable at the open stage of query execution.
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   update statistics on olympic_range;
@@ -948,7 +959,7 @@ because those values are not determinable at the open stage of query execution.
            1988  'URS'                          55  'Korea'               'Harmony and progress'
 
 Upon checking the profiling output after query execution,
-we can observe that scans for all partitions are displayed as PARTITION entries under the SCAN entry because partition pruning was not applied.
+we can observe that scans for all partitions are displayed as **PARTITION** entries under the **SCAN** entry because partition pruning was not applied.
 
 .. code-block:: text
 
@@ -965,7 +976,7 @@ we can observe that scans for all partitions are displayed as PARTITION entries 
         MEMOIZE (time: 0, hit: 0, miss: 1, size: 0KB, enabled: true)
 
 Partition pruning can be applied even when a partitioned table is used as the driven table in a join query
-because it is applicable if a partitioning key predicate with an identifiable value is included in the WHERE clause at the open stage of query execution.
+because it is applicable if a partitioning key predicate with an identifiable value is included in the **WHERE** clause at the open stage of query execution.
 
 .. code-block:: sql
 
@@ -992,8 +1003,8 @@ because it is applicable if a partitioning key predicate with an identifiable va
            1988  'URS'                          55  'Korea'               'Harmony and progress'
 
 Upon checking the profiling output after query execution,
-we can observe that only the before_2000 and latest partitions were scanned
-because they satisfy the predicate that o.host_year is 1988 or 2004, which is included in the WHERE clause.
+we can observe that only the ``before_2000`` and ``latest`` partitions were scanned
+because they satisfy the ``o.host_year in (1988, 2004)`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: text
@@ -1021,7 +1032,7 @@ because the bound value is identifiable at the open stage of query execution.
         participant as p
         inner join olympic_range as o on p.host_year = o.host_year
     where
-        o.host_year = ?
+        o.host_year = year (to_date (?, ''YYYY-MM-DD''))
         and p.gold > 40
     order by
         p.host_year, p.gold, p.nation_code;
@@ -1038,8 +1049,8 @@ because the bound value is identifiable at the open stage of query execution.
            1988  'URS'                          55  'Korea'               'Harmony and progress'
 
 Upon checking the profiling output after query execution,
-we can observe that only the before_2000 partition was scanned
-because it satisfies the predicate that the value bound to o.host_year is 1988, which is included in the WHERE clause.
+we can observe that only the ``before_2000`` partition was scanned
+because it satisfies the ``o.host_year = year (to_date ('1988-01-01', 'YYYY-MM-DD'))`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: text
@@ -1054,12 +1065,12 @@ All other partitions were successfully excluded from the scan target.
 
 .. rubric:: Example 7. Accessing Specific Partitions Directly
 
-In this example, we explore how to directly query a specific partition using the PARTITION clause, apart from partition pruning.
+In this example, we explore how to directly query a specific partition using the **PARTITION** clause, apart from partition pruning.
 Through this, we explore whether optimization techniques that were inapplicable to the partitioned table are applicable to the partition.
 
 In the following query,
-the SKIP ORDER BY is not applied because it targets the partitioned table,
-even though the ORDER BY and LIMIT clauses are included and an appropriate index exists.
+the **SKIP ORDER BY** is not applied because it targets the partitioned table,
+even though the **ORDER BY** and **LIMIT** clauses are included and an appropriate index exists.
 
 .. code-block:: sql
 
@@ -1073,7 +1084,7 @@ even though the ORDER BY and LIMIT clauses are included and an appropriate index
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   create index i_olympic_range_host_year on olympic_range (host_year);
@@ -1131,7 +1142,7 @@ even though the ORDER BY and LIMIT clauses are included and an appropriate index
            2004  'Greece'              'Athens'              'Athena  Phevos'
 
 Upon checking the profiling output after query execution,
-we can observe that TopNSort was performed for the ORDER BY clause because the SKIP ORDER BY was not applied.
+we can observe that **TopNSort** was performed for the **ORDER BY** clause because the **SKIP ORDER BY** was not applied.
 
 .. code-block:: text
 
@@ -1147,7 +1158,7 @@ we can observe that TopNSort was performed for the ORDER BY clause because the S
              PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)
       ORDERBY (time: 0, topnsort: true)
 
-SKIP ORDER BY is applicable if we directly query a specific partition using the PARTITION clause
+**SKIP ORDER BY** is applicable if we directly query a specific partition using the **PARTITION** clause
 because the partition is handled as a non-partitioned table.
 
 .. code-block:: sql
@@ -1201,7 +1212,7 @@ because the partition is handled as a non-partitioned table.
            2004  'Greece'              'Athens'              'Athena  Phevos'
 
 Upon checking the profiling output after query execution,
-we can observe that SKIP ORDER BY was applied because only the 'latest' partition was queried directly through the PARTITION clause.
+we can observe that **SKIP ORDER BY** was applied.
 
 .. code-block:: text
 

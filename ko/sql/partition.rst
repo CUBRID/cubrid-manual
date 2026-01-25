@@ -259,21 +259,19 @@
 분할 프루닝
 ========================================
 
-분할 프루닝(Partition Pruning)은 분할 테이블 조회 시 조건절에 사용된 분할 키 조건을 평가하여, 접근해야 할 분할 범위를 최소화하는 최적화 기법이다.
-결과에 포함될 가능성이 없는 분할(Partition)을 미리 제외함으로써 디스크 I/O와 스캔 비용을 줄이고 질의 성능을 향상시킬 수 있다.
+분할 프루닝(Partition Pruning)은 분할 테이블 조회 시 분할 키 조건을 평가하여, 접근해야 할 분할(Partition) 범위를 최소화하는 최적화 기법이다.
+결과에 포함될 가능성이 없는 분할을 미리 제외함으로써 디스크 I/O와 스캔 비용을 줄이고 질의 성능을 향상시킬 수 있다.
 
 분할 프루닝의 적용 여부는 질의 컴파일 단계에서 결정하지 않으며, 질의 실행을 준비하는 단계에서 분할 키 조건으로 사용되는 값을 분석하여 결정한다.
 따라서 동일한 형태의 질의라도 분할 키 조건으로 사용되는 값이 달라지면 분할 프루닝 적용 여부도 달라질 수 있다.
 
-분할 프루닝의 적용 여부는 질의 실행 준비 단계에서 결정되므로, 질의 실행 계획에는 분할 프루닝의 적용 여부가 표시되지 않는다.
-질의 실행 후 질의 프로파일링 결과를 통해 분할 프루닝의 적용 여부를 확인할 수 있다.
-
-질의 프로파일링에 대한 자세한 내용은 :ref:`질의 프로파일링 관련 내용 <query-profiling>`\을 참고한다.
+분할 프루닝 적용 여부는 질의 실행 계획에 표시되지 않지만, 질의 실행 후 프로파일링 결과를 통해 이를 확인할 수 있다.
+질의 프로파일링에 대한 자세한 내용은 :ref:`질의 프로파일링 <query-profiling>`\을 참고한다.
 
 .. note::
 
-  CUBRID 9.0 미만 버전에서는 분할 프루닝 여부를 질의 컴파일 단계에서 결정하지만,
-  9.0 이상 버전부터는 질의 실행 준비 단계에서 사용되는 값을 분석하여 결정한다.
+  CUBRID 9.0 미만 버전에서는 분할 프루닝 여부를 질의 컴파일 단계에서 결정되지만,
+  9.0 이상 버전부터는 질의 실행 준비 단계에서 결정된다.
 
 .. rubric:: 분할 방식별 분할 프루닝 지원 비교 연산자
 
@@ -296,7 +294,7 @@
 
 .. rubric:: 분할 프루닝이 적용되지 않는 경우
 
-- WHERE 절의 분할 키 조건이 분할 키로 정의한 표현식과 다르거나, 표현식이 동일하더라도 인자 순서가 일치하지 않는 경우
+- **WHERE** 절의 분할 키 조건이 분할 키로 정의한 표현식과 다르거나, 표현식이 동일하더라도 인자 순서가 일치하지 않는 경우
 - 분할 방식에서 분할 프루닝을 지원하지 않는 비교 연산자를 사용하는 경우
 - 질의 실행 준비 단계에서 분할 키 조건의 값을 확인할 수 없는 경우
 
@@ -308,19 +306,19 @@
 
   ... FROM [<schema_name>.]<partition_table_name> PARTITION (<partition_name>) [AS <alias_name>] ...
 
-WHERE 절에 분할 키 조건이 없거나 분할 프루닝이 적용되지 않더라도, PARTITION 절을 사용하거나 분할 이름을 직접 지정하면 특정 분할만 조회할 수 있다.
+**WHERE** 절에 분할 키 조건이 없거나 분할 프루닝이 적용되지 않더라도, **PARTITION** 절을 사용하거나 분할 이름을 직접 지정하여 특정 분할만 조회할 수 있다.
 이 방식은 일반 테이블을 조회하는 것과 동일하게 동작하므로 분할 테이블에서는 제한되었던 일부 최적화 기법도 적용 가능하다.
 다만 질의 범위가 해당 분할로 고정되기 때문에, 조건에 맞는 레코드가 다른 분할에 있더라도 검색 대상에서 제외되므로 잘못된 결과가 반환될 수 있다.
 
-INSERT와 UPDATE 문에서도 특정 분할을 지정할 수 있지만, 처리하려는 레코드가 해당 분할에 속하지 않으면 오류가 발생할 수 있으니 주의해야 한다.
-특히 INSERT 문은 분할을 지정하더라도 별도의 성능 이점이 없으므로 분할을 직접 지정하는 방식을 권장하지 않는다.
+**INSERT**\와 **UPDATE** 문에서도 특정 분할을 지정할 수 있지만, 처리하려는 레코드가 해당 분할에 속하지 않으면 오류가 발생할 수 있으니 주의해야 한다.
+특히 **INSERT** 문은 분할을 지정하더라도 별도의 성능 이점이 없으므로 분할을 직접 지정하는 방식을 권장하지 않는다.
 
 또한, 분할에 직접 접근하면 분할 테이블이 제공하는 운영상의 장점을 누리기 어렵다.
 테이블 단위로 질의를 작성하면 향후 분할 구성이 변경되어도 응용 프로그램을 수정할 필요가 없지만,
 분할을 직접 명시하면 이러한 유연성을 확보할 수 없기 때문이다.
 따라서 특별한 목적이 있는 경우가 아니라면 분할 테이블을 통해 데이터에 접근하는 것을 권장한다.
 
-분할 테이블에 적용할 수 없는 최적화 기법에 대한 자세한 내용은 :ref:`분할된 테이블에 대한 제약들에 대한 내용 <partitioning-notes>`\을 참고한다.
+분할 테이블에 적용할 수 없는 최적화 기법에 대한 자세한 내용은 :ref:`분할된 테이블에 대한 제약들 <partitioning-notes>`\을 참고한다.
 
 .. _example_partition-pruning_query-profiling:
 
@@ -328,7 +326,7 @@ INSERT와 UPDATE 문에서도 특정 분할을 지정할 수 있지만, 처리�
 
 이번 예제에서는 질의 프로파일링 결과를 통해 분할 프루닝의 적용 여부를 확인한다.
 
-아래 질의는 조건절에 분할 키 조건이 존재하며, 해당 조건은 분할 테이블 생성 시 정의한 분할 키 표현식과 동일하다.
+아래 질의는 **WHERE** 절에 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
 또한 범위 분할은 범위 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
 다만 분할 프루닝은 질의 실행 준비 단계에서 결정하므로 실행 계획만으로는 적용 여부를 확인할 수 없다.
 
@@ -344,7 +342,7 @@ INSERT와 UPDATE 문에서도 특정 분할을 지정할 수 있지만, 처리�
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   create index i_olympic_range_host_nation on olympic_range (host_nation);
@@ -397,10 +395,11 @@ INSERT와 UPDATE 문에서도 특정 분할을 지정할 수 있지만, 처리�
            1996  'USA'                 'Atlanta'             'Izzy'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-분할 테이블의 각 분할에 대한 스캔이 SCAN 하위에 PARTITION으로 출력되는 것을 확인할 수 있다.
-SCAN에는 분할 테이블 전체에 대한 스캔 정보가 표시되고, PARTITION에는 각 분할에 대한 스캔 정보가 표시된다.
-PARTITION으로 출력되지 않은 분할은 분할 프루닝이 적용되어 스캔 대상에서 제외된 것이다.
-o.host_year가 1990보다 크다는 조건을 만족하는 before_2000과 latest 분할만 스캔되었으며,
+분할 테이블의 각 분할에 대한 스캔이 **SCAN** 하위에 **PARTITION**\으로 출력되는 것을 확인할 수 있다.
+**SCAN**\에는 분할 테이블 전체에 대한 스캔 정보가 표시되고, **PARTITION**\에는 각 분할에 대한 스캔 정보가 표시된다.
+**PARTITION**\으로 출력되지 않은 분할은 분할 프루닝이 적용되어 스캔 대상에서 제외된 것이다.
+
+``o.host_year > 1990`` 조건을 만족하는 ``before_2000``\과 ``latest`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. code-block:: sql
@@ -420,7 +419,7 @@ o.host_year가 1990보다 크다는 조건을 만족하는 before_2000과 latest
              PARTITION (index: public.olympic_range__p__before_2000.i_olympic_range_host_nation), (btree time: 0, fetch: 4, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 0, rows: 1)
              PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
 
-아래 질의는 조건절에 분할 키 조건이 없으므로 분할 프루닝이 적용되지 않는다.
+아래 질의는 **WHERE** 절에 분할 키 조건이 없으므로 분할 프루닝이 적용되지 않는다.
 
 .. code-block:: sql
 
@@ -443,7 +442,7 @@ o.host_year가 1990보다 크다는 조건을 만족하는 before_2000과 latest
            1996  'USA'                 'Atlanta'             'Izzy'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 SCAN 하위에 PARTITION으로 출력된 것을 확인할 수 있다.
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
 
 .. code-block:: text
   
@@ -461,10 +460,10 @@ o.host_year가 1990보다 크다는 조건을 만족하는 before_2000과 latest
 
 .. rubric:: 예제 2. 산술 표현식 분할 키의 분할 프루닝
 
-이번 예제에서는 산술 표현식으로 정의한 분할 키를 조건절에서 동일한 표현식으로 사용하는 경우와,
+이번 예제에서는 산술 표현식으로 정의한 분할 키를 **WHERE** 절에서 동일한 표현식으로 사용하는 경우와,
 인자 순서만 달라진 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
 
-아래 질의는 조건절에 산술 표현식 분할 키 조건이 존재하며, 해당 조건은 분할 테이블 생성 시 정의한 분할 키 표현식과 동일하다.
+아래 질의는 **WHERE** 절에 산술 표현식 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
 또한 범위 분할은 범위 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
 
 .. code-block:: sql
@@ -479,7 +478,7 @@ o.host_year가 1990보다 크다는 조건을 만족하는 before_2000과 latest
       partition before_1985 values less than (1985),
       partition before_2005 values less than (2005),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   update statistics on olympic_arith_range;
@@ -510,7 +509,7 @@ o.host_year가 1990보다 크다는 조건을 만족하는 before_2000과 latest
            1988  'Korea'               'Seoul'               'HODORI'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-o.host_year + 5가 1975와 1995 사이를 만족하는 before_1985와 before_2005 분할만 스캔되었으며,
+``o.host_year + 5 between 1975 and 1995`` 조건을 만족하는 ``before_1985``\와 ``before_2005`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. code-block:: text
@@ -550,7 +549,7 @@ o.host_year + 5가 1975와 1995 사이를 만족하는 before_1985와 before_200
            1988  'Korea'               'Seoul'               'HODORI'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 SCAN 하위에 PARTITION으로 출력된 것을 확인할 수 있다.
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
 
 .. code-block:: text
 
@@ -569,10 +568,10 @@ o.host_year + 5가 1975와 1995 사이를 만족하는 before_1985와 before_200
 
 .. rubric:: 예제 3. 함수 표현식 분할 키의 분할 프루닝
 
-이번 예제에서는 함수 표현식으로 정의한 분할 키를 조건절에서 동일한 표현식으로 사용하는 경우와,
+이번 예제에서는 함수 표현식으로 정의한 분할 키를 **WHERE** 절에서 동일한 표현식으로 사용하는 경우와,
 함수 표현식을 사용하지 않고 원본 컬럼만 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
 
-아래 질의는 조건절에 함수 표현식 분할 키 조건이 존재하며, 해당 조건은 분할 테이블 생성 시 정의한 분할 키 표현식과 동일하다.
+아래 질의는 **WHERE** 절에 함수 표현식 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
 또한 범위 분할은 범위 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
 
 .. code-block:: sql
@@ -587,7 +586,7 @@ o.host_year + 5가 1975와 1995 사이를 만족하는 before_1985와 before_200
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   update statistics on olympic_func_range;
@@ -618,7 +617,7 @@ o.host_year + 5가 1975와 1995 사이를 만족하는 before_1985와 before_200
            1988  'Korea'               'Seoul'               'HODORI'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-YEAR(o.opening_date)가 1970과 1990 사이를 만족하는 before_1980과 before_2000 분할만 스캔되었으며,
+``YEAR (o.opening_date) between 1970 and 1990`` 조건을 만족하는 ``before_1980``\과 ``before_2000`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. code-block:: text
@@ -659,7 +658,7 @@ YEAR(o.opening_date)가 1970과 1990 사이를 만족하는 before_1980과 befor
             1988  'Korea'               'Seoul'               'HODORI'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-함수 표현식 분할 키 조건을 직접 사용하지 않았음에도 YEAR 함수가 원본 컬럼과 동일한 정렬 순서를 보장하므로 분할 프루닝이 적용되었음을 확인할 수 있다.
+함수 표현식 분할 키 조건을 직접 사용하지 않았음에도 **YEAR** 함수가 원본 컬럼과 동일한 정렬 순서를 보장하므로 분할 프루닝이 적용되었음을 확인할 수 있다.
 
 .. code-block:: text
 
@@ -670,8 +669,8 @@ YEAR(o.opening_date)가 1970과 1990 사이를 만족하는 before_1980과 befor
              PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)   
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
-조건절에는 o.opening_date가 사용되었지만 YEAR(o.opening_date)와 정렬 순서가 동일하기 때문에,
-YEAR(o.opening_date)가 YEAR('1970-01-01')과 YEAR('1990-12-31') 사이를 만족하는 before_1980과 before_2000 분할만 스캔되었으며,
+조건절에는 ``o.opening_date``\가 사용되었지만 ``YEAR(o.opening_date)``\와 정렬 순서가 동일하기 때문에,
+``YEAR(o.opening_date) between YEAR('1970-01-01') and YEAR('1990-12-31')`` 조건을 만족하는 ``before_1980``\과 ``before_2000`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. _example_partition-pruning_list:
@@ -679,9 +678,9 @@ YEAR(o.opening_date)가 YEAR('1970-01-01')과 YEAR('1990-12-31') 사이를 만�
 .. rubric:: 예제 4. 리스트 분할의 분할 프루닝
 
 이번 예제에서는 리스트 분할 방식으로 분할 테이블을 생성한 뒤,
-조건절에 동등 조건을 사용하는 경우와 범위 조건을 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
+**WHERE** 절에 동등 조건을 사용하는 경우와 범위 조건을 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
 
-아래 질의는 조건절에 분할 키 조건이 존재하며, 해당 조건은 분할 테이블 생성 시 정의한 분할 키 표현식과 동일하다.
+아래 질의는 **WHERE** 절에 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
 또한 리스트 분할은 동등 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
 
 .. code-block:: sql
@@ -695,7 +694,7 @@ YEAR(o.opening_date)가 YEAR('1970-01-01')과 YEAR('1990-12-31') 사이를 만�
       partition p1996 values IN (1996),
       partition p2000 values IN (2000),
       partition p2004 values IN (2004)
-  )
+    )
   as (select * from participant);
 
   update statistics on participant_list;
@@ -724,7 +723,7 @@ YEAR(o.opening_date)가 YEAR('1970-01-01')과 YEAR('1990-12-31') 사이를 만�
            1996  'USA'                          44
 
 질의 실행 후 프로파일링 결과를 확인하면,
-p.host_year가 1988인 p1988 분할과 1996인 p1996 분할만 스캔되었으며,
+``p.host_year in (1988, 1996)`` 조건을 만족하는 ``p1988``\과 ``p1996`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. code-block:: text
@@ -763,9 +762,9 @@ p.host_year가 1988인 p1988 분할과 1996인 p1996 분할만 스캔되었으�
            1992  'EUN'                          45
 
 질의 실행 후 프로파일링 결과를 확인하면,
-분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 SCAN 하위에 PARTITION으로 출력된 것을 확인할 수 있다.
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
 
-각 분할의 값을 기준으로 보면 p1996, p2000, p2004 분할은 스캔 대상에서 제외될 것처럼 보이지만,
+각 분할의 값을 기준으로 보면 ``p1996``, ``p2000``, ``p2004`` 분할은 스캔 대상에서 제외될 것처럼 보이지만,
 리스트 분할은 정렬된 순서대로 값이 배치되는 구조가 아니므로 범위 조건만으로는 특정 분할이 스캔 대상에서 제외될 수 없다.
 
 .. code-block:: text
@@ -785,9 +784,9 @@ p.host_year가 1988인 p1988 분할과 1996인 p1996 분할만 스캔되었으�
 .. rubric:: 예제 5. 해시 분할의 분할 프루닝
 
 이번 예제에서는 해시 분할 방식으로 분할 테이블을 생성한 뒤,
-조건절에 동등 조건을 사용하는 경우와 부정 조건을 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
+**WHERE** 절에 동등 조건을 사용하는 경우와 부정 조건을 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
 
-아래 질의는 조건절에 분할 키 조건이 존재하며, 해당 조건은 분할 테이블 생성 시 정의한 분할 키 표현식과 동일하다.
+아래 질의는 **WHERE** 절에 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
 또한 해시 분할은 동등 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
 
 .. code-block:: sql
@@ -823,7 +822,7 @@ p.host_year가 1988인 p1988 분할과 1996인 p1996 분할만 스캔되었으�
     'KOR'                 'Seoul Olympic Stadium'       100000
 
 질의 실행 후 프로파일링 결과를 확인하면,
-s.nation_code가 'KOR'인 p2 분할만 스캔되었으며,
+``s.nation_code = 'KOR'`` 조건을 만족하는 ``p2`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. code-block:: text
@@ -859,10 +858,10 @@ s.nation_code가 'KOR'인 p2 분할만 스캔되었으며,
     'AUS'                 'Olympic Stadium'          115600
 
 질의 실행 후 프로파일링 결과를 확인하면,
-분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 SCAN 하위에 PARTITION으로 출력된 것을 확인할 수 있다.
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
 
-앞선 질의에서 s.nation_code가 'KOR'인 경우 p2 분할만 스캔되었으므로 부정 조건에서는 스캔 대상에서 제외될 것처럼 보이지만,
-해당 분할에도 'KOR'이 아닌 레코드가 존재할 수 있어 스캔 대상에서 제외될 수 없다.
+앞선 질의에서 ``s.nation_code = 'KOR'`` 조건을 만족하는 경우 ``p2`` 분할만 스캔되었으므로 부정 조건에서는 스캔 대상에서 제외될 것처럼 보이지만,
+해당 분할에도 ``s.nation_code != 'KOR'`` 조건을 만족하는 레코드가 존재할 수 있어 스캔 대상에서 제외될 수 없다.
 
 .. code-block:: text
 
@@ -897,7 +896,7 @@ s.nation_code가 'KOR'인 p2 분할만 스캔되었으며,
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   update statistics on olympic_range;
@@ -927,7 +926,7 @@ s.nation_code가 'KOR'인 p2 분할만 스캔되었으며,
            1988  'URS'                          55  'Korea'               'Harmony and progress'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 SCAN 하위에 PARTITION으로 출력된 것을 확인할 수 있다.
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
 
 .. code-block:: text
 
@@ -971,7 +970,7 @@ s.nation_code가 'KOR'인 p2 분할만 스캔되었으며,
            1988  'URS'                          55  'Korea'               'Harmony and progress'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-o.host_year 값인 1988이 포함된 before_2000 분할과 2004가 포함된 latest 분할만 스캔되었으며,
+``o.host_year in (1988, 2004)`` 조건을 만족하는 ``before_2000`` 분할과 ``latest`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. code-block:: text
@@ -1017,7 +1016,7 @@ o.host_year 값인 1988이 포함된 before_2000 분할과 2004가 포함된 lat
            1988  'URS'                          55  'Korea'               'Harmony and progress'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-o.host_year에 바인딩된 값인 1988이 포함된 before_2000 분할만 스캔되었으며,
+``o.host_year = year (to_date ('1988-01-01', 'YYYY-MM-DD'))`` 조건을 만족하는 ``before_2000`` 분할만 스캔되었으며,
 그 외 나머지 분할은 스캔 대상에서 제외되었다.
 
 .. code-block:: text
@@ -1032,11 +1031,11 @@ o.host_year에 바인딩된 값인 1988이 포함된 before_2000 분할만 스�
 
 .. rubric:: 예제 7. 분할 직접 접근
 
-이번 예제에서는 분할 프루닝 외에 PARTITION 절을 사용하여 특정 분할을 직접 조회하는 방법을 확인한다.
+이번 예제에서는 분할 프루닝 외에 **PARTITION** 절을 사용하여 특정 분할을 직접 조회하는 방법을 확인한다.
 이를 통해 분할 테이블에는 적용할 수 없었던 최적화 기법이 분할 단위에서는 적용되는지 그 여부를 확인한다.
 
-아래 질의는 분할 테이블을 대상으로 조회하므로, ORDER BY 및 LIMIT 절과 적절한 인덱스가 존재하더라도
-SKIP ORDER BY 최적화는 적용되지 않는다.
+아래 질의는 분할 테이블을 대상으로 조회하므로, **ORDER BY** 및 **LIMIT** 절과 적절한 인덱스가 존재하더라도
+**SKIP ORDER BY** 최적화는 적용되지 않는다.
 
 .. code-block:: sql
 
@@ -1050,7 +1049,7 @@ SKIP ORDER BY 최적화는 적용되지 않는다.
       partition before_1980 values less than (1980),
       partition before_2000 values less than (2000),
       partition latest values less than maxvalue
-  )
+    )
   as (select * from olympic);
 
   create index i_olympic_range_host_year on olympic_range (host_year);
@@ -1108,7 +1107,7 @@ SKIP ORDER BY 최적화는 적용되지 않는다.
            2004  'Greece'              'Athens'              'Athena  Phevos'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-SKIP ORDER BY 최적화가 적용되지 않아 ORDERBY에서 topnsort가 수행되었음을 확인할 수 있다.
+**SKIP ORDER BY** 최적화가 적용되지 않아 **ORDERBY**\에서 **TopNSort**\가 수행되었음을 확인할 수 있다.
 
 .. code-block:: text
 
@@ -1124,8 +1123,8 @@ SKIP ORDER BY 최적화가 적용되지 않아 ORDERBY에서 topnsort가 수행�
              PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)
       ORDERBY (time: 0, topnsort: true)
 
-PARTITION 절을 통해 특정 분할만 직접 조회하면
-일반 테이블과 동일하게 처리되므로, SKIP ORDER BY 최적화가 적용될 수 있다.
+**PARTITION** 절을 통해 특정 분할만 직접 조회하면
+일반 테이블과 동일하게 처리되므로, **SKIP ORDER BY** 최적화가 적용될 수 있다.
 
 .. code-block:: sql
 
@@ -1178,7 +1177,7 @@ PARTITION 절을 통해 특정 분할만 직접 조회하면
            2004  'Greece'              'Athens'              'Athena  Phevos'
 
 질의 실행 후 프로파일링 결과를 확인하면,
-SKIP ORDER BY 최적화가 적용되었음을 확인할 수 있다.
+**SKIP ORDER BY** 최적화가 적용되었음을 확인할 수 있다.
 
 .. code-block:: text
 

@@ -531,7 +531,7 @@ The degree of parallelism is determined according to the number of pages in the 
 
 Starting from 2,048 pages, the degree of parallelism calculated by throughput rule increases by 1 each time the number of pages doubles from the previous increase threshold.
 
-**The degree of parallelism determined by throughput rules cannot exceed the :ref:`parallelism <parallelism>` parameter value:**
+**The degree of parallelism determined by throughput rules cannot exceed the** :ref:`parallelism <parallelism>` **parameter value:**
 
 *   **MIN (throughput rule calculation, parallelism parameter value)**
 

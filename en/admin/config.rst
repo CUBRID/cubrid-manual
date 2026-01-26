@@ -768,7 +768,7 @@ The following are parameters related to the memory used by the database server o
     
     .. note::
 
-        If a small number of queries excessively occupy server resources through parallel execution, the performance of other queries may degrade. To prevent this, throughput rules are applied to selectively allow parallel execution only for queries with significant parallel execution benefits.
+        If all queries are executed in parallel, excessive server resource usage may cause overall system performance degradation. To prevent this, the optimizer applies **throughput rules** to selectively allow parallel execution only for queries with high parallel processing efficiency.
 
 .. _parallelism:
 

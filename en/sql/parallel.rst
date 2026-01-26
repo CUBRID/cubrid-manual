@@ -307,7 +307,7 @@ Since subqueries can be executed independently of other subqueries, when there a
 
 Parallel execution of subqueries is possible if the :ref:`parallelism <parallelism>` parameter is set to 2 or higher, or if the degree of parallelism is specified to 2 or higher using the **PARALLEL** ( *degree* ) hint.
 
-The **NO_PARALLEL_SUBQUERY** hint can be used to disable parallel execution of subqueries.
+The **NO_PARALLEL_SUBQUERY** hint can be used to disable parallel execution of subqueries. When used together with the **PARALLEL** hint, the **NO_PARALLEL_SUBQUERY** hint takes precedence.
 
 Execution Conditions
 ^^^^^^^^^^^^^^^^^^^^

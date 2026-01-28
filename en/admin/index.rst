@@ -133,3 +133,4 @@ See :ref:`cubrid-utilities` for details.
     scripts.rst
     troubleshoot.rst
     ddl_audit.rst
+    error_log.rst

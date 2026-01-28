@@ -134,3 +134,4 @@ CUBRID 운영
     scripts.rst
     troubleshoot.rst
     ddl_audit.rst
+    error_log.rst

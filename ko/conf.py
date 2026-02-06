@@ -179,6 +179,17 @@ linkcheck_ignore = [
     r"https://metacpan.org/dist/DBI/",
     r"https://www\.gnu\.org/software/libc/manual/html_node/Malloc-Tunable-Parameters",
 ]
+
+# Some sites treat the default Python/Sphinx User-Agent as a generic crawler
+# and respond with 403/429. Use a browser-like User-Agent to reduce false
+# negatives, but keep an explicit token so that requests can still be
+# identified as coming from Sphinx linkcheck in server logs.
+linkcheck_user_agent = (
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 "
+    "SphinxDocumentationChecker"
+)
+
 linkcheck_timeout = 30
 linkcheck_workers = 10
 linkcheck_retries = 5

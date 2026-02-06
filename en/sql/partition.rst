@@ -311,7 +311,7 @@ For more details on query profiling, see :ref:`Query Profiling <query-profiling>
   ... FROM [<schema_name>.]<partition_table_name> PARTITION (<partition_name>) [AS <alias_name>] ...
 
 Individual partitions can be accessed by using the **PARTITION** clause or by specifying partition names directly.
-This method is available even if a partition key predicate is not included in the the **WHERE** clause or partition pruning is not performed.
+This method is available even if a partition key predicate is not included in the **WHERE** clause or partition pruning is not performed.
 In such cases, the executor handles the partition as a non-partitioned table,
 allowing the application of certain optimization techniques that are otherwise restricted for partitioned tables.
 
@@ -320,7 +320,7 @@ Records satisfying the predicate are excluded from retrieval even if they exist 
 potentially resulting in incorrect results.
 
 A target partition can also be specified in **INSERT** and **UPDATE** statements.
-Care must be taken because an error occurs if the record to be processed does not meet the mapping criteria of the specified partition,
+Be aware that an error occurs if the record to be processed does not meet the mapping criteria of the specified partition,
 potentially resulting in a statement failure.
 In particular, explicitly specifying a partition for **INSERT** statements is not recommended because it provides no additional performance advantage.
 
@@ -388,17 +388,17 @@ However, its application cannot be verified through the execution plan alone bec
   Join graph terms:
   term[0]: o.host_nation='USA' (sel 0.0555556) (sarg term) (not-join eligible) (indexable host_nation[0]) (loc 0)
   term[1]: o.host_year range (1990 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (loc 0)
-  
+
   Query plan:
-  
+
   iscan
       class: o node[0]
       index: i_olympic_range_host_nation term[0]
       sargs: term[1]
       cost:  3 card 1
-  
+
   Query stmt:
-  
+
   select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range o where (o.host_year> ?:0 ) and o.host_nation= ?:1
 
 .. code-block:: text
@@ -425,9 +425,9 @@ All other partitions were successfully excluded from the scan target.
 
   Query Plan:
     INDEX SCAN (o.i_olympic_range_host_nation) (key range: o.host_nation= ?:1 )
-  
+
     rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range] o where (o.host_year> ?:0 ) and o.host_nation= ?:1
-  
+
   Trace Statistics:
     SELECT (time: 0, fetch: 10, fetch_time: 0, ioread: 0)
       SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 0, fetch: 6, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 0, rows: 1)
@@ -461,7 +461,7 @@ Upon checking the profiling output after query execution,
 we can observe that scans for all partitions are displayed as **PARTITION** entries under the **SCAN** entry because partition pruning was not applied.
 
 .. code-block:: text
-  
+
   Trace Statistics:
     SELECT (time: 1, fetch: 24, fetch_time: 1, ioread: 0)
       SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 1, fetch: 16, ioread: 0, readkeys: 3, filteredkeys: 3, rows: 4) (lookup time: 1, rows: 1)
@@ -536,8 +536,8 @@ All other partitions were successfully excluded from the scan target.
   Trace Statistics:
     SELECT (time: 4, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_arith_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
-             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)  
-             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)  
+             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
       ORDERBY (time: 4, sort: true, page: 0, ioread: 0)
 
 Even if the arithmetic expression has an identical structure,
@@ -576,12 +576,12 @@ we can observe that scans for all partitions are displayed as **PARTITION** entr
   Trace Statistics:
     SELECT (time: 0, fetch: 12, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_arith_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 25, rows: 5)
-             PARTITION (table: public.olympic_arith_range__p__before_1925), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)  
-             PARTITION (table: public.olympic_arith_range__p__before_1945), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)  
-             PARTITION (table: public.olympic_arith_range__p__before_1965), (heap time: 0, fetch: 1, ioread: 0, readrows: 3, rows: 0)  
-             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)  
-             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)  
-             PARTITION (table: public.olympic_arith_range__p__latest), (heap time: 0, fetch: 1, ioread: 0, readrows: 2, rows: 0)       
+             PARTITION (table: public.olympic_arith_range__p__before_1925), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1945), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1965), (heap time: 0, fetch: 1, ioread: 0, readrows: 3, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
+             PARTITION (table: public.olympic_arith_range__p__latest), (heap time: 0, fetch: 1, ioread: 0, readrows: 2, rows: 0)
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
 .. _example_partition-pruning_function-expression:
@@ -648,11 +648,11 @@ All other partitions were successfully excluded from the scan target.
   Trace Statistics:
     SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_func_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
-             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)   
-             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)   
+             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
-Partition pruning can be applied even if the source column is used instead of the functional expression
+Partition pruning can be applied even if the source column is used instead of the functional expression,
 because the functional expression defined as the partition key guarantees the same sort order as the source column.
 
 .. code-block:: sql
@@ -689,8 +689,8 @@ even though the functional expression defining the partition key was not directl
   Trace Statistics:
     SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_func_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
-             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)   
-             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)   
+             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
 we can observe that only the ``before_1980`` and ``before_2000`` partitions were scanned
@@ -967,11 +967,11 @@ we can observe that scans for all partitions are displayed as **PARTITION** entr
     SELECT (time: 1, fetch: 2204, fetch_time: 0, ioread: 0)
       SCAN (index: public.participant.pk_participant_host_year_nation_code), (btree time: 1, fetch: 2172, ioread: 0, readkeys: 2154, filteredkeys: 2148, rows: 2148) (lookup time: 1, rows: 6)
         SCAN (table: public.olympic_range), (heap time: 0, fetch: 31, ioread: 0, readrows: 25, rows: 1)
-               PARTITION (table: public.olympic_range__p__before_1920), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_1940), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_1960), (heap time: 0, fetch: 4, ioread: 0, readrows: 3, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_1980), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 1)     
+               PARTITION (table: public.olympic_range__p__before_1920), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1940), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1960), (heap time: 0, fetch: 4, ioread: 0, readrows: 3, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1980), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 1)
                PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 3, ioread: 0, readrows: 2, rows: 0)
         MEMOIZE (time: 0, hit: 0, miss: 1, size: 0KB, enabled: true)
 
@@ -1013,7 +1013,7 @@ All other partitions were successfully excluded from the scan target.
     SELECT (time: 1, fetch: 1845, fetch_time: 1, ioread: 0)
       SCAN (table: public.participant), (heap time: 1, fetch: 1838, ioread: 0, readrows: 1832, rows: 6)
         SCAN (table: public.olympic_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 21, rows: 1)
-               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 3, ioread: 0, readrows: 15, rows: 1)    
+               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 3, ioread: 0, readrows: 15, rows: 1)
                PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 3, ioread: 0, readrows: 6, rows: 0)
         MEMOIZE (time: 0, hit: 0, miss: 3, size: 0KB, enabled: true)
 
@@ -1065,7 +1065,7 @@ All other partitions were successfully excluded from the scan target.
 
 .. rubric:: Example 7. Accessing Specific Partitions Directly
 
-In this example, we explore how to directly query a specific partition using the **PARTITION** clause, apart from partition pruning.
+In this example, we explore how to directly query a specific partition using the **PARTITION** clause, separate from partition pruning.
 Through this, we explore whether optimization techniques that were inapplicable to the partitioned table are applicable to the partition.
 
 In the following query,
@@ -1120,9 +1120,9 @@ even though the **ORDER BY** and **LIMIT** clauses are included and an appropria
   node[0]: public.olympic_range o(25/6) (sargs 0) (loc 0)
   Join graph terms:
   term[0]: o.host_year range (2000 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[0]) (loc 0)
-  
+
   Query plan:
-  
+
   temp(order by)
       subplan: iscan
                    class: o node[0]
@@ -1130,9 +1130,9 @@ even though the **ORDER BY** and **LIMIT** clauses are included and an appropria
                    cost:  3 card 2
       sort:  1 desc
       cost:  9 card 2
-  
+
   Query stmt:
-  
+
   select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
 
 .. code-block:: text
@@ -1149,9 +1149,9 @@ we can observe that **TopNSort** was performed for the **ORDER BY** clause becau
   Query Plan:
     SORT (order by)
       INDEX SCAN (o.i_olympic_range_host_year) (key range: (o.host_year> ?:0 ))
-  
+
     rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range] o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
-  
+
   Trace Statistics:
     SELECT (time: 0, fetch: 6, fetch_time: 0, ioread: 0)
       SCAN (index: public.olympic_range.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)
@@ -1190,19 +1190,19 @@ because the partition is handled as a non-partitioned table.
   node[0]: public.olympic_range__p__latest o(25/1) (sargs 0) (loc 0)
   Join graph terms:
   term[0]: o.host_year range (2000 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[0]) (loc 0)
-  
+
   Query plan:
-  
+
   iscan
       class: o node[0]
       index: i_olympic_range_host_year term[0] (desc_index)
       sort:  1 desc
       cost:  4 card 2
-  
+
   Query stmt:
-  
+
   select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range__p__latest o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
-  
+
   /* ---> skip ORDER BY */
 
 .. code-block:: text
@@ -1219,9 +1219,9 @@ we can observe that **SKIP ORDER BY** was applied.
   Query Plan:
     INDEX SCAN (o.i_olympic_range_host_year) (key range: (o.host_year> ?:0 ), desc_index: true)
     skip order by: true
-  
+
     rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range__p__latest] o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
-  
+
   Trace Statistics:
     SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (index: public.olympic_range__p__latest.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 2, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)

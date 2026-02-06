@@ -375,17 +375,17 @@
   Join graph terms:
   term[0]: o.host_nation='USA' (sel 0.0555556) (sarg term) (not-join eligible) (indexable host_nation[0]) (loc 0)
   term[1]: o.host_year range (1990 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (loc 0)
-  
+
   Query plan:
-  
+
   iscan
       class: o node[0]
       index: i_olympic_range_host_nation term[0]
       sargs: term[1]
       cost:  3 card 1
-  
+
   Query stmt:
-  
+
   select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range o where (o.host_year> ?:0 ) and o.host_nation= ?:1
 
 .. code-block:: text
@@ -410,9 +410,9 @@
 
   Query Plan:
     INDEX SCAN (o.i_olympic_range_host_nation) (key range: o.host_nation= ?:1 )
-  
+
     rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range] o where (o.host_year> ?:0 ) and o.host_nation= ?:1
-  
+
   Trace Statistics:
     SELECT (time: 0, fetch: 10, fetch_time: 0, ioread: 0)
       SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 0, fetch: 6, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 0, rows: 1)
@@ -445,7 +445,7 @@
 분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
 
 .. code-block:: text
-  
+
   Trace Statistics:
     SELECT (time: 1, fetch: 24, fetch_time: 1, ioread: 0)
       SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 1, fetch: 16, ioread: 0, readkeys: 3, filteredkeys: 3, rows: 4) (lookup time: 1, rows: 1)
@@ -517,8 +517,8 @@
   Trace Statistics:
     SELECT (time: 4, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_arith_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
-             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)  
-             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)  
+             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
       ORDERBY (time: 4, sort: true, page: 0, ioread: 0)
 
 산술 표현식의 형태가 동일하더라도, 인자 순서가 일치하지 않으면 분할 프루닝이 적용되지 않는다.
@@ -556,12 +556,12 @@
   Trace Statistics:
     SELECT (time: 0, fetch: 12, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_arith_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 25, rows: 5)
-             PARTITION (table: public.olympic_arith_range__p__before_1925), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)  
-             PARTITION (table: public.olympic_arith_range__p__before_1945), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)  
-             PARTITION (table: public.olympic_arith_range__p__before_1965), (heap time: 0, fetch: 1, ioread: 0, readrows: 3, rows: 0)  
-             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)  
-             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)  
-             PARTITION (table: public.olympic_arith_range__p__latest), (heap time: 0, fetch: 1, ioread: 0, readrows: 2, rows: 0)       
+             PARTITION (table: public.olympic_arith_range__p__before_1925), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1945), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1965), (heap time: 0, fetch: 1, ioread: 0, readrows: 3, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
+             PARTITION (table: public.olympic_arith_range__p__latest), (heap time: 0, fetch: 1, ioread: 0, readrows: 2, rows: 0)
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
 .. _example_partition-pruning_function-expression:
@@ -625,8 +625,8 @@
   Trace Statistics:
     SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_func_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
-             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)   
-             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)   
+             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
 분할 키로 정의한 함수 표현식이 원본 컬럼과 동일한 정렬 순서를 보장하는 경우에는,
@@ -665,8 +665,8 @@
   Trace Statistics:
     SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (table: public.olympic_func_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
-             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)   
-             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)   
+             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
       ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
 
 조건절에는 ``o.opening_date``\가 사용되었지만 ``YEAR(o.opening_date)``\와 정렬 순서가 동일하기 때문에,
@@ -934,11 +934,11 @@
     SELECT (time: 1, fetch: 2204, fetch_time: 0, ioread: 0)
       SCAN (index: public.participant.pk_participant_host_year_nation_code), (btree time: 1, fetch: 2172, ioread: 0, readkeys: 2154, filteredkeys: 2148, rows: 2148) (lookup time: 1, rows: 6)
         SCAN (table: public.olympic_range), (heap time: 0, fetch: 31, ioread: 0, readrows: 25, rows: 1)
-               PARTITION (table: public.olympic_range__p__before_1920), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_1940), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_1960), (heap time: 0, fetch: 4, ioread: 0, readrows: 3, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_1980), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)     
-               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 1)     
+               PARTITION (table: public.olympic_range__p__before_1920), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1940), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1960), (heap time: 0, fetch: 4, ioread: 0, readrows: 3, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1980), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 1)
                PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 3, ioread: 0, readrows: 2, rows: 0)
         MEMOIZE (time: 0, hit: 0, miss: 1, size: 0KB, enabled: true)
 
@@ -979,7 +979,7 @@
     SELECT (time: 1, fetch: 1845, fetch_time: 1, ioread: 0)
       SCAN (table: public.participant), (heap time: 1, fetch: 1838, ioread: 0, readrows: 1832, rows: 6)
         SCAN (table: public.olympic_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 21, rows: 1)
-               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 3, ioread: 0, readrows: 15, rows: 1)    
+               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 3, ioread: 0, readrows: 15, rows: 1)
                PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 3, ioread: 0, readrows: 6, rows: 0)
         MEMOIZE (time: 0, hit: 0, miss: 3, size: 0KB, enabled: true)
 
@@ -1085,9 +1085,9 @@
   node[0]: public.olympic_range o(25/6) (sargs 0) (loc 0)
   Join graph terms:
   term[0]: o.host_year range (2000 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[0]) (loc 0)
-  
+
   Query plan:
-  
+
   temp(order by)
       subplan: iscan
                    class: o node[0]
@@ -1095,9 +1095,9 @@
                    cost:  3 card 2
       sort:  1 desc
       cost:  9 card 2
-  
+
   Query stmt:
-  
+
   select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
 
 .. code-block:: text
@@ -1114,9 +1114,9 @@
   Query Plan:
     SORT (order by)
       INDEX SCAN (o.i_olympic_range_host_year) (key range: (o.host_year> ?:0 ))
-  
+
     rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range] o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
-  
+
   Trace Statistics:
     SELECT (time: 0, fetch: 6, fetch_time: 0, ioread: 0)
       SCAN (index: public.olympic_range.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)
@@ -1155,19 +1155,19 @@
   node[0]: public.olympic_range__p__latest o(25/1) (sargs 0) (loc 0)
   Join graph terms:
   term[0]: o.host_year range (2000 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[0]) (loc 0)
-  
+
   Query plan:
-  
+
   iscan
       class: o node[0]
       index: i_olympic_range_host_year term[0] (desc_index)
       sort:  1 desc
       cost:  4 card 2
-  
+
   Query stmt:
-  
+
   select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range__p__latest o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
-  
+
   /* ---> skip ORDER BY */
 
 .. code-block:: text
@@ -1184,9 +1184,9 @@
   Query Plan:
     INDEX SCAN (o.i_olympic_range_host_year) (key range: (o.host_year> ?:0 ), desc_index: true)
     skip order by: true
-  
+
     rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range__p__latest] o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
-  
+
   Trace Statistics:
     SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
       SCAN (index: public.olympic_range__p__latest.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 2, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)

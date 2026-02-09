@@ -146,6 +146,10 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_hash_list_scan_size             | client/server parameter | O       | byte     | 8,388,608(8M)                  | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | max_parallel_workers                | server parameter        |         | int      | 100                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | parallelism                         | server parameter        |         | int      | 4                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_subquery_cache_size             | server parameter        |         | byte     | 2,097,152(2M)                  | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          | DBA only              |
@@ -690,6 +694,10 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_hash_list_scan_size        | byte   | 8,388,608(8M)             | 0                         | 128MB                     |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| max_parallel_workers           | int    | 100                       | 0                         | 1000                      |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| parallelism                    | int    | 4                         | 0                         | MIN(32, system cores)     |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_subquery_cache_size        | byte   | 2,097,152(2M)             | 0                         | 16,777,216(16M)           |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
@@ -731,6 +739,68 @@ The following are parameters related to the memory used by the database server o
     **max_hash_list_scan_size** is a parameter to configure the maximum memory per transaction allocated for building hash table in a query containing subquerys. The default is 8MB, the minimum size is 0, and the maximum size is 128MB.
 
     If this parameter is set to 0 or If :ref:`NO_HASH_LIST_SCAN <no-hash-list-scan>` hint is specified, hash list scan will not be used.
+
+.. _max_parallel_workers:
+
+**max_parallel_workers**
+
+    **max_parallel_workers** is a parameter that sets the maximum number of parallel query worker threads that can be executed simultaneously across the entire server. The default value is **100**, the minimum value is **0**, and the maximum value is **1000**.
+
+    If this parameter is set to **0**, the parallel query feature is disabled. When set to **2 or higher**, various parallel processing features such as Parallel Heap Scan, Parallel Subquery Execution, Parallel Hash Join, and Parallel Sort can be used.
+
+    The server manages parallel query execution through a **global worker pool**. Even when multiple sessions simultaneously request parallel queries or complex parallel operations are performed within a single session, the total number of active parallel workers across the entire server cannot exceed the **max_parallel_workers** value.
+
+    Each server thread reserves the required number of workers through the **parallel query worker manager** before query execution, and releases them immediately upon task completion. If reservation fails due to insufficient available workers, the query is executed in the normal single-threaded manner.
+
+    For more details on parallel query execution, see :ref:`parallel-query`.
+
+    The following example allows up to 200 parallel workers. ::
+
+        max_parallel_workers=200
+
+    .. note::
+
+        Parallel queries are effective in environments with sufficient CPU cores and memory. If the **max_parallel_workers** value is excessively large compared to the actual number of physical cores, performance may degrade due to system resource contention.
+
+    .. note::
+
+        Each worker thread in parallel queries uses independent resources (such as memory), so the overall server memory usage increases as the number of parallel workers used grows.
+    
+    .. note::
+
+        If all queries are executed in parallel, excessive server resource usage may cause overall system performance degradation. To prevent this, the optimizer applies **throughput rules** to selectively allow parallel execution only for queries with high parallel processing efficiency.
+
+.. _parallelism:
+
+**parallelism**
+
+    **parallelism** is a parameter that sets the upper limit of the **degree of parallelism** that can be allocated to a single parallel operation. The default value is **4**, the minimum value is **0**, and the maximum value is **MIN(32, number of system CPU cores)**.
+
+    If this parameter is set to **0** or **1**, all queries without the **PARALLEL** hint are executed in single-threaded mode. When set to **2 or higher**, the optimizer automatically applies parallel execution to operations (scan, hash join, sort, subquery, etc.) where parallel processing is determined to be efficient.
+
+    The actual degree of parallelism applied during query execution follows these rules:
+
+    When the **PARALLEL(N)** hint is used, it ignores this parameter value and attempts to allocate N workers. However, it cannot exceed the maximum allowed value (the smaller of 32 or the number of system cores).
+
+    Without hints, the number of workers allocated to individual parallel operations cannot exceed this parameter value. However, if a single query has a structure that performs multiple parallel operations simultaneously, the total number of parallel workers used by that query may exceed this parameter value. The total number of parallel workers across the entire server cannot exceed the :ref:`max_parallel_workers <max_parallel_workers>` value.
+
+    You can redefine the degree of parallelism for each query using the **PARALLEL** ( *degree* ) hint. For more details, see :ref:`parallel-query`.
+
+    The following example sets the default degree of parallelism to 8. ::
+
+        parallelism=8
+
+    .. note::
+
+        The **parallelism** parameter sets the upper limit for individual parallel operations, but the actual parallel execution and its degree for an entire query are determined by throughput rules, table size, :ref:`max_parallel_workers <max_parallel_workers>` settings, and other factors.
+
+    .. note::
+
+        Setting a high degree of parallelism may improve individual query performance, but excessively high values can degrade overall system performance due to resource contention.
+    
+    .. note::
+
+        The maximum value of this parameter is automatically limited to the smaller of the number of physical cores and 32, preventing individual parallel operations from excessively occupying server resources and ensuring overall system stability.
 
 **max_subquery_cache_size**
 
@@ -1293,8 +1363,8 @@ The following are parameters for improving transaction commit performance. The t
 
     .. warning::
 
-    *    If some dblink queries have already been committed and the overall transaction commit later fails, those prior commits cannot be rolled back.
-    *    Savepoints are not supported in dblink transactions.
+        *    If some dblink queries have already been committed and the overall transaction commit later fails, those prior commits cannot be rolled back.
+        *    Savepoints are not supported in dblink transactions.
 
 .. _stmt-type-parameters:
 

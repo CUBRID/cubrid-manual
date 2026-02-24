@@ -345,7 +345,7 @@ CONNECT_BY_ROOT
 ---------------
 
 The **CONNECTION_BY_ROOT** operator returns the value of a root row as a column value. This operator can be used in the **WHERE** and **ORDER BY** clauses of the **SELECT** statement.
-The **CONNECT_BY_ROOT** operator returns the root row’s value as a column expression. It is permitted for use in the **WHERE and ORDER BY** clauses of a **SELECT** statement. When used, the **WHERE** clause must precede the START WITH and CONNECT BY clauses, while the **ORDER BY** clause must follow the hierarchical query specification.
+The **CONNECT_BY_ROOT** operator returns the root row’s value as a column expression. It is permitted for use in the **WHERE** and **ORDER BY** clauses of a **SELECT** statement. When used, the **WHERE** clause must precede the **START WITH** and **CONNECT BY** clauses, while the **ORDER BY** clause must follow the hierarchical query specification.
 
 The following example shows how to retrieve the root row's *id* value.
 

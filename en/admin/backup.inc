@@ -123,9 +123,11 @@ The following shows options available with the **cubrid backupdb** utility (opti
         cubrid backupdb -k demodb
 
     .. note::
+
         The key file manages the master key of the TDE key stored within the database and contains security information that controls access to backup files rather than database data itself.
 Therefore, the key file must not be backed up together with the backup volume or stored on the same storage media. It must be separated and managed securely by the DBA using an independent and secure method.
 If the key file is lost or compromised, the backup volume may become unrecoverable or may result in a security incident. Accordingly, it is strongly recommended to establish clear access control and retention policies for the key file.
+
 
 Backup Strategy and Method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -118,9 +118,14 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. option:: -k, --separate-keys
 
-    This option is used to exclude the key file from the backup volume. The excluded key file is separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  The key file is security metadata used exclusively for the encryption and decryption of backup volumes and is not part of the database data itself. Its purpose is to control access to encrypted backup files. Accordingly, the key file should never be backed up together with the backup volume nor stored on the same storage device. The DBA must manage the key file separately through a secure and controlled mechanism. Loss of the key file makes restoration of the backup volume impossible, while unauthorized exposure of the key file may result in security breaches. To mitigate these risks, it is recommended to define and enforce strict access control and storage policies for key files. ::
+    This option is used to exclude the key file from the backup volume. The excluded key file is separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  
 
         cubrid backupdb -k demodb
+
+    .. note::
+        The key file manages the master key of the TDE key stored within the database and contains security information that controls access to backup files rather than database data itself.
+Therefore, the key file must not be backed up together with the backup volume or stored on the same storage media. It must be separated and managed securely by the DBA using an independent and secure method.
+If the key file is lost or compromised, the backup volume may become unrecoverable or may result in a security incident. Accordingly, it is strongly recommended to establish clear access control and retention policies for the key file.
 
 Backup Strategy and Method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -130,11 +130,27 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | db_hosts                            | client parameter        | O       | string   | NULL                           | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | use_user_hosts                      | client/server parameter |         | bool     | off                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_clients                         | server parameter        |         | int      | 100                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | max_connection_worker               | server parameter        |         | int      | system cores / 2               |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | min_connection_worker               | server parameter        |         | int      | 4                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | auto_scaling_window_size            | server parameter        |         | int      | 4                              |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | recv_budget_per_connection          | server parameter        |         | int      | 16384 (16KB)                   |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | send_budget_per_connection          | server parameter        |         | int      | 32768 (32KB)                   |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | tcp_keepalive                       | client/server parameter |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | use_user_hosts                      | client/server parameter |         | bool     | off                            |                       |
+|                               | tcp_keepalive_idle                  | server parameter        |         | int      | 300                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | tcp_keepalive_interval              | server parameter        |         | int      | 300                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | tcp_keepalive_count                 | server parameter        |         | int      | 3                              |                       |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        |         | byte     | 32,768 *                       |                       |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
@@ -299,13 +315,11 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | update_use_attribute_references     | client parameter        | O       | bool     | no                             | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-| :ref:`thread-parameters`      | thread_connection_pooling           | server parameter        |         | bool     | yes                            |                       |
+| :ref:`thread-parameters`      | task_group                          | server parameter        |         | int      | system cores                   |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | thread_connection_timeout_seconds   | server parameter        |         | int      | 300                            |                       |
+|                               | task_worker                         | server parameter        |         | int      | the value of max_clients       |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_worker_pooling               | server parameter        |         | bool     | yes                            |                       |
-|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
-|                               | thread_core_count                   | server parameter        |         | int      | # of system cores              |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | thread_worker_timeout_seconds       | server parameter        |         | int      | 300                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -529,21 +543,37 @@ Connection-Related Parameters
 
 The following are parameters related to the database server. The type and value range for each parameter are as follows:
 
-+---------------------------------+--------+----------+----------+----------+
-| Parameter Name                  | Type   | Default  | Min      | Max      |
-+=================================+========+==========+==========+==========+
-| cubrid_port_id                  | int    | 1523     | 1        |          |
-+---------------------------------+--------+----------+----------+----------+
-| check_peer_alive                | string | both     |          |          |
-+---------------------------------+--------+----------+----------+----------+
-| db_hosts                        | string | NULL     |          |          |
-+---------------------------------+--------+----------+----------+----------+
-| max_clients                     | int    | 100      | 10       | 4000     |
-+---------------------------------+--------+----------+----------+----------+
-| tcp_keepalive                   | bool   | yes      |          |          |
-+---------------------------------+--------+----------+----------+----------+
-| use_user_hosts                  | bool   | off      |          |          |
-+---------------------------------+--------+----------+----------+----------+
++----------------------------+----------+--------------------+-------------+------------------+
+| Parameter Name             | Type     | Default            | Min         | Max              |
++============================+==========+====================+=============+==================+
+| cubrid_port_id             | int      | 1523               | 1           |                  |
++----------------------------+----------+--------------------+-------------+------------------+
+| check_peer_alive           | string   | both               |             |                  |
++----------------------------+----------+--------------------+-------------+------------------+
+| db_hosts                   | string   | NULL               |             |                  |
++----------------------------+----------+--------------------+-------------+------------------+
+| use_user_hosts             | bool     | off                |             |                  |
++----------------------------+----------+--------------------+-------------+------------------+
+| max_clients                | int      | 100                | 10          | 4000             |
++----------------------------+----------+--------------------+-------------+------------------+
+| max_connection_worker      | int      | system cores / 2   | 1           |                  |
++----------------------------+----------+--------------------+-------------+------------------+
+| min_connection_worker      | int      | 4                  | 1           |                  |
++----------------------------+----------+--------------------+-------------+------------------+
+| auto_scaling_window_size   | int      | 4                  | 1           | system cores     |
++----------------------------+----------+--------------------+-------------+------------------+
+| recv_budget_per_connection | int      | 16384 (16KB)       | 0 (unlimit) | 1073741824 (1GB) |
++----------------------------+----------+--------------------+-------------+------------------+
+| send_budget_per_connection | int      | 32768 (32KB)       | 0 (unlimit) | 1073741824 (1GB) |
++----------------------------+----------+--------------------+-------------+------------------+
+| tcp_keepalive              | bool     | yes                |             |                  |
++----------------------------+----------+--------------------+-------------+------------------+
+| tcp_keepalive_idle         | int      | 300                | 60          | 31536000         |
++----------------------------+----------+--------------------+-------------+------------------+
+| tcp_keepalive_interval     | int      | 300                | 60          | 31536000         |
++----------------------------+----------+--------------------+-------------+------------------+
+| tcp_keepalive_count        | int      | 3                  | 1           | 32               |
++----------------------------+----------+--------------------+-------------+------------------+
 
 **cubrid_port_id**
 
@@ -575,31 +605,6 @@ The following are parameters related to the database server. The type and value 
         db_hosts="hosts1:hosts2:hosts3"
 
     To connect to the server, the client first tries to connect to the specified server host referring to the database location file (**databases.txt**). If the connection fails, the client then tries to connect to the first one of the secondarily specified server hosts by referring to the value of the **db_hosts** parameter in the database configuration file (**cubrid.conf**).
-
-.. _max_clients:
-
-**max_clients**
-
-    **max_clients** is a parameter to configure the maximum number of clients (usually broker application processes (CAS)) which allow concurrent connections to the database server. The **max_clients** parameter refers to the number of concurrent transactions per database server process. The default value is **100**.
-
-    To guarantee performance while increasing the number of concurrent users in CUBRID environment, you need to make the appropriate value of the **max_clients** (**cubrid.conf**) parameter and the :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` (**cubrid_broker.conf**) parameter. That is, you are required to configure the number of concurrent connections allowed by databases with the **max_clients** parameter. You should also configure the number of concurrent connections allowed by brokers with the **MAX_NUM_APPL_SERVER** parameter.
-
-    For example, in the **cubrid_broker.conf** file, two node of a broker where the **MAX_NUM_APPL_SERVER** value of [%query_editor] is 50 and the **MAX_NUM_APPL_SERVER** value of [%BROKER1] is 50 is trying to connect one database server, the concurrent connections (**max_clients** value) allowed by the database server can be configured as follows:
-
-    *   (the maximum number of 50 by each node of a broker) * (two node of a broker) + (10 spare for database server connections of internal CUBRID process such as database server connection of CSQL Interpreter or HA log replication process) = 110
-
-    Especially, in HA environment, the value must be greater than the sum specified in **MAX_NUM_APPL_SERVER** of every broker node which connects to the same database.
-
-    Note that the memory usage is affected by the value specified in **max_clients**. That is, if the number of value is high, the memory usage will increase regardless of whether or not the clients actually access the database.
-
-    .. note::
-        
-        In Linux system, max_clients parameter is related to "ulimit -n" command, which specifies the maximum number of file descriptors which a process can use. File descriptor includes not only a file, but also a network socket. Therefore, the number of "ulimit -n" should be greater than the number of max_clients.
-
-**tcp_keepalive** 
-  
-    **tcp_keepalive** is a parameter which specifies if you apply SO_KEEPALIVE option to TCP network protocol or not. The default is **yes**. If this value is **no**, DB server-side connection can be disconnected when transaction logs are not copied for a long time in the firewall environment between master and slave.
- 
 
 **use_user_hosts** 
 
@@ -671,6 +676,68 @@ The following are parameters related to the database server. The type and value 
 
       cubrid-dev1
       CUB2.dev
+
+.. _max_clients:
+
+**max_clients**
+
+    **max_clients** is a parameter to configure the maximum number of clients (usually broker application processes (CAS)) which allow concurrent connections to the database server. The **max_clients** parameter refers to the number of concurrent transactions per database server process. The default value is **100**.
+
+    To guarantee performance while increasing the number of concurrent users in CUBRID environment, you need to make the appropriate value of the **max_clients** (**cubrid.conf**) parameter and the :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` (**cubrid_broker.conf**) parameter. That is, you are required to configure the number of concurrent connections allowed by databases with the **max_clients** parameter. You should also configure the number of concurrent connections allowed by brokers with the **MAX_NUM_APPL_SERVER** parameter.
+
+    For example, in the **cubrid_broker.conf** file, two node of a broker where the **MAX_NUM_APPL_SERVER** value of [%query_editor] is 50 and the **MAX_NUM_APPL_SERVER** value of [%BROKER1] is 50 is trying to connect one database server, the concurrent connections (**max_clients** value) allowed by the database server can be configured as follows:
+
+    *   (the maximum number of 50 by each node of a broker) * (two node of a broker) + (10 spare for database server connections of internal CUBRID process such as database server connection of CSQL Interpreter or HA log replication process) = 110
+
+    Especially, in HA environment, the value must be greater than the sum specified in **MAX_NUM_APPL_SERVER** of every broker node which connects to the same database.
+
+    Note that the memory usage is affected by the value specified in **max_clients**. That is, if the number of value is high, the memory usage will increase regardless of whether or not the clients actually access the database.
+
+    .. note::
+        
+        In Linux system, max_clients parameter is related to "ulimit -n" command, which specifies the maximum number of file descriptors which a process can use. File descriptor includes not only a file, but also a network socket. Therefore, the number of "ulimit -n" should be greater than the number of max_clients.
+
+.. _connection_worker:
+
+**max_connection_worker**
+
+    **max_connection_worker** specifies the maximum number of **connection workers** used for connection handling in the database server. Because **connection workers** are responsible for receiving and sending data for clients, this value should be set appropriately considering system load.
+
+**min_connection_worker**
+
+    **min_connection_worker** specifies the minimum number of **connection workers** used for connection handling in the database server. The server adjusts the number of **connection workers** based on both **max_connection_worker** and **min_connection_worker**.
+
+**auto_scaling_window_size**
+
+    **auto_scaling_window_size** specifies the search range used by the server when finding an appropriate number of **connection workers**. If **auto_scaling_window_size** is too large, performance may decrease. If it is too small, proper adjustment may be difficult.
+
+.. _budget_per_connection:
+
+**recv_budget_per_connection**
+
+    **recv_budget_per_connection** specifies the number of bytes one connection can receive at once. If **recv_budget_per_connection** is too small, receive processing may be interrupted too frequently and become slower. If it is too large, receives of other connections may be delayed.
+
+**send_budget_per_connection**
+
+    **send_budget_per_connection** specifies the number of bytes one connection can send at once. If **send_budget_per_connection** is too small, send processing may be interrupted too frequently and become slower. If it is too large, sends of other connections may be delayed.
+
+.. _tcp_keepalive:
+
+**tcp_keepalive**
+  
+    **tcp_keepalive** is a parameter which specifies if you apply SO_KEEPALIVE option to TCP network protocol or not. The default is **yes**. If this value is **no**, DB server-side connection can be disconnected when transaction logs are not copied for a long time in the firewall environment between master and slave.
+
+**tcp_keepalive_idle**
+  
+    **tcp_keepalive_idle** is a parameter that configures the TCP_KEEPIDLE option value in the TCP network protocol. The default value is **300** seconds. If no data is exchanged for a certain period, a keepalive packet is sent to verify the connection.
+
+**tcp_keepalive_interval**
+  
+    **tcp_keepalive_interval** is a parameter that configures the TCP_KEEPINTVL option value in the TCP network protocol. The default value is **300** seconds. It is the interval before sending another keepalive packet when no response is received to the previous packet.
+
+**tcp_keepalive_count**
+  
+    **tcp_keepalive_count** is a parameter that configures the TCP_KEEPCNT option value in the TCP network protocol. The default value is **3**. It is the number of keepalive probes to send; if no response is received after this number, the connection is disconnected.
 
 .. _memory-parameters:
 
@@ -2020,45 +2087,31 @@ Thread-Related Parameters
 
 Thread management can be configured by threads parameters. The type and value range for each parameter are as follows:
 
-+---------------------------------------+--------+-------------------+----------+----------+
-| Parameter Name                        | Type   | Default           | Min      | Max      |
-+=======================================+========+===================+==========+==========+
-| thread_connection_pooling             | bool   | true              |          |          |
-+---------------------------------------+--------+-------------------+----------+----------+
-| thread_connection_timeout_seconds     | int    | 300               | -1       | 3600     |
-+---------------------------------------+--------+-------------------+----------+----------+
-| thread_worker_pooling                 | bool   | true              |          |          |
-+---------------------------------------+--------+-------------------+----------+----------+
-| thread_core_count                     | int    | # of system core  | 1        | 1024     |
-+---------------------------------------+--------+-------------------+----------+----------+
-| thread_worker_timeout_seconds         | int    | 300               | -1       | 3600     |
-+---------------------------------------+--------+-------------------+----------+----------+
-| loaddb_worker_count                   | bool   | 8                 | 2        | 64       |
-+---------------------------------------+--------+-------------------+----------+----------+
++---------------------------------------+--------+-------------------+---------+-----------------+
+| Parameter Name                        | Type   | Default           | Min     | Max             |
++=======================================+========+===================+=========+=================+
+| task_group                            | int    | system cores      | 1       | system cores    |
++---------------------------------------+--------+-------------------+---------+-----------------+
+| task_worker                           | int    | max_clients value | 1       | 1048576         |
++---------------------------------------+--------+-------------------+---------+-----------------+
+| thread_worker_pooling                 | bool   | true              |         |                 |
++---------------------------------------+--------+-------------------+---------+-----------------+
+| thread_worker_timeout_seconds         | int    | 300               | -1      | 3600            |
++---------------------------------------+--------+-------------------+---------+-----------------+
+| loaddb_worker_count                   | bool   | 8                 | 2       | 64              |
++---------------------------------------+--------+-------------------+---------+-----------------+
 
-**thread_connection_pooling**
+**task_group**
 
-    If **thread_connection_pooling** parameter is true, all threads used for client connection management are pooled on server boot.
+    **task_group** adjusts the number of **task worker** groups. The default value is set to the number of system cores.
 
-**thread_connection_timeout_seconds**
+**task_worker**
 
-    **thread_connection_timeout_seconds** is a parameter that configures \
-    \wait time before stopping for threads handling connection management. \
-    \After closing a connection, the thread will wait the value of the \
-    \parameter expressed in seconds to be assigned a new connection. If no \
-    \connection is assigned and the wait time expires, the thread stops. \
-    \Another thread may be started the next time a connection comes. \
-    \If parameter value is **-1**, threads never stop. They sleep until \
-    \they are given a new assignment.
+    **task_worker** specifies the number of **workers** used for transaction jobs. The default value is the same as **max_clients**, but this value has a significant impact on performance and should be tuned appropriately.
 
 **thread_worker_pooling**
 
     If **thread_worker_pooling** parameter is true, all threads used for client requests execution are pooled on server boot.
-
-**thread_core_count**
-
-    The number of groups of pooled threads is configured according to the **thread_core_count** parameter. The default value is set to the number of system cores.
-    If the number of threads in a group does not reach 3 or more according to the parameter value, the system adjusts this value so that at least 3 threads belong to each group.
 
 **thread_worker_timeout_seconds**
 

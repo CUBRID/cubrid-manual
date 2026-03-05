@@ -701,7 +701,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **max_connection_worker**
 
-    **max_connection_worker**\ 는 데이터베이스 서버에서 연결 처리에 사용할 **connection worker**\ 의 최대 개수를 지정한다. **connection worker**\ 는 클라이언트들로부터의 송수신을 담당하므로 부하를 고려하여 적절한 개수가 지정되어야 한다.
+    **max_connection_worker**\ 는 데이터베이스 서버에서 연결 처리에 사용할 **connection worker**\ 의 최대 개수를 지정한다. **connection worker**\ 는 클라이언트들로부터의 송수신을 담당하므로 부하를 고려하여 적절한 개수가 지정되어야 한다. 일반적으로 장비의 코어 개수 혹은 코어 개수 / 2를 권장한다.
 
 **min_connection_worker**
 
@@ -2099,7 +2099,9 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **task_worker**
 
-    **task_worker**\ 는 트랜잭션 작업을 수행할 **worker**\ 의 개수를 지정한다. 기본 값은 **max_clients**\ 와 동일하게 설정되지만, 성능에 큰 영향을 주므로 적절한 조정이 필요하다.
+    **task_worker**\ 는 트랜잭션 작업을 수행할 **worker**\ 의 개수를 지정한다. 기본 값은 **max_clients**\ 와 동일하게 설정된다. **task_worker**\ 는 성능에 큰 영향을 미치는데, 너무 많으면 잦은 임계 구역 진입과 많은 자원 사용으로 인해 성능이 저하될 수 있는 반면, 너무 적으면 자원을 전부 활용하지 못하거나 교착 상태 시 작업이 멈출 수 있다.
+    
+    **task_worker**\ 는 환경에 따라 최적의 값이 달라지므로 세심한 변경이 필요하다.
 
 **thread_worker_pooling**
 

@@ -683,7 +683,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **max_clients**\ 는 데이터베이스 서버에 동시 연결을 허용하는 클라이언트(일반적으로 브로커 용용 서버(CAS))의 최대 개수를 지정하기 위한 파라미터이다. 즉, **max_clients** 파라미터는 데이터베이스 서버 프로세스 하나 당 동시에 접속할 수 있는 클라이언트의 최대 개수를 의미한다. 이 파라미터의 기본값은 **100**\ 이다.
 
-    CUBRID 환경에서 동시 사용자 수를 증가시키기 위해서는 질의 성능을 고려하여 **max_clients** 파라미터(**cubrid.conf**) 및 :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` 파라미터(**cubrid_broker.conf**)를 적절한 값으로 설정해야 한다. 즉, **max_clients** 파라미터를 통해 데이터베이스 서버가 허용하는 동시 접속 개수를 설정하고, **MAX_NUM_APPL_SERVER** 파라미터를 통해 해당 브로커가 허용하는 동시 접속 개수를 설정한다.
+    CUBRID 환경에서 동시 사용자 수를 증가시키기 위해서는 질의 성능을 고려하여 **max_clients** 파라미터(**cubrid.conf**) 및 :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` 파라미터(**cubrid_broker.conf**)를 적절한 값으로 설정해야 한다. **max_clients** 파라미터는 데이터베이스 서버가 허용하는 동시 접속 개수를 설정하고, **MAX_NUM_APPL_SERVER** 파라미터는 해당 브로커가 허용하는 동시 접속 개수를 설정한다.
 
     예를 들어, **cubrid_broker.conf** 파일에서 [%query_editor]의 **MAX_NUM_APPL_SERVER** 값이 50이고 [%BROKER1]의 **MAX_NUM_APPL_SERVER** 값이 50인 브로커 노드 2개가 하나의 데이터베이스 서버에 접속하는 경우, 데이터베이스 서버가 허용하는 동시 접속 개수인 **max_clients** 의 값은 다음과 같이 설정할 수 있다.
 

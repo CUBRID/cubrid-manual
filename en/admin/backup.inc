@@ -124,9 +124,8 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
     .. note::
 
-        The key file manages the master key of the TDE key stored within the database and contains security information that controls access to backup files rather than database data itself.
-Therefore, the key file must not be backed up together with the backup volume or stored on the same storage media. It must be separated and managed securely by the DBA using an independent and secure method.
-If the key file is lost or compromised, the backup volume may become unrecoverable or may result in a security incident. Accordingly, it is strongly recommended to establish clear access control and retention policies for the key file.
+        The key file manages an auxiliary key used to encrypt and decrypt the master key of TDE stored within the database. When using the TDE feature, the key file should not be backed up together with the backup volume or stored on the same storage media. Instead, it is recommended to manage it separately using a secure method. If the key file is lost or exposed, data protected by the TDE feature may become inaccessible or may lead to a security incident. Therefore, it is recommended to establish clear policies for the secure storage and management of the key file.
+
 
 
 Backup Strategy and Method

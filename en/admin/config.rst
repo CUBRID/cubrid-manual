@@ -701,7 +701,7 @@ The following are parameters related to the database server. The type and value 
 
 **max_connection_worker**
 
-    **max_connection_worker** specifies the maximum number of **connection workers** used for connection handling in the database server. Because **connection workers** are responsible for receiving and sending data for clients, this value should be set appropriately considering system load.
+    **max_connection_worker** specifies the maximum number of **connection workers** used for connection handling in the database server. Because **connection workers** are responsible for receiving and sending data for clients, this value should be set appropriately considering system load. In general, the number of CPU cores or half the number of CPU cores is recommended.
 
 **min_connection_worker**
 
@@ -2107,7 +2107,9 @@ Thread management can be configured by threads parameters. The type and value ra
 
 **task_worker**
 
-    **task_worker** specifies the number of **workers** used for transaction jobs. The default value is the same as **max_clients**, but this value has a significant impact on performance and should be tuned appropriately.
+    **task_worker** specifies the number of **workers** used for transaction jobs. The default value is the same as **max_clients**. **task_worker** has a significant impact on performance. If set too high, performance may degrade due to frequent entry into critical sections and higher resource usage. If set too low, resources may not be fully utilized, or processing may stall when deadlocks occur.
+
+    The optimal value of **task_worker** depends on the environment, so tune it carefully.
 
 **thread_worker_pooling**
 

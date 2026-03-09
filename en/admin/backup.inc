@@ -3,7 +3,7 @@
 backupdb
 --------
 
-A database backup is the procedure of storing CUBRID database volumes, control files and log files, and it is executed by using the **cubrid backupdb** utility or the CUBRID Manager. **DBA** must regularly back up the database so that the database can be properly restored in the case of storage media or file errors. The restore environment must have the same operating system and the same version of CUBRID as the backup environment. For such a reason, you must perform a backup in a new environment immediately after migrating a database to a new version.
+A database backup is the procedure of storing CUBRID database volumes, control files and log files, and it is executed by using the **cubrid backupdb** utility or the CUBRID Manager. **DBA** must regularly back up the database so that the database can be properly restored in the case of storage media or file errors. The restore environment must have the same operating system and the same version of CUBRID as the backup environment. For this reason, you must perform a backup in the new environment immediately after migrating a database to a new version. However, because LOB (Large Object) data in CUBRID is stored as external files separate from database volumes, it is not included in backups performed by the backupdb utility. Therefore, database administrators must manually back up the directory containing LOB files during database backup operations. When restoring the database, the LOB files must also be restored to their original directory to ensure data consistency.
 
 To recover all database pages, control files and the database to the state at the time of backup, the **cubrid backupdb** utility copies all necessary log records. ::
 
@@ -118,9 +118,15 @@ The following shows options available with the **cubrid backupdb** utility (opti
 
 .. option:: -k, --separate-keys
 
-    This option is used not to include the key file in the backup volume. The key file that is not included is separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  ::
+    This option is used to exclude the key file from the backup volume. The excluded key file is separated into a file named **<database_name>_bk<backup_level>_keys**. If this option is not given, the key file is included in the backup volume by default. For a detailed description of key file separation, see :ref:`tde-enc-backup`.  
 
         cubrid backupdb -k demodb
+
+    .. note::
+
+        The key file manages an auxiliary key used to encrypt and decrypt the master key of TDE stored within the database. When using the TDE feature, the key file should not be backed up together with the backup volume or stored on the same storage media. Instead, it is recommended to manage it separately using a secure method. If the key file is lost or exposed, data protected by the TDE feature may become inaccessible or may lead to a security incident. Therefore, it is recommended to establish clear policies for the secure storage and management of the key file.
+
+
 
 Backup Strategy and Method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

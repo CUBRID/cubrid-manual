@@ -345,7 +345,7 @@ CONNECT_BY_ISCYCLE
 CONNECT_BY_ROOT
 ---------------
 
-**CONNECT_BY_ROOT** 은 칼럼 값으로 루트 행의 값을 반환한다. 이 연산자는 **SELECT** 문 내의 **WHERE** 절 및 **ORDER BY** 절에서 사용할 수 있다.
+**CONNECT_BY_ROOT** 은 칼럼 값으로 루트 행의 값을 반환한다. 이 연산자는 **SELECT** 문 내의 **WHERE** 절 및 **ORDER BY** 절에서 사용할 수 있지만, **WHERE** 절은 반드시 START WITH / CONNECT BY 절보다 앞에 위치해야 하고, **ORDER BY** 는 계층절 다음에 위치하여야 한다.
 
 다음은 계층 질의 결과 행에 대하여 루트 행의 *id* 값을 조회하는 예제이다.
 
@@ -369,6 +369,24 @@ CONNECT_BY_ROOT
         5            2  'Verma'                                 2
         6            2  'Foster'                                2
         7            6  'Brown'                                 2
+
+.. code-block:: sql
+
+    -- 올바른 예
+    SELECT id, CONNECT_BY_ROOT name
+    FROM tree
+    WHERE CONNECT_BY_ROOT name = 'Kim'
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id = mgrid
+
+    -- 잘못된 예
+    SELECT id, CONNECT_BY_ROOT name
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id = mgrid
+    WHERE CONNECT_BY_ROOT name = 'Kim';  -- 문법 오류
+
+    
 
 .. _prior-operator:
 

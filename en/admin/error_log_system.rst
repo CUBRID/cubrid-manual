@@ -111,70 +111,70 @@ System Management Errors
 
 **ERROR CODE: -102, 'Unexpected EOF in volume information file.'**
 
-- This message is an error that occurs while the CUBRID system reads the volume information (DBname_vinf) file; it mainly occurs when the file is incomplete or corrupted, or when it has been recorded/entered in a way that does not match the actual database volume information.
+- This message is displayed while the CUBRID system reads the volume information (DBname_vinf) file; it mainly occurs when the file is incomplete or corrupted, or when it has been recorded/entered in a way that does not match the actual database volume information.
 
 
 .. _ERROR-103:
 
 **ERROR CODE: -103, 'The first volume in volume information file is not in order.'**
 
-- This message is an error that occurs while the CUBRID system searches for the first volume in the database volume information (DBname_vinf) file; it means that the entries in the volume information file must be sorted sequentially, but their order has been changed or there are missing entries.
+- This message is displayed while the CUBRID system searches for the first volume in the database volume information (DBname_vinf) file; it means that the entries in the volume information file must be sorted sequentially, but their order has been changed or there are missing entries.
 
 
 .. _ERROR-104:
 
 **ERROR CODE: -104, 'The first volume in volume information file is not found.'**
 
-- This message is an error that occurs while the CUBRID system searches for the first volume in the database volume information (DBname_vinf) file; it may indicate a database integrity issue, file corruption, or that the file has possibly been modified manually.
+- This message is displayed while the CUBRID system searches for the first volume in the database volume information (DBname_vinf) file; it may indicate a database integrity issue, file corruption, or that the file has possibly been modified manually.
 
 
 .. _ERROR-105:
 
 **ERROR CODE: -105, 'Unable to open backup file "%1$s".'**
 
-- This message is an error that occurs when the CUBRID system tries to access a backup file but cannot access it due to file-system permission problems, file corruption, or the file not existing; backup or restore operations can fail because this file-access failure blocks access to the backup file.
+- This message is displayed when the CUBRID system tries to access a backup file but cannot access it due to file-system permission problems, file corruption, or the file not existing; backup or restore operations can fail because this file-access failure blocks access to the backup file.
 
 
 .. _ERROR-111:
 
 **ERROR CODE: -111, 'Transaction was aborted.'**
 
-- This message is an error that occurs when the CUBRID system unilaterally aborts an active transaction due to a server failure or a mode change; it means the system forcibly terminated the transaction without the client’s request or consent, and it mainly occurs when the server process is terminated unexpectedly or during failover/failback or other mode transitions, which can lead to client errors and rollback of in-flight work.
+- This message is displayed when the CUBRID system unilaterally aborts an active transaction due to a server failure or a mode change; it means the system forcibly terminated the transaction without the client’s request or consent, and it mainly occurs when the server process is terminated unexpectedly or during failover/failback or other mode transitions, which can lead to client errors and rollback of in-flight work.
 
 
 .. _ERROR-113:
 
 **ERROR CODE: -113, 'Cannot restart server.'**
 
-- This message is an error that occurs when the CUBRID system fails while trying to restart or initialize the database server; during server restart/initialization, this can occur due to insufficient system resources, permission problems, port conflicts, or other system-level errors, and it can prevent normal database service from starting.
+- This message is displayed when the CUBRID system fails while trying to restart or initialize the database server; during server restart/initialization, this can occur due to insufficient system resources, permission problems, port conflicts, or other system-level errors, and it can prevent normal database service from starting.
 
 
 .. _ERROR-114:
 
 **ERROR CODE: -114, 'Unknown database "%1$s".'**
 
-- This message is an error that occurs when the CUBRID system cannot recognize the specified path or name as a database; it means that database volumes or files have been renamed or copied outside of the database domain, so CUBRID cannot find the correct database structure.
+- This message is displayed when the CUBRID system cannot recognize the specified path or name as a database; it means that database volumes or files have been renamed or copied outside of the database domain, so CUBRID cannot find the correct database structure.
 
 
 .. _ERROR-118:
 
 **ERROR CODE: -118, 'Unable to determine the current working directory.'**
 
-- This message is an error that occurs when the CUBRID system fails while checking the current working directory; such failures mainly occur due to file-system permission problems, the directory having been deleted, or process permission issues.
+- This message is displayed when the CUBRID system fails while checking the current working directory; such failures mainly occur due to file-system permission problems, the directory having been deleted, or process permission issues.
 
 
 .. _ERROR-123:
 
 **ERROR CODE: -123, 'Unable to create database volumes.'**
 
-- This message is an error that occurs when the CUBRID system tries to create volumes or files required for the database but fails due to file-system permissions, insufficient disk space, path problems, and similar issues; database volume creation can fail because the needed files cannot be created, which can block database creation, volume expansion, or certain maintenance operations.
+- This message is displayed when the CUBRID system tries to create volumes or files required for the database but fails due to file-system permissions, insufficient disk space, path problems, and similar issues; database volume creation can fail because the needed files cannot be created, which can block database creation, volume expansion, or certain maintenance operations.
 
 
 .. _ERROR-130:
 
 **ERROR CODE: -130, 'Unable to allocate %1$zu bytes.'**
 
-- This message is an error that occurs when the CUBRID database system cannot allocate the required memory; it is printed when the system’s virtual memory is insufficient or when a memory allocation request fails, which indicates that the system’s memory resources have been exhausted.
+- This message is displayed when the CUBRID database system cannot allocate the required memory; it is printed when the system’s virtual memory is insufficient or when a memory allocation request fails, which indicates that the system’s memory resources have been exhausted.
 
 
 .. _ERROR-313:

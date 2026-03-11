@@ -15,7 +15,6 @@ The composition of CUBRID error message files and user guidance messages is as f
 * cubrid.msg: Runtime errors and system messages of the CUBRID database engine
 * csql.msg: Usage instructions, commands, and error messages of the CSQL (CUBRID SQL Interpreter) client tool
 * utils.msg: Messages and usage instructions of CUBRID administrative utility tools
-* esql.msg: Error and warning messages of the ESQL/C (Embedded SQL in C) precompiler
 
 
 **CUBRID Data Model Terminology**

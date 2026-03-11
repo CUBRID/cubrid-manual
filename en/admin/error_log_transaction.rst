@@ -41,21 +41,21 @@ Transaction-Related Errors
 
 **ERROR CODE: -106, 'Cannot prepare to commit the current transaction with global transaction identifier %1$d because that transaction identifier is in use by another transaction.'**
 
-- This message is an error that occurs when the CUBRID system tries to prepare-commit the current transaction in a 2PC (Two-Phase Commit) distributed transaction, but cannot proceed with the prepare operation because the specified global transaction identifier is already in use by another active transaction.
+- This message is displayed when the CUBRID system tries to prepare-commit the current transaction in a 2PC (Two-Phase Commit) distributed transaction, but cannot proceed with the prepare operation because the specified global transaction identifier is already in use by another active transaction.
 
 
 .. _ERROR-107:
 
 **ERROR CODE: -107, 'There is no global distributed transaction associated with transaction identifier %1$d.'**
 
-- This message is an error that occurs when the CUBRID system cannot find a global distributed transaction associated with a specific transaction identifier; that is, in a 2PC (Two-Phase Commit) distributed-transaction environment, the client attempted an operation on a distributed transaction using a specific transaction ID, but the global distributed transaction for that ID does not exist or has already completed.
+- This message is displayed when the CUBRID system cannot find a global distributed transaction associated with a specific transaction identifier; that is, in a 2PC (Two-Phase Commit) distributed-transaction environment, the client attempted an operation on a distributed transaction using a specific transaction ID, but the global distributed transaction for that ID does not exist or has already completed.
 
 
 .. _ERROR-108:
 
 **ERROR CODE: -108, 'Current transaction %1$d must be committed or aborted before attempting to join to the distributed transaction with global identifier %2$d.'**
 
-- This message is an error that occurs when the CUBRID system tries to participate in a 2PC (Two-Phase Commit) distributed transaction but cannot participate because there is already an active transaction; it means that the current transaction must be completed (committed or aborted) before participating in the distributed transaction.
+- This message is displayed when the CUBRID system tries to participate in a 2PC (Two-Phase Commit) distributed transaction but cannot participate because there is already an active transaction; it means that the current transaction must be completed (committed or aborted) before participating in the distributed transaction.
 
 
 .. _ERROR-198:
@@ -76,7 +76,7 @@ Transaction-Related Errors
 
 **ERROR CODE: -441, 'Invalid cursor operation.'**
 
-- This message is an error that occurs when trying to extract a record’s OID from a result (cursor) that does not include OIDs in the CUBRID database; it can occur during cursor-operation validation in the query processor when an operation that the cursor does not support is attempted, or when the cursor state does not allow that operation.
+- This message is displayed when trying to extract a record’s OID from a result (cursor) that does not include OIDs in the CUBRID database; it can occur during cursor-operation validation in the query processor when an operation that the cursor does not support is attempted, or when the cursor state does not allow that operation.
 
 
 .. _ERROR-442:
@@ -153,7 +153,7 @@ Transaction-Related Errors
 
 **ERROR CODE: -641, 'A name must be given for a savepoint.'**
 
-- This message is an error that occurs when creating a savepoint in the CUBRID database but no name is provided; a savepoint is a feature that marks a specific point within a transaction, and it must require a unique name; this is a validation error that occurs when the required parameter (the name) is missing when creating a savepoint.
+- This message is displayed when creating a savepoint in the CUBRID database but no name is provided; a savepoint is a feature that marks a specific point within a transaction, and it must require a unique name; this is a validation error that occurs when the required parameter (the name) is missing when creating a savepoint.
 
 
 .. _ERROR-642:

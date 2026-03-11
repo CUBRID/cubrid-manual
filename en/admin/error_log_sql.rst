@@ -6,14 +6,14 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -64, 'Unknown class "%1$s".'**
 
-- This message is an error that occurs when the specified table name cannot be found in the CUBRID system.
+- This message is displayed when the specified table name cannot be found in the CUBRID system.
 
 
 .. _ERROR-65:
 
 **ERROR CODE: -65, 'Class "%1$s" already exists.'**
 
-- This message is an error that occurs when you attempt to create a new table with a table name that already exists in the CUBRID system.
+- This message is displayed when you attempt to create a new table with a table name that already exists in the CUBRID system.
 
 
 .. _ERROR-176:
@@ -27,7 +27,7 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -181, 'Cannot coerce value of domain "%1$s" to domain "%2$s".'**
 
-- This message is an error that occurs when converting a value of one data type to another data type in CUBRID when the conversion is not possible or is incompatible; it occurs due to compatibility issues between data types or values that do not match the conversion rules; for example, it can occur when converting a string to a number, or performing an operation between different data types.
+- This message is displayed when converting a value of one data type to another data type in CUBRID when the conversion is not possible or is incompatible; it occurs due to compatibility issues between data types or values that do not match the conversion rules; for example, it can occur when converting a string to a number, or performing an operation between different data types.
 
 
 .. _ERROR-182:
@@ -41,35 +41,35 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -202, 'Attribute "%1$s" was not found.'**
 
-- This message is an error that occurs when a column with the specified name cannot be found in the CUBRID database; it can mainly appear due to an incorrect column name reference, access to a non-existent column, or a schema definition error.
+- This message is displayed when a column with the specified name cannot be found in the CUBRID database; it can mainly appear due to an incorrect column name reference, access to a non-existent column, or a schema definition error.
 
 
 .. _ERROR-203:
 
 **ERROR CODE: -203, 'Value for attribute "%1$s" must be of type "%2$s", not type "%3$s".'**
 
-- This message is an error that occurs when the data type of a column and the type of the value you are trying to assign do not match in the CUBRID database; it can mainly appear when trying to assign a value of an incorrect type, due to a data type definition issue or a data type conversion failure.
+- This message is displayed when the data type of a column and the type of the value you are trying to assign do not match in the CUBRID database; it can mainly appear when trying to assign a value of an incorrect type, due to a data type definition issue or a data type conversion failure.
 
 
 .. _ERROR-205:
 
 **ERROR CODE: -205, 'Attribute "%1$s" cannot be made NULL.'**
 
-- This message is an error that occurs when you attempt to assign a NULL value to a column on which a NOT NULL constraint is set in the CUBRID database; it can mainly appear due to incorrect data insertion, assigning a NULL value during an update, or a mismatch between the schema definition and the data.
+- This message is displayed when you attempt to assign a NULL value to a column on which a NOT NULL constraint is set in the CUBRID database; it can mainly appear due to incorrect data insertion, assigning a NULL value during an update, or a mismatch between the schema definition and the data.
 
 
 .. _ERROR-208:
 
 **ERROR CODE: -208, 'Method "%1$s" not found.'**
 
-- This message is an error that occurs when a method with the specified name cannot be found in the CUBRID database; it can mainly appear due to an incorrect method name reference, access to a non-existent method, or a schema definition error.
+- This message is displayed when a method with the specified name cannot be found in the CUBRID database; it can mainly appear due to an incorrect method name reference, access to a non-existent method, or a schema definition error.
 
 
 .. _ERROR-218:
 
 **ERROR CODE: -218, 'Invalid object in db_get path expression.'**
 
-- This message is an error that occurs when an invalid object is found while processing the path expression of the `db_get` function in the CUBRID database.
+- This message is displayed when an invalid object is found while processing the path expression of the `db_get` function in the CUBRID database.
 
 
 
@@ -77,7 +77,7 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -219, 'Invalid db_get path expression.'**
 
-- This message is an error that occurs when the path expression of the `db_get` function is invalid in the CUBRID database.
+- This message is displayed when the path expression of the `db_get` function is invalid in the CUBRID database.
 
 
 
@@ -85,56 +85,56 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -220, 'Invalid set in db_get path expression.'**
 
-- This message is an error that occurs when, while processing the path expression of the `db_get` function in the CUBRID database, a set-related operation is attempted on an object that is not of a set type.
+- This message is displayed when, while processing the path expression of the `db_get` function in the CUBRID database, a set-related operation is attempted on an object that is not of a set type.
 
 
 .. _ERROR-221:
 
 **ERROR CODE: -221, 'Invalid set index in db_get path expression.'**
 
-- This message is an error that occurs when, while processing the path expression of the `db_get` function in the CUBRID database, an invalid index is used for a collection object of type set, multiset, or sequence.
+- This message is displayed when, while processing the path expression of the `db_get` function in the CUBRID database, an invalid index is used for a collection object of type set, multiset, or sequence.
 
 
 .. _ERROR-222:
 
 **ERROR CODE: -222, 'Attempt to assign string value greater than %2$d characters to attribute "%1$s".'**
 
-- This message is an error that occurs when, in the CUBRID database, you attempt to assign a string value to a specific column of an object and the length of the string to be assigned exceeds the maximum string length allowed by that column; it mainly occurs when inserting or updating data that exceeds the maximum length defined for a column of type `VARCHAR` or `CHAR`.
+- This message is displayed when, in the CUBRID database, you attempt to assign a string value to a specific column of an object and the length of the string to be assigned exceeds the maximum string length allowed by that column; it mainly occurs when inserting or updating data that exceeds the maximum length defined for a column of type `VARCHAR` or `CHAR`.
 
 
 .. _ERROR-225:
 
 **ERROR CODE: -225, 'Missing value for attribute "%1$s" with the NOT NULL constraint.'**
 
-- This message is an error that occurs when, in the CUBRID database, a value is not provided for a column with a `NOT NULL` constraint or when a `NULL` value is attempted to be assigned.
+- This message is displayed when, in the CUBRID database, a value is not provided for a column with a `NOT NULL` constraint or when a `NULL` value is attempted to be assigned.
 
 
 .. _ERROR-226:
 
 **ERROR CODE: -226, 'Empty component list in class.'**
 
-- This message is an error that occurs when, while performing an operation on a table or object in the CUBRID database, the list of components (columns, attributes, etc.) that the table or object must have is empty or invalid; it can mainly occur in operations such as schema unload, query result processing, or retrieving specific object information.
+- This message is displayed when, while performing an operation on a table or object in the CUBRID database, the list of components (columns, attributes, etc.) that the table or object must have is empty or invalid; it can mainly occur in operations such as schema unload, query result processing, or retrieving specific object information.
 
 
 .. _ERROR-227:
 
 **ERROR CODE: -227, 'Attempt to assign value to attribute "%1$s" more than once.'**
 
-- This message is an error that occurs when, in the CUBRID database, you create an object using an object template and attempt to assign a value to the same column more than once.
+- This message is displayed when, in the CUBRID database, you create an object using an object template and attempt to assign a value to the same column more than once.
 
 
 .. _ERROR-228:
 
 **ERROR CODE: -228, 'Method "%1$s" called with %2$d arguments. The system allows a maximum of %3$d arguments.'**
 
-- This message is an error that occurs when, in the CUBRID database, you call a method and pass more arguments than the maximum number of arguments allowed.
+- This message is displayed when, in the CUBRID database, you call a method and pass more arguments than the maximum number of arguments allowed.
 
 
 .. _ERROR-229:
 
 **ERROR CODE: -229, 'Method "%1$s" requires argument %2$d to be within the domain "%3$s". An invalid value of domain "%4$s" was given.'**
 
-- This message is an error that occurs when, in the CUBRID database, the value of a specific argument falls outside the expected domain when calling a method; it can mainly appear when a value of an incorrect type is passed as a method argument, or when data type conversion (coercion) is not possible.
+- This message is displayed when, in the CUBRID database, the value of a specific argument falls outside the expected domain when calling a method; it can mainly appear when a value of an incorrect type is passed as a method argument, or when data type conversion (coercion) is not possible.
 
 
 .. _ERROR-233:
@@ -260,7 +260,7 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -254, 'Unable to remove domain "%2$s" from attribute "%1$s".'**
 
-- This message is an error that occurs when, in the CUBRID database, you attempt to remove a specific data type; it mainly occurs when trying to remove a column's data type using a `DROP TABLE` statement, in a situation where the data type cannot be removed from the column (e.g., the data type does not exist, is referenced by another constraint, or is the column's basic data type).
+- This message is displayed when, in the CUBRID database, you attempt to remove a specific data type; it mainly occurs when trying to remove a column's data type using a `DROP TABLE` statement, in a situation where the data type cannot be removed from the column (e.g., the data type does not exist, is referenced by another constraint, or is the column's basic data type).
 
 
 .. _ERROR-260:
@@ -302,14 +302,14 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -293, 'Operation not allowed for this class type.'**
 
-- This message is an error that occurs when, in the CUBRID database, you attempt an operation that is not allowed for a specific table type; it can occur mainly in the process of schema definition, table alteration, or performing certain object-related operations, and indicates that you must understand the characteristics of the table and perform allowed operations.
+- This message is displayed when, in the CUBRID database, you attempt an operation that is not allowed for a specific table type; it can occur mainly in the process of schema definition, table alteration, or performing certain object-related operations, and indicates that you must understand the characteristics of the table and perform allowed operations.
 
 
 .. _ERROR-294:
 
 **ERROR CODE: -294, 'Undefined environment variable "%1$s" referenced in method file.'**
 
-- This message is an error that occurs when, in the CUBRID database, an environment variable included in the path of a method file is not defined; a method file is an external library file that implements user-defined methods (functions) in CUBRID, and this message mainly indicates a problem that occurs because the method file cannot be found during the dynamic linking process.
+- This message is displayed when, in the CUBRID database, an environment variable included in the path of a method file is not defined; a method file is an external library file that implements user-defined methods (functions) in CUBRID, and this message mainly indicates a problem that occurs because the method file cannot be found during the dynamic linking process.
 
 
 .. _ERROR-305:
@@ -673,14 +673,14 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -628, 'Invalid currency type: %1$d.'**
 
-- This message is an error that occurs when processing the monetary data type in the CUBRID database, it occurs when an unsupported currency type is specified.
+- This message is displayed when processing the monetary data type in the CUBRID database, it occurs when an unsupported currency type is specified.
 
 
 .. _ERROR-631:
 
 **ERROR CODE: -631, 'SQL statement violated NOT NULL constraint.'**
 
-- This message is an error that occurs when an SQL statement violates a NOT NULL constraint in the CUBRID database, it appears when a NOT NULL constraint is set on a table column but an INSERT or UPDATE statement attempts to input a NULL value into that column.
+- This message is displayed when an SQL statement violates a NOT NULL constraint in the CUBRID database, it appears when a NOT NULL constraint is set on a table column but an INSERT or UPDATE statement attempts to input a NULL value into that column.
 
 
 
@@ -688,7 +688,7 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -649, 'Given precision of %1$d is invalid; it should be greater than %2$d and no greater than %3$d.'**
 
-- This message is an error that occurs when the precision value of a data type is invalid in the CUBRID database, it occurs when the specified precision value is outside the range allowed by the data type, it means a validation failure that occurs when defining a data type with a precision value that is too small or too large.
+- This message is displayed when the precision value of a data type is invalid in the CUBRID database, it occurs when the specified precision value is outside the range allowed by the data type, it means a validation failure that occurs when defining a data type with a precision value that is too small or too large.
 
 
 .. _ERROR-670:
@@ -702,14 +702,14 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -683, 'Attempted to create string with illegal length %1$d'**
 
-- This message is an error that occurs when you try to create a string in the CUBRID database but the specified length is not valid, the string length cannot exceed the maximum length defined in CUBRID and cannot be negative, it mainly occurs in the process of converting LOB (Large Object) data to a string in the clob_to_char() function.
+- This message is displayed when you try to create a string in the CUBRID database but the specified length is not valid, the string length cannot exceed the maximum length defined in CUBRID and cannot be negative, it mainly occurs in the process of converting LOB (Large Object) data to a string in the clob_to_char() function.
 
 
 .. _ERROR-685:
 
 **ERROR CODE: -685, 'Class "%1$s" is invalid.'**
 
-- This message is an error that occurs when the specified table is invalid while changing the owner in the CUBRID database.
+- This message is displayed when the specified table is invalid while changing the owner in the CUBRID database.
 
 
 .. _ERROR-704:
@@ -933,21 +933,21 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -787, 'Conversion error in time format.'**
 
-- This message is an error that occurs in the time processing module of the CUBRID database during time format conversion, that is, the error is set when a problem occurs during converting time data to another format, converting time zones, or validating time values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of time data.
+- This message is displayed in the time processing module of the CUBRID database during time format conversion, that is, the error is set when a problem occurs during converting time data to another format, converting time zones, or validating time values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of time data.
 
 
 .. _ERROR-788:
 
 **ERROR CODE: -788, 'Conversion error in timestamp format.'**
 
-- This message is an error that occurs in the timestamp processing module of the CUBRID database during timestamp format conversion, that is, the error is set when a problem occurs during converting timestamp data to another format, parsing a date/time string into a timestamp, or validating timestamp values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of timestamp data.
+- This message is displayed in the timestamp processing module of the CUBRID database during timestamp format conversion, that is, the error is set when a problem occurs during converting timestamp data to another format, parsing a date/time string into a timestamp, or validating timestamp values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of timestamp data.
 
 
 .. _ERROR-791:
 
 **ERROR CODE: -791, 'Invalid serial value.'**
 
-- This message is an error that occurs when validation of a serial value fails in the serial object processing module of the CUBRID database, that is, the error is set when required attribute values are NULL or are not of the correct data type during validation of serial object property values, it occurs during the validation process to ensure the integrity of serial objects, and it mainly appears during schema export or SERIAL object management.
+- This message is displayed when validation of a serial value fails in the serial object processing module of the CUBRID database, that is, the error is set when required attribute values are NULL or are not of the correct data type during validation of serial object property values, it occurs during the validation process to ensure the integrity of serial objects, and it mainly appears during schema export or SERIAL object management.
 
 
 .. _ERROR-833:
@@ -1416,7 +1416,7 @@ This message occurs when you try to change the value of an auto increment (AUTO_
 
 **ERROR CODE: -1056, 'To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.'**
 
-- This message is an error that occurs in the CUBRID database when, during table creation or alteration, there are two or more auto_increment columns and you try to specify an auto_increment=seed value, because it is difficult to determine which auto_increment column to apply it to. For reference, you can set multiple auto_increment columns within a single table.
+- This message is displayed in the CUBRID database when, during table creation or alteration, there are two or more auto_increment columns and you try to specify an auto_increment=seed value, because it is difficult to determine which auto_increment column to apply it to. For reference, you can set multiple auto_increment columns within a single table.
 
 
 .. _ERROR-1057:
@@ -1493,7 +1493,7 @@ This message occurs when you try to change the value of an auto increment (AUTO_
 
 **ERROR CODE: -1080, 'The maximum length of filter predicate string must be %1$d.'**
 
-- This message is an error that occurs when creating a function index in the CUBRID database, if the length of the argument (expression) used in the function is larger than the internally defined limit.
+- This message is displayed when creating a function index in the CUBRID database, if the length of the argument (expression) used in the function is larger than the internally defined limit.
 
 
 .. _ERROR-1085:
@@ -1535,14 +1535,14 @@ This message occurs when you try to change the value of an auto increment (AUTO_
 
 **ERROR CODE: -1098, 'Locales for language '%1$s' are not available with charset '%2$s'.'**
 
-- This message is an error that occurs when using date/time formatting functions (e.g., DATE_FORMAT, TIME_FORMAT) in the CUBRID database. That is, it occurs when locale data for a specific language/charset combination is not installed on the system or is not supported. This is a multilingual support-related error that appears when trying to output a date or time in a specific language format but the locale information for that language is not compatible with the current charset.
+- This message is displayed when using date/time formatting functions (e.g., DATE_FORMAT, TIME_FORMAT) in the CUBRID database. That is, it occurs when locale data for a specific language/charset combination is not installed on the system or is not supported. This is a multilingual support-related error that appears when trying to output a date or time in a specific language format but the locale information for that language is not compatible with the current charset.
 
 
 .. _ERROR-1106:
 
 **ERROR CODE: -1106, 'Multiple rows in source table match the same row in destination table.'**
 
-- This message is an error that occurs in the CUBRID database when, during GROUP BY processing, there are two or more identical records in the result, and it also occurs in the process of merging results after sorting.
+- This message is displayed in the CUBRID database when, during GROUP BY processing, there are two or more identical records in the result, and it also occurs in the process of merging results after sorting.
 
 
 .. _ERROR-1107:

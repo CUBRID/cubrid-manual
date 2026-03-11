@@ -126,12 +126,12 @@ CUBRID 운영
 .. toctree::
     :maxdepth: 3
 
-    control.rst
-    db_manage.rst
-    admin_utils.rst
-    config.rst
-    systemtap.rst
-    scripts.rst
-    troubleshoot.rst
-    ddl_audit.rst
-    error_log.rst
+    control
+    db_manage
+    admin_utils
+    config
+    systemtap
+    scripts
+    troubleshoot
+    ddl_audit
+    error_log

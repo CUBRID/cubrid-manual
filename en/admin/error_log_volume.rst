@@ -216,7 +216,7 @@ Database File Errors
 
 **ERROR CODE: -98, 'Unable to create archive log "%1$s" to archive pages from %2$lld to %3$lld.'**
 
-- This message is an error that occurs when the CUBRID system fails to create an archive log file while performing log archiving; it is an important error that can affect database consistency and recoverability.
+- This message is displayed when the CUBRID system fails to create an archive log file while performing log archiving; it is an important error that can affect database consistency and recoverability.
 
 
 .. _ERROR-296:
@@ -356,7 +356,7 @@ Database File Errors
 
 **ERROR CODE: -585, 'Unknown heap %1$s|%2$d|%3$d'**
 
-- This message is an error that occurs when trying to access a heap file that does not exist or is unknown in the CUBRID database; a heap file is the basic unit for storing data in CUBRID, and each heap file has a unique identifier (HFID).
+- This message is displayed when trying to access a heap file that does not exist or is unknown in the CUBRID database; a heap file is the basic unit for storing data in CUBRID, and each heap file has a unique identifier (HFID).
 
 
 .. _ERROR-587:
@@ -405,14 +405,14 @@ Database File Errors
 
 **ERROR CODE: -625, 'Internal Error. Trying to update the wrong instance object %1$d|%2$d|%3$d attribute information template with instance object %4$d|%5$d|%6$d.'**
 
-- This message is an error that occurs internally in the CUBRID database; it is an internal error caused by an OID mismatch in attribute information for the wrong record object; an OID (Object Identifier) is an 8-byte identifier that uniquely identifies each object in a CUBRID database.
+- This message is displayed internally in the CUBRID database; it is an internal error caused by an OID mismatch in attribute information for the wrong record object; an OID (Object Identifier) is an 8-byte identifier that uniquely identifies each object in a CUBRID database.
 
 
 .. _ERROR-626:
 
 **ERROR CODE: -626, 'Internal Error. %1$d requested attributes were not found.'**
 
-- This message is an error that occurs internally in the CUBRID database; it appears when some of the requested attributes cannot be found, and it occurs while caching or retrieving attribute information for a table.
+- This message is displayed internally in the CUBRID database; it appears when some of the requested attributes cannot be found, and it occurs while caching or retrieving attribute information for a table.
 
 
 .. _ERROR-638:

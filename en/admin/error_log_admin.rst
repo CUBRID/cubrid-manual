@@ -27,21 +27,21 @@ Database Management Errors
 
 **ERROR CODE: -83, 'Length of path "%1$s" plus length of prefix logname "%2$s" is too long; the combined length must be less than %3$d.'**
 
-- This message is an error that occurs when the total length combining the path of the log file and the log name exceeds the maximum length allowed, CUBRID enforces a limit on the total path length of log files, and this message mainly occurs when the database path or log file name is too long and the overall path exceeds the system limit.
+- This message is displayed when the total length combining the path of the log file and the log name exceeds the maximum length allowed, CUBRID enforces a limit on the total path length of log files, and this message mainly occurs when the database path or log file name is too long and the overall path exceeds the system limit.
 
 
 .. _ERROR-84:
 
 **ERROR CODE: -84, 'Length of prefix logname "%1$s" is too long; the length must be less than %2$d.'**
 
-- This message is an error that occurs when the length of a log file name exceeds the maximum length allowed, CUBRID enforces a length limit on log file names, and this message mainly occurs when the database name is too long, or when the log file path exceeds the system limit.
+- This message is displayed when the length of a log file name exceeds the maximum length allowed, CUBRID enforces a length limit on log file names, and this message mainly occurs when the database name is too long, or when the log file path exceeds the system limit.
 
 
 .. _ERROR-85:
 
 **ERROR CODE: -85, 'The prefix name "%1$s" is not the same as "%2$s" on the log disk. The log may have been renamed outside the database domain.'**
 
-- This message is an error that occurs when the name of the log file found on the log disk does not match the name expected by the database, this may occur when the database transaction log file has been manually renamed outside the database system, or when the log file is connected to the wrong database.
+- This message is displayed when the name of the log file found on the log disk does not match the name expected by the database, this may occur when the database transaction log file has been manually renamed outside the database system, or when the log file is connected to the wrong database.
 
 
 .. _ERROR-86:
@@ -69,105 +69,105 @@ Database Management Errors
 
 **ERROR CODE: -89, 'Log "%1$s" does not belong to the given database.'**
 
-- This message is an error that occurs when the CUBRID system determines that a specific log file does not belong to the database currently being worked on, it is an error that occurs during the consistency verification process between the log file and the database, and this can occur when the log file is connected to the wrong database, when the log file is corrupted, or when the database configuration is incorrect.
+- This message is displayed when the CUBRID system determines that a specific log file does not belong to the database currently being worked on, it is an error that occurs during the consistency verification process between the log file and the database, and this can occur when the log file is connected to the wrong database, when the log file is corrupted, or when the database configuration is incorrect.
 
 
 .. _ERROR-99:
 
 **ERROR CODE: -99, 'Unable to create backup directory information file "%1$s".'**
 
-- This message is an error that occurs when the CUBRID system fails while trying to create the backup information file (DBname_bkvinf) that stores backup directory information when performing a database backup operation.
+- This message is displayed when the CUBRID system fails while trying to create the backup information file (DBname_bkvinf) that stores backup directory information when performing a database backup operation.
 
 
 .. _ERROR-100:
 
 **ERROR CODE: -100, 'Unable to backup database "%1$s".'**
 
-- This message is an error that occurs when the CUBRID system tries to perform a database backup operation, but the backup fails due to an error during the backup process, backup failures can occur due to various causes such as file system permission issues, insufficient disk space, file access errors, or insufficient system resources.
+- This message is displayed when the CUBRID system tries to perform a database backup operation, but the backup fails due to an error during the backup process, backup failures can occur due to various causes such as file system permission issues, insufficient disk space, file access errors, or insufficient system resources.
 
 
 .. _ERROR-115:
 
 **ERROR CODE: -115, 'Database "%1$s" already exists.'**
 
-- This message is an error that occurs when the CUBRID system tries to create a new database, but a database with the same name already exists, CUBRID database names are case-sensitive, and this message means that you cannot create a new database with the same name as an existing database.
+- This message is displayed when the CUBRID system tries to create a new database, but a database with the same name already exists, CUBRID database names are case-sensitive, and this message means that you cannot create a new database with the same name as an existing database.
 
 
 .. _ERROR-116:
 
 **ERROR CODE: -116, 'Database "%1$s" is unknown, or the file "databases.txt" cannot be accessed.'**
 
-- This message is an error that occurs when the CUBRID system cannot find the specified database, or cannot access the databases.txt file that manages the database list, it mainly occurs when the database name is incorrect, when the databases.txt file is corrupted, or when access is not possible due to file system permission issues.
+- This message is displayed when the CUBRID system cannot find the specified database, or cannot access the databases.txt file that manages the database list, it mainly occurs when the database name is incorrect, when the databases.txt file is corrupted, or when access is not possible due to file system permission issues.
 
 
 .. _ERROR-117:
 
 **ERROR CODE: -117, 'Absolute pathname for the database is too long. The combined length of the path "%1$s" plus the name "%2$s" is %3$d; the combined length must be less than %4$d.'**
 
-- This message is an error that occurs when the CUBRID system tries to handle the full pathname of the database (absolute path + database name), but the length exceeds the maximum length allowed by the system, it means that an overly long pathname cannot be handled due to file system or internal CUBRID limitations.
+- This message is displayed when the CUBRID system tries to handle the full pathname of the database (absolute path + database name), but the length exceeds the maximum length allowed by the system, it means that an overly long pathname cannot be handled due to file system or internal CUBRID limitations.
 
 
 .. _ERROR-119:
 
 **ERROR CODE: -119, 'Cannot find hostname ("%1$s") in "%2$s". Please check permissions of the file or if there is the hostname.'**
 
-- This message is an error that occurs when the CUBRID system tried to find a specific host name but failed, it mainly occurs in the process of configuring network communication or querying host information, and appears when the specified host name is invalid, or when it cannot access the file that contains host information (e.g., /etc/hosts).
+- This message is displayed when the CUBRID system tried to find a specific host name but failed, it mainly occurs in the process of configuring network communication or querying host information, and appears when the specified host name is invalid, or when it cannot access the file that contains host information (e.g., /etc/hosts).
 
 
 .. _ERROR-120:
 
 **ERROR CODE: -120, 'The maximum number of volumes (%1$d) has been exceeded.'**
 
-- This message is an error that occurs when the CUBRID system tries to add a new volume, but exceeds the maximum number of volumes allowed by the system., CUBRID limits the maximum number of volumes per database for system stability and performance. If this limit is exceeded, the volume addition fails.
+- This message is displayed when the CUBRID system tries to add a new volume, but exceeds the maximum number of volumes allowed by the system., CUBRID limits the maximum number of volumes per database for system stability and performance. If this limit is exceeded, the volume addition fails.
 
 
 .. _ERROR-121:
 
 **ERROR CODE: -121, 'Trying to remove "%1$s" a permanent volume from the database.'**
 
-- This message is an error that occurs when the CUBRID system tries to remove a temporary volume (temp temp volume) from the database, a temporary volume is a space in the database for sorting queries, and deletion is not allowed while the database is running (operating). This error is an event message that informs the user that an attempt to remove a permanent volume has been detected.
+- This message is displayed when the CUBRID system tries to remove a temporary volume (temp temp volume) from the database, a temporary volume is a space in the database for sorting queries, and deletion is not allowed while the database is running (operating). This error is an event message that informs the user that an attempt to remove a permanent volume has been detected.
 
 
 .. _ERROR-122:
 
 **ERROR CODE: -122, 'Unable to access system message catalog.'**
 
-- This message is an error that occurs when the CUBRID system tries to initialize message catalog files, but cannot access the message catalog files, the message catalog consists of files that include all of CUBRID's error messages and locale-specific messages, and they must be loaded during system initialization.
+- This message is displayed when the CUBRID system tries to initialize message catalog files, but cannot access the message catalog files, the message catalog consists of files that include all of CUBRID's error messages and locale-specific messages, and they must be loaded during system initialization.
 
 
 .. _ERROR-124:
 
 **ERROR CODE: -124, 'Volume "%1$s" already exists.'**
 
-- This message is an error that occurs when the CUBRID system tries to create a new volume, but a volume with the same name already exists, it means that creation failed due to a duplicate volume name during volume expansion or new volume creation.
+- This message is displayed when the CUBRID system tries to create a new volume, but a volume with the same name already exists, it means that creation failed due to a duplicate volume name during volume expansion or new volume creation.
 
 
 .. _ERROR-126:
 
 **ERROR CODE: -126, 'Unknown purpose "%1$s" given on line %2$d.'**
 
-- This message is an error that occurs when the CUBRID system parses a database volume-addition configuration file and the 'volume purpose (PURPOSE)' value specified on a particular line is invalid or unrecognizable, it mainly occurs when using the --more-volume-file option in the `createdb` command, and it means that a string that is not allowed was entered into the PURPOSE parameter that specifies the purpose of a volume in the volume expansion configuration file.
+- This message is displayed when the CUBRID system parses a database volume-addition configuration file and the 'volume purpose (PURPOSE)' value specified on a particular line is invalid or unrecognizable, it mainly occurs when using the --more-volume-file option in the `createdb` command, and it means that a string that is not allowed was entered into the PURPOSE parameter that specifies the purpose of a volume in the volume expansion configuration file.
 
 
 .. _ERROR-127:
 
 **ERROR CODE: -127, 'Incorrect value %1$d for number of pages given on line %2$d.'**
 
-- This message is an error that occurs when the CUBRID system parses a database volume-addition configuration file and the 'number of pages' value specified on a particular line is invalid, it mainly occurs when using the --more-volume-file option in the `createdb` command, and it means that the number of pages that specifies the size of a volume in the volume expansion configuration file was specified with a value that is not allowed.
+- This message is displayed when the CUBRID system parses a database volume-addition configuration file and the 'number of pages' value specified on a particular line is invalid, it mainly occurs when using the --more-volume-file option in the `createdb` command, and it means that the number of pages that specifies the size of a volume in the volume expansion configuration file was specified with a value that is not allowed.
 
 
 .. _ERROR-128:
 
 **ERROR CODE: -128, 'Number of pages was not given on line %1$d.'**
 
-- This message is an error that occurs when the CUBRID system parses a database volume-addition configuration file and the required 'number of pages' information is missing or invalid on a particular line, it mainly occurs when using the --more-volume-file option in the `createdb` command, and it means that the number of pages that defines the size of a volume in the volume expansion configuration file was not defined, or was specified in an incorrect format.
+- This message is displayed when the CUBRID system parses a database volume-addition configuration file and the required 'number of pages' information is missing or invalid on a particular line, it mainly occurs when using the --more-volume-file option in the `createdb` command, and it means that the number of pages that defines the size of a volume in the volume expansion configuration file was not defined, or was specified in an incorrect format.
 
 
 .. _ERROR-129:
 
 **ERROR CODE: -129, 'Unknown token "%1$s" was found on line %2$d.'**
 
-- This message is an error that occurs when the CUBRID system parses a database volume-addition configuration file and finds an unexpected, undefined token (keyword), it means that an unsupported keyword or an incorrect syntax was used in the volume expansion configuration file.
+- This message is displayed when the CUBRID system parses a database volume-addition configuration file and finds an unexpected, undefined token (keyword), it means that an unsupported keyword or an incorrect syntax was used in the volume expansion configuration file.
 
 
 .. _ERROR-131:
@@ -202,7 +202,7 @@ Database Management Errors
 
 **ERROR CODE: -140, 'Operation "%1$s" can only be performed by the DBA or a DBA group member.'**
 
-- This message is an error that occurs when, in the CUBRID system, a user tries to perform a specific operation and that operation requires privileges that only the DBA or a member of the DBA group can have, it occurs when a general user attempts an operation that requires system administrator privileges, and it means that access has been denied for security reasons.
+- This message is displayed when, in the CUBRID system, a user tries to perform a specific operation and that operation requires privileges that only the DBA or a member of the DBA group can have, it occurs when a general user attempts an operation that requires system administrator privileges, and it means that access has been denied for security reasons.
 
 
 .. _ERROR-141:
@@ -216,77 +216,77 @@ Database Management Errors
 
 **ERROR CODE: -142, 'Adding member causes the user hierarchy to become a cyclic graph.'**
 
-- This message is an error that occurs when adding a member to a user or group causes a cyclic reference (cyclic dependency) in the user hierarchy structure in the CUBRID system, for example, it can occur when trying to add group B as a member of group A, and at the same time trying to add group A as a member of group B. Since this can cause an infinite loop or a logical contradiction, it is not allowed by the system.
+- This message is displayed when adding a member to a user or group causes a cyclic reference (cyclic dependency) in the user hierarchy structure in the CUBRID system, for example, it can occur when trying to add group B as a member of group A, and at the same time trying to add group A as a member of group B. Since this can cause an infinite loop or a logical contradiction, it is not allowed by the system.
 
 
 .. _ERROR-143:
 
 **ERROR CODE: -143, 'Encountered a class with no owner.'**
 
-- This message is an error that occurs when the object whose privileges are being modified has no owner in the CUBRID database.
+- This message is displayed when the object whose privileges are being modified has no owner in the CUBRID database.
 
 
 .. _ERROR-146:
 
 **ERROR CODE: -146, 'Cannot issue GRANT/REVOKE to owner of a %1$s.'**
 
-- This message is an error that occurs when attempting to perform GRANT on the owner's object in the CUBRID database.
+- This message is displayed when attempting to perform GRANT on the owner's object in the CUBRID database.
 
 
 .. _ERROR-147:
 
 **ERROR CODE: -147, 'No GRANT option.'**
 
-- This message is an error that occurs when performing GRANT in the CUBRID database without giving the GRANT OPTION.
+- This message is displayed when performing GRANT in the CUBRID database without giving the GRANT OPTION.
 
 
 .. _ERROR-148:
 
 **ERROR CODE: -148, 'Cannot obtain write lock on authorization object.'**
 
-- This message is an error that occurs when the CUBRID database cannot obtain a write lock during GRANT or REVOKE processing and therefore cannot update.
+- This message is displayed when the CUBRID database cannot obtain a write lock during GRANT or REVOKE processing and therefore cannot update.
 
 
 .. _ERROR-150:
 
 **ERROR CODE: -150, 'Cannot revoke privileges from self.'**
 
-- This message is an error that occurs when attempting to perform REVOKE on one's own object in the CUBRID database.
+- This message is displayed when attempting to perform REVOKE on one's own object in the CUBRID database.
 
 
 .. _ERROR-151:
 
 **ERROR CODE: -151, 'Cannot revoke privileges from owner of a %1$s.'**
 
-- This message is an error that occurs when attempting to perform REVOKE on the owner's object in the CUBRID database.
+- This message is displayed when attempting to perform REVOKE on the owner's object in the CUBRID database.
 
 
 .. _ERROR-152:
 
 **ERROR CODE: -152, 'GRANT not found.'**
 
-- This message is an error that occurs when, during REVOKE execution in the CUBRID database, it cannot find the related GRANT information.
+- This message is displayed when, during REVOKE execution in the CUBRID database, it cannot find the related GRANT information.
 
 
 .. _ERROR-153:
 
 **ERROR CODE: -153, 'No authorization privileges in effect for the database.'**
 
-- This message is an error that occurs when, in the CUBRID database, there is no permission-related catalog class in the relevant DB.
+- This message is displayed when, in the CUBRID database, there is no permission-related catalog class in the relevant DB.
 
 
 .. _ERROR-154:
 
 **ERROR CODE: -154, 'Incomplete authorization installation no authorization privileges in effect for the database.'**
 
-- This message is an error that occurs when, in the CUBRID database, the DBA and public users do not exist in the relevant DB.
+- This message is displayed when, in the CUBRID database, the DBA and public users do not exist in the relevant DB.
 
 
 .. _ERROR-156:
 
 **ERROR CODE: -156, 'Authorization failure.'**
 
-- This message is an error that occurs when an unknown authorization is requested in the CUBRID database.
+- This message is displayed when an unknown authorization is requested in the CUBRID database.
 
 
 .. _ERROR-157:
@@ -342,7 +342,7 @@ Database Management Errors
 
 **ERROR CODE: -164, 'User "%1$s" already exists.'**
 
-- This message is an error that occurs when the CUBRID system tries to create a new user, but a user with the same name already exists in the system, it means that user creation failed due to a duplicate user name when executing the CREATE USER statement.
+- This message is displayed when the CUBRID system tries to create a new user, but a user with the same name already exists in the system, it means that user creation failed due to a duplicate user name when executing the CREATE USER statement.
 
 
 .. _ERROR-165:
@@ -356,7 +356,7 @@ Database Management Errors
 
 **ERROR CODE: -166, 'Invalid user specified.'**
 
-- This message is an error that occurs when performing a user privilege (GRANT) operation in the CUBRID system, if the specified user is invalid or does not exist, it mainly occurs due to a user name error or when referencing a non-existent user.
+- This message is displayed when performing a user privilege (GRANT) operation in the CUBRID system, if the specified user is invalid or does not exist, it mainly occurs due to a user name error or when referencing a non-existent user.
 
 
 .. _ERROR-167:
@@ -370,56 +370,56 @@ Database Management Errors
 
 **ERROR CODE: -168, '168 Member not found.'**
 
-- This message is an error that occurs in the CUBRID database when requesting deletion of a user that is not a member during drop member.
+- This message is displayed in the CUBRID database when requesting deletion of a user that is not a member during drop member.
 
 
 .. _ERROR-169:
 
 **ERROR CODE: -169, '169 Cannot remove user %1$s from the database.'**
 
-- This message is an error that occurs when requesting deletion of a currently logged-in user during drop user in the CUBRID database.
+- This message is displayed when requesting deletion of a currently logged-in user during drop user in the CUBRID database.
 
 
 .. _ERROR-171:
 
 **ERROR CODE: -171, 'Incorrect or missing password.'**
 
-- This message is an error that occurs when, during user authentication in the CUBRID system, the provided password is incorrect, or when no password is provided at all, it means that a password mismatch or omission was detected in the authentication process required to connect to the database or to perform CUBRID command operations.
+- This message is displayed when, during user authentication in the CUBRID system, the provided password is incorrect, or when no password is provided at all, it means that a password mismatch or omission was detected in the authentication process required to connect to the database or to perform CUBRID command operations.
 
 
 .. _ERROR-172:
 
 **ERROR CODE: -172, '172 Password string cannot have more than 31 bytes.'**
 
-- This message is an error that occurs when the password length of a CUBRID database DB user exceeds 31 characters.
+- This message is displayed when the password length of a CUBRID database DB user exceeds 31 characters.
 
 
 .. _ERROR-173:
 
 **ERROR CODE: -173, 'Could not locate database file "%1$s".'**
 
-- This message is an error that occurs when the CUBRID system cannot find a specific databases.txt file.
+- This message is displayed when the CUBRID system cannot find a specific databases.txt file.
 
 
 .. _ERROR-174:
 
 **ERROR CODE: -174, 'Could not obtain write access to database file "%1$s".'**
 
-- This message is an error that occurs when the CUBRID system fails to obtain write permission for a specific databases.txt file.
+- This message is displayed when the CUBRID system fails to obtain write permission for a specific databases.txt file.
 
 
 .. _ERROR-183:
 
 **ERROR CODE: -183, 'Unexpected amount of received data; %1$d expected, %2$d received.'**
 
-- This message is an error that occurs when the CUBRID client receives data from the server and the expected data size does not match the actual received data size, it can occur due to data integrity issues during network communication, protocol mismatch, or data transfer errors, and it can indicate incorrect communication where the amount of data received from the server differs from what was expected.
+- This message is displayed when the CUBRID client receives data from the server and the expected data size does not match the actual received data size, it can occur due to data integrity issues during network communication, protocol mismatch, or data transfer errors, and it can indicate incorrect communication where the amount of data received from the server differs from what was expected.
 
 
 .. _ERROR-184:
 
 **ERROR CODE: -184, 'Cannot allocate communications buffer.'**
 
-- This message is an error that occurs when the CUBRID system cannot allocate a buffer for network communication, it occurs due to insufficient memory, system resource limits, or buffer allocation failure, and occurs when it cannot create a communications buffer for data transmission between the client and server.
+- This message is displayed when the CUBRID system cannot allocate a buffer for network communication, it occurs due to insufficient memory, system resource limits, or buffer allocation failure, and occurs when it cannot create a communications buffer for data transmission between the client and server.
 
 
 .. _ERROR-185:
@@ -440,7 +440,7 @@ Database Management Errors
 
 **ERROR CODE: -187, 'Communications buffer not used.'**
 
-- This message is an error that occurs when the CUBRID client receives data from the server and the expected buffer differs from the buffer actually received, it occurs when there is a problem with buffer management during network communication or when unexpected data is received.
+- This message is displayed when the CUBRID client receives data from the server and the expected buffer differs from the buffer actually received, it occurs when there is a problem with buffer management during network communication or when unexpected data is received.
 
 
 .. _ERROR-188:
@@ -454,21 +454,21 @@ Database Management Errors
 
 **ERROR CODE: -189, 'Invalid host name "%1$s".'**
 
-- This message is an error that occurs when the host name provided by the CUBRID client when connecting to the server is invalid or in an incorrect format, it occurs when the host name is NULL, exceeds the maximum allowed length, or is not in a valid format, and occurs when validating the server host information during the client initialization process.
+- This message is displayed when the host name provided by the CUBRID client when connecting to the server is invalid or in an incorrect format, it occurs when the host name is NULL, exceeds the maximum allowed length, or is not in a valid format, and occurs when validating the server host information during the client initialization process.
 
 
 .. _ERROR-190:
 
 **ERROR CODE: -190, 'Server host not identified.'**
 
-- This message is an error that occurs when the CUBRID client cannot find server host information, it occurs when the server host name or server name is not set or is empty during the client initialization process, and indicates a state where the client does not know which server to connect to.
+- This message is displayed when the CUBRID client cannot find server host information, it occurs when the server host name or server name is not set or is empty during the client initialization process, and indicates a state where the client does not know which server to connect to.
 
 
 .. _ERROR-191:
 
 **ERROR CODE: -191, 'Cannot connect to server "%1$s" on "%2$s".'**
 
-- This message is an error that occurs when the CUBRID client cannot connect to the database server process (cub_server) on the specified host, it can occur due to network connection failure, the server not running, firewall blocking, port issues, and so on, and indicates a state where the client cannot establish communication with the server.
+- This message is displayed when the CUBRID client cannot connect to the database server process (cub_server) on the specified host, it can occur due to network connection failure, the server not running, firewall blocking, port issues, and so on, and indicates a state where the client cannot establish communication with the server.
 
 
 .. _ERROR-193:
@@ -482,7 +482,7 @@ Database Management Errors
 
 **ERROR CODE: -194, 'Unknown server request id %1$d.'**
 
-- This message is an error that occurs when the request ID (service ID) received by the CUBRID server from the client is invalid or an undefined request, it occurs when the server receives a request ID it cannot process, and is mainly due to a protocol version mismatch between the client and server or an incorrect request format.
+- This message is displayed when the request ID (service ID) received by the CUBRID server from the client is invalid or an undefined request, it occurs when the server receives a request ID it cannot process, and is mainly due to a protocol version mismatch between the client and server or an incorrect request format.
 
 
 .. _ERROR-195:
@@ -496,7 +496,7 @@ Database Management Errors
 
 **ERROR CODE: -196, 'Server name not identified.'**
 
-- This message is an error that occurs when attempting to connect to the CUBRID database server, if the server name is not set or is not valid, it mainly indicates a state where the name of the server or host information that the client is trying to connect to is not correctly configured.
+- This message is displayed when attempting to connect to the CUBRID database server, if the server name is not set or is not valid, it mainly indicates a state where the name of the server or host information that the client is trying to connect to is not correctly configured.
 
 
 .. _ERROR-197:
@@ -510,14 +510,14 @@ Database Management Errors
 
 **ERROR CODE: -199, 'Server no longer responding.'**
 
-- This message is an error that occurs when the CUBRID database server does not respond to the client's request, or when the server process unexpectedly terminates, it indicates a state where the server can no longer communicate with the client, and can occur due to DB connection problems, disconnections, or server process interruption, and so on.
+- This message is displayed when the CUBRID database server does not respond to the client's request, or when the server process unexpectedly terminates, it indicates a state where the server can no longer communicate with the client, and can occur due to DB connection problems, disconnections, or server process interruption, and so on.
 
 
 .. _ERROR-204:
 
 **ERROR CODE: -204, 'Function called with missing or invalid arguments.'**
 
-- This message is an error that occurs when, inside the CUBRID database, a function is called with required arguments missing or with invalid argument values, in general it is less likely to be a direct user SQL error and more likely to be an internal CUBRID engine issue or a case where a developer used the CUBRID API incorrectly.
+- This message is displayed when, inside the CUBRID database, a function is called with required arguments missing or with invalid argument values, in general it is less likely to be a direct user SQL error and more likely to be an internal CUBRID engine issue or a case where a developer used the CUBRID API incorrectly.
 
 
 .. _ERROR-210:
@@ -538,21 +538,21 @@ Database Management Errors
 
 **ERROR CODE: -224, 'A database has not been restarted.'**
 
-- This message is an error that occurs when database work is attempted in the CUBRID database while the database connection is not established or the database has not been restarted, it mainly occurs when the connection to the database server has been lost, or when the database is not started normally and an SQL statement is executed or database work is attempted.
+- This message is displayed when database work is attempted in the CUBRID database while the database connection is not established or the database has not been restarted, it mainly occurs when the connection to the database server has been lost, or when the database is not started normally and an SQL statement is executed or database work is attempted.
 
 
 .. _ERROR-231:
 
 **ERROR CODE: -231, 'Invalid API operation attempted on a temporary object.'**
 
-- This message is an error that occurs when attempting an API operation that is not allowed on a temporary object in the CUBRID database, in CUBRID, temporary objects are temporary objects mainly related to schema templates or triggers, and they have a different lifecycle and constraints than general database objects, it mainly occurs when attempting operations (e.g., data access, modification, deletion, etc.) that are allowed only for general objects on a temporary object.
+- This message is displayed when attempting an API operation that is not allowed on a temporary object in the CUBRID database, in CUBRID, temporary objects are temporary objects mainly related to schema templates or triggers, and they have a different lifecycle and constraints than general database objects, it mainly occurs when attempting operations (e.g., data access, modification, deletion, etc.) that are allowed only for general objects on a temporary object.
 
 
 .. _ERROR-232:
 
 **ERROR CODE: -232, 'Not allowed to use object templates over multiple transactions.'**
 
-- This message is an error that occurs when an object template is attempted to be used across multiple transactions in the CUBRID database, an object template is a temporary schema-definition object that must generally be created and used within a single transaction. If it is used across multiple transactions, it can cause data consistency issues or unexpected behavior, so the system prohibits this, it occurs in logic related to lifecycle management of object templates, and appears when a template is used outside the transaction scope in which it was created.
+- This message is displayed when an object template is attempted to be used across multiple transactions in the CUBRID database, an object template is a temporary schema-definition object that must generally be created and used within a single transaction. If it is used across multiple transactions, it can cause data consistency issues or unexpected behavior, so the system prohibits this, it occurs in logic related to lifecycle management of object templates, and appears when a template is used outside the transaction scope in which it was created.
 
 
 .. _ERROR-247:
@@ -580,7 +580,7 @@ Database Management Errors
 
 **ERROR CODE: -321, 'Possible corruption in the workspace detected.'**
 
-- This message is an error that occurs when unwanted information exists during processing in the workspace in the CUBRID database, it occurs during the data integrity verification process in the workspace management system, generally the workspace is a memory-resident object management structure and it must keep consistency, and this error is reported when that consistency is broken.
+- This message is displayed when unwanted information exists during processing in the workspace in the CUBRID database, it occurs during the data integrity verification process in the workspace management system, generally the workspace is a memory-resident object management structure and it must keep consistency, and this error is reported when that consistency is broken.
 
 
 .. _ERROR-322:
@@ -650,21 +650,21 @@ Database Management Errors
 
 **ERROR CODE: -347, 'Could not establish a pipe to the master server.'**
 
-- This message is an error that occurs when, in the CUBRID database server process (cub_server), it tries to perform communication with the master process (cub_master) and the socket is invalid.
+- This message is displayed when, in the CUBRID database server process (cub_server), it tries to perform communication with the master process (cub_master) and the socket is invalid.
 
 
 .. _ERROR-350:
 
 **ERROR CODE: -350, 'Cannot find hostname ("%1$s") in "%2$s". Please check permissions of the file or if there is the hostname.'**
 
-- This message is an error that occurs when the CUBRID system tries to obtain an IP address from a hostname, it occurs in cases such as a permission error on /etc/hosts, when there is no hostname information, when use_user_host = yes, and when there is no hostname information in $CUBRID/conf/cubrid_hosts.conf.
+- This message is displayed when the CUBRID system tries to obtain an IP address from a hostname, it occurs in cases such as a permission error on /etc/hosts, when there is no hostname information, when use_user_host = yes, and when there is no hostname information in $CUBRID/conf/cubrid_hosts.conf.
 
 
 .. _ERROR-363:
 
 **ERROR CODE: -363, 'Recvmsg from master socket failed.'**
 
-- This message is an error that occurs when a message is received after connecting between the CUBRID database process (cub_server) and the master process (cub_master).
+- This message is displayed when a message is received after connecting between the CUBRID database process (cub_server) and the master process (cub_master).
 
 
 .. _ERROR-364:
@@ -678,7 +678,7 @@ Database Management Errors
 
 **ERROR CODE: -366, '366 Error from server: %1$s'**
 
-- This message is an error that occurs when changing mode in a CUBRID HA environment, or when the CAS process is connected to a standby server and the database server process (cub_server) terminates the connection.
+- This message is displayed when changing mode in a CUBRID HA environment, or when the CAS process is connected to a standby server and the database server process (cub_server) terminates the connection.
 
 
 .. _ERROR-367:
@@ -720,6 +720,8 @@ Database Management Errors
 **ERROR CODE: -469, 'Invalid data type used.'**
 
 - This message is an error that appears when an unsupported or incorrect data type is used in the CUBRID database.
+
+
 .. _ERROR-547:
 
 **ERROR CODE: -547, 'Server release %1$s is different from client release %2$s.'**
@@ -731,7 +733,7 @@ Database Management Errors
 
 **ERROR CODE: -554, 'The loader has entered an invalid state. No further operations are possible.'**
 
-- This message is an error that occurs when the CUBRID database loaddb command enters an invalid state, this mainly occurs when the loaddb command session is invalid, or when the loader is in an unexpected state, and if the loader (loaddb) is in this state, no further data load operations can be performed.
+- This message is displayed when the CUBRID database loaddb command enters an invalid state, this mainly occurs when the loaddb command session is invalid, or when the loader is in an unexpected state, and if the loader (loaddb) is in this state, no further data load operations can be performed.
 
 
 .. _ERROR-555:
@@ -745,112 +747,112 @@ Database Management Errors
 
 **ERROR CODE: -556, 'Too many values supplied. Expecting %1$d.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, the number of supplied values is greater than the expected number, it mainly occurs when processing attribute values during the data loading process, and it occurs when more values are provided than the number of attributes defined in the table.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, the number of supplied values is greater than the expected number, it mainly occurs when processing attribute values during the data loading process, and it occurs when more values are provided than the number of attributes defined in the table.
 
 
 .. _ERROR-559:
 
 **ERROR CODE: -559, 'For attribute %1$s of %2$s, expected type %3$s, got %4$s.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, the domain type of an attribute does not match the expected type, it mainly occurs when validating the domain type during the data loading process, and it occurs when the expected type and the actually received type are different for a specific attribute.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, the domain type of an attribute does not match the expected type, it mainly occurs when validating the domain type during the data loading process, and it occurs when the expected type and the actually received type are different for a specific attribute.
 
 
 .. _ERROR-560:
 
 **ERROR CODE: -560, 'For attribute %1$s of %2$s, domain is not specific enough to support\n unqualified object references.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, the domain of an object reference is ambiguous, it mainly occurs when validating an object domain during the data loading process, and it occurs when the domain of a specific attribute is not specific enough to support unqualified object references.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, the domain of an object reference is ambiguous, it mainly occurs when validating an object domain during the data loading process, and it occurs when the domain of a specific attribute is not specific enough to support unqualified object references.
 
 
 .. _ERROR-561:
 
 **ERROR CODE: -561, 'Nested sets are not allowed.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, it tries to handle nested sets (collections), it mainly occurs when processing collection elements during the data loading process, and because CUBRID does not allow nested sets, this error occurs when a set is attempted to contain another set.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, it tries to handle nested sets (collections), it mainly occurs when processing collection elements during the data loading process, and because CUBRID does not allow nested sets, this error occurs when a set is attempted to contain another set.
 
 
 .. _ERROR-562:
 
 **ERROR CODE: -562, 'System class %1$s cannot be populated using the database loader.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, it tries to load a system table, it mainly occurs when initializing the table context during the data loading process, system tables are special tables used internally by CUBRID and cannot be loaded through a general loaddb.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, it tries to load a system table, it mainly occurs when initializing the table context during the data loading process, system tables are special tables used internally by CUBRID and cannot be loaded through a general loaddb.
 
 
 .. _ERROR-563:
 
 **ERROR CODE: -563, 'Reference to internal class %1$s converted to NULL.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, it processes a reference to an internal table, it mainly occurs when creating a table record during the data loading process, and when a reference to an internal table is found, it is converted to NULL and processed.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, it processes a reference to an internal table, it mainly occurs when creating a table record during the data loading process, and when a reference to an internal table is found, it is converted to NULL and processed.
 
 
 .. _ERROR-565:
 
 **ERROR CODE: -565, 'Constructor method %1$s is not defined on class %2$s.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, the specified constructor method is not defined on the table, it mainly occurs when creating a table record during the data loading process, and it occurs when the constructor method does not exist on the table or is not defined.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, the specified constructor method is not defined on the table, it mainly occurs when creating a table record during the data loading process, and it occurs when the constructor method does not exist on the table or is not defined.
 
 
 .. _ERROR-566:
 
 **ERROR CODE: -566, 'No class specified or no attribute in class.'**
 
-- This message is an error that occurs when, while loading data with the CUBRID database loaddb command, no table is specified or there is no attribute in the table, it mainly occurs when creating a table record during the data loading process, and it occurs when the table does not exist, or when the table exists but no attributes are defined.
+- This message is displayed when, while loading data with the CUBRID database loaddb command, no table is specified or there is no attribute in the table, it mainly occurs when creating a table record during the data loading process, and it occurs when the table does not exist, or when the table exists but no attributes are defined.
 
 
 .. _ERROR-567:
 
 **ERROR CODE: -567, 'Too many constructor method arguments supplied. Expected %1$d.'**
 
-- This message is an error that occurs when more arguments are supplied than the number of arguments expected by the CUBRID database loaddb command, it mainly occurs when creating a table record during the data loading process, and it occurs when more arguments are provided than the number of arguments required for the constructor method.
+- This message is displayed when more arguments are supplied than the number of arguments expected by the CUBRID database loaddb command, it mainly occurs when creating a table record during the data loading process, and it occurs when more arguments are provided than the number of arguments required for the constructor method.
 
 
 .. _ERROR-568:
 
 **ERROR CODE: -568, 'Missing constructor method parameters. Expected %1$d, found %2$d.'**
 
-- This message is an error that occurs when the expected number of arguments and the actually supplied number of arguments do not match in the CUBRID database loaddb command, it mainly occurs when creating a table record during the data loading process, and it occurs when fewer arguments are provided than the number of arguments required for the constructor method.
+- This message is displayed when the expected number of arguments and the actually supplied number of arguments do not match in the CUBRID database loaddb command, it mainly occurs when creating a table record during the data loading process, and it occurs when fewer arguments are provided than the number of arguments required for the constructor method.
 
 
 .. _ERROR-569:
 
 **ERROR CODE: -569, 'Missing attribute values.  Expected %1$d, found %2$d.'**
 
-- This message is an error that occurs when, during the process of loading data with the CUBRID database loaddb command, the expected number of attribute values and the actually found number of attribute values do not match, it mainly occurs when creating a table record during the data loading process, and it occurs when fewer attribute values are provided than the number of attributes defined in the table.
+- This message is displayed when, during the process of loading data with the CUBRID database loaddb command, the expected number of attribute values and the actually found number of attribute values do not match, it mainly occurs when creating a table record during the data loading process, and it occurs when fewer attribute values are provided than the number of attributes defined in the table.
 
 
 .. _ERROR-570:
 
 **ERROR CODE: -570, 'Could not access Glo data file "%1$s".'**
 
-- This message is an error that occurs when, in the CUBRID database loaddb command, it cannot access a GLO (Generalized Large Object) data file, it mainly occurs when processing BLOB (Binary Large Object) or CLOB (Character Large Object) data during the data loading process, and it occurs when the path to the LOB data file is wrong, the file does not exist, or there are no permissions.
+- This message is displayed when, in the CUBRID database loaddb command, it cannot access a GLO (Generalized Large Object) data file, it mainly occurs when processing BLOB (Binary Large Object) or CLOB (Character Large Object) data during the data loading process, and it occurs when the path to the LOB data file is wrong, the file does not exist, or there are no permissions.
 
 
 .. _ERROR-571:
 
 **ERROR CODE: -571, 'Instance was previously created through a forward reference.\nThis is not allowed for instances created using constructor methods.'**
 
-- This message is an error that occurs when, in the CUBRID database loaddb command, it tries to create again, using a constructor method, a record that has already been created through a forward reference, it mainly occurs when creating a table record during the data loading process.
+- This message is displayed when, in the CUBRID database loaddb command, it tries to create again, using a constructor method, a record that has already been created through a forward reference, it mainly occurs when creating a table record during the data loading process.
 
 
 .. _ERROR-576:
 
 **ERROR CODE: -576, 'Reference to class %3$s is not compatible with the domain of %1$s of %2$s.'**
 
-- This message is an error that occurs when, in the CUBRID database loaddb command, when referencing a table object, the reference is not compatible with the domain of a specific attribute, it mainly occurs when creating or updating a table record during the data loading process, and it occurs when the table reference does not match the attribute's domain.
+- This message is displayed when, in the CUBRID database loaddb command, when referencing a table object, the reference is not compatible with the domain of a specific attribute, it mainly occurs when creating or updating a table record during the data loading process, and it occurs when the table reference does not match the attribute's domain.
 
 
 .. _ERROR-579:
 
 **ERROR CODE: -579, 'Target domain must include type "object" to allow references to classes.'**
 
-- This message is an error that occurs when, in the CUBRID database loaddb command, the domain type is not correct when referencing a table object, to reference a table object, the target domain must include the "object" type, this is a special requirement for table references in CUBRID's type system.
+- This message is displayed when, in the CUBRID database loaddb command, the domain type is not correct when referencing a table object, to reference a table object, the target domain must include the "object" type, this is a special requirement for table references in CUBRID's type system.
 
 
 .. _ERROR-581:
 
 **ERROR CODE: -581, 'Attempted to update the database when updates are disabled.'**
 
-- This message is an error that occurs when trying to modify the database while database updates are disabled because the CUBRID database server is in standby or to_be_active status, the state where database updates are disabled can occur in read-only mode or in special situations.
+- This message is displayed when trying to modify the database while database updates are disabled because the CUBRID database server is in standby or to_be_active status, the state where database updates are disabled can occur in read-only mode or in special situations.
 
 
 .. _ERROR-582:
@@ -878,7 +880,7 @@ Database Management Errors
 
 **ERROR CODE: -595, 'The database name "%1$s" is too long. Database name should be less than %2$d characters.'**
 
-- This message is an error that occurs in CUBRID when the database name exceeds the maximum length and it tries to create a volume file name that is the same as the database name.
+- This message is displayed in CUBRID when the database name exceeds the maximum length and it tries to create a volume file name that is the same as the database name.
 
 
 .. _ERROR-611:
@@ -913,35 +915,35 @@ Database Management Errors
 
 **ERROR CODE: -630, 'Conversion not supported by %1$s.'**
 
-- This message is an error that occurs when the CUBRID database attempts conversion between certain data types but the conversion is not supported by the system, it occurs when an internal function attempts conversion between types, for example, when attempting an unsupported data type combination or conversion between composite types, this error may occur.
+- This message is displayed when the CUBRID database attempts conversion between certain data types but the conversion is not supported by the system, it occurs when an internal function attempts conversion between types, for example, when attempting an unsupported data type combination or conversion between composite types, this error may occur.
 
 
 .. _ERROR-632:
 
 **ERROR CODE: -632, '%1$s is not a backup volume.'**
 
-- This message is an error that occurs when, in the CUBRID database, the specified file or directory is not a valid backup volume, it appears when the header of the backup file cannot be read or when the magic number of the backup file is not correct, and it occurs when trying to recognize a file in a format other than a CUBRID backup file as a backup file.
+- This message is displayed when, in the CUBRID database, the specified file or directory is not a valid backup volume, it appears when the header of the backup file cannot be read or when the magic number of the backup file is not correct, and it occurs when trying to recognize a file in a format other than a CUBRID backup file as a backup file.
 
 
 .. _ERROR-633:
 
 **ERROR CODE: -633, '1$s is a backup of database %2$s created on %3$s instead of given database %4$s created on %5$s'**
 
-- This message is an error that occurs when restoring a backup file in the CUBRID database, it appears when the backup file is a backup of another database or a backup of a database created at another point in time, and it occurs when the database specified by the user and the database information contained in the backup file do not match.
+- This message is displayed when restoring a backup file in the CUBRID database, it appears when the backup file is a backup of another database or a backup of a database created at another point in time, and it occurs when the database specified by the user and the database information contained in the backup file do not match.
 
 
 .. _ERROR-634:
 
 **ERROR CODE: -634, 'A database volume/file was expected in backup.'**
 
-- This message is an error that occurs when restoring a backup file or checking the list in the CUBRID database, it appears when database volume or file information cannot be found in the backup file, and it occurs when the structure of the backup file is damaged or differs from the expected format.
+- This message is displayed when restoring a backup file or checking the list in the CUBRID database, it appears when database volume or file information cannot be found in the backup file, and it occurs when the structure of the backup file is damaged or differs from the expected format.
 
 
 .. _ERROR-648:
 
 **ERROR CODE: -648, 'Backup is incompatible with current "%1$s" release "%2$s".'**
 
-- This message is an error that occurs when a backup file is not compatible with the current CUBRID version in the CUBRID database, it indicates a compatibility problem between the CUBRID version that created the backup file and the CUBRID version attempting recovery, and it occurs when the backup file is not supported in the current version.
+- This message is displayed when a backup file is not compatible with the current CUBRID version in the CUBRID database, it indicates a compatibility problem between the CUBRID version that created the backup file and the CUBRID version attempting recovery, and it occurs when the backup file is not supported in the current version.
 
 
 .. _ERROR-669:
@@ -955,21 +957,21 @@ Database Management Errors
 
 **ERROR CODE: -675, 'Cannot read the database location file, '%1$s'.'**
 
-- This message is an error that occurs when the CUBRID database system attempted to read the database location file (e.g., `databases.txt`) but failed, this file is used by CUBRID to identify the location and information of databases registered in the system, and this error occurs when the file cannot be accessed or its contents are damaged.
+- This message is displayed when the CUBRID database system attempted to read the database location file (e.g., `databases.txt`) but failed, this file is used by CUBRID to identify the location and information of databases registered in the system, and this error occurs when the file cannot be accessed or its contents are damaged.
 
 
 .. _ERROR-676:
 
 **ERROR CODE: -676, 'Database '%1$s', cannot be found in the database location file, '%2$s''**
 
-- This message is an error that occurs when the CUBRID database system tries to start or connect to a specific database, but information for that database is not found in the database location file (e.g., `databases.txt`), CUBRID manages the location and information of databases registered in the system through a configuration file such as `databases.txt`, and if there is no database information in this file, the system cannot recognize that database.
+- This message is displayed when the CUBRID database system tries to start or connect to a specific database, but information for that database is not found in the database location file (e.g., `databases.txt`), CUBRID manages the location and information of databases registered in the system through a configuration file such as `databases.txt`, and if there is no database information in this file, the system cannot recognize that database.
 
 
 .. _ERROR-677:
 
 **ERROR CODE: -677, 'Failed to connect to database server, '%1$s', on the following host(s): %2$s'**
 
-- This message is an error that occurs when a client in the CUBRID database attempted to connect to the database server on the specified host(s) but failed, it indicates a situation where the database server cannot be connected to due to various causes such as network connection, server status, authentication, and so on, and for detailed causes it is necessary to check csql, err files, or $CUBRID/log/*.err files, and so on.
+- This message is displayed when a client in the CUBRID database attempted to connect to the database server on the specified host(s) but failed, it indicates a situation where the database server cannot be connected to due to various causes such as network connection, server status, authentication, and so on, and for detailed causes it is necessary to check csql, err files, or $CUBRID/log/*.err files, and so on.
 
 
 .. _ERROR-695:
@@ -1430,28 +1432,28 @@ This error code occurs when there is already a COMPACTDB process running and you
 
 **ERROR CODE: -1099, 'DDL statement is not allowed by configuration (block_ddl_statement=yes).\n SQL Text: %1$s'**
 
-- This message is an error that occurs when trying to execute a DDL (Data Definition Language) statement in the CUBRID database, that is, when the system parameter `block_ddl_statement` is set to `yes`, it is a protection feature that blocks schema change operations such as creating, modifying, and dropping tables, it is a protective error to ensure stability and security of the database schema and prevents unintended schema changes, it checks whether it is a DDL statement with the `pt_is_ddl_statement` function in a DDL statement and allows or blocks execution according to the system parameter setting.
+- This message is displayed when trying to execute a DDL (Data Definition Language) statement in the CUBRID database, that is, when the system parameter `block_ddl_statement` is set to `yes`, it is a protection feature that blocks schema change operations such as creating, modifying, and dropping tables, it is a protective error to ensure stability and security of the database schema and prevents unintended schema changes, it checks whether it is a DDL statement with the `pt_is_ddl_statement` function in a DDL statement and allows or blocks execution according to the system parameter setting.
 
 
 .. _ERROR-1100:
 
 **ERROR CODE: -1100, 'Statement without WHERE clause is not allowed by configuration (block_nowhere_statement=yes).'**
 
-- This message is an error that occurs when trying to execute a DELETE statement without a WHERE clause in the CUBRID database, that is, when the system parameter `block_nowhere_statement` is set to `yes`, it is a protection feature that blocks execution of dangerous SQL statements that delete all records without conditions, it is a protective error to ensure data integrity and system stability and prevents accidentally deleting data of an entire table, it mainly occurs by detecting the case where `search_cond` (search condition) is NULL in a DELETE statement, and allows or blocks execution according to the system parameter setting.
+- This message is displayed when trying to execute a DELETE statement without a WHERE clause in the CUBRID database, that is, when the system parameter `block_nowhere_statement` is set to `yes`, it is a protection feature that blocks execution of dangerous SQL statements that delete all records without conditions, it is a protective error to ensure data integrity and system stability and prevents accidentally deleting data of an entire table, it mainly occurs by detecting the case where `search_cond` (search condition) is NULL in a DELETE statement, and allows or blocks execution according to the system parameter setting.
 
 
 .. _ERROR-1102:
 
 **ERROR CODE: -1102, 'Unknown system parameter or bad value.'**
 
-- This message is an error that occurs when setting or changing a system parameter in the CUBRID database when there is no change value, that is, it occurs when referencing a system parameter that does not exist, or when the parameter value is outside the allowed range or format, it is a protective error to ensure system stability and data integrity.
+- This message is displayed when setting or changing a system parameter in the CUBRID database when there is no change value, that is, it occurs when referencing a system parameter that does not exist, or when the parameter value is outside the allowed range or format, it is a protective error to ensure system stability and data integrity.
 
 
 .. _ERROR-1103:
 
 **ERROR CODE: -1103, 'Cannot change system parameter.'**
 
-- This message is an error that occurs when trying to change a system parameter in the CUBRID database when there is no change value, that is, it occurs when attempting to change a parameter that cannot be changed dynamically while the database is running, or when trying to modify a parameter for which there is no change permission, it is a protective error to ensure system stability and data integrity.
+- This message is displayed when trying to change a system parameter in the CUBRID database when there is no change value, that is, it occurs when attempting to change a parameter that cannot be changed dynamically while the database is running, or when trying to modify a parameter for which there is no change permission, it is a protective error to ensure system stability and data integrity.
 
 
 .. _ERROR-1104:

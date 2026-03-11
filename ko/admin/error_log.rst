@@ -17,7 +17,6 @@ CUBRID 오류 메시지 파일별 구성 및 사용자 안내 메시지는 다�
 * cubrid.msg: CUBRID 데이터베이스 엔진의 런타임 에러 및 시스템 메시지
 * csql.msg: CSQL(CUBRID SQL 인터프리터) 클라이언트 도구의 사용법, 명령어, 에러 메시지
 * utils.msg: CUBRID 관리 유틸리티 도구들의 메시지 및 사용법
-* esql.msg: ESQL/C (Embedded SQL in C) 프리컴파일러의 에러 및 경고 메시지
 
 
 **CUBRID 데이터 모델 용어 비교**

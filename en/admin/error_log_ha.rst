@@ -89,7 +89,7 @@ CUBRID HA Errors
 
 **ERROR CODE: -1027, 'log applier: failed to change apply state from '%1$s' to '%2$s'.'**
 
-- This message is an error that occurs when the applylogdb process cannot change its operation state as requested by the internal system in a CUBRID HA (High Availability) environment.
+- This message is displayed when the applylogdb process cannot change its operation state as requested by the internal system in a CUBRID HA (High Availability) environment.
 
 
 .. _ERROR-1028:
@@ -250,7 +250,7 @@ CUBRID HA Errors
 
 **ERROR CODE: -1144, 'Timed out attempting to connect to %1$s. (timeout: %2$d sec(s))'**
 
-- This message is an error that occurs when a CUBRID client or component (for example, CSQL, JDBC driver, etc.) attempts to connect to a specified server but fails to receive a response within the configured timeout period. It can generally occur due to network failures, abnormal server states, firewall blocking, or port opening failures.
+- This message is displayed when a CUBRID client or component (for example, CSQL, JDBC driver, etc.) attempts to connect to a specified server but fails to receive a response within the configured timeout period. It can generally occur due to network failures, abnormal server states, firewall blocking, or port opening failures.
 
 - Reference: This message is summarized as "equipment down" in the CUBRID HA replication inconsistency detection section of the CUBRID manual.
 

@@ -46,11 +46,13 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 
 html:
+	sed 's|<span class="sr-only">Copy code</span>|<span class="sr-only"></span>|g' $$(find / -name theme.js | grep sphinxawesome_theme) > _static/theme.js
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
 livehtml:
+	sed 's|<span class="sr-only">Copy code</span>|<span class="sr-only"></span>|g' $$(find / -name theme.js | grep sphinxawesome_theme) > _static/theme.js
 	$(SPHINXAUTOBUILD) --host=0.0.0.0 --port=$(PORT) $(ALLSPHINXOPTS) $(BUILDDIR)/html
 
 dirhtml:

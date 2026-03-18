@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys, os, sphinx
+
 from pathlib import Path
 
 from dataclasses import asdict
@@ -23,6 +24,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinxext.rediraffe',
     'sphinx_design',
+    'sphinx_tsegsearch',
 ]
 
 templates_path = ['_templates']
@@ -42,6 +44,7 @@ version = '10.1'
 release = '10.1'
 
 language = 'en'
+html_search_language = "en"
 html_use_index = True
 
 html_title = f"CUBRID {version} User Manual"
@@ -53,7 +56,7 @@ html_context = {
 
 exclude_patterns = ['_build']
 
-pygments_style = "friendly"
+pygments_style = "nord"
 pygments_style_dark = "github-dark"
 
 suppress_warnings = [
@@ -70,11 +73,6 @@ plantuml = f"java -Djava.awt.headless=true -jar {local_plantuml_path}"
 simplepdf_vars = {
     'cover-overlay': 'rgba(150, 26, 26, 0.7)',
 }
-
-# DocSearch
-docsearch_app_id = os.getenv("DOCSEARCH_APP_ID", "")
-docsearch_api_key = os.getenv("DOCSEARCH_API_KEY", "")
-docsearch_index_name = os.getenv("DOCSEARCH_INDEX_NAME", "")
 
 # -- Options for HTML output ---------------------------------------------------
 html_theme = 'sphinxawesome_theme'

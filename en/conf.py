@@ -76,7 +76,6 @@ simplepdf_vars = {
 
 # -- Options for HTML output ---------------------------------------------------
 html_theme = 'sphinxawesome_theme'
-#html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
   "logo_light": "_static/logo.svg",
   "logo_dark": "_static/logo.svg",

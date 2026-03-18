@@ -162,4 +162,6 @@ doctest:
 	      "results in $(BUILDDIR)/doctest/output.txt."
 
 pdf:
+	sed -i "s/templates_path = \['_templates'\]/templates_path = \['_templates_pdf'\]/g" conf.py
 	$(SPHINXBUILD) -b simplepdf $(ALLSPHINXOPTS) $(BUILDDIR)/simplepdf
+	sed -i "s/templates_path = \['_templates_pdf'\]/templates_path = \['_templates'\]/g" conf.py

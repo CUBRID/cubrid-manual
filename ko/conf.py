@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys, os, sphinx
+
 from pathlib import Path
 
 from dataclasses import asdict
@@ -42,9 +43,10 @@ version = '10.2'
 release = '10.2'
 
 language = 'ko'
+html_search_language = "ko"
 html_use_index = True
 
-html_title = f"CUBRID {version} 사용자 매뉴얼"
+html_title = f"CUBRID {version} User Manual"
 
 html_context = {
     "switcher_url": "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json",
@@ -53,7 +55,7 @@ html_context = {
 
 exclude_patterns = ['_build']
 
-pygments_style = "friendly"
+pygments_style = "nord"
 pygments_style_dark = "github-dark"
 
 suppress_warnings = [
@@ -71,14 +73,8 @@ simplepdf_vars = {
     'cover-overlay': 'rgba(150, 26, 26, 0.7)',
 }
 
-# DocSearch
-docsearch_app_id = os.getenv("DOCSEARCH_APP_ID", "")
-docsearch_api_key = os.getenv("DOCSEARCH_API_KEY", "")
-docsearch_index_name = os.getenv("DOCSEARCH_INDEX_NAME", "")
-
 # -- Options for HTML output ---------------------------------------------------
 html_theme = 'sphinxawesome_theme'
-#html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
   "logo_light": "_static/logo.svg",
   "logo_dark": "_static/logo.svg",

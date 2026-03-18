@@ -24,7 +24,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinxext.rediraffe',
     'sphinx_design',
-    'sphinx_tsegsearch',
 ]
 
 templates_path = ['_templates']

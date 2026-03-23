@@ -164,3 +164,19 @@ jobs:
           # Overwrite existing files to keep the latest version clean
           keep_files: false 
           force_detach: true
+
+      # [4-3] Comment Official Link on Merged PR
+      - name: Comment Official Link
+        if: github.event_name == 'push' && matrix.lang == 'ko' && steps.pr_info.outputs.merged_pr != 'manual-push'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          pr_number: ${{ steps.pr_info.outputs.merged_pr }}
+          message: |
+            🚀 **CUBRID Manual Deployment Complete!**
+            The changes have been merged and deployed to the official documentation. (Branch: `${{ github.ref_name }}`)
+
+            | Type | 🇰🇷 Korean (KO) | 🇺🇸 English (EN) |
+            | :--- | :--- | :--- |
+            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ko/${{ github.ref_name }}/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/en/${{ github.ref_name }}/index.html) |
+            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ko/${{ github.ref_name }}/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/en/${{ github.ref_name }}/CUBRID.pdf) |
+          comment_tag: official-deploy-links

@@ -14,13 +14,21 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # 
-name: github-checks
-on:
-  - pull_request
+name: CUBRID Manual CI/CD (Rocky Linux)
 
-# Set environment variables available to all action steps.
-env:
-  DOMAIN: cubrid-manual-${{ github.event.pull_request.number }}.surge.sh
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [ "develop", "release/[0-9]*" ]
+  pull_request:
+    branches: [ "develop", "release/[0-9]*" ]
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   build_docs:
@@ -29,21 +37,130 @@ jobs:
       matrix:
         lang: [en, ko]
       fail-fast: false
+    container:
+      image: rockylinux:9.3
+
     steps:
-    - name: Set up Python
-      uses: actions/checkout@v1
-    - name: Build and Test Sphinx Doc
-      uses: ammaraskar/sphinx-action@7.3.1
-      with:
-        docs-folder: ${{ matrix.lang }}
-        pre-build-command: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-    - name: Check link
-      uses: ammaraskar/sphinx-action@7.3.1
-      with:
-        docs-folder: ${{ matrix.lang }}
-        pre-build-command: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-        build-command: make linkcheck
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. Cache Python Packages (pip)
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # 2. Cache Sphinx Build Directory
+      - name: Cache Sphinx Build
+        uses: actions/cache@v4
+        with:
+          path: ./${{ matrix.lang }}/_build
+          key: ${{ runner.os }}-sphinx-${{ matrix.lang }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-sphinx-${{ matrix.lang }}-
+
+      - name: Install Dependencies
+        run: |
+          dnf install -y epel-release glibc-locale-source glibc-langpack-ko \
+          gcc make openssl-devel bzip2-devel libffi-devel zlib-devel unzip pango cairo \
+          git gdk-pixbuf2 python3.12 python3.12-pip jq
+          update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 2
+          update-alternatives --set python3 /usr/bin/python3.12
+          pip3.12 install 'urllib3<2.0' Sphinx==9.1.0 \
+          sphinx_design sphinxext-rediraffe sphinxawesome-theme==6.0.0 \
+          weasyprint==68.0 sphinx-simplepdf==1.7 sphinx-rtd-theme
+          localedef -f UTF-8 -i ko_KR ko_KR.utf8
+
+      - name: Build Manual (HTML & PDF)
+        env:
+          LANG: ko_KR.utf8
+        run: |
+          cd ${{ matrix.lang }}
+          make html
+          make pdf
+          if [ -f "_build/simplepdf/CUBRID.pdf" ]; then
+            cp _build/simplepdf/CUBRID.pdf _build/html/CUBRID.pdf
+          fi
+
+      # Extract PR number for push (merge) events
+      - name: Get PR number for Merge
+        if: github.event_name == 'push'
+        id: pr_info
+        run: |
+          PR_NUMBER=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
+            | jq -r '.[0].number')
+          
+          if [ "$PR_NUMBER" != "null" ]; then
+            echo "merged_pr=$PR_NUMBER" >> $GITHUB_OUTPUT
+          else
+            echo "merged_pr=manual-push" >> $GITHUB_OUTPUT
+          fi
+
+      # 3. Deploy Preview (Triggered on PR commits)
+      - name: Deploy Preview
+        if: github.event_name == 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./${{ matrix.lang }}/_build/html
+          destination_dir: pr-preview/${{ github.event.pull_request.number }}/${{ matrix.lang }}
+          keep_files: true
+          force_detach: true
+
+      - name: Comment PR Link
+        if: github.event_name == 'pull_request' && matrix.lang == 'ko'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            ✅ **CUBRID Manual Preview is Ready!**
+
+            | Type | 🇰🇷 Korean (KO) | 🇺🇸 English (EN) |
+            | :--- | :--- | :--- |
+            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/index.html) |
+            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/CUBRID.pdf) |
+
+            ---
+            <details>
+            <summary>🔍 <b>Page not found? (404 Error) / 페이지가 보이지 않나요?</b></summary>
+            <br />
+
+            **🇰🇷 가이드 (For @${{ github.event.pull_request.user.login }})**
+            1. [**Settings > Pages**](https://github.com/${{ github.event.pull_request.user.login }}/${{ github.event.repository.name }}/settings/pages) 메뉴로 이동합니다.
+            2. **Branch**를 `gh-pages`로 선택하고 `/(root)`를 저장(Save)하세요.
+            3. 설정 후 이 PR의 **Actions** 탭에서 **Re-run all jobs**를 클릭하면 URL이 활성화됩니다.
+
+            **🇺🇸 Guide (For @${{ github.event.pull_request.user.login }})**
+            1. Go to your [**Settings > Pages**](https://github.com/${{ github.event.pull_request.user.login }}/${{ github.event.repository.name }}/settings/pages).
+            2. Select `gh-pages` **Branch** and `/(root)`, then click **Save**.
+            3. After saving, go to the **Actions** tab of this PR and **Re-run all jobs** to activate the URL.
+            </details>
+          comment_tag: preview-links
+
+      # [4-1] Deploy Official Archive (Maintain history by PR number)
+      - name: Deploy Official Archive
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./${{ matrix.lang }}/_build/html
+          # Example: ko/develop/PR-15 (Long-term archive)
+          destination_dir: ${{ matrix.lang }}/${{ github.ref_name }}/PR-${{ steps.pr_info.outputs.merged_pr }}
+          keep_files: true
+          force_detach: true
+
+      # [4-2] Deploy Official Latest (Update latest version)
+      - name: Deploy Official Latest
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./${{ matrix.lang }}/_build/html
+          # Example: ko/develop (Fixed URL for users)
+          destination_dir: ${{ matrix.lang }}/${{ github.ref_name }}
+          # Overwrite existing files to keep the latest version clean
+          keep_files: false 
+          force_detach: true

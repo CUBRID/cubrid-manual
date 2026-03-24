@@ -176,5 +176,6 @@ jobs:
             2. Select `gh-pages` **Branch** and `/(root)`, then click **Save**.
             3. After saving, go to the **Actions** tab of this PR and **Re-run all jobs** to activate the URL.
             </details>
-          comment_tag: preview-links
+          comment_tag: cubrid-manual-preview
+          refresh_message_id: true
           mode: recreate

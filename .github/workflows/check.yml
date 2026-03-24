@@ -108,6 +108,9 @@ jobs:
   deploy_docs:
     needs: build_docs
     runs-on: ubuntu-latest
+    concurrency:
+      group: gh-pages-deploy-${{ github.ref }} 
+      cancel-in-progress: false               
     strategy:
       matrix:
         lang: [en, ko]

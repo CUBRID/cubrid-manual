@@ -29,7 +29,9 @@ on:
 permissions:
   contents: write
   pull-requests: write
-
+  pages: write
+  id-token: write
+  
 jobs:
   # [JOB 1] Parallel Build
   build_docs:

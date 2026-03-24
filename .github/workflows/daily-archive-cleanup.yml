@@ -1,0 +1,51 @@
+name: Daily Build Cleanup
+
+on:
+  schedule:
+    # Run at 03:00 KST (18:00 UTC) every day
+    - cron: '0 18 * * *'
+  workflow_dispatch: # Allows manual execution by administrators
+
+jobs:
+  purge-old-builds:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Delete builds older than 30 days
+        run: |
+          echo "Starting cleanup for builds older than 30 days..."
+          
+          # 1. Clean up temporary PR preview folders (pr-preview/*)
+          if [ -d "pr-preview" ]; then
+            # Find and delete all PR number folders under pr-preview that are older than 30 days
+            find pr-preview/* -maxdepth 0 -type d -mtime +30 -exec rm -rf {} \;
+            echo "Cleaned up old pr-preview folders."
+          fi
+
+          # 2. Clean up archived PR folders in official paths (e.g., ko/develop/PR-*)
+          # Target all directories starting with 'PR-' under any language/branch path
+          echo "Searching for archived PR folders in official paths..."
+          find . -type d -name "PR-*" -mtime +30 -exec rm -rf {} \;
+          
+          # Git configuration for automated commits
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Stage deletion changes
+          git add .
+          
+          # Check for changes and push if there is anything to commit
+          if ! git diff --cached --quiet; then
+            git commit -m "Cleanup: Purge archived PR builds older than 30 days"
+            git push origin gh-pages
+            echo "✅ Successfully pushed cleanup changes."
+          else
+            echo "ℹ️ No old builds found to delete. Everything is clean."
+          fi

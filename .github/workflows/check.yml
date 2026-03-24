@@ -110,6 +110,9 @@ jobs:
   deploy_docs:
     needs: build_docs
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     concurrency:
       group: gh-pages-deploy-${{ github.ref }} 
       cancel-in-progress: false               

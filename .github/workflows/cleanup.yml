@@ -1,0 +1,50 @@
+name: Cleanup PR Preview
+
+on:
+  pull_request:
+    types: [closed] # Execute immediately when a PR is merged or closed
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to push deletion commits to the gh-pages branch
+
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages # Checkout the branch where preview data is stored
+
+      - name: Delete PR Preview Folder
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          TARGET_DIR="pr-preview/$PR_NUMBER"
+          
+          echo "Target PR Number: $PR_NUMBER"
+          
+          # Check if the directory for the specific PR exists
+          if [ -d "$TARGET_DIR" ]; then
+            echo "Folder $TARGET_DIR found. Starting cleanup..."
+            
+            # Remove the directory
+            rm -rf "$TARGET_DIR"
+            
+            # Git configuration (using GitHub Actions Bot account)
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            
+            # Stage changes
+            git add .
+            
+            # Check for changes, then commit and push if necessary
+            if ! git diff --cached --quiet; then
+              git commit -m "Cleanup: Remove preview for PR #$PR_NUMBER"
+              git push origin gh-pages
+              echo "✅ Successfully cleaned up PR #$PR_NUMBER preview from gh-pages."
+            else
+              echo "⚠️ No changes to commit (already clean)."
+            fi
+          else
+            echo "ℹ️ No preview folder exists for PR #$PR_NUMBER. Nothing to do."
+          fi

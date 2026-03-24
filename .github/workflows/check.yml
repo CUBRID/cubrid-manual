@@ -23,7 +23,7 @@ concurrency:
 on:
   push:
     branches: [ "develop", "release/[0-9]*" ]
-  pull_request:
+  pull_request_target:
     branches: [ "develop", "release/[0-9]*" ]
 
 permissions:
@@ -47,6 +47,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Cache pip
         uses: actions/cache@v4
@@ -119,7 +121,7 @@ jobs:
     strategy:
       matrix:
         lang: [en, ko]
-      max-parallel: 1 # Important: Prevents "cannot lock ref" by deploying one by one
+      max-parallel: 1
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
@@ -127,16 +129,15 @@ jobs:
           name: build-artifact-${{ matrix.lang }}
           path: ./dist
 
-      # Deploy Preview (PR only)
+      # Deploy Preview (PR only) - upstream repo의 gh-pages에 PR별 디렉토리로 배포
       - name: Deploy Preview
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request_target'
         uses: peaceiris/actions-gh-pages@v4
         with:
           personal_token: ${{ secrets.GH_PAGES_TOKEN }}
-          external_repository: ${{ github.repository_owner }}/cubrid-manual
           publish_branch: gh-pages
           publish_dir: ./dist
-          dest_dir: pr-preview/${{ env.PR_NUMBER }}
+          dest_dir: pr-preview/${{ github.event.pull_request.number }}/${{ matrix.lang }}
           keep_files: true
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
@@ -162,37 +163,39 @@ jobs:
     steps:
       # Case A: Post PR Preview Link
       - name: Comment PR Link
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request_target'
         uses: thollander/actions-comment-pull-request@v2
         with:
           github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          pr_number: ${{ github.event.pull_request.number }}
           message: |
             ✅ **CUBRID Manual Preview is Ready!**
             All docs (KO/EN) are successfully built and deployed.
 
             | Type | 🇰🇷 Korean (KO) | 🇺🇸 English (EN) |
             | :--- | :--- | :--- |
-            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/index.html) |
-            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/CUBRID.pdf) |
+            | 🌐 **Web** | [View Docs](https://CUBRID.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/ko/index.html) | [View Docs](https://CUBRID.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/en/index.html) |
+            | 📄 **PDF** | [Download](https://CUBRID.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/ko/CUBRID.pdf) | [Download](https://CUBRID.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/en/CUBRID.pdf) |
 
             ---
             <details>
             <summary>🔍 <b>Page not found? (404 Error) / 페이지가 보이지 않나요?</b></summary>
             <br />
 
-            **🇰🇷 가이드 (For @${{ github.event.pull_request.user.login }})**
-            1. [**Settings > Pages**](https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/settings/pages) 메뉴로 이동합니다.
+            **🇰🇷 가이드**
+            1. [**Settings > Pages**](https://github.com/CUBRID/cubrid-manual/settings/pages) 메뉴로 이동합니다.
             2. **Branch**를 `gh-pages`로 선택하고 `/(root)`를 저장(Save)하세요.
             3. 설정 후 이 PR의 **Actions** 탭에서 **Re-run all jobs**를 클릭하면 URL이 활성화됩니다.
 
-            **🇺🇸 Guide (For @${{ github.event.pull_request.user.login }})**
-            1. Go to your [**Settings > Pages**](https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/settings/pages).
+            **🇺🇸 Guide**
+            1. Go to [**Settings > Pages**](https://github.com/CUBRID/cubrid-manual/settings/pages).
             2. Select `gh-pages` **Branch** and `/(root)`, then click **Save**.
             3. After saving, go to the **Actions** tab of this PR and **Re-run all jobs** to activate the URL.
             </details>
           comment_tag: cubrid-manual-preview
           mode: recreate
           refresh_message_id: true
+
       # Case B: Post Official Deployment Success (Merge only)
       - name: Comment Official Deploy Success
         if: github.event_name == 'push' && needs.build_docs.outputs.merged_pr != 'null'
@@ -205,8 +208,7 @@ jobs:
 
             | Language | 🌐 Official Web Link |
             | :--- | :--- |
-            | 🇰🇷 **Korean** | [View Official](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ko/${{ github.ref_name }}/index.html) |
-            | 🇺🇸 **English** | [View Official](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/en/${{ github.ref_name }}/index.html) |
+            | 🇰🇷 **Korean** | [View Official](https://CUBRID.github.io/cubrid-manual/ko/${{ github.ref_name }}/index.html) |
+            | 🇺🇸 **English** | [View Official](https://CUBRID.github.io/cubrid-manual/en/${{ github.ref_name }}/index.html) |
           comment_tag: cubrid-manual-official-deploy
           mode: create
-

@@ -127,12 +127,12 @@ jobs:
           name: build-artifact-${{ matrix.lang }}
           path: ./dist
 
-      # 3. Deploy Preview (PR only)
+      # Deploy Preview (PR only)
       - name: Deploy Preview
         if: github.event_name == 'pull_request'
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
           external_repository: ${{ github.repository_owner }}/cubrid-manual
           publish_branch: gh-pages
           publish_dir: ./dist
@@ -141,7 +141,7 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
 
-      # [4-1/4-2] Official Deploy (Push only)
+      # Official Deploy (Push only)
       - name: Deploy Official
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
@@ -165,7 +165,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
+          github_token: ${{ secrets.GH_PAGES_TOKEN }}
           message: |
             ✅ **CUBRID Manual Preview is Ready!**
             All docs (KO/EN) are successfully built and deployed.

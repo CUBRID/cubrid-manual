@@ -161,7 +161,7 @@ jobs:
         if: github.event_name == 'pull_request_target'
         uses: thollander/actions-comment-pull-request@v2
         with:
-          github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_number: ${{ github.event.pull_request.number }}
           message: |
             ✅ **CUBRID Manual Preview is Ready!**
@@ -180,7 +180,7 @@ jobs:
         if: github.event_name == 'push' && needs.build_docs.outputs.merged_pr != 'null' && needs.build_docs.outputs.merged_pr != 'manual-push'
         uses: thollander/actions-comment-pull-request@v2
         with:
-          github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_number: ${{ needs.build_docs.outputs.merged_pr }}
           message: |
             🚀 **Official Deployment Complete!** (`${{ needs.build_docs.outputs.short_sha }}`)

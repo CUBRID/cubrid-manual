@@ -146,19 +146,6 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
 
-      # --- Official Deploy (latest) ---
-      - name: Deploy Official (latest)
-        if: github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./dist
-          destination_dir: ${{ matrix.lang }}/${{ github.ref_name }}/latest
-          keep_files: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-
   # ---------------------------------------------------------------------------
   # [JOB 3] Post Comments (after all deploys finish)
   # ---------------------------------------------------------------------------
@@ -183,8 +170,8 @@ jobs:
 
             | Type | 🇰🇷 Korean (KO) | 🇺🇸 English (EN) |
             | :--- | :--- | :--- |
-            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/ko/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/en/index.html) |
-            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/ko/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/cubrid-manual/pr-preview/${{ github.event.pull_request.number }}/en/CUBRID.pdf) |
+            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/index.html) |
+            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/CUBRID.pdf) |
           comment_tag: cubrid-manual-preview
           mode: recreate
 
@@ -200,9 +187,9 @@ jobs:
 
             The changes have been merged and published to the official manual.
 
-            | Type | 🇰 🇷  Korean (KO) | 🇺 🇸  English (EN) |
+            | Type | 🇰🇷 Korean (KO) | 🇺🇸 English (EN) |
             | :--- | :--- | :--- |
-            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/cubrid-manual/ko/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/cubrid-manual/en/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/index.html) |
-            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/cubrid-manual/ko/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/cubrid-manual/en/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/CUBRID.pdf) |
+            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ko/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/en/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/index.html) |
+            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ko/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/en/${{ github.ref_name }}/${{ needs.build_docs.outputs.short_sha }}/CUBRID.pdf) |
           comment_tag: cubrid-manual-official-deploy
           mode: create

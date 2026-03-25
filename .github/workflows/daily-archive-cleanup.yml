@@ -27,18 +27,14 @@ jobs:
             echo "Cleaned up old pr-preview folders."
           fi
 
-          # 2. Clean up archived PR folders in official paths (e.g., ko/develop/PR-*)
-          echo "Searching for archived PR folders in official paths..."
-          find . -type d -name "PR-*" -mtime +60 -exec rm -rf {} \;
-
-          # 3. Clean up per-commit deploy directories ({lang}/{branch}/{short_sha}/)
+          # 2. Clean up per-commit deploy directories ({lang}/{branch}/{short_sha}/)
           # Exclude 'latest/' directory — it must always be preserved
           echo "Searching for old per-commit deploy directories..."
           for lang_dir in en ko; do
             if [ -d "$lang_dir" ]; then
               for branch_dir in "$lang_dir"/*/; do
                 if [ -d "$branch_dir" ]; then
-                  find "$branch_dir" -maxdepth 1 -type d -mtime +60 ! -name "latest" ! -name "$(basename "$branch_dir")" -exec rm -rf {} \;
+                  find "$branch_dir" -maxdepth 1 -type d -mtime +60 ! -name "$(basename "$branch_dir")" -exec rm -rf {} \;
                 fi
               done
             fi

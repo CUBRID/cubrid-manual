@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>PHP Driver | CUBRID 10.1 User Manual</title>
+<meta content="PHP Driver | CUBRID 10.1 User Manual" property="og:title"/>
+<meta content="PHP Driver | CUBRID 10.1 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="pdo.html" rel="next" title="PDO Driver"/>
+<link href="cciapi.html" rel="prev" title="CCI API Reference"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 10.1 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/10.1/api/php.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 10.1 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_upgrade.html">Installing and Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sql/index.html">CUBRID SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">CUBRID Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oledb.html">OLE DB Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release_note/index.html">Release Notes</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 10.1 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">API Reference</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">PHP Driver</span>
+</nav>
+<div id="content" role="main">
+<section id="php-driver">
+<h1>PHP Driver<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#php-driver"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>CUBRID PHP driver implements an interface to enable access from application in PHP to CUBRID database. Every function offered by CUBRID PHP driver has a prefix <strong>cubrid_</strong> such as cubrid_connect() and cubrid_connect_with_url().</p>
+<p>The official one is available as a PECL package. PECL is a repository for PHP extensions, providing a directory of all known extensions and holding facilities for downloading and development of PHP extensions. For more information about PECL, visit <a class="reference external" href="http://pecl.php.net/">http://pecl.php.net/</a> .</p>
+<p>CUBRID PHP driver is written based on CCI API so affected by CCI configurations such as <strong>CCI_DEFAULT_AUTOCOMMIT</strong>.</p>
+<section id="installing-and-configuring-php">
+<h2>Installing and Configuring PHP<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-and-configuring-php" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-and-configuring-php'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The easiest and fastest way to get all applications installed on your system is to install CUBRID, Apache web server, PHP, and CUBRID PHP driver at the same time.</p>
+<section id="for-linux">
+<h3>For Linux<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#for-linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#for-linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>Configuring the Environment</strong></p>
+<ul class="simple">
+<li><p>Operating system: 32-bit or 64-bit Linux</p></li>
+<li><p>Web server: Apache</p></li>
+<li><p>PHP: 5.2 or 5.3 (<a class="reference external" href="http://php.net/downloads.php">http://php.net/downloads.php</a>)</p></li>
+</ul>
+<p><strong>Installing CUBRID PHP Driver using PECL</strong></p>
+<p>If <strong>PECL</strong> package has been installed on your system, the installation of CUBRID PHP driver is straightforward. <strong>PECL</strong> will download and compile the driver for you.</p>
+<ol class="arabic">
+<li><p>Enter the following command to install the latest version of CUBRID PHP driver.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">pecl</span> <span class="n">install</span> <span class="n">cubrid</span>
+</span></code></pre></div>
+</div>
+<p>If you need earlier versions of the driver, you can install exact versions as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">pecl</span> <span class="n">install</span> <span class="n">cubrid</span><span class="o">-</span><span class="mf">8.3.0.0005</span>
+</span></code></pre></div>
+</div>
+<p>During the installation, you will be prompted to enter <strong>CUBRID base install dir autodetect :</strong>. Just to make sure your installation goes smoothly, enter the full path to the directory where you have installed CUBRID. For example, if CUBRID has been installed at <strong>/home/cubridtest/CUBRID</strong>, then enter <strong>/home/cubridtest/CUBRID</strong>.</p>
+</li>
+<li><p>Edit the configuration file.</p>
+<p>If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named <strong>cubrid.ini</strong>, enter a command line <strong>extension=cubrid.so</strong>, and store the fine in the <strong>/etc/php.d</strong> directory.</p>
+<p>If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the <strong>php.ini</strong> file (default location: <strong>/etc/php5/apache2/</strong> or <strong>/etc/</strong>) and add the following two command lines at the end of the file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span><span class="o">=</span><span class="n">cubrid</span><span class="o">.</span><span class="n">so</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Restart the web server to apply changes.</p></li>
+</ol>
+<p><strong>Installing using apt-get on Ubuntu</strong></p>
+<ol class="arabic">
+<li><p>If you do not have PHP itself installed, install it using the following command; if you have PHP installed on your system, skip this step.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">php5</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>To install CUBRID PHP driver using <strong>apt-get</strong>, we need to add CUBRID’s repository so that Ubuntu knows where to download the packages from and tell the operating system to update its indexes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">add</span><span class="o">-</span><span class="n">apt</span><span class="o">-</span><span class="n">repository</span> <span class="n">ppa</span><span class="p">:</span><span class="n">cubrid</span><span class="o">/</span><span class="n">cubrid</span>
+</span><span id="line-2"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Now install the driver.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">php5</span><span class="o">-</span><span class="n">cubrid</span>
+</span></code></pre></div>
+</div>
+<p>To install earlier versions, indicate the version as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">php5</span><span class="o">-</span><span class="n">cubrid</span><span class="o">-</span><span class="mf">8.3.1</span>
+</span></code></pre></div>
+</div>
+<p>This will copy the <strong>cubrid.so</strong> driver to <strong>/usr/lib/php5/2009*</strong> and add the following configuration lines to <strong>/etc/php5/apache2/php.ini</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">PHP_CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span><span class="o">=</span><span class="n">cubrid</span><span class="o">.</span><span class="n">so</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Restart the web server so that PHP can read the module.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">service</span> <span class="n">apache2</span> <span class="n">restart</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Installing using Yum on Fedora/CentOS</strong></p>
+<ol class="arabic">
+<li><p>To install CUBRID PHP driver using <strong>yum</strong> command, we need to tell <strong>Yum</strong> where to look for CUBRID package. First, visit one of the following links depending on your operating system.</p>
+<ul class="simple">
+<li><p>CentOS: <a class="reference external" href="http://www.cubrid.org/?mid=yum_repository&amp;os=centos">http://www.cubrid.org/?mid=yum_repository&amp;os=centos</a></p></li>
+<li><p>Fedora: <a class="reference external" href="http://www.cubrid.org/?mid=yum_repository&amp;os=fedora">http://www.cubrid.org/?mid=yum_repository&amp;os=fedora</a></p></li>
+</ul>
+</li>
+<li><p>Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">rpm</span> <span class="o">-</span><span class="n">i</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">yumrepository</span><span class="o">.</span><span class="n">cubrid</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">cubrid_repo_settings</span><span class="o">/</span><span class="mf">9.0.0</span><span class="o">/</span><span class="n">cubridrepo</span><span class="o">-</span><span class="mf">9.0.0</span><span class="o">-</span><span class="mf">1.</span><span class="n">fc16</span><span class="o">.</span><span class="n">noarch</span><span class="o">.</span><span class="n">rpm</span>
+</span></code></pre></div>
+</div>
+<p>For CentOS, el6.2 means CentOS version 6.2.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">rpm</span> <span class="o">-</span><span class="n">i</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">yumrepository</span><span class="o">.</span><span class="n">cubrid</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">cubrid_repo_settings</span><span class="o">/</span><span class="mf">9.0.0</span><span class="o">/</span><span class="n">cubridrepo</span><span class="o">-</span><span class="mf">9.0.0</span><span class="o">-</span><span class="mf">1.</span><span class="n">el6</span><span class="mf">.2</span><span class="o">.</span><span class="n">noarch</span><span class="o">.</span><span class="n">rpm</span>
+</span></code></pre></div>
+</div>
+<p>Executing this command will tell <strong>Yum</strong> where to look for CUBRID package.</p>
+</li>
+<li><p>Execute the command below to install CUBRID PHP driver.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">yum</span> <span class="n">install</span> <span class="n">php</span><span class="o">-</span><span class="n">cubrid</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Restart the web server.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">service</span> <span class="n">httpd</span> <span class="n">restart</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="for-windows">
+<h3>For Windows<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#for-windows" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#for-windows'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>Requirements</strong></p>
+<ul class="simple">
+<li><p>CUBRID: 2008 R3.0 (8.3.0) or later</p></li>
+<li><p>Operating system: 32-bit or 64 bit Windows</p></li>
+<li><p>Web server: Apache or IIS</p></li>
+<li><p>PHP: 5.2 or 5.3 (<a class="reference external" href="http://windows.php.net/download/">http://windows.php.net/download/</a>)</p></li>
+</ul>
+<p><strong>Using CUBRID PHP Driver Installer</strong></p>
+<p>The CUBRID PHP API Installer is a Windows installer which automatically detects the CUBRID and PHP version and installs the proper driver for you by copying it to the default PHP extensions directory and adding the extension load directives to the <strong>php.ini</strong> file. In this section, we will explain how to use the CUBRID PHP API Installer to install the CUBRID PHP extension on Windows.</p>
+<p>In case you want to remove the CUBRID PHP driver, you just have to run the CUBRID PHP API Installer again in uninstall mode (like any other un-installer on Windows) and it will reset all the changes made during installation.</p>
+<p>Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are added in the system variable, <strong>Path</strong>.</p>
+<ol class="arabic">
+<li><p>Download the CUBRID PHP API installer for Windows from the link below. The current installer includes the drivers for all CUBRID versions.</p>
+<p><a class="reference external" href="http://www.cubrid.org/?mid=downloads&amp;item=php_driver&amp;os=windows">http://www.cubrid.org/?mid=downloads&amp;item=php_driver&amp;os=windows</a></p>
+</li>
+<li><p>To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.</p></li>
+<li><p>Agree with the BSD license terms and click the [Next] button.</p></li>
+<li><p>Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like <strong>C:\Program Files\CUBRID PHP API</strong>.</p></li>
+<li><p>Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see “Configuring the environment” below.</p></li>
+<li><p>If no error message is displayed, this should install the CUBRID PHP extension and update your <strong>php.ini</strong> file. Click [Finish] to close the installer.</p></li>
+<li><p>For changes to take place, restart your web server and execute the phpinfo() to confirm CUBRID has successfully been installed.</p>
+<img alt="../_images/image56.png" src="../_images/image56.png"/>
+</li>
+</ol>
+<p><strong>Configuring the environment</strong></p>
+<p>If you have received an error messages, follow the steps below; if you can see CUBRID in phpinfo(), you do not need to look further. By default, when you install CUBRID, it automatically adds its installation directory to the <strong>Path</strong> system environment variable. To verify the variable have been correctly configured, launch the command prompt ([Start] &gt; [Programs] &gt; [Accessories] &gt; [Command Prompt]) and enter the following commands one by one.</p>
+<ol class="arabic">
+<li><p>Enter command below in the command prompt as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">php</span> <span class="o">--</span><span class="n">version</span>
+</span></code></pre></div>
+</div>
+<p>You can see the PHP version like below if it is properly configured.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Administrator</span><span class="o">&gt;</span><span class="n">php</span> <span class="o">--</span><span class="n">version</span>
+</span><span id="line-2"><span class="n">PHP</span> <span class="mf">5.2.9</span> <span class="o">&lt;</span><span class="n">cli</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">built</span><span class="p">:</span> <span class="n">Feb</span> <span class="mi">25</span> <span class="mi">2009</span> <span class="mi">15</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mi">24</span><span class="o">&gt;</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Enter command as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">php</span> <span class="o">--</span><span class="n">version</span>
+</span></code></pre></div>
+</div>
+<p>You can see the CUBRID version like below if it is properly configured.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Administrator</span><span class="o">&gt;</span><span class="n">cubrid</span> <span class="o">--</span><span class="n">version</span>
+</span><span id="line-2"><span class="n">cubrid</span> <span class="o">&lt;</span><span class="n">cubrid</span> <span class="n">utilities</span><span class="o">&gt;</span> <span class="n">R2</span><span class="mf">.1</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+<p>If you cannot get the result like above, it is highly likely that your PHP and CUBRID installations went wrong. Try to reinstall them and recheck again. If the path is not automatically specified even after you complete reinstallation, you can do it manually.</p>
+<ol class="arabic simple">
+<li><p>Right-click [My Computer] and select [Properties]. The [System Properties] dialog box will appear.</p></li>
+<li><p>Go to [Advanced] tab and click on [Environment Variables].</p></li>
+<li><p>Select the variable called <strong>Path</strong> in the [System variables] box and click [Edit] button. You will notice that the value of that variable contains system paths separated by semi-colon.</p></li>
+<li><p>Add the paths for CUBRID and PHP in that variable. For example, if PHP is installed in <strong>C:\Program Files\PHP</strong> and also CUBRID in <strong>C:\CUBRID\bin</strong>, you will have to append (do not overwrite, just append) these values to the path like <strong>C:\CUBRID\bin;C:\Program Files\PHP</strong>.</p></li>
+<li><p>Click [OK] to save and close the dialog box.</p></li>
+<li><p>To confirm you have done everything correct, check the variable presence in the command prompt.</p></li>
+</ol>
+<p><strong>Downloading and Installing Compiled CUBRID PHP Driver</strong></p>
+<p>First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from <a class="reference external" href="http://www.cubrid.org/?mid=downloads&amp;item=php_driver&amp;os=windows&amp;php=detect&amp;driver=detect">http://www.cubrid.org/?mid=downloads&amp;item=php_driver&amp;os=windows&amp;php=detect&amp;driver=detect</a> .</p>
+<p>After you download the driver, you will see the <strong>php_cubrid.dll</strong> file for CUBRID PHP driver or the <strong>php_pdo_cubrid.dll</strong> file for CUBRID PDO driver. Follow the steps below to install it.</p>
+<ol class="arabic">
+<li><p>Copy this driver to the default PHP extensions directory (usually located at <strong>C:\Program Files\PHP\ext</strong>).</p></li>
+<li><p>Set your system environment. Check if the environment variable <strong>PHPRC</strong> is <strong>C:\Program Files\PHP</strong> and system variable path is added with <strong>%PHPRC%</strong> and <strong>%PHPRC\ext</strong>.</p></li>
+<li><p>Edit <strong>php.ini</strong> (<strong>C:\Program Files\PHP\php.ini</strong>) and add the following two command lines at the end of the <strong>php.ini</strong> file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">PHP_CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span><span class="o">=</span><span class="n">php_cubrid</span><span class="o">.</span><span class="n">dll</span>
+</span></code></pre></div>
+</div>
+<p>For CUBRID PDO driver, add command lines below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">PHP_PDO_CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span> <span class="o">=</span> <span class="n">php_pdo_cubrid</span><span class="o">.</span><span class="n">dll</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Restart your web server to apply changes.</p></li>
+</ol>
+</section>
+</section>
+<section id="building-cubrid-php-driver-from-source-code">
+<h2>Building CUBRID PHP Driver from Source Code<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#building-cubrid-php-driver-from-source-code" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#building-cubrid-php-driver-from-source-code'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id1">
+<h3>For Linux<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id1'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>In this section, we will introduce the way of building CUBRID PHP driver for Linux.</p>
+<p><strong>Configuring the environment</strong></p>
+<ul class="simple">
+<li><p>CUBRID: Install CUBRID. Make sure the environment variable <strong>%CUBRID%</strong> is defined in your system.</p></li>
+<li><p>PHP 5.3 source code: You can download PHP source code from <a class="reference external" href="http://php.net/downloads.php">http://php.net/downloads.php</a> .</p></li>
+<li><p>Apache 2: It can be used to test PHP.</p></li>
+<li><p>CUBRID PHP driver source code: You can download the source code from <a class="reference external" href="http://www.cubrid.org/?mid=downloads&amp;item=php_driver">http://www.cubrid.org/?mid=downloads&amp;item=php_driver</a> . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.</p></li>
+</ul>
+<p><strong>Compiling CUBRID PHP driver</strong></p>
+<ol class="arabic">
+<li><p>Download the CUBRID PHP driver, extract it, and enter the directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$&gt; tar zxvf php-&lt;version&gt;.tar.gz (or tar jxvf php-&lt;version&gt;.tar.bz2)
+</span><span id="line-2">$&gt; cd php-&lt;version&gt;/ext
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Run <strong>phpize</strong>. For more information about getting <strong>phpize</strong>, see <a class="reference internal" href="#phpize-remark"><span class="std std-ref">Remark</span></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">phpize</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Configure the project. It is recommended to execute <strong>./configure -h</strong> so that you can check the configuration options (we assume that Apache 2 has been installed in <strong>/usr/local</strong>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;./</span><span class="n">configure</span> <span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">cubrid</span> <span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">php</span><span class="o">-</span><span class="n">config</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">php</span><span class="o">-</span><span class="n">config</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>–with-cubrid=shared: Includes CUBRID support.</p></li>
+<li><p>–with-php-config=PATH: Enters an absolute path of php-config including the file name.</p></li>
+</ul>
+</li>
+<li><p>Build the project. If it is successfully compiled, the <strong>cubrid.so</strong> file will be created in the <strong>/modules</strong> directory.</p></li>
+<li><p>Copy the <strong>cubrid.so</strong> to the <strong>/usr/local/php/lib/php/extensions</strong> directory; the <strong>/usr/local/php</strong> is a PHP root directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">extensions</span>
+</span><span id="line-2"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="n">modules</span><span class="o">/</span><span class="n">cubrid</span><span class="o">.</span><span class="n">so</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">extensions</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>In the <strong>php.ini</strong> file, set the <strong>extension_dir</strong> variable and add the CUBRID PHP driver to the <strong>extension</strong> variable as shown below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">extension_dir</span> <span class="o">=</span> <span class="s2">"/usr/local/php/lib/php/extension/no-debug-zts-xxx"</span>
+</span><span id="line-2"><span class="n">extension</span> <span class="o">=</span> <span class="n">cubrid</span><span class="o">.</span><span class="n">so</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Testing CUBRID PHP driver installation</strong></p>
+<ol class="arabic">
+<li><p>Create a <strong>test.php</strong> file as follows:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">&lt;?php</span> <span class="nb">phpinfo</span><span class="p">();</span> <span class="cp">?&gt;</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Use web browser to visit <a class="reference external" href="http://localhost/test.php">http://localhost/test.php</a>. If you can see the following result, it means that installation is successfully completed.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>CUBRID</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>9.0.0.XXXX</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<p id="phpize-remark"><strong>Remark</strong></p>
+<p><strong>phpize</strong> is a shell script to prepare the PHP extension for compiling. You can get it when you install PHP because it is automatically installed with PHP installation, in general. If it you do not have <strong>phpize</strong> installed on your system, you can get it by following the steps below.</p>
+<ol class="arabic">
+<li><p>Download the PHP source code. Make sure that the PHP version works with the PHP extension that you want to use. Extract PHP source code and enter its root directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$&gt; tar zxvf php-&lt;version&gt;.tar.gz (or tar jxvf php-&lt;version&gt;.tar.bz2)
+</span><span id="line-2">$&gt; cd php-&lt;version&gt;
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Configure the project, build, and install it. You can specify the directory you want install PHP by using the option, <strong>–prefix</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">php</span><span class="o">-</span><span class="n">root</span><span class="o">&gt;</span> <span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix_dir</span><span class="p">;</span> <span class="n">make</span><span class="p">;</span> <span class="n">make</span> <span class="n">install</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>You can find <strong>phpize</strong> in the <strong>prefix_dir/bin</strong> directory.</p></li>
+</ol>
+</section>
+<section id="id2">
+<h3>For Windows<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>In this section, we will introduce three ways of building CUBRID PHP driver for Windows. If you have no idea which version you choose, read the following contents first.</p>
+<ul class="simple">
+<li><p>If you are using PHP with Apache 1 or Apache 2, you should use the VC6 versions of PHP.</p></li>
+<li><p>If you are using PHP with IIS, you should use the VC9 versions of PHP.</p></li>
+</ul>
+<p>VC6 versions are compiled with the legacy Visual Studio 6 compiler; VC9 versions are compiled with the Visual Studio 2008 compiler. The VC9 versions have more improvements in performance and stability.</p>
+<p>The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the Microsoft 2008 C++ Runtime (x64) installed. Do not use VC9 versions with binaries provided by the Apache Software Foundation ( <a class="reference external" href="http://www.apache.org/">http://www.apache.org/</a> ).</p>
+<p><strong>Building CUBRID PHP Driver with VC9 for PHP 5.3</strong></p>
+<p><strong>Configuring the environment</strong></p>
+<ul>
+<li><p>CUBRID: Install CUBRID. Make sure the environment variable <strong>%CUBRID%</strong> is defined in your system.</p></li>
+<li><p>Visual Studio 2008: You can alternately use the free Visual C++ Express Edition or the Visual C++ 9 compiler included in the Windows SDK v6.1 if you are familiar with a makefile. Make sure that you have the Microsoft Visual C++ Redistributable Package installed on your system to use CUBRID PHP VC9 driver.</p></li>
+<li><p>PHP 5.3 binaries: You can install VC9 x86 Non Thread Safe or VC9 x86 Thread Safe. Make sure that the <strong>%PHPRC%</strong> system environment variable is correctly set. In the [Property Pages] dialog box, select [General] under the [Linker] tree node. You can see <strong>$(PHPRC)</strong> in [Additional Library Directories].</p>
+<img alt="../_images/image57.jpg" src="../_images/image57.jpg"/>
+</li>
+<li><p>PHP 5.3 source code: Remember to get the source code that matches your binary version. After you extract the PHP 5.3 source code, add the <strong>%PHP5_SRC%</strong> system environment variable and set its value to the path of PHP 5.3 source code. In the [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see <strong>$(PHP5_SRC)</strong> in [Additional Include Directories].</p>
+<img alt="../_images/image58.jpg" src="../_images/image58.jpg"/>
+</li>
+<li><p>CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that have been installed on your system. You can get it from <a class="reference external" href="http://www.cubrid.org/?mid=downloads&amp;item=php_driver">http://www.cubrid.org/?mid=downloads&amp;item=php_driver</a> .</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You do not need to build PHP 5.3 from source code but configuring a project is required. If you do not make configuration settings, you will get the message that a header file (<strong>config.w32.h</strong>) cannot be found. Read <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">https://wiki.php.net/internals/windows/stepbystepbuild</a> to get more detailed information.</p>
+</div>
+<p><strong>Building CUBRID PHP driver with VC9 for PHP 5.3</strong></p>
+<ol class="arabic">
+<li><p>Open the <strong>php_cubrid.vcproj</strong> file under the <strong>\win</strong> directory. In the [Solution Explorer] pane, right-click on the <strong>php_cubrid</strong> (project name) and select [Properties].</p>
+<img alt="../_images/image59.jpg" src="../_images/image59.jpg"/>
+</li>
+<li><p>In the [Property Page] dialog box, click the [Configuration Manager] button. Select one of four values among Release_TS, Release_NTS, Debug_TS, and Debug_NTS in [Configuration] of [Project contexts] and click the [Close] button.</p>
+<img alt="../_images/image60.jpg" src="../_images/image60.jpg"/>
+</li>
+<li><p>After you complete the properties modification, click the [OK] button and press the &lt;F7&gt; key to compile the driver. Then, we have the <strong>php_cubrid.dll</strong> file built.</p></li>
+<li><p>You need to make PHP recognize the <strong>php_cubrid.dll</strong> file as an extension. To do this:</p>
+<ul class="simple">
+<li><p>Create a new folder named <strong>cubrid</strong> where PHP has been installed and copy the  <strong>php_cubrid.dll</strong> file to the <strong>cubrid</strong> folder. You can also put the <strong>php_cubrid.dll</strong> file in <strong>%PHPRC%\ext</strong> if this directory exists.</p></li>
+<li><p>In the php.ini file, enter the path of the <strong>php_cubrid.dll</strong> file as an extension_dir variable value and enter <strong>php_cubrid.dll</strong> as an extension value.</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Building CUBRID PHP Driver with VC6 for PHP 5.2/5.3</strong></p>
+<p><strong>Configuring the environment</strong></p>
+<ul>
+<li><p>CUBRID: Install CUBRID. Make sure that the environment variable <strong>%CUBRID%</strong> is defined in your system.</p></li>
+<li><p>Visual C++ 6.0 SP6</p></li>
+<li><p>Windows Server Feb. 2003 SDK: It is recommended to use Windows Server Feb. 2008 SDK because every official release and snapshot are compiled with Visual C++ 6.0 SP6 and Windows Server Feb. 2003 SDK. You can configure the default settings without using this SDK; however, there is possibility that an error would occur while building the driver. In this case, you should fix the error yourself.</p></li>
+<li><p>PHP 5.3/5.2 binaries: You can install VC6 x86 Non Thread Safe or VC6 x86 Thread Safe. Make sure that the value of the <strong>%PHPRC%</strong> system environment variable is correctly set. In the [Project Settings] dialog box, you can find <strong>$(PHPRC)</strong> in [Additional library path] of the [Link] tab.</p>
+<img alt="../_images/image61.jpg" src="../_images/image61.jpg"/>
+</li>
+<li><p>PHP 5.2/5.3 source code: Remember to get the source that matches your binary version. After you extract the PHP 5.3 source code, add the <strong>%PHP5_SRC%</strong> system environment variable and set its value to the path of PHP 5.3 source code. In the [Project Settings] dialog box of VC6 project, you can find <strong>$(PHP5_SRC)</strong> in [Additional include directories] of the [C/C++] tab.</p>
+<img alt="../_images/image62.jpg" src="../_images/image62.jpg"/>
+</li>
+<li><p>CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that has been installed on your system. You can get it from <a class="reference external" href="http://www.cubrid.org/?mid=downloads&amp;item=php_driver">http://www.cubrid.org/?mid=downloads&amp;item=php_driver</a> .</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you build CUBRID PHP driver with PHP 5.3 source code, you need to make some configuration settings for PHP 5.3 on Windows. If you do not make these settings, you will get the message that a header file (<strong>config.w32.h</strong>) cannot be found. Read <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">https://wiki.php.net/internals/windows/stepbystepbuild</a> to get more detailed information.</p>
+</div>
+<p><strong>Building CUBRID PHP driver</strong></p>
+<ol class="arabic">
+<li><p>Open the project in the [Build] menu and then select [Set Active Configuration].</p>
+<img alt="../_images/image63.jpg" src="../_images/image63.jpg"/>
+</li>
+<li><p>There are four types of configuration settings (Win32 Release_TS, Win32 Release, Win32 Debug_TS, and Win32 Debug). Select one of them depending on your system and then click the [OK] button.</p>
+<img alt="../_images/image64.jpg" src="../_images/image64.jpg"/>
+</li>
+<li><p>After you complete the properties modification, click the [OK] button and press the &lt;F7&gt; key to compile the driver. Then you have the <strong>php_cubrid.dll</strong> file built.</p></li>
+<li><p>You need to make PHP recognize the <strong>php_cubrid.dll</strong> file as an extension. To do this:</p>
+<ul class="simple">
+<li><p>Create a new folder named  <strong>cubrid</strong> where PHP is installed and copy <strong>php_cubrid.dll</strong> to the <strong>cubrid</strong> folder. You can also put <strong>php_cubrid.dll</strong> in <strong>%PHPRC%\ext</strong> if this directory exists.</p></li>
+<li><p>Set the <strong>extension_dir</strong> variable and add CUBRID PHP driver to <strong>extension</strong> variable in the <strong>php.ini</strong> file.</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Building CUBRID PHP Driver for 64-bit Windows</strong></p>
+<p><strong>PHP for 64-bit Windows</strong></p>
+<p>We do not provide 64-bit Windows CUBRID PHP driver, mainly because there is no official 64-bit Windows PHP at windows.php.net (only x86 versions are available). But sometimes you need 64-bit Windows binaries for PHP. In that case you can build it from source codes. Best of all, some guys have already done this (see <a class="reference external" href="http://www.anindya.com/">http://www.anindya.com/</a>). Here, we will not describe how to build x64 PHP itself.</p>
+<p>You can find the supported compilers to build PHP on Windows at <a class="reference external" href="https://wiki.php.net/internals/windows/compiler">https://wiki.php.net/internals/windows/compiler</a> . You can see that both VC++ 8 (2005) and VC++ 9 (2008 SP1 only) can be used to build 64-bit PHP. Earlier versions of Visual C++ 2005, the Windows Server Fed. 2003 SDK was the only way to build 64-bit Windows applications.</p>
+<p><strong>Apache for 64-bit Windows</strong></p>
+<p>There is no official Apache for 64-bit Windows either. Instead, you can use IIS as your Windows Web Server on 64-bit Windows. If you really need VC9 x64 versions of Apache, you can find it at <a class="reference external" href="http://www.anindya.com/">http://www.anindya.com/</a> .</p>
+<p><strong>Configuring the environment</strong></p>
+<ul class="simple">
+<li><p>CUBRID for 64-bit Windows: You can install the latest version of CUBRID for 64-bit Windows. Make sure the environment variable <strong>%CUBRID%</strong> is defined in your system.</p></li>
+<li><p>Visual Studio 2008: You can alternately use the free Visual C++ Express Edition or the Visual C++ 9 compiler in the Windows SDK v6.1 if you are familiar with a makefile.</p></li>
+<li><p>SDK 6.1: If you are using VC9, you need Microsoft Windows SDK for Windows Server 2008 and .NET Framework 3.5 (also known as the SDK 6.1).</p></li>
+<li><p>PHP 5.3 binaries for 64-bit Windows: You can build your own VC9 x64 PHP with SDK 6.1 or you can get it at <a class="reference external" href="http://www.anindya.com">http://www.anindya.com</a> . Both VC9 x64 Non Thread Safe and VC9 x64 Thread Safe are available. After you have installed it, check if the value of system environment variable <strong>%PHPRC%</strong> is correctly set.</p></li>
+<li><p>PHP 5.3 source code: Remember to get the src package that matches your binary version. After you extract the PHP 5.3 src, add system environment variable <strong>%PHP5_SRC%</strong> and set its value to the path of PHP 5.3 source code. In the VC9 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see <strong>$(PHP5_SRC)</strong> in [Additional Include Directories].</p></li>
+<li><p>CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that is installed on your system. You can get it from <a class="reference external" href="http://www.cubrid.org/?mid=downloads&amp;item=php_driver">http://www.cubrid.org/?mid=downloads&amp;item=php_driver</a> .</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You do not need to build PHP 5.3 from source code; however, configuring a project is required. If you do not make configuration settings, you will get the message that a header file (<strong>config.w32.h</strong>) cannot be found. Read <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">https://wiki.php.net/internals/windows/stepbystepbuild</a> to get more detailed information.</p>
+</div>
+<p><strong>Configuring PHP 5.3</strong></p>
+<ol class="arabic">
+<li><p>After you have installed SDK 6.1, click the [CMD Shell] shortcut under the [Microsoft Windows SDK v6.1] folder (Windows Start menu).</p>
+<img alt="../_images/image65.png" src="../_images/image65.png"/>
+</li>
+<li><p>Run <strong>setenv /x64 /release</strong>.</p>
+<img alt="../_images/image66.png" src="../_images/image66.png"/>
+</li>
+<li><p>Enter PHP 5.3 source code directory in the command prompt and run <strong>buildconf</strong> to generate the <strong>configure.js</strong> file.</p>
+<img alt="../_images/image67.png" src="../_images/image67.png"/>
+<p>Or you can also double-click the <strong>buildconf.bat</strong> file.</p>
+<img alt="../_images/image68.png" src="../_images/image68.png"/>
+</li>
+<li><p>Run the <strong>configure</strong> command to configure the PHP project.</p>
+<img alt="../_images/image69.png" src="../_images/image69.png"/>
+<img alt="../_images/image70.png" src="../_images/image70.png"/>
+</li>
+</ol>
+<p><strong>Building CUBRID PHP dirver</strong></p>
+<ol class="arabic">
+<li><p>Open the <strong>php_cubrid.vcproj</strong> file under the <strong>\win</strong> directory. In the [Solution Explorer] on the left, right-click on the <strong>php_cubrid</strong> project name and select [Properties].</p></li>
+<li><p>On the top right corner of the [Property Pages] dialog box, click [Configuration Manager].</p>
+<img alt="../_images/image71.png" src="../_images/image71.png"/>
+</li>
+<li><p>In the [Configuration Manager] dialog box, you can see four types of configurations (Release_TS, Release_NTS, Debug_TS, and Debug_NTS) in the [Active solution configuration] dropdown list. Select <strong>New</strong> in the dropdown list so that you can create a new one for your x64 build.</p>
+<img alt="../_images/image72.png" src="../_images/image72.png"/>
+</li>
+<li><p>In the [New Solution Configuration] dialog box, enter a value in the <strong>Name</strong> box (e.g., <strong>Release_TS_x64</strong>). In the [Copy settings from] dropdown list, select the corresponding x86 configuration and click [OK].</p>
+<img alt="../_images/image73.png" src="../_images/image73.png"/>
+</li>
+<li><p>In the [Configuration Manager] dialog box, select the value <strong>x64</strong> in the [Platform] dropdown list. If it does not exist, select <strong>New</strong>.</p>
+<img alt="../_images/image74.png" src="../_images/image74.png"/>
+<ul class="simple">
+<li><p>In the [New Project Platform] dialog box, select <strong>x64</strong> option in the [New platform] dropdown list.</p></li>
+</ul>
+<img alt="../_images/image75.png" src="../_images/image75.png"/>
+</li>
+<li><p>In the [Property Pages] dialog box, select [Preprocessor] under the [C/C++] tree node. In [Preprocessor Definitions], delete <strong>_USE_32BIT_TIME_T</strong> and click [OK] to close the dialog box.</p>
+<img alt="../_images/image76.png" src="../_images/image76.png"/>
+</li>
+<li><p>Press the &lt;F7&gt; key to compile. Now you will get the CUBRID PHP driver for 64-bit Windows.</p></li>
+</ol>
+</section>
+</section>
+<section id="php-programming">
+<h2>PHP Programming<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#php-programming" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#php-programming'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="connecting-to-a-database">
+<h3>Connecting to a Database<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#connecting-to-a-database" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#connecting-to-a-database'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The first step of database applications is to use <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-connect.php">cubrid_connect</a> () or <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-connect-with-url.php">cubrid_connect_with_url</a> () function which provides database connection. Once <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-connect.php">cubrid_connect</a> () or <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-connect-with-url.php">cubrid_connect_with_url</a> () function is executed successfully, you can use any functions available in the database. It is very important to call the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-disconnect.php">cubrid_disconnect</a> () function before applications are terminated. The <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-disconnect.php">cubrid_disconnect</a> () function terminates the current transaction as well as the connection handle and all request handles created by the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-connect.php">cubrid_connect</a> () function.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The database connection in thread-based programming must be used independently each other.</p></li>
+<li><p>In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.</p></li>
+</ul>
+</div>
+</section>
+<section id="transactions-and-auto-commit">
+<h3>Transactions and Auto-Commit<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#transactions-and-auto-commit" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#transactions-and-auto-commit'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID PHP supports transaction and auto-commit mode. Auto-commit mode means that every query that you run has its own implicit transaction. You can use the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-get-autocommit.php">cubrid_get_autocommit</a> () function to get the status of current connection auto-commit mode and use the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-set-autocommit.php">cubrid_set_autocommit</a> () function to enable/disable auto-commit mode of current connection. In auto-commit mode, any transactions being executed are committed regardless of whether it is set to <strong>ON</strong> or <strong>OFF</strong>.</p>
+<p>The default value of auto-commit mode upon application startup is configured by the <strong>CCI_DEFAULT_AUTOCOMMIT</strong> (broker parameter). If the broker parameter value is not configured, the default value is set to <strong>ON</strong>.</p>
+<p>If you set auto-commit mode to <strong>OFF</strong> in the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-set-autocommit.php">cubrid_set_autocommit</a> () function, you can handle transactions by specifying a proper function; to commit transactions, use the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-commit.php">cubrid_commit</a> () function and to roll back transactions, use the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-rollback.php">cubrid_rollback</a> () function. If you use the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-disconnect.php">cubrid_disconnect</a> () function, transactions will be disconnected and jobs which have not been committed will be rolled back.</p>
+</section>
+<section id="processing-queries">
+<h3>Processing Queries<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#processing-queries" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#processing-queries'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>Executing queries</strong></p>
+<p>The following are the basic steps to execute queries.</p>
+<ul class="simple">
+<li><p>Creating a connection handle</p></li>
+<li><p>Creating a request handle for an SQL query request</p></li>
+<li><p>Fetching result</p></li>
+<li><p>Disconnecting the request handle</p></li>
+</ul>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$con = cubrid_connect("192.168.0.10", 33000, "demodb");</span>
+</span><span id="line-2"><span class="x">if($con) {</span>
+</span><span id="line-3"><span class="x">    $req = cubrid_execute($con, "select * from code");</span>
+</span><span id="line-4"><span class="x">    if($req) {</span>
+</span><span id="line-5"><span class="x">        while ($row = cubrid_fetch($req)) {</span>
+</span><span id="line-6"><span class="x">            echo $row["s_name"];</span>
+</span><span id="line-7"><span class="x">            echo $row["f_name"];</span>
+</span><span id="line-8"><span class="x">        }</span>
+</span><span id="line-9"><span class="x">        cubrid_close_request($req);</span>
+</span><span id="line-10"><span class="x">    }</span>
+</span><span id="line-11"><span class="x">    cubrid_disconnect($con);</span>
+</span><span id="line-12"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>Column types and names of the query result</strong></p>
+<p>The <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-column-types.php">cubrid_column_types</a> () function is used to get arrays containing column types and the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-column-types.php">cubrid_column_types</a> () functions is used to get arrays containing colunm names.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$req = cubrid_execute($con, "select host_year, host_city from olympic");</span>
+</span><span id="line-2"><span class="x">if($req) {</span>
+</span><span id="line-3"><span class="x">    $col_types = cubrid_column_types($req);</span>
+</span><span id="line-4"><span class="x">    $col_names = cubrid_column_names($req);</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="x">    while (list($key, $col_type) = each($col_types)) {</span>
+</span><span id="line-7"><span class="x">        echo $col_type;</span>
+</span><span id="line-8"><span class="x">    }</span>
+</span><span id="line-9"><span class="x">    while (list($key, $col_name) = each($col_names))</span>
+</span><span id="line-10"><span class="x">        echo $col_name;</span>
+</span><span id="line-11"><span class="x">    }</span>
+</span><span id="line-12"><span class="x">    cubrid_close_request($req);</span>
+</span><span id="line-13"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>Controlling a cursor</strong></p>
+<p>The <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-move-cursor.php">cubrid_move_cursor</a> () function is used to move a cursor to a specified position from one of three points: beginning of the query result, current cursor position, or end of the query result).</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$req = cubrid_execute($con, "select host_year, host_city from olympic order by host_year");</span>
+</span><span id="line-2"><span class="x">if($req) {</span>
+</span><span id="line-3"><span class="x">    cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)</span>
+</span><span id="line-4"><span class="x">    while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {</span>
+</span><span id="line-5"><span class="x">        echo $row["host_year"]." ";</span>
+</span><span id="line-6"><span class="x">        echo $row["host_city"]."\n";</span>
+</span><span id="line-7"><span class="x">    }</span>
+</span><span id="line-8"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>Result array types</strong></p>
+<p>One of the following three types of arrays is used in the result of the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-fetch.php">cubrid_fetch</a> () function. The array types can be determined when the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-fetch.php">cubrid_fetch</a> () function is called. Of array types, the associative array uses string indexes and the numeric array uses number indexes. The last array includes both associative and numeric arrays.</p>
+<ul>
+<li><p>Numeric array</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {</span>
+</span><span id="line-2"><span class="x">    echo $id;</span>
+</span><span id="line-3"><span class="x">    echo $name;</span>
+</span><span id="line-4"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Associative array</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {</span>
+</span><span id="line-2"><span class="x">    echo $row["id"];</span>
+</span><span id="line-3"><span class="x">    echo $row["name"];</span>
+</span><span id="line-4"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Catalog Operations</strong></p>
+<p>The <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-schema.php">cubrid_schema</a> () function is used to get database schema information such as classes, virtual classes, attributes, methods, triggers, and constraints. The return value of the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-schema.php">cubrid_schema</a> () function is a two-dimensional array.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$pk = cubrid_schema($con, CUBRID_SCH_PRIMARY_KEY, "game");</span>
+</span><span id="line-2"><span class="x">if ($pk) {</span>
+</span><span id="line-3"><span class="x">    print_r($pk);</span>
+</span><span id="line-4"><span class="x">}</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="x">$fk = cubrid_schema($con, CUBRID_SCH_IMPORTED_KEYS, "game");</span>
+</span><span id="line-7"><span class="x">if ($fk) {</span>
+</span><span id="line-8"><span class="x">    print_r($fk);</span>
+</span><span id="line-9"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>Error Handling</strong></p>
+<p>When an error occurs, most of PHP interfaces display error messages and return false or -1. The <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-error-msg.php">cubrid_error_msg</a> (), <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-error-code.php">cubrid_error_code</a> () and <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-error-code-facility.php">cubrid_error_code_facility</a> () functions are used to check error messages, error codes, and error facility codes.</p>
+<p>The return value of the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-error-code-facility.php">cubrid_error_code_facility</a> () function is one of the following (<strong>CUBRID_FACILITY_DBMS</strong> (DBMS error), <strong>CUBRID_FACILITY_CAS</strong> (CAS server error), <strong>CUBRID_FACILITY_CCI</strong> (CCI error), or <strong>CUBRID_FACILITY_CLIENT</strong> (PHP module error).</p>
+<p><strong>Using OIDs</strong></p>
+<p>The OID value in the currently updated f record by using the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-current-oid.php">cubrid_current_oid</a> function if it is used together with query that can update the <strong>CUBRID_INCLUDE_OID</strong> option in the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-execute.php">cubrid_execute</a> () function.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$req = cubrid_execute($con, "select * from person where id = 1", CUBRID_INCLUDE_OID);</span>
+</span><span id="line-2"><span class="x">if ($req) {</span>
+</span><span id="line-3"><span class="x">    while ($row = cubrid_fetch($req)) {</span>
+</span><span id="line-4"><span class="x">        echo cubrid_current_oid($req);</span>
+</span><span id="line-5"><span class="x">        echo $row["id"];</span>
+</span><span id="line-6"><span class="x">        echo $row["name"];</span>
+</span><span id="line-7"><span class="x">    }</span>
+</span><span id="line-8"><span class="x">    cubrid_close_request($req);</span>
+</span><span id="line-9"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p>Values in every attribute, specified attributes, or a single attribute of an instance can be obtained by using OIDs.</p>
+<p>If any attributes are not specified in the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-get.php">cubrid_get</a> () function, values in every attribute are returned (a).
+If attributes is specified in the array data type, the array containing the specified attribute value is returned in the associative array (b).
+If a single attribute it is specified in the string type, a value of the attributed is returned (c).</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$attrarray = cubrid_get ($con, $oid); // (a)</span>
+</span><span id="line-2"><span class="x">$attrarray = cubrid_get ($con, $oid, array("id", "name")); // (b)</span>
+</span><span id="line-3"><span class="x">$attrarray = cubrid_get ($con, $oid, "id"); // (c)</span>
+</span></code></pre></div>
+</div>
+<p>The attribute values of an instance can be updated by using OIDs. To update a single attribute value, specify attribute name and value in the string type (a). To update multiple attribute values, specify attribute names and values in the associative array (b).</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$cubrid_put ($con, $oid, "id", 1); // (a)</span>
+</span><span id="line-2"><span class="x">$cubrid_put ($con, $oid, array("id"=&gt;1, "name"=&gt;"Tomas")); // (b)</span>
+</span></code></pre></div>
+</div>
+<p><strong>Using Collections</strong></p>
+<p>You can use the collection data types through PHP array data types or functions that support array data types. The following example shows how to fetch query result by using the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-fetch.php">cubrid_fetch</a> () function.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$row = cubrid_fetch ($req);</span>
+</span><span id="line-2"><span class="x">$col = $row["customer"];</span>
+</span><span id="line-3"><span class="x">while (list ($key, $cust) = each ($col)) {</span>
+</span><span id="line-4"><span class="x">   echo $cust;</span>
+</span><span id="line-5"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p>You can get values of collection attributes. The example shows how to get values of collection attributes by using the <a class="reference external" href="http://www.php.net/manual/en/function.cubrid-col-get.php">cubrid_col_get</a> () function.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$tels = cubrid_col_get ($con, $oid, "tels");</span>
+</span><span id="line-2"><span class="x">while (list ($key, $tel) = each ($tels)) {</span>
+</span><span id="line-3"><span class="x">   echo $tel."\n";</span>
+</span><span id="line-4"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p>You can directly update values of collection types by using cubrid_set_add() or cubrid_set_drop() function.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$tels = cubrid_col_get ($con, $oid, "tels");</span>
+</span><span id="line-2"><span class="x">while (list ($key, $tel) = each ($tels)) {</span>
+</span><span id="line-3"><span class="x">   $res = cubrid_set_drop ($con, $oid, "tel", $tel);</span>
+</span><span id="line-4"><span class="x">}</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="x">cubrid_commit ($con);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a string longer than defined max length is inserted (<strong>INSERT</strong>) or updated (<strong>UPDATE</strong>), the string will be truncated.</p>
+</div>
+</section>
+</section>
+<section id="php-api">
+<h2>PHP API<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#php-api" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#php-api'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>See <a class="reference external" href="http://ftp.cubrid.org/CUBRID_Docs/Drivers/">http://ftp.cubrid.org/CUBRID_Docs/Drivers/</a>.</p>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="cciapi.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        CCI API Reference
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="pdo.html">
+        PDO Driver
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#installing-and-configuring-php'" class="reference internal" href="#installing-and-configuring-php">Installing and Configuring PHP</a><ul>
+<li><a :data-current="activeSection === '#for-linux'" class="reference internal" href="#for-linux">For Linux</a></li>
+<li><a :data-current="activeSection === '#for-windows'" class="reference internal" href="#for-windows">For Windows</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#building-cubrid-php-driver-from-source-code'" class="reference internal" href="#building-cubrid-php-driver-from-source-code">Building CUBRID PHP Driver from Source Code</a><ul>
+<li><a :data-current="activeSection === '#id1'" class="reference internal" href="#id1">For Linux</a></li>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">For Windows</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#php-programming'" class="reference internal" href="#php-programming">PHP Programming</a><ul>
+<li><a :data-current="activeSection === '#connecting-to-a-database'" class="reference internal" href="#connecting-to-a-database">Connecting to a Database</a></li>
+<li><a :data-current="activeSection === '#transactions-and-auto-commit'" class="reference internal" href="#transactions-and-auto-commit">Transactions and Auto-Commit</a></li>
+<li><a :data-current="activeSection === '#processing-queries'" class="reference internal" href="#processing-queries">Processing Queries</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#php-api'" class="reference internal" href="#php-api">PHP API</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=2236d03e"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=582b20c5"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

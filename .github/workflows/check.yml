@@ -77,6 +77,13 @@ jobs:
             cp _build/simplepdf/CUBRID.pdf _build/html/CUBRID.pdf
           fi
 
+      - name: Check link
+        env:
+          LANG: ko_KR.utf8
+        run: |
+          cd ${{ matrix.lang }}
+          make linkcheck
+          
       # Save PR number for later jobs (push event only)
       - name: Get PR number
         if: github.event_name == 'push'

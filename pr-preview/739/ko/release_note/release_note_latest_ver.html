@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>11.2 릴리스 노트 | CUBRID 11.2 사용자 매뉴얼</title>
+<meta content="11.2 릴리스 노트 | CUBRID 11.2 사용자 매뉴얼" property="og:title"/>
+<meta content="11.2 릴리스 노트 | CUBRID 11.2 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="index.html" rel="prev" title="릴리스 노트"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.2 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.2/release_note/release_note_latest_ver.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.2 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/jsp.html">Java 저장 함수/프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/method.html">메서드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-javasp-server">CUBRID 자바 저장 프로시저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/oledb.html">OLE DB 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">11.2 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto"><div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="../index.html"></a></li>
+<li class="breadcrumb-item"><a href="index.html">릴리스 노트</a></li>
+<li class="breadcrumb-item active">11.2 릴리스 노트</li>
+<li class="wy-breadcrumbs-aside"><div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</li>
+</ul>
+
+</div>
+<div id="content" role="main">
+<section id="id1">
+<h1><a class="toc-backref" href="#id14" role="doc-backlink">11.2 릴리스 노트</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<nav class="contents" id="id2">
+<p class="topic-title">목차</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#id1" id="id14">11.2 릴리스 노트</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id15">릴리스 노트 정보</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id16">릴리스 개요</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id5" id="id17">드라이버 호환성</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#changes" id="id18">11.2 변경사항</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id19">주의사항</a></p>
+<ul>
+<li><p><a class="reference internal" href="#new-cautions" id="id20">신규 주의 사항</a></p>
+<ul>
+<li><p><a class="reference internal" href="#cubrid-11-2-cubrid-11-1" id="id21">CUBRID 11.2의 데이터베이스 볼륨은 CUBRID 11.1 및 그 이전 버전의 볼륨과 호환되지 않는다.</a></p></li>
+<li><p><a class="reference internal" href="#user-schema" id="id22">User schema 개념 도입으로 사용자 별로 동일한 객체명을 사용할 수 있으며, 지원에 따라 다음 동작이 변경됨</a></p></li>
+<li><p><a class="reference internal" href="#javasp-jdbc-default-connection-getdefaultconnection-javasp" id="id23">JavaSP의 “jdbc:default:connection:” 또는 getDefaultConnection()  사용 시 다음 함수 및 동작 변경됨 (<a class="reference internal" href="../sql/jsp.html#jsp-caution"><span class="std std-ref">JavaSP 주의 사항</span></a> 참조)</a></p></li>
+<li><p><a class="reference internal" href="#truncate-table-fk-set-null-cascade-sql-query-truncate" id="id24">Truncate table 수행 시 FK의 set null 또는 cascade가 있는 경우 동작이 변경됨 (<a class="reference internal" href="../sql/query/truncate.html"><span class="doc">TRUNCATE</span></a> 참조)</a></p></li>
+<li><p><a class="reference internal" href="#alter-change-modify-alter-auto-increment-on-update-property-change-column" id="id25">Alter change/modify 시 기입하지 않은 컬럼 속성은 유지되게 변경되었으며, alter 구문으로 auto_increment, on update property를 제거할 수 없게 변경됨 (<a class="reference internal" href="../sql/schema/table_stmt.html#change-column"><span class="std std-ref">CHANGE/MODIFY 절</span></a> 참조)</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id26">조건절에 컬럼명만 존재하는 경우 오류 처리되도록 변경됨</a></p></li>
+<li><p><a class="reference internal" href="#multiple-sql" id="id27">Multiple SQL는 반드시 세미콜론으로 구분하도록 변경됨</a></p></li>
+<li><p><a class="reference internal" href="#cubrid-cci-driver-cubrid-lib-cubrid-include-cubrid-cci-lib-cubrid-cci-include-cci" id="id28">CUBRID 패키지내의 CCI Driver 디렉토리가 $CUBRID/lib, $CUBRID/include에서 $CUBRID/cci/lib, $CUBRID/cci/include로 각각 변경됨 (<a class="reference internal" href="../api/cci.html#cci-overview"><span class="std std-ref">CCI 개요</span></a> 참조)</a></p></li>
+<li><p><a class="reference internal" href="#z-compress-backupdb" id="id29">백업 시 압축(-z, --compress) 옵션이 기본으로 설정되도록 변경됨 (<a class="reference internal" href="../admin/backup.html#backupdb"><span class="std std-ref">backupdb</span></a> 참조)</a></p></li>
+<li><p><a class="reference internal" href="#sql-catalog" id="id30">새로운 기능 추가로 인해 시스템 카탈로그 정보가 변경되거나 추가됨 (<a class="reference internal" href="../sql/catalog.html"><span class="doc">시스템 카탈로그</span></a> 참조)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id10" id="id31">기존 주의 사항</a></p>
+<ul>
+<li><p><a class="reference internal" href="#reuse-oid" id="id32">옵션 없이 테이블 생성 시 reuse_oid 테이블로 생성</a></p></li>
+<li><p><a class="reference internal" href="#char-256m" id="id33">CHAR 데이터 타입의 최대 길이 256M 문자열로 변경</a></p></li>
+<li><p><a class="reference internal" href="#id11" id="id34">문자열 데이터 타입에 길이보다 큰 문자열이 들어가는 경우 오류 발생</a></p></li>
+<li><p><a class="reference internal" href="#id12" id="id35">문자열 끝의 공백 문자를 인식하게 수정하여, 문자열 끝의 공백 문자에 따라 다른 문자열로 인식</a></p></li>
+<li><p><a class="reference internal" href="#id13" id="id36">통계 수집 방식의 변경으로 주기적인 통계 수집 수행 필요</a></p></li>
+<li><p><a class="reference internal" href="#db" id="id37">DB를 생성할 때 로케일(언어 및 문자 집합)을 지정</a></p></li>
+<li><p><a class="reference internal" href="#cubrid-charset" id="id38">CUBRID_CHARSET 환경 변수 제거</a></p></li>
+<li><p><a class="reference internal" href="#jdbc-url-zerodatetimebehavior-round-timestamp-zero-date-0001-01-01-00-00-00-1970-01-01-00-00-00-gst-cubridsus-11612" id="id39">[JDBC] 연결 URL의 zeroDateTimeBehavior 값이 “round”일 때 TIMESTAMP의 zero date가 ‘0001-01-01 00:00:00’에서 ‘1970-01-01 00:00:00’(GST)으로 변경 (CUBRIDSUS-11612)</a></p></li>
+<li><p><a class="reference internal" href="#aix-cubrid-sh-cubridsus-12251" id="id40">AIX에서 CUBRID SH 패키지 설치 시 권장 사항 (CUBRIDSUS-12251)</a></p></li>
+<li><p><a class="reference internal" href="#cubrid-lang-cubrid-msg-lang" id="id41">CUBRID_LANG 제거, CUBRID_MSG_LANG 추가</a></p></li>
+<li><p><a class="reference internal" href="#cci-cubridsus-9364" id="id42">CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결과의 배열에 대한 오류 처리 방식 수정 (CUBRIDSUS-9364)</a></p></li>
+<li><p><a class="reference internal" href="#java-sql-xaconnection-hold-cursors-over-commit-cubridsus-10800" id="id43">java.sql.XAConnection 인터페이스에서 HOLD_CURSORS_OVER_COMMIT을 지원하지 않음 (CUBRIDSUS-10800)</a></p></li>
+<li><p><a class="reference internal" href="#strcmp" id="id44">9.0부터 STRCMP가 대소문자를 구분하여 동작</a></p></li>
+<li><p><a class="reference internal" href="#r4-1-cci-default-autocommit-on-cubridsus-5879" id="id45">2008 R4.1 버전부터 CCI_DEFAULT_AUTOCOMMIT의 기본값이 ON으로 변경됨 (CUBRIDSUS-5879)</a></p></li>
+<li><p><a class="reference internal" href="#r4-0-cubridsus-5136" id="id46">2008 R4.0 버전부터 페이지 단위를 사용하는 옵션 및 파라미터가 볼륨 크기 단위를 사용하도록 변경됨 (CUBRIDSUS-5136)</a></p></li>
+<li><p><a class="reference internal" href="#r4-0-db-cubridsus-4222" id="id47">2008 R4.0 베타 이전 버전 사용자는 db 볼륨 크기를 설정할 때 주의할 것 (CUBRIDSUS-4222)</a></p></li>
+<li><p><a class="reference internal" href="#r4-0-cubridsus-4095" id="id48">2008 R4.0 이전 버전의 일부 시스템 파라미터의 기본값 변경 (CUBRIDSUS-4095)</a></p></li>
+<li><p><a class="reference internal" href="#cubridsus-5375" id="id49">시스템 파라미터가 잘못 설정된 경우 데이터베이스 서비스, 유틸리티 및 응용 프로그램을 수행할 수 없도록 변경됨 (CUBRIDSUS-5375)</a></p></li>
+<li><p><a class="reference internal" href="#cubrid-32-2g-data-buffer-size-cubridsus-5349" id="id50">CUBRID 32비트 버전에서 2G를 초과하는 값을 사용하여 data_buffer_size를 설정할 경우 데이터베이스 구동에 실패함 (CUBRIDSUS-5349)</a></p></li>
+<li><p><a class="reference internal" href="#windows-vista-cubrid-cubridsus-4186" id="id51">Windows Vista 및 그 이후 버전에서 CUBRID 유틸리티를 사용한 서비스 제어 시 권장 사항 (CUBRIDSUS-4186)</a></p></li>
+<li><p><a class="reference internal" href="#cubrid-cubridsus-3553" id="id52">CUBRID 소스 빌드 후 수행 시, 매니저 서버 프로세스 관련 오류 발생 (CUBRIDSUS-3553)</a></p></li>
+<li><p><a class="reference internal" href="#r3-0-glo-cubridsus-3826" id="id53">2008 r3.0 또는 그 이전 버전에서 사용하던 GLO 클래스 지원 중단 (CUBRIDSUS-3826)</a></p></li>
+<li><p><a class="reference internal" href="#cubridsus-3564" id="id54">마스터와 서버 프로세스 사이의 프로토콜이 변경된 경우 또는 두 버전이 동시에 실행되는 경우 포트 설정 필요 (CUBRIDSUS-3564)</a></p></li>
+<li><p><a class="reference internal" href="#jdbc-url-cubridsus-3217" id="id55">JDBC에서 URL 문자열로서 연결 정보를 입력할 때 물음표 명시 (CUBRIDSUS-3217)</a></p></li>
+<li><p><a class="reference internal" href="#cubridsus-2828" id="id56">데이터베이스명에 @을 포함할 수 없음 (CUBRIDSUS-2828)</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="id3">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">릴리스 노트 정보</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>본 문서는 CUBRID 11.2에 관한 정보를 포함한다.</p>
+<p>CUBRID 11.2는 CUBRID 11.0에서 발견된 오류 수정 및 기능 개선과 이전 버전들에 반영된 모든 오류 수정 및 기능 개선을 포함한다.</p>
+<p>CUBRID 11.0에 대한 정보는 <a class="reference external" href="https://www.cubrid.org/manual/ko/11.0/release_note/index.html">https://www.cubrid.org/manual/ko/11.0/release_note/index.html</a> 에서 확인할 수 있다.</p>
+<p>CUBRID 10.2에 대한 정보는 <a class="reference external" href="https://www.cubrid.org/manual/ko/10.2/release_note/index.html">https://www.cubrid.org/manual/ko/10.2/release_note/index.html</a> 에서 확인할 수 있다.</p>
+<p>CUBRID 10.1에 대한 정보는 <a class="reference external" href="https://www.cubrid.org/manual/ko/10.1/release_note/index.html">https://www.cubrid.org/manual/ko/10.1/release_note/index.html</a> 에서 확인할 수 있다.</p>
+<p>CUBRID 10.0에 대한 정보는 <a class="reference external" href="https://www.cubrid.org/manual/en/10.0/release_note/index.html">https://www.cubrid.org/manual/en/10.0/release_note/index.html</a> 에서 확인할 수 있다.</p>
+<p>CUBRID 9.3에 대한 정보는 <a class="reference external" href="https://www.cubrid.org/manual/ko/9.3.0/release_note/index.html">https://www.cubrid.org/manual/ko/9.3.0/release_note/index.html</a> 에서 확인할 수 있다.</p>
+</section>
+<section id="id4">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">릴리스 개요</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CUBRID 11.2는 새로운 기능, 중요한 변경 사항 및 개선 사항이 포함 된 최신 안정화 버전이다.</p>
+<p>CUBRID 11.2는</p>
+<ul class="simple">
+<li><p>연결성이 향상된 버전이다.</p></li>
+<li><p>보다 안정적이고, 빠르고, 관리자의 편의성을 높였다.</p></li>
+<li><p>수많은 중요 버그가 수정되었다.</p></li>
+<li><p>유용한 SQL 확장: User Schema 개념, Synonym을 지원한다.</p></li>
+<li><p>코드 재작성 및 최신화 작업을 포함한다.</p></li>
+</ul>
+<p>CUBRID 11.2는 동종 DBMS와 이종 DBMS간의 데이터베이스 링크를 제공하여 <strong>연계성을 향상시켰다</strong>. 또한 이 버전에서는 변경된 데이터를 추적할 수 있는 supplemental logging을 지원하여 CDC(Change data capture) 기능을 제공한다.</p>
+<p>CUBRID 11.2은 <strong>더 빨라졌다</strong>. 이 버전은 조건절 푸시다운(predicate pushdown) 과 뷰 변환(view transformation) 등의  질의 최적화(query optimization) 개선, 모든 서브질의에 Hash List Scan 지원,  캐시를 이용한 조건절 없는 count(*) 성능 개선 및 truncate table을 개선하여 성능을 더욱 향상시켰다.</p>
+<p>CUBRID 11.2는 트랜잭션별로 변경된 데이터의 원복 질의를 추출할 수 있는 플래시백(flashback) 기능을 제공하여 <strong>관리자 편의성을 개선</strong> 하였다.</p>
+<p>CUBRID 11.2는 데이터베이스 링크, User Schema, Synonym을 위한 <strong>SQL이 확장</strong>되었고, 동일한 컬럼에 대해 여러 개의 필터 인덱스 (filtered index)를 지원한다.</p>
+<p>CUBRID 11.2의 데이터베이스 볼륨은 CUBRID 11.1 및 그 이전 버전의 볼륨과 호환되지 않는다. 따라서, CUBRID 11.1 또는 이전 버전을 사용하는 경우 반드시 <strong>데이터베이스 마이그레이션</strong>을  해야 한다. 이와 관련하여 <a class="reference internal" href="../upgrade.html"><span class="doc">업그레이드</span></a> 절을 참고한다.</p>
+<section id="id5">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">드라이버 호환성</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<ul class="simple">
+<li><p>CUBRID 11.2의 JDBC 및 CCI 드라이버는 CUBRID 11.1, 11.0, 10.2, 10.1, 10.0, 9.3, 9.2, 9.1, 2008 R4.4, R4.3 또는 R4.1의 DB 서버와 호환된다.</p></li>
+<li><p>드라이버 업그레이드를 권장한다.</p></li>
+</ul>
+<p>변경 사항에 대한 자세한 내용은 <a class="reference internal" href="#changes"><span class="std std-ref">11.2 변경사항</span></a> 절을 참고한다. 이전 버전의 사용자는 <a class="reference internal" href="#changes"><span class="std std-ref">11.2 변경사항</span></a> 및 <a class="reference internal" href="#new-cautions"><span class="std std-ref">신규 주의 사항</span></a> 절을 확인해야 한다.</p>
+</section>
+</section>
+<section id="changes">
+<span id="id6"></span><h2><a class="toc-backref" href="#id18" role="doc-backlink">11.2 변경사항</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#changes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#changes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><a class="reference external" href="https://github.com/CUBRID/cubrid/releases/tag/v11.2">change logs of CUBRID 11.2</a> 를 참고한다.</p>
+</section>
+<section id="id7">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">주의사항</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="new-cautions">
+<span id="id8"></span><h3><a class="toc-backref" href="#id20" role="doc-backlink">신규 주의 사항</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#new-cautions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#new-cautions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="cubrid-11-2-cubrid-11-1">
+<h4><a class="toc-backref" href="#id21" role="doc-backlink">CUBRID 11.2의 데이터베이스 볼륨은 CUBRID 11.1 및 그 이전 버전의 볼륨과 호환되지 않는다.</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-11-2-cubrid-11-1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="user-schema">
+<h4><a class="toc-backref" href="#id22" role="doc-backlink">User schema 개념 도입으로 사용자 별로 동일한 객체명을 사용할 수 있으며, 지원에 따라 다음 동작이 변경됨</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-schema"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<ul class="simple">
+<li><p>객체명에 “.”(dot)을 허용하지 않는다.</p></li>
+<li><p>질의 또는 유틸리티 명령어 사용 시 “[사용자명].객체명”으로 사용해야 한다. (단, 로그인 된 사용자의 객체를 질의하는 경우에는 사용자명을 생략할 수 있음) (<a class="reference internal" href="../sql/user_schema.html"><span class="doc">사용자 스키마</span></a> 참조)</p></li>
+<li><p>info schema, show full tables 결과에 사용자명 포함되도록 변경되었다. (<a class="reference internal" href="../sql/query/show.html"><span class="doc">SHOW</span></a> 참조)</p></li>
+<li><p>11.2 이전 loaddb 파일은 11.2에서 수행할 수 있도록 user명.table명으로 수정하거나 --no-user-specified-name 옵션을 설정하여 loaddb를 수행할 수 있다. (<a class="reference internal" href="../admin/migration.html#loaddb"><span class="std std-ref">loaddb</span></a> 참조)</p></li>
+</ul>
+</section>
+<section id="javasp-jdbc-default-connection-getdefaultconnection-javasp">
+<h4><a class="toc-backref" href="#id23" role="doc-backlink">JavaSP의 “jdbc:default:connection:” 또는 getDefaultConnection()  사용 시 다음 함수 및 동작 변경됨 (<a class="reference internal" href="../sql/jsp.html#jsp-caution"><span class="std std-ref">JavaSP 주의 사항</span></a> 참조)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#javasp-jdbc-default-connection-getdefaultconnection-javasp"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<ul class="simple">
+<li><p>java.sql.DatabaseMetaData의 모든 function 지원하지 않는다.</p></li>
+<li><p>java.sql.Connection의 createClob(), createBlob() 지원하지 않는다.</p></li>
+<li><p>java.sql.Statement의 addBatch(), clearBatch(), executeBatch(), setMaxRows(), cancel() 지원하지 않는다.</p></li>
+<li><p>하나의 prepare (또는 execute)에 multiple sql을지원하지 않는다.</p></li>
+<li><p>cursor는 non-holdable로 변경되었다.</p></li>
+<li><p>ResultSet은 non-updatable, non-scrollable, non-sensitive로 변경되었다.</p></li>
+</ul>
+</section>
+<section id="truncate-table-fk-set-null-cascade-sql-query-truncate">
+<h4><a class="toc-backref" href="#id24" role="doc-backlink">Truncate table 수행 시 FK의 set null 또는 cascade가 있는 경우 동작이 변경됨 (<a class="reference internal" href="../sql/query/truncate.html"><span class="doc">TRUNCATE</span></a> 참조)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#truncate-table-fk-set-null-cascade-sql-query-truncate"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="alter-change-modify-alter-auto-increment-on-update-property-change-column">
+<h4><a class="toc-backref" href="#id25" role="doc-backlink">Alter change/modify 시 기입하지 않은 컬럼 속성은 유지되게 변경되었으며, alter 구문으로 auto_increment, on update property를 제거할 수 없게 변경됨 (<a class="reference internal" href="../sql/schema/table_stmt.html#change-column"><span class="std std-ref">CHANGE/MODIFY 절</span></a> 참조)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alter-change-modify-alter-auto-increment-on-update-property-change-column"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="id9">
+<h4><a class="toc-backref" href="#id26" role="doc-backlink">조건절에 컬럼명만 존재하는 경우 오류 처리되도록 변경됨</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id9"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<ul class="simple">
+<li><p>UPDATE t1 SET c1 = 9 WHERE c1; 형태로 사용하면 오류 발생한다.</p></li>
+</ul>
+</section>
+<section id="multiple-sql">
+<h4><a class="toc-backref" href="#id27" role="doc-backlink">Multiple SQL는 반드시 세미콜론으로 구분하도록 변경됨</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#multiple-sql"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="cubrid-cci-driver-cubrid-lib-cubrid-include-cubrid-cci-lib-cubrid-cci-include-cci">
+<h4><a class="toc-backref" href="#id28" role="doc-backlink">CUBRID 패키지내의 CCI Driver 디렉토리가 $CUBRID/lib, $CUBRID/include에서 $CUBRID/cci/lib, $CUBRID/cci/include로 각각 변경됨 (<a class="reference internal" href="../api/cci.html#cci-overview"><span class="std std-ref">CCI 개요</span></a> 참조)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-cci-driver-cubrid-lib-cubrid-include-cubrid-cci-lib-cubrid-cci-include-cci"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<ul class="simple">
+<li><p>CCI 사용 시 환경변수 LD_LIBRARY_PATH에 $CUBRID/cci/lib를 추가해야 한다.</p></li>
+</ul>
+</section>
+<section id="z-compress-backupdb">
+<h4><a class="toc-backref" href="#id29" role="doc-backlink">백업 시 압축(-z, --compress) 옵션이 기본으로 설정되도록 변경됨 (<a class="reference internal" href="../admin/backup.html#backupdb"><span class="std std-ref">backupdb</span></a> 참조)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#z-compress-backupdb"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="sql-catalog">
+<h4><a class="toc-backref" href="#id30" role="doc-backlink">새로운 기능 추가로 인해 시스템 카탈로그 정보가 변경되거나 추가됨 (<a class="reference internal" href="../sql/catalog.html"><span class="doc">시스템 카탈로그</span></a> 참조)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sql-catalog"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+</section>
+<section id="id10">
+<h3><a class="toc-backref" href="#id31" role="doc-backlink">기존 주의 사항</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id10" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id10'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="reuse-oid">
+<h4><a class="toc-backref" href="#id32" role="doc-backlink">옵션 없이 테이블 생성 시 reuse_oid 테이블로 생성</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#reuse-oid"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="char-256m">
+<h4><a class="toc-backref" href="#id33" role="doc-backlink">CHAR 데이터 타입의 최대 길이 256M 문자열로 변경</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#char-256m"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="id11">
+<h4><a class="toc-backref" href="#id34" role="doc-backlink">문자열 데이터 타입에 길이보다 큰 문자열이 들어가는 경우 오류 발생</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id11"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="id12">
+<h4><a class="toc-backref" href="#id35" role="doc-backlink">문자열 끝의 공백 문자를 인식하게 수정하여, 문자열 끝의 공백 문자에 따라 다른 문자열로 인식</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id12"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="id13">
+<h4><a class="toc-backref" href="#id36" role="doc-backlink">통계 수집 방식의 변경으로 주기적인 통계 수집 수행 필요</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id13"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+</section>
+<section id="db">
+<h4><a class="toc-backref" href="#id37" role="doc-backlink">DB를 생성할 때 로케일(언어 및 문자 집합)을 지정</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#db"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>DB를 생성할 때 로케일을 지정하도록 변경되었다.</p>
+</section>
+<section id="cubrid-charset">
+<h4><a class="toc-backref" href="#id38" role="doc-backlink">CUBRID_CHARSET 환경 변수 제거</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-charset"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>9.2 버전 이후 DB를 생성할 때 로케일(언어 및 문자 집합)을 지정하므로 CUBRID_CHARSET는 더 이상 사용하지 않는다.</p>
+</section>
+<section id="jdbc-url-zerodatetimebehavior-round-timestamp-zero-date-0001-01-01-00-00-00-1970-01-01-00-00-00-gst-cubridsus-11612">
+<h4><a class="toc-backref" href="#id39" role="doc-backlink">[JDBC] 연결 URL의 zeroDateTimeBehavior 값이 “round”일 때 TIMESTAMP의 zero date가 ‘0001-01-01 00:00:00’에서 ‘1970-01-01 00:00:00’(GST)으로 변경 (CUBRIDSUS-11612)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#jdbc-url-zerodatetimebehavior-round-timestamp-zero-date-0001-01-01-00-00-00-1970-01-01-00-00-00-gst-cubridsus-11612"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>2008 R4.4부터 연결 URL의 “zeroDateTimeBehavior” 속성 값이 “round”일 때 TIMESTAMP의 zero date가 ‘0001-01-01 00:00:00’에서 ‘1970-01-01 00:00:00’(GST)으로 변경되었므로, 응용 프로그램에서 zero date를 사용하는 경우 주의해야 한다.</p>
+</section>
+<section id="aix-cubrid-sh-cubridsus-12251">
+<h4><a class="toc-backref" href="#id40" role="doc-backlink">AIX에서 CUBRID SH 패키지 설치 시 권장 사항 (CUBRIDSUS-12251)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#aix-cubrid-sh-cubridsus-12251"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>AIX OS에서 ksh를 사용하여 CUBRID SH 패키지를 설치하는 경우 다음 오류와 함께 실패한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">0403</span><span class="o">-</span><span class="mi">065</span> <span class="n">An</span> <span class="n">incomplete</span> <span class="ow">or</span> <span class="n">invalid</span> <span class="n">multibyte</span> <span class="n">character</span> <span class="n">encountered</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>따라서 ksh 대신 ksh93 또는 bash를 사용할 것을 권장한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ ksh93 ./CUBRID-9.2.0.0146-AIX-ppc64.sh
+</span><span id="line-2">$ bash ./CUBRID-9.2.0.0146-AIX-ppc64.sh
+</span></code></pre></div>
+</div>
+</section>
+<section id="cubrid-lang-cubrid-msg-lang">
+<h4><a class="toc-backref" href="#id41" role="doc-backlink">CUBRID_LANG 제거, CUBRID_MSG_LANG 추가</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-lang-cubrid-msg-lang"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>9.1 버전부터 CUBRID_LANG 환경 변수를 더 이상 사용하지 않는다.
+유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용한다.</p>
+</section>
+<section id="cci-cubridsus-9364">
+<h4><a class="toc-backref" href="#id42" role="doc-backlink">CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결과의 배열에 대한 오류 처리 방식 수정 (CUBRIDSUS-9364)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cci-cubridsus-9364"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부터 2008 R4.1 버전까지는 cci_execute_array 함수나 cci_execute_batch 함수에 의한 질의 수행 결과들 중 하나만 오류가 발생해도 해당 질의의 오류 코드를 반환했으나, 2008 R4.3 버전 및 9.1 버전부터는 전체 질의 개수를 반환하고 CCI_QUERY_RESULT_* 매크로를 통해 개별 질의에 대한 오류를 확인할 수 있도록 수정했다.</p>
+<p>수정 이전 버전에서는 오류가 발생한 경우에도 배열 내 각각의 질의들의 성공 실패 여부를 알 수 없으므로, 이를 판단해야 한다.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">...</span>
+</span><span id="line-2"><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)"</span><span class="p">;</span>
+</span><span id="line-3"><span class="p">...</span>
+</span><span id="line-4"><span class="n">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_prepare</span><span class="w"> </span><span class="p">(</span><span class="n">con</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cci_error</span><span class="p">);</span>
+</span><span id="line-5"><span class="p">...</span>
+</span><span id="line-6"><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_bind_param_array_size</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</span><span id="line-7"><span class="p">...</span>
+</span><span id="line-8"><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_bind_param_array</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_A_TYPE_INT</span><span class="p">,</span><span class="w"> </span><span class="n">co_ex</span><span class="p">,</span><span class="w"> </span><span class="n">null_ind</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_U_TYPE_INT</span><span class="p">);</span>
+</span><span id="line-9"><span class="p">...</span>
+</span><span id="line-10"><span class="n">n_executed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_execute_array</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cci_error</span><span class="p">);</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n_executed</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+</span><span id="line-13"><span class="w">  </span><span class="p">{</span>
+</span><span id="line-14"><span class="w">    </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"execute error: %d, %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">cci_error</span><span class="p">.</span><span class="n">err_code</span><span class="p">,</span><span class="w"> </span><span class="n">cci_error</span><span class="p">.</span><span class="n">err_msg</span><span class="p">);</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span id="line-17"><span class="w">      </span><span class="p">{</span>
+</span><span id="line-18"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"query %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+</span><span id="line-19"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"result count = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_QUERY_RESULT_RESULT</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">));</span>
+</span><span id="line-20"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"error message = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_QUERY_RESULT_ERR_MSG</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">));</span>
+</span><span id="line-21"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"statement type = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_QUERY_RESULT_STMT_TYPE</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">));</span>
+</span><span id="line-22"><span class="w">      </span><span class="p">}</span>
+</span><span id="line-23"><span class="w">  </span><span class="p">}</span>
+</span><span id="line-24"><span class="p">...</span>
+</span></code></pre></div>
+</div>
+<p>수정된 버전부터는 오류가 발생하면 전체 질의가 실패한 것이며, 오류가 발생하지 않은 경우에 대해 배열 내 각 질의의 성공 여부를 판단한다.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">...</span>
+</span><span id="line-2"><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)"</span><span class="p">;</span>
+</span><span id="line-3"><span class="p">...</span>
+</span><span id="line-4"><span class="n">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_prepare</span><span class="w"> </span><span class="p">(</span><span class="n">con</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cci_error</span><span class="p">);</span>
+</span><span id="line-5"><span class="p">...</span>
+</span><span id="line-6"><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_bind_param_array_size</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</span><span id="line-7"><span class="p">...</span>
+</span><span id="line-8"><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_bind_param_array</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_A_TYPE_INT</span><span class="p">,</span><span class="w"> </span><span class="n">co_ex</span><span class="p">,</span><span class="w"> </span><span class="n">null_ind</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_U_TYPE_INT</span><span class="p">);</span>
+</span><span id="line-9"><span class="p">...</span>
+</span><span id="line-10"><span class="n">n_executed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cci_execute_array</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cci_error</span><span class="p">);</span>
+</span><span id="line-11"><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n_executed</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+</span><span id="line-12"><span class="w">  </span><span class="p">{</span>
+</span><span id="line-13"><span class="w">    </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"execute error: %d, %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">cci_error</span><span class="p">.</span><span class="n">err_code</span><span class="p">,</span><span class="w"> </span><span class="n">cci_error</span><span class="p">.</span><span class="n">err_msg</span><span class="p">);</span>
+</span><span id="line-14"><span class="w">  </span><span class="p">}</span>
+</span><span id="line-15"><span class="k">else</span>
+</span><span id="line-16"><span class="w">  </span><span class="p">{</span>
+</span><span id="line-17"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span id="line-18"><span class="w">      </span><span class="p">{</span>
+</span><span id="line-19"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"query %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+</span><span id="line-20"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"result count = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_QUERY_RESULT_RESULT</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">));</span>
+</span><span id="line-21"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"error message = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_QUERY_RESULT_ERR_MSG</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">));</span>
+</span><span id="line-22"><span class="w">        </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">"statement type = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">CCI_QUERY_RESULT_STMT_TYPE</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">));</span>
+</span><span id="line-23"><span class="w">      </span><span class="p">}</span>
+</span><span id="line-24"><span class="w">  </span><span class="p">}</span>
+</span><span id="line-25"><span class="p">...</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="java-sql-xaconnection-hold-cursors-over-commit-cubridsus-10800">
+<h4><a class="toc-backref" href="#id43" role="doc-backlink">java.sql.XAConnection 인터페이스에서 HOLD_CURSORS_OVER_COMMIT을 지원하지 않음 (CUBRIDSUS-10800)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#java-sql-xaconnection-hold-cursors-over-commit-cubridsus-10800"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>현재 CUBRID는 java.sql.XAConnection 인터페이스에서 ResultSet.HOLD_CURSORS_OVER_COMMIT를 지원하지 않는다.</p>
+</section>
+<section id="strcmp">
+<h4><a class="toc-backref" href="#id44" role="doc-backlink">9.0부터 STRCMP가 대소문자를 구분하여 동작</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#strcmp"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>9.0 이전 버전까지는 STRCMP가 대소문자를 구분하지 않았지만 9.0부터는 문자열에서 대소문자를 비교하여 구분한다.
+STRCMP가 대소문자를 구분하지 않도록 하려면 대소문자를 구분하지 않는 콜레이션(예: utf8_en_ci)을 사용해야 한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- In previous version of 9.0 STRCMP works case-insensitively</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">STRCMP</span><span class="w"> </span><span class="p">(</span><span class="s1">'ABC'</span><span class="p">,</span><span class="s1">'abc'</span><span class="p">);</span>
+</span><span id="line-3"><span class="mi">0</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="c1">-- From 9.0 version, STRCMP distinguish the uppercase and the lowercase when the collation is case-sensitive.</span>
+</span><span id="line-6"><span class="n">export</span><span class="w"> </span><span class="n">CUBRID_CHARSET</span><span class="o">=</span><span class="n">en_US</span><span class="p">.</span><span class="n">iso88591</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="k">SELECT</span><span class="w"> </span><span class="n">STRCMP</span><span class="w"> </span><span class="p">(</span><span class="s1">'ABC'</span><span class="p">,</span><span class="s1">'abc'</span><span class="p">);</span>
+</span><span id="line-9"><span class="o">-</span><span class="mi">1</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="c1">-- If the collation is case-insensitive, it distinguish the uppercase and the lowercase.</span>
+</span><span id="line-12"><span class="n">export</span><span class="w"> </span><span class="n">CUBRID_CHARSET</span><span class="o">=</span><span class="n">en_US</span><span class="p">.</span><span class="n">iso88591</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="k">SELECT</span><span class="w"> </span><span class="n">STRCMP</span><span class="w"> </span><span class="p">(</span><span class="s1">'ABC'</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_en_ci</span><span class="w"> </span><span class="p">,</span><span class="s1">'abc'</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_en_ci</span><span class="p">);</span>
+</span><span id="line-15"><span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="r4-1-cci-default-autocommit-on-cubridsus-5879">
+<h4><a class="toc-backref" href="#id45" role="doc-backlink">2008 R4.1 버전부터 CCI_DEFAULT_AUTOCOMMIT의 기본값이 ON으로 변경됨 (CUBRIDSUS-5879)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#r4-1-cci-default-autocommit-on-cubridsus-5879"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>CCI 인터페이스로 개발한 응용 프로그램의 자동 커밋 모드에 영향을 미치는 CCI_DEFAULT_AUTOCOMMIT 브로커 파라미터의 기본값이 CUBRID 2008 R4.1부터 ON으로 변경되었다. 이 변경의 결과로 CCI 및 CC 기반 인터페이스(PHP, ODBC, OLE DB 등) 사용자는 응용 프로그램의 자동 커밋 모드가 이에 대해 적합한지 확인해야 한다.</p>
+</section>
+<section id="r4-0-cubridsus-5136">
+<h4><a class="toc-backref" href="#id46" role="doc-backlink">2008 R4.0 버전부터 페이지 단위를 사용하는 옵션 및 파라미터가 볼륨 크기 단위를 사용하도록 변경됨 (CUBRIDSUS-5136)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#r4-0-cubridsus-5136"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>데이터베이스 볼륨 크기와 cubrid createdb 유틸리티의 로그 볼륨 크기를 지정하기 위해 페이지 단위를 사용하는 옵션(-p, -l, -s)은 제거되므로, 2008 R4.0 베타 이후 새로 추가된 옵션(--db-volume-size, --log-volume-size, --db-page-size, --log-page-size)을 사용한다.</p>
+<p>cubrid addvoldb 유틸리티의 데이터베이스 볼륨 크기를 지정하려면 페이지 단위를 사용하지 말고 2008 R4.0 베타 이후 새로 추가된 옵션(--db-volume-size)을 사용한다.
+페이지 단위 시스템 파라미터가 제거되므로 바이트 형식의 새 시스템 파라미터 사용을 권장한다. 관련 시스템 파라미터에 대한 자세한 내용은 아래를 참고한다.</p>
+</section>
+<section id="r4-0-db-cubridsus-4222">
+<h4><a class="toc-backref" href="#id47" role="doc-backlink">2008 R4.0 베타 이전 버전 사용자는 db 볼륨 크기를 설정할 때 주의할 것 (CUBRIDSUS-4222)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#r4-0-db-cubridsus-4222"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>2008 R4.0 베타 버전부터 데이터베이스를 생성할 때 데이터 페이지 크기 및 로그 페이지 크기의 기본값이 4KB에서 16KB로 변경되었다. 페이지 수로 데이터베이스 볼륨을 지정하는 경우 볼륨의 바이트 크기는 예상과 다를 수 있다. 어떠한 옵션도 선택하지 않은 경우 이전 버전에서는 4KB 페이지 크기의 100MB 데이터베이스 볼륨이 생성되었다. 그러나 2008 R4.0부터는 16KB 페이지 크기의 512MB 데이터베이스 볼륨이 생성된다.</p>
+<p>또한 사용 가능한 데이터베이스 볼륨의 최소 크기는 20MB로 제한된다. 따라서, 이 크기보다 작은 데이터베이스 볼륨을 생성할 수 없다.</p>
+</section>
+<section id="r4-0-cubridsus-4095">
+<h4><a class="toc-backref" href="#id48" role="doc-backlink">2008 R4.0 이전 버전의 일부 시스템 파라미터의 기본값 변경 (CUBRIDSUS-4095)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#r4-0-cubridsus-4095"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>2008 R4.0부터 일부 시스템 파라미터의 기본값이 변경되었다.</p>
+<p>max_clients의 기본값(DB 서버에서 허용되는 동시 연결 수 지정)과 index_unfill_factor의 기본값(인덱스 페이지 생성 시 향후 갱신을 위한 예약 공간의 비율 지정)이 변경되었으며, 바이트 단위의 시스템 파라미터의 기본값이 페이지 단위의 이전 시스템 파라미터의 기본값을 초과하는 경우 더 많은 메모리를 사용하게 되었다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>기존 시스템
+파라미터</p></th>
+<th class="head"><p>추가된 시스템
+파라미터</p></th>
+<th class="head"><p>기존 기본값</p></th>
+<th class="head"><p>변경된 기본값
+(단위 :바이트)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>max_clients</p></td>
+<td><p>없음</p></td>
+<td><p>50</p></td>
+<td><p>100</p></td>
+</tr>
+<tr class="row-odd"><td><p>index_unfill_factor</p></td>
+<td><p>없음</p></td>
+<td><p>0.2</p></td>
+<td><p>0.05</p></td>
+</tr>
+<tr class="row-even"><td><p>data_buffer_pages</p></td>
+<td><p>data_buffer_size</p></td>
+<td><p>100M(page size=4K)</p></td>
+<td><p>512M</p></td>
+</tr>
+<tr class="row-odd"><td><p>log_buffer_pages</p></td>
+<td><p>log_buffer_size</p></td>
+<td><p>200K(page size=4K)</p></td>
+<td><p>4M</p></td>
+</tr>
+<tr class="row-even"><td><p>sort_buffer_pages</p></td>
+<td><p>sort_buffer_size</p></td>
+<td><p>64K(page size=4K)</p></td>
+<td><p>2M</p></td>
+</tr>
+<tr class="row-odd"><td><p>index_scan_oid_buffer_pages</p></td>
+<td><p>index_scan_oid_buffer_size</p></td>
+<td><p>16K(page size=4K)</p></td>
+<td><p>64K</p></td>
+</tr>
+</tbody>
+</table>
+<p>또한, cubrid createdb를 사용하여 데이터베이스를 생성할 때 데이터 페이지 크기 및 로그 페이지 크기의 최소 값이 1K에서 4K로 변경되었다.</p>
+</section>
+<section id="cubridsus-5375">
+<h4><a class="toc-backref" href="#id49" role="doc-backlink">시스템 파라미터가 잘못 설정된 경우 데이터베이스 서비스, 유틸리티 및 응용 프로그램을 수행할 수 없도록 변경됨 (CUBRIDSUS-5375)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubridsus-5375"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>cubrid.conf 또는 cubrid_ha.conf에 정의되지 않은 시스템 파라미터를 설정하거나, 시스템 파라미터의 값이 임계값을 초과하거나, 페이지 단위 시스템 파라미터 및 바이트 단위 시스템 파라미터가 동시에 사용되는 경우 관련 서비스, 유틸리티 및 응용 프로그램이 수행되지 않도록 변경되었다.</p>
+</section>
+<section id="cubrid-32-2g-data-buffer-size-cubridsus-5349">
+<h4><a class="toc-backref" href="#id50" role="doc-backlink">CUBRID 32비트 버전에서 2G를 초과하는 값을 사용하여 data_buffer_size를 설정할 경우 데이터베이스 구동에 실패함 (CUBRIDSUS-5349)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-32-2g-data-buffer-size-cubridsus-5349"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>CUBRID 32비트 버전에서 data_buffer_size의 값이 2G를 초과하는 경우 데이터베이스 구동에 실패한다. 이 설정 값은 OS 제한 때문에 32비트 버전에서 2G를 초과할 수 없다.</p>
+</section>
+<section id="windows-vista-cubrid-cubridsus-4186">
+<h4><a class="toc-backref" href="#id51" role="doc-backlink">Windows Vista 및 그 이후 버전에서 CUBRID 유틸리티를 사용한 서비스 제어 시 권장 사항 (CUBRIDSUS-4186)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#windows-vista-cubrid-cubridsus-4186"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>Windows Vista 및 그 이후 버전에서 cubrid 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 구동한 후 사용하는 것을 권장한다.</p>
+<p>명령 프롬프트 창을 관리자 권한으로 구동하지 않고 cubrid 유틸리티를 사용하는 경우 UAC(User Account Control) 대화 상자를 통하여 관리자 권한으로 수행할 수 있으나 수행 결과의 메시지를 확인할 수 없다.</p>
+<p>Windows Vista 및 그 이후 버전에서 명령 프롬프트 창을 관리자 권한으로 구동하는 방법은 다음과 같다.:</p>
+<ul class="simple">
+<li><p>[시작 &gt; 모든 프로그램 &gt; 보조프로그램 &gt; 명령 프롬프트]를 마우스 오른쪽 버튼을 클릭한다.</p></li>
+<li><p>[관리자로 수행(A)]을 선택하면 권한 상승을 확인하는 대화 상자가 활성화되고, “예”를 클릭하여 관리자 권한으로 구동한다.</p></li>
+</ul>
+</section>
+<section id="cubrid-cubridsus-3553">
+<h4><a class="toc-backref" href="#id52" role="doc-backlink">CUBRID 소스 빌드 후 수행 시, 매니저 서버 프로세스 관련 오류 발생 (CUBRIDSUS-3553)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-cubridsus-3553"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>사용자가 CUBRID 소스를 직접 빌드하고 설치하는 경우, CUBRID와 CUBRID Manager를 각각 빌드하여 설치해야 한다. CUBRID 소스만 체크 아웃하고 빌드 후 cubrid service start 또는 cubrid manager start를 실행하면 “cubrid manager server is not installed”라는 오류가 발생한다.</p>
+</section>
+<section id="r3-0-glo-cubridsus-3826">
+<h4><a class="toc-backref" href="#id53" role="doc-backlink">2008 r3.0 또는 그 이전 버전에서 사용하던 GLO 클래스 지원 중단 (CUBRIDSUS-3826)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#r3-0-glo-cubridsus-3826"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>CUBRID 2008 R3.0 및 그 이전 버전은 glo(Generalized Large Object) 클래스를 사용하여 Large Object를 처리했지만 glo 클래스는 CUBRID 2008 R3.1 및 그 이후 버전에서 제거되었다. 대신, BLOB 및 CLOB(이후 LOB) 데이터 타입이 지원된다. LOB 데이터 타입에 대한 자세한 내용은 <a class="reference internal" href="../sql/datatype.html#blob-clob"><span class="std std-ref">BLOB/CLOB 데이터 타입</span></a> 절을 참고한다.</p>
+<p>glo 클래스 사용자는 다음 작업을 수행할 것을 권장한다.:</p>
+<ul class="simple">
+<li><p>GLO 데이터를 파일로 저장한 후에 다른 응용 프로그램 및 DB 스키마에서 GLO를 사용하지 않도록 수정한다.</p></li>
+<li><p>unloaddb 및 loaddb 유틸리티를 사용하여 DB 마이그레이션을 수행한다.</p></li>
+<li><p>수정된 응용 프로그램에 따라 파일을 LOB 데이터로 로드하는 작업을 수행한다.</p></li>
+<li><p>수정한 응용 프로그램이 정상적으로 동작하는지 확인한다.</p></li>
+</ul>
+<p>예를 들어, cubrid loaddb 유틸리티가 GLO 클래스를 상속하거나 GLO 데이터 타입이 있는 테이블을 로드하는 경우 “Error occurred during schema loading.” 오류 메시지와 함께 데이터 로딩을 중지한다.</p>
+<p>GLO 클래스의 지원이 중단됨에 따라 각 인터페이스에 대해 삭제된 함수는 다음과 같다.:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>인터페이스</p></th>
+<th class="head"><p>삭제한 함수</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CCI</p></td>
+<td><p>cci_glo_append_data</p>
+<p>cci_glo_compress_data</p>
+<p>cci_glo_data_size</p>
+<p>cci_glo_delete_data</p>
+<p>cci_glo_destroy_data</p>
+<p>cci_glo_insert_data</p>
+<p>cci_glo_load</p>
+<p>cci_glo_new</p>
+<p>cci_glo_read_data</p>
+<p>cci_glo_save</p>
+<p>cci_glo_truncate_data</p>
+<p>cci_glo_write_data</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>JDBC</p></td>
+<td><p>CUBRIDConnection.getNewGLO</p>
+<p>CUBRIDOID.loadGLO</p>
+<p>CUBRIDOID.saveGLO</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>PHP</p></td>
+<td><p>cubrid_new_glo</p>
+<p>cubrid_save_to_glo</p>
+<p>cubrid_load_from_glo</p>
+<p>cubrid_send_glo</p>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cubridsus-3564">
+<h4><a class="toc-backref" href="#id54" role="doc-backlink">마스터와 서버 프로세스 사이의 프로토콜이 변경된 경우 또는 두 버전이 동시에 실행되는 경우 포트 설정 필요 (CUBRIDSUS-3564)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubridsus-3564"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>마스터 프로세스(cub_master)와 서버 프로세스(cub_server) 사이의 통신 프로토콜이 변경되었으므로 CUBRID 2008 R3.0 또는 그 이후 버전의 마스터 프로세스는 이전 버전의 서버 프로세스와 통신할 수 없고 이전 버전의 마스터 프로세스는 2008 R3.0 또는 그 이후 버전과 통신할 수 없다. 따라서 이전 버전이 이미 설치된 환경에 새 버전을 추가하여 동시에 두 버전의 CUBRID를 실행하는 경우 버전별로 다른 포트가 사용되도록 cubrid.conf의 cubrid_port_id 시스템 파라미터를 수정해야 한다.</p>
+</section>
+<section id="jdbc-url-cubridsus-3217">
+<h4><a class="toc-backref" href="#id55" role="doc-backlink">JDBC에서 URL 문자열로서 연결 정보를 입력할 때 물음표 명시 (CUBRIDSUS-3217)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#jdbc-url-cubridsus-3217"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>JDBC에서 URL 문자열로서 연결 정보를 입력할 때 이전 버전에서 물음표(?)를 입력하지 않은 경우에도 속성 정보가 지정되었다. 그러나 이 CUBRID 2008 R3.0 버전에서는 구문에 따라 물음표를 명시해야 한다. 그렇지 않은 경우 오류가 표시된다. 또한, 연결 정보에 사용자명 또는 암호가 없는 경우에도 콜론(:)을 명시해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">URL=jdbc:CUBRID:127.0.0.1:31000:db1:::altHosts=127.0.0.2:31000,127.0.0.3:31000 -- 에러처리
+</span><span id="line-2">URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?altHosts=127.0.0.2:31000,127.0.0.3:31000 -- 정상처리
+</span></code></pre></div>
+</div>
+</section>
+<section id="cubridsus-2828">
+<h4><a class="toc-backref" href="#id56" role="doc-backlink">데이터베이스명에 @을 포함할 수 없음 (CUBRIDSUS-2828)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubridsus-2828"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>데이터베이스명에 @이 포함되면 호스트명이 지정된 것으로 해석될 수 있다. 이를 방지하기 위해 cubrid createdb, cubrid renamedb 및 cubrid copydb 유틸리티를 실행할 때는 데이터베이스에 @이 포함될 수 없도록 수정되었다.</p>
+</section>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="index.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        릴리스 노트
+      </a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">릴리스 노트 정보</a></li>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">릴리스 개요</a><ul>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">드라이버 호환성</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#changes'" class="reference internal" href="#changes">11.2 변경사항</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">주의사항</a><ul>
+<li><a :data-current="activeSection === '#new-cautions'" class="reference internal" href="#new-cautions">신규 주의 사항</a></li>
+<li><a :data-current="activeSection === '#id10'" class="reference internal" href="#id10">기존 주의 사항</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 3월 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=b340f5c5"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

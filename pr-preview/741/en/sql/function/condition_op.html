@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Comparison Expression | CUBRID 11.4 User Manual</title>
+<meta content="Comparison Expression | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Comparison Expression | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/logo_only.png" rel="icon"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="condition_fn.html" rel="next" title="Comparison Functions"/>
+<link href="encryption_fn.html" rel="prev" title="Encryption Function"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../.././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/function/condition_op.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../release_note/index.html">Release Note</a>
+<a href="../.././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">Operators and Functions</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Comparison Expression</span>
+</nav>
+<div id="content" role="main">
+<section id="comparison-expression">
+<h1>Comparison Expression<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#comparison-expression"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="simple-comparison-expression">
+<span id="basic-cond-expr"></span><h2>Simple Comparison Expression<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#simple-comparison-expression" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#simple-comparison-expression'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>A comparison expression is an expression that is included in the <strong>WHERE</strong> clause of the <strong>SELECT</strong>, <strong>UPDATE</strong> and <strong>DELETE</strong> statements, and in the <strong>HAVING</strong> clause of the <strong>SELECT</strong> statement. There are simple comparison, <strong>ANY</strong> / <strong>SOME</strong> / <strong>ALL</strong>, <strong>BETWEEN</strong>, <strong>EXISTS</strong>, <strong>IN</strong> / <strong>NOT IN</strong>, <strong>LIKE</strong> and <strong>IS NULL</strong> comparison expressions, depending on the kinds of the operators combined.</p>
+<p>A simple comparison expression compares two comparable data values. Expressions or subqueries are specified as operands, and the comparison expression always returns <strong>NULL</strong> if one of the operands is <strong>NULL</strong>. The following table shows operators that can be used in the simple comparison expressions. For details, see <a class="reference internal" href="comparison_op.html"><span class="doc">Comparison Operators</span></a>.</p>
+<p><strong>Comparison Operators</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Comparison Operator</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Comparison Expression</p></th>
+<th class="head"><p>Return Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>=</strong></p></td>
+<td><p>A value of left operand is the same as that of right operand.</p></td>
+<td><p>1=2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>&lt;&gt;</strong>
+,
+<strong>!=</strong></p></td>
+<td><p>A value of left operand is not the same as that of right operand.</p></td>
+<td><p>1&lt;&gt;2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>&gt;</strong></p></td>
+<td><p>A value of left operand is greater than that of right operand.</p></td>
+<td><p>1&gt;2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>&lt;</strong></p></td>
+<td><p>A value of left operand is less than that of right operand.</p></td>
+<td><p>1&lt;2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>&gt;=</strong></p></td>
+<td><p>A value of left operand is equal to or greater than that of right operand.</p></td>
+<td><p>1&gt;=2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>&lt;=</strong></p></td>
+<td><p>A value of left operand is equal to or less than that of right operand.</p></td>
+<td><p>1&lt;=2</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="any-some-all-quantifiers">
+<span id="any-some-all-expr"></span><h2>ANY/SOME/ALL quantifiers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#any-some-all-quantifiers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#any-some-all-quantifiers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>A comparison expression that includes quantifiers such as <strong>ANY/SOME/ALL</strong> performs comparison operation on one data value and on some or all values included in the list. A comparison expression that includes <strong>ANY</strong> or <strong>SOME</strong> returns <strong>TRUE</strong> if the value of the data on the left satisfies simple comparison with at least one of the values in the list specified as an operand on the right. A comparison expression that includes <strong>ALL</strong> returns <strong>TRUE</strong> if the value of the data on the left satisfies simple comparison with all values in the list on the right.</p>
+<p>When a comparison operation is performed on <strong>NULL</strong> in a comparison expression that includes <strong>ANY</strong> or <strong>SOME</strong>, <strong>UNKNOWN</strong> or <strong>TRUE</strong> is returned as a result; when a comparison operation is performed on <strong>NULL</strong> in a comparison expression that includes <strong>ALL</strong>, <strong>UNKNOWN</strong> or <strong>FALSE</strong> is returned.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">expression</span> <span class="n">comp_op</span> <span class="n">SOME</span> <span class="n">expression</span>
+</span><span id="line-2"><span class="n">expression</span> <span class="n">comp_op</span> <span class="n">ANY</span> <span class="n">expression</span>
+</span><span id="line-3"><span class="n">expression</span> <span class="n">comp_op</span> <span class="n">ALL</span> <span class="n">expression</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>comp_op</em> : A comparison operator &gt;, = or &lt;= can be used.</p></li>
+<li><p><em>expression</em> (left): A single-value column, path expression (ex.: <em>tbl_name.col_name</em>), constant value or arithmetic function that produces a single value can be used.</p></li>
+<li><p><em>expression</em> (right): A column name, path expression, list (set) of constant values or subquery can be used. A list is a set represented within braces ({}). If a subquery is used, <em>expression</em> (left) and comparison operation on all results of the subquery execution is performed.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--creating a table</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Kim'</span><span class="p">,</span><span class="w"> </span><span class="s1">'devel'</span><span class="p">,</span><span class="w"> </span><span class="mi">4000000</span><span class="p">);</span>
+</span><span id="line-5"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'Moy'</span><span class="p">,</span><span class="w"> </span><span class="s1">'sales'</span><span class="p">,</span><span class="w"> </span><span class="mi">3000000</span><span class="p">);</span>
+</span><span id="line-6"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'Jones'</span><span class="p">,</span><span class="w"> </span><span class="s1">'sales'</span><span class="p">,</span><span class="w"> </span><span class="mi">5400000</span><span class="p">);</span>
+</span><span id="line-7"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'Smith'</span><span class="p">,</span><span class="w"> </span><span class="s1">'devel'</span><span class="p">,</span><span class="w"> </span><span class="mi">5500000</span><span class="p">);</span>
+</span><span id="line-8"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'Kim'</span><span class="p">,</span><span class="w"> </span><span class="s1">'account'</span><span class="p">,</span><span class="w"> </span><span class="mi">3800000</span><span class="p">);</span>
+</span><span id="line-9"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'Smith'</span><span class="p">,</span><span class="w"> </span><span class="s1">'devel'</span><span class="p">,</span><span class="w"> </span><span class="mi">2400000</span><span class="p">);</span>
+</span><span id="line-10"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">'Brown'</span><span class="p">,</span><span class="w"> </span><span class="s1">'account'</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">);</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="c1">--selecting rows where department is sales or devel</span>
+</span><span id="line-13"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">ANY</span><span class="err">{</span><span class="s1">'devel'</span><span class="p">,</span><span class="s1">'sales'</span><span class="err">}</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'Kim       '</span>          <span class="s1">'devel'</span>                   <span class="mi">4000000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'Moy       '</span>          <span class="s1">'sales'</span>                   <span class="mi">3000000</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'Jones     '</span>          <span class="s1">'sales'</span>                   <span class="mi">5400000</span>
+</span><span id="line-6">            <span class="mi">4</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">5500000</span>
+</span><span id="line-7">            <span class="mi">6</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">2400000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows comparing NULL value in the ALL group conditions</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">ALL</span><span class="err">{</span><span class="mi">3000000</span><span class="p">,</span><span class="w"> </span><span class="mi">4000000</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="err">}</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">There</span> <span class="n">are</span> <span class="n">no</span> <span class="n">results</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows comparing NULL value in the ANY group conditions</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">ANY</span><span class="err">{</span><span class="mi">3000000</span><span class="p">,</span><span class="w"> </span><span class="mi">4000000</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="err">}</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'Kim       '</span>          <span class="s1">'devel'</span>                   <span class="mi">4000000</span>
+</span><span id="line-4">            <span class="mi">3</span>  <span class="s1">'Jones     '</span>          <span class="s1">'sales'</span>                   <span class="mi">5400000</span>
+</span><span id="line-5">            <span class="mi">4</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">5500000</span>
+</span><span id="line-6">            <span class="mi">5</span>  <span class="s1">'Kim       '</span>          <span class="s1">'account'</span>                 <span class="mi">3800000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where salary*0.9 is less than those salary in devel department</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">  </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">9</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">salary</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span>
+</span><span id="line-4"><span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'devel'</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">6</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">2400000</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="between">
+<span id="between-expr"></span><h2>BETWEEN<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#between" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#between'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The <strong>BETWEEN</strong> makes a comparison to determine whether the data value on the left exists between two data values specified on the right. It returns <strong>TRUE</strong> even when the data value on the left is the same as a boundary value of the comparison target range. If <strong>NOT</strong> comes before the <strong>BETWEEN</strong> keyword, the result of a <strong>NOT</strong> operation on the result of the <strong>BETWEEN</strong> operation is returned.</p>
+<p><em>i</em> <strong>BETWEEN</strong> <em>g</em> <strong>AND</strong> <em>m</em> and the compound condition <em>i</em> <strong>&gt;= g AND</strong> <em>i</em> &lt;= <em>m</em> have the same effect.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">expression</span> <span class="p">[</span> <span class="n">NOT</span> <span class="p">]</span> <span class="n">BETWEEN</span> <span class="n">expression</span> <span class="n">AND</span> <span class="n">expression</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>expression</em> : A column name, path expression (ex.: <em>tbl_name.col_name</em>), constant value, arithmetic expression or aggregate function can be used. For a character string expression, the conditions are evaluated in alphabetical order. If <strong>NULL</strong> is specified for at least one of the expressions, the <strong>BETWEEN</strong> predicate returns <strong>UNKNOWN</strong> as a result.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where 3000000 &lt;= salary &lt;= 4000000</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">3000000</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">4000000</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="p">(</span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">3000000</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="p">(</span><span class="n">salary</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">4000000</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'Kim       '</span>          <span class="s1">'devel'</span>                   <span class="mi">4000000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'Moy       '</span>          <span class="s1">'sales'</span>                   <span class="mi">3000000</span>
+</span><span id="line-5">            <span class="mi">5</span>  <span class="s1">'Kim       '</span>          <span class="s1">'account'</span>                 <span class="mi">3800000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where salary &lt; 3000000 or salary &gt; 4000000</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">3000000</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">4000000</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">3</span>  <span class="s1">'Jones     '</span>          <span class="s1">'sales'</span>                   <span class="mi">5400000</span>
+</span><span id="line-4">            <span class="mi">4</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">5500000</span>
+</span><span id="line-5">            <span class="mi">6</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">2400000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where name starts from A to E</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="s1">'A'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="s1">'E'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">7</span>  <span class="s1">'Brown     '</span>          <span class="s1">'account'</span>                    <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="exists">
+<span id="exists-expr"></span><h2>EXISTS<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#exists" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#exists'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The <strong>EXISTS</strong> returns <strong>TRUE</strong> if one or more results of the execution of the subquery specified on the right exist, and returns <strong>FALSE</strong> if the result of the operation is an empty set.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">EXISTS</span> <span class="n">expression</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>expression</em> : Specifies a subquery and compares to determine whether the result of the subquery execution exists. If the subquery does not produce any result, the result of the conditional expression is <strong>FALSE</strong>.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows using EXISTS and subquery</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="s1">'raise'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">(</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2500000</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="s1">'raise'</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'raise'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows using NOT EXISTS and subquery</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="s1">'raise'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">(</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2500000</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">There</span> <span class="n">are</span> <span class="n">no</span> <span class="n">results</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="in">
+<span id="in-expr"></span><h2>IN<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#in" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#in'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The <strong>IN</strong> compares to determine whether the single data value on the left is included in the list specified on the right. That is, the predicate returns <strong>TRUE</strong> if the single data value on the left is an element of the expression specified on the right. If <strong>NOT</strong> comes before the <strong>IN</strong> keyword, the result of a <strong>NOT</strong> operation on the result of the <strong>IN</strong> operation is returned.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">expression</span> <span class="p">[</span> <span class="n">NOT</span> <span class="p">]</span> <span class="n">IN</span> <span class="n">expression</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>expression</em> (left): A single-value column, path expression (ex.: <em>tbl_name.col_name</em>), constant value or arithmetic function that produces a single value can be used.</p></li>
+<li><p><em>expression</em> (right): A column name, path expression, list (set) of constant values or subquery can be used. A list is a set represented within parentheses (()) or braces ({}). If a subquery is used, comparison with expression(left) is performed for all results of the subquery execution.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where department is sales or devel</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="err">{</span><span class="s1">'devel'</span><span class="p">,</span><span class="s1">'sales'</span><span class="err">}</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">ANY</span><span class="err">{</span><span class="s1">'devel'</span><span class="p">,</span><span class="s1">'sales'</span><span class="err">}</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'Kim       '</span>          <span class="s1">'devel'</span>                   <span class="mi">4000000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'Moy       '</span>          <span class="s1">'sales'</span>                   <span class="mi">3000000</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'Jones     '</span>          <span class="s1">'sales'</span>                   <span class="mi">5400000</span>
+</span><span id="line-6">            <span class="mi">4</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">5500000</span>
+</span><span id="line-7">            <span class="mi">6</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">2400000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where department is neither sales nor devel</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="err">{</span><span class="s1">'devel'</span><span class="p">,</span><span class="s1">'sales'</span><span class="err">}</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">5</span>  <span class="s1">'Kim       '</span>          <span class="s1">'account'</span>                 <span class="mi">3800000</span>
+</span><span id="line-4">            <span class="mi">7</span>  <span class="s1">'Brown     '</span>          <span class="s1">'account'</span>                    <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="is-null">
+<span id="is-null-expr"></span><h2>IS NULL<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#is-null" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#is-null'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The <strong>IS NULL</strong> compares to determine whether the expression specified on the left is <strong>NULL</strong>, and if it is <strong>NULL</strong>, returns <strong>TRUE</strong> and it can be used in the conditional expression. If <strong>NOT</strong> comes before the <strong>NULL</strong> keyword, the result of a <strong>NOT</strong> operation on the result of the <strong>IS NULL</strong> operation is returned.</p>
+<blockquote>
+<div><p>expression IS [ NOT ] NULL</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><em>expression</em> : A single-value column, path expression (ex.: <em>tbl_name.col_name</em>), constant value or arithmetic function that produces a single value can be used.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where salary is NULL</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">7</span>  <span class="s1">'Brown     '</span>          <span class="s1">'account'</span>                    <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting rows where salary is NOT NULL</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'Kim       '</span>          <span class="s1">'devel'</span>                   <span class="mi">4000000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'Moy       '</span>          <span class="s1">'sales'</span>                   <span class="mi">3000000</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'Jones     '</span>          <span class="s1">'sales'</span>                   <span class="mi">5400000</span>
+</span><span id="line-6">            <span class="mi">4</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">5500000</span>
+</span><span id="line-7">            <span class="mi">5</span>  <span class="s1">'Kim       '</span>          <span class="s1">'account'</span>                 <span class="mi">3800000</span>
+</span><span id="line-8">            <span class="mi">6</span>  <span class="s1">'Smith     '</span>          <span class="s1">'devel'</span>                   <span class="mi">2400000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--simple comparison operation returns NULL when operand is NULL</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">There</span> <span class="n">are</span> <span class="n">no</span> <span class="n">results</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="like">
+<span id="like-expr"></span><h2>LIKE<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#like" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#like'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The <strong>LIKE</strong> compares patterns between character string data, and returns <strong>TRUE</strong> if a character string whose pattern matches the search word is found. Pattern comparison target types are <strong>CHAR</strong>, <strong>VARCHAR</strong> and <strong>STRING</strong>. The <strong>LIKE</strong> search cannot be performed on an <strong>BIT</strong> type. If <strong>NOT</strong> comes before the <strong>LIKE</strong> keyword, the result of a <strong>NOT</strong> operation on the result of the <strong>LIKE</strong> operation is returned.</p>
+<p>A wild card string corresponding to any character or character string can be included in the search word on the right of the <strong>LIKE</strong> operator. % (percent) and _ (underscore) can be used. .% corresponds to any character string whose length is 0 or greater, and _ corresponds to one character. An escape character is a character that is used to search for a wild card character itself, and can be specified by the user as another character (<strong>NULL</strong>, alphabet, or number whose length is 1. See below for an example of using a character string that includes wild card or escape characters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">expression</span> <span class="p">[</span> <span class="n">NOT</span> <span class="p">]</span> <span class="n">LIKE</span> <span class="n">pattern</span> <span class="p">[</span> <span class="n">ESCAPE</span> <span class="n">char</span> <span class="p">]</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>expression</em>: Specifies the data type column of the character string. Pattern comparison, which is case-sensitive, starts from the first character of the column.</p></li>
+<li><p><em>pattern</em>: Enters the search word. A character string with a length of 0 or greater is required. Wild card characters (% or _) can be included as the pattern of the search word. The length of the character string is 0 or greater.</p></li>
+<li><p><strong>ESCAPE</strong> <em>char</em> : <strong>NULL</strong>, alphabet, or number is allowed for <em>char</em>. If the string pattern of the search word includes “_” or “%” itself, an ESCAPE character must be specified. For example, if you want to search for the character string “10%” after specifying backslash (\) as the ESCAPE character, you must specify “10%” for <em>pattern</em>. If you want to search for the character string “C:\”, you can specify “C:\” for <em>pattern</em>.</p></li>
+</ul>
+<p>For details about character sets supported in CUBRID, see <a class="reference internal" href="../datatype.html#char-data-type"><span class="std std-ref">Character Strings</span></a>.</p>
+<p>Whether to detect the escape characters of the LIKE conditional expression is determined depending on the configuration of <strong>no_backslash_escapes</strong> and <strong>require_like_escape_character</strong> in the <strong>cubrid.conf</strong> file. For details, see <a class="reference internal" href="../../admin/config.html#stmt-type-parameters"><span class="std std-ref">Statement/Type-Related Parameters</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>To execute string comparison operation for data entered in the multibyte charset environment such as UTF-8, the parameter setting (<strong>single_byte_compare</strong> = yes) which compares strings by 1 byte should be added to the <strong>cubrid.conf</strong> file for a successful search result.</p></li>
+<li><p>Versions after CUBRID 9.0 support Unicode charset, so the <strong>single_byte_compare</strong> parameter is no longer used.</p></li>
+</ul>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selection rows where name contains lower case 's', not upper case</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'%s%'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">3</span>  <span class="s1">'Jones     '</span>          <span class="s1">'sales'</span>                   <span class="mi">5400000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selection rows where second letter is 'O' or 'o'</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">UPPER</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'_O%'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">2</span>  <span class="s1">'Moy       '</span>          <span class="s1">'sales'</span>                   <span class="mi">3000000</span>
+</span><span id="line-4">            <span class="mi">3</span>  <span class="s1">'Jones     '</span>          <span class="s1">'sales'</span>                   <span class="mi">5400000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selection rows where name is 3 characters</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'___'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'Kim       '</span>          <span class="s1">'devel'</span>                   <span class="mi">4000000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'Moy       '</span>          <span class="s1">'sales'</span>                   <span class="mi">3000000</span>
+</span><span id="line-5">            <span class="mi">5</span>  <span class="s1">'Kim       '</span>          <span class="s1">'account'</span>                 <span class="mi">3800000</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="case">
+<span id="case-expr"></span><h2>CASE<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#case" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#case'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The <strong>CASE</strong> expression uses the SQL statement to perform an <strong>IF</strong> … <strong>THEN</strong> statement. When a result of comparison expression specified in a <strong>WHEN</strong> clause is true, a value specified in <strong>THEN</strong> clause is returned. A value specified in an <strong>ELSE</strong> clause is returned otherwise. If no <strong>ELSE</strong> clause exists, <strong>NULL</strong> is returned.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CASE</span> <span class="n">control_expression</span> <span class="n">simple_when_list</span>
+</span><span id="line-2"><span class="p">[</span> <span class="n">else_clause</span> <span class="p">]</span>
+</span><span id="line-3"><span class="n">END</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">CASE</span> <span class="n">searched_when_list</span>
+</span><span id="line-6"><span class="p">[</span> <span class="n">else_clause</span> <span class="p">]</span>
+</span><span id="line-7"><span class="n">END</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="n">simple_when</span> <span class="p">:</span>
+</span><span id="line-10"><span class="n">WHEN</span> <span class="n">expression</span> <span class="n">THEN</span> <span class="n">result</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="n">searched_when</span> <span class="p">:</span>
+</span><span id="line-13"><span class="n">WHEN</span> <span class="n">search_condition</span> <span class="n">THEN</span> <span class="n">result</span>
+</span><span id="line-14">
+</span><span id="line-15"><span class="n">else_clause</span> <span class="p">:</span>
+</span><span id="line-16"><span class="n">ELSE</span> <span class="n">result</span>
+</span><span id="line-17">
+</span><span id="line-18"><span class="n">result</span> <span class="p">:</span>
+</span><span id="line-19"><span class="n">expression</span> <span class="o">|</span> <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<p><strong>The CASE</strong> expression must end with the END keyword. A <em>control_expression</em> argument and an <em>expression argument</em> in <em>simple_when</em> expression should be comparable data types. The data types of <em>result</em> specified in the <strong>THEN</strong> … <strong>ELSE</strong> statement should all same, or they can be convertible to common data type.</p>
+<p>The data type for a value returned by the <strong>CASE</strong> expression is determined based on the following rules.</p>
+<ul class="simple">
+<li><p>If data types for result specified in the <strong>THEN</strong> statement are all same, a value with the data type is returned.</p></li>
+<li><p>If data types can be convertible to common data type even though they are not all same, a value with the data type is returned.</p></li>
+<li><p>If any of values for <em>result</em> is a variable length string, a value data type is a variable length string. If values for <em>result</em> are all a fixed length string, the longest character string or bit string is returned.</p></li>
+<li><p>If any of values for result is an approximate numeric data type, a value with a numeric data type is returned. The number of digits after the decimal point is determined  to display all significant figures.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--creating a table</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">(</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">case_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">case_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span id="line-5"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">case_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span><span id="line-6"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">case_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">);</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="c1">--case operation with a search when clause</span>
+</span><span id="line-9"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+</span><span id="line-10"><span class="w">       </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'one'</span>
+</span><span id="line-11"><span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'two'</span>
+</span><span id="line-12"><span class="w">            </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'other'</span>
+</span><span id="line-13"><span class="w">       </span><span class="k">END</span>
+</span><span id="line-14"><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">case</span> <span class="n">when</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span> <span class="n">then</span> <span class="s1">'one'</span> <span class="n">when</span> <span class="n">a</span><span class="o">=</span><span class="mi">2</span> <span class="n">then</span> <span class="s1">'two'</span> <span class="k">else</span> <span class="s1">'other'</span> <span class="n">end</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'one'</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'two'</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'other'</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="s1">'other'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--case operation with a simple when clause</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">       </span><span class="k">CASE</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'one'</span>
+</span><span id="line-4"><span class="w">              </span><span class="k">WHEN</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'two'</span>
+</span><span id="line-5"><span class="w">              </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'other'</span>
+</span><span id="line-6"><span class="w">       </span><span class="k">END</span>
+</span><span id="line-7"><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">case</span> <span class="n">a</span> <span class="n">when</span> <span class="mi">1</span> <span class="n">then</span> <span class="s1">'one'</span> <span class="n">when</span> <span class="mi">2</span> <span class="n">then</span> <span class="s1">'two'</span> <span class="k">else</span> <span class="s1">'other'</span> <span class="n">end</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'one'</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'two'</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'other'</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="s1">'other'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--result types are converted to a single type containing all of significant figures</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">       </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="line-4"><span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">2345</span>
+</span><span id="line-5"><span class="w">            </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">234567890</span>
+</span><span id="line-6"><span class="w">       </span><span class="k">END</span>
+</span><span id="line-7"><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">case</span> <span class="n">when</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span> <span class="n">then</span> <span class="mi">1</span> <span class="n">when</span> <span class="n">a</span><span class="o">=</span><span class="mi">2</span> <span class="n">then</span> <span class="mf">1.2345</span> <span class="k">else</span> <span class="mf">1.234567890</span> <span class="n">end</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="mf">1.000000000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="mf">1.234500000</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="mf">1.234567890</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="mf">1.234567890</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--an error occurs when result types are not convertible</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">       </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'one'</span>
+</span><span id="line-4"><span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'two'</span>
+</span><span id="line-5"><span class="w">            </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">2345</span>
+</span><span id="line-6"><span class="w">       </span><span class="k">END</span>
+</span><span id="line-7"><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">coerce</span> <span class="s1">'one'</span> <span class="n">to</span> <span class="nb">type</span> <span class="n">double</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="encryption_fn.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Encryption Function
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="condition_fn.html">
+        Comparison Functions
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#simple-comparison-expression'" class="reference internal" href="#simple-comparison-expression">Simple Comparison Expression</a></li>
+<li><a :data-current="activeSection === '#any-some-all-quantifiers'" class="reference internal" href="#any-some-all-quantifiers">ANY/SOME/ALL quantifiers</a></li>
+<li><a :data-current="activeSection === '#between'" class="reference internal" href="#between">BETWEEN</a></li>
+<li><a :data-current="activeSection === '#exists'" class="reference internal" href="#exists">EXISTS</a></li>
+<li><a :data-current="activeSection === '#in'" class="reference internal" href="#in">IN</a></li>
+<li><a :data-current="activeSection === '#is-null'" class="reference internal" href="#is-null">IS NULL</a></li>
+<li><a :data-current="activeSection === '#like'" class="reference internal" href="#like">LIKE</a></li>
+<li><a :data-current="activeSection === '#case'" class="reference internal" href="#case">CASE</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../../_static/theme.js?v=b0acb063"></script>
+<script src="../../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../../_static/version-switcher.js?v=993d9931"></script>
+<script src="../../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

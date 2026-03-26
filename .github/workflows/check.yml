@@ -103,7 +103,7 @@ jobs:
     permissions:
       contents: write
     concurrency:
-      group: gh-pages-deploy-${{ github.event.pull_request.number || github.ref }}
+      group: gh-pages-deploy
       cancel-in-progress: false
     strategy:
       matrix:

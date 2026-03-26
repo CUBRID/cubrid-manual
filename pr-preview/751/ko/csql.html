@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="./" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CSQL 인터프리터 | CUBRID 10.1 사용자 매뉴얼</title>
+<meta content="CSQL 인터프리터 | CUBRID 10.1 사용자 매뉴얼" property="og:title"/>
+<meta content="CSQL 인터프리터 | CUBRID 10.1 사용자 매뉴얼" name="twitter:title"/>
+<link href="_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="_static/logo_only.png" rel="icon"/>
+<link href="search.html" rel="search" title="검색"/>
+<link href="genindex.html" rel="index" title="색인"/>
+<link href="sql/index.html" rel="next" title="CUBRID SQL"/>
+<link href="qrytool.html" rel="prev" title="질의 도구"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 10.1 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="./genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/10.1/csql.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 10.1 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="release_note/index.html">Release Note</a>
+<a href="./genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_upgrade.html">설치 및 업그레이드</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">시작하기</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="current reference internal expandable" href="#">CSQL 인터프리터<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="#csql-intro">CSQL 인터프리터 소개</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">CSQL 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#csql-session-commands">세션 명령어</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sql/index.html">CUBRID SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin/index.html">CUBRID 운영</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API 레퍼런스</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_note/index.html">릴리스 노트</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="index.html">
+<span class="hidden md:inline">CUBRID 10.1 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">CSQL 인터프리터</span>
+</nav>
+<div id="content" role="main">
+<section id="csql">
+<h1>CSQL 인터프리터<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#csql"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>CUBRID에서 SQL 질의문을 수행하려면 그래픽 사용자 인터페이스(GUI) 기반 CUBRID Manager나 콘솔 기반 CSQL 인터프리터를 사용해야 한다.</p>
+<p>CSQL은 CUBRID에서 명령어 방식으로 SQL 문을 사용할 수 있는 프로그램이다. 여기에서는 CSQL 인터프리터의 간단한 사용법과 관련 명령어를 설명한다.</p>
+<section id="csql-intro">
+<span id="id1"></span><h2>CSQL 인터프리터 소개<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#csql-intro" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#csql-intro'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>SQL 사용을 위한 도구</strong></p>
+<p>CSQL 인터프리터는 CUBRID와 함께 설치되며, 대화형(interactive) 방식과 일괄 수행(batch) 방식으로 SQL 질의를 수행하고 수행 결과를 조회할 수 있는 프로그램이다. CSQL 인터프리터는 명령어 라인 입력 방식의 인터페이스를 제공하며, 입력된 SQL 문장과 그 결과는 나중에 사용하기 위해서 파일에 저장할 수도 있다.</p>
+<p>CSQL 인터프리터는 CUBRID를 사용하는 가장 기본적이고 손쉬운 방법이다. CUBRID를 사용하는데 제공되는 다양한 API(JDBC, ODBC, PHP, CCI 등)를 활용하여 데이터베이스 응용 프로그램을 작성할 수 있다. 또한, CUBRID에서 제공하는 관리 및 질의 도구인 CUBRID 매니저를 사용할 수도 있다. 사용자는 CSQL 인터프리터가 제공하는 터미널 기반의 환경에서 SQL 질의를 생성하고, 수행 결과를 조회할 수 있다.</p>
+<p>CSQL 인터프리터는 CUBRID 데이터베이스에 접속하여 SQL 문을 통해 다양한 작업을 수행한다. CSQL 인터프리터를 이용해 다음과 같은 작업을 수행할 수 있다.</p>
+<ul class="simple">
+<li><p>SQL 문을 이용하여 데이터베이스 조회, 갱신, 삭제 등의 작업</p></li>
+<li><p>외부 셸 명령 실행</p></li>
+<li><p>조회 결과의 저장 혹은 출력</p></li>
+<li><p>SQL 스크립트 파일의 작성 및 실행</p></li>
+<li><p>테이블 스키마 조회</p></li>
+<li><p>데이터베이스 서버 시스템 파라미터의 조회 및 변경</p></li>
+<li><p>다양한 데이터베이스 정보(스키마, 트리거, 지연 트리거, workspace, 잠금, 통계) 조회</p></li>
+</ul>
+<p><strong>DBA를 위한 도구</strong></p>
+<p><strong>DBA</strong> (Database Administrator)는 일상적인 많은 관리 업무를 수행하기 위해서 CUBRID가 설치된 시스템에 접속해서 CUBRID가 제공하는 다양한 관리 유틸리티를 이용해서 작업을 수행한다. 따라서, 터미널 기반의 인터페이스를 제공하는 CSQL 인터프리터는 <strong>DBA</strong> 가 데이터베이스 관리 업무를 수행하는데 유용하게 사용된다. 또한, CSQL 인터프리터는 <strong>DBA</strong> 에게 필요한 다양한 데이터베이스 정보를 제공한다.</p>
+<p>CSQL 인터프리터는 독립 모드(Standalone Mode)로 실행될 수도 있다. 독립 실행 모드는 CSQL 인터프리터가 서버 프로세스의 기능을 포함하여 직접 데이터베이스 파일에 접근하여 수행하는 방식이다. 즉 별도의 데이터베이스 서버 프로세스가 구동되어 있지 않은 상태에서 해당 데이터베이스를 대상으로 SQL 문을 실행할 수 있다. CSQL 인터프리터는 데이터베이스 서버나 브로커 등 어떠한 다른 프로그램의 도움 없이 <strong>csql</strong> 유틸리티 하나로 데이터베이스를 이용할 수 있는 강력한 수단이다.</p>
+</section>
+<section id="id2">
+<h2>CSQL 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="csql-exec-mode">
+<span id="id3"></span><h3>CSQL 실행 모드<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#csql-exec-mode" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#csql-exec-mode'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>대화형 모드(Interactive Mode)</strong></p>
+<p>CSQL 인터프리터는 데이터베이스에서 스키마 또는 데이터를 다루기 위한 SQL 문을 입력하고 수행할 수 있다. <strong>csql</strong> 유틸리티를 실행하면 나타나는 프롬프트에 사용자는 구문을 입력한다. 구문을 입력한 후 실행하면 다음 라인에 결과가 표시되는데, 이를 대화형 모드라고 한다.</p>
+<p><strong>일괄 수행 모드(Batch Mode)</strong></p>
+<p>사용자는 원하는 SQL 문을 임의의 파일에 저장한 후 <strong>csql</strong> 유틸리티가 해당 파일을 읽도록 구문을 실행할 수 있다. 이를 일괄 수행(배치형) 모드라고 한다.</p>
+<p><strong>독립 모드(Standalone Mode)</strong></p>
+<p>독립 실행 모드는 CSQL 인터프리터가 서버 프로세스의 기능을 포함하여 직접 데이터베이스 파일에 접근하여 수행하는 방식이다. 즉 별도의 데이터베이스 서버 프로세스가 구동되어 있지 않은 상태에서 해당 데이터베이스를 대상으로 SQL 문을 실행할 수 있다. 독립 모드는 동시에 한 사용자만이 접근이 가능하므로 <strong>DBA</strong> (Database Administrator)가 관리 작업을 위해 수행하는데 적합한 모드이다.</p>
+<p><strong>클라이언트/서버 모드(Client/Server Mode)</strong></p>
+<p>클라이언트/서버 모드는 일반적으로 해당 CSQL 인터프리터가 클라이언트 프로세스로 동작하여 데이터베이스 서버 프로세스에 접속하는 방식으로 사용되는 모드이다.</p>
+<p><strong>시스템 관리자 모드</strong></p>
+<p>시스템 관리자 모드는 CSQL 인터프리터를 통해 특별한 관리 작업을 수행하기 위해 사용되는 모드이다. 서버 접속 개수가 시스템 파라미터 <strong>max_clients</strong>의 값을 초과하더라도 CSQL 인터프리터에서 시스템 관리자 모드로 접속하면 추가로 단 하나의 연결을 허용한다. 체크 포인트를 수행하거나 트랜잭션 모니터링을 종료 등의 작업을 수행할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">--</span><span class="n">sysadm</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>CSQL 사용 방법<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>로컬 호스트 접속</strong></p>
+<p><strong>csql</strong> 유틸리티를 사용하여 CSQL 인터프리터를 실행한다. 이 때, 필요에 따라 옵션을 설정할 수 있으며, 옵션을 설정하려면 접속하려는 데이터베이스 이름을 인수로 지정한다. 다음은 로컬 서버에 위치한 데이터베이스에 접속하는 <strong>csql</strong> 유틸리티 구문이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
+</span></code></pre></div>
+</div>
+<p><strong>원격 호스트 접속</strong></p>
+<p>다음은 원격 호스트에 위치한 데이터베이스에 접속하는 <strong>csql</strong> 유틸리티 구문이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span><span class="nd">@remote_host_name</span>
+</span></code></pre></div>
+</div>
+<p>단, 원격 호스트에서 CSQL 인터프리터를 실행하려면 다음 조건을 만족해야 한다.</p>
+<ul class="simple">
+<li><p>원격 호스트와 로컬 호스트에 설치된 CUBRID는 동일한 버전이어야 한다.</p></li>
+<li><p>원격 호스트와 로컬 호스트의 마스터 프로세스가 사용하는 포트 번호가 동일해야 한다.</p></li>
+<li><p><strong>-C</strong> 옵션을 사용하여 클라이언트/서버 모드로 원격 호스트에 접속해야 한다.</p></li>
+</ul>
+<p><strong>예제</strong></p>
+<p>다음은 192.168.1.3 위치의 원격 호스트에 존재하는 <strong>demodb</strong> 에 접속하여 <strong>csql</strong> 유틸리티를 호출하는 예제이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">C</span> <span class="n">demodb</span><span class="o">@</span><span class="mf">192.168.1.3</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>CSQL 시작 옵션<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>프롬프트 상에서 옵션 목록을 보려면, 다음과 같이 옵션을 적용할 데이터베이스를 지정하지 않고 <strong>csql</strong> 유틸리티를 실행한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ csql
+</span><span id="line-2">A database-name is missing.
+</span><span id="line-3">interactive SQL utility, version 10.1
+</span><span id="line-4">usage: csql [OPTION] database-name[@host]
+</span><span id="line-5">
+</span><span id="line-6">valid options:
+</span><span id="line-7">  -S, --SA-mode                standalone mode execution
+</span><span id="line-8">  -C, --CS-mode                client-server mode execution
+</span><span id="line-9">  -u, --user=ARG               alternate user name
+</span><span id="line-10">  -p, --password=ARG           password string, give "" for none
+</span><span id="line-11">  -e, --error-continue         don't exit on statement error
+</span><span id="line-12">  -i, --input-file=ARG         input-file-name
+</span><span id="line-13">  -o, --output-file=ARG        output-file-name
+</span><span id="line-14">  -s, --single-line            single line oriented execution
+</span><span id="line-15">  -c, --command=ARG            CSQL-commands
+</span><span id="line-16">  -l, --line-output            display each value in a line
+</span><span id="line-17">  -r, --read-only              read-only mode
+</span><span id="line-18">  -t, --plain-output           display results in a script-friendly format (only works with -c and -i)
+</span><span id="line-19">  -N, --skip-column-names      do not display column names in results (only works with -c and -i)
+</span><span id="line-20">      --string-width           display each column which is a string type in this width
+</span><span id="line-21">      --no-auto-commit         disable auto commit mode execution
+</span><span id="line-22">      --no-pager               do not use pager
+</span><span id="line-23">      --no-single-line         turn off single line oriented execution
+</span><span id="line-24">      --no-trigger-action      disable trigger action
+</span><span id="line-25">
+</span><span id="line-26">For additional information, see http://www.cubrid.org
+</span></code></pre></div>
+</div>
+<p><strong>옵션</strong></p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-S">
+<span id="cmdoption-csql-SA-mode"></span><span class="sig-name descname"><span class="pre">-S</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--SA-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-S" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-S'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-S</strong> 옵션을 이용하여 독립 모드로 데이터베이스에 접속하여 <strong>csql</strong>을 실행한다. 데이터베이스를 독점적으로 사용하고자 할 때 <strong>-S</strong> 옵션을 이용한다. <strong>csql</strong>이 독립 모드로 실행중이면 또 다른 <strong>csql</strong> 또는 유틸리티의 사용이 불가능하다. <strong>-S</strong> 옵션과 <strong>-C</strong> 옵션을 둘 다 생략하면 <strong>-C</strong> 옵션으로 동작한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">S</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-C">
+<span id="cmdoption-csql-CS-mode"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--CS-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-C" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-C'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-C</strong> 옵션을 이용하여 클라이언트/서버 모드로 데이터베이스에 접속하여 <strong>csql</strong> 유틸리티를 실행한다. 데이터베이스에 여러 클라이언트가 동시 접속하는 환경에서 <strong>-C</strong> 옵션을 이용한다. 만약 클라이언트/서버 모드로 원격 호스트의 데이터베이스에 접속한 경우라도 <strong>csql</strong> 유틸리티를 실행하는 도중에 발생한 에러 로그는 로컬 호스트의 <strong>csql.err</strong> 파일에 기록된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">C</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-i">
+<span id="cmdoption-csql-input-file"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input-file</span></span><span class="sig-prename descclassname"><span class="pre">=ARG</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-i" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-i'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-i</strong> 옵션을 이용하여 배치 모드에서 사용할 입력 파일의 이름을 지정한다. <strong>infile</strong> 파일에는 하나 이상의 SQL 문이 저장되어 있으며, <strong>-i</strong> 옵션이 지정되지 않으면 CSQL 인터프리터는 대화형 모드로 실행된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">i</span> <span class="n">infile</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-o">
+<span id="cmdoption-csql-output-file"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output-file</span></span><span class="sig-prename descclassname"><span class="pre">=ARG</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-o" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-o'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-o</strong> 옵션을 이용하여 질의 수행 결과를 화면에 출력하지 않고 지정된 파일에 저장한다. 이는 CSQL 인터프리터에 의한 질의 수행 결과를 추후 조회하고자 할 때 유용하게 사용될 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">o</span> <span class="n">outfile</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-u">
+<span id="cmdoption-csql-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"><span class="pre">=ARG</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-u" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-u'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-u</strong> 옵션을 이용하여 지정된 데이터베이스에 접속하려는 사용자 이름을 지정한다. 만약 <strong>-u</strong> 옵션이 지정되지 않으면 가장 낮은 사용자 권한을 가지는 <strong>PUBLIC</strong> 이 사용자로 지정된다. 또한 사용자 이름이 유효하지 않은 경우에는 오류가 출력되고 <strong>csql</strong> 유틸리티는 종료된다. 암호가 설정된 사용자 이름이 지정된 경우에는 암호를 입력받기 위한 프롬프트가 출력된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">u</span> <span class="n">DBA</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-p">
+<span id="cmdoption-csql-password"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--password</span></span><span class="sig-prename descclassname"><span class="pre">=ARG</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-p" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-p'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-p</strong> 옵션을 이용하여 지정된 사용자의 암호를 입력한다. 특히, 배치 모드에서는 지정한 사용자에 대한 암호 입력을 요청하는 프롬프트가 출력되지 않으므로 <strong>-p</strong> 옵션을 이용하여 암호를 입력해야 한다. 잘못된 암호를 입력하면, 오류가 출력되고 <strong>csql</strong> 유틸리티는 종료된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">u</span> <span class="n">DBA</span> <span class="o">-</span><span class="n">p</span> <span class="o">***</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-s">
+<span id="cmdoption-csql-single-line"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--single-line</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-s" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-s'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-i</strong> 옵션과 함께 사용하는 옵션으로, <strong>-s</strong> 옵션을 지정하면 파일에 입력된 여러 개의 SQL 문을 하나씩 나누어 수행한다. 이 옵션은 질의 수행에 메모리를 적게 할당하고 싶을 때 유용하게 이용할 수 있다. 각 SQL 문은 세미콜론(;)으로 구분한다. 옵션을 생략하면 여러 개의 SQL 문을 한꺼번에 읽어들인 후 수행한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">i</span> <span class="n">infile</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-c">
+<span id="cmdoption-csql-command"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--command</span></span><span class="sig-prename descclassname"><span class="pre">=ARG</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-c" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-c'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-c</strong> 옵션을 이용하여 셸 상에서 하나 이상의 SQL 문을 직접 수행한다. 이 때, 각 문장은 세미콜론(;)으로 구분한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'select * from olympic;select * from stadium'</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-l">
+<span id="cmdoption-csql-line-output"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--line-output</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-l" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-l'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-l</strong> 옵션을 이용하여 SQL 문을 실행한 결과 레코드의 SELECT 리스트 값들을 라인 단위로 나누어서 출력한다. <strong>-l</strong> 옵션을 지정하지 않으면 결과 레코드의 모든 SELECT 리스트 값들을 한 라인에 출력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">l</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-e">
+<span id="cmdoption-csql-error-continue"></span><span class="sig-name descname"><span class="pre">-e</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--error-continue</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-e" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-e'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>SQL 문 여러 개를 연속으로 나열하여 실행할 때 <strong>-e</strong> 옵션을 이용하면 SQL 문 중간에 의미상(semantic) 오류 또는 런타임 에러가 발생하여도 이를 무시하고 계속 SQL 문을 실행한다. 이때 SQL 문에 문법상(syntax) 오류가 있다면 <strong>-e</strong> 옵션이 지정되어 있어도 오류가 발생한 후의 질의를 실행하지 않는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ csql -e demodb
+</span><span id="line-2">
+</span><span id="line-3">csql&gt; SELECT * FROM aaa;SELECT * FROM athlete WHERE code=10000;
+</span><span id="line-4">
+</span><span id="line-5">In line 1, column 1,
+</span><span id="line-6">
+</span><span id="line-7">ERROR: before ' ;SELECT * FROM athlete WHERE code=10000; '
+</span><span id="line-8">Unknown class "aaa".
+</span><span id="line-9">
+</span><span id="line-10">
+</span><span id="line-11">=== &lt;Result of SELECT Command in Line 1&gt; ===
+</span><span id="line-12">
+</span><span id="line-13">         code  name                  gender                nation_code           event
+</span><span id="line-14">=====================================================================================================
+</span><span id="line-15">        10000  'Aardewijn Pepijn'    'M'                   'NED'                 'Rowing'
+</span><span id="line-16">
+</span><span id="line-17">
+</span><span id="line-18">1 rows selected. (0.006433 sec) Committed.
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-r">
+<span id="cmdoption-csql-read-only"></span><span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--read-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-r" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-r'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-r</strong> 옵션을 이용하여 읽기 전용으로 데이터베이스에 접속한다. 데이터베이스에 읽기 전용으로 접속하면 테이블을 만들거나 데이터를 입력할 수 없고 데이터를 조회만 할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">r</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-t">
+<span id="cmdoption-csql-plain-output"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--plain-output</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-t" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-t'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>컬럼명과 값만 표시되며 <strong>-c</strong> 또는 <strong>-i</strong> 옵션과 함께 작동된다. 각 컬럼과 값이 탭과 줄 바꿈으로 구분되며, 결과에 포함된 탭과 백슬래시는 ‘n’, ‘t’ 및 ‘\’으로 각각 대체된다. 이 옵션은 <strong>-l</strong> 옵션과 함께 지정된 경우에는 무시된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ csql testdb@localhost -c "select * from test_tbl" -t
+</span><span id="line-2">
+</span><span id="line-3">col1 col2 col3
+</span><span id="line-4">string1 12:16:10.090 PM 10/23/2014
+</span><span id="line-5">string2 12:16:10.090 PM 10/23/2014
+</span><span id="line-6">string3 12:16:10.090 PM 10/23/2014
+</span><span id="line-7">string4 12:16:10.090 PM 10/23/2014
+</span><span id="line-8">string5 12:16:10.090 PM 10/23/2014
+</span><span id="line-9">string6 12:16:10.090 PM 10/23/2014
+</span><span id="line-10">string7 12:16:10.090 PM 10/23/2014
+</span><span id="line-11">string8 12:16:10.090 PM 10/23/2014
+</span><span id="line-12">string9 12:16:10.090 PM 10/23/2014
+</span><span id="line-13">string10 12:16:10.090 PM 10/23/2014
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-N">
+<span id="cmdoption-csql-skip-column-names"></span><span class="sig-name descname"><span class="pre">-N</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--skip-column-names</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-N" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-N'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>결과에서 컬럼명을 숨긴다. <strong>-c</strong> 또는 <strong>-i</strong> 옵션을 사용하는 경우에만 작동하며 일반적으로 <strong>-t</strong> 옵션과 함께 사용된다. 이 옵션은 <strong>-l</strong> 옵션과 함께 지정된 경우에는 무시된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ csql testdb@localhost -c "select * from test_tbl" -t -N
+</span><span id="line-2">
+</span><span id="line-3">string1 12:16:10.090 PM 10/23/2014
+</span><span id="line-4">string2 12:16:10.090 PM 10/23/2014
+</span><span id="line-5">string3 12:16:10.090 PM 10/23/2014
+</span><span id="line-6">string4 12:16:10.090 PM 10/23/2014
+</span><span id="line-7">string5 12:16:10.090 PM 10/23/2014
+</span><span id="line-8">string6 12:16:10.090 PM 10/23/2014
+</span><span id="line-9">string7 12:16:10.090 PM 10/23/2014
+</span><span id="line-10">string8 12:16:10.090 PM 10/23/2014
+</span><span id="line-11">string9 12:16:10.090 PM 10/23/2014
+</span><span id="line-12">string10 12:16:10.090 PM 10/23/2014
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-no-auto-commit">
+<span class="sig-name descname"><span class="pre">--no-auto-commit</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-no-auto-commit" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-no-auto-commit'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>–no-auto-commit</strong> 옵션을 이용하여 자동 커밋 모드를 중지한다. <strong>–no-auto-commit</strong> 옵션을 지정하지 않으면 기본적으로 CSQL 인터프리터는 자동 커밋 모드로 작동되고, 입력된 SQL 문이 실행될 때마다 자동으로 커밋된다. 또한, CSQL 인터프리터를 시작한 후 <strong>;AUtocommit</strong> 세션 명령을 수행해도 동일한 결과를 얻을 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">auto</span><span class="o">-</span><span class="n">commit</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-no-pager">
+<span class="sig-name descname"><span class="pre">--no-pager</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-no-pager" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-no-pager'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>–no-pager</strong> 옵션을 이용하여 CSQL 인터프리터에서 수행한 질의 결과를 페이지 단위로 출력하지 않고, 일괄적으로 출력한다. <strong>–no-pager</strong> 옵션을 지정하지 않으면 페이지 단위로 질의 수행 결과를 출력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">pager</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-no-single-line">
+<span class="sig-name descname"><span class="pre">--no-single-line</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-no-single-line" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-no-single-line'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>–no-single-line</strong> 옵션을 이용하면 SQL 문 여러 개를 저장해 두었다가 <strong>;xr</strong> 혹은 <strong>;r</strong> 세션 명령어로 한꺼번에 수행한다. 이 옵션을 지정하지 않으면 <strong>;xr</strong> 혹은 <strong>;r</strong> 세션 명령어 없이 SQL 문이 바로 실행된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">single</span><span class="o">-</span><span class="n">line</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-sysadm">
+<span class="sig-name descname"><span class="pre">--sysadm</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-sysadm" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-sysadm'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>이 옵션은 <strong>-u dba</strong>와 같이 사용해야 하며, 시스템 관리자 모드로 실행하고자 할 때 지정한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">--</span><span class="n">sysadm</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-write-on-standby">
+<span class="sig-name descname"><span class="pre">--write-on-standby</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-write-on-standby" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-write-on-standby'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>이 옵션은 시스템 관리자 모드 옵션(<strong>–sysadm–</strong>)과 함께 사용해야 한다. 이 옵션으로 CSQL을 실행한 dba는 standby 상태의 DB 즉, 슬레이브 DB 또는 레플리카 DB에 직접 접속하여 쓰기 작업을 수행할 수 있다. 단, 레플리카에 직접 쓰는 데이터는 복제되지 않는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span> <span class="o">--</span><span class="n">sysadm</span> <span class="o">--</span><span class="n">write</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">standby</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="n">testdb</span><span class="nd">@localhost</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>레플리카에 직접 데이터를 쓰는 경우 복제 불일치가 발생함에 주의해야 한다.</p>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-csql-no-trigger-action">
+<span class="sig-name descname"><span class="pre">--no-trigger-action</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-csql-no-trigger-action" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-csql-no-trigger-action'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>이 옵션을 지정하면 해당 CSQL에서 수행되는 질의문의 트리거는 동작하지 않는다.</p>
+</dd></dl>
+</section>
+</section>
+<section id="csql-session-commands">
+<span id="id6"></span><h2>세션 명령어<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#csql-session-commands" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#csql-session-commands'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CSQL 인터프리터에는 SQL 문 이외에 CSQL 인터프리터를 제어하는 특별한 명령어가 있으며 이를 세션 명령어라고 한다. 모든 세션 명령어는 반드시 세미콜론(;)으로 시작해야 한다.</p>
+<p><strong>;help</strong> 를 입력하여 CSQL 인터프리터에서 지원되는 세션 명령어를 확인할 수 있다. 세션 명령어를 전부 입력하지 않고 대문자로 표시된 글자까지만 입력해도 CSQL 인터프리터는 세션 명령어를 인식한다. 세션 명령어는 대소문자를 구분하지 않는다.</p>
+<p>“질의 버퍼”는 질의문을 실행하기 전까지 질의문을 저장하는 버퍼이다. <strong>–no-single-line</strong> 옵션을 부여하여 CSQL을 실행하는 경우 <strong>;xr</strong> 명령으로 질의를 실행하기 전까지는 질의문을 버퍼에 유지한다.</p>
+<p><strong>파일에서 질의 읽기(;REAd)</strong></p>
+<p><strong>;REAd</strong> 명령어는 파일의 내용을 질의 버퍼로 읽는 세션 명령어로, 지정된 입력 파일에 저장된 질의문들을 실행하는데 사용할 수 있다. 질의 버퍼에 올려진 파일 내용을 보기 위해서는 <strong>;List</strong> 명령어를 사용한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">read</span> <span class="n">nation</span><span class="o">.</span><span class="n">sql</span>
+</span><span id="line-2"><span class="n">The</span> <span class="n">file</span> <span class="n">has</span> <span class="n">been</span> <span class="n">read</span> <span class="n">into</span> <span class="n">the</span> <span class="n">command</span> <span class="n">buffer</span><span class="o">.</span>
+</span><span id="line-3"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="nb">list</span>
+</span><span id="line-4"><span class="n">insert</span> <span class="n">into</span> <span class="s2">"sport_event"</span> <span class="p">(</span><span class="s2">"event_code"</span><span class="p">,</span> <span class="s2">"event_name"</span><span class="p">,</span> <span class="s2">"gender_type"</span><span class="p">,</span> <span class="s2">"num_player"</span><span class="p">)</span> <span class="n">values</span>
+</span><span id="line-5"><span class="p">(</span><span class="mi">20001</span><span class="p">,</span> <span class="s1">'Archery Individual'</span><span class="p">,</span> <span class="s1">'M'</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span id="line-6"><span class="n">insert</span> <span class="n">into</span> <span class="s2">"sport_event"</span> <span class="p">(</span><span class="s2">"event_code"</span><span class="p">,</span> <span class="s2">"event_name"</span><span class="p">,</span> <span class="s2">"gender_type"</span><span class="p">,</span> <span class="s2">"num_player"</span><span class="p">)</span> <span class="n">values</span>
+</span><span id="line-7"><span class="mi">20002</span><span class="p">,</span> <span class="s1">'Archery Individual'</span><span class="p">,</span> <span class="s1">'W'</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span id="line-8"><span class="o">....</span>
+</span></code></pre></div>
+</div>
+<p><strong>파일에 질의 저장(;Write)</strong></p>
+<p><strong>;Write</strong> 는 질의 버퍼의 내용을 파일에 저장하는 세션 명령어로 사용자가 CSQL 인터프리터에서 입력 혹은 수정한 질의문을 파일에 저장할 때 사용된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">write</span> <span class="n">outfile</span>
+</span><span id="line-2"><span class="n">Command</span> <span class="n">buffer</span> <span class="n">has</span> <span class="n">been</span> <span class="n">saved</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p><strong>파일에 덧붙이기(;APpend)</strong></p>
+<p>현재 질의 버퍼의 내용을 출력 파일인 <strong>outfile</strong>에 추가한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">append</span> <span class="n">outfile</span>
+</span><span id="line-2"><span class="n">Command</span> <span class="n">buffer</span> <span class="n">has</span> <span class="n">been</span> <span class="n">saved</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p><strong>셸 명령어를 실행(;SHELL)</strong></p>
+<p><strong>;SHELL</strong> 세션 명령어로 외부 셸을 호출할 수 있다. CSQL 인터프리터가 실행된 환경에서 새로운 셸이 시작되고, 셸을 마치면 다시 CSQL 인터프리터로 돌아온다. 만약에 <strong>;SHELL_Cmd</strong> 명령어로 수행할 셸 명령어가 지정되어 있다면 셸을 구동하여 지정된 명령어를 실행하고 CSQL 인터프리터로 복귀하게 된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">shell</span>
+</span><span id="line-2"><span class="o">%</span> <span class="n">ls</span> <span class="o">-</span><span class="n">al</span>
+</span><span id="line-3"><span class="n">total</span> <span class="mi">2088</span>
+</span><span id="line-4"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span> <span class="mi">16</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">51</span> <span class="o">.</span>
+</span><span id="line-5"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">6</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">17</span> <span class="o">..</span>
+</span><span id="line-6"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">2</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">02</span><span class="p">:</span><span class="mi">49</span> <span class="n">audit</span>
+</span><span id="line-7"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">2</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">17</span> <span class="nb">bin</span>
+</span><span id="line-8"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">2</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">17</span> <span class="n">conf</span>
+</span><span id="line-9"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">4</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">14</span> <span class="n">cubridmanager</span>
+</span><span id="line-10"><span class="o">%</span> <span class="n">exit</span>
+</span><span id="line-11"><span class="n">csql</span><span class="o">&gt;</span>
+</span></code></pre></div>
+</div>
+<p><strong>셸 명령어 등록(;SHELL_Cmd)</strong></p>
+<p>;SHELL_Cmd를 사용하여 ;SHELL 세션 명령어로 실행할 셸 명령어를 등록한다. 등록된 명령어를 실행하기 위해서는 예제와 같이 ;shell 명령어를 입력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">shell_c</span> <span class="n">ls</span> <span class="o">-</span><span class="n">la</span>
+</span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">shell</span>
+</span><span id="line-3"><span class="n">total</span> <span class="mi">2088</span>
+</span><span id="line-4"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span> <span class="mi">16</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">51</span> <span class="o">.</span>
+</span><span id="line-5"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">6</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">17</span> <span class="o">..</span>
+</span><span id="line-6"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">2</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">02</span><span class="p">:</span><span class="mi">49</span> <span class="n">audit</span>
+</span><span id="line-7"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">2</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">17</span> <span class="nb">bin</span>
+</span><span id="line-8"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">2</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">17</span> <span class="n">conf</span>
+</span><span id="line-9"><span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">4</span> <span class="n">DBA</span> <span class="n">cubrid</span>   <span class="mi">4096</span> <span class="n">Jul</span> <span class="mi">29</span> <span class="mi">16</span><span class="p">:</span><span class="mi">14</span> <span class="n">cubridmanager</span>
+</span><span id="line-10"><span class="n">csql</span><span class="o">&gt;</span>
+</span></code></pre></div>
+</div>
+<p><strong>페이저 명령어 등록(;PAger_cmd)</strong></p>
+<p>;PAger_cmd를 사용하여 질의 실행 결과를 출력하는 페이저 명령어를 등록한다. 등록되는 명령어에 따라 출력되는 방식이 결정된다. 기본 명령어는 <strong>more</strong> 이며, <strong>cat</strong>, <strong>less</strong> 등이 사용될 수 있다. 단, 이 명령어는 Linux에서만 정상 동작한다.</p>
+<p>페이저 명령어를 <strong>more</strong> 로 등록하는 경우 질의 결과를 페이지 단위로 출력하고, 스페이스 키가 눌려질 때까지 다음 페이지의 출력을 대기한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="p">;</span><span class="n">pager</span> <span class="n">more</span>
+</span></code></pre></div>
+</div>
+<p>페이저 명령어를 cat으로 등록하는 경우 페이징 없이 질의 결과 전체를 출력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="p">;</span><span class="n">pager</span> <span class="n">cat</span>
+</span></code></pre></div>
+</div>
+<p>output.txt로 출력을 리다이렉션하면 질의 결과 전체를 output.txt에 기록한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="p">;</span><span class="n">pager</span> <span class="n">cat</span> <span class="o">&gt;</span> <span class="n">output</span><span class="o">.</span><span class="n">txt</span>
+</span></code></pre></div>
+</div>
+<p>페이저 명령어를 <strong>less</strong> 로 등록하는 경우 질의 결과에 대해 포워딩, 백워딩을 할 수 있고 패턴 검색도 할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="p">;</span><span class="n">pager</span> <span class="n">less</span>
+</span></code></pre></div>
+</div>
+<p><strong>less</strong> 에서 사용하는 키보드 명령은 다음과 같다.</p>
+<ul class="simple">
+<li><p>Page UP, b: 한 페이지 뒤로 가기(백워딩)</p></li>
+<li><p>Page Down, Space: 한 페이지 앞으로 가기(포워딩)</p></li>
+<li><p>/문자열: 질의 결과에서 문자열 찾기</p></li>
+<li><p>n: 다음 문자열 찾기</p></li>
+<li><p>N: 앞의 문자열 찾기</p></li>
+<li><p>q: 질의 결과 보기 종료하기</p></li>
+</ul>
+<p><strong>현재 작업 디렉터리 변경(;CD)</strong></p>
+<p>CSQL 인터프리터를 실행한 현재 작업 디렉터리를 지정된 디렉터리로 변경한다. 경로를 지정하지 않으면 홈 디렉터리로 변경된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">cd</span> <span class="o">/</span><span class="n">home1</span><span class="o">/</span><span class="n">DBA</span><span class="o">/</span><span class="n">CUBRID</span>
+</span><span id="line-2"><span class="n">Current</span> <span class="n">directory</span> <span class="n">changed</span> <span class="n">to</span>  <span class="o">/</span><span class="n">home1</span><span class="o">/</span><span class="n">DBA</span><span class="o">/</span><span class="n">CUBRID</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p><strong>CSQL 인터프리터 종료(;EXit)</strong></p>
+<p>CSQL 인터프리터를 종료한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">ex</span>
+</span></code></pre></div>
+</div>
+<p><strong>질의 버퍼 초기화(;CLear)</strong></p>
+<p><strong>;CLear</strong> 세션 명령어는 질의 버퍼의 내용을 초기화한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">clear</span>
+</span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="nb">list</span>
+</span></code></pre></div>
+</div>
+<p><strong>질의 버퍼의 내용 보여주기(;List)</strong></p>
+<p>현재까지 입력 수정된 질의 버퍼의 내용을 화면에 출력하기 위해서는 <strong>;List</strong> 세션 명령어를 사용한다. 질의 버퍼는 사용자의 SQL 입력, <strong>;REAd</strong> 명령어, <strong>;EDIT</strong> 명령어 등으로 수정될 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="nb">list</span>
+</span></code></pre></div>
+</div>
+<p><strong>SQL 문 실행(;RUn)</strong></p>
+<p>질의 버퍼에 있는 SQL 문을 실행하는 명령어이다. 다음에서 설명하는 <strong>;Xrun</strong> 세션 명령어와 달리 질의 실행 후에도 버퍼는 초기화되지 않는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">run</span>
+</span></code></pre></div>
+</div>
+<p><strong>SQL 문 실행 후 질의 버퍼 초기화(;Xrun)</strong></p>
+<p>질의 버퍼에 있는 SQL 문을 실행하는 명령어이다. 질의 실행 후 질의 버퍼는 초기화된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">xrun</span>
+</span></code></pre></div>
+</div>
+<p><strong>트랜잭션 커밋(;COmmit)</strong></p>
+<p>현재 수행되고 있는 트랜잭션을 커밋(commit)하는 세션 명령어이다. 자동 커밋(auto-commit) 모드가 아닌 경우, 명시적으로 커밋 명령어를 입력해야 CSQL 인터프리터에서 수행 중이던 트랜잭션이 커밋된다. 자동 커밋(auto-commit) 모드인 경우는 SQL을 실행할 때마다 트랜잭션이 자동으로 커밋된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">commit</span>
+</span><span id="line-2"><span class="n">Execute</span> <span class="n">OK</span><span class="o">.</span> <span class="p">(</span><span class="mf">0.000192</span> <span class="n">sec</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p><strong>트랜잭션 롤백(;ROllback)</strong></p>
+<p>현재 수행되고 있는 트랜잭션을 롤백(rollback)하는 세션 명령어이다. <strong>;COmmit</strong> 과 마찬가지로 자동 커밋(auto-commit) 모드가 아닐 경우(OFF)에만 의미가 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">rollback</span>
+</span><span id="line-2"><span class="n">Execute</span> <span class="n">OK</span><span class="o">.</span> <span class="p">(</span><span class="mf">0.000166</span> <span class="n">sec</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p><strong>자동 커밋 모드 설정(;AUtocommit)</strong></p>
+<p>자동 커밋(auto-commit) 모드를 <strong>ON</strong> 또는 <strong>OFF</strong> 로 설정하는 명령어이다. 만약, <strong>ON</strong> 또는 <strong>OFF</strong> 를 지정하지 않으면 현재 설정된 값을 보여준다. 참고로 CSQL 인터프리터는 기본값이 <strong>ON</strong> 이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">autocommit</span> <span class="n">off</span>
+</span><span id="line-2"><span class="n">AUTOCOMMIT</span> <span class="n">IS</span> <span class="n">OFF</span>
+</span></code></pre></div>
+</div>
+<p><strong>체크포인트 수행(;CHeckpoint)</strong></p>
+<p>CSQL 세션 내에서 체크포인트 수행을 지시하는 명령어이다. CSQL 인터프리터 접속 시 사용자 지정 옵션(<strong>-u</strong> <em>user_name</em>)에 <strong>DBA</strong> 그룹 멤버가 지정되고 시스템 관리자 모드(<strong>–sysadm</strong>)로 접속한 경우에만 수행할 수 있다.</p>
+<p>체크포인트는 현재 데이터 버퍼에 존재하는 모든 더티 페이지를 디스크로 내려쓰기(flush)하는 작업이며, CSQL 세션 내에서 파라미터 값을 설정하는 명령어(<strong>;set</strong> <em>parameter_name value</em>)를 통해서도 체크포인트 주기를 변경할 수 있다. 체크포인트 수행 주기와 관련된 파라미터는 <strong>checkpoint_interval</strong>과 <strong>checkpoint_every_size</strong> 가 있다. 이에 대한 자세한 내용은 <a class="reference internal" href="admin/config.html#logging-parameters"><span class="std std-ref">로깅 관련 파라미터</span></a> 를 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sysadm</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">checkpoint</span>
+</span><span id="line-2"><span class="n">Checkpoint</span> <span class="n">has</span> <span class="n">been</span> <span class="n">issued</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p><strong>트랜잭션 모니터링 또는 종료(;Killtran)</strong></p>
+<p>CSQL 세션 내에서 트랜잭션 상태 정보를 확인하거나 특정 트랜잭션을 종료시키는 명령어이다. CSQL 인터프리터 접속 시 사용자 지정 옵션(<strong>-u</strong> <em>user_name</em>)에 <strong>DBA</strong> 그룹 멤버가 지정되고 시스템 관리자 모드(<strong>–sysadm</strong>)로 접속한 경우에만 수행할 수 있다. 인자가 생략되면 모든 트랜잭션 상태 정보를 화면 출력하고, 인자로 특정 트랜잭션 ID가 지정되면 해당 트랜잭션을 종료시킨다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sysadm</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">killtran</span>
+</span><span id="line-2"><span class="n">Tran</span> <span class="n">index</span>      <span class="n">User</span> <span class="n">name</span>      <span class="n">Host</span> <span class="n">name</span>      <span class="n">Process</span> <span class="nb">id</span>      <span class="n">Program</span> <span class="n">name</span>
+</span><span id="line-3"><span class="o">-------------------------------------------------------------------------------</span>
+</span><span id="line-4">      <span class="mi">1</span><span class="p">(</span><span class="o">+</span><span class="p">)</span>            <span class="n">dba</span>      <span class="n">myhost</span>             <span class="mi">664</span>           <span class="n">cub_cas</span>
+</span><span id="line-5">      <span class="mi">2</span><span class="p">(</span><span class="o">+</span><span class="p">)</span>            <span class="n">dba</span>      <span class="n">myhost</span>            <span class="mi">6700</span>              <span class="n">csql</span>
+</span><span id="line-6">      <span class="mi">3</span><span class="p">(</span><span class="o">+</span><span class="p">)</span>            <span class="n">dba</span>      <span class="n">myhost</span>            <span class="mi">2188</span>           <span class="n">cub_cas</span>
+</span><span id="line-7">      <span class="mi">4</span><span class="p">(</span><span class="o">+</span><span class="p">)</span>            <span class="n">dba</span>      <span class="n">myhost</span>             <span class="mi">696</span>              <span class="n">csql</span>
+</span><span id="line-8">      <span class="mi">5</span><span class="p">(</span><span class="o">+</span><span class="p">)</span>         <span class="n">public</span>      <span class="n">myhost</span>            <span class="mi">6944</span>              <span class="n">csql</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">sysadm</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">killtran</span> <span class="mi">3</span>
+</span><span id="line-11"><span class="n">The</span> <span class="n">specified</span> <span class="n">transaction</span> <span class="n">has</span> <span class="n">been</span> <span class="n">killed</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p><strong>데이터베이스 재접속(;REStart)</strong></p>
+<p>CSQL 세션 내에서 대상 데이터베이스에 재접속을 시도하는 명령어이다. CSQL 인터프리터를 클라이언트/서버 모드(CS 모드)로 수행하는 경우에는 서버와의 접속이 해제되므로 유의한다. 이 명령어는 HA 환경에서 장애로 인해 다른 서버로 절체가 이루어짐에 따라 도중에 서버와의 연결이 해제되는 경우, 세션을 유지하면서 절체된 서버로 재접속할 때 유용하게 사용할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">restart</span>
+</span><span id="line-2"><span class="n">The</span> <span class="n">database</span> <span class="n">has</span> <span class="n">been</span> <span class="n">restarted</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p><strong>현재 날짜 출력(;DATE)</strong></p>
+<p><strong>;DATE</strong> 는 CSQL 인터프리터에서 현재 날짜 및 시간 정보를 출력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">date</span>
+</span><span id="line-2">     <span class="n">Tue</span> <span class="n">July</span> <span class="mi">29</span> <span class="mi">18</span><span class="p">:</span><span class="mi">58</span><span class="p">:</span><span class="mi">12</span> <span class="n">KST</span> <span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<p><strong>대상 데이터베이스 정보 출력(;DATAbase)</strong></p>
+<p>CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트 이름을 출력한다. 만약, 대상 데이터베이스가 HA모드로 동작 중이라면 현재 HA모드(active, standby, 또는 maintenance)도 함께 출력될 것이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">database</span>
+</span><span id="line-2">     <span class="n">demodb</span><span class="nd">@cubridhost</span> <span class="p">(</span><span class="n">active</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p><strong>지정한 테이블의 스키마 정보 출력(;SChema)</strong></p>
+<p><strong>;SChema</strong> 세션 명령어로 지정한 테이블의 스키마 정보를 확인할 수 있다. 해당 테이블의 이름, 칼럼 명, 제약 사항 등의 정보가 출력된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">schema</span> <span class="n">event</span>
+</span><span id="line-2"><span class="o">===</span> <span class="o">&lt;</span><span class="n">Help</span><span class="p">:</span> <span class="n">Schema</span> <span class="n">of</span> <span class="n">a</span> <span class="n">Class</span><span class="o">&gt;</span> <span class="o">===</span>
+</span><span id="line-3"> <span class="o">&lt;</span><span class="n">Class</span> <span class="n">Name</span><span class="o">&gt;</span>
+</span><span id="line-4">     <span class="n">event</span>
+</span><span id="line-5"> <span class="o">&lt;</span><span class="n">Attributes</span><span class="o">&gt;</span>
+</span><span id="line-6">     <span class="n">code</span>           <span class="n">INTEGER</span> <span class="n">NOT</span> <span class="n">NULL</span>
+</span><span id="line-7">     <span class="n">sports</span>         <span class="n">CHARACTER</span> <span class="n">VARYING</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</span><span id="line-8">     <span class="n">name</span>           <span class="n">CHARACTER</span> <span class="n">VARYING</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</span><span id="line-9">     <span class="n">gender</span>         <span class="n">CHARACTER</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="line-10">     <span class="n">players</span>        <span class="n">INTEGER</span>
+</span><span id="line-11"> <span class="o">&lt;</span><span class="n">Constraints</span><span class="o">&gt;</span>
+</span><span id="line-12">     <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="n">pk_event_event_code</span> <span class="n">ON</span> <span class="n">event</span> <span class="p">(</span><span class="n">code</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p><strong>트리거 출력(;TRigger)</strong></p>
+<p>지정한 트리거 명을 검색하여 출력하는 명령어이다. 트리거 명을 지정하지 않으면 정의된 모든 트리거를 보여준다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">trigger</span>
+</span><span id="line-2"><span class="o">===</span> <span class="o">&lt;</span><span class="n">Help</span><span class="p">:</span> <span class="n">All</span> <span class="n">Triggers</span><span class="o">&gt;</span> <span class="o">===</span>
+</span><span id="line-3">    <span class="n">trig_delete_contents</span>
+</span></code></pre></div>
+</div>
+<p><strong>파라미터 값 확인(;Get)</strong></p>
+<p><strong>;Get</strong> 세션 명령어를 이용해 현재 CSQL 인터프리터에 설정된 파라미터 값을 확인할 수 있다. 지정된 파라미터 명이 정확하지 않으면 오류가 발생한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">get</span> <span class="n">isolation_level</span>
+</span><span id="line-2"><span class="o">===</span> <span class="n">Get</span> <span class="n">Param</span> <span class="n">Input</span> <span class="o">===</span>
+</span><span id="line-3"><span class="n">isolation_level</span><span class="o">=</span><span class="mi">4</span>
+</span></code></pre></div>
+</div>
+<p><strong>파라미터 값 설정(;SEt)</strong></p>
+<p>특정 파라미터의 값을 설정하기 위해서는 <strong>;Set</strong> 세션 명령어를 사용한다. 동적 변경이 가능한 파라미터만 값을 변경할 수 있으며, 서버 파라미터는 DBA 권한이 있어야만 값을 변경할 수 있다. 동적 변경이 가능한 파라미터 목록은 <a class="reference internal" href="admin/config.html#broker-configuration"><span class="std std-ref">브로커 설정</span></a> 를 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="nb">set</span> <span class="n">block_ddl_statement</span><span class="o">=</span><span class="mi">1</span>
+</span><span id="line-2"><span class="o">===</span> <span class="n">Set</span> <span class="n">Param</span> <span class="n">Input</span> <span class="o">===</span>
+</span><span id="line-3"><span class="n">block_ddl_statement</span><span class="o">=</span><span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="o">--</span> <span class="n">dba</span> <span class="n">계정으로</span> <span class="n">실행한</span> <span class="n">csql에서</span> <span class="n">log_max_archives</span> <span class="n">값을</span> <span class="n">동적으로</span> <span class="n">변경</span>
+</span><span id="line-6"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="nb">set</span> <span class="n">log_max_archives</span><span class="o">=</span><span class="mi">5</span>
+</span></code></pre></div>
+</div>
+<p><strong>문자열 타입과 비트 타입 칼럼의 출력 길이 지정(;STring-width)</strong></p>
+<p>문자열 타입과 비트 타입 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다.</p>
+<p><strong>;string-width</strong> 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="n">name</span> <span class="n">FROM</span> <span class="n">NATION</span> <span class="n">WHERE</span> <span class="n">NAME</span> <span class="n">LIKE</span> <span class="s1">'Ar%'</span><span class="p">;</span>
+</span><span id="line-2">  <span class="s1">'Arab Republic of Egypt'</span>
+</span><span id="line-3">  <span class="s1">'Aruba'</span>
+</span><span id="line-4">  <span class="s1">'Armenia'</span>
+</span><span id="line-5">  <span class="s1">'Argentina'</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">string</span><span class="o">-</span><span class="n">width</span> <span class="mi">5</span>
+</span><span id="line-8"><span class="n">csql</span><span class="o">&gt;</span>  <span class="n">SELECT</span> <span class="n">name</span> <span class="n">FROM</span> <span class="n">NATION</span> <span class="n">WHERE</span> <span class="n">NAME</span> <span class="n">LIKE</span> <span class="s1">'Ar%'</span><span class="p">;</span>
+</span><span id="line-9">  <span class="s1">'Arab '</span>
+</span><span id="line-10">  <span class="s1">'Aruba'</span>
+</span><span id="line-11">  <span class="s1">'Armen'</span>
+</span><span id="line-12">  <span class="s1">'Argen'</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">string</span><span class="o">-</span><span class="n">width</span>
+</span><span id="line-15"><span class="n">STRING</span><span class="o">-</span><span class="n">WIDTH</span> <span class="p">:</span> <span class="mi">5</span>
+</span></code></pre></div>
+</div>
+<p><strong>지정한 칼럼의 출력 길이 지정(;COLumn-width)</strong></p>
+<p>타입과 상관없이 특정 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다.
+;COL 뒤에 값을 주지 않으면 현재 설정된 칼럼의 출력 길이를 보여준다.  뒤에 값이 0이면 해당 칼럼의 값을 모두 출력하며, 값이 0보다 크다면 해당 길이만큼 칼럼의 값을 출력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">tbl</span><span class="p">(</span><span class="n">a</span> <span class="n">BIGINT</span><span class="p">,</span> <span class="n">b</span> <span class="n">BIGINT</span><span class="p">);</span>
+</span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">tbl</span> <span class="n">VALUES</span><span class="p">(</span><span class="mi">12345678890</span><span class="p">,</span> <span class="mi">1234567890</span><span class="p">)</span>
+</span><span id="line-3"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">column</span><span class="o">-</span><span class="n">width</span> <span class="n">a</span><span class="o">=</span><span class="mi">5</span>
+</span><span id="line-4"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">tbl</span><span class="p">;</span>
+</span><span id="line-5">      <span class="mi">12345</span>            <span class="mi">1234567890</span>
+</span><span id="line-6"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">column</span><span class="o">-</span><span class="n">width</span>
+</span><span id="line-7"><span class="n">COLUMN</span><span class="o">-</span><span class="n">WIDTH</span> <span class="n">a</span> <span class="p">:</span> <span class="mi">5</span>
+</span></code></pre></div>
+</div>
+<p><strong>질의 실행 계획 보기 수준 설정(;PLan)</strong></p>
+<p><strong>;PLan</strong> 세션 명령어는 질의 실행 계획 보기의 수준을 설정한다. 수준은 <strong>simple</strong>, <strong>detail</strong>, <strong>off</strong> 로 지정한다. 각 설정값의 의미는 다음과 같다.</p>
+<ul class="simple">
+<li><p><strong>off</strong>: 질의 실행 계획을 출력하지 않음</p></li>
+<li><p><strong>simple</strong>: 질의 실행 계획을 단순하게 출력함. (OPT LEVEL=257)</p></li>
+<li><p><strong>detail</strong>: 질의 실행 계획을 자세하게 출력함. (OPT LEVEL=513)</p></li>
+</ul>
+<p id="set-autotrace"><strong>SQL 트레이스 설정(;trace)</strong></p>
+<p>질의 결과를 출력할 때 SQL 트레이스 결과를 항상 함께 출력할 것인지 여부를 설정한다.
+이 명령을 사용하여 SQL 트레이스를 ON으로 설정하면, “<strong>SHOW TRACE</strong>” 구문을 실행하지 않아도 질의 결과를 출력한 다음에 질의 프로파일링(profiling) 결과를 자동으로 출력한다.</p>
+<p>보다 자세한 설명은 <a class="reference internal" href="sql/tuning.html#query-profiling"><span class="std std-ref">질의 프로파일링</span></a>를 참고한다.</p>
+<p>명령 형식은 다음과 같다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">;</span><span class="n">trace</span> <span class="p">{</span><span class="n">on</span> <span class="o">|</span> <span class="n">off</span><span class="p">}</span> <span class="p">[{</span><span class="n">text</span> <span class="o">|</span> <span class="n">json</span><span class="p">}]</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>on</strong>: SQL 트레이스를 on한다.</p></li>
+<li><p><strong>off</strong>: SQL 트레이스를 off한다.</p></li>
+<li><p><strong>text</strong>: 일반 TEXT 형식으로 출력한다. OUTPUT 이하 절을 생략하면 일반 TEXT 형식으로 출력한다.</p></li>
+<li><p><strong>json</strong>: JSON 형식으로 출력한다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>독립 모드(-S 옵션 사용)로 실행한 CSQL 인터프리터는 SQL 트레이스 기능을 지원하지 않는다.</p>
+</div>
+<p><strong>정보 출력(;Info)</strong></p>
+<p><strong>;Info</strong> 세션 명령어는 스키마, 트리거, 작업 환경, 잠금, 통계 등의 정보를 확인할 수 있는 명령어이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">info</span> <span class="n">lock</span>
+</span><span id="line-2"><span class="o">***</span> <span class="n">Lock</span> <span class="n">Table</span> <span class="n">Dump</span> <span class="o">***</span>
+</span><span id="line-3"> <span class="n">Lock</span> <span class="n">Escalation</span> <span class="n">at</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">Run</span> <span class="n">Deadlock</span> <span class="n">interval</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="line-4"><span class="n">Transaction</span> <span class="p">(</span><span class="n">index</span>  <span class="mi">0</span><span class="p">,</span> <span class="n">unknown</span><span class="p">,</span> <span class="n">unknown</span><span class="nd">@unknown</span><span class="o">|-</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="line-5"><span class="n">Isolation</span> <span class="n">COMMITTED</span> <span class="n">READ</span>
+</span><span id="line-6"><span class="n">State</span> <span class="n">TRAN_ACTIVE</span>
+</span><span id="line-7"><span class="n">Timeout_period</span> <span class="o">-</span><span class="mi">1</span>
+</span><span id="line-8"><span class="o">......</span>
+</span></code></pre></div>
+</div>
+<p id="csql-execution-statistics"><strong>CSQL 실행 통계 정보 출력(;.Hist)</strong></p>
+<p><strong>;.Hist</strong> 세션 명령어는 CSQL에서 질의 실행 통계 정보의 수집을 시작하기 위한 CSQL 세션 명령어로서, 이 정보는 “<strong>;.Hist on</strong>”이  입력된 이후부터 현재 연결된 CSQL에 대해서만 수집된다. 다음은 이 세션 명령어의 <strong>;.Hist</strong> 세션 명령어의 옵션으로 <strong>on</strong>, <strong>off</strong>를 제공하며, 각 옵션의 의미는 다음과 같다.</p>
+<ul class="simple">
+<li><p><strong>on</strong>: 해당 연결에 대한 서버 실행 통계 정보 수집을 시작.</p></li>
+<li><p><strong>off</strong>: 서버 실행 통계 정보 수집을 종료.</p></li>
+</ul>
+<p>단, <strong>cubrid.conf</strong> 파일에서 관련 파라미터(<strong>communication_histogram</strong>)를 <strong>yes</strong>로 설정하거나, csql에서 “;se communication_histogram=yes”를 실행해야만 이 명령어를 사용할 수 있다.</p>
+<p>“<strong>;.Hist on</strong>” 이후 서버 실행 통계 정보를 화면에 출력하기 위해서는 <strong>;.dump_hist</strong> 또는 <strong>;.x</strong>와 같은 실행 명령어를 입력해야 한다. <strong>;.dump_hist</strong> 또는 <strong>;.x</strong>를 수행할 때마다, 축적된 값이 출력된 후 모든 값이 초기화된다.</p>
+<p>참고로, DB 서버의 모든 질의 실행 통계 정보를 확인하기 위해서는 <strong>cubrid statdump</strong> 유틸리티를 사용해야 한다.</p>
+<p>다음 예제는 현재 연결에 대한 서버 실행 통계 정보를 확인하는 예제이다.  출력되는 통계 정보 항목 또는 <strong>cubrid statdump</strong>에 대한 설명은 <a class="reference internal" href="admin/admin_utils.html#statdump"><span class="std std-ref">statdump</span></a>을 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="o">.</span><span class="n">hist</span> <span class="n">on</span>
+</span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="o">.</span><span class="n">x</span>
+</span><span id="line-3"><span class="n">Histogram</span> <span class="n">of</span> <span class="n">client</span> <span class="n">requests</span><span class="p">:</span>
+</span><span id="line-4"><span class="n">Name</span>                            <span class="n">Rcount</span>   <span class="n">Sent</span> <span class="n">size</span>  <span class="n">Recv</span> <span class="n">size</span> <span class="p">,</span> <span class="n">Server</span> <span class="n">time</span>
+</span><span id="line-5"> <span class="n">No</span> <span class="n">server</span> <span class="n">requests</span> <span class="n">made</span>
+</span><span id="line-6">
+</span><span id="line-7"> <span class="o">***</span> <span class="n">CLIENT</span> <span class="n">EXECUTION</span> <span class="n">STATISTICS</span> <span class="o">***</span>
+</span><span id="line-8"><span class="n">System</span> <span class="n">CPU</span> <span class="p">(</span><span class="n">sec</span><span class="p">)</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-9"><span class="n">User</span> <span class="n">CPU</span> <span class="p">(</span><span class="n">sec</span><span class="p">)</span>                <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-10"><span class="n">Elapsed</span> <span class="p">(</span><span class="n">sec</span><span class="p">)</span>                 <span class="o">=</span>         <span class="mi">20</span>
+</span><span id="line-11">
+</span><span id="line-12"> <span class="o">***</span> <span class="n">SERVER</span> <span class="n">EXECUTION</span> <span class="n">STATISTICS</span> <span class="o">***</span>
+</span><span id="line-13"><span class="n">Num_file_creates</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-14"><span class="n">Num_file_removes</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-15"><span class="n">Num_file_ioreads</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-16"><span class="n">Num_file_iowrites</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-17"><span class="n">Num_file_iosynches</span>            <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-18"><span class="n">Num_data_page_fetches</span>         <span class="o">=</span>         <span class="mi">56</span>
+</span><span id="line-19"><span class="n">Num_data_page_dirties</span>         <span class="o">=</span>         <span class="mi">14</span>
+</span><span id="line-20"><span class="n">Num_data_page_ioreads</span>         <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-21"><span class="n">Num_data_page_iowrites</span>        <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-22"><span class="n">Num_data_page_victims</span>         <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-23"><span class="n">Num_data_page_iowrites_for_replacement</span> <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-24"><span class="n">Num_log_page_ioreads</span>          <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-25"><span class="n">Num_log_page_iowrites</span>         <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-26"><span class="n">Num_log_append_records</span>        <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-27"><span class="n">Num_log_archives</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-28"><span class="n">Num_log_checkpoints</span>           <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-29"><span class="n">Num_log_wals</span>                  <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-30"><span class="n">Num_page_locks_acquired</span>       <span class="o">=</span>          <span class="mi">2</span>
+</span><span id="line-31"><span class="n">Num_object_locks_acquired</span>     <span class="o">=</span>          <span class="mi">2</span>
+</span><span id="line-32"><span class="n">Num_page_locks_converted</span>      <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-33"><span class="n">Num_object_locks_converted</span>    <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-34"><span class="n">Num_page_locks_re</span><span class="o">-</span><span class="n">requested</span>   <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-35"><span class="n">Num_object_locks_re</span><span class="o">-</span><span class="n">requested</span> <span class="o">=</span>          <span class="mi">1</span>
+</span><span id="line-36"><span class="n">Num_page_locks_waits</span>          <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-37"><span class="n">Num_object_locks_waits</span>        <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-38"><span class="n">Num_tran_commits</span>              <span class="o">=</span>          <span class="mi">1</span>
+</span><span id="line-39"><span class="n">Num_tran_rollbacks</span>            <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-40"><span class="n">Num_tran_savepoints</span>           <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-41"><span class="n">Num_tran_start_topops</span>         <span class="o">=</span>          <span class="mi">3</span>
+</span><span id="line-42"><span class="n">Num_tran_end_topops</span>           <span class="o">=</span>          <span class="mi">3</span>
+</span><span id="line-43"><span class="n">Num_tran_interrupts</span>           <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-44"><span class="n">Num_btree_inserts</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-45"><span class="n">Num_btree_deletes</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-46"><span class="n">Num_btree_updates</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-47"><span class="n">Num_btree_covered</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-48"><span class="n">Num_btree_noncovered</span>          <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-49"><span class="n">Num_btree_resumes</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-50"><span class="n">Num_query_selects</span>             <span class="o">=</span>          <span class="mi">1</span>
+</span><span id="line-51"><span class="n">Num_query_inserts</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-52"><span class="n">Num_query_deletes</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-53"><span class="n">Num_query_updates</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-54"><span class="n">Num_query_sscans</span>              <span class="o">=</span>          <span class="mi">1</span>
+</span><span id="line-55"><span class="n">Num_query_iscans</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-56"><span class="n">Num_query_lscans</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-57"><span class="n">Num_query_setscans</span>            <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-58"><span class="n">Num_query_methscans</span>           <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-59"><span class="n">Num_query_nljoins</span>             <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-60"><span class="n">Num_query_mjoins</span>              <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-61"><span class="n">Num_query_objfetches</span>          <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-62"><span class="n">Num_network_requests</span>          <span class="o">=</span>          <span class="mi">8</span>
+</span><span id="line-63"><span class="n">Num_adaptive_flush_pages</span>      <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-64"><span class="n">Num_adaptive_flush_log_pages</span>  <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-65"><span class="n">Num_adaptive_flush_max_pages</span>  <span class="o">=</span>          <span class="mi">0</span>
+</span><span id="line-66">
+</span><span id="line-67"> <span class="o">***</span> <span class="n">OTHER</span> <span class="n">STATISTICS</span> <span class="o">***</span>
+</span><span id="line-68"><span class="n">Data_page_buffer_hit_ratio</span>    <span class="o">=</span>     <span class="mf">100.00</span>
+</span><span id="line-69"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="o">.</span><span class="n">hist</span> <span class="n">off</span>
+</span></code></pre></div>
+</div>
+<p><strong>질의 수행 시간을 출력(;TIme)</strong></p>
+<p><strong>;TIme</strong> 세션 명령어로 질의를 수행한 시간을 출력하도록 설정할 수 있다. <strong>ON</strong> 혹은 <strong>OFF</strong> 로 지정하며, 인자가 없으면 현재 설정값을 보여준다. 기본값은 <strong>ON</strong> 이다.</p>
+<p><strong>SELECT</strong> 질의에서는 페치(fetch)한 레코드를 출력하는 시간까지 포함한다. 따라서, <strong>SELECT</strong> 질의에서 모든 레코드의 출력이 한 번에 끝난 수행 시간을 보려면 CSQL 인터프리터 수행 시 <strong>–no-pager</strong> 옵션을 사용해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ csql -u dba --no-pager demodb
+</span><span id="line-2">csql&gt; ;time ON
+</span><span id="line-3">csql&gt; ;time
+</span><span id="line-4">TIME IS ON
+</span></code></pre></div>
+</div>
+<p><strong>질의 결과를 칼럼 당 한 라인으로 출력(;LINe-output)</strong></p>
+<p>이 값을 <strong>ON</strong> 으로 설정하면 질의 결과 레코드를 칼럼 당 한 라인으로 출력한다. 기본 설정은 OFF로서, 한 레코드는 한 라인으로 출력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">line</span><span class="o">-</span><span class="n">output</span> <span class="n">ON</span>
+</span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">select</span> <span class="o">*</span> <span class="kn">from</span><span class="w"> </span><span class="nn">athlete</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="o">===</span> <span class="o">&lt;</span><span class="n">Result</span> <span class="n">of</span> <span class="n">SELECT</span> <span class="n">Command</span> <span class="ow">in</span> <span class="n">Line</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="o">===</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="o">&lt;</span><span class="mi">00001</span><span class="o">&gt;</span> <span class="n">code</span>       <span class="p">:</span> <span class="mi">10999</span>
+</span><span id="line-7">        <span class="n">name</span>       <span class="p">:</span> <span class="s1">'Fernandez Jesus'</span>
+</span><span id="line-8">        <span class="n">gender</span>     <span class="p">:</span> <span class="s1">'M'</span>
+</span><span id="line-9">        <span class="n">nation_code</span><span class="p">:</span> <span class="s1">'ESP'</span>
+</span><span id="line-10">        <span class="n">event</span>      <span class="p">:</span> <span class="s1">'Handball'</span>
+</span><span id="line-11"><span class="o">&lt;</span><span class="mi">00002</span><span class="o">&gt;</span> <span class="n">code</span>       <span class="p">:</span> <span class="mi">10998</span>
+</span><span id="line-12">        <span class="n">name</span>       <span class="p">:</span> <span class="s1">'Fernandez Jaime'</span>
+</span><span id="line-13">        <span class="n">gender</span>     <span class="p">:</span> <span class="s1">'M'</span>
+</span><span id="line-14">        <span class="n">nation_code</span><span class="p">:</span> <span class="s1">'AUS'</span>
+</span><span id="line-15">        <span class="n">event</span>      <span class="p">:</span> <span class="s1">'Rowing'</span>
+</span><span id="line-16"><span class="o">...</span>
+</span></code></pre></div>
+</div>
+<p><strong>질의 수행 이력 확인(;HISTORYList)</strong></p>
+<p>앞서 수행된 명령어(입력 내용)를 수행 번호를 포함한 리스트로 보여준다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">historylist</span>
+</span><span id="line-2"><span class="o">----&lt;</span> <span class="mi">1</span> <span class="o">&gt;----</span>
+</span><span id="line-3"><span class="n">select</span> <span class="o">*</span> <span class="kn">from</span><span class="w"> </span><span class="nn">nation</span><span class="p">;</span>
+</span><span id="line-4"><span class="o">----&lt;</span> <span class="mi">2</span> <span class="o">&gt;----</span>
+</span><span id="line-5"><span class="n">select</span> <span class="o">*</span> <span class="kn">from</span><span class="w"> </span><span class="nn">athlete</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>지정된 수행 번호에 해당하는 입력 내용을 버퍼로 불러오기(;HISTORYRead)</strong></p>
+<p><strong>;HISTORYRead</strong> 세션 명령어를 사용해 지정된 <strong>;HISTORYList</strong> 에서 확인한 수행 번호에 해당하는 내용을 명령어 버퍼로 불러올 수 있다. 해당 SQL 문을 직접 입력한 것과 같은 상태이므로 바로 <strong>;run</strong> 또는 <strong>;xrun</strong> 를 입력할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">historyread</span> <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<p><strong>기본 편집기를 호출(;EDIT)</strong></p>
+<p>지정된 편집기를 호출하는 세션 명령어이다. 기본 편집기는 Linux에서는 vi이고, Windows에서는 메모장이다. 다른 편집기로 지정하려면 <strong>;EDITOR_Cmd</strong> 명령어를 이용한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">edit</span>
+</span></code></pre></div>
+</div>
+<p><strong>편집기 설정(;EDITOR_Cmd)</strong></p>
+<p><strong>;EDIT</strong> 세션 명령어에서 사용될 편집기를 지정한다. 예제와 같이 기본 편집기인 vi 대신에 해당 시스템에 설치된 다른 편집기(예: emacs)를 설정할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">editor_cmd</span> <span class="n">emacs</span>
+</span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">edit</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="qrytool.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        질의 도구
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="sql/index.html">
+        CUBRID SQL
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#csql-intro'" class="reference internal" href="#csql-intro">CSQL 인터프리터 소개</a></li>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">CSQL 실행</a><ul>
+<li><a :data-current="activeSection === '#csql-exec-mode'" class="reference internal" href="#csql-exec-mode">CSQL 실행 모드</a></li>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">CSQL 사용 방법</a></li>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">CSQL 시작 옵션</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#csql-session-commands'" class="reference internal" href="#csql-session-commands">세션 명령어</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 3월 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="_static/documentation_options.js?v=f56d35f6"></script>
+<script src="_static/doctools.js?v=fd6eb6e6"></script>
+<script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="_static/theme.js?v=582b20c5"></script>
+<script src="_static/translations.js?v=afa94a99"></script>
+<script src="_static/design-tabs.js?v=f930bc37"></script>
+<script src="_static/version-switcher.js?v=993d9931"></script>
+<script src="_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

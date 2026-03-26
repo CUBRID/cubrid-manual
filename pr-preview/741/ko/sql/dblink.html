@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CUBRID DBLink | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="CUBRID DBLink | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="CUBRID DBLink | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="oodb.html" rel="next" title="클래스 상속"/>
+<link href="trigger.html" rel="prev" title="트리거"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/sql/dblink.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">트리거</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">CUBRID DBLink</span>
+</nav>
+<div id="content" role="main">
+<section id="cubrid-dblink">
+<h1>CUBRID DBLink<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-dblink"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="dblink-introduction">
+<span id="id1"></span><h2>CUBRID DBLink 소개<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dblink-introduction" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dblink-introduction'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>데이터베이스에서 정보를 조회하다 보면 종종 외부 데이터베이스의 정보 조회가 필요한 경우가 있다. 이렇게 외부 데이터베이스의 정보를 조회하기 위해서 CUBRID DBLink를 이용하면 타 데이터베이스의 정보를 조회할 수 있다.</p>
+<p>CUBRID DBLink는 동일 기종인 CUBRID와 이기종인 Oracle, MySQL, MariaDB의 데이터베이스의 정보를 조회할 수 있도록 기능을 제공하고 있다.
+외부 데이터베이스의 정보를 마치 하나의 데이터베이스에서 조회하는 것과 같은 효과를 발휘한다. 단 외부 데이터베이스를 여러 개 설정은 가능 하나, 정보를 조회할 때는 한 개의 타 데이터베이스의 정보만 조회할 수 있다.</p>
+<p>CUBRID DBLink는 SELECT의 FROM절에 연결될 서버와 실행될 질의를 명시한 DBLINK 구문 형식과 원격 테이블 (테이블 확장명) 형식으로 사용 가능하며, INSERT/REPLACE/UPDATE/DELETE/MERGE구문은 원격 테이블 형식만 사용할 수 있다.</p>
+</section>
+<section id="dblink-diagram">
+<span id="id2"></span><h2>CUBRID DBLink 구성도<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dblink-diagram" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dblink-diagram'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CUBRID DBLink는 동일기종 간에 DBLink와 이기종 간의 DBLink를 지원한다.</p>
+<section id="dblink">
+<h3>동일기종 간의 DBLink 구성도<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dblink" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dblink'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>동일기종의 외부 데이터베이스의 정보를 조회하기 위한 구성도를 보면 Database Server에서 CCI를 이용하여 동일기종의 Brokers에 접속하여 외부 데이터베이스의 정보를 조회할 수 있다.</p>
+<img alt="../_images/dblink_homo.png" src="../_images/dblink_homo.png"/>
+</section>
+<section id="id3">
+<h3>이기종 간의 DBLink 구성도<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>이기종 데이터베이스의 정보를 조회하기 위한 구성도를 보면 게이트웨이를 통해서 이기종 데이터베이스의 정보를 조회할 수 있다.
+게이트웨이는 연결하는 데이터베이스의 ODBC(Open DataBase Connectivity) 드라이버를 이용하고 있다.</p>
+<img alt="../_images/dblink_heter.png" src="../_images/dblink_heter.png"/>
+</section>
+</section>
+<section id="gateway-info">
+<span id="id4"></span><h2>DBLink를 위한 게이트웨이<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#gateway-info" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#gateway-info'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>게이트웨이는 CUBRID 데이터베이스와 이기종 데이터베이스 간의 중개하는 미들웨어로 브로커(Broker)와 유사하다. 게이트웨이는 이기종 데이터베이스 서버 (Oracle/MySQL/MariaDB 등)에 연결하고 데이터를 조회하여 CUBRID 데이터베이스 서버에 전달하는 역할을 한다.</p>
+<p>게이트웨이를 포함하는 큐브리드 시스템은 아래 그림과 같이 cub_gateway, cub_cas_cgw를 포함한 다중 계층 구조를 가진다.</p>
+<img alt="../_images/gateway.png" src="../_images/gateway.png"/>
+<section id="cub-cas-cgw">
+<h3>cub_cas_cgw<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cub-cas-cgw" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cub-cas-cgw'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>cub_cas_cgw(CAS Gateway)는 CUBRID Database Server에서 외부의 Database의 연결을 요청하는 공용 서버 역할을 한다. 또한, cub_cas_cgw는 데이터베이스 서버의 클라이언트로 동작하여 CUBRID Database Server의 요청에 의해 외부 데이터베이스 서버와 연결을 제공한다. 서비스 풀(service pool) 내에서 구동되는 cub_cas_cgw의 개수는 cubrid_gateway.conf 설정 파일에 지정할 수 있으며, cub_gateway에 의해 동적으로 조정된다.</p>
+</section>
+<section id="cub-gateway">
+<h3>cub_gateway<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cub-gateway" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cub-gateway'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개하는 기능을 수행한다. 즉, CUBRID Database Server가 접근을 요청하면, cub_gateway는 공유 메모리(shared memory)를 통해 cub_cas_cgw의 상태를 파악하여 할당 가능한 cub_cas_cgw에게 요청을 전달하고, 해당 cub_cas_cgw로부터 전달받은 요청에 대한 처리 결과를 CUBRID Database Server에게 반환한다.</p>
+<p>또한, cub_gateway는 서비스 풀 내의 cub_cas_cgw 개수를 조정하여 서버 부하를 관리하고, cub_cas_cgw의 구동 상태를 모니터링 및 관리한다. 만약, CUBRID Database Server의 요청을 cub_cas_cgw 1에게 전달하였는데, 비정상적인 종료로 인해 cub_cas_cgw 1과의 연결이 실패하면, cub_gateway는 CUBRID Database Server에게 연결 실패에 관한 에러 메시지를 전송하고 cub_cas_cgw 1을 재구동한다. 새롭게 구동된 cub_cas_cgw 1은 정상적인 대기 상태가 되어, 새로운 응용 클라이언트의 요청에 의해 재연결된다.</p>
+</section>
+<section id="id5">
+<h3>공유 메모리<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>공유 메모리에는 cub_cas_cgw의 상태 정보가 저장되며, cub_gateway는 공유 메모리에 저장된 cub_cas_cgw의 상태 정보를 참조하여 CUBRID Database Server와의 연결을 중개한다. 공유 메모리에 저장된 cub_cas_cgw의 상태 정보를 통해 시스템 관리자는 어떤 cub_cas_cgw가 현재 작업을 수행 중인지 확인할 수 있다.</p>
+</section>
+<section id="id6">
+<h3>게이트웨이 구동<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>게이트웨이를 구동하기 위하여 다음과 같이 입력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid gateway start
+</span></code></pre></div>
+</div>
+<p>이미 게이트웨이가 구동 중이라면 다음과 같은 메시지가 출력된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid gateway start
+</span><span id="line-2">@cubrid gateway is running.
+</span></code></pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>게이트웨이 종료<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>게이트웨이를 종료하기 위하여 다음과 같이 입력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid gateway stop
+</span></code></pre></div>
+</div>
+<p>이미 게이트웨이가 종료되었다면 다음과 같은 메시지가 출력된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid gateway stop
+</span><span id="line-2">@ cubrid gateway stop
+</span><span id="line-3">++ cubrid gateway is not running.
+</span></code></pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>게이트웨이 재시작<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id8'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>게이트웨이를 재시작하기 위하여 다음과 같이 입력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid gateway restart
+</span></code></pre></div>
+</div>
+</section>
+<section id="gateway-status-command">
+<span id="id9"></span><h3>게이트웨이 상태 확인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#gateway-status-command" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#gateway-status-command'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>cubrid gateway status</strong>  는 다양한 옵션을 제공하며, 각 게이트웨이의 처리 완료된 작업 수, 처리 대기중인 작업 수를 포함한 게이트웨이 상태 정보를 확인할 수 있도록 한다.</p>
+<p>게이트웨이 상태 정보는 브로커와 동일하므로 <a class="reference internal" href="../admin/control.html#broker-status"><span class="std std-ref">브로커 상태 확인</span></a>을 참조 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">gateway</span> <span class="n">status</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="p">[</span><span class="n">expr</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="cubrid">
+<h3>CUBRID 서비스 시작시 게이트웨이 함께 시작<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cubrid'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID 서비스 시작(<strong>cubrid service start</strong>) 시 <em>게이트웨이</em> 를 같이 시작되게 하려면, <strong>cubrid.conf</strong> 파일의 <strong>service</strong> 파라메터에 <em>gateway</em> 를 설정한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># cubrid.conf</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="p">[</span><span class="n">service</span><span class="p">]</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">service</span><span class="o">=</span><span class="n">server</span><span class="p">,</span><span class="n">broker</span><span class="p">,</span><span class="n">gateway</span><span class="p">,</span><span class="n">manager</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="o">...</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>CUBRID DBLINK 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id10" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id10'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 DBLink의 설정이 다르다.</p>
+<section id="id11">
+<h3>동일기종 DBLink 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id11" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id11'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>위의 동일기종 구성도를 보면 원격지 데이터베이스의 Broker에 연결을 해야 하므로 원격지 데이터베이스의 Broker 설정이 필요 하다.
+이 설정은 일반적인 Broker 설정과 동일하다.</p>
+</section>
+<section id="id12">
+<h3>이기종 DBLink 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id12" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id12'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>이기종 데이터베이스(Oracle/MySQL/MariaDB)와 연결하기 위해서는 cubrid_gateway.conf 와 unixODBC 설치, ODBC Driver 정보 설정이 필요 하다.</p>
+</section>
+<section id="gatewayconf-info">
+<span id="id13"></span><h3>게이트웨이 설정 파일<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#gatewayconf-info" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#gatewayconf-info'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_gateway.conf 에서 사용되는 파라메터는 브로커 파라메터와 거의 동일 하며, 추가로 반드시 변경해야 할 일부 파라메터가 포함된다. 기본으로 포함되지 않는 파라메터의 값은 직접 추가/편집해서 사용하면 된다. 다음은 설치 시 기본으로 제공되는 cubrid_gateway.conf 파일 내용이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">gateway</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">MASTER_SHM_ID</span>           <span class="o">=</span><span class="mi">50001</span>
+</span><span id="line-3"><span class="n">ADMIN_LOG_FILE</span>          <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">gateway</span><span class="o">/</span><span class="n">cubrid_gateway</span><span class="o">.</span><span class="n">log</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">[</span><span class="o">%</span><span class="n">oracle_gateway</span><span class="p">]</span>
+</span><span id="line-6"><span class="n">SERVICE</span>                 <span class="o">=</span><span class="n">OFF</span>
+</span><span id="line-7"><span class="n">SSL</span>                     <span class="o">=</span><span class="n">OFF</span>
+</span><span id="line-8"><span class="n">APPL_SERVER</span>             <span class="o">=</span><span class="n">CAS_CGW</span>
+</span><span id="line-9"><span class="n">BROKER_PORT</span>             <span class="o">=</span><span class="mi">53000</span>
+</span><span id="line-10"><span class="n">MIN_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">5</span>
+</span><span id="line-11"><span class="n">MAX_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">40</span>
+</span><span id="line-12"><span class="n">APPL_SERVER_SHM_ID</span>      <span class="o">=</span><span class="mi">53000</span>
+</span><span id="line-13"><span class="n">LOG_DIR</span>                 <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">gateway</span><span class="o">/</span><span class="n">sql_log</span>
+</span><span id="line-14"><span class="n">ERROR_LOG_DIR</span>           <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">gateway</span><span class="o">/</span><span class="n">error_log</span>
+</span><span id="line-15"><span class="n">SQL_LOG</span>                 <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-16"><span class="n">TIME_TO_KILL</span>            <span class="o">=</span><span class="mi">120</span>
+</span><span id="line-17"><span class="n">SESSION_TIMEOUT</span>         <span class="o">=</span><span class="mi">300</span>
+</span><span id="line-18"><span class="n">KEEP_CONNECTION</span>         <span class="o">=</span><span class="n">AUTO</span>
+</span><span id="line-19"><span class="n">CCI_DEFAULT_AUTOCOMMIT</span>  <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-20"><span class="n">APPL_SERVER_MAX_SIZE</span>    <span class="o">=</span><span class="mi">256</span>
+</span><span id="line-21"><span class="n">CGW_LINK_SERVER</span>         <span class="o">=</span><span class="n">ORACLE</span>
+</span><span id="line-22"><span class="n">CGW_LINK_SERVER_IP</span>      <span class="o">=</span><span class="n">localhost</span>
+</span><span id="line-23"><span class="n">CGW_LINK_SERVER_PORT</span>    <span class="o">=</span><span class="mi">1521</span>
+</span><span id="line-24"><span class="n">CGW_LINK_ODBC_DRIVER_NAME</span>   <span class="o">=</span><span class="n">Oracle_ODBC_Driver</span>
+</span><span id="line-25"><span class="n">CGW_LINK_CONNECT_URL_PROPERTY</span>       <span class="o">=</span>
+</span><span id="line-26">
+</span><span id="line-27">
+</span><span id="line-28"><span class="p">[</span><span class="o">%</span><span class="n">mysql_gateway</span><span class="p">]</span>
+</span><span id="line-29"><span class="n">SERVICE</span>                 <span class="o">=</span><span class="n">OFF</span>
+</span><span id="line-30"><span class="n">SSL</span>                     <span class="o">=</span><span class="n">OFF</span>
+</span><span id="line-31"><span class="n">APPL_SERVER</span>             <span class="o">=</span><span class="n">CAS_CGW</span>
+</span><span id="line-32"><span class="n">BROKER_PORT</span>             <span class="o">=</span><span class="mi">56000</span>
+</span><span id="line-33"><span class="n">MIN_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">5</span>
+</span><span id="line-34"><span class="n">MAX_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">40</span>
+</span><span id="line-35"><span class="n">APPL_SERVER_SHM_ID</span>      <span class="o">=</span><span class="mi">56000</span>
+</span><span id="line-36"><span class="n">LOG_DIR</span>                 <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">gateway</span><span class="o">/</span><span class="n">sql_log</span>
+</span><span id="line-37"><span class="n">ERROR_LOG_DIR</span>           <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">gateway</span><span class="o">/</span><span class="n">error_log</span>
+</span><span id="line-38"><span class="n">SQL_LOG</span>                 <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-39"><span class="n">TIME_TO_KILL</span>            <span class="o">=</span><span class="mi">120</span>
+</span><span id="line-40"><span class="n">SESSION_TIMEOUT</span>         <span class="o">=</span><span class="mi">300</span>
+</span><span id="line-41"><span class="n">KEEP_CONNECTION</span>         <span class="o">=</span><span class="n">AUTO</span>
+</span><span id="line-42"><span class="n">CCI_DEFAULT_AUTOCOMMIT</span>  <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-43"><span class="n">APPL_SERVER_MAX_SIZE</span>    <span class="o">=</span><span class="mi">256</span>
+</span><span id="line-44"><span class="n">CGW_LINK_SERVER</span>         <span class="o">=</span><span class="n">MYSQL</span>
+</span><span id="line-45"><span class="n">CGW_LINK_SERVER_IP</span>      <span class="o">=</span><span class="n">localhost</span>
+</span><span id="line-46"><span class="n">CGW_LINK_SERVER_PORT</span>    <span class="o">=</span><span class="mi">3306</span>
+</span><span id="line-47"><span class="n">CGW_LINK_ODBC_DRIVER_NAME</span>   <span class="o">=</span><span class="n">MySQL_ODBC_Driver</span>
+</span><span id="line-48"><span class="n">CGW_LINK_CONNECT_URL_PROPERTY</span>       <span class="o">=</span><span class="s2">"charset=utf8;PREFETCH=100;NO_CACHE=1"</span>
+</span><span id="line-49">
+</span><span id="line-50"><span class="p">[</span><span class="o">%</span><span class="n">mariadb_gateway</span><span class="p">]</span>
+</span><span id="line-51"><span class="n">SERVICE</span>                 <span class="o">=</span><span class="n">OFF</span>
+</span><span id="line-52"><span class="n">SSL</span>                     <span class="o">=</span><span class="n">OFF</span>
+</span><span id="line-53"><span class="n">APPL_SERVER</span>             <span class="o">=</span><span class="n">CAS_CGW</span>
+</span><span id="line-54"><span class="n">BROKER_PORT</span>             <span class="o">=</span><span class="mi">59000</span>
+</span><span id="line-55"><span class="n">MIN_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">5</span>
+</span><span id="line-56"><span class="n">MAX_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">40</span>
+</span><span id="line-57"><span class="n">APPL_SERVER_SHM_ID</span>      <span class="o">=</span><span class="mi">59000</span>
+</span><span id="line-58"><span class="n">LOG_DIR</span>                 <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">gateway</span><span class="o">/</span><span class="n">sql_log</span>
+</span><span id="line-59"><span class="n">ERROR_LOG_DIR</span>           <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">gateway</span><span class="o">/</span><span class="n">error_log</span>
+</span><span id="line-60"><span class="n">SQL_LOG</span>                 <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-61"><span class="n">TIME_TO_KILL</span>            <span class="o">=</span><span class="mi">120</span>
+</span><span id="line-62"><span class="n">SESSION_TIMEOUT</span>         <span class="o">=</span><span class="mi">300</span>
+</span><span id="line-63"><span class="n">KEEP_CONNECTION</span>         <span class="o">=</span><span class="n">AUTO</span>
+</span><span id="line-64"><span class="n">CCI_DEFAULT_AUTOCOMMIT</span>  <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-65"><span class="n">APPL_SERVER_MAX_SIZE</span>    <span class="o">=</span><span class="mi">256</span>
+</span><span id="line-66"><span class="n">CGW_LINK_SERVER</span>         <span class="o">=</span><span class="n">MARIADB</span>
+</span><span id="line-67"><span class="n">CGW_LINK_SERVER_IP</span>      <span class="o">=</span><span class="n">localhost</span>
+</span><span id="line-68"><span class="n">CGW_LINK_SERVER_PORT</span>    <span class="o">=</span><span class="mi">3306</span>
+</span><span id="line-69"><span class="n">CGW_LINK_ODBC_DRIVER_NAME</span>   <span class="o">=</span><span class="n">MariaDB_ODBC_Driver</span>
+</span><span id="line-70"><span class="n">CGW_LINK_CONNECT_URL_PROPERTY</span>       <span class="o">=</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id14">
+<h3>게이트웨이 파라메터<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id14" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id14'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>이기종 데이터 베이스와 DBLink를 사용하기 위해서 설정하는 파라메터이다.</p>
+<p>각각의 파라메터 의미는 이기종 데이터베이스 별로 약간 차이가 있다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>APPL_SERVER</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>CGW_LINK_SERVER</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>CGW_LINK_SERVER_IP</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>CGW_LINK_SERVER_PORT</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>CGW_LINK_ODBC_DRIVER_NAME</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>CGW_LINK_CONNECT_URL_PROPERTY</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>APPL_SERVER</strong></p>
+<blockquote>
+<div><p><strong>APPL_SERVER</strong> 는 게이트웨이의 응용 서버 이름을 설정하는 부분으로 반드시 CAS_CGW 로 설정해야 한다.</p>
+</div></blockquote>
+<p><strong>CGW_LINK_SERVER</strong></p>
+<blockquote>
+<div><p><strong>CGW_LINK_SERVER</strong> 는 CAS_CGW로 연결하여 사용할 이기종 데이터베이스의 이름을 설정해야 한다. 현재 지원하는 데이터베이스는 Oracle, MySQL, MariaDB이다.</p>
+</div></blockquote>
+<p><strong>CGW_LINK_SERVER_IP</strong></p>
+<blockquote>
+<div><p><strong>CGW_LINK_SERVER_IP</strong> 는 CAS_CGW와 연결할 이기종 데이터베이스의 IP 주소를 설정해야 한다.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.</p></li>
+<li><p>자세한 내용은 <a class="reference internal" href="#tnsnames-info"><span class="std std-ref">Oracle Database에 연결을 위한 연결정보 설정</span></a>을 참고한다.</p></li>
+</ul>
+</div>
+<p><strong>CGW_LINK_SERVER_PORT</strong></p>
+<blockquote>
+<div><p><strong>CGW_LINK_SERVER_PORT</strong> 는 CAS_CGW와 연결할 이기종 데이터베이스의 Port 번호를 설정해야 한다.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.</p></li>
+<li><p>자세한 내용은 <a class="reference internal" href="#tnsnames-info"><span class="std std-ref">Oracle Database에 연결을 위한 연결정보 설정</span></a>을 참고한다.</p></li>
+</ul>
+</div>
+<p><strong>CGW_LINK_ODBC_DRIVER_NAME</strong></p>
+<blockquote>
+<div><p><strong>CGW_LINK_ODBC_DRIVER_NAME</strong> 는 CAS_CGW와 연결할 때 이기종 데이터베이스에서 제공하는 ODBC Driver 이름을 설정해야 한다.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>Windows에서는 해당 이기종 데이터베이스의 ODBC Driver가 설치된 경우, ODBC 데이터 원본 관리자를 통해 Driver 이름을 확인할 수 있다.</p></li>
+<li><p>Linux는 odbcinit.ini에 직접 Driver 이름을 명시해야 한다.</p></li>
+<li><p>자세한 내용은 <a class="reference internal" href="#odbcdriver-info"><span class="std std-ref">ODBC Driver 정보 설정</span></a>을 참고한다.</p></li>
+</ul>
+</div>
+<p><strong>CGW_LINK_CONNECT_URL_PROPERTY</strong></p>
+<blockquote>
+<div><p><strong>CGW_LINK_CONNECT_URL_PROPERTY</strong> 는 이기종 데이터베이스 연결을 위한 연결 문자열(Connection String)에 사용되는 연결 속성(property)을 작성한다.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>연결 속성(property)는 데이터베이스별로 각각 다르므로 아래의 사이트를 참조한다.</p></li>
+<li><p>Oracle : <a class="reference external" href="https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418">https://docs.oracle.com/cd/B19306_01/server.102/b15658/app_odbc.htm#UNXAR418</a></p></li>
+<li><p>MySQL : <a class="reference external" href="https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags">https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html#codbc-dsn-option-flags</a></p></li>
+<li><p>MariaDB : <a class="reference external" href="https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#general-connection-parameters">https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#general-connection-parameters</a></p></li>
+</ul>
+</div>
+</section>
+<section id="unixodbc">
+<h3>unixODBC 설치<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#unixodbc" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#unixodbc'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>unixODBC 드라이버 관리자는 Linux 및 UNIX 운영 체제에서 ODBC 드라이버 와 함께 사용할 수 있는 오픈 소스 ODBC 드라이버 관리자이다.
+게이트웨이에서는 ODBC를 사용하기 위해서 unixODBC를 반드시 설치해야 한다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>Windows에서는 기본으로 설치된 Microsoft® ODBC 데이터 원본 관리자 를 사용하면 된다.</p>
+</div>
+<p>unixODBC 설치 방법</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ wget https://www.unixodbc.org/unixODBC-2.3.9.tar.gz
+</span><span id="line-2">$ tar xvf unixODBC-2.3.9.tar.gz
+</span><span id="line-3">$ cd unixODBC-2.3.9
+</span><span id="line-4">$ ./configure
+</span><span id="line-5">$ make
+</span><span id="line-6">$ make install
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>unixODBC 드라이버 관리자 설치 방법은 아래의 url를 참고 바란다.</p>
+<p>unixODBC 홈페이지 : <a class="reference external" href="https://www.unixodbc.org/">https://www.unixodbc.org/</a></p>
+</div>
+</section>
+<section id="odbc-driver">
+<span id="odbcdriver-info"></span><h3>ODBC Driver 정보 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#odbc-driver" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#odbc-driver'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>unixODBC가 설치한 후, 연결할 데이터베이스의 ODBC Driver 정보를 등록해야 한다.</p>
+<p>ODBC Driver 정보는 odbcinst.ini를 직접 수정해서 등록한다.</p>
+<p>아래의 내용은 MySQL, Oracle, MariaDB ODBC Driver 정보를 설정한 예제이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">MySQL</span> <span class="n">ODBC</span> <span class="mf">8.0</span> <span class="n">Unicode</span> <span class="n">Driver</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">Description</span> <span class="o">=</span> <span class="n">MySQL</span> <span class="n">ODBC</span> <span class="n">driver</span> <span class="n">v8</span><span class="mf">.0</span>
+</span><span id="line-3"><span class="n">Driver</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">libmyodbc8w</span><span class="o">.</span><span class="n">so</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">[</span><span class="n">Oracle</span> <span class="mi">11</span><span class="n">g</span> <span class="n">ODBC</span> <span class="n">driver</span><span class="p">]</span>
+</span><span id="line-6"><span class="n">Description</span> <span class="o">=</span> <span class="n">Oracle</span> <span class="n">ODBC</span> <span class="n">driver</span> <span class="n">v11g</span>
+</span><span id="line-7"><span class="n">Driver</span> <span class="o">=</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">instantclient</span><span class="o">/</span><span class="n">libsqora</span><span class="o">.</span><span class="n">so</span><span class="mf">.19.1</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="p">[</span><span class="n">mariadb</span> <span class="n">odbc</span> <span class="mf">3.1.13</span> <span class="n">driver</span><span class="p">]</span>
+</span><span id="line-10"><span class="n">Description</span><span class="o">=</span> <span class="n">mariadb</span> <span class="n">odbc</span> <span class="n">driver</span> <span class="mf">3.1.13</span>
+</span><span id="line-11"><span class="n">Driver</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">mariadb</span><span class="o">-</span><span class="n">odbc</span><span class="o">-</span><span class="mf">3.1.13</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">mariadb</span><span class="o">/</span><span class="n">libmaodbc</span><span class="o">.</span><span class="n">so</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>참고로, 위의 예제에서 드라이버 이름은 각각 “MySQL ODBC 8.0 Unicode Driver”, “Oracle 11g ODBC driver” 와 “mariadb odbc 3.1.13 driver” 이다.</p>
+</div>
+</section>
+</section>
+<section id="dblink-oracle">
+<h2>DBLink를 위한 Oracle 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dblink-oracle" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dblink-oracle'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="oracle">
+<h3>Oracle 환경설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#oracle" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#oracle'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>DBLink에서 Oracle을 사용하기 위해서는 Oracle Instant Client 설치 및 설정, 연결 정보 설정, Oracle Database 환경변수 설정 및 게이트웨이 설정을 반드시 해야 한다.</p>
+<p><strong>오라클 인스턴트 클라이언트 ODBC 설치</strong></p>
+<p>Oracle Instant Client 다운로드 사이트에서 ODBC Package와 Basic Package 다운받아 동일한 디렉터리에 압축을 풉니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">unzip</span> <span class="n">instantclient</span><span class="o">-</span><span class="n">basic</span><span class="o">-</span><span class="n">linux</span><span class="o">.</span><span class="n">x64</span><span class="o">-</span><span class="mf">19.20.0.0.0</span><span class="n">dbru</span><span class="o">.</span><span class="n">zip</span>
+</span><span id="line-2"><span class="n">unzip</span> <span class="n">instantclient</span><span class="o">-</span><span class="n">odbc</span><span class="o">-</span><span class="n">linux</span><span class="o">.</span><span class="n">x64</span><span class="o">-</span><span class="mf">19.20.0.0.0</span><span class="n">dbru</span><span class="o">.</span><span class="n">zip</span>
+</span></code></pre></div>
+</div>
+<p>Oracle Instant Client 다운로드 사이트: <a class="reference external" href="https://www.oracle.com/database/technologies/instant-client/downloads.html">https://www.oracle.com/database/technologies/instant-client/downloads.html</a></p>
+<p><strong>오라클 인스턴트 클라이언트 환경변수 설정</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">export ORACLE_INSTANT_CLIENT=/home/user/oracle/instantclient
+</span><span id="line-2">export PATH=$ORACLE_INSTANT_CLIENT:$PATH
+</span><span id="line-3">export LD_LIBRARY_PATH=$ORACLE_INSTANT_CLIENT:$LD_LIBRARY_PATH
+</span></code></pre></div>
+</div>
+<p id="tnsnames-info"><strong>Oracle Database에 연결을 위한 연결정보 설정</strong></p>
+<p>Oracle Database에 연결을 하기 위해서는 연결정보를 가지고 있는 tnsnames.ora 파일을 수정해야 한다.
+아래의 기본 형식에 HOST, PORT, SERVICE_NAME 이 세 항목에 연결정보를 작성해야 한다.
+연결정보를 작성한 tnsnames.ora 파일은 TNS_ADMIN 환경변수에서 디렉터리 경로를 설정해야 한다.
+TNS_ADMIN설정 방법은 <a class="reference internal" href="#tns-admin-info"><span class="std std-ref">TNS_ADMIN 환경변수 설정</span></a>을 참고한다.</p>
+<p>tnsnames.ora 파일의 기본 형식</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">net_service_name</span> <span class="o">=</span>
+</span><span id="line-2">  <span class="p">(</span><span class="n">DESCRIPTION</span><span class="o">=</span>
+</span><span id="line-3">        <span class="p">(</span><span class="n">ADDRESS</span> <span class="o">=</span> <span class="p">(</span><span class="n">PROTOCOL</span> <span class="o">=</span> <span class="n">TCP</span><span class="p">)(</span><span class="n">HOST</span> <span class="o">=</span> <span class="n">xxx</span><span class="o">.</span><span class="n">xxx</span><span class="o">.</span><span class="n">xxx</span><span class="o">.</span><span class="n">xxx</span><span class="p">)(</span><span class="n">PORT</span> <span class="o">=</span> <span class="mi">1521</span><span class="p">)</span>
+</span><span id="line-4">  <span class="p">)</span>
+</span><span id="line-5">  <span class="p">(</span><span class="n">CONNECT_DATA</span> <span class="o">=</span>
+</span><span id="line-6">        <span class="p">(</span><span class="n">SERVICE_NAME</span><span class="o">=</span><span class="n">service_name</span><span class="p">)</span>
+</span><span id="line-7">  <span class="p">)</span>
+</span><span id="line-8"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>net_service_name: 데이터베이스 연결을 위한 네트 서비스 이름이며, connection url의 db_name에 사용하는 이름이다.</p></li>
+<li><p>HOST: 데이터베이스에 연결하려는 IP 주소 또는 서버 이름이다.</p></li>
+<li><p>PORT: 연결에 필요한 포트이다. 대부분의 경우 기본 포트는 1521이다.</p></li>
+<li><p>SERVICE_NAME: 연결하려는 데이터베이스의 이름이다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>참고로, net_service_name 이 중복으로 작성이 되어도 에러가 발생되지 않는다. 하지만 중복된 다른 서버에 연결될 수 있으므로, net_service_name 이 반드시 중복되지 않게 설정해야 한다.</p>
+</div>
+<p><strong>Oracle Database 환경변수 설정</strong></p>
+<p>Oracle database server 에 아래의 환경변수를 설정해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">export ORACLE_SID=XE
+</span><span id="line-2">export ORACLE_BASE=/u01/app/oracle
+</span><span id="line-3">export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/xe
+</span><span id="line-4">export PATH=$ORACLE_HOME/bin:$PATH
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>ORACLE_SID는 시스템 식별자이다.</p></li>
+<li><p>ORACLE_BASE은 오라클 기본 디렉터리 구조이다.</p></li>
+<li><p>ORACLE_HOME은 오라클 데이터베이스가 설치된 경로이다.</p></li>
+</ul>
+<p id="tns-admin-info"><strong>TNS_ADMIN 환경변수 설정</strong></p>
+<p>TNS_ADMIN는 tnsnames.ora 파일이 있는 디렉터리 경로를 가리킨다.
+만약 /home/user/myconfigs 에 tnsnames.ora 파일이 있다면 아래와 같이 설정 할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">export</span> <span class="n">TNS_ADMIN</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">myconfigs</span>
+</span></code></pre></div>
+</div>
+<p><strong>Oracle을 위한 cubrid_gateway.conf 설정</strong></p>
+<p>게이트웨이에서 oracle에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.</p>
+<p>자세한 내용은 <a class="reference internal" href="#gatewayconf-info"><span class="std std-ref">게이트웨이 설정 파일</span></a>을 참고한다.</p>
+<p>게이트웨이는 oracle에 연결하기 위해서 tnsnames.ora 의 정보를 이용하기 때문에  CGW_LINK_SERVER_IP, CGW_LINK_SERVER_PORT 는 작성하지 않아도 된다. 해당 정보를 작성한 경우에도 게이트웨이는 참조하지 않는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">APPL_SERVER</span>                     <span class="o">=</span><span class="n">CAS_CGW</span>
+</span><span id="line-2">                <span class="o">.</span>
+</span><span id="line-3">                <span class="o">.</span>
+</span><span id="line-4">                <span class="o">.</span>
+</span><span id="line-5"><span class="n">CGW_LINK_SERVER</span>                 <span class="o">=</span><span class="n">ORACLE</span>
+</span><span id="line-6"><span class="n">CGW_LINK_ODBC_DRIVER_NAME</span>   <span class="o">=</span><span class="n">Oracle</span> <span class="mi">19</span><span class="n">c</span> <span class="n">ODBC</span> <span class="n">driver</span>
+</span><span id="line-7"><span class="n">CGW_LINK_CONNECT_URL_PROPERTY</span> <span class="o">=</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="dblink-mysql">
+<h2>DBLink를 위한 MySQL 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dblink-mysql" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dblink-mysql'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="mysql">
+<h3>MySQL 환경설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#mysql" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#mysql'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>MySQL ODBC Driver 설치</strong></p>
+<p>게이트웨이에서 MySQL 연결을 하기위해서는 MySQL Unicode ODBC Driver가 필요 하다.
+아래의 내용은 MySQL ODBC Driver 설치 방법이다.</p>
+<p>MySQL Yum 저장소 를 사용하여 Connector/ODBC RPM 패키지를 제공합니다. 시스템의 리포지토리 목록에 MySQL Yum 저장소가 있어야 하며,
+없는경우 MySQL Yum 저장소 다운로드 페이지( <a class="reference external" href="https://dev.mysql.com/downloads/repo/yum/">https://dev.mysql.com/downloads/repo/yum/</a> ) 에서 플랫폼에 대한 패키지를 선택하고 다운로드한다.</p>
+<p>다운로드한 릴리스 패키지를 설치한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ sudo yum install mysql80-community-release-el6-{version-number}.noarch.rpm
+</span></code></pre></div>
+</div>
+<p>Yum을 사용하여 저장소를 업데이트한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ sudo yum update mysql-community-release
+</span></code></pre></div>
+</div>
+<p>아래의 명령으로 Connector/ODBC 를 설치한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ sudo yum install mysql-connector-odbc
+</span></code></pre></div>
+</div>
+<p>자세한 설치 방법은 <a class="reference external" href="https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum.html">https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-installation-binary-yum.html</a> 을 참고한다.</p>
+<p><strong>MySQL을 위한 cubrid_gateway.conf 설정</strong></p>
+<p>게이트웨이에서 MySQL에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.</p>
+<p>자세한 내용은 <a class="reference internal" href="#gatewayconf-info"><span class="std std-ref">게이트웨이 설정 파일</span></a>을 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">APPL_SERVER</span>                  <span class="o">=</span><span class="n">CAS_CGW</span>
+</span><span id="line-2">                <span class="o">.</span>
+</span><span id="line-3">                <span class="o">.</span>
+</span><span id="line-4">                <span class="o">.</span>
+</span><span id="line-5"><span class="n">CGW_LINK_SERVER</span>                  <span class="o">=</span><span class="n">MYSQL</span>
+</span><span id="line-6"><span class="n">CGW_LINK_SERVER_IP</span>           <span class="o">=</span><span class="n">localhost</span>
+</span><span id="line-7"><span class="n">CGW_LINK_SERVER_PORT</span>         <span class="o">=</span><span class="mi">3306</span>
+</span><span id="line-8"><span class="n">CGW_LINK_ODBC_DRIVER_NAME</span>    <span class="o">=</span><span class="n">MySQL</span> <span class="n">ODBC</span> <span class="mf">8.0</span> <span class="n">Unicode</span> <span class="n">Driver</span>
+</span><span id="line-9"><span class="n">CGW_LINK_CONNECT_URL_PROPERTY</span> <span class="o">=</span><span class="s2">"charset=utf8;PREFETCH=100;NO_CACHE=1"</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="dblink-mariadb">
+<h2>DBLink를 위한 MariaDB 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dblink-mariadb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dblink-mariadb'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="mariadb">
+<h3>MariaDB 환경설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#mariadb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#mariadb'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>MariaDB ODBC Driver 설치</strong></p>
+<p>게이트웨이에서 MariaDB 연결을 하기위해서는 MariaDB ODBC Driver가 필요하다.
+아래의 내용은 MariaDB ODBC Driver 설치 방법이다.</p>
+<p>MariaDB Connector/ODBC 패키지는 아래의 페이지에서 버전을 선택하여 다운로드할 수 있다.</p>
+<p><a class="reference external" href="https://mariadb.com/downloads/connectors/">https://mariadb.com/downloads/connectors/</a></p>
+<p>다운로드한 tarball 패키지에서 파일을 추출한다. 그리고 드라이버의 공유 라이브러리를 시스템의 적절한 위치에 설치 한다.
+설치한 드라이버는 odbcinst.ini에 드라이버 정보를 설정해야 한다. 설정 방법은 <a class="reference internal" href="#odbcdriver-info"><span class="std std-ref">ODBC Driver 정보 설정</span></a>을 참고 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ mariadb-connector-odbc-3.1.13-centos7-amd64.tar.gz -C mariadb-odbc-3.1.13
+</span></code></pre></div>
+</div>
+<p>자세한 설치 방법은 <a class="reference external" href="https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#installing-mariadb-connector-odbc-on-linux">https://mariadb.com/docs/connectors/mariadb-connector-odbc/mariadb-connector-odbc-guide#installing-mariadb-connector-odbc-on-linux</a> 을 참고한다.</p>
+<p><strong>MariaDB 위한 cubrid_gateway.conf 설정</strong></p>
+<p>게이트웨이에서 MariaDB에 연결하기 위해서는 아래와 같이 몇 가지 설정이 필요하다.</p>
+<p>자세한 내용은 <a class="reference internal" href="#gatewayconf-info"><span class="std std-ref">게이트웨이 설정 파일</span></a>을 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">APPL_SERVER</span>                  <span class="o">=</span><span class="n">CAS_CGW</span>
+</span><span id="line-2">                <span class="o">.</span>
+</span><span id="line-3">                <span class="o">.</span>
+</span><span id="line-4">                <span class="o">.</span>
+</span><span id="line-5"><span class="n">CGW_LINK_SERVER</span>                  <span class="o">=</span><span class="n">MARIADB</span>
+</span><span id="line-6"><span class="n">CGW_LINK_SERVER_IP</span>           <span class="o">=</span><span class="n">localhost</span>
+</span><span id="line-7"><span class="n">CGW_LINK_SERVER_PORT</span>         <span class="o">=</span><span class="mi">3306</span>
+</span><span id="line-8"><span class="n">CGW_LINK_ODBC_DRIVER_NAME</span>    <span class="o">=</span><span class="n">mariadb</span> <span class="n">odbc</span> <span class="mf">3.1.13</span> <span class="n">driver</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="id15">
+<h2>Cubrid DBLink 사용 방법<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id15" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id15'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는 이기종 데이터베이스를 위한 게이트웨이 설정이 완료되었다면, DBLink을 이용한 Query문 작성 방법에 대해서 알아본다.</p>
+<p>데이터 조회를 위한 DBLINK Query문 작성 방법은 두가지이다.</p>
+<p><strong>첫번째</strong>, FROM절에 DBLINK 구문을 작성하여 타 데이터베이스의 정보를 조회하는 방법</p>
+<p>아래의 Query문은 IP 192.xxx.xxx.xxx의 타 데이터베이스의 remote_t 테이블 정보를 조회하는 Query문이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">DBLINK</span> <span class="p">(</span><span class="s1">'192.xxx.xxx.xxx:53000:testdb:user:password:'</span><span class="p">,</span><span class="s1">'SELECT col1, col2 FROM remote_t'</span><span class="p">)</span> <span class="n">AS</span> <span class="n">t</span><span class="p">(</span><span class="n">col1</span> <span class="nb">int</span><span class="p">,</span> <span class="n">col2</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>Oracle의 경우 원격접속 정보 중 ip와 port는 게이트웨이 접속 정보이고, db_name 항목에는 tnsnames.ora의 net_service_name 을 넣어야 한다.
+만약 net_service_name이 ora_test 이라면 아래와 같이 작성하면 된다.</p>
+<p>SELECT * FROM DBLINK (‘192.xxx.xxx.xxx:53000:ora_test:user:password:’,’SELECT col1, col2 FROM remote_t’) AS t(col1 int, col2 varchar(32));</p>
+</div>
+<p><strong>두번째</strong>,  Query를 작성할 때 마다 매번 연결 정보를 작성해야 하는 번거로움과 사용자 정보(id, password)의 정보 보호를 위해 CREATE SERVER구문을 이용한다.CREATE SERVER 구문을 이용하는 경우 Query문이 간결해지고 사용자 정보 보호에 도움이 된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">SERVER</span> <span class="n">remote_srv</span> <span class="p">(</span> <span class="n">HOST</span><span class="o">=</span><span class="s1">'192.xxx.xxx.xxx'</span><span class="p">,</span> <span class="n">PORT</span><span class="o">=</span><span class="mi">53000</span><span class="p">,</span> <span class="n">DBNAME</span><span class="o">=</span><span class="n">testdb</span><span class="p">,</span> <span class="n">USER</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">PASSWORD</span><span class="o">=</span><span class="s1">'password'</span><span class="p">);</span>
+</span><span id="line-2"><span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">DBLINK</span> <span class="p">(</span><span class="n">remote_srv</span><span class="p">,</span> <span class="s1">'SELECT col1 FROM remote_t'</span><span class="p">)</span> <span class="n">AS</span> <span class="n">t</span><span class="p">(</span><span class="n">col1</span> <span class="nb">int</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>DBLINK는 접속 URL에 추가 연결 속성(Properties)을 설정할 수 있다. 상세한 속성 내용은 <a class="reference internal" href="../api/cciapi.html#cci-connect-with-url"><span class="std std-ref">CCI드라이버의 cci_connect_with_url 함수</span></a>를 참조한다.</p>
+<p>DBLINK 대상 데이터베이스가 HA 환경으로 구성된 경우 altHosts 속성을 이용해서 아래 예제처럼 설정을 할 수 있다.</p>
+<p>192.168.0.1:53000:testdb:user:password::?altHosts=192.168.0.2:33000,192.168.0.3:33000</p>
+<p>예제는 192.168.0.1 서버가 Active 데이터베이스이고 해당 서버에 연결할 수 없는 경우, 192.168.0.2 서버에 연결 요청하는 설정이다. 위의 예시처럼 여러개의 altHosts를 지정할 수 있으며, 나열한 순서대로 연결을 시도한다.</p>
+<p>CREATE SERVER 구문의 PROPERTIES 항목에 연결 속성을 설정할 수 있다. 자세한 내용은 <a class="reference internal" href="query/select.html"><span class="doc">SELECT</span></a> 와 <a class="reference internal" href="schema/server_stmt.html"><span class="doc">서버 정의문</span></a> 을 참고한다.</p>
+</div>
+</section>
+<section id="id16">
+<h2>유의 사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id16" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id16'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<ul class="simple">
+<li><p>동의어 생성 : 원격 테이블과 원격 동의어를 대상으로 로컬 동의어가 생성이 가능하다. 단, CUBRID가 아닌 타 DBMS의 경우, user명이나 db명을 병기해야 한다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- for CUBRID</span>
+</span><span id="line-2"><span class="k">create</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">synonym_1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">t1</span><span class="o">@</span><span class="n">srv1</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">create</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">synonym_2</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">remote_synonym</span><span class="o">@</span><span class="n">srv1</span><span class="p">;</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="c1">-- for ORACLE</span>
+</span><span id="line-6"><span class="k">create</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">synonym_ora</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">user_ora</span><span class="p">.</span><span class="n">t1</span><span class="o">@</span><span class="n">srv_ora</span><span class="p">;</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="c1">-- for MySQL and MariaDB</span>
+</span><span id="line-9"><span class="k">create</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">synonym_my</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">my_db</span><span class="p">.</span><span class="n">t1</span><span class="o">@</span><span class="n">srv_mysql</span><span class="p">;</span>
+</span><span id="line-10"><span class="k">create</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">synonym_maria</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">maria_db</span><span class="p">.</span><span class="n">t1</span><span class="o">@</span><span class="n">srv_maria</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>예약어 처리 : 원격DB의 예약어를 식별자로 사용하는 경우 예약어 처리 문자와 함께 반드시 대괄호 ([ ])로 감싸야 한다. CUBRID의 예약어 처리 문자는 큰따옴표(” “)문자이다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">[</span><span class="ss">"COLUMN"</span><span class="p">],[</span><span class="ss">"ADD"</span><span class="p">],[</span><span class="ss">"ALTER"</span><span class="p">]</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">[</span><span class="ss">"TABLE"</span><span class="p">]</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dblink</span><span class="p">(</span><span class="n">srv1</span><span class="p">,</span><span class="w"> </span><span class="s1">'select "COLUMN","ADD","ALTER" from "TABLE" '</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>오라클의 예약어 처리 문자는 큰따옴표(” “)문자이다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">[</span><span class="ss">"COLUMN"</span><span class="p">],[</span><span class="ss">"ADD"</span><span class="p">],[</span><span class="ss">"ALTER"</span><span class="p">]</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">[</span><span class="ss">"TABLE"</span><span class="p">]</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dblink</span><span class="p">(</span><span class="n">srv1</span><span class="p">,</span><span class="w"> </span><span class="s1">'select "COLUMN","ADD","ALTER" from "TABLE" '</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>MySQL, MariaDB 예약어 처리 문자는 백쿼트(` `) 이다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">[</span><span class="o">`</span><span class="k">COLUMN</span><span class="o">`</span><span class="p">],[</span><span class="o">`</span><span class="k">ADD</span><span class="o">`</span><span class="p">],[</span><span class="o">`</span><span class="k">ALTER</span><span class="o">`</span><span class="p">]</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">[</span><span class="o">`</span><span class="k">TABLE</span><span class="o">`</span><span class="p">]</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dblink</span><span class="p">(</span><span class="n">srv1</span><span class="p">,</span><span class="w"> </span><span class="s1">'select `COLUMN`,`ADD`,`ALTER` from `TABLE` '</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id17">
+<h2>제약 사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id17" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id17'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id18">
+<h3>공통 제약 사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id18" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id18'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<ul>
+<li><p>원격 DB의 문자셋(charset)은 유니코드(utf-8) 문자셋만 지원한다.</p></li>
+<li><dl>
+<dt>테이블 확장 형식 (<a class="reference external" href="mailto:object%40server">object<span>@</span>server</a>) 지원</dt><dd><ul>
+<li><p>테이블, 뷰, 동의어만 지원</p></li>
+<li><p>시리얼, 내장함수, 저장함수는 미지원</p>
+<p>(예 : 원격서버(server1)의 sp_func() 저장 함수는 sp_func@server1(arg1, …) 형식으로 사용할 수 없음)</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>SELECT 질의의 모든 함수들(SYSDATE를 포함한 내장 함수, 저장 함수), serial 관련 함수 및 시스템 상수는 모두 로컬에서 실행된다. (원격DB에서 함수 또는 serial 수행이 필요한 경우에는 DBLINK 구문을 사용해야 한다.)
+예를 들어 아래와 같이 원격 테이블 대상 select 질의에 대해 옵티마이저가 재작성한 질의를 보면 DBLINK() 안의 질의만 원격DB에서 실행된다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">rownum</span><span class="w"> </span><span class="n">rn</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="w"> </span><span class="n">empty</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="n">null_col</span><span class="p">,</span><span class="w"> </span><span class="n">SYSDATE</span>
+</span><span id="line-2"><span class="k">FROM</span><span class="w"> </span><span class="n">t1</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- rewritten query</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">parentid</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="p">.[</span><span class="nb">text</span><span class="p">],</span><span class="w"> </span><span class="n">rownum</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">SYS_DATE</span><span class="w"> </span><span class="c1">-- at local</span>
+</span><span id="line-6"><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">].</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">].</span><span class="n">parentid</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">].[</span><span class="nb">text</span><span class="p">]</span>
+</span><span id="line-7"><span class="w">       </span><span class="k">FROM</span><span class="w"> </span><span class="n">DBLINK</span><span class="p">(</span><span class="w"> </span><span class="n">srv1</span><span class="w"> </span><span class="cm">/* '192.168.1.125:33000:remotedb1:dba::' */</span><span class="p">,</span>
+</span><span id="line-8"><span class="w">                </span><span class="s1">'SELECT * FROM tree A'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">](</span><span class="n">id</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"> </span><span class="n">parentid</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nb">text</span><span class="p">]</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span><span class="w"> </span><span class="c1">-- at remote</span>
+</span><span id="line-9"><span class="w">     </span><span class="p">)</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">parentid</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nb">text</span><span class="p">])</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>INSERT/UPDATE/DELETE/MERGE 질의에서 사용하는 모든 함수와, serial 관련 함수 및 시스템 상수는 모두 원격 서버에서 실행되므로 사용 시 주의가 필요하다. (즉, CUBRID의 내장함수가 원격 DBMS에서는 지원하지 않거나 사용법이 달라 오류 등의 오동작이 발생할 수 있으므로 주의 요망)</p></li>
+<li><p>트랜잭션 : 로컬DB와 원격DB의 트랜잭션(commit, rollback)은 하나의 트랜잭션으로 처리되지 않는다. 원격DB의 DML(INSERT/UPDATE/DELETE/MERGE 구문) 질의는 로컬 DB의 트랜잭션과 별개로 auto commit으로 동작한다.
+아래 예시 처럼 트랜잭션을 수행하는 경우, 원격DB에는 insert 수행과 함께 커밋 처리되어 데이터가 입력되고, 로컬DB에는 명시적 롤백 질의에 의해 insert 수행했던 데이터가 롤백되어 입력되지 않는다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- local input</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'local'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- remote input</span>
+</span><span id="line-5"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t2</span><span class="o">@</span><span class="n">srv1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'remote'</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">rollback</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t1</span><span class="p">,</span><span class="w"> </span><span class="n">t2</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-10"><span class="n">there</span><span class="err">’</span><span class="n">s</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="k">result</span>
+</span></code></pre></div>
+</div>
+<ul>
+<li><p>TRUNCATE 구문 미지원</p></li>
+<li><p>CREATE TABLE … LIKE 테이블명@server명 구문 미지원 (참고로 CREATE TABLE … AS SELECT FROM 테이블명@server명 구문은 지원)</p></li>
+<li><p>TRIGGER 구문에서 DBLINK() 혹은 원격 테이블(@server)을 사용한 질의는 오류가 발생한다.</p></li>
+<li><p>predicate push 처리: 테이블 확장 형식(@server) 구문으로 작성된 SELECT 구문은 옵티마이저가 DBLINK()구문으로 재작성하는데, 성능 향상을 위해 원격 DB에서 처리 가능한 조건절을 함께 push 하여 재작성한다. 단, 조건절에서 사용한 내장함수와 사용자 정의함수는 push에서 제외되고, 로컬DB에서 실행된다.</p></li>
+<li><p>성능 유의 사항</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>테이블 확장 형식(@server)의 SELECT 구문에서 connect by절, group by절, having절 및 limit절을 사용한 경우, where조건, group by절, having절 및 limit절이 원격DB에서 실행되지 않고, 전체 데이터를 로컬DB로 가져온 후 해당 조건 처리를 수행함으로 성능이 저하될 수 있다.</p>
+</div>
+<p>아래는 count()를 처리하기 위해서 원격DB의 tree 테이블의 전체 데이터를 로컬DB로 가져온 후에 group by절을 처리하는 예시이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- original query</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">parentid</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">()</span>
+</span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">tree</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="n">A</span>
+</span><span id="line-4"><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">parentid</span><span class="w"> </span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="c1">-- rewritten query</span>
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">parentid</span><span class="p">,</span><span class="w"> </span><span class="k">count</span><span class="p">()</span>
+</span><span id="line-8"><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">].</span><span class="n">parentid</span>
+</span><span id="line-9"><span class="w">       </span><span class="k">FROM</span><span class="w"> </span><span class="n">DBLINK</span><span class="p">(</span><span class="w"> </span><span class="n">srv1</span><span class="w"> </span><span class="cm">/* '192.168.1.125:33000:remotedb1:dba::' */</span><span class="p">,</span>
+</span><span id="line-10"><span class="w">                    </span><span class="s1">'SELECT parentid FROM tree A'</span>
+</span><span id="line-11"><span class="w">                  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">](</span><span class="n">parentid</span><span class="w"> </span><span class="nb">integer</span><span class="p">)</span>
+</span><span id="line-12"><span class="w">     </span><span class="p">)</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">(</span><span class="n">parentid</span><span class="p">)</span>
+</span><span id="line-13"><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">parentid</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>테이블 확장 형식(@server)구문에서 사용하는 sysdate 함수는 로컬DB에서 수행되므로 서버간의 시간이 다른 경우 주의가 필요하다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- original query</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">col1</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">sysdate</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- rewritten query</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-6"><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">col1</span><span class="p">,</span><span class="w"> </span><span class="n">col2</span>
+</span><span id="line-7"><span class="w">       </span><span class="k">FROM</span><span class="w"> </span><span class="n">DBLINK</span><span class="p">(</span><span class="w"> </span><span class="n">srv1</span><span class="w"> </span><span class="cm">/* '192.168.1.125:33000:remotedb1:dba::' */</span><span class="p">,</span>
+</span><span id="line-8"><span class="w">                    </span><span class="s1">'SELECT col1, col2 FROM tbl'</span>
+</span><span id="line-9"><span class="w">                  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">](</span><span class="n">col1</span><span class="w"> </span><span class="nb">date</span><span class="p">,</span><span class="w"> </span><span class="n">col2</span><span class="w"> </span><span class="nb">varchar</span><span class="p">)</span>
+</span><span id="line-10"><span class="w">     </span><span class="p">)</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">col1</span><span class="p">,</span><span class="w"> </span><span class="n">col2</span><span class="p">)</span>
+</span><span id="line-11"><span class="k">WHERE</span><span class="w"> </span><span class="n">col1</span><span class="o">&gt;=</span><span class="w"> </span><span class="n">SYS_DATE</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터를 찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a &lt; 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾는 작업을 하기 때문에 수행이 느려질 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- original query</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">a</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">       </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="nb">text</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tree</span><span class="o">@</span><span class="n">srv1</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">remote_text</span>
+</span><span id="line-4"><span class="k">FROM</span><span class="w"> </span><span class="n">hangul_t1</span><span class="w"> </span><span class="n">T1</span>
+</span><span id="line-5"><span class="k">WHERE</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="c1">-- rewritten query</span>
+</span><span id="line-8"><span class="k">SELECT</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">a</span><span class="p">,</span>
+</span><span id="line-9"><span class="w">       </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">A</span><span class="p">.[</span><span class="nb">text</span><span class="p">]</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">].[</span><span class="nb">text</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">].</span><span class="n">id</span>
+</span><span id="line-10"><span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">DBLINK</span><span class="p">(</span><span class="n">srv1</span><span class="w"> </span><span class="cm">/* '192.168.1.125:33000:remotedb1:dba::' */</span><span class="p">,</span>
+</span><span id="line-11"><span class="w">                    </span><span class="s1">'SELECT [text], id FROM tree A'</span>
+</span><span id="line-12"><span class="w">                   </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">]([</span><span class="nb">text</span><span class="p">]</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">integer</span><span class="p">)</span>
+</span><span id="line-13"><span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="p">[</span><span class="n">_dbl</span><span class="p">].</span><span class="n">id</span><span class="o">=</span><span class="n">T1</span><span class="p">.</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">([</span><span class="nb">text</span><span class="p">],</span><span class="w"> </span><span class="n">id</span><span class="p">))</span>
+</span><span id="line-14"><span class="k">FROM</span><span class="w"> </span><span class="n">hangul_t1</span><span class="w"> </span><span class="n">T1</span>
+</span><span id="line-15"><span class="k">WHERE</span><span class="w"> </span><span class="p">(</span><span class="n">T1</span><span class="p">.</span><span class="n">a</span><span class="o">&lt;</span><span class="w"> </span><span class="o">?</span><span class="p">:</span><span class="mi">0</span><span class="w"> </span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id19">
+<h3>CUBRID 제약 사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id19" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id19'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<ul class="simple">
+<li><p>SELECT 구문에서 ENUM, BLOB, CLOB, SET 타입 미지원</p></li>
+<li><p>로컬 DB와 원격 DB의 설정된 파라미터가 다른 경우 원하지 않는 결과가 발생할 수 있다.</p></li>
+</ul>
+<blockquote id="heterogen-restrict">
+<div><p><strong>이기종 DBMS 공통 제약 사항</strong></p>
+<ul>
+<li><p>게이트웨이에서는 반드시 이기종 원격 데이터베이스(Oracle/MySQL/MariaDB)의 유니코드 전용 ODBC Driver를 사용해야 한다.</p></li>
+<li><p>ODBC 타입 중 SQL_INTERVAL,SQL_GUID,SQL_BIT,SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY, SQL_LONGVARCHAR, SQL_WLONGVARCHAR 는 미지원 타입이다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ODBC SQL Type</p></th>
+<th class="head"><p>Oracle Data Type</p></th>
+<th class="head"><p>MySQL Data Type</p></th>
+<th class="head"><p>MariaDB Data Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SQL_LONGVARCHAR</p></td>
+<td><p>LONG,  CLOB</p></td>
+<td><p>LONGTEXT</p></td>
+<td><p>LONGTEXT</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQL_WLONGVARCHAR</p></td>
+<td><p>NCLOB</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SQL_BIT</p></td>
+<td></td>
+<td><p>BIT</p></td>
+<td><p>BIT</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQL_BINARY</p></td>
+<td></td>
+<td><p>BINARY</p></td>
+<td><p>BINARY</p></td>
+</tr>
+<tr class="row-even"><td><p>SQL_VARBINARY</p></td>
+<td><p>RAW</p></td>
+<td><p>VARBINARY</p></td>
+<td><p>VARBINARY</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="12"><p>SQL_LONGVARBINARY</p></td>
+<td><p>LONG RAW</p></td>
+<td><p>LONG VARBINARY</p></td>
+<td><p>LONG VARBINARY</p></td>
+</tr>
+<tr class="row-even"><td><p>BLOB</p></td>
+<td><p>BLOB</p></td>
+<td><p>BLOB</p></td>
+</tr>
+<tr class="row-odd"><td><p>BFILE</p></td>
+<td><p>TINYBLOB</p></td>
+<td><p>TINYBLOB</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>MEDIUMBLOB</p></td>
+<td><p>MEDIUMBLOB</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>LONGBLOB</p></td>
+<td><p>LONGBLOB</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>GEOMETRY</p></td>
+<td><p>GEOMETRY</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>POINT</p></td>
+<td><p>POINT</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>POLGON</p></td>
+<td><p>POLGON</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>GEOMETRYCOLLECTION</p></td>
+<td><p>GEOMETRYCOLLECTION</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>MULTILINESTRING</p></td>
+<td><p>MULTILINESTRING</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>MULTIPOINT</p></td>
+<td><p>MULTIPOINT</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>MULTIPOLYGON</p></td>
+<td><p>MULTIPOLYGON</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>SQL_INTERVAL</p></td>
+<td><p>INTERVAL YEAR TO MONTH</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>INTERVAL DAY TO SECOND</p></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>1개 컬럼의 문자열 최대 길이는 16M이다. 아래의 표는 DBMS별 Data의 길이가 16M 이상인 Data Type 이다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DBMS Name</p></th>
+<th class="head"><p>Data Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Oracle</p></td>
+<td><p>LONG, NCLOB, CLOB</p></td>
+</tr>
+<tr class="row-odd"><td><p>MySQL</p></td>
+<td><p>LONGTEXT</p></td>
+</tr>
+<tr class="row-even"><td><p>MariaDB</p></td>
+<td><p>LONGTEXT</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>INSERT, UPDATE, DELETE, MERGE 와 같은 DML 구문에서 CUBRID가 미지원하는 내장 함수 중 function(파라미터1, …, 파라미터N)의 형식이 아닌 경우에는 질의 오류가 발생한다.</p>
+<p>예시: MySQL, MariaDB의 convert 함수 : convert(‘binary’ using binary) – 오류 발생</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>Oracle 제약 사항</p>
+<ul class="simple">
+<li><p>SELECT 구문에서 LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, CLOB 타입은 지원하지 않는다. 자세한 내용은 <a class="reference internal" href="#heterogen-restrict"><span class="std std-ref">이기종 DBMS 공통 제약 사항의 미지원 타입</span></a>을 참고한다.</p></li>
+<li><p>INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH 타입은 Oracle ODBC에서 지원하지 않는 타입이다. 자세한 내용은 “Using the Oracle ODBC Driver”(<a class="reference external" href="https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028">https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028</a>)를 참고한다.</p></li>
+<li><p>Oracle ODBC는 타임존 데이터 조회시 timestamp 타입의 로컬 시간으로 변환하여 반환된다. (타임존 데이터 타입 미지원)</p></li>
+</ul>
+<p>아래는 Oracle DB의 타임존 데이터를 ODBC로 조회시 로컬타임존으로 변환되는 예시이다. 입력한 타임존 “+02:00”이지만, DBLink을 통해 select 하는 경우 로컬타임존 “+09:00”로 변환하여 “PM 08시”로 출력된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- oracle input</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">to_timestamp_tz</span><span class="p">(</span><span class="s1">'2021-07-25 12:34:56 +02:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'yyyy-mm-dd hh24:mi:ss tzh:tzm'</span><span class="p">));</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- local</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">t_timestamp_timezone2</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="o">@</span><span class="n">server</span><span class="p">;</span>
+</span><span id="line-6"><span class="mi">07</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mi">56</span><span class="p">.</span><span class="mi">000</span><span class="w"> </span><span class="n">PM</span><span class="w"> </span><span class="mi">07</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2021</span>
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">to_char</span><span class="p">(</span><span class="n">t_timestamp_timezone2</span><span class="p">,</span><span class="w"> </span><span class="s1">'yyyy-mm-dd hh24:mi:ss.ff tzh:tzm'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="o">@</span><span class="n">server</span><span class="p">;</span>
+</span><span id="line-8"><span class="mi">2021</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">25</span><span class="w"> </span><span class="mi">19</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mi">56</span><span class="p">.</span><span class="mi">000</span><span class="w"> </span><span class="o">+</span><span class="mi">09</span><span class="p">:</span><span class="mi">00</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>미지원 구문인 REPLACE 구문은 사용시 오류 발생</p></li>
+<li><p>CUBRID의 타입 범위를 벗어나는 오라클의 date, number 타입 데이터는 입력은 가능하나 조회 시에는 오류가 발생한다.</p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>MySQL/MariaDB제약 사항</p>
+<ul class="simple">
+<li><p>MySQL에서 cache를 사용하는 경우 게이트웨이 프로세스(cub_cas_cgw)의 메모리 사용량이 증가하므로 PREFETCH, NO_CACHE=1 사용을 권장한다.</p></li>
+<li><p>MySQL/MariaDB에서 repeat() 함수가 포함된 질의 수행 시 문자열의 일부가 잘리거나, 문자열을 읽어오지 못할 수 있다.</p></li>
+<li><p>SELECT 구문에서 LONGTEXT, BIT, BLOB, LONGBLOB 타입은 지원하지 않는다. 자세한 내용은 <a class="reference internal" href="#heterogen-restrict"><span class="std std-ref">이기종 DBMS 공통 제약 사항의 미지원 타입</span></a>을 참고한다.</p></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="trigger.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        트리거
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="oodb.html">
+        클래스 상속
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#dblink-introduction'" class="reference internal" href="#dblink-introduction">CUBRID DBLink 소개</a></li>
+<li><a :data-current="activeSection === '#dblink-diagram'" class="reference internal" href="#dblink-diagram">CUBRID DBLink 구성도</a><ul>
+<li><a :data-current="activeSection === '#dblink'" class="reference internal" href="#dblink">동일기종 간의 DBLink 구성도</a></li>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">이기종 간의 DBLink 구성도</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#gateway-info'" class="reference internal" href="#gateway-info">DBLink를 위한 게이트웨이</a><ul>
+<li><a :data-current="activeSection === '#cub-cas-cgw'" class="reference internal" href="#cub-cas-cgw">cub_cas_cgw</a></li>
+<li><a :data-current="activeSection === '#cub-gateway'" class="reference internal" href="#cub-gateway">cub_gateway</a></li>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">공유 메모리</a></li>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">게이트웨이 구동</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">게이트웨이 종료</a></li>
+<li><a :data-current="activeSection === '#id8'" class="reference internal" href="#id8">게이트웨이 재시작</a></li>
+<li><a :data-current="activeSection === '#gateway-status-command'" class="reference internal" href="#gateway-status-command">게이트웨이 상태 확인</a></li>
+<li><a :data-current="activeSection === '#cubrid'" class="reference internal" href="#cubrid">CUBRID 서비스 시작시 게이트웨이 함께 시작</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id10'" class="reference internal" href="#id10">CUBRID DBLINK 설정</a><ul>
+<li><a :data-current="activeSection === '#id11'" class="reference internal" href="#id11">동일기종 DBLink 설정</a></li>
+<li><a :data-current="activeSection === '#id12'" class="reference internal" href="#id12">이기종 DBLink 설정</a></li>
+<li><a :data-current="activeSection === '#gatewayconf-info'" class="reference internal" href="#gatewayconf-info">게이트웨이 설정 파일</a></li>
+<li><a :data-current="activeSection === '#id14'" class="reference internal" href="#id14">게이트웨이 파라메터</a></li>
+<li><a :data-current="activeSection === '#unixodbc'" class="reference internal" href="#unixodbc">unixODBC 설치</a></li>
+<li><a :data-current="activeSection === '#odbc-driver'" class="reference internal" href="#odbc-driver">ODBC Driver 정보 설정</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#dblink-oracle'" class="reference internal" href="#dblink-oracle">DBLink를 위한 Oracle 설정</a><ul>
+<li><a :data-current="activeSection === '#oracle'" class="reference internal" href="#oracle">Oracle 환경설정</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#dblink-mysql'" class="reference internal" href="#dblink-mysql">DBLink를 위한 MySQL 설정</a><ul>
+<li><a :data-current="activeSection === '#mysql'" class="reference internal" href="#mysql">MySQL 환경설정</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#dblink-mariadb'" class="reference internal" href="#dblink-mariadb">DBLink를 위한 MariaDB 설정</a><ul>
+<li><a :data-current="activeSection === '#mariadb'" class="reference internal" href="#mariadb">MariaDB 환경설정</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id15'" class="reference internal" href="#id15">Cubrid DBLink 사용 방법</a></li>
+<li><a :data-current="activeSection === '#id16'" class="reference internal" href="#id16">유의 사항</a></li>
+<li><a :data-current="activeSection === '#id17'" class="reference internal" href="#id17">제약 사항</a><ul>
+<li><a :data-current="activeSection === '#id18'" class="reference internal" href="#id18">공통 제약 사항</a></li>
+<li><a :data-current="activeSection === '#id19'" class="reference internal" href="#id19">CUBRID 제약 사항</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 3월 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

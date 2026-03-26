@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="./" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Upgrade | CUBRID 11.2 User Manual</title>
+<meta content="Upgrade | CUBRID 11.2 User Manual" property="og:title"/>
+<meta content="Upgrade | CUBRID 11.2 User Manual" name="twitter:title"/>
+<link href="_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="_static/logo_only.png" rel="icon"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="uninstall.html" rel="next" title="Uninstalling CUBRID"/>
+<link href="env.html" rel="prev" title="Configuring Environment Variables"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.2 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="./genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.2/upgrade.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.2 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="release_note/index.html">Release Note</a>
+<a href="./genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="sql/syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/jsp.html">Java Stored Function/Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/method.html">Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-java-stored-procedure-server">CUBRID Java Stored Procedure Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">CUBRID Security</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/oledb.html">OLE DB Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="release_note/release_note_latest_ver.html">11.2 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="index.html">
+<span class="hidden md:inline">CUBRID 11.2 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="install_upgrade.html">Installing and Upgrading</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Upgrade</span>
+</nav>
+<div id="content" role="main">
+<section id="upgrade">
+<span id="id1"></span><h1>Upgrade<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#upgrade"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="cautions-during-upgrade">
+<h2>Cautions during upgrade<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cautions-during-upgrade" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cautions-during-upgrade'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>Changes</strong></p>
+<p>Please confirm <a class="reference internal" href="release_note/release_note_latest_ver.html#changes"><span class="std std-ref">11.2 Changes</span></a> in the release notes.</p>
+<p><strong>Saving the Existing Configuration File</strong></p>
+<ul class="simple">
+<li><p>Save the configuration files in the <strong>$CUBRID/conf</strong> directory (<strong>cubrid.conf</strong>, <strong>cubrid_broker.conf</strong> and <strong>cm.conf</strong>) and the DB location file (<strong>databases.txt</strong>) in the <strong>$CUBRID_DATABASES</strong> directory.</p></li>
+</ul>
+<p><strong>Checking New Reserved Words</strong></p>
+<ul class="simple">
+<li><p>You can check whether reserved words are being used or not by applying the CUBRID 11.2 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or <a class="reference external" href="http://ftp.cubrid.org/CUBRID_Engine/11.2/">http://ftp.cubrid.org/CUBRID_Engine/11.2/</a>. If the reserved words are being used as identifiers, the identifiers must be modified. See <a class="reference internal" href="sql/identifier.html"><span class="doc">Identifier</span></a>.</p></li>
+</ul>
+<p><strong>Configuring environment variables of CUBRID_MSG_LANG</strong></p>
+<ul class="simple">
+<li><p><strong>CUBRID_LANG</strong> and <strong>CUBRID_CHARSET</strong> environment variables are no more used, and the language and the charset should be configured during creating DB. <strong>CUBRID_MSG_LANG</strong> is used when displaying the messages of utilities or errors. If <strong>CUBRID_MSG_LANG</strong> is not configured, it follows the language and the charset specified when creating DB.</p></li>
+</ul>
+<p><strong>Changing schema</strong></p>
+<ul class="simple">
+<li><p>9.0 Beta or earlier version user which had used not ISO-8859-1 charset but EUC-KR charset or UTF-8 charset, should change the schema. In the earlier version of 9.0 Beta, the precision of <strong>CHAR</strong> or <strong>VARCHAR</strong> was specified as byte size. From 9.0 Beta, the precision is specified as character length.</p></li>
+</ul>
+<p><strong>Adding/Keeping locales</strong></p>
+<ul class="simple">
+<li><p>If you have locales to want to add, add them into <strong>$CUBRID/conf/cubrid_locales.txt</strong> file and run <strong>make_locale</strong> script. For more details, see <a class="reference internal" href="sql/i18n.html#locale-setting"><span class="std std-ref">Locale Setting</span></a>.</p></li>
+<li><p>If you want to keep the old version’s locale, add the old version’s locale to <strong>$CUBRID/conf/cubrid_locales.txt</strong> file and run <strong>make_locale</strong> script, and specify the old locale when running <strong>“cubrid createdb”</strong> command.</p></li>
+</ul>
+<p><strong>DB migration</strong></p>
+<ul class="simple">
+<li><p>Since the DB volume of CUBRID 11.1 and earlier versions are not compatible with the DB volume of CUBRID 11.2, it should be migrated with cubrid unloaddb/loaddb utility. For more detail procedure, see <a class="reference internal" href="#migration-from-41"><span class="std std-ref">DB migration</span></a>.</p></li>
+<li><p>CUBRID 2008 R3.1 and later don’t support GLO and the LOB type replaces the GLO feature. For this reason, applications or schemas that use GLO must be modified to be compatible with LOB.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In 2008 R4.0 or before, TIMESTAMP ‘1970-01-01 00:00:00’(GMT) is the minimum value of TIMESTAMP, but in 2008 4.1 or later, it is recognized as zerodate and TIMESTAMP ‘1970-01-01 00:00:01’(GMT) is the minimum value of TIMESTAMP.</p>
+</div>
+<p><strong>Reconfiguring environments for replication or HA</strong></p>
+<ul class="simple">
+<li><p>From 2008 R4.0, the replication feature is no longer supported; therefore, it is recommended to reconfigure the DB migration and HA environment for systems in which previous replication versions are used. In addition, for systems that use Linux Heartbeat-based HA feature, which is provided in CUBRID 2008 R2.0 and 2008 R2.1, you must reconfigure to DB migration and the CUBRID Heartbeat-based HA environment for better operational stability(see <a class="reference internal" href="#ha-db-migration"><span class="std std-ref">Database Migration under HA Environment</span></a>).</p></li>
+<li><p>To reconfigure the HA environment configuration, see <a class="reference internal" href="ha.html"><span class="doc">CUBRID HA</span></a> in the manual.</p></li>
+</ul>
+<p><strong>Java Stored Function/Procedure</strong></p>
+<ul class="simple">
+<li><p>A user who uses Java stored function/procedure should run loadjava command to load Java classes into CUBRID. See <a class="reference internal" href="sql/jsp.html#jsp-loadjava"><span class="std std-ref">Load the compiled Java class into CUBRID</span></a>.</p></li>
+<li><p><strong>Java SP server</strong> should be started before using Java stored procedure/function. See <a class="reference internal" href="sql/jsp.html#jsp-starting-javasp"><span class="std std-ref">Start Java SP Server</span></a>.</p></li>
+</ul>
+</section>
+<section id="upgrading-from-cubrid-9-2-9-3-10-0-10-1-10-2-11-0-to-cubrid-11-2">
+<h2>Upgrading from CUBRID 9.2/9.3/10.0/10.1/10.2/11.0 to CUBRID 11.2<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#upgrading-from-cubrid-9-2-9-3-10-0-10-1-10-2-11-0-to-cubrid-11-2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#upgrading-from-cubrid-9-2-9-3-10-0-10-1-10-2-11-0-to-cubrid-11-2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Users who are using versions CUBRID 9.2/9.3/10.0/10.1/10.2/11.0 should install 11.2 in the different directory, migrate the databases to 11.2 and modify parameter values in the previous environment configuration file.</p>
+<section id="db-migration">
+<span id="db-migrate-to-11"></span><h3>DB migration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#db-migration" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#db-migration'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from <a class="reference external" href="http://ftp.cubrid.org/CUBRID_Engine/11.0/">http://ftp.cubrid.org/CUBRID_Engine/11.0/</a> and the cubrid unloaddb/loaddb utilities. (See <a class="reference internal" href="admin/migration.html#unloaddb"><span class="std std-ref">unloaddb</span></a> and <a class="reference internal" href="admin/migration.html#loaddb"><span class="std std-ref">loaddb</span></a>)</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Linux Environment</p></th>
+<th class="head"><p>Windows Environment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Step C1: Stop CUBRID Service</p></td>
+<td><p>% cubrid service stop</p></td>
+<td><p>Stop CUBRID Service Tray.</p></td>
+</tr>
+<tr class="row-odd"><td><dl class="simple">
+<dt>Step C2: Execute the reserved</dt><dd><p>words detection script</p>
+</dd>
+</dl>
+</td>
+<td colspan="2"><p>Execute the following command in the directory where the reserved word detection
+script is located.</p>
+<p>Execute migration or identifier modification by checking the detection result
+(For the allowable identifier).</p>
+<blockquote>
+<div><p>% csql -S -u dba -i check_reserved.sql testdb</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td rowspan="2"><dl class="simple">
+<dt>Step C3: Unload the earlier</dt><dd><p>version of the DB</p>
+</dd>
+</dl>
+</td>
+<td colspan="2"><p>Store the databases.txt file and the configuration files under the conf directory
+of the earlier version in a separate directory (C3a).</p>
+<p>Execute the cubrid unloaddb utility and store the file generated at this point in a
+separate directory (C3b).</p>
+<blockquote>
+<div><p>% cubrid unloaddb -S -u dba testdb</p>
+</div></blockquote>
+<p>Delete the existing database (C3c).</p>
+<blockquote>
+<div><p>% cubrid deletedb testdb</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Uninstall the earlier version of CUBRID.</p></td>
+</tr>
+<tr class="row-even"><td><p>Step C4: Install new version</p></td>
+<td colspan="2"><p>See <a class="reference internal" href="install.html#install-execute"><span class="std std-ref">Installing and Running CUBRID</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><dl class="simple">
+<dt>Step C5: Database creation and</dt><dd><p>data loading</p>
+</dd>
+</dl>
+</td>
+<td colspan="2"><p>Go to the directory where you want to create a database, and create one.
+At this time, be cautious about locale setting(*). (C5a)</p>
+<blockquote>
+<div><p>% cd $CUBRID/databases/testdb</p>
+<p>% cubrid createdb testdb en_US</p>
+</div></blockquote>
+<p>Execute the cubrid loaddb utility with the stored files in (C3b). (C5b)</p>
+<blockquote>
+<div><p>% cubrid loaddb -u dba -s testdb_schema -d testdb_objects -i testdb_indexes testdb</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><dl class="simple">
+<dt>Step C6: Back up the new version</dt><dd><p>of the DB</p>
+</dd>
+</dl>
+</td>
+<td colspan="2"><p>% cubrid backupdb -S testdb</p></td>
+</tr>
+<tr class="row-odd"><td><dl class="simple">
+<dt>Step C7: Configure the CUBRID</dt><dd><p>environment and start
+the CUBRID Service</p>
+</dd>
+</dl>
+</td>
+<td><p>Modify the configuration file.
+At this point, partially modify
+the configuration files from the earlier
+version stored in step (C3a) to fit the new
+version.</p>
+<p>(For configuring system parameter, see
+<a class="reference internal" href="#conf-from-41"><span class="std std-ref">Parameter configuration</span></a> and <a class="reference internal" href="admin/config.html"><span class="doc">System Parameters</span></a>)</p>
+<blockquote>
+<div><p>% cubrid service start</p>
+<p>% cubrid server start testdb</p>
+</div></blockquote>
+</td>
+<td><p>Start the service by selecting
+CUBRID Service Tray &gt; [Service Start].</p>
+<p>Start the database server from the
+command prompt.</p>
+<blockquote>
+<div><p>% cubrid server start testdb</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="parameter-configuration">
+<h3>Parameter configuration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parameter-configuration" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parameter-configuration'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>cubrid.conf</strong></p>
+<ul class="simple">
+<li><p>The minimum size of <strong>log_buffer_size</strong> is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.</p></li>
+</ul>
+</section>
+</section>
+<section id="upgrading-from-cubrid-9-1-to-cubrid-11-2">
+<span id="up-from-91"></span><h2>Upgrading from CUBRID 9.1 to CUBRID 11.2<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#upgrading-from-cubrid-9-1-to-cubrid-11-2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#upgrading-from-cubrid-9-1-to-cubrid-11-2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Users who are using versions CUBRID 9.1 should install 11.2 in the different directory, migrate databases to 11.2 and modify parameter values in the previous environment configuration file.</p>
+<section id="migration-from-91">
+<span id="id2"></span><h3>DB migration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#migration-from-91" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#migration-from-91'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Please refer <a class="reference internal" href="#db-migrate-to-11"><span class="std std-ref">DB migration</span></a> for migration steps.</p>
+</section>
+<section id="conf-from-91">
+<span id="id3"></span><h3>Parameter configuration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#conf-from-91" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#conf-from-91'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>cubrid.conf</strong></p>
+<ul>
+<li><p>The minimum size of <strong>log_buffer_size</strong> is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.</p></li>
+<li><p>The value of <strong>sort_buffer_size</strong> should be configured as 2G or less since the maximum value of sort_buffer_size is 2G.</p></li>
+<li><p>In the following parameters, the old parameters will be deprecated and the new parameters are recommended to use. The value in the parenthesis is the unit of the value when the unit is omitted, and the new parameters can specify the unit after the value. For details, see each parameter’s explanation in <a class="reference internal" href="admin/config.html"><span class="doc">System Parameters</span></a></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Old parameters(unit)</p></th>
+<th class="head"><p>New parameters(unit)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>lock_timeout_in_secs(sec)</p></td>
+<td><p>lock_timeout(msec)</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_every_npages(page_count)</p></td>
+<td><p>checkpoint_every_size(byte)</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint_interval_in_mins(min)</p></td>
+<td><p>checkpoint_interval(msec)</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_flush_pages_per_second(page_count)</p></td>
+<td><p>max_flush_size_per_second(byte)</p></td>
+</tr>
+<tr class="row-even"><td><p>sync_on_nflush(page_count)</p></td>
+<td><p>sync_on_flush_size(byte)</p></td>
+</tr>
+<tr class="row-odd"><td><p>sql_trace_slow_msecs(msec)</p></td>
+<td><p>sql_trace_slow(msecs)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p><strong>cubrid_broker.conf</strong></p>
+<ul class="simple">
+<li><p>In <strong>KEEP_CONNECTION</strong> parameter, OFF value should be changed as <strong>ON</strong> or <strong>AUTO</strong> since <strong>OFF</strong> setting value is no longer used.</p></li>
+<li><p><strong>SELECT_AUTO_COMMIT</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p>The value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> should be 2,097,151 or less since the maximum value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> is 2,097,151.</p></li>
+</ul>
+<p><strong>Environment variable</strong></p>
+<ul>
+<li><p><strong>CUBRID_CHARSET</strong> is removed, and now <strong>CUBRID_CHARSET</strong> is used for configuring the charset of database and <strong>CUBRID_MSG_LANG</strong> is used for configuring the charset of messages for utilities and errors.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When you create database, a language and a charset must be specified. It affects the length of string type, string comparison operation, etc. The specified charset when creating database cannot be changed later, so you should be careful when specifying it.</p>
+<p>For charset, locale and collation setting, see <a class="reference internal" href="sql/i18n.html"><span class="doc">An Overview of Globalization</span></a>.</p>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="upgrading-from-cubrid-2008-r4-1-r4-3-r4-4-to-cubrid-11-2">
+<span id="up-from-41"></span><h2>Upgrading From CUBRID 2008 R4.1/R4.3/R4.4 To CUBRID 11.2<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#upgrading-from-cubrid-2008-r4-1-r4-3-r4-4-to-cubrid-11-2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#upgrading-from-cubrid-2008-r4-1-r4-3-r4-4-to-cubrid-11-2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Users who are using a version of CUBRID 2008 R4.1, R4.3 or R4.4 should install 11.2 in the different directory, migrate databases to 11.2 and modify parameter values in the existing environment configuration file.</p>
+<section id="migration-from-41">
+<span id="id4"></span><h3>DB migration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#migration-from-41" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#migration-from-41'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Please refer <a class="reference internal" href="#db-migrate-to-11"><span class="std std-ref">DB migration</span></a> for migration steps.</p>
+<p>(*): The user which uses CUBRID 2008 R4.x or before should be cautious for determining a locale(language and charset). For example, when the user which used the language as ko_KR(Korean) and the charset as utf8 processes DB migration, the locale should be set as “cubrid createdb testdb ko_KR.utf8”. If the locale is not built-in locale, you should run make_locale(.sh) command first. For more details, see <a class="reference internal" href="sql/i18n.html#locale-setting"><span class="std std-ref">Locale Setting</span></a>.</p>
+<ul class="simple">
+<li><p>You should be careful about the change of the space for storing about the multibyte character. For example, in 2008 R4.3, <strong>CHAR(6)</strong> means <strong>CHAR</strong> type with 6 bytes size, but from 9.3, <strong>CHAR(6)</strong> means <strong>CHAR</strong> type with 6 characters. In utf8 charset, Korean uses 3 bytes per 1 character, so <strong>CHAR(6)</strong> has 18 bytes. Therefore, more disk space is required.</p></li>
+<li><p>If you used utf8 charset in CUBRID 2008 R4.x or before, you should set the charset as utf8 when you run “cubrid createdb”. If not, retrieval queries or string functions are unable to work properly.</p></li>
+</ul>
+</section>
+<section id="conf-from-41">
+<span id="id5"></span><h3>Parameter configuration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#conf-from-41" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#conf-from-41'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>cubrid.conf</strong></p>
+<ul>
+<li><p>The minimum size of <strong>log_buffer_size</strong> is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.</p></li>
+<li><p>The value of <strong>sort_buffer_size</strong> should be configured as 2G or less since the maximum value of <strong>sort_buffer_size</strong> is 2G.</p></li>
+<li><p><strong>single_byte_compare</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p><strong>intl_mbs_support</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p><strong>lock_timeout_message_type</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p>In the following parameters, the old parameters will be deprecated and the new parameters are recommended to use. the value in the parenthesis is the unit of the value when the unit is omitted, and the new parameters can specify the unit after the value. For details, see each parameter’s explanation in <a class="reference internal" href="admin/config.html"><span class="doc">System Parameters</span></a></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Old parameters(unit)</p></th>
+<th class="head"><p>New parameters(unit)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>lock_timeout_in_secs(sec)</p></td>
+<td><p>lock_timeout(msec)</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_every_npages(page_count)</p></td>
+<td><p>checkpoint_every_size(byte)</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint_interval_in_mins(min)</p></td>
+<td><p>checkpoint_interval(msec)</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_flush_pages_per_second(page_count)</p></td>
+<td><p>max_flush_size_per_second(byte)</p></td>
+</tr>
+<tr class="row-even"><td><p>sync_on_nflush(page_count)</p></td>
+<td><p>sync_on_flush_size(byte)</p></td>
+</tr>
+<tr class="row-odd"><td><p>sql_trace_slow_msecs(msec)</p></td>
+<td><p>sql_trace_slow(msecs)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p><strong>cubrid_broker.conf</strong></p>
+<ul class="simple">
+<li><p>In <strong>KEEP_CONNECTION</strong> parameter, <strong>OFF</strong> value should be changed as <strong>ON</strong> or <strong>AUTO</strong> since <strong>OFF</strong> setting value is no longer used.</p></li>
+<li><p><strong>SELECT_AUTO_COMMIT</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p>The value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> should be 2,097,151 or less since the maximum value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> is 2,097,151.</p></li>
+</ul>
+<p><strong>Environment variable</strong></p>
+<ul>
+<li><p><strong>CUBRID_LANG</strong> is removed; now the language and the charset of database is set when creating DB, and <strong>CUBRID_MSG_LANG</strong> is used for configuring the charset of messages for utilities and errors.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When you create database, the language and the charset of database should be specified. It affects the length of string type, string comparison operation, etc. The specified charset when creating database cannot be changed later, so you should be careful when specifying it.</p>
+<p>For charset, locale and collation setting, see <a class="reference internal" href="sql/i18n.html"><span class="doc">An Overview of Globalization</span></a>.</p>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="upgrading-from-cubrid-2008-r4-0-or-earlier-versions-to-cubrid-11-2">
+<span id="up-from-40"></span><h2>Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 11.2<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#upgrading-from-cubrid-2008-r4-0-or-earlier-versions-to-cubrid-11-2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#upgrading-from-cubrid-2008-r4-0-or-earlier-versions-to-cubrid-11-2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Users who are using versions CUBRID 2008 R4.0 or earlier should install 11.2 in the different directory, migrate databases to 11.2 and modify parameter values in the existing environment configuration file.</p>
+<section id="id6">
+<h3>DB migration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Do the same procedures with <a class="reference internal" href="#db-migrate-to-11"><span class="std std-ref">DB migration</span></a>. If you use GLO classes, you must modify applications and schema in order to use <strong>BLOB</strong> or <strong>CLOB</strong> types, since GLO classes are not supported in 2008 R3.1. If this modification is not easy, it is not recommended to perform the migration.</p>
+</section>
+<section id="id7">
+<h3>Parameter configuration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>cubrid.conf</strong></p>
+<ul>
+<li><p>The minimum size of <strong>log_buffer_size</strong> is changed from 48KB(3*1page, 16KB=1page) into 2MB(128*1page, 16KB=1page); therefore, this value should be larger than the changed minimum size.</p></li>
+<li><p>The value of <strong>sort_buffer_size</strong> should be configured as 2G or less since the maximum valur of <strong>sort_buffer_size</strong> is 2G.</p></li>
+<li><p><strong>single_byte_compare</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p><strong>intl_mbs_support</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p><strong>lock_timeout_message_type</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p>Because the default value of <strong>thread_stacksize</strong> has been changed from 100K to 1M, it is recommended that users who have not configured this value check memory usage of CUBRID-associative processes.</p></li>
+<li><p>Because the minimum value of <strong>data_buffer_size</strong> has been changed from 64K to 16M, users who have configured this value less than 16M must change the value equal to or greater than 16M.</p></li>
+<li><p>In the following parameters, the old parameters will be deprecated and the new parameters are recommended to use. the value in the parenthesis is the unit of the value when the unit is omitted, and the new parameters can specify the unit after the value. For details, see each parameter’s explanation in <a class="reference internal" href="admin/config.html"><span class="doc">System Parameters</span></a></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Old parameters(unit)</p></th>
+<th class="head"><p>New parameters(unit)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>lock_timeout_in_secs(sec)</p></td>
+<td><p>lock_timeout(msec)</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_every_npages(page_count)</p></td>
+<td><p>checkpoint_every_size(byte)</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint_interval_in_mins(min)</p></td>
+<td><p>checkpoint_interval(msec)</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_flush_pages_per_second(page_count)</p></td>
+<td><p>max_flush_size_per_second(byte)</p></td>
+</tr>
+<tr class="row-even"><td><p>sync_on_nflush(page_count)</p></td>
+<td><p>sync_on_flush_size(byte)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p><strong>cubrid_broker.conf</strong></p>
+<ul class="simple">
+<li><p>In <strong>KEEP_CONNECTION</strong> parameter, <strong>OFF</strong> value should be changed as <strong>ON</strong> or <strong>AUTO</strong> since <strong>OFF</strong> setting value is no longer used.</p></li>
+<li><p><strong>SELECT_AUTO_COMMIT</strong> should be deleted since this parameter is no longer used.</p></li>
+<li><p>The value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> should be 2,097,151 or less since the maximum value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> is 2,097,151.</p></li>
+<li><p>The minimum value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> is 1024M. It is recommended that users who configure <strong>APPL_SERVER_MAX_SIZE</strong> configure this value less than the value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong>.</p></li>
+<li><p>Because the default value of <strong>CCI_DEFAULT_AUTOCOMMIT</strong> has been changed to <strong>ON</strong>, users who have not configured this value should change it to <strong>OFF</strong> if they want to keep auto commit mode.</p></li>
+</ul>
+<p><strong>cubrid_ha.conf</strong></p>
+<ul class="simple">
+<li><p>Users who have configured the <strong>ha_apply_max_mem_size</strong> parameter value more than 500 must the value to 500 or less.</p></li>
+</ul>
+<p><strong>Environment variable</strong></p>
+<ul>
+<li><p><strong>CUBRID_LANG</strong> is removed; now the language and the charset of database is set when creating DB, and <strong>CUBRID_MSG_LANG</strong> is used for configuring the charset of messages for utilities and errors.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When you create database, the language and the charset of database should be specified. It affects the length of string type, string comparison operation, etc. The specified charset when creating database cannot be changed later, so you should be careful when specifying it.</p>
+<p>For charset, locale and collation setting, see <a class="reference internal" href="sql/i18n.html"><span class="doc">An Overview of Globalization</span></a>.</p>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="database-migration-under-ha-environment">
+<span id="ha-db-migration"></span><h1>Database Migration under HA Environment<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#database-migration-under-ha-environment"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="ha-migration-from-cubrid-2008-r2-2-or-higher-to-cubrid-11-2">
+<h2>HA migration from CUBRID 2008 R2.2 or higher to CUBRID 11.2<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ha-migration-from-cubrid-2008-r2-2-or-higher-to-cubrid-11-2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ha-migration-from-cubrid-2008-r2-2-or-higher-to-cubrid-11-2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>In the scenario described below, the current service is stopped to perform an upgrade in an environment in which a broker, a master DB and a slave DB are operating on different servers.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Steps C1-C6: Perform <a class="reference internal" href="#db-migrate-to-11"><span class="std std-ref">DB migration</span></a></p></td>
+<td><p>Run the CUBRID upgrade and database migration in the master node, and back up the new version’s database
+on the master node.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Step C7: Install new version in the slave node</p></td>
+<td><p>Delete the previous version of the database from the slave node and install a new version.</p>
+<p>For more information, see <a class="reference internal" href="install.html#install-execute"><span class="std std-ref">Installing and Running CUBRID</span></a>.</p>
+</td>
+</tr>
+<tr class="row-even"><td><dl class="simple">
+<dt>Step C8: Restore the backup copy of the master node</dt><dd><p>in the slave node</p>
+</dd>
+</dl>
+</td>
+<td><p>Restore the new database backup copy (testdb_bk*) of the master node, which is created in step H6
+, to the slave node.</p>
+<blockquote>
+<div><p>% scp user1@master:$CUBRID/databases/databases.txt $CUBRID/databases/.</p>
+<p>% cd ~/DB/testdb</p>
+<p>% scp user1@master:~/DB/testdb/testdb_bk0v000 .</p>
+<p>% scp user1@master:~/DB/testdb/testdb_bkvinf .</p>
+<p>% cubrid restoredb testdb</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td><dl class="simple">
+<dt>Step C9: Reconfigure HA environment and start</dt><dd><p>HA mode</p>
+</dd>
+</dl>
+</td>
+<td><p>In the master node and the slave node, set the CUBRID environment configuration file (cubrid.conf)
+and the HA environment configuration file (cubrid_ha.conf)</p>
+<p>See <a class="reference internal" href="ha.html#quick-server-config"><span class="std std-ref">Creating Databases and Configuring Servers</span></a>.</p>
+</td>
+</tr>
+<tr class="row-even"><td><dl class="simple">
+<dt>Step C10: Install new version in the broker server,</dt><dd><p>and start the broker</p>
+</dd>
+</dl>
+</td>
+<td><p>For more information about installation, see <a class="reference internal" href="install.html#install-execute"><span class="std std-ref">Installing and Running CUBRID</span></a>.</p>
+<p>Start the broker in the Broker server. See <a class="reference internal" href="ha.html#quick-broker-config"><span class="std std-ref">Configuring and Starting Broker, and Verifying the Broker Status</span></a>.</p>
+<blockquote>
+<div><p>% cubrid broker start</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ha-migration-from-cubrid-2008-r2-0-r2-1-to-cubrid-11-2">
+<h2>HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 11.2<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ha-migration-from-cubrid-2008-r2-0-r2-1-to-cubrid-11-2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ha-migration-from-cubrid-2008-r2-0-r2-1-to-cubrid-11-2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>If you are using the HA feature of CUBRID 2008 R2.0 or 2008 R2.1, you must upgrade the server version, migrate the database, set up a new HA environment, and then change the Linux Heartbeat auto start setting used in 2008 R2.0 or 2008 R2.1. If the Linux Heartbeat package is not needed, delete it.</p>
+<p>Perform steps C1~C10 above, then perform step C11 below:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><dl class="simple">
+<dt>Step C11: Change the previous Linux heartbeat</dt><dd><p>auto start settings</p>
+</dd>
+</dl>
+</td>
+<td><p>Perform the following task in the master and slave nodes from a root account.</p>
+<blockquote>
+<div><p>[root@master ~]# chkconfig --del heartbeat
+// Performing the same job in the slave node</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="env.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Configuring Environment Variables
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="uninstall.html">
+        Uninstalling CUBRID
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><ul>
+<li><a :data-current="activeSection === '#cautions-during-upgrade'" class="reference internal" href="#cautions-during-upgrade">Cautions during upgrade</a></li>
+<li><a :data-current="activeSection === '#upgrading-from-cubrid-9-2-9-3-10-0-10-1-10-2-11-0-to-cubrid-11-2'" class="reference internal" href="#upgrading-from-cubrid-9-2-9-3-10-0-10-1-10-2-11-0-to-cubrid-11-2">Upgrading from CUBRID 9.2/9.3/10.0/10.1/10.2/11.0 to CUBRID 11.2</a><ul>
+<li><a :data-current="activeSection === '#db-migration'" class="reference internal" href="#db-migration">DB migration</a></li>
+<li><a :data-current="activeSection === '#parameter-configuration'" class="reference internal" href="#parameter-configuration">Parameter configuration</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#upgrading-from-cubrid-9-1-to-cubrid-11-2'" class="reference internal" href="#upgrading-from-cubrid-9-1-to-cubrid-11-2">Upgrading from CUBRID 9.1 to CUBRID 11.2</a><ul>
+<li><a :data-current="activeSection === '#migration-from-91'" class="reference internal" href="#migration-from-91">DB migration</a></li>
+<li><a :data-current="activeSection === '#conf-from-91'" class="reference internal" href="#conf-from-91">Parameter configuration</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#upgrading-from-cubrid-2008-r4-1-r4-3-r4-4-to-cubrid-11-2'" class="reference internal" href="#upgrading-from-cubrid-2008-r4-1-r4-3-r4-4-to-cubrid-11-2">Upgrading From CUBRID 2008 R4.1/R4.3/R4.4 To CUBRID 11.2</a><ul>
+<li><a :data-current="activeSection === '#migration-from-41'" class="reference internal" href="#migration-from-41">DB migration</a></li>
+<li><a :data-current="activeSection === '#conf-from-41'" class="reference internal" href="#conf-from-41">Parameter configuration</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#upgrading-from-cubrid-2008-r4-0-or-earlier-versions-to-cubrid-11-2'" class="reference internal" href="#upgrading-from-cubrid-2008-r4-0-or-earlier-versions-to-cubrid-11-2">Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 11.2</a><ul>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">DB migration</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">Parameter configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#database-migration-under-ha-environment'" class="reference internal" href="#database-migration-under-ha-environment">Database Migration under HA Environment</a><ul>
+<li><a :data-current="activeSection === '#ha-migration-from-cubrid-2008-r2-2-or-higher-to-cubrid-11-2'" class="reference internal" href="#ha-migration-from-cubrid-2008-r2-2-or-higher-to-cubrid-11-2">HA migration from CUBRID 2008 R2.2 or higher to CUBRID 11.2</a></li>
+<li><a :data-current="activeSection === '#ha-migration-from-cubrid-2008-r2-0-r2-1-to-cubrid-11-2'" class="reference internal" href="#ha-migration-from-cubrid-2008-r2-0-r2-1-to-cubrid-11-2">HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 11.2</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="_static/documentation_options.js?v=641b100d"></script>
+<script src="_static/doctools.js?v=fd6eb6e6"></script>
+<script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="_static/theme.js?v=b0acb063"></script>
+<script src="_static/design-tabs.js?v=f930bc37"></script>
+<script src="_static/version-switcher.js?v=993d9931"></script>
+<script src="_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>데이터 타입 변환 함수와 연산자 | CUBRID 11.2 사용자 매뉴얼</title>
+<meta content="데이터 타입 변환 함수와 연산자 | CUBRID 11.2 사용자 매뉴얼" property="og:title"/>
+<meta content="데이터 타입 변환 함수와 연산자 | CUBRID 11.2 사용자 매뉴얼" name="twitter:title"/>
+<link href="../../_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="../../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../../_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="../../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/logo_only.png" rel="icon"/>
+<link href="../../search.html" rel="search" title="검색"/>
+<link href="../../genindex.html" rel="index" title="색인"/>
+<link href="analysis_fn.html" rel="next" title="집계/분석 함수"/>
+<link href="lob_fn.html" rel="prev" title="LOB 함수"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.2 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../.././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.2/sql/function/typecast_fn.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.2 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../release_note/index.html">Release Note</a>
+<a href="../.././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install_upgrade.html">설치 및 업그레이드</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">시작하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jsp.html">Java 저장 함수/프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../method.html">메서드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">CUBRID 운영</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../security.html">CUBRID 보안</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API 레퍼런스</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release_note/index.html">릴리스 노트</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto"><div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="../../index.html"></a></li>
+<li class="breadcrumb-item"><a href="../index.html">CUBRID SQL</a></li>
+<li class="breadcrumb-item"><a href="index.html">연산자와 함수</a></li>
+<li class="breadcrumb-item active">데이터 타입 변환 함수와 연산자</li>
+<li class="wy-breadcrumbs-aside"><div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</li>
+</ul>
+
+</div>
+<div id="content" role="main">
+<section id="id1">
+<h1><a class="toc-backref" href="#id3" role="doc-backlink">데이터 타입 변환 함수와 연산자</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<nav class="contents" id="id2">
+<p class="topic-title">목차</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#id1" id="id3">데이터 타입 변환 함수와 연산자</a></p>
+<ul>
+<li><p><a class="reference internal" href="#cast" id="id4">CAST</a></p></li>
+<li><p><a class="reference internal" href="#date-format" id="id5">DATE_FORMAT</a></p></li>
+<li><p><a class="reference internal" href="#format" id="id6">FORMAT</a></p></li>
+<li><p><a class="reference internal" href="#str-to-date" id="id7">STR_TO_DATE</a></p></li>
+<li><p><a class="reference internal" href="#time-format" id="id8">TIME_FORMAT</a></p></li>
+<li><p><a class="reference internal" href="#to-char-date-time" id="id9">TO_CHAR(date_time)</a></p></li>
+<li><p><a class="reference internal" href="#to-char-number" id="id10">TO_CHAR(number)</a></p></li>
+<li><p><a class="reference internal" href="#to-date" id="id11">TO_DATE</a></p></li>
+<li><p><a class="reference internal" href="#to-datetime" id="id12">TO_DATETIME</a></p></li>
+<li><p><a class="reference internal" href="#to-datetime-tz" id="id13">TO_DATETIME_TZ</a></p></li>
+<li><p><a class="reference internal" href="#to-number" id="id14">TO_NUMBER</a></p></li>
+<li><p><a class="reference internal" href="#to-time" id="id15">TO_TIME</a></p></li>
+<li><p><a class="reference internal" href="#to-timestamp" id="id16">TO_TIMESTAMP</a></p></li>
+<li><p><a class="reference internal" href="#to-timestamp-tz" id="id17">TO_TIMESTAMP_TZ</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="cast">
+<span id="castfn"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">CAST</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cast" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cast'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="CAST">
+<span class="sig-name descname"><span class="pre">CAST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cast_operand</span> <span class="pre">AS</span> <span class="pre">cast_target</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#CAST" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#CAST'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>CAST</strong> 연산자를 <strong>SELECT</strong> 문에서 어떤 값의 데이터 타입을 다른 데이터 타입으로 명시적으로 변환하는 데 사용할 수 있다. 조회 리스트 또는 <strong>WHERE</strong> 절의 값 수식을 다른 데이터 타입으로 변환할 수 있다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cast_operand</strong> – 다른 타입으로 변환할 값을 선언한다.</p></li>
+<li><p><strong>cast_target</strong> – 변환할 타입을 지정한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>cast_target</p>
+</dd>
+</dl>
+</dd></dl>
+<p>경우에 따라 <strong>CAST</strong> 연산자를 쓰지 않고 데이터 타입이 자동으로 변환될 수 있다. 이에 대한 자세한 내용은 <a class="reference internal" href="../datatype.html#implicit-type-conversion"><span class="std std-ref">묵시적 타입 변환</span></a>을 참고한다.</p>
+<p>문자열을 날짜/시간 타입으로 변환하는 것에 대한 자세한 내용은 <a class="reference internal" href="../datatype.html#cast-string-to-datetime"><span class="std std-ref">문자열을 날짜/시간 타입으로 CAST</span></a> 을 참고한다.</p>
+<p>CUBRID에서 <strong>CAST</strong> 연산자를 사용한 명시적인 타입 변환에 대해서 정리하면 다음의 표와 같다.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>From \ To</strong></p></td>
+<td><p><strong>EN</strong></p></td>
+<td><p><strong>AN</strong></p></td>
+<td><p><strong>VC</strong></p></td>
+<td><p><strong>FC</strong></p></td>
+<td><p><strong>VB</strong></p></td>
+<td><p><strong>FB</strong></p></td>
+<td><p><strong>ENUM</strong></p></td>
+<td><p><strong>BLOB</strong></p></td>
+<td><p><strong>CLOB</strong></p></td>
+<td><p><strong>D</strong></p></td>
+<td><p><strong>T</strong></p></td>
+<td><p><strong>UT</strong></p></td>
+<td><p><strong>UTZ</strong></p></td>
+<td><p><strong>DT</strong></p></td>
+<td><p><strong>DTZ</strong></p></td>
+<td><p><strong>S</strong></p></td>
+<td><p><strong>MS</strong></p></td>
+<td><p><strong>SQ</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>EN</strong></p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>AN</strong></p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>VC</strong></p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes(*)</p></td>
+<td><p>Yes(*)</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>FC</strong></p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes(*)</p></td>
+<td><p>Yes(*)</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>VB</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>FB</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ENUM</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>BLOB</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>CLOB</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>D</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>T</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>UT</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>UTZ</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>DT</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DTZ</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>S</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>SQ</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
+<p>(*): 이 경우에 <strong>CAST</strong> 연산은 값 수식과 변환할 데이터 타입이 같은 문자셋을 가질 경우에만 허용된다.</p>
+<ul class="simple">
+<li><p><strong>데이터 타입 키</strong></p>
+<ul>
+<li><p><strong>EN</strong>: 정확한 수치(<strong>INTEGER</strong>, <strong>SMALLINT</strong>, <strong>BIGINT</strong>, <strong>NUMERIC</strong>, <strong>DECIMAL</strong>)</p></li>
+<li><p><strong>AN</strong>: 근사값 수치(<strong>FLOAT/REAL</strong>, <strong>DOUBLE</strong>)</p></li>
+<li><p><strong>VC</strong>: 가변 길이 문자열(<strong>VARCHAR</strong> (<em>n</em>))</p></li>
+<li><p><strong>FC</strong>: 고정 길이 문자열(<strong>CHAR</strong> (<em>n</em>))</p></li>
+<li><p><strong>VB</strong>: 가변 길이 비트열(<strong>BIT VARYING</strong> (<em>n</em>))</p></li>
+<li><p><strong>FB</strong>: 고정 길이 비트열(<strong>BIT</strong> (<em>n</em>))</p></li>
+<li><p><strong>ENUM</strong>: <strong>ENUM</strong> 타입</p></li>
+<li><p><strong>BLOB</strong>: DB 외부에 저장하는 바이너리 데이터(<strong>BLOB</strong>)</p></li>
+<li><p><strong>CLOB</strong>: DB 외부에 저장하는 문자열 데이터(<strong>CLOB</strong>)</p></li>
+<li><p><strong>D</strong>: <strong>DATE</strong></p></li>
+<li><p><strong>T</strong>: <strong>TIME</strong></p></li>
+<li><p><strong>DT</strong>: <strong>DATETIME</strong></p></li>
+<li><p><strong>DTZ</strong>: <strong>DATETIME WITH TIME ZONE</strong> 및 <strong>DATETIME WITH LOCAL TIME ZONE</strong> 데이터 타입</p></li>
+<li><p><strong>UT</strong>: <strong>TIMESTAMP</strong></p></li>
+<li><p><strong>UTZ</strong>: <strong>TIMESTAMP WITH TIME ZONE</strong> 및 <strong>TIMESTAMP WITH LOCAL TIME ZONE</strong> 데이터 타입</p></li>
+<li><p><strong>S</strong>: <strong>SET</strong></p></li>
+<li><p><strong>MS</strong>: <strong>MULTISET</strong></p></li>
+<li><p><strong>SQ</strong>: <strong>LIST</strong> (= <strong>SEQUENCE</strong>)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--operation after casting character as INT type returns 2</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="k">CAST</span><span class="w"> </span><span class="p">(</span><span class="s1">'1'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INT</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">2</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--cannot cast the string which is out of range as SMALLINT</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'1234567890'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">SMALLINT</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">coerce</span> <span class="n">value</span> <span class="n">of</span> <span class="n">domain</span> <span class="s2">"character"</span> <span class="n">to</span> <span class="n">domain</span> <span class="s2">"smallint"</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--operation after casting returns 1+1234567890</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'1234567890'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INT</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">1234567891</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--'1234.567890' is casted to 1235 after rounding up</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'1234.567890'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INT</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">1236</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--'1234.567890' is casted to string containing only first 5 letters.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'1234.567890'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">)));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'1234.'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--numeric type can be casted to CHAR type only when enough length is specified</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="mi">1234</span><span class="p">.</span><span class="mi">567890</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">)));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">coerce</span> <span class="n">value</span> <span class="n">of</span> <span class="n">domain</span> <span class="s2">"numeric"</span> <span class="n">to</span> <span class="n">domain</span> <span class="s2">"character"</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--numeric type can be casted to CHAR type only when enough length is specified</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="mi">1234</span><span class="p">.</span><span class="mi">567890</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">11</span><span class="p">)));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'1234.567890'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--numeric type can be casted to CHAR type only when enough length is specified</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="mi">1234</span><span class="p">.</span><span class="mi">567890</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'1234.567890'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--string can be casted to time/date types only when its literal is correctly specified</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'2008-12-25 10:30:20'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">20</span> <span class="n">AM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'10:30:20'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">TIME</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">20</span> <span class="n">AM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--string can be casted to TIME type when its literal is same as TIME's.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="s1">'2008-12-25 10:30:20'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">TIME</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">20</span> <span class="n">AM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--string can be casted to TIME type after specifying its type of the string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="k">TIMESTAMP</span><span class="s1">'2008-12-25 10:30:20'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">TIME</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">20</span> <span class="n">AM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">'abcde'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">BLOB</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">file</span><span class="p">:</span><span class="o">/</span><span class="n">home1</span><span class="o">/</span><span class="n">user1</span><span class="o">/</span><span class="n">db</span><span class="o">/</span><span class="n">tdb</span><span class="o">/</span><span class="n">lob</span><span class="o">/</span><span class="n">ces_743</span><span class="o">/</span><span class="n">ces_temp</span><span class="mf">.00001283232024309172_1342</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="n">B</span><span class="s1">'11010000'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'d0'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">'1A'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">BLOB</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">X</span><span class="s1">'1a00'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--numbers can be casted to TIMESTAMP type</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">),</span><span class="w"> </span><span class="k">CAST</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">2</span><span class="n">F</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">09</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">AM</span> <span class="mi">01</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">1970</span>     <span class="mi">09</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">AM</span> <span class="mi">01</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">1970</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--numbers cannot be casted to DATETIME type</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">DATETIME</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Cannot</span> <span class="n">coerce</span> <span class="mi">1</span> <span class="n">to</span> <span class="nb">type</span> <span class="n">datetime</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--TIMESTAMP cannot be casted to numbers</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="w"> </span><span class="p">(</span><span class="k">TIMESTAMP</span><span class="s1">'09:00:01 AM 01/01/1970'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Cannot</span> <span class="n">coerce</span> <span class="n">timestamp</span> <span class="s1">'09:00:01 AM 01/01/1970'</span> <span class="n">to</span> <span class="nb">type</span> <span class="n">integer</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p><strong>CAST</strong> 변환은 같은 문자셋을 가지는 데이터 타입끼리만 허용된다.</p></li>
+<li><p>근사치 데이터 타입(FLOAT, DOUBLE)이 정수형으로 변환되는 경우, 소수점 아래 자리가 반올림 처리된다.</p></li>
+<li><p>정확한 수치 데이터 타입(NUMERIC)이 정수형으로 변환되는 경우,  소수점 아래 자리가 반올림 처리된다.</p></li>
+<li><p>수치 데이터 타입을 문자열 타입으로 변환하는 경우, 문자열의 길이가 (모든 유효 숫자 자리 + 소수점) 이상이 되도록 충분하게 지정해야 한다. 그렇지 않으면 에러가 발생한다.</p></li>
+<li><p>문자열 타입 <em>A</em>를 문자열 타입 <em>B</em>로 변환하는 경우, <em>A</em>의 길이 이상이 되도록 충분하게 지정되지 않으면 문자열 끝 부분이 삭제(truncate)되어 저장된다.</p></li>
+<li><p>문자열 타입 <em>A</em>를 날짜/시간 데이터 타입 <em>B</em>로 변환하는 경우, <em>A</em>의 리터럴이 <em>B</em> 타입과 일치하는 경우에만 변환된다. 그렇지 않을 경우 에러가 발생한다.</p></li>
+<li><p>문자열로 저장된 수치 데이터는 명시적으로 타입 변환을 해주어야 산술 연산이 가능하다.</p></li>
+</ul>
+</div>
+</section>
+<section id="date-format">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">DATE_FORMAT</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#date-format" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#date-format'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DATE_FORMAT">
+<span class="sig-name descname"><span class="pre">DATE_FORMAT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#DATE_FORMAT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#DATE_FORMAT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>DATE_FORMAT</strong> 함수는 날짜를 포함하는 날짜/시간 타입 값을 지정된 날짜/시간 형식의 문자열로 출력하며, 리턴 값은 <strong>VARCHAR</strong> 타입이다. 지정할 <em>format</em> 인자는 아래의 <a class="reference internal" href="#datetime-format2"><span class="std std-ref">날짜/시간 형식 2</span></a> 표를 참고한다. <a class="reference internal" href="#datetime-format2"><span class="std std-ref">날짜/시간 형식 2</span></a> 표는 <a class="reference internal" href="#DATE_FORMAT" title="DATE_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">DATE_FORMAT()</span></code></a> 함수, <a class="reference internal" href="#TIME_FORMAT" title="TIME_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">TIME_FORMAT()</span></code></a> 함수, <a class="reference internal" href="#STR_TO_DATE" title="STR_TO_DATE"><code class="xref py py-func docutils literal notranslate"><span class="pre">STR_TO_DATE()</span></code></a> 함수에서 사용된다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>date</strong> – DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, 또는 TIMESTAMPLTZ 타입의 값</p></li>
+<li><p><strong>format</strong> – 출력 형식을 지정한다. ‘%’로 시작하는 형식 지정자(specifier)를 사용한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용된다. <strong>intl_date_lang</strong>이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>format</em> 이 “%d %M %Y”인 경우 “2009년 10월 3일”인 날짜를 “3 Oktober 2009”인 문자열로 출력한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p>아래 <a class="reference internal" href="#datetime-format2"><span class="std std-ref">날짜/시간 형식 2</span></a> 표에서 월 이름, 요일 이름, 일 이름, 오전/오후 이름 등은 언어에 따라 다르다.</p>
+<p id="datetime-format2"><strong>날짜/시간 형식 2</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>format 값</p></th>
+<th class="head"><p>의미</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>%a</p></td>
+<td><p>Weekday, 영문 약어 (Sun, …, Sat)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%b</p></td>
+<td><p>Month, 영문 약어 (Jan, …, Dec)</p></td>
+</tr>
+<tr class="row-even"><td><p>%c</p></td>
+<td><p>Month(1, …, 12)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%D</p></td>
+<td><p>Day of the month, 서수 영문 문자열(1st, 2nd, 3rd, …)</p></td>
+</tr>
+<tr class="row-even"><td><p>%d</p></td>
+<td><p>Day of the month, 두 자리 숫자(01, …, 31)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%e</p></td>
+<td><p>Day of the month (1, …, 31)</p></td>
+</tr>
+<tr class="row-even"><td><p>%f</p></td>
+<td><p>Milliseconds, 세 자리 숫자 (000, …, 999)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%H</p></td>
+<td><p>Hour, 24시간 기준, 두 자리 수 이상 (00, …, 23, …, 100, …)</p></td>
+</tr>
+<tr class="row-even"><td><p>%h</p></td>
+<td><p>Hour, 12시간 기준 두 자리 숫자 (01, …, 12)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%I</p></td>
+<td><p>Hour, 12시간 기준 두 자리 숫자 (01, …, 12)</p></td>
+</tr>
+<tr class="row-even"><td><p>%i</p></td>
+<td><p>Minutes, 두 자리 숫자 (00, …, 59)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%j</p></td>
+<td><p>Day of year, 세 자리 숫자 (001, …, 366)</p></td>
+</tr>
+<tr class="row-even"><td><p>%k</p></td>
+<td><p>Hour, 24시간 기준, 한 자리 수 이상 (0, …, 23, …, 100, …)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%l</p></td>
+<td><p>Hour, 12시간 기준 (1, …, 12)</p></td>
+</tr>
+<tr class="row-even"><td><p>%M</p></td>
+<td><p>Month, 영문 문자열 (January, …, December)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%m</p></td>
+<td><p>Month, 두 자리 숫자 (01, …, 12)</p></td>
+</tr>
+<tr class="row-even"><td><p>%p</p></td>
+<td><p>AM or PM</p></td>
+</tr>
+<tr class="row-odd"><td><p>%r</p></td>
+<td><p>Time, 12 시간 기준, 시:분:초 (hh:mi:ss AM or hh:mi:ss PM)</p></td>
+</tr>
+<tr class="row-even"><td><p>%S</p></td>
+<td><p>Seconds, 두 자리 숫자 (00, …, 59)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%s</p></td>
+<td><p>Seconds, 두 자리 숫자 (00, …, 59)</p></td>
+</tr>
+<tr class="row-even"><td><p>%T</p></td>
+<td><p>Time, 24시간 기준, 시:분:초 (hh:mi:ss)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%U</p></td>
+<td><p>Week, 두 자리 숫자, 일요일이 첫날인 주 단위 (00, …, 53)</p></td>
+</tr>
+<tr class="row-even"><td><p>%u</p></td>
+<td><p>Week, 두 자리 숫자, 월요일이 첫날인 주 단위 (00, …, 53)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%V</p></td>
+<td><p>Week, 두 자리 숫자, 일요일이 첫날인 주 단위 (01, …, 53)
+%X와 결합되어 사용 가능</p></td>
+</tr>
+<tr class="row-even"><td><p>%v</p></td>
+<td><p>Week, 두 자리 숫자, 월요일이 첫날인 주 단위 (01, …, 53)
+%x 와 결합되어 사용 가능</p></td>
+</tr>
+<tr class="row-odd"><td><p>%W</p></td>
+<td><p>Weekday, 영문 문자열 (Sunday, …, Saturday)</p></td>
+</tr>
+<tr class="row-even"><td><p>%w</p></td>
+<td><p>Day of the week, 숫자 인덱스 (0=Sunday, …, 6=Saturday)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%X</p></td>
+<td><p>Year, 네 자리 숫자, 일요일이 첫날인 주 단위로 계산(0000, …, 9999)
+%V와 결합되어 사용 가능</p></td>
+</tr>
+<tr class="row-even"><td><p>%x</p></td>
+<td><p>Year, 네 자리 숫자, 월요일이 첫날인 주 단위로 계산(0000, …, 9999)
+%v와 결합되어 사용 가능</p></td>
+</tr>
+<tr class="row-odd"><td><p>%Y</p></td>
+<td><p>Year, 네 자리 숫자 (0001, …, 9999)</p></td>
+</tr>
+<tr class="row-even"><td><p>%y</p></td>
+<td><p>Year, 두 자리 숫자 (00, 01, …, 99)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%%</p></td>
+<td><p>특수문자 “%”를 그대로 출력하는 경우</p></td>
+</tr>
+<tr class="row-even"><td><p>%x</p></td>
+<td><p>형식 지정자로 쓰이지 않는 영문자 중 임의의 문자 x를 그대로 출력하는 경우</p></td>
+</tr>
+<tr class="row-odd"><td><p>%TZR</p></td>
+<td><p>타임존 영역 정보(예: US/Pacific)</p></td>
+</tr>
+<tr class="row-even"><td><p>%TZD</p></td>
+<td><p>일광 절약 정보(예: KST, KT, EET)</p></td>
+</tr>
+<tr class="row-odd"><td><p>%TZH</p></td>
+<td><p>타임존의 시간 오프셋(예: +09, -09)</p></td>
+</tr>
+<tr class="row-even"><td><p>%TZM</p></td>
+<td><p>타임존의 분 오프셋  (예: +00, +30)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>%TZR, %TZD, %TZH, %TZM은 타임존 타입에서만 사용 가능하다.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p><strong>TZD 뒤에 숫자를 명시하는 포맷</strong></p>
+<p><a class="reference internal" href="#tzd-and-a-following-number"><span class="std std-ref">TZD 뒤에 숫자를 명시하는 포맷</span></a>을 참고한다.</p>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “en_US”인 경우의 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">datetime</span><span class="s1">'2009-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%W %M %Y'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'Sunday October 2009'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">datetime</span><span class="s1">'2007-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%H:%i:%s'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'22:23:00'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">datetime</span><span class="s1">'1900-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%D %y %a %d %m %b %j'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'4th 00 Thu 04 10 Oct 277'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="nb">date</span><span class="s1">'1999-01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%X %V'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'1998 52'</span>
+</span></code></pre></div>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “de_DE”인 경우의 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">datetime</span><span class="s1">'2009-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%W %M %Y'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'Sonntag Oktober 2009'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">datetime</span><span class="s1">'2007-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%H:%i:%s %p'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'22:23:00 Nachm.'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">datetime</span><span class="s1">'1900-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%D %y %a %d %m %b %j'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'4 00 Do. 04 10 Okt 277'</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>문자셋이 ISO-8859-1인 경우 “en_US” 외에 시스템 파라미터 <strong>intl_date_lang</strong>에 의해 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>의 <a class="reference internal" href="#tochar-remark"><span class="std std-ref">Note</span></a>를 참고한다.</p>
+</div>
+<p>다음은 타임존 정보를 포함하는 DATETIMETZ 타입의 값을 원하는 형식에 맞게 문자열로 변환하여 출력하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">datetimetz</span><span class="s1">'2012-02-02 10:10:10 Europe/Zurich CET'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%TZR %TZD %TZH %TZM'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'Europe/Zurich CET 01 00'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="format">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">FORMAT</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#format" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#format'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="FORMAT">
+<span class="sig-name descname"><span class="pre">FORMAT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#FORMAT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#FORMAT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>FORMAT</strong> 함수는 숫자 <em>x</em> 의 형식이 <em>#,###,###.#####</em> 이 되도록, 소수점 위 세 자리마다 자릿수 구분 기호로 구분하고 소수점 기호 아래 숫자가 <em>dec</em> 만큼 표현되도록 <em>dec</em> 의 아랫자리에서 반올림을 수행한 결과를 <strong>VARCHAR</strong> 타입으로 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – 수치 값을 반환하는 임의의 연산식이다.</p></li>
+<li><p><strong>dec</strong> – 소수점 이하 자릿수</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<p>자릿수 구분 기호와 소수점 기호는 지정한 언어에 맞는 형식으로 출력한다. 이때 언어는 <strong>intl_number_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_number_lang</strong> 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”나 “fr_FR”과 같은 유럽 국가의 언어이면 “.”를 숫자의 자릿수 구분 기호로 해석하고 “,”를 소수점 기호로 해석한다(<a class="reference internal" href="#tochar-default-number-format"><span class="std std-ref">언어별 숫자의 기본 출력</span></a> 참고).</p>
+<p>다음은 시스템 파라미터 <strong>intl_number_lang</strong> 의 값을 “en_US”로 설정하여 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_number_lang="en_US"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">FORMAT</span><span class="p">(</span><span class="mi">12000</span><span class="p">.</span><span class="mi">123456</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="n">FORMAT</span><span class="p">(</span><span class="mi">12000</span><span class="p">.</span><span class="mi">123456</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'12,000.123'</span>          <span class="s1">'12,000'</span>
+</span></code></pre></div>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_number_lang</strong> 의 값을 “de_DE”로 설정하여 생성한 데이터베이스에서 실행한 예이다. 독일, 프랑스 등 유럽 국가 대부분의 숫자 출력 형식은 “.”가 자릿수 구분 기호이고, “,”가 소수점 기호이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_number_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">FORMAT</span><span class="p">(</span><span class="mi">12000</span><span class="p">.</span><span class="mi">123456</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="n">FORMAT</span><span class="p">(</span><span class="mi">12000</span><span class="p">.</span><span class="mi">123456</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'12.000,123'</span>          <span class="s1">'12.000'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="str-to-date">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">STR_TO_DATE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#str-to-date" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#str-to-date'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="STR_TO_DATE">
+<span class="sig-name descname"><span class="pre">STR_TO_DATE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#STR_TO_DATE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#STR_TO_DATE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>STR_TO_DATE</strong> 함수는 인자로 주어진 문자열을 지정된 형식에 따라 해석하여 날짜/시간 값으로 변환하며, <a class="reference internal" href="#DATE_FORMAT" title="DATE_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">DATE_FORMAT()</span></code></a> 함수와 반대로 동작한다. 리턴 값은 문자열에 포함된 날짜 또는 시간 부분에 따라 타입이 결정된다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 문자열</p></li>
+<li><p><strong>format</strong> – 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. <a class="reference internal" href="#DATE_FORMAT" title="DATE_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">DATE_FORMAT()</span></code></a> 함수의 <a class="reference internal" href="#datetime-format2"><span class="std std-ref">날짜/시간 형식 2</span></a> 표를 참고한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>DATETIME, DATE, TIME, DATETIMETZ</p>
+</dd>
+</dl>
+</dd></dl>
+<p>지정할 <em>format</em> 인자는 <a class="reference internal" href="#DATE_FORMAT" title="DATE_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">DATE_FORMAT()</span></code></a> 함수의 <a class="reference internal" href="#datetime-format2"><span class="std std-ref">날짜/시간 형식 2</span></a> 표를 참고한다.</p>
+<p><em>string</em>에 유효하지 않은 날짜/시간 값이 포함되거나, <em>format</em>에 지정된 형식 지정자를 적용하여 문자열을 해석할 수 없으면 에러를 리턴한다.</p>
+<p><em>format</em> 인자가 지정되면 지정된 언어에 맞는 형식으로 <em>string</em> 을 해석한다. 이때 언어는 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용된다. <strong>intl_date_lang</strong> 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>format</em> 이 “%d %M %Y”인 경우 “3 Oktober 2009”인 문자열을 “2009년 10월 3일”인 <strong>DATE</strong> 타입으로 해석한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p>인자의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값을 입력한 경우에는 날짜와 시간 값이 모두 0인 <strong>DATE</strong>, <strong>DATETIME</strong> 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다. 이에 관한 자세한 내용은 <a class="reference internal" href="../../api/jdbc.html#jdbc-connection-conf"><span class="std std-ref">연결 설정</span></a>을 참고하면 된다.</p>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “en_US”인 경우의 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="en_US"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'01,5,2013'</span><span class="p">,</span><span class="s1">'%d,%m,%Y'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">05</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2013</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'May 1, 2013'</span><span class="p">,</span><span class="s1">'%M %d,%Y'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">05</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2013</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'13:30:17'</span><span class="p">,</span><span class="s1">'%H:%i'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="n">PM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'09:30:17 PM'</span><span class="p">,</span><span class="s1">'%r'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">09</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">17</span> <span class="n">PM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'0,0,0000'</span><span class="p">,</span><span class="s1">'%d,%m,%Y'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">00</span><span class="o">/</span><span class="mi">00</span><span class="o">/</span><span class="mi">0000</span>
+</span></code></pre></div>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “de_DE”인 경우의 예이다. 독일어 Oktober가 10월로 해석된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'3 Oktober 2009'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%d %M %Y'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span><span class="o">/</span><span class="mi">03</span><span class="o">/</span><span class="mi">2009</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>문자셋이 ISO-8859-1인 경우 “en_US” 외에 시스템 파라미터 <strong>intl_date_lang</strong>에 의해 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>의 <a class="reference internal" href="#tochar-remark"><span class="std std-ref">Note</span></a>를 참고한다.</p>
+</div>
+<p>다음은 타임존 정보를 포함하는 날짜/시간 문자열을 DATETIMETZ 타입으로 변환하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'2001-10-11 02:03:04 AM Europe/Bucharest EEST'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%Y-%m-%d %h:%i:%s %p %TZR %TZD'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">02</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mf">04.000</span> <span class="n">AM</span> <span class="mi">10</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">2001</span> <span class="n">Europe</span><span class="o">/</span><span class="n">Bucharest</span> <span class="n">EEST</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="time-format">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">TIME_FORMAT</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#time-format" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#time-format'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TIME_FORMAT">
+<span class="sig-name descname"><span class="pre">TIME_FORMAT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TIME_FORMAT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TIME_FORMAT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TIME_FORMAT</strong> 함수는 시간을 포함하는 날짜/시간 타입 값을 지정된 시간 형식의 문자열로 출력하며, 리턴 값은 <strong>VARCHAR</strong> 타입이다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> – 시간을 포함하는 타입(TIME, TIMESTAMP, DATETIME, TIMESTAMPTZ 또는 DATETIMETZ)의 값.</p></li>
+<li><p><strong>format</strong> – 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. <a class="reference internal" href="#DATE_FORMAT" title="DATE_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">DATE_FORMAT()</span></code></a> 함수의 <a class="reference internal" href="#datetime-format2"><span class="std std-ref">날짜/시간 형식 2</span></a> 표를 참고한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용된다. <strong>intl_date_lang</strong> 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>format</em> 이 “%h:%i:%s %p”인 경우 “08:46:53 PM”인 시간을 “08:46:53 Nachm.”으로 출력한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “en_US”인 경우의 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="en_US"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">TIME_FORMAT</span><span class="p">(</span><span class="k">time</span><span class="s1">'22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%H %i %s'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'22 23 00'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TIME_FORMAT</span><span class="p">(</span><span class="k">time</span><span class="s1">'23:59:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%H %h %i %s %f'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'23 11 59 00 000'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">SYSTIME</span><span class="p">,</span><span class="w"> </span><span class="n">TIME_FORMAT</span><span class="p">(</span><span class="n">SYSTIME</span><span class="p">,</span><span class="w"> </span><span class="s1">'%p'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">08</span><span class="p">:</span><span class="mi">46</span><span class="p">:</span><span class="mi">53</span> <span class="n">PM</span>  <span class="s1">'PM'</span>
+</span></code></pre></div>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “de_DE”인 경우의 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">SYSTIME</span><span class="p">,</span><span class="w"> </span><span class="n">TIME_FORMAT</span><span class="p">(</span><span class="n">SYSTIME</span><span class="p">,</span><span class="w"> </span><span class="s1">'%p'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">08</span><span class="p">:</span><span class="mi">46</span><span class="p">:</span><span class="mi">53</span> <span class="n">PM</span>  <span class="s1">'Nachm.'</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>문자셋이 ISO-8859-1인 경우 “en_US” 외에 시스템 파라미터 <strong>intl_date_lang</strong>에 의해 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>의 <a class="reference internal" href="#tochar-remark"><span class="std std-ref">Note</span></a>를 참고한다.</p>
+</div>
+<p>다음은 타임존 정보를 포함하는 값을 명시한 포맷의 문자열로 출력하는 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TIME_FORMAT</span><span class="p">(</span><span class="n">datetimetz</span><span class="s1">'2001-10-11 02:03:04 AM Europe/Bucharest EEST'</span><span class="p">,</span><span class="w"> </span><span class="s1">'%h:%i:%s %p %TZR %TZD'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'02:03:04 AM Europe/Bucharest EEST'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="to-char-date-time">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">TO_CHAR(date_time)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-char-date-time" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-char-date-time'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_CHAR">
+<span class="sig-name descname"><span class="pre">TO_CHAR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_time</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">date_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_CHAR" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_CHAR'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_CHAR</strong> (date_time) 함수는 날짜/시간 타입 값을 <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a> 표에 따라 문자열로 변환하여 이를 반환하며, 리턴 값의 타입은 <strong>VARCHAR</strong> 이다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>date_time</strong> – 날짜/시간 타입(TIME, DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ )의 값.</p></li>
+<li><p><strong>format</strong> – 리턴 값의 형식</p></li>
+<li><p><strong>date_lang_string_literal</strong> – 리턴 값에 적용할 언어를 지정한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정한 언어에 맞는 형식으로 <em>date_time</em> 을 출력한다. 자세한 형식은 <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a> 표를 참고하면 된다. 언어는 <em>date_lang_string_literal</em> 인자에 의해 정해진다. <em>date_lang_string_literal</em> 인자가 생략되면 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_date_lang</strong> 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>format</em>이 “HH:MI:SS AM”인 경우 “08:46:53 PM”인 시간을 “08:46:53 Nachm.”으로 출력한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p><em>format</em> 인자가 생략되면 “en_US”의 기본 출력 형식을 따라 <em>date_time</em>을 문자열로 출력한다(아래 <a class="reference internal" href="#tochar-default-datetime-format"><span class="std std-ref">날짜/시간 타입에 대한 언어별 기본 출력 형식</span></a> 표의 en_US 참고).</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>CUBRID 9.0 미만 버전에서 사용되었던 <strong>CUBRID_DATE_LANG</strong> 환경 변수는 더 이상 사용되지 않는다.</p>
+</div>
+<p id="tochar-default-datetime-format"><strong>날짜/시간 타입에 대한 언어별 기본 출력 형식</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>LANG</p></th>
+<th class="head"><p>DATE</p></th>
+<th class="head"><p>TIME</p></th>
+<th class="head"><p>TIMESTAMP</p></th>
+<th class="head"><p>DATETIME</p></th>
+<th class="head"><p>TIMESTAMP WITH TIME ZONE</p></th>
+<th class="head"><p>DATETIME WITH TIME ZONE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>en_US</p></td>
+<td><p>‘MM/DD/YYYY’</p></td>
+<td><p>‘HH:MI:SS AM’</p></td>
+<td><p>‘HH:MI:SS AM MM/DD/YYYY’</p></td>
+<td><p>‘HH:MI:SS.FF AM MM/DD/YYYY’</p></td>
+<td><p>‘HH:MI:SS AM MM/DD/YYYY TZR’</p></td>
+<td><p>‘HH:MI:SS.FF AM MM/DD/YYYY TZR’</p></td>
+</tr>
+<tr class="row-odd"><td><p>de_DE</p></td>
+<td><p>‘DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY TZR’</p></td>
+</tr>
+<tr class="row-even"><td><p>es_ES</p></td>
+<td><p>‘DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD/MM/YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD/MM/YYYY TZR’</p></td>
+</tr>
+<tr class="row-odd"><td><p>fr_FR</p></td>
+<td><p>‘DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD/MM/YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD/MM/YYYY TZR’</p></td>
+</tr>
+<tr class="row-even"><td><p>it_IT</p></td>
+<td><p>‘DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD/MM/YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD/MM/YYYY TZR’</p></td>
+</tr>
+<tr class="row-odd"><td><p>ja_JP</p></td>
+<td><p>‘YYYY/MM/DD’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS YYYY/MM/DD’</p></td>
+<td><p>‘HH24:MI:SS.FF YYYY/MM/DD’</p></td>
+<td><p>‘HH24:MI:SS YYYY/MM/DD TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF YYYY/MM/DD TZR’</p></td>
+</tr>
+<tr class="row-even"><td><p>km_KH</p></td>
+<td><p>‘DD/MM/YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD/MM/YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD/MM/YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD/MM/YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD/MM/YYYY TZR’</p></td>
+</tr>
+<tr class="row-odd"><td><p>ko_KR</p></td>
+<td><p>‘YYYY.MM.DD’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS YYYY.MM.DD’</p></td>
+<td><p>‘HH24:MI:SS.FF YYYY.MM.DD’</p></td>
+<td><p>‘HH24:MI:SS YYYY.MM.DD TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF YYYY.MM.DD TZR’</p></td>
+</tr>
+<tr class="row-even"><td><p>tr_TR</p></td>
+<td><p>‘DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY TZR’</p></td>
+</tr>
+<tr class="row-odd"><td><p>vi_VN</p></td>
+<td><p>‘DD/MM/YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD/MM/YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD/MM/YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD/MM/YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD/MM/YYYY TZR’</p></td>
+</tr>
+<tr class="row-even"><td><p>zh_CN</p></td>
+<td><p>‘YYYY-MM-DD’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS YYYY-MM-DD’</p></td>
+<td><p>‘HH24:MI:SS.FF YYYY-MM-DD’</p></td>
+<td><p>‘HH24:MI:SS YYYY-MM-DD TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF YYYY-MM-DD TZR’</p></td>
+</tr>
+<tr class="row-odd"><td><p>ro_RO</p></td>
+<td><p>‘DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY’</p></td>
+<td><p>‘HH24:MI:SS DD.MM.YYYY TZR’</p></td>
+<td><p>‘HH24:MI:SS.FF DD.MM.YYYY TZR’</p></td>
+</tr>
+</tbody>
+</table>
+<p id="datetime-format1"><strong>날짜/시간 형식 1</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>format 값</p></th>
+<th class="head"><p>의미</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>CC</strong></p></td>
+<td><p>세기(Century)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>YYYY</strong>
+, <strong>YY</strong></p></td>
+<td><p>4자리 연도, 2자리 연도</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Q</strong></p></td>
+<td><p>분기(1, 2, 3, 4; 1월~3월 = 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MM</strong></p></td>
+<td><p>월(01-12; 1월 = 01)
+<em>참고: 분(minute)은 MI이다.</em></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MONTH</strong></p></td>
+<td><p>월 이름</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MON</strong></p></td>
+<td><p>축약된 월 이름</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DD</strong></p></td>
+<td><p>날(1-31)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>DAY</strong></p></td>
+<td><p>요일 이름</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DY</strong></p></td>
+<td><p>축약된 요일 이름</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>D</strong> 또는 <strong>d</strong></p></td>
+<td><p>요일(1-7)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>AM</strong> 또는 <strong>PM</strong></p></td>
+<td><p>오전/오후</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>A.M.</strong>
+또는 <strong>P.M.</strong></p></td>
+<td><p>마침표가 포함된 오전/오후</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>HH</strong>
+또는 <strong>HH12</strong></p></td>
+<td><p>시(1-12)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>HH24</strong></p></td>
+<td><p>시(0-23)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MI</strong></p></td>
+<td><p>분(0-59)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>SS</strong></p></td>
+<td><p>초(0-59)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>FF</strong></p></td>
+<td><p>밀리초(0-999)</p></td>
+</tr>
+<tr class="row-odd"><td><p>- / , . ; : “텍스트”</p></td>
+<td><p>구두점과 인용구는 그대로 결과에 표현됨</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>TZD</strong></p></td>
+<td><p>일광 절약 정보(예: KST, KT, EET)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>TZH</strong></p></td>
+<td><p>타임존의 시간 오프셋(예: +09, -09)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>TZM</strong></p></td>
+<td><p>타임존의 분 오프셋  (예: 00, 30)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>TZR, TZD, TZH, TZM은 타임존 타입에서만 사용 가능하다.</p>
+</div>
+<div class="admonition note" id="tzd-and-a-following-number">
+<p class="admonition-title">참고</p>
+<p><strong>TZD 뒤에 숫자를 명시하는 포맷</strong></p>
+<p>TZD는 뒤에 숫자를 붙여서도 사용할 수 있다. TZD2~TZD11까지 사용할 수 있는데, 일반 문자를 문자열의 구분자로 사용하는 경우 숫자가 뒤따르는 포맷을 사용할 수 있다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">STR_TO_DATE</span><span class="p">(</span><span class="s1">'09:30:17 20140307XEESTXEurope/Bucharest'</span><span class="p">,</span><span class="s1">'%h:%i:%s %Y%d%mX%TZD4X%TZR'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">09</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mf">17.000</span> <span class="n">AM</span> <span class="mi">07</span><span class="o">/</span><span class="mi">03</span><span class="o">/</span><span class="mi">2014</span> <span class="n">Europe</span><span class="o">/</span><span class="n">Bucharest</span> <span class="n">EEST</span>
+</span></code></pre></div>
+</div>
+<p>위와 같이 각각의 값을 구분하기 위한 구분자로 일반 문자인 ‘X’를 사용하는 경우, TZD 값은 길이가 변할 수 있는 값이므로 TZD의 값과 구분자를 구분하기에 모호하다. 이런 경우 TZD의 길이를 명시하여야 한다.</p>
+</div></blockquote>
+</div>
+<p><strong>date_lang_string_literal 예</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" rowspan="2"><p><strong>형식 구성
+요소</strong></p></th>
+<th class="head" colspan="2"><p><strong>date_lang_string_literal</strong></p></th>
+</tr>
+<tr class="row-even"><th class="head"><p><strong>‘en_US’</strong></p></th>
+<th class="head"><p><strong>‘ko_KR’</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p><strong>MONTH</strong></p></td>
+<td><p>JANUARY</p></td>
+<td><p>1월</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MON</strong></p></td>
+<td><p>JAN</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>DAY</strong></p></td>
+<td><p>MONDAY</p></td>
+<td><p>월요일</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DY</strong></p></td>
+<td><p>MON</p></td>
+<td><p>월</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Month</strong></p></td>
+<td><p>January</p></td>
+<td><p>1월</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Mon</strong></p></td>
+<td><p>Jan</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Day</strong></p></td>
+<td><p>Monday</p></td>
+<td><p>월요일</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Dy</strong></p></td>
+<td><p>Mon</p></td>
+<td><p>월</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>month</strong></p></td>
+<td><p>january</p></td>
+<td><p>1월</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>mon</strong></p></td>
+<td><p>jan</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>day</strong></p></td>
+<td><p>monday</p></td>
+<td><p>월요일</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Dy</strong></p></td>
+<td><p>mon</p></td>
+<td><p>월</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>AM</strong></p></td>
+<td><p>AM</p></td>
+<td><p>오전</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Am</strong></p></td>
+<td><p>Am</p></td>
+<td><p>오전</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>am</strong></p></td>
+<td><p>am</p></td>
+<td><p>오전</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>A.M.</strong></p></td>
+<td><p>A.M.</p></td>
+<td><p>오전</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>A.m.</strong></p></td>
+<td><p>A.m.</p></td>
+<td><p>오전</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>a.m.</strong></p></td>
+<td><p>a.m.</p></td>
+<td><p>오전</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>PM</strong></p></td>
+<td><p>PM</p></td>
+<td><p>오후</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pm</strong></p></td>
+<td><p>Pm</p></td>
+<td><p>오후</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>pm</strong></p></td>
+<td><p>pm</p></td>
+<td><p>오후</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>P.M.</strong></p></td>
+<td><p>P.M.</p></td>
+<td><p>오후</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>P.m.</strong></p></td>
+<td><p>P.m.</p></td>
+<td><p>오후</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>p.m.</strong></p></td>
+<td><p>p.m.</p></td>
+<td><p>오후</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>리턴 값 형식의 자릿수의 예</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>형식 구성 요소</p></th>
+<th class="head"><p>en_US 자릿수</p></th>
+<th class="head"><p>ko_KR 자릿수</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>MONTH(Month, month)</strong></p></td>
+<td><p>9</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MON(Mon, mon)</strong></p></td>
+<td><p>3</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DAY(Day, day)</strong></p></td>
+<td><p>9</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>DY(Dy, dy)</strong></p></td>
+<td><p>3</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>HH12, HH24</strong></p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>“텍스트”</p></td>
+<td><p>텍스트의 길이</p></td>
+<td><p>텍스트의 길이</p></td>
+</tr>
+<tr class="row-even"><td><p>나머지 형식</p></td>
+<td><p>주어진 형식의 길이와 같음</p></td>
+<td><p>주어진 형식의 길이와 같음</p></td>
+</tr>
+</tbody>
+</table>
+<p>다음은 언어 및 문자셋을 “en_US.iso88591”로 설정하여 생성한 데이터베이스에서 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- create database testdb en_US.iso88591</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">--creating a table having date/time type columns</span>
+</span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">datetime_tbl</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="k">TIME</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">DATE</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="n">DATETIME</span><span class="p">);</span>
+</span><span id="line-5"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">datetime_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="n">SYSTIME</span><span class="p">,</span><span class="w"> </span><span class="n">SYSDATE</span><span class="p">,</span><span class="w"> </span><span class="n">SYSTIMESTAMP</span><span class="p">,</span><span class="w"> </span><span class="n">SYSDATETIME</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="c1">--selecting a VARCHAR type string from the data in the specified format</span>
+</span><span id="line-8"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s1">'DD, DY , MON, YYYY'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">datetime_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'20, TUE , AUG, 2013'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="k">c</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH24:MI, DD, MONTH, YYYY'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">datetime_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'17:00, 20, AUGUST   , 2013'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH12:MI:SS:FF pm, YYYY-MM-DD-DAY'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">datetime_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'05:00:58:358 pm, 2013-08-20-TUESDAY  '</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="k">TIMESTAMP</span><span class="s1">'2009-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Day Month yyyy'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'Sunday    October   2009'</span>
+</span></code></pre></div>
+</div>
+<p>다음은 위에서 생성한 데이터베이스에서 <strong>TO_CHAR</strong> 함수에 언어 인자를 별도로 부여한 예이다. 문자셋이 ISO-8859-1이면 <strong>TO_CHAR</strong> 함수의 언어 인자를 “tr_TR”과 “ko_KR”로 설정하는 것은 허용하나, 다른 언어는 허용하지 않는다. <strong>TO_CHAR</strong> 의 언어 인자로 모든 언어를 사용 가능하게 하려면 데이터베이스 생성 시 문자셋이 UTF8이어야 한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="k">TIMESTAMP</span><span class="s1">'2009-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Day Month yyyy'</span><span class="p">,</span><span class="s1">'ko_KR'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'Iryoil    10wol 2009'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="k">TIMESTAMP</span><span class="s1">'2009-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Day Month yyyy'</span><span class="p">,</span><span class="s1">'tr_TR'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'Pazar     Ekim    2009'</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note" id="tochar-remark">
+<p class="admonition-title">참고</p>
+<ul>
+<li><p>언어에 따라 월 이름, 일 이름, 요일 이름, 오전/오후 이름의 해석이 변경되는 함수에서 문자셋이 ISO-8859-1인 경우 “en_US” 외에 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다(위의 예 참고). 다만, 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 시스템 파라미터 <strong>intl_date_lang</strong>을 설정하거나 <strong>TO_CHAR</strong> 함수의 언어 인자를 지정하여 CUBRID가 지원하는 모든 언어(위 구문의 <em>date_lang_string_literal</em> 참고) 중 하나로 변경할 수 있다. 언어에 따라 날짜/시간 형식의 해석이 변경되는 함수들의 목록은 시스템 파라미터 <strong>intl_date_lang</strong>의 설명을 참고한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- change date locale as "de_DE" and run the below query.</span>
+</span><span id="line-2"><span class="c1">-- This case is failed because database locale, en_US's charset is ISO-8859-1</span>
+</span><span id="line-3"><span class="c1">-- and 'de_DE' only supports UTF-8 charset.</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="k">TIMESTAMP</span><span class="s1">'2009-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Day Month yyyy'</span><span class="p">,</span><span class="s1">'de_DE'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">before</span> <span class="s1">' , '</span><span class="n">Day</span> <span class="n">Month</span> <span class="n">yyyy</span><span class="s1">','</span><span class="n">de_DE</span><span class="s1">'); '</span>
+</span><span id="line-2"><span class="n">Locales</span> <span class="k">for</span> <span class="n">language</span> <span class="s1">'de_DE'</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">available</span> <span class="k">with</span> <span class="n">charset</span> <span class="s1">'iso8859-1'</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>다음은 DB 생성 시 로캘을 “en_US.utf8”로 설정하고 생성한 데이터베이스에서 <strong>TO_CHAR</strong> 함수에 언어 인자를 “de_DE”로 지정하고 실행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="k">TIMESTAMP</span><span class="s1">'2009-10-04 22:23:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Day Month yyyy'</span><span class="p">,</span><span class="s1">'de_DE'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'Sonntag   Oktober 2009'</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>첫번째 인자가 zerodate이고 두번째 인자에 ‘Month’, ‘Day’와 같은 리터럴 형식이 지정되면 TO_CHAR 함수는 NULL을 반환한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="k">timestamp</span><span class="w"> </span><span class="s1">'0000-00-00 00:00:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Month Day YYYY'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</div>
+<p>다음은 타임존 정보를 포함하는 날짜/시간 타입을 TO_CHAR 함수에서 출력하는 예이다.</p>
+<p>형식을 정의하지 않으면 아래와 같은 순서로 출력된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="n">datetimetz</span><span class="s1">'2001-10-11 02:03:04 AM Europe/Bucharest EEST'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'02:03:04.000 AM 10/11/2001 Europe/Bucharest EEST'</span>
+</span></code></pre></div>
+</div>
+<p>형식을 정의하면 정의한 순서대로 출력된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="n">datetimetz</span><span class="s1">'2001-10-11 02:03:04 AM Europe/Bucharest EEST'</span><span class="p">,</span><span class="w"> </span><span class="s1">'MM/DD/YYYY HH24:MI TZR TZD TZH TZM'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'10/11/2001 02:03 Europe/Bucharest EEST +03 +00'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="to-char-number">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">TO_CHAR(number)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-char-number" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-char-number'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">TO_CHAR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">number_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id0" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id0'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_CHAR</strong> (number) 함수는 수치형 데이터 타입을 <a class="reference internal" href="#tochar-number-format"><span class="std std-ref">숫자 형식</span></a>에 맞는 문자열로 변환하여 <strong>VARCHAR</strong> 타입으로 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number</strong> – 숫자를 반환하는 수치형 데이터 타입의 연산식을 지정한다. 입력값이 NULL이면 결과로 NULL이 반환된다. 입력값이 문자열 타입이면 해당 문자열을 그대로 반환한다.</p></li>
+<li><p><strong>format</strong> – 리턴 값의 형식을 지정한다. 값이 <strong>NULL</strong>인 경우에는 <strong>NULL</strong>이 반환된다.</p></li>
+<li><p><strong>number_lang_string_literal</strong> – 입력 숫자를 출력할 때 적용할 언어를 지정한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정한 언어에 맞는 형식으로 <em>number</em>를 출력한다. 이때 언어는 <em>number_lang_string_literal</em> 인자에 의해 정해진다. <em>number_lang_string_literal</em> 인자가 생략되면 <strong>intl_number_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_number_lang</strong> 값이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”나 “fr_FR”과 같은 유럽 국가의 언어이면 “.”를 숫자의 자릿수 구분 기호로 출력하고 “,”를 소수점 기호로 출력한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p><em>format</em> 인자가 생략되면 지정된 언어의 기본 출력에 따라 <em>number</em> 를 문자열로 출력한다(<a class="reference internal" href="#tochar-default-number-format"><span class="std std-ref">언어별 숫자의 기본 출력</span></a> 표 참고).</p>
+<p id="tochar-number-format"><strong>숫자 형식</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>형식 구성 요소</p></th>
+<th class="head"><p>예제</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>9</strong></p></td>
+<td><p>9999</p></td>
+<td><p>“9”의 개수는 반환될 유효숫자 자릿수를 나타낸다.
+숫자 인자에 대해 형식에서 지정된 유효숫자 자릿수가 부족하면, 소수부에 대해서는 반올림 연산을 수행한다.
+숫자 인자의 정수부 자릿수보다 유효숫자 자릿수가 부족하면 #을 출력한다.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>0</strong></p></td>
+<td><p>0999</p></td>
+<td><p>형식에서 지정된 유효숫자 자릿수가 충분한 경우, 정수부 앞 부분을 공백이 아닌 0으로 채워 반환한다.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>S</strong></p></td>
+<td><p>S9999</p></td>
+<td><p>지정된 위치에 양수/음수 부호를 출력한다. 부호는 문자열의 시작부분에만 사용할 수 있다.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>C</strong></p></td>
+<td><p>C9999</p></td>
+<td><p>지정된 위치에 ISO 통화 기호를 반환한다.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>,</strong>
+(쉼표)</p></td>
+<td><p>9,999</p></td>
+<td><p>지정된 위치에 쉼표(“,”)를 반환한다. 언어의 설정에 따라 쓰임이 달라지는데, 자릿수 구분 기호로 사용될 경우 여러 개가 허용되며,
+소수점 기호로 사용될 경우 한 개만 허용된다. <a class="reference internal" href="#tochar-default-number-format"><span class="std std-ref">언어별 숫자의 기본 출력</span></a> 표 참고</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>.</strong>
+(마침표)</p></td>
+<td><p>9.999</p></td>
+<td><p>지정된 위치에 마침표를 출력한다. 언어의 설정에 따라 쓰임이 달라지는데, 자릿수 구분 기호로 사용될 경우 여러 개가 허용되며,
+소수점 기호로 사용될 경우 한 개만 허용된다. <a class="reference internal" href="#tochar-default-number-format"><span class="std std-ref">언어별 숫자의 기본 출력</span></a> 표 참고</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>EEEE</strong></p></td>
+<td><p>9.99EEEE</p></td>
+<td><p>과학적 기수법(scientific notation)을 반환한다.</p></td>
+</tr>
+</tbody>
+</table>
+<p id="tochar-default-number-format"><strong>언어별 숫자의 기본 출력</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>언어</p></th>
+<th class="head"><p>로캘 이름</p></th>
+<th class="head"><p>자릿수 구분 기호</p></th>
+<th class="head"><p>소수점 기호</p></th>
+<th class="head"><p>숫자 표기 예</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>영어</p></td>
+<td><p>en_US</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>123,456,789.012</p></td>
+</tr>
+<tr class="row-odd"><td><p>독일어</p></td>
+<td><p>de_DE</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+<tr class="row-even"><td><p>스페인어</p></td>
+<td><p>es_ES</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+<tr class="row-odd"><td><p>프랑스어</p></td>
+<td><p>fr_FR</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+<tr class="row-even"><td><p>이태리어</p></td>
+<td><p>it_IT</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+<tr class="row-odd"><td><p>일본어</p></td>
+<td><p>ja_JP</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>123,456,789.012</p></td>
+</tr>
+<tr class="row-even"><td><p>캄보디아어</p></td>
+<td><p>km_KH</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+<tr class="row-odd"><td><p>한국어</p></td>
+<td><p>ko_KR</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>123,456,789.012</p></td>
+</tr>
+<tr class="row-even"><td><p>터키어</p></td>
+<td><p>tr_TR</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+<tr class="row-odd"><td><p>베트남어</p></td>
+<td><p>vi_VN</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+<tr class="row-even"><td><p>중국어</p></td>
+<td><p>zh_CN</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>123,456,789.012</p></td>
+</tr>
+<tr class="row-odd"><td><p>루마니아어</p></td>
+<td><p>ro_RO</p></td>
+<td><p>.(마침표)</p></td>
+<td><p>,(쉼표)</p></td>
+<td><p>123.456.789,012</p></td>
+</tr>
+</tbody>
+</table>
+<p>다음은 DB 생성 시 로캘을 “en_US.utf8”로 설정하여 생성한 데이터베이스에서 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting a string casted from a number in the specified format</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span><span class="s1">'S999999'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span><span class="s1">'S099999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">' +12345'</span>             <span class="s1">'+012345'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span><span class="s1">'9,999,999,999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'    1,234,567'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span><span class="s1">'9.999.999.999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'#############'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'99'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'999.99999'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'99999.999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'##'</span>                  <span class="s1">'123.45670'</span>           <span class="s1">'  123.457'</span>
+</span></code></pre></div>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_number_lang</strong>의 값을 “de_DE”로 설정하고 수행한 예이다. 독일, 프랑스 등 유럽 국가 대부분의 숫자 출력 형식은 “.”가 자릿수 구분 기호이고, “,”가 소수점 기호이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_number_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">--selecting a string casted from a number in the specified format</span>
+</span><span id="line-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span><span class="s1">'S999999'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span><span class="s1">'S099999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">' +12345'</span>             <span class="s1">'+012345'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span><span class="s1">'9,999,999,999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'#############'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span><span class="s1">'9.999.999.999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'    1.234.567'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'99'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'999,99999'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'99999,999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'##'</span>                  <span class="s1">'123,45670'</span>           <span class="s1">'  123,457'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'99'</span><span class="p">,</span><span class="s1">'en_US'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'999.99999'</span><span class="p">,</span><span class="s1">'en_US'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">,</span><span class="s1">'99999.999'</span><span class="p">,</span><span class="s1">'en_US'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'##'</span>                  <span class="s1">'123.45670'</span>           <span class="s1">'  123.457'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">234567</span><span class="p">,</span><span class="s1">'99.999EEEE'</span><span class="p">,</span><span class="s1">'en_US'</span><span class="p">),</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">234567</span><span class="p">,</span><span class="s1">'99,999EEEE'</span><span class="p">,</span><span class="s1">'de_DE'</span><span class="p">),</span><span class="w"> </span><span class="n">to_char</span><span class="p">(</span><span class="mi">123</span><span class="p">.</span><span class="mi">4567</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'1.235E+00'</span>           <span class="s1">'1,235E+00'</span>           <span class="s1">'123,4567'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="to-date">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">TO_DATE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-date" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-date'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_DATE">
+<span class="sig-name descname"><span class="pre">TO_DATE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">date_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_DATE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_DATE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_DATE</strong> 함수는 인자로 지정된 날짜 형식을 기준으로 문자열을 해석하여, 이를 <strong>DATE</strong> 타입의 값으로 변환하여 반환한다. 날짜 형식은 <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a>을 참고한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 문자열</p></li>
+<li><p><strong>format</strong> – <strong>DATE</strong> 타입으로 변환할 값의 형식을 지정하며, <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a> 표를 참고한다. 값이 <strong>NULL</strong>이면 결과로 <strong>NULL</strong>이 반환된다.</p></li>
+<li><p><strong>date_lang_string_literal</strong> – 입력 값에 적용할 언어를 지정한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>DATE</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정한 언어에 맞는 형식으로 <em>string</em> 을 해석한다. 이때 언어는 <em>date_lang_string_literal</em> 인자에 의해 정해진다. <em>date_lang_string_literal</em> 인자가 생략되면 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_date_lang</strong> 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>string</em> 이 “12.mai.2012”이고 <em>format</em> 이 “DD.mon.YYYY”인 경우 “2012년 5월 12일”로 해석한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p><em>format</em> 인자가 생략되면 먼저 CUBRID 기본 형식(<a class="reference internal" href="../datatype.html#cast-to-datetime-recommend"><span class="std std-ref">날짜/시간 타입 문자열 권장 형식</span></a> 참고)에 따라 <em>string</em>을 해석하고, 실패하는 경우 <strong>intl_date_lang</strong>에 의해 설정된 언어의 기본 출력 형식(<a class="reference internal" href="#tochar-default-datetime-format"><span class="std std-ref">날짜/시간 타입에 대한 언어별 기본 출력 형식</span></a> 표 참고)에 따라 <em>string</em>을 해석한다. <strong>intl_date_lang</strong>이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <strong>DATE</strong> 타입에 대해 허용하는 문자열은 CUBRID 기본 형식인 “MM/DD/YYYY”과 “de_DE” 기본 형식인 “DD.MM.YYYY”이다.</p>
+<p>다음은 DB 생성 시 로캘을 “en_US.utf8”로 설정하여 수행하는 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting a date type value casted from a string in the specified format</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'12/25/2008'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'25/12/2008'</span><span class="p">,</span><span class="w"> </span><span class="s1">'DD/MM/YYYY'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'081225'</span><span class="p">,</span><span class="w"> </span><span class="s1">'YYMMDD'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'2008-12-25'</span><span class="p">,</span><span class="w"> </span><span class="s1">'YYYY-MM-DD'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<p>다음은 <strong>intl_date_lang</strong> 의 값이 “de_DE”일 때 <strong>TO_DATE</strong>를 수행하는 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'25.12.2012'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2012</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">'12/mai/2012'</span><span class="p">,</span><span class="s1">'dd/mon/yyyy'</span><span class="p">,</span><span class="w"> </span><span class="s1">'de_DE'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">05</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">2012</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>문자셋이 ISO-8859-1인 경우 “en_US” 외에 시스템 파라미터 <strong>intl_date_lang</strong>에 의해 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>의 <a class="reference internal" href="#tochar-remark"><span class="std std-ref">Note</span></a>를 참고한다.</p>
+</div>
+</section>
+<section id="to-datetime">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">TO_DATETIME</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-datetime" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-datetime'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_DATETIME">
+<span class="sig-name descname"><span class="pre">TO_DATETIME</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">date_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_DATETIME" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_DATETIME'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_DATETIME</strong> 함수는 인자로 지정된 <strong>DATETIME</strong> 형식을 기준으로 문자열을 해석하여, 이를 <strong>DATETIME</strong> 타입의 값으로 변환하여 반환한다. <strong>DATETIME</strong> 형식은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a> 함수의 <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a>을 참고한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 문자열</p></li>
+<li><p><strong>format</strong> – DATETIME 타입으로 변환할 값의 형식을 지정하며, <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a>을 참고한다. 값이 <strong>NULL</strong> 이면 결과로 <strong>NULL</strong> 이 반환된다.</p></li>
+<li><p><strong>date_lang_string_literal</strong> – 입력 값에 적용할 언어를 지정한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>DATETIME</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정한 언어에 맞는 형식으로 <em>string</em> 을 해석한다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>string</em>이 “12/mai/2012 12:10:00 Nachm.”이고 <em>format</em>이 “DD/MON/YYYY HH:MI:SS AM”인 경우 “2012년 5월 12일 오후 12시 10분 0초”로 해석한다. 이때 언어는 <em>date_lang_string_literal</em> 인자에 의해 정해진다. <em>date_lang_string_literal</em> 인자가 생략되면 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_date_lang</strong> 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p><em>format</em> 인자가 생략되면 먼저 CUBRID 기본 형식(<a class="reference internal" href="../datatype.html#cast-to-datetime-recommend"><span class="std std-ref">날짜/시간 타입 문자열 권장 형식</span></a> 참고)에 따라 <em>string</em>을 해석하고, 실패하는 경우 <strong>intl_date_lang</strong>에 의해 설정된 언어의 기본 출력 형식(<a class="reference internal" href="#tochar-default-datetime-format"><span class="std std-ref">날짜/시간 타입에 대한 언어별 기본 출력 형식</span></a> 표 참고)에 따라 <em>string</em>을 해석한다. <strong>intl_date_lang</strong>이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <strong>DATETIME</strong> 타입에 대해 허용하는 문자열은 CUBRID 기본 형식인 “HH:MI:SS.FF AM MM/DD/YYYY”와 “de_DE” 기본 형식인 “HH24:MI:SS.FF DD.MM.YYYY”이다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>CUBRID 9.0 미만 버전에서 사용되었던 <strong>CUBRID_DATE_LANG</strong> 환경 변수는 더 이상 사용되지 않는다.</p>
+</div>
+<p>다음은 DB 생성 시 로캘을 “en_US”로 설정하여 생성된 데이터베이스에서 수행하는 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting a datetime type value casted from a string in the specified format</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATETIME</span><span class="p">(</span><span class="s1">'13:10:30 12/25/2008'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">30.000</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATETIME</span><span class="p">(</span><span class="s1">'08-Dec-25 13:10:30.999'</span><span class="p">,</span><span class="w"> </span><span class="s1">'YY-Mon-DD HH24:MI:SS.FF'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">30.999</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATETIME</span><span class="p">(</span><span class="s1">'DATE: 12-25-2008 TIME: 13:10:30.999'</span><span class="p">,</span><span class="w"> </span><span class="s1">'"DATE:" MM-DD-YYYY "TIME:" HH24:MI:SS.FF'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">30.999</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<p>다음은 <strong>intl_date_lang</strong> 의 값이 “de_DE”일 때 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATETIME</span><span class="p">(</span><span class="s1">'13:10:30.999 25.12.2012'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">30.999</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2012</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATETIME</span><span class="p">(</span><span class="s1">'12/mai/2012 12:10:00 Nachm.'</span><span class="p">,</span><span class="s1">'DD/MON/YYYY HH:MI:SS AM'</span><span class="p">,</span><span class="w"> </span><span class="s1">'de_DE'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">12</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">00.000</span> <span class="n">PM</span> <span class="mi">05</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">2012</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>문자셋이 ISO-8859-1인 경우 “en_US” 외에 시스템 파라미터 <strong>intl_date_lang</strong>에 의해 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>의 <a class="reference internal" href="#tochar-remark"><span class="std std-ref">Note</span></a>를 참고한다.</p>
+</div>
+</section>
+<section id="to-datetime-tz">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">TO_DATETIME_TZ</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-datetime-tz" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-datetime-tz'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_DATETIME_TZ">
+<span class="sig-name descname"><span class="pre">TO_DATETIME_TZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">date_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_DATETIME_TZ" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_DATETIME_TZ'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_DATETIME_TZ</strong> 함수는 입력 문자열에 타임존 정보를 포함할 수 있다는 점을 제외하고는 <a class="reference internal" href="#TO_DATETIME" title="TO_DATETIME"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_DATETIME()</span></code></a> 함수와 동일하다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">반환 형식<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DATETIMETZ</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_DATETIME_TZ</span><span class="p">(</span><span class="s1">'13:10:30 Asia/Seoul 12/25/2008'</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH24:MI:SS TZR MM/DD/YYYY'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">30.000</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span> <span class="n">Asia</span><span class="o">/</span><span class="n">Seoul</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="to-number">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">TO_NUMBER</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-number" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-number'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_NUMBER">
+<span class="sig-name descname"><span class="pre">TO_NUMBER</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_NUMBER" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_NUMBER'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_NUMBER</strong> 함수는 인자로 지정된 숫자 형식을 기준으로 문자열을 해석하여, 이를 <strong>NUMERIC</strong> 타입으로 변환하여 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 문자열을 반환하는 임의의 연산식이다. 값이 NULL이면 결과로 NULL이 반환된다.</p></li>
+<li><p><strong>format</strong> – 숫자로 반환할 값의 형식을 지정하며, <a class="reference internal" href="#tochar-number-format"><span class="std std-ref">숫자 형식</span></a> 표를 참고한다. 생략되면 NUMERIC(38,0) 값이 리턴된다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>NUMERIC</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정한 언어에 맞는 형식으로 <em>string</em> 을 해석한다. 이때 언어는 <strong>intl_number_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_number_lang</strong> 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”나 “fr_FR”과 같은 유럽 국가의 언어이면 “.”를 숫자의 자릿수 구분 기호로 해석하고 “,”를 소수점 기호로 해석한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p><em>format</em> 인자가 생략되면 <strong>intl_number_lang</strong>에 의해 설정된 언어의 기본 출력 형식을 따라 <em>string</em> 을 해석한다(<a class="reference internal" href="#tochar-default-number-format"><span class="std std-ref">언어별 숫자의 기본 출력</span></a> 표 참고). <strong>intl_number_lang</strong>이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>다음은 시스템 파라미터 <strong>intl_number_lang</strong> 의 값이 “en_US”일 때 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_number_lang="en_US"'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">--selecting a number casted from a string in the specified format</span>
+</span><span id="line-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_NUMBER</span><span class="p">(</span><span class="s1">'-1234'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">-</span><span class="mi">1234</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_NUMBER</span><span class="p">(</span><span class="s1">'12345'</span><span class="p">,</span><span class="s1">'999999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">12345</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_NUMBER</span><span class="p">(</span><span class="s1">'12,345.67'</span><span class="p">,</span><span class="s1">'99,999.999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mf">12345.670</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_NUMBER</span><span class="p">(</span><span class="s1">'12345.67'</span><span class="p">,</span><span class="s1">'99999.999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mf">12345.670</span>
+</span></code></pre></div>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_number_lang</strong> 의 값을 “de_DE”로 설정하여 실행한 예이다. 독일, 프랑스 등 유럽 국가에서는 숫자의 자릿수 구분 기호로 마침표가 사용되며, 소수점 기호로 쉼표가 사용된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_number_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_NUMBER</span><span class="p">(</span><span class="s1">'12.345,67'</span><span class="p">,</span><span class="s1">'99.999,999'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mf">12345.670</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="to-time">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">TO_TIME</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-time" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-time'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_TIME">
+<span class="sig-name descname"><span class="pre">TO_TIME</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">date_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_TIME" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_TIME'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_TIME</strong> 함수는 인자로 지정된 시간 형식을 기준으로 문자열을 해석하여, 이를 TIME 타입의 값으로 변환하여 반환한다. 시간 형식은 <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a>을 참고한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 문자열을 반환하는 임의의 연산식이다. 값이 NULL이면 결과로 NULL이 반환된다.</p></li>
+<li><p><strong>format</strong> – TIME 타입으로 변환할 값의 형식을 지정하며, <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a> 표를 참고한다. 값이 <strong>NULL</strong> 이면 결과로 <strong>NULL</strong> 이 반환된다.</p></li>
+<li><p><strong>date_lang_string_literal</strong> – 입력 값에 적용할 언어를 지정한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>TIME</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정한 언어에 맞는 형식으로 <em>string</em> 을 해석한다. 이때 언어는 <em>date_lang_string_literal</em> 인자에 의해 정해진다. <em>date_lang_string_literal</em> 인자가 생략되면 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_date_lang</strong> 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.
+주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>string</em> 이 “10:23:00 Nachm.”이고 <em>format</em> 이 “HH:MI:SS AM”인 경우 “오후 10시 23분 0초”로 해석한다.</p>
+<p><em>format</em> 인자가 생략되면 먼저 CUBRID 기본 형식(<a class="reference internal" href="../datatype.html#cast-to-datetime-recommend"><span class="std std-ref">날짜/시간 타입 문자열 권장 형식</span></a> 참고)에 따라 <em>string</em>을 해석하고, 실패하는 경우 <strong>intl_date_lang</strong>에 의해 설정된 언어의 기본 출력 형식(<a class="reference internal" href="#tochar-default-datetime-format"><span class="std std-ref">날짜/시간 타입에 대한 언어별 기본 출력 형식</span></a> 표 참고)에 따라 <em>string</em>을 해석한다. <strong>intl_date_lang</strong>이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <strong>TIME</strong> 타입에 대해 허용하는 문자열은 CUBRID 기본 형식인 “HH:MI:SS AM”과 “de_DE” 기본 형식인 “HH24:MI:SS”이다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>CUBRID 9.0 미만 버전에서 사용되었던 <strong>CUBRID_DATE_LANG</strong> 환경 변수는 더 이상 사용되지 않는다.</p>
+</div>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “en_US”일 때 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="en_US"'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">--selecting a time type value casted from a string in the specified format</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIME</span><span class="w"> </span><span class="p">(</span><span class="s1">'13:10:30'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIME</span><span class="p">(</span><span class="s1">'HOUR: 13 MINUTE: 10 SECOND: 30'</span><span class="p">,</span><span class="w"> </span><span class="s1">'"HOUR:" HH24 "MINUTE:" MI "SECOND:" SS'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIME</span><span class="w"> </span><span class="p">(</span><span class="s1">'13:10:30'</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH24:MI:SS'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIME</span><span class="w"> </span><span class="p">(</span><span class="s1">'13:10:30'</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH12:MI:SS'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Conversion</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">date</span> <span class="nb">format</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>다음은 <strong>intl_date_lang</strong> 의 값이 “de_DE”일 때 수행하는 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIME</span><span class="p">(</span><span class="s1">'13:10:30'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIME</span><span class="p">(</span><span class="s1">'10:23:00 Nachm.'</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH:MI:SS AM'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">00</span> <span class="n">PM</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>문자셋이 ISO-8859-1인 경우 “en_US” 외에 시스템 파라미터 <strong>intl_date_lang</strong>에 의해 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>의 <a class="reference internal" href="#tochar-remark"><span class="std std-ref">Note</span></a>를 참고한다.</p>
+</div>
+</section>
+<section id="to-timestamp">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">TO_TIMESTAMP</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-timestamp" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-timestamp'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">TO_TIMESTAMP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">date_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_TIMESTAMP" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_TIMESTAMP'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>TO_TIMESTAMP</strong> 함수는 인자로 지정된 타임스탬프 형식을 기준으로 문자열을 해석하여, 이를 <strong>TIMESTAMP</strong> 타입의 값으로 변환하여 반환한다. 타임스탬프 형식은 <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a>을 참고한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 문자열을 반환하는 임의의 연산식이다. 값이 NULL이면 결과로 NULL이 반환된다.</p></li>
+<li><p><strong>format</strong> – TIMESTAMP 타입으로 변환할 값의 형식을 지정하며, <a class="reference internal" href="#datetime-format1"><span class="std std-ref">날짜/시간 형식 1</span></a> 표를 참고한다. 값이 <strong>NULL</strong> 이면 결과로 <strong>NULL</strong> 이 반환된다.</p></li>
+<li><p><strong>date_lang_string_literal</strong> – 입력 값에 적용할 언어를 지정한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>TIMESTAMP</p>
+</dd>
+</dl>
+</dd></dl>
+<p><em>format</em> 인자가 지정되면 지정한 언어에 맞는 형식으로 <em>string</em> 을 해석한다. 이때 언어는 <em>date_lang_string_literal</em> 인자에 의해 정해진다. <em>date_lang_string_literal</em> 인자가 생략되면 <strong>intl_date_lang</strong> 시스템 파라미터에 지정한 언어가 적용되며, <strong>intl_date_lang</strong> 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <em>string</em> 이 “12/mai/2012 12:10:00 Nachm.”이고 <em>format</em> 이 “DD/MON/YYYY HH:MI:SS AM”인 경우 “2012년 5월 12일 오후 12시 10분 0초”로 해석한다. 주어진 문자열과 대응하지 않는 <em>format</em> 인자가 지정되면 에러를 반환한다.</p>
+<p><em>format</em> 인자가 생략되면 먼저 CUBRID 기본 형식(<a class="reference internal" href="../datatype.html#cast-to-datetime-recommend"><span class="std std-ref">날짜/시간 타입 문자열 권장 형식</span></a> 참고)에 따라 <em>string</em>을 해석하고, 실패하는 경우 <strong>intl_date_lang</strong>에 의해 설정된 언어의 기본 출력 형식(<a class="reference internal" href="#tochar-default-datetime-format"><span class="std std-ref">날짜/시간 타입에 대한 언어별 기본 출력 형식</span></a> 표 참고)에 따라 <em>string</em>을 해석한다. <strong>intl_date_lang</strong>이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.</p>
+<p>예를 들어 언어가 “de_DE”일 때 <strong>TIMESTAMP</strong> 타입에 대해 허용하는 문자열은 CUBRID 기본 형식인 “HH:MI:SS AM MM/DD/YYYY”와 “de_DE” 기본 형식인 “HH24:MI:SS DD.MM.YYYY”이다.</p>
+<p>다음은 시스템 파라미터 <strong>intl_date_lang</strong> 의 값이 “en_US”일 때 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="en_US"'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">--selecting a timestamp type value casted from a string in the specified format</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIMESTAMP</span><span class="p">(</span><span class="s1">'13:10:30 12/25/2008'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIMESTAMP</span><span class="p">(</span><span class="s1">'08-Dec-25 13:10:30'</span><span class="p">,</span><span class="w"> </span><span class="s1">'YY-Mon-DD HH24:MI:SS'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIMESTAMP</span><span class="p">(</span><span class="s1">'YEAR: 2008 DATE: 12-25 TIME: 13:10:30'</span><span class="p">,</span><span class="w"> </span><span class="s1">'"YEAR:" YYYY "DATE:" MM-DD "TIME:" HH24:MI:SS'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<p>다음은 <strong>intl_date_lang</strong> 의 값이 “de_DE”일 때 수행한 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">SYSTEM</span><span class="w"> </span><span class="k">PARAMETERS</span><span class="w"> </span><span class="s1">'intl_date_lang="de_DE"'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIMESTAMP</span><span class="p">(</span><span class="s1">'13:10:30 25.12.2008'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIMESTAMP</span><span class="p">(</span><span class="s1">'10:23:00 Nachm.'</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH12:MI:SS AM'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">00</span> <span class="n">PM</span> <span class="mi">08</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2012</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>문자셋이 ISO-8859-1인 경우 “en_US” 외에 시스템 파라미터 <strong>intl_date_lang</strong>에 의해 변경할 수 있는 언어는 “ko_KR”과 “tr_TR”뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 <a class="reference internal" href="#id0" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>의 <a class="reference internal" href="#tochar-remark"><span class="std std-ref">Note</span></a>를 참고한다.</p>
+</div>
+</section>
+<section id="to-timestamp-tz">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink">TO_TIMESTAMP_TZ</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-timestamp-tz" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#to-timestamp-tz'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TO_TIMESTAMP_TZ">
+<span class="sig-name descname"><span class="pre">TO_TIMESTAMP_TZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">date_lang_string_literal</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#TO_TIMESTAMP_TZ" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#TO_TIMESTAMP_TZ'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><blockquote>
+<div><p><strong>TO_TIMESTAMP_TZ</strong> 함수는 입력 문자열에 타임존 정보를 포함할 수 있다는 점을 제외하고는 <a class="reference internal" href="#TO_TIMESTAMP" title="TO_TIMESTAMP"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_TIMESTAMP()</span></code></a> 함수와 동일하다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">rtype<span class="colon">:</span></dt>
+<dd class="field-odd"><p>TIMESTAMPTZ</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">TO_TIMESTAMP_TZ</span><span class="p">(</span><span class="s1">'13:10:30 Asia/Seoul 12/25/2008'</span><span class="p">,</span><span class="w"> </span><span class="s1">'HH24:MI:SS TZR MM/DD/YYYY'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">01</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span> <span class="n">PM</span> <span class="mi">12</span><span class="o">/</span><span class="mi">25</span><span class="o">/</span><span class="mi">2008</span> <span class="n">Asia</span><span class="o">/</span><span class="n">Seoul</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="lob_fn.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        LOB 함수
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="analysis_fn.html">
+        집계/분석 함수
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#cast'" class="reference internal" href="#cast">CAST</a><ul>
+<li><a :data-current="activeSection === '#CAST'" class="reference internal" href="#CAST"><code class="docutils literal notranslate"><span class="pre">CAST()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#date-format'" class="reference internal" href="#date-format">DATE_FORMAT</a><ul>
+<li><a :data-current="activeSection === '#DATE_FORMAT'" class="reference internal" href="#DATE_FORMAT"><code class="docutils literal notranslate"><span class="pre">DATE_FORMAT()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#format'" class="reference internal" href="#format">FORMAT</a><ul>
+<li><a :data-current="activeSection === '#FORMAT'" class="reference internal" href="#FORMAT"><code class="docutils literal notranslate"><span class="pre">FORMAT()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#str-to-date'" class="reference internal" href="#str-to-date">STR_TO_DATE</a><ul>
+<li><a :data-current="activeSection === '#STR_TO_DATE'" class="reference internal" href="#STR_TO_DATE"><code class="docutils literal notranslate"><span class="pre">STR_TO_DATE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#time-format'" class="reference internal" href="#time-format">TIME_FORMAT</a><ul>
+<li><a :data-current="activeSection === '#TIME_FORMAT'" class="reference internal" href="#TIME_FORMAT"><code class="docutils literal notranslate"><span class="pre">TIME_FORMAT()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-char-date-time'" class="reference internal" href="#to-char-date-time">TO_CHAR(date_time)</a><ul>
+<li><a :data-current="activeSection === '#TO_CHAR'" class="reference internal" href="#TO_CHAR"><code class="docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-char-number'" class="reference internal" href="#to-char-number">TO_CHAR(number)</a><ul>
+<li><a :data-current="activeSection === '#id0'" class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-date'" class="reference internal" href="#to-date">TO_DATE</a><ul>
+<li><a :data-current="activeSection === '#TO_DATE'" class="reference internal" href="#TO_DATE"><code class="docutils literal notranslate"><span class="pre">TO_DATE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-datetime'" class="reference internal" href="#to-datetime">TO_DATETIME</a><ul>
+<li><a :data-current="activeSection === '#TO_DATETIME'" class="reference internal" href="#TO_DATETIME"><code class="docutils literal notranslate"><span class="pre">TO_DATETIME()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-datetime-tz'" class="reference internal" href="#to-datetime-tz">TO_DATETIME_TZ</a><ul>
+<li><a :data-current="activeSection === '#TO_DATETIME_TZ'" class="reference internal" href="#TO_DATETIME_TZ"><code class="docutils literal notranslate"><span class="pre">TO_DATETIME_TZ()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-number'" class="reference internal" href="#to-number">TO_NUMBER</a><ul>
+<li><a :data-current="activeSection === '#TO_NUMBER'" class="reference internal" href="#TO_NUMBER"><code class="docutils literal notranslate"><span class="pre">TO_NUMBER()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-time'" class="reference internal" href="#to-time">TO_TIME</a><ul>
+<li><a :data-current="activeSection === '#TO_TIME'" class="reference internal" href="#TO_TIME"><code class="docutils literal notranslate"><span class="pre">TO_TIME()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-timestamp'" class="reference internal" href="#to-timestamp">TO_TIMESTAMP</a><ul>
+<li><a :data-current="activeSection === '#TO_TIMESTAMP'" class="reference internal" href="#TO_TIMESTAMP"><code class="docutils literal notranslate"><span class="pre">TO_TIMESTAMP()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#to-timestamp-tz'" class="reference internal" href="#to-timestamp-tz">TO_TIMESTAMP_TZ</a><ul>
+<li><a :data-current="activeSection === '#TO_TIMESTAMP_TZ'" class="reference internal" href="#TO_TIMESTAMP_TZ"><code class="docutils literal notranslate"><span class="pre">TO_TIMESTAMP_TZ()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 3월 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../_static/documentation_options.js?v=b340f5c5"></script>
+<script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../../_static/theme.js?v=582b20c5"></script>
+<script src="../../_static/translations.js?v=afa94a99"></script>
+<script src="../../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../../_static/version-switcher.js?v=993d9931"></script>
+<script src="../../_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

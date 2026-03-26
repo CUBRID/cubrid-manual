@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Java Stored Function/Procedure | CUBRID 11.0 User Manual</title>
+<meta content="Java Stored Function/Procedure | CUBRID 11.0 User Manual" property="og:title"/>
+<meta content="Java Stored Function/Procedure | CUBRID 11.0 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="method.html" rel="next" title="Method"/>
+<link href="trigger.html" rel="prev" title="Trigger"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.0 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.0/sql/jsp.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.0 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">Trigger</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Java Stored Function/Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="method.html">Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-java-stored-procedure-server">CUBRID Java Stored Procedure Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/oledb.html">OLE DB Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.0 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.0 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Java Stored Function/Procedure</span>
+</nav>
+<div id="content" role="main">
+<section id="java-stored-function-procedure">
+<h1>Java Stored Function/Procedure<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#java-stored-function-procedure"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>Stored functions and procedures are used to implement complicated program logic that is not possible with SQL. They allow users to manipulate data more easily. Stored functions/procedures are blocks of code that have a flow of commands for data manipulation and are easy to manipulate and administer.</p>
+<p>CUBRID supports to develop stored functions and procedures in Java. Java stored functions/procedures are executed on the JVM (Java Virtual Machine) hosted by CUBRID.</p>
+<p>You can call Java stored functions/procedures from SQL statements or from Java applications using JDBC.</p>
+<p>The advantages of using Java stored functions/procedures are as follows:</p>
+<ul class="simple">
+<li><p><strong>Productivity and usability</strong>: Java stored functions/procedures, once created, can be reused anytime. They can be called from SQL statements or from Java applications using JDBC.</p></li>
+<li><p><strong>Excellent interoperability and portability</strong>: Java stored functions/procedures use the Java Virtual Machine. Therefore, they can be used on any system where the Java Virtual Machine is available.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The other languages except Java do not support stored function/procedure. In CUBRID, only Java can implement stored function/procedure.</p></li>
+</ul>
+</div>
+<section id="starting-java-stored-procedure-server">
+<span id="jsp-starting-javasp"></span><h2>Starting Java Stored Procedure Server<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#starting-java-stored-procedure-server" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#starting-java-stored-procedure-server'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You need to start a Java Stored Procedure server (Java SP server) for the database you want to use Java-stored procedures/functions.</p>
+<p>Execute the <strong>cubrid javasp</strong> <strong>start</strong> <em>db_name</em>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">cubrid</span> <span class="n">javasp</span> <span class="n">start</span> <span class="n">demodb</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">@</span> <span class="n">cubrid</span> <span class="n">javasp</span> <span class="n">start</span><span class="p">:</span> <span class="n">demodb</span>
+</span><span id="line-4"><span class="o">++</span> <span class="n">cubrid</span> <span class="n">javasp</span> <span class="n">start</span><span class="p">:</span> <span class="n">success</span>
+</span></code></pre></div>
+</div>
+<p>You can verify that the Java SP server is successfully started.</p>
+<p>Execute the <strong>cubrid javasp</strong> <strong>status</strong> <em>db_name</em>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">cubrid</span> <span class="n">javasp</span> <span class="n">status</span> <span class="n">demodb</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">@</span> <span class="n">cubrid</span> <span class="n">javasp</span> <span class="n">status</span><span class="p">:</span> <span class="n">demodb</span>
+</span><span id="line-4"><span class="n">Java</span> <span class="n">Stored</span> <span class="n">Procedure</span> <span class="n">Server</span> <span class="p">(</span><span class="n">demodb</span><span class="p">,</span> <span class="n">pid</span> <span class="mi">9220</span><span class="p">,</span> <span class="n">port</span> <span class="mi">38408</span><span class="p">)</span>
+</span><span id="line-5"><span class="n">Java</span> <span class="n">VM</span> <span class="n">arguments</span> <span class="p">:</span>
+</span><span id="line-6"><span class="o">-------------------------------------------------</span>
+</span><span id="line-7"><span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">file</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">CUBRID</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">logging</span><span class="o">.</span><span class="n">properties</span>
+</span><span id="line-8"><span class="o">-</span><span class="n">Xrs</span>
+</span><span id="line-9"><span class="o">-------------------------------------------------</span>
+</span></code></pre></div>
+</div>
+<p>For more details on javasp utility, see <a class="reference internal" href="../admin/control.html#cubrid-javasp-server"><span class="std std-ref">CUBRID Java Stored Procedure Server</span></a> and <a class="reference internal" href="../admin/control.html#cubrid-javasp-server-config"><span class="std std-ref">Configuring for CUBRID Java SP Server</span></a>.</p>
+</section>
+<section id="how-to-write-java-stored-function-procedure">
+<h2>How to Write Java Stored Function/Procedure<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#how-to-write-java-stored-function-procedure" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#how-to-write-java-stored-function-procedure'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The following is an example to write a Java stored function/procedure.</p>
+<section id="check-the-cubrid-conf-file">
+<h3>Check the cubrid.conf file<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#check-the-cubrid-conf-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#check-the-cubrid-conf-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>By default, the <strong>java_stored_procedure</strong> is set to <strong>no</strong> in the <strong>cubrid.conf</strong> file. To use a Java stored function/procedure, this value must be changed to <strong>yes</strong>. For details on this value, see <a class="reference external" href="#pm_pm_db_classify_etc_htm">Other Parameters</a> in Database Server Configuration.</p>
+</section>
+<section id="write-and-compile-the-java-source-code">
+<h3>Write and compile the Java source code<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#write-and-compile-the-java-source-code" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#write-and-compile-the-java-source-code'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Compile the SpCubrid.java file as follows:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpCubrid</span><span class="p">{</span>
+</span><span id="line-2"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">HelloCubrid</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-3"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Hello, Cubrid !!"</span><span class="p">;</span>
+</span><span id="line-4"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">SpInt</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-7"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-8"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">outTest</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-11"><span class="w">        </span><span class="n">o</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Hello, CUBRID"</span><span class="p">;</span>
+</span><span id="line-12"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-13"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">javac</span> <span class="n">SpCubrid</span><span class="o">.</span><span class="n">java</span>
+</span></code></pre></div>
+</div>
+<p>Here, the Java class method must be public static.</p>
+</section>
+<section id="load-the-compiled-java-class-into-cubrid">
+<span id="jsp-loadjava"></span><h3>Load the compiled Java class into CUBRID<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#load-the-compiled-java-class-into-cubrid" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#load-the-compiled-java-class-into-cubrid'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Load the compiled Java class into CUBRID.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">loadjava</span> <span class="n">demodb</span> <span class="n">SpCubrid</span><span class="o">.</span><span class="k">class</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="publish-the-loaded-java-class">
+<h3>Publish the loaded Java class<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#publish-the-loaded-java-class" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#publish-the-loaded-java-class'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Create a CUBRID stored function and publish the Java class as shown below.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">hello</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="n">STRING</span>
+</span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-3"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpCubrid.HelloCubrid() return java.lang.String'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Or with <strong>OR REPLACE</strong> syntax, you can replace the current stored function/procedure or create the new stored function/procedure.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span><span class="w"> </span><span class="n">OR</span><span class="w"> </span><span class="n">REPLACE</span><span class="w"> </span><span class="n">FUNCTION</span><span class="w"> </span><span class="nf">hello</span><span class="p">()</span><span class="w"> </span><span class="n">RETURN</span><span class="w"> </span><span class="n">STRING</span>
+</span><span id="line-2"><span class="n">AS</span><span class="w"> </span><span class="n">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-3"><span class="n">NAME</span><span class="w"> </span><span class="err">'</span><span class="n">SpCubrid</span><span class="p">.</span><span class="na">HelloCubrid</span><span class="p">()</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">lang</span><span class="p">.</span><span class="na">String</span><span class="err">'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="call-the-java-stored-function-procedure">
+<h3>Call the Java stored function/procedure<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#call-the-java-stored-function-procedure" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#call-the-java-stored-function-procedure'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Call the published Java stored function as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">hello</span><span class="p">()</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">Hello</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">Result</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'Hello, Cubrid !!'</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="using-server-side-internal-jdbc-driver">
+<h2>Using Server-side Internal JDBC Driver<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#using-server-side-internal-jdbc-driver" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#using-server-side-internal-jdbc-driver'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>To access the database from a Java stored function/procedure, you must use the server-side JDBC driver. As Java stored functions/procedures are executed within the database, there is no need to make the connection to the server-side JDBC driver again. To acquire a connection to the database using the server-side JDBC driver, you can either use “<strong>jdbc:default:connection:</strong>” as the URL for JDBC connection, or call the <strong>getDefaultConnection</strong> () method of the <strong>cubrid.jdbc.driver.CUBRIDDriver</strong> class.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-2"><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:default:connection:"</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>or</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span><span class="p">.</span><span class="na">jdbc</span><span class="p">.</span><span class="na">driver</span><span class="p">.</span><span class="na">CUBRIDDriver</span><span class="p">.</span><span class="na">getDefaultConnection</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<p>If you connect to the database using the JDBC driver as shown above, the transaction in the Java stored function/procedure is ignored. That is, database operations executed in the Java stored function/procedure belong to the transaction that called the Java stored function/procedure. In the following example, <strong>conn.commit()</strong> method of the <strong>Athlete</strong> class is ignored.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.*</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Athlete</span><span class="p">{</span>
+</span><span id="line-4"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Athlete</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">SQLException</span><span class="p">{</span>
+</span><span id="line-5"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="o">=</span><span class="s">"INSERT INTO ATHLETE(NAME, GENDER, NATION_CODE, EVENT)"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"VALUES (?, ?, ?, ?)"</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="w">        </span><span class="k">try</span><span class="p">{</span>
+</span><span id="line-8"><span class="w">            </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-9"><span class="w">            </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:default:connection:"</span><span class="p">);</span>
+</span><span id="line-10"><span class="w">            </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">pstmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="p">);</span>
+</span><span id="line-14"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">nation_code</span><span class="p">);</span>
+</span><span id="line-15"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);;</span>
+</span><span id="line-16"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+</span><span id="line-17">
+</span><span id="line-18"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-19"><span class="w">            </span><span class="n">conn</span><span class="p">.</span><span class="na">commit</span><span class="p">();</span>
+</span><span id="line-20"><span class="w">            </span><span class="n">conn</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-21"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-22"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-23"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-24"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-25"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="connecting-to-other-database">
+<h2>Connecting to Other Database<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#connecting-to-other-database" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#connecting-to-other-database'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You can connect to another outside database instead of the currently connected one even when the server-side JDBC driver is being used. Acquiring a connection to an outside database is not different from a generic JDBC connection. For details, see JDBC API.</p>
+<p>If you connect to other databases, the connection to the CUBRID database does not terminate automatically even when the execution of the Java method ends. Therefore, the connection must be explicitly closed so that the result of transaction operations such as <strong>COMMIT</strong> or <strong>ROLLBACK</strong> will be reflected in the database. That is, a separate transaction will be performed because the database that called the Java stored function/procedure is different from the one where the actual connection is made.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.*</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SelectData</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-4"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">SearchSubway</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">        </span><span class="n">Statement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-8"><span class="w">        </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-11"><span class="w">            </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-12"><span class="w">            </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:CUBRID:localhost:33000:demodb:::"</span><span class="p">,</span><span class="s">""</span><span class="p">,</span><span class="s">""</span><span class="p">);</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"select line_id, line from line"</span><span class="p">;</span>
+</span><span id="line-15"><span class="w">            </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">createStatement</span><span class="p">();</span>
+</span><span id="line-16"><span class="w">            </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+</span><span id="line-17">
+</span><span id="line-18"><span class="w">            </span><span class="k">while</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-19"><span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">host_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">"host_year"</span><span class="p">);</span>
+</span><span id="line-20"><span class="w">                </span><span class="n">String</span><span class="w"> </span><span class="n">host_nation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">"host_nation"</span><span class="p">);</span>
+</span><span id="line-21">
+</span><span id="line-22"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Host Year ==&gt; "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">host_year</span><span class="p">);</span>
+</span><span id="line-23"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">" Host Nation==&gt; "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">host_nation</span><span class="p">);</span>
+</span><span id="line-24"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n=========\n"</span><span class="p">);</span>
+</span><span id="line-25"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-26">
+</span><span id="line-27"><span class="w">            </span><span class="n">rs</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-28"><span class="w">            </span><span class="n">stmt</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-29"><span class="w">            </span><span class="n">conn</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-30"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">SQLException</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-31"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-32"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-33"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-34"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-35"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-36"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-37"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-38"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>When the Java stored function/procedure being executed should run only on JVM located in the database server, you can check where it is running by calling System.getProperty (“cubrid.server.version”) from the Java program source. The result value is the database version if it is called from the database; otherwise, it is <strong>NULL</strong>.</p>
+</section>
+<section id="loadjava-utility">
+<h2>loadjava Utility<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#loadjava-utility" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#loadjava-utility'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>To load a compiled Java or JAR (Java Archive) file into CUBRID, use the <strong>loadjava</strong> utility. If you load a Java *.class or *.jar file using the <strong>loadjava</strong> utility, the file is moved to the specified database path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">loadjava</span> <span class="p">[</span><span class="n">option</span><span class="p">]</span> <span class="n">database</span><span class="o">-</span><span class="n">name</span> <span class="n">java</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">file</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>database-name</em>: The name of the database where the Java file is to be loaded.</p></li>
+<li><p><em>java-class-file</em>: The name of the Java class or jar file to be loaded.</p></li>
+<li><p>[<em>option</em>]</p>
+<ul>
+<li><p><strong>-y</strong>: Automatically overwrites a class file with the same name, if any. The default value is <strong>no</strong>. If you load the file without specifying the <strong>-y</strong> option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="loaded-java-class-publish">
+<h2>Loaded Java Class Publish<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#loaded-java-class-publish" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#loaded-java-class-publish'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>In CUBRID, it is required to publish Java classes to call Java methods from SQL statements or Java applications. You must publish Java classes by using call specifications because it is not known how a function in a class will be called by SQL statements or Java applications when Java classes are loaded.</p>
+<section id="call-specifications">
+<h3>Call Specifications<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#call-specifications" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#call-specifications'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>To use a Java stored function/procedure in CUBRID, you must write call specifications. With call specifications, Java function names, parameter types, return values and their types can be accessed by SQL statements or Java applications. To write call specifications, use <strong>CREATE FUNCTION</strong> or <strong>CREATE PROCEDURE</strong> statement. Java stored function/procedure names are not case sensitive. The maximum number of characters a Java stored function/procedure can have is 254 bytes. The maximum number of parameters a Java stored function/procedure can have is 64.</p>
+<p>If there is a return value, it is a function; if not, it is a procedure.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="p">[</span><span class="n">OR</span> <span class="n">REPLACE</span><span class="p">]</span> <span class="n">FUNCTION</span> <span class="n">function_name</span><span class="p">[(</span><span class="n">param</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'param_comment_string'</span><span class="p">]</span> <span class="p">[,</span> <span class="n">param</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'param_comment_string'</span><span class="p">]]</span><span class="o">...</span><span class="p">)]</span> <span class="n">RETURN</span> <span class="n">sql_type</span>
+</span><span id="line-2"><span class="p">{</span><span class="n">IS</span> <span class="o">|</span> <span class="n">AS</span><span class="p">}</span> <span class="n">LANGUAGE</span> <span class="n">JAVA</span>
+</span><span id="line-3"><span class="n">NAME</span> <span class="s1">'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]'</span>
+</span><span id="line-4"><span class="n">COMMENT</span> <span class="s1">'sp_comment'</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="n">CREATE</span> <span class="p">[</span><span class="n">OR</span> <span class="n">REPLACE</span><span class="p">]</span> <span class="n">PROCEDURE</span> <span class="n">procedure_name</span><span class="p">[(</span><span class="n">param</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'param_comment_string'</span><span class="p">][,</span> <span class="n">param</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'param_comment_string'</span><span class="p">]]</span> <span class="o">...</span><span class="p">)]</span>
+</span><span id="line-7"><span class="p">{</span><span class="n">IS</span> <span class="o">|</span> <span class="n">AS</span><span class="p">}</span> <span class="n">LANGUAGE</span> <span class="n">JAVA</span>
+</span><span id="line-8"><span class="n">NAME</span> <span class="s1">'method_fullname (java_type_fullname [,java_type_fullname]...) [return java_type_fullname]'</span><span class="p">;</span>
+</span><span id="line-9"><span class="n">COMMENT</span> <span class="s1">'sp_comment_string'</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="n">parameter_name</span> <span class="p">[</span><span class="n">IN</span><span class="o">|</span><span class="n">OUT</span><span class="o">|</span><span class="n">IN</span> <span class="n">OUT</span><span class="o">|</span><span class="n">INOUT</span><span class="p">]</span> <span class="n">sql_type</span>
+</span><span id="line-12">   <span class="p">(</span><span class="n">default</span> <span class="n">IN</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>param_comment_string</em>: specifies the parameter’s comment string.</p></li>
+<li><p><em>sp_comment_string</em>: specifies the Java stored function/procedure’s comment string.</p></li>
+</ul>
+<p>If the parameter of a Java stored function/procedure is set to <strong>OUT</strong>, it will be passed as a one-dimensional array whose length is 1. Therefore, a Java method must store its value to pass in the first space of the array.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">Hello</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span>
+</span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-3"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpCubrid.HelloCubrid() return java.lang.String'</span><span class="p">;</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">Sp_int</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">int</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">int</span>
+</span><span id="line-6"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-7"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpCubrid.SpInt(int) return int'</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">Athlete_Add</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="n">gender</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">varchar</span><span class="p">)</span>
+</span><span id="line-10"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-11"><span class="n">NAME</span><span class="w"> </span><span class="s1">'Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'</span><span class="p">;</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_out</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">STRING</span><span class="p">)</span>
+</span><span id="line-14"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-15"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpCubrid.outTest(java.lang.String[] o)'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>When a Java stored function/procedure is published, it is not checked whether the return definition of the Java stored function/procedure coincides with the one in the declaration of the Java file. Therefore, the Java stored function/procedure follows the <em>sql_type</em> return definition provided at the time of registration. The return definition in the declaration is significant only as user-defined information.</p>
+</section>
+<section id="data-type-mapping">
+<h3>Data Type Mapping<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#data-type-mapping" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#data-type-mapping'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>In call specifications, the data types SQL must correspond to the data types of Java parameter and return value. The following table shows SQL/Java data types allowed in CUBRID.</p>
+<p><strong>Data Type Mapping</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>SQL Type</p></th>
+<th class="head"><p>Java Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CHAR, VARCHAR</p></td>
+<td><p>java.lang.String, java.sql.Date, java.sql.Time, java.sql.Timestamp, java.lang.Byte, java.lang.Short, java.lang.Integer, java.lang.Long,
+java.lang.Float, java.lang.Double, java.math.BigDecimal, byte, short, int, long, float, double</p></td>
+</tr>
+<tr class="row-odd"><td><p>NUMERIC, SHORT,
+INT, FLOAT,
+DOUBLE,
+CURRENCY</p></td>
+<td><p>java.lang.Byte, java.lang.Short, java.lang.Integer, java.lang.Long, java.lang.Float, java.lang.Double, java.math.BigDecimal,
+java.lang.String, byte, short, int, long, float, double</p></td>
+</tr>
+<tr class="row-even"><td><p>DATE, TIME,
+TIMESTAMP</p></td>
+<td><p>java.sql.Date, java.sql.Time, java.sql.Timestamp, java.lang.String</p></td>
+</tr>
+<tr class="row-odd"><td><p>SET, MULTISET,
+SEQUENCE</p></td>
+<td><p>java.lang.Object[], java primitive type array, java.lang.Integer[] …</p></td>
+</tr>
+<tr class="row-even"><td><p>OBJECT</p></td>
+<td><p>cubrid.sql.CUBRIDOID</p></td>
+</tr>
+<tr class="row-odd"><td><p>CURSOR</p></td>
+<td><p>cubrid.jdbc.driver.CUBRIDResultSet</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="checking-the-published-java-stored-function-procedure-information">
+<h3>Checking the Published Java Stored Function/Procedure Information<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#checking-the-published-java-stored-function-procedure-information" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#checking-the-published-java-stored-function-procedure-information'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>You can check the information on the published Java stored function/procedure The <strong>db_stored_procedure</strong> system virtual table provides virtual table and the <strong>db_stored_procedure_args</strong> system virtual table. The <strong>db_stored_procedure</strong> system virtual table provides the information on stored names and types, return types, number of parameters, Java class specifications, and the owner. The <strong>db_stored_procedure_args</strong> system virtual table provides the information on parameters used in the stored function/procedure.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sp_name</span>     <span class="n">sp_type</span>   <span class="n">return_type</span>    <span class="n">arg_count</span>
+</span><span id="line-2"><span class="n">sp_name</span>               <span class="n">sp_type</span>               <span class="n">return_type</span>             <span class="n">arg_count</span>  <span class="n">lang</span> <span class="n">target</span>                <span class="n">owner</span>
+</span><span id="line-3"><span class="o">================================================================================</span>
+</span><span id="line-4"><span class="s1">'hello'</span>               <span class="s1">'FUNCTION'</span>            <span class="s1">'STRING'</span>                        <span class="mi">0</span>  <span class="s1">'JAVA''SpCubrid.HelloCubrid() return java.lang.String'</span>  <span class="s1">'DBA'</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="s1">'sp_int'</span>              <span class="s1">'FUNCTION'</span>            <span class="s1">'INTEGER'</span>                       <span class="mi">1</span>  <span class="s1">'JAVA''SpCubrid.SpInt(int) return int'</span>  <span class="s1">'DBA'</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="s1">'athlete_add'</span>         <span class="s1">'PROCEDURE'</span>           <span class="s1">'void'</span>                          <span class="mi">4</span>  <span class="s1">'JAVA''Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'</span>  <span class="s1">'DBA'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure_args</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sp_name</span>   <span class="n">index_of</span>  <span class="n">arg_name</span>  <span class="n">data_type</span>      <span class="n">mode</span>
+</span><span id="line-2"><span class="o">=================================================</span>
+</span><span id="line-3"> <span class="s1">'sp_int'</span>                        <span class="mi">0</span>  <span class="s1">'i'</span>                   <span class="s1">'INTEGER'</span>             <span class="s1">'IN'</span>
+</span><span id="line-4"> <span class="s1">'athlete_add'</span>                   <span class="mi">0</span>  <span class="s1">'name'</span>                <span class="s1">'STRING'</span>              <span class="s1">'IN'</span>
+</span><span id="line-5"> <span class="s1">'athlete_add'</span>                   <span class="mi">1</span>  <span class="s1">'gender'</span>              <span class="s1">'STRING'</span>              <span class="s1">'IN'</span>
+</span><span id="line-6"> <span class="s1">'athlete_add'</span>                   <span class="mi">2</span>  <span class="s1">'nation_code'</span>         <span class="s1">'STRING'</span>              <span class="s1">'IN'</span>
+</span><span id="line-7"> <span class="s1">'athlete_add'</span>                   <span class="mi">3</span>  <span class="s1">'event'</span>               <span class="s1">'STRING'</span>              <span class="s1">'IN'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="deleting-java-stored-functions-procedures">
+<h3>Deleting Java Stored Functions/Procedures<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#deleting-java-stored-functions-procedures" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#deleting-java-stored-functions-procedures'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>You can delete published Java stored functions/procedures in CUBRID. To delete a Java function/procedure, use the <strong>DROP FUNCTION</strong> <em>function_name</em> or <strong>DROP PROCEDURE</strong> <em>procedure_name</em> statement. Also, you can delete multiple Java stored functions/procedures at a time with several function_names or procedure_names separated by a comma (,).</p>
+<p>A Java stored function/procedure can be deleted only by the user who published it or by DBA members. For example, if a <strong>PUBLIC</strong> user published the ‘sp_int’ Java stored function, only the <strong>PUBLIC</strong> or <strong>DBA</strong> members can delete it.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">hello</span><span class="p">,</span><span class="w"> </span><span class="n">sp_int</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">DROP</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">Athlete_Add</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="comment-of-java-stored-function-procedure">
+<h3>COMMENT of Java Stored Function/Procedure<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#comment-of-java-stored-function-procedure" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#comment-of-java-stored-function-procedure'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A comment of stored function/procedure can be written at the end of the statement as follows.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">Hello</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span>
+</span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-3"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpCubrid.HelloCubrid() return java.lang.String'</span>
+</span><span id="line-4"><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'function comment'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>A comment of a paramenter can be written as follows.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'arg i'</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">RETURN</span><span class="w"> </span><span class="nb">NUMBER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span><span class="w"> </span><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpTest.testInt(int) return int'</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'function test'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>A comment of a stored function/procedure can be shown by running the following syntax.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">sp_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>A comment for a parameter of a function can be shown by running the following syntax.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">sp_name</span><span class="p">,</span><span class="w"> </span><span class="n">arg_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure_args</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="java-stored-function-procedure-call">
+<h2>Java Stored Function/Procedure Call<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#java-stored-function-procedure-call" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#java-stored-function-procedure-call'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="using-call-statement">
+<h3>Using CALL Statement<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#using-call-statement" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#using-call-statement'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>You can call the Java stored functions/procedures by using a <strong>CALL</strong> statement, from SQL statements or Java applications. The following shows how to call them by using the <strong>CALL</strong> statement. The name of the Java stored function/procedure called from a <strong>CALL</strong> statement is not case sensitive.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CALL</span> <span class="p">{</span><span class="n">procedure_name</span> <span class="p">([</span><span class="n">param</span><span class="p">[,</span> <span class="n">param</span><span class="p">]</span><span class="o">...</span><span class="p">])</span> <span class="o">|</span> <span class="n">function_name</span> <span class="p">([</span><span class="n">param</span><span class="p">[,</span> <span class="n">param</span><span class="p">]</span><span class="o">...</span><span class="p">])</span> <span class="n">INTO</span> <span class="p">:</span><span class="n">host_variable</span>
+</span><span id="line-2"><span class="n">param</span> <span class="p">{</span><span class="n">literal</span> <span class="o">|</span> <span class="p">:</span><span class="n">host_variable</span><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">Hello</span><span class="p">()</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">HELLO</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">Sp_int</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">i</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">CALL</span><span class="w"> </span><span class="n">phone_info</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">,</span><span class="s1">'016-111-1111'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>In CUBRID, the Java functions/procedures are called by using the same <strong>CALL</strong> statement. Therefore, the <strong>CALL</strong> statement is processed as follows:</p>
+<ul class="simple">
+<li><p>It is processed as a method if there is a target class in the <strong>CALL</strong> statement.</p></li>
+<li><p>If there is no target class in the <strong>CALL</strong> statement, it is checked whether a Java stored function/procedure is executed or not; a Java stored function/procedure will be executed if one exists.</p></li>
+<li><p>If no Java stored function/procedure exists in step 2 above, it is checked whether a method is executed or not; a method will be executed if one with the same name exists.</p></li>
+</ul>
+<p>The following error occurs if you call a Java stored function/procedure that does not exist.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">deposit</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Stored</span> <span class="n">procedure</span><span class="o">/</span><span class="n">function</span> <span class="s1">'deposit'</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">deposit</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">,</span><span class="w"> </span><span class="mi">3000000</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Methods</span> <span class="n">require</span> <span class="n">an</span> <span class="nb">object</span> <span class="k">as</span> <span class="n">their</span> <span class="n">target</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>If there is no argument in the <strong>CALL</strong> statement, a message “ERROR: Stored procedure/function ‘deposit’ does not exist.” appears because it can be distinguished from a method. However, if there is an argument in the <strong>CALL</strong> statement, a message “ERROR: Methods require an object as their target.” appears because it cannot be distinguished from a method.</p>
+<p>If the <strong>CALL</strong> statement is nested within another <strong>CALL</strong> statement calling a Java stored function/procedure, or if a subquery is used in calling the Java function/procedure, the <strong>CALL</strong> statement is not executed.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">phone_info</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">,</span><span class="w"> </span><span class="k">CALL</span><span class="w"> </span><span class="n">sp_int</span><span class="p">(</span><span class="mi">999</span><span class="p">));</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">phone_info</span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Phone</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="s1">'Tom'</span><span class="p">));</span>
+</span></code></pre></div>
+</div>
+<p>If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the <em>dbname</em><strong>_java.log</strong> file. To display the exception on the screen, change a handler value of the <strong>$CUBRID/java/logging.properties</strong> file to “ java.lang.logging.ConsoleHandler.” Then, the exception details are displayed on the screen.</p>
+</section>
+<section id="calling-from-sql-statement">
+<h3>Calling from SQL Statement<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#calling-from-sql-statement" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#calling-from-sql-statement'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>You can call a Java stored function from a SQL statement as shown below.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">Hello</span><span class="p">()</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">sp_int</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>You can use a host variable for the IN/OUT data type when you call a Java stored function/procedure as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="s1">'Hi'</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">out_data</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">test_out</span><span class="p">(:</span><span class="n">out_data</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="p">:</span><span class="n">out_data</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The first clause calls a Java stored procedure in out mode by using a parameter variable; the second is a query clause retrieving the assigned host variable out_data.</p>
+</section>
+<section id="calling-from-java-application">
+<h3>Calling from Java Application<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#calling-from-java-application" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#calling-from-java-application'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>To call a Java stored function/procedure from a Java application, use a <strong>CallableStatement</strong> object.</p>
+<p>Create a phone class in the CUBRID database.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">phone</span><span class="p">(</span>
+</span><span id="line-2"><span class="w">     </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">     </span><span class="n">phoneno</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>Compile the following <strong>PhoneNumber.java</strong> file, load the Java class file into CUBRID, and publish it.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.*</span><span class="p">;</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.*</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PhoneNumber</span><span class="p">{</span>
+</span><span id="line-5"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Phone</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">phoneno</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="p">{</span>
+</span><span id="line-6"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="o">=</span><span class="s">"INSERT INTO PHONE(NAME, PHONENO)"</span><span class="o">+</span><span class="w"> </span><span class="s">"VALUES (?, ?)"</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">        </span><span class="k">try</span><span class="p">{</span>
+</span><span id="line-8"><span class="w">            </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-9"><span class="w">            </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:default:connection:"</span><span class="p">);</span>
+</span><span id="line-10"><span class="w">            </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">pstmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">phoneno</span><span class="p">);</span>
+</span><span id="line-14"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="w">            </span><span class="n">pstmt</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-17"><span class="w">            </span><span class="n">conn</span><span class="p">.</span><span class="na">commit</span><span class="p">();</span>
+</span><span id="line-18"><span class="w">            </span><span class="n">conn</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-19"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SQLException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-20"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-21"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-22"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-23"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">create</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">phone_info</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">,</span><span class="w"> </span><span class="n">phoneno</span><span class="w"> </span><span class="nb">varchar</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="n">java</span>
+</span><span id="line-2"><span class="n">name</span><span class="w"> </span><span class="s1">'PhoneNumber.Phone(java.lang.String, java.lang.String)'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Create and run the following Java application.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.*</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">StoredJDBC</span><span class="p">{</span>
+</span><span id="line-4"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(){</span>
+</span><span id="line-5"><span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-6"><span class="w">        </span><span class="n">Statement</span><span class="w"> </span><span class="n">stmt</span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+</span><span id="line-8"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="w">        </span><span class="k">try</span><span class="p">{</span>
+</span><span id="line-11"><span class="w">            </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-12"><span class="w">            </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:CUBRID:localhost:33000:demodb:::"</span><span class="p">,</span><span class="s">""</span><span class="p">,</span><span class="s">""</span><span class="p">);</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="w">            </span><span class="n">CallableStatement</span><span class="w"> </span><span class="n">cs</span><span class="p">;</span>
+</span><span id="line-15"><span class="w">            </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareCall</span><span class="p">(</span><span class="s">"CALL PHONE_INFO(?, ?)"</span><span class="p">);</span>
+</span><span id="line-16">
+</span><span id="line-17"><span class="w">            </span><span class="n">cs</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">"Jane"</span><span class="p">);</span>
+</span><span id="line-18"><span class="w">            </span><span class="n">cs</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s">"010-1111-1111"</span><span class="p">);</span>
+</span><span id="line-19"><span class="w">            </span><span class="n">cs</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="w">            </span><span class="n">conn</span><span class="p">.</span><span class="na">commit</span><span class="p">();</span>
+</span><span id="line-22"><span class="w">            </span><span class="n">cs</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-23"><span class="w">            </span><span class="n">conn</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-24"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-25"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+</span><span id="line-26"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-27"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-28"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>Retrieve the phone class after executing the program above; the following result would be displayed.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">phone</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">name</span>                  <span class="n">phoneno</span>
+</span><span id="line-2"><span class="o">============================================</span>
+</span><span id="line-3">    <span class="s1">'Jane'</span>                <span class="s1">'010-111-1111'</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="caution">
+<h2>Caution<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#caution" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#caution'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="returning-value-of-java-stored-function-procedure-and-precision-type-on-in-out">
+<h3>Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#returning-value-of-java-stored-function-procedure-and-precision-type-on-in-out" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#returning-value-of-java-stored-function-procedure-and-precision-type-on-in-out'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>To limit the return value of Java stored function/procedure and precision type on IN/OUT, CUBRID processes as follows:</p>
+<ul class="simple">
+<li><p>Checks the sql_type of the Java stored function/procedure.</p></li>
+<li><p>Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user manipulates directly the data which is passed to the database.</p></li>
+</ul>
+<p>Take a look at the following <strong>typestring</strong> () Java stored function.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JavaSP1</span><span class="p">{</span>
+</span><span id="line-2"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">typestring</span><span class="p">(){</span>
+</span><span id="line-3"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">" "</span><span class="p">;</span>
+</span><span id="line-4"><span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span id="line-5"><span class="w">            </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"1234567890"</span><span class="p">;</span>
+</span><span id="line-6"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-8"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">typestring</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-2"><span class="n">NAME</span><span class="w"> </span><span class="s1">'JavaSP1.typestring() return java.lang.String'</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">CALL</span><span class="w"> </span><span class="n">typestring</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">Result</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">' 1234567890'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="returning-java-sql-resultset-in-java-stored-procedure">
+<h3>Returning java.sql.ResultSet in Java Stored Procedure<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#returning-java-sql-resultset-in-java-stored-procedure" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#returning-java-sql-resultset-in-java-stored-procedure'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>In CUBRID, you must use <strong>CURSOR</strong> as the data type when you declare a Java stored function/procedure that returns a <strong>java.sql.ResultSet</strong>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">rset</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="k">CURSOR</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-2"><span class="n">NAME</span><span class="w"> </span><span class="s1">'JavaSP2.TResultSet() return java.sql.ResultSet'</span>
+</span></code></pre></div>
+</div>
+<p>Before the Java file returns <strong>java.sql.ResultSet</strong>, it is required to cast to the <strong>CUBRIDResultSet</strong> class and then to call the <strong>setReturnable</strong> () method.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Connection</span><span class="p">;</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.DriverManager</span><span class="p">;</span>
+</span><span id="line-3"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.ResultSet</span><span class="p">;</span>
+</span><span id="line-4"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Statement</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="kn">import</span><span class="w"> </span><span class="nn">cubrid.jdbc.driver.CUBRIDConnection</span><span class="p">;</span>
+</span><span id="line-7"><span class="kn">import</span><span class="w"> </span><span class="nn">cubrid.jdbc.driver.CUBRIDResultSet</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JavaSP2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-10"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">ResultSet</span><span class="w"> </span><span class="nf">TResultSet</span><span class="p">(){</span>
+</span><span id="line-11"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-12"><span class="w">            </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:default:connection:"</span><span class="p">);</span>
+</span><span id="line-14"><span class="w">            </span><span class="p">((</span><span class="n">CUBRIDConnection</span><span class="p">)</span><span class="n">conn</span><span class="p">).</span><span class="na">setCharset</span><span class="p">(</span><span class="s">"euc_kr"</span><span class="p">);</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"select * from station"</span><span class="p">;</span>
+</span><span id="line-17"><span class="w">            </span><span class="n">Statement</span><span class="w"> </span><span class="n">stmt</span><span class="o">=</span><span class="n">conn</span><span class="p">.</span><span class="na">createStatement</span><span class="p">();</span>
+</span><span id="line-18"><span class="w">            </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+</span><span id="line-19"><span class="w">            </span><span class="p">((</span><span class="n">CUBRIDResultSet</span><span class="p">)</span><span class="n">rs</span><span class="p">).</span><span class="na">setReturnable</span><span class="p">();</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">rs</span><span class="p">;</span>
+</span><span id="line-22"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-23"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+</span><span id="line-24"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-25">
+</span><span id="line-26"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-27"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-28"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>In the calling block, you must set the OUT argument with <strong>Types.JAVA_OBJECT</strong>, get the argument to the <strong>getObject</strong> () function, and then cast it to the <strong>java.sql.ResultSet</strong> type before you use it. In addition, the <strong>java.sql.ResultSet</strong> is only available to use in <strong>CallableStatement</strong> of JDBC.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.CallableStatement</span><span class="p">;</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Connection</span><span class="p">;</span>
+</span><span id="line-3"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.DriverManager</span><span class="p">;</span>
+</span><span id="line-4"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.ResultSet</span><span class="p">;</span>
+</span><span id="line-5"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Types</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TestResultSet</span><span class="p">{</span>
+</span><span id="line-8"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-9"><span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-12"><span class="w">            </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:CUBRID:localhost:31001:tdemodb:::"</span><span class="p">,</span><span class="s">""</span><span class="p">,</span><span class="s">""</span><span class="p">);</span>
+</span><span id="line-14">
+</span><span id="line-15"><span class="w">            </span><span class="n">CallableStatement</span><span class="w"> </span><span class="n">cstmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareCall</span><span class="p">(</span><span class="s">"?=CALL rset()"</span><span class="p">);</span>
+</span><span id="line-16"><span class="w">            </span><span class="n">cstmt</span><span class="p">.</span><span class="na">registerOutParameter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Types</span><span class="p">.</span><span class="na">JAVA_OBJECT</span><span class="p">);</span>
+</span><span id="line-17"><span class="w">            </span><span class="n">cstmt</span><span class="p">.</span><span class="na">execute</span><span class="p">();</span>
+</span><span id="line-18"><span class="w">            </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ResultSet</span><span class="p">)</span><span class="w"> </span><span class="n">cstmt</span><span class="p">.</span><span class="na">getObject</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-19">
+</span><span id="line-20"><span class="w">            </span><span class="k">while</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-21"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+</span><span id="line-22"><span class="w">            </span><span class="p">}</span>
+</span><span id="line-23">
+</span><span id="line-24"><span class="w">            </span><span class="n">rs</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-25"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-26"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+</span><span id="line-27"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-28"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-29"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>You cannot use the <strong>ResultSet</strong> as an input argument. If you pass it to an IN argument, an error occurs. An error also occurs when calling a function that returns <strong>ResultSet</strong> in a non-Java environment.</p>
+</section>
+<section id="in-out-of-set-type-in-java-stored-function-procedure">
+<h3>IN/OUT of Set Type in Java Stored Function/Procedure<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#in-out-of-set-type-in-java-stored-function-procedure" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#in-out-of-set-type-in-java-stored-function-procedure'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>If the set type of the Java stored function/procedure in CUBRID is IN OUT, the value of the argument changed in Java must be applied to IN OUT. When the set type is passed to the OUT argument, it must be passed as a two-dimensional array.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">setoid</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="k">set</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">object</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-2"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">SetOID</span><span class="p">(</span><span class="n">cubrid</span><span class="p">.</span><span class="na">sql</span><span class="p">.</span><span class="na">CUBRID</span><span class="o">[][]</span><span class="w"> </span><span class="n">set</span><span class="p">,</span><span class="w"> </span><span class="n">cubrid</span><span class="p">.</span><span class="na">sql</span><span class="p">.</span><span class="na">CUBRIDOID</span><span class="w"> </span><span class="n">aoid</span><span class="p">){</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="o">=</span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">Statement</span><span class="w"> </span><span class="n">stmt</span><span class="o">=</span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">ret</span><span class="o">=</span><span class="s">""</span><span class="p">;</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">Vector</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Vector</span><span class="p">();</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="w">    </span><span class="n">cubrid</span><span class="p">.</span><span class="na">sql</span><span class="p">.</span><span class="na">CUBRIDOID</span><span class="o">[]</span><span class="w"> </span><span class="n">set1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">set</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-10"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">set1</span><span class="o">!=</span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-11"><span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">set1</span><span class="p">.</span><span class="na">length</span><span class="p">;</span>
+</span><span id="line-12"><span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span id="line-15"><span class="w">                </span><span class="n">v</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">set1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">);</span>
+</span><span id="line-16"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-17">
+</span><span id="line-18"><span class="w">        </span><span class="n">v</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">aoid</span><span class="p">);</span>
+</span><span id="line-19"><span class="w">        </span><span class="n">set</span><span class="o">[</span><span class="mi">0</span><span class="o">]=</span><span class="p">(</span><span class="n">cubrid</span><span class="p">.</span><span class="na">sql</span><span class="p">.</span><span class="na">CUBRIDOID</span><span class="o">[]</span><span class="p">)</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">toArray</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">cubrid</span><span class="p">.</span><span class="na">sql</span><span class="p">.</span><span class="na">CUBRIDOID</span><span class="o">[]</span><span class="p">{});</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-22"><span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+</span><span id="line-23"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">pirntln</span><span class="p">(</span><span class="s">"SQLException:"</span><span class="o">+</span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-24"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-25"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="using-oid-in-java-stored-function-procedure">
+<h3>Using OID in Java Stored Function/Procedure<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#using-oid-in-java-stored-function-procedure" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#using-oid-in-java-stored-function-procedure'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>In case of using the OID type value for IN/OUT in CUBRID, use the value passed from the server.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">tOID</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">inout</span><span class="w"> </span><span class="k">object</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="n">string</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
+</span><span id="line-2"><span class="n">NAME</span><span class="w"> </span><span class="s1">'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">tOID</span><span class="p">(</span><span class="n">CUBRIDOID</span><span class="o">[]</span><span class="w"> </span><span class="n">oid</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">query</span><span class="p">)</span>
+</span><span id="line-2"><span class="p">{</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="o">=</span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">Statement</span><span class="w"> </span><span class="n">stmt</span><span class="o">=</span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">ret</span><span class="o">=</span><span class="s">""</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-8"><span class="w">        </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-9"><span class="w">        </span><span class="n">conn</span><span class="o">=</span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:default:connection:"</span><span class="p">);</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="na">setAutoCommit</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span><span id="line-12"><span class="w">        </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">createStatement</span><span class="p">();</span>
+</span><span id="line-13"><span class="w">        </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">(</span><span class="n">query</span><span class="p">);</span>
+</span><span id="line-14"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"query:"</span><span class="o">+</span><span class="w"> </span><span class="n">query</span><span class="p">);</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-17"><span class="w">            </span><span class="n">oid</span><span class="o">[</span><span class="mi">0</span><span class="o">]=</span><span class="p">(</span><span class="n">CUBRIDOID</span><span class="p">)</span><span class="n">rs</span><span class="p">.</span><span class="na">getObject</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-18"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"oid:"</span><span class="o">+</span><span class="n">oid</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">.</span><span class="na">getTableName</span><span class="p">());</span>
+</span><span id="line-19"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="w">        </span><span class="n">stmt</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-22"><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-23">
+</span><span id="line-24"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SQLException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-25"><span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+</span><span id="line-26"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"SQLException:"</span><span class="o">+</span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-27"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-28"><span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+</span><span id="line-29"><span class="w">        </span><span class="n">system</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Exception:"</span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-30"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-31"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="trigger.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Trigger
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="method.html">
+        Method
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#starting-java-stored-procedure-server'" class="reference internal" href="#starting-java-stored-procedure-server">Starting Java Stored Procedure Server</a></li>
+<li><a :data-current="activeSection === '#how-to-write-java-stored-function-procedure'" class="reference internal" href="#how-to-write-java-stored-function-procedure">How to Write Java Stored Function/Procedure</a><ul>
+<li><a :data-current="activeSection === '#check-the-cubrid-conf-file'" class="reference internal" href="#check-the-cubrid-conf-file">Check the cubrid.conf file</a></li>
+<li><a :data-current="activeSection === '#write-and-compile-the-java-source-code'" class="reference internal" href="#write-and-compile-the-java-source-code">Write and compile the Java source code</a></li>
+<li><a :data-current="activeSection === '#load-the-compiled-java-class-into-cubrid'" class="reference internal" href="#load-the-compiled-java-class-into-cubrid">Load the compiled Java class into CUBRID</a></li>
+<li><a :data-current="activeSection === '#publish-the-loaded-java-class'" class="reference internal" href="#publish-the-loaded-java-class">Publish the loaded Java class</a></li>
+<li><a :data-current="activeSection === '#call-the-java-stored-function-procedure'" class="reference internal" href="#call-the-java-stored-function-procedure">Call the Java stored function/procedure</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#using-server-side-internal-jdbc-driver'" class="reference internal" href="#using-server-side-internal-jdbc-driver">Using Server-side Internal JDBC Driver</a></li>
+<li><a :data-current="activeSection === '#connecting-to-other-database'" class="reference internal" href="#connecting-to-other-database">Connecting to Other Database</a></li>
+<li><a :data-current="activeSection === '#loadjava-utility'" class="reference internal" href="#loadjava-utility">loadjava Utility</a></li>
+<li><a :data-current="activeSection === '#loaded-java-class-publish'" class="reference internal" href="#loaded-java-class-publish">Loaded Java Class Publish</a><ul>
+<li><a :data-current="activeSection === '#call-specifications'" class="reference internal" href="#call-specifications">Call Specifications</a></li>
+<li><a :data-current="activeSection === '#data-type-mapping'" class="reference internal" href="#data-type-mapping">Data Type Mapping</a></li>
+<li><a :data-current="activeSection === '#checking-the-published-java-stored-function-procedure-information'" class="reference internal" href="#checking-the-published-java-stored-function-procedure-information">Checking the Published Java Stored Function/Procedure Information</a></li>
+<li><a :data-current="activeSection === '#deleting-java-stored-functions-procedures'" class="reference internal" href="#deleting-java-stored-functions-procedures">Deleting Java Stored Functions/Procedures</a></li>
+<li><a :data-current="activeSection === '#comment-of-java-stored-function-procedure'" class="reference internal" href="#comment-of-java-stored-function-procedure">COMMENT of Java Stored Function/Procedure</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#java-stored-function-procedure-call'" class="reference internal" href="#java-stored-function-procedure-call">Java Stored Function/Procedure Call</a><ul>
+<li><a :data-current="activeSection === '#using-call-statement'" class="reference internal" href="#using-call-statement">Using CALL Statement</a></li>
+<li><a :data-current="activeSection === '#calling-from-sql-statement'" class="reference internal" href="#calling-from-sql-statement">Calling from SQL Statement</a></li>
+<li><a :data-current="activeSection === '#calling-from-java-application'" class="reference internal" href="#calling-from-java-application">Calling from Java Application</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#caution'" class="reference internal" href="#caution">Caution</a><ul>
+<li><a :data-current="activeSection === '#returning-value-of-java-stored-function-procedure-and-precision-type-on-in-out'" class="reference internal" href="#returning-value-of-java-stored-function-procedure-and-precision-type-on-in-out">Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT</a></li>
+<li><a :data-current="activeSection === '#returning-java-sql-resultset-in-java-stored-procedure'" class="reference internal" href="#returning-java-sql-resultset-in-java-stored-procedure">Returning java.sql.ResultSet in Java Stored Procedure</a></li>
+<li><a :data-current="activeSection === '#in-out-of-set-type-in-java-stored-function-procedure'" class="reference internal" href="#in-out-of-set-type-in-java-stored-function-procedure">IN/OUT of Set Type in Java Stored Function/Procedure</a></li>
+<li><a :data-current="activeSection === '#using-oid-in-java-stored-function-procedure'" class="reference internal" href="#using-oid-in-java-stored-function-procedure">Using OID in Java Stored Function/Procedure</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=f79b1e7e"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

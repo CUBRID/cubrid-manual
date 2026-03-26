@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="./" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Installing and Running CUBRID | CUBRID 11.0 User Manual</title>
+<meta content="Installing and Running CUBRID | CUBRID 11.0 User Manual" property="og:title"/>
+<meta content="Installing and Running CUBRID | CUBRID 11.0 User Manual" name="twitter:title"/>
+<link href="_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="_static/logo_only.png" rel="icon"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="env.html" rel="next" title="Configuring Environment Variables"/>
+<link href="install_upgrade.html" rel="prev" title="Installing and Upgrading"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.0 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="./genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.0/install.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.0 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="release_note/index.html">Release Note</a>
+<a href="./genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="sql/syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/jsp.html">Java Stored Function/Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/method.html">Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-java-stored-procedure-server">CUBRID Java Stored Procedure Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">CUBRID Security</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/oledb.html">OLE DB Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="release_note/release_note_latest_ver.html">11.0 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="index.html">
+<span class="hidden md:inline">CUBRID 11.0 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="install_upgrade.html">Installing and Upgrading</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Installing and Running CUBRID</span>
+</nav>
+<div id="content" role="main">
+<section id="installing-and-running-cubrid">
+<span id="install-execute"></span><h1>Installing and Running CUBRID<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-and-running-cubrid"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="supported-platforms-and-system-requirements">
+<h2>Supported Platforms and System Requirements<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#supported-platforms-and-system-requirements" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#supported-platforms-and-system-requirements'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The platforms supported by CUBRID and hardware/software requirements for the installation are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Supported Platforms</p></th>
+<th class="head"><p>Required Memory</p></th>
+<th class="head"><p>Required Disk Space</p></th>
+<th class="head"><p>Required Software</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><ul class="simple">
+<li><p>Windows 32/64 Bit Windows 7</p></li>
+<li><p>Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)</p></li>
+</ul>
+</td>
+<td><p>1GB or more</p></td>
+<td><p>2GB or more(*)</p></td>
+<td><p>JRE/JDK 1.6 or higher
+(Required when Java Stored Procedure
+is required)</p></td>
+</tr>
+</tbody>
+</table>
+<p>(*): Requires a 500MB of free disk space on the initial installation; requires approximately 1.5GB of free disk space with a database creating with default options.</p>
+<p>Beginning with 2008 R4.0, CUBRID Manager Client is not automatically installed when installing the CUBRID package. For this reason, if you require CUBRID Manager you must install it separately. The CUBRID can be downloaded from <a class="reference external" href="http://ftp.cubrid.org">http://ftp.cubrid.org</a>.</p>
+<p>A variety of drivers such as PHP, ODBC and OLE DB can also be downloaded from <a class="reference external" href="http://ftp.cubrid.org">http://ftp.cubrid.org</a>.</p>
+<p>For more information on the CUBRID engine, tools, and drivers, see <a class="reference external" href="https://www.cubrid.org">https://www.cubrid.org</a>.</p>
+</section>
+<section id="compatibility">
+<h2>Compatibility<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#compatibility" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#compatibility'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>Application Compatibility</strong></p>
+<ul class="simple">
+<li><p>Applications that use JDBC, PHP or CCI APIs from 2008 R4.1 or higher version of CUBRID can access the CUBRID 11.0 database. However, you must link the CUBRID 11.0 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces. In order to use <a class="reference internal" href="sql/datatype.html#timezone-type"><span class="std std-ref">Date/Time Types with Timezone</span></a> which are introduced as 10.0, users should upgrade drivers.</p></li>
+<li><p>Drivers lower version than 10.2 interpret JSON type columns as Varchar.</p></li>
+<li><p>Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.</p></li>
+<li><p>An application that is developed by using the GLO class can be used after it is converted to an application or schema suitable to the BLOB or CLOB type.</p></li>
+</ul>
+<p><strong>CUBRID Manager Compatibility</strong></p>
+<ul>
+<li><p>CUBRID Manager guarantees backward compatibility with the servers using CUBRID 2008 R2.2 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Manager that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Manager. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed($CUBRID on Linux, %CUBRID% on Windows).</p></li>
+<li><p>The bit version of CUBRID Manager must be identical to the bit version of JRE.</p>
+<p>For example, if a 64-bit DB server uses CUBRID Manager 32-bit version, JRE or JDK 32-bit version should be installed.</p>
+</li>
+<li><p>Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the <a class="reference external" href="https://www.cubrid.org">https://www.cubrid.org</a> Website.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Old version users should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 11.0 version.
+For upgrade and data migration, see <a class="reference internal" href="upgrade.html"><span class="doc">Upgrade</span></a>.</p>
+</div>
+<p><strong>Interoperability between CUBRID DB server and broker</strong></p>
+<ul>
+<li><p>If the CUBRID DB server and its broker server are operated separately, CUBRID version between them should be the same, but if just the patch version is different, their interoperability is guaranteed.</p>
+<p>For example, 2008 R4.1 Patch1 broker is compatible with 2008 R4.1 Patch 10 DB server, but not compatible with 2008 R4.3 DB server. 9.1 Patch 1 broker is compatible with 9.1 Patch 10 DB server, but not compatible with 9.2 DB server.</p>
+</li>
+<li><p>Even if the operating systems are different, their interoperability is guaranteed if the bit version of a DB server is identical to the bit version of a broker server.</p>
+<p>For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows.</p>
+<p>For the relation between DB server and broker, see <a class="reference internal" href="intro.html"><span class="doc">Introduction to CUBRID</span></a>.</p>
+</li>
+</ul>
+</section>
+<section id="installing-and-running-cubrid-on-linux">
+<span id="installing-and-running-on-linux"></span><h2>Installing and Running CUBRID on Linux<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-and-running-cubrid-on-linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-and-running-cubrid-on-linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>Checklist before Installing</strong></p>
+<p>Check the following before installing CUBRID for Linux.</p>
+<ul>
+<li><p>glibc version</p>
+<p>Only supports glibc 2.3.4 or later.
+The glibc version can be checked as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="n">rpm</span> <span class="o">-</span><span class="n">q</span> <span class="n">glibc</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>64-bit</p>
+<p>As 10.0, CUBRID supports only 64-bit Linux. You can check the version as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">uname</span> <span class="o">-</span><span class="n">a</span>
+</span><span id="line-2"><span class="n">Linux</span> <span class="n">host_name</span> <span class="mf">2.6.32</span><span class="o">-</span><span class="mf">696.20.1</span><span class="o">.</span><span class="n">el6</span><span class="o">.</span><span class="n">x86_64</span> <span class="c1">#1 SMP Fri Jan 26 17:51:45 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux</span>
+</span></code></pre></div>
+</div>
+<p>Make sure to install the CUBRID 64-bit version on 64-bit Linux.</p>
+</li>
+<li><p>The libraries that should be added.</p>
+<ul>
+<li><p>Curses Library (rpm -q ncurses)</p>
+<p>CUBRID is packaged with version 5 of Curses library. You may need to install ncurses-compat-libs package if your system has newer version and downgrade is not possible.</p>
+</li>
+<li><p>gcrypt Library (rpm -q libgcrypt)</p></li>
+<li><p>stdc++ Library (rpm -q libstdc++)</p></li>
+</ul>
+</li>
+<li><p>Check if the mapping between host names and IP addresses are correct in the /etc/hosts file.</p>
+<p>If host names and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.</p>
+</li>
+</ul>
+<p><strong>Installing CUBRID</strong></p>
+<p>The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the “CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.sh” file on the Linux.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ sh CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.sh
+</span><span id="line-2">Do you agree to the above license terms? (yes or no) : yes
+</span><span id="line-3">Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
+</span><span id="line-4">Install CUBRID to '/home1/cub_user/CUBRID' ...
+</span><span id="line-5">In case a different version of the CUBRID product is being used in other machines,
+</span><span id="line-6">please note that the CUBRID 11.0 servers are only compatible with the CUBRID 11.0 clients and vice versa.
+</span><span id="line-7">Do you want to continue? (yes or no) [Default: yes] : yes
+</span><span id="line-8">Copying old .cubrid.sh to .cubrid.sh.bak ...
+</span><span id="line-9">
+</span><span id="line-10">CUBRID has been successfully installed.
+</span><span id="line-11">
+</span><span id="line-12">demodb has been successfully created.
+</span><span id="line-13">
+</span><span id="line-14">If you want to use CUBRID, run the following commands
+</span><span id="line-15">$ . /home1/cub_user/.cubrid.sh
+</span><span id="line-16">$ cubrid service start
+</span></code></pre></div>
+</div>
+<p>As shown in the example above, after installing the downloaded file (CUBRID-11.0.0.0248-b53ae4a-Linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ . /home1/cub_user/.cubrid.sh
+</span></code></pre></div>
+</div>
+<p>After CUBRID is installed, you can start CUBRID Manager server and CUBRID broker as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid service start
+</span></code></pre></div>
+</div>
+<p>When you want to check whether CUBRID Manager server and CUBRID broker works well, you can use <strong>grep</strong> command in Linux as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ ps -ef | grep cub_
+</span><span id="line-2">cub_user 15200 1 0 18:57   00:00:00 cub_master
+</span><span id="line-3">cub_user 15205 1 0 18:57 pts/17 00:00:00 cub_broker
+</span><span id="line-4">cub_user 15210 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_1
+</span><span id="line-5">cub_user 15211 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_2
+</span><span id="line-6">cub_user 15212 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_3
+</span><span id="line-7">cub_user 15213 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_4
+</span><span id="line-8">cub_user 15214 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_5
+</span><span id="line-9">cub_user 15217 1 0 18:57 pts/17 00:00:00 cub_broker
+</span><span id="line-10">cub_user 15222 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_1
+</span><span id="line-11">cub_user 15223 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_2
+</span><span id="line-12">cub_user 15224 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_3
+</span><span id="line-13">cub_user 15225 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_4
+</span><span id="line-14">cub_user 15226 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_5
+</span><span id="line-15">cub_user 15229 1 0 18:57   00:00:00 cub_auto start
+</span><span id="line-16">cub_user 15232 1 0 18:57   00:00:00 cub_js start
+</span></code></pre></div>
+</div>
+<p><strong>Installing CUBRID (rpm File)</strong></p>
+<p>You can install CUBRID by using rpm file that is created on CentOS 6. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ rpm -Uvh cubrid-11.0.0.0248-b53ae4a-Linux.x86_64.rpm
+</span></code></pre></div>
+</div>
+<p>When rpm is executed, CUBRID is installed in the “cubrid” home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that <em>demodb</em> is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with “cubrid” Linux ID. When installation is complete, enter the code below to start CUBRID with “cubrid” Linux ID.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid service start
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p></p>
+<ul>
+<li><p><strong>RPM and dependency</strong></p>
+<p>You must check RPM dependency when installing with RPM. If you ignore (–nodeps) dependency, it may not be executed.</p>
+</li>
+<li><p><strong>cubrid account and DB exists even if you remove RPM package</strong></p>
+<p>Even if you remove RPM, user accounts and databases that are created after installing, you must remove it manually, if needed.</p>
+</li>
+<li><p><strong>Running CUBRID automatically in Linux when the system is started</strong></p>
+<p>When you use SH package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, <strong>CUBRID_USER</strong>. You should change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.</p>
+<p>When you use RPM package to install CUBRID, the cubrid script will be included in /etc/init.d. But you still need to change the environment variable, $CUBRID_USER from “cubrid” script file.</p>
+</li>
+<li><p><strong>In /etc/hosts file, check if a host name and an IP address mapping is normal</strong></p>
+<p>If a host name and an IP address is abnormally mapped, you cannot start DB server. Therefore, you should check if they are normally mapped.</p>
+</li>
+</ul>
+</div>
+<p><strong>Upgrading CUBRID</strong></p>
+<p>When you specify an installation directory where the previous version of CUBRID is already installed, a message which asks to overwrite files in the directory will appear. Entering <strong>no</strong> will stop the installation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Directory '/home1/cub_user/CUBRID' exist!
+</span><span id="line-2">If a CUBRID service is running on this directory, it may be terminated abnormally.
+</span><span id="line-3">And if you don't have right access permission on this directory(subdirectories or files), install operation will be failed.
+</span><span id="line-4">Overwrite anyway? (yes or no) [Default: no] : yes
+</span></code></pre></div>
+</div>
+<p>Choose whether to overwrite the existing configuration files during the CUBRID installation. Entering <strong>yes</strong> will overwrite and back up them as extension .bak files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">The configuration file (.conf or .pass) already exists. Do you want to overwrite it? (yes or no) : yes
+</span></code></pre></div>
+</div>
+<p>For more information on upgrading a database from a previous version to a new version, see <a class="reference internal" href="upgrade.html"><span class="doc">Upgrade</span></a>.</p>
+<p><strong>Configuring Environment</strong></p>
+<p>You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the <strong>$CUBRID/conf</strong> directory. See <a class="reference internal" href="#installing-and-running-on-windows"><span class="std std-ref">Installing and Running CUBRID on Windows</span></a> for more information.</p>
+<p><strong>Installing CUBRID Interfaces</strong></p>
+<p>You can download interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js from <a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a>.</p>
+<p>A simple description on each driver can be found on <a class="reference internal" href="api/index.html"><span class="doc">API Reference</span></a>.</p>
+<p><strong>Installing CUBRID Tools</strong></p>
+<p>You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from <a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a>.</p>
+</section>
+<section id="installing-and-running-cubrid-on-windows">
+<span id="installing-and-running-on-windows"></span><h2>Installing and Running CUBRID on Windows<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-and-running-cubrid-on-windows" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-and-running-cubrid-on-windows'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>Checklist before Installing</strong></p>
+<p>You should check the below before installing CUBRID for Windows.</p>
+<ul>
+<li><p>64-bit</p>
+<p>CUBRID supports only 64-bit Windows. You can check the version by selecting [My Computer] &gt; [System Properties]. Make sure to install a CUBRID 64-bit version on 64-bit Windows.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>10.1 would be the last release of 32-bit Windows.</p>
+</div>
+</li>
+</ul>
+<p><strong>Installation Process</strong></p>
+<p><strong>Step 1: Specifying the directory to install</strong></p>
+<p><strong>Step 2: Creating a sample database</strong></p>
+<blockquote>
+<div><p>To create a sample database, it requires about 1.5GB disk space.</p>
+</div></blockquote>
+<p><strong>Step 3: Completing the installation</strong></p>
+<blockquote>
+<div><p>CUBRID Service Tray appears on the right bottom.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CUBRID Service is automatically started when the system is rebooted. If you want to stop the  when the system is rebooted, change the “Start parameters” of “CUBRIDService” as “Stop”; “Control Panel &gt; Administrative Tools &gt; Services” and double-clicking “CUBRIDService”, then pop-up window will be shown.</p>
+</div>
+<p><strong>Checklist After Installation</strong></p>
+<ul>
+<li><p>Whether the start of CUBRID Service Tray or not</p>
+<p>If CUBRID Service Tray is not automatically started when starting a system, confirm the following.</p>
+<ul class="simple">
+<li><p>Check if Task Scheduler is started in [Start button] &gt; [Control panel] &gt; [Administrative Tools] &gt; [Services]; if not, start Task Scheduler.</p></li>
+<li><p>Check if CUBRID Service Tray is registered in [Start button] &gt; [All Programs] &gt; [Startup]; if not, register CUBRID Service Tray.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Upgrading CUBRID</strong></p>
+<p>To install a new version of CUBRID in an environment in which a previous version has already been installed, select [CUBRID Service Tray] &gt; [Exit] from the menu to stop currently running services, and then remove the previous version of CUBRID. Note that when you are prompted with “Do you want to delete all the existing version of databases and the configuration files?” you must select “No” to protect the existing databases.</p>
+<p>For more information on upgrading a database from a previous version to a new version, see <a class="reference internal" href="upgrade.html"><span class="doc">Upgrade</span></a>.</p>
+<p><strong>Configuring Environment</strong></p>
+<p>You can change configuration such as service ports to meet the user environment by changing the parameter values of following files which are located in the <strong>%CUBRID%\conf</strong> directory. If a firewall has been configured, the ports used in CUBRID need to be opened.</p>
+<ul>
+<li><p><strong>cm.conf</strong></p>
+<p>A configuration file for CUBRID Manager. The port that the Manager server process uses is called  <strong>cm_port</strong> and its default value is <strong>8001</strong>.</p>
+</li>
+<li><p><strong>cubrid.conf</strong></p>
+<p>A configuration file for server. You can use it to configure the following values: database memory, the number threads based on the number of concurrent users, communication port between broker and server, etc.  The port that a master process uses is called cubrid_port_id and its default value is 1523. For details, see <a class="reference internal" href="admin/config.html#cubrid-conf"><span class="std std-ref">cubrid.conf Configuration File and Default Parameters</span></a>.</p>
+</li>
+<li><p><strong>cubrid_broker.conf</strong></p>
+<p>A configuration file for broker. You can use it to configure the following values: broker port, the number of application servers (CAS), SQL LOG, etc. The port that a broker uses is called <strong>BROKER_PORT</strong>. A port you see in the drivers such as JDBC is its corresponding broker’s port. <strong>APPL_SERVER_PORT</strong> is a port that a broker application server (CAS) uses and it is added only in Windows. The default value is  <strong>BROKER_PORT</strong> +1. The number of ports used is the same as the number of CAS, starting from the specified port’s number plus 1. For details, see <a class="reference internal" href="admin/config.html#parameter-by-broker"><span class="std std-ref">Parameter by Broker</span></a>.
+For example, if the value of <strong>APPL_SERVER_PORT</strong> is 35000 and the maximum number of CASes by <strong>MAX_NUM_APPL_SERVER</strong> is 50, then listening ports on CASes are 35000, 35001, …, 35049.
+For more details, see <a class="reference internal" href="admin/config.html#parameter-by-broker"><span class="std std-ref">Parameter by Broker</span></a>.</p>
+<p>The <strong>CCI_DEFAULT_AUTOCOMMIT</strong> broker parameter is supported since 2008 R4.0. The default value in the version is <strong>OFF</strong> and it is later changed to <strong>ON</strong>.  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to <strong>OFF</strong> or configure the auto-commit mode to <strong>OFF</strong>.</p>
+</li>
+</ul>
+<p><strong>Installing CUBRID Interfaces</strong></p>
+<p>You can download interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js from <a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a>.</p>
+<p>A simple description on each driver can be found on <a class="reference internal" href="api/index.html"><span class="doc">API Reference</span></a>.</p>
+<p><strong>Installing CUBRID Tools</strong></p>
+<p>You can download various tools including CUBRID Manager and CUBRID Migration Toolkit from <a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a>.</p>
+</section>
+<section id="installing-with-a-compressed-package">
+<h2>Installing with a Compressed Package<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-with-a-compressed-package" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-with-a-compressed-package'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="installing-cubrid-with-tar-gz-on-linux">
+<h3>Installing CUBRID with tar.gz on Linux<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-cubrid-with-tar-gz-on-linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-cubrid-with-tar-gz-on-linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>Checklist before Installing</strong></p>
+<p>Check the following before installing CUBRID for Linux.</p>
+<ul>
+<li><p>glibc version</p>
+<p>Only supports glibc 2.3.4 or later.
+The glibc version can be checked as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="n">rpm</span> <span class="o">-</span><span class="n">q</span> <span class="n">glibc</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>64-bit</p>
+<p>As 10.0, CUBRID supports only 64-bit Linux. You can check the version as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">uname</span> <span class="o">-</span><span class="n">a</span>
+</span><span id="line-2"><span class="n">Linux</span> <span class="n">host_name</span> <span class="mf">2.6.18</span><span class="o">-</span><span class="mf">53.1.14</span><span class="o">.</span><span class="n">el5xen</span> <span class="c1">#1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux</span>
+</span></code></pre></div>
+</div>
+<p>Make sure to install the CUBRID 64-bit version on 64-bit Linux.</p>
+</li>
+<li><p>The libraries that should be added.</p>
+<ul>
+<li><p>Curses Library (rpm -q ncurses)</p>
+<p>CUBRID is packaged with version 5 of Curses library. You may need to install ncurses-compat-libs package if your system has newer version and downgrade is not possible.</p>
+</li>
+<li><p>gcrypt Library (rpm -q libgcrypt)</p></li>
+<li><p>stdc++ Library (rpm -q libstdc++)</p></li>
+</ul>
+</li>
+<li><p>Check if the mapping between host names and IP addresses are correct in the /etc/hosts file.</p>
+<p>If host names and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.</p>
+</li>
+</ul>
+<p><strong>Installation Process</strong></p>
+<blockquote>
+<div><p><strong>Specifying the Directory to Install</strong></p>
+<ul>
+<li><p>Decompress the compressed file to the directory to install.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">tar</span> <span class="n">xvfz</span> <span class="n">CUBRID</span><span class="o">-</span><span class="mf">11.0.0.0248</span><span class="o">-</span><span class="n">b53ae4a</span><span class="o">-</span><span class="n">Linux</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="o">/</span><span class="n">home1</span><span class="o">/</span><span class="n">cub_user</span><span class="o">/</span>
+</span></code></pre></div>
+</div>
+<p>CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory.</p>
+</li>
+</ul>
+<p><strong>Specifying Environment Variables</strong></p>
+<ol class="arabic">
+<li><p>Add below environment variables to a shell script which is run automatically and located under the home directory of a user.</p>
+<p>You may have to create a directory for <strong>$CUBRID_DATABASES</strong>. You can designate any directory you have enough permission.</p>
+<p>The below is an example to add environment variables to .bash_profile when you run on the bash shell.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">export CUBRID=/home1/cub_user/CUBRID
+</span><span id="line-2">export CUBRID_DATABASES=$CUBRID/databases
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Add CUBRID JDBC library file name to the <strong>CLASSPATH</strong> environment variable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">export CLASSPATH=$CUBRID/jdbc/cubrid_jdbc.jar:$CLASSPATH
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Add CUBRID bin directory to <strong>PATH</strong> environment variables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">export PATH=$CUBRID/bin:$PATH
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Creating DB</strong></p>
+<ul>
+<li><p>Move to the directory to create DB on the console and create DB.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">cd $CUBRID_DATABASES
+</span><span id="line-2">mkdir testdb
+</span><span id="line-3">cd testdb
+</span><span id="line-4">cubrid createdb --db-volume-size=128M --log-volume-size=128M testdb en_US
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Auto-starting when Booting</strong></p>
+<ul class="simple">
+<li><p>“cubrid” script is included in the <strong>$CUBRID/share/init.d</strong> directory. Change the value of <strong>$CUBRID_USER</strong> environment variable into the Linux account which installed CUBRID and register this script to <strong>/etc/init.d</strong>; then you can start automatically by using “service” or “chkconfig” command.</p></li>
+</ul>
+<p><strong>Auto-starting DB</strong></p>
+<ul>
+<li><p>To start DB automatically when you booting a system, change the below in <strong>$CUBRID/conf/cubrid.conf</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">service</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">service</span><span class="o">=</span><span class="n">server</span><span class="p">,</span> <span class="n">broker</span><span class="p">,</span> <span class="n">manager</span>
+</span><span id="line-3"><span class="n">server</span><span class="o">=</span><span class="n">testdb</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>In the “service” parameter, processes to be auto-started are specified.</p></li>
+<li><p>In the “server” parameter, DB name to be auto-started is specified.</p></li>
+</ul>
+</div></blockquote>
+<p>For environment setting, tools installation and interfaces installation after CUBRID installation,  see <a class="reference internal" href="#installing-and-running-on-linux"><span class="std std-ref">Installing and Running CUBRID on Linux</span></a>.</p>
+</section>
+<section id="installing-cubrid-with-zip-on-windows">
+<h3>Installing CUBRID with zip on Windows<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-cubrid-with-zip-on-windows" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-cubrid-with-zip-on-windows'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>Checklist before Installing</strong></p>
+<p>Check below list before installing CUBRID database of Windows version.</p>
+<ul>
+<li><p>64bit</p>
+<p>CUBRID supports only 64-bit Windows. You can check the version by selecting [My Computer] &gt; [System Properties]. Make sure to install a CUBRID 64-bit version on 64-bit Windows.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>10.1 would be the last release of 32-bit Windows.</p>
+</div>
+</li>
+</ul>
+<p><strong>Installation Process</strong></p>
+<blockquote>
+<div><p><strong>Specifying the Directory to Install</strong></p>
+<ul>
+<li><p>Decompress the compressed file to the directory to install.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>You may have to create a directory for <strong>$CUBRID_DATABASES</strong>. You can designate any directory you have enough permission.</p></li>
+</ul>
+<p><strong>Specifying Environment Variables</strong></p>
+<ol class="arabic">
+<li><p>Select [Start button] &gt; [Computer] &gt; (click right mouse button) &gt; [Properties] &gt; [Advanced system settings] &gt; [Environment Variables].</p></li>
+<li><p>Click [New …] under the system variables and add system variables as below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CUBRID</span> <span class="o">=</span> <span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>
+</span><span id="line-2"><span class="n">CUBRID_DATABASES</span> <span class="o">=</span> <span class="o">%</span><span class="n">CUBRID</span><span class="o">%</span>\<span class="n">databases</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Add CUBRID JDBC library name to <strong>CLASSPATH</strong> system variable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="n">CUBRID</span><span class="o">%</span>\<span class="n">jdbc</span>\<span class="n">cubrid_jdbc</span><span class="o">.</span><span class="n">jar</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Add CUBRID bin directory to <strong>Path</strong> system variable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="n">CUBRID</span><span class="o">%</span>\<span class="nb">bin</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting environment variables for using CUBRID can be conveniently configured by using the batch file (cubrid_env.bat) below.
+C:CUBRIDshardwindows_scriptscubrid_env.bat</p>
+</div>
+<p><strong>Creating DB</strong></p>
+<ul>
+<li><p>Run <strong>cmd</strong> command and open the console; move to the directory to create DB and create DB.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>\<span class="n">databases</span>
+</span><span id="line-2"><span class="n">md</span> <span class="n">testdb</span>
+</span><span id="line-3"><span class="n">cd</span> <span class="n">testdb</span>
+</span><span id="line-4"><span class="n">c</span><span class="p">:</span>\<span class="n">CUBRID</span>\<span class="n">databases</span>\<span class="n">testdb</span><span class="o">&gt;</span><span class="n">cubrid</span> <span class="n">createdb</span> <span class="o">--</span><span class="n">db</span><span class="o">-</span><span class="n">volume</span><span class="o">-</span><span class="n">size</span><span class="o">=</span><span class="mi">128</span><span class="n">M</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">volume</span><span class="o">-</span><span class="n">size</span><span class="o">=</span><span class="mi">128</span><span class="n">M</span> <span class="n">testdb</span> <span class="n">en_US</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Auto-starting when Booting</strong></p>
+<ul>
+<li><p>To start CUBRID automatically when booting the Windows system, CUBRID Service should be registered to Windows Service.</p>
+<ol class="arabic">
+<li><p>Register CUBRID Service to Windows Service.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>\<span class="nb">bin</span>\<span class="n">ctrlService</span><span class="o">.</span><span class="n">exe</span> <span class="o">-</span><span class="n">i</span> <span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>\<span class="nb">bin</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>The below shows how to start/stop CUBRID Service.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>\<span class="nb">bin</span>\<span class="n">ctrlService</span><span class="o">.</span><span class="n">exe</span> <span class="o">-</span><span class="n">start</span><span class="o">/-</span><span class="n">stop</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>Auto-starting DB</strong></p>
+<ul>
+<li><p>To start DB when booting on Windows, change below in C:\CUBRID\conf\cubrid.conf.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">service</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">service</span><span class="o">=</span><span class="n">server</span><span class="p">,</span> <span class="n">broker</span><span class="p">,</span> <span class="n">manager</span>
+</span><span id="line-3"><span class="n">server</span><span class="o">=</span><span class="n">testdb</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>Specify the processes to start automatically on the “service” parameter.</p></li>
+<li><p>Specify the DB name to start automatically on the “server” parameter.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Removing from Service</strong></p>
+<ul>
+<li><p>To remove registered CUBRID Service, run the following.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>\<span class="nb">bin</span>\<span class="n">ctrlService</span><span class="o">.</span><span class="n">exe</span> <span class="o">-</span><span class="n">u</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>Registering CUBRID Service Tray</strong></p>
+<p>Since CUBRID Service Tray is not automatically registered when installing CUBRID with zip file, it is required to register manually if you want CUBRID Service Tray.</p>
+<ol class="arabic">
+<li><p>Create a link of C:\CUBRID\bin\CUBRID_Service_Tray.exe in [Start button] &gt; [All Programs] &gt; [Startup].</p></li>
+<li><p>Input “regedit” in [Start button] &gt; [Accessories] &gt; [Run] to run a registry editor.</p></li>
+<li><p>Create CUBRID folder under [Computer] &gt; [HKEY_LOCAL_MACHINE] &gt; [SOFTWARE].</p></li>
+<li><p>Create [cmclient] folder under [CUBRID] folder(Edit &gt; New &gt; Key) and add below items(Edit &gt; New &gt; String Value).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Name</span>          <span class="n">Type</span>       <span class="n">Data</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">ROOT_PATH</span>     <span class="n">REG_SZ</span>     <span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>\<span class="n">cubridmanager</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Create [cmserver] folder under [CUBRID] folder(Edit &gt; New &gt; Key) and add below items(Edit &gt; New &gt; String Value).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Name</span>          <span class="n">Type</span>       <span class="n">Data</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">ROOT_PATH</span>     <span class="n">REG_SZ</span>     <span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Create [CUBRID] folder under [CUBRID] folder(Edit &gt; New &gt; Key) and add below items(Edit &gt; New &gt; String Value).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Name</span>          <span class="n">Type</span>       <span class="n">Data</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">ROOT_PATH</span>     <span class="n">REG_SZ</span>     <span class="n">C</span><span class="p">:</span>\<span class="n">CUBRID</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>When rebooting Windows, CUBRID Service Tray is created under right side.</p></li>
+</ol>
+<p><strong>Checklist After Installation</strong></p>
+<ul>
+<li><p>Whether the start of CUBRID Service Tray or not</p>
+<p>If CUBRID Service Tray is not automatically started when starting a system, confirm the following.</p>
+<ul class="simple">
+<li><p>Check if Task Scheduler is started in [Start button] &gt; [Control panel] &gt; [Administrative Tools] &gt; [Services]; if not, start Task Scheduler.</p></li>
+<li><p>Check if CUBRID Service Tray is registered in [Start button] &gt; [All Programs] &gt; [Startup]; if not, register CUBRID Service Tray.</p></li>
+</ul>
+</li>
+</ul>
+<p>For environment setting, tools installation and interfaces installation after CUBRID installation,  see <a class="reference internal" href="#installing-and-running-on-windows"><span class="std std-ref">Installing and Running CUBRID on Windows</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If CUBRID is installed as a zip file, it may not be executed because there is no DLL required to execute CUBRID.
+In this case, you need to install Microsoft Visual C++ Redistributable.</p>
+<ul>
+<li><p><strong>Microsoft Visual C++ Redistributable</strong></p>
+<p><a class="reference external" href="https://visualstudio.microsoft.com/downloads/">https://visualstudio.microsoft.com/downloads/</a></p>
+</li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="install_upgrade.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Installing and Upgrading
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="env.html">
+        Configuring Environment Variables
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#supported-platforms-and-system-requirements'" class="reference internal" href="#supported-platforms-and-system-requirements">Supported Platforms and System Requirements</a></li>
+<li><a :data-current="activeSection === '#compatibility'" class="reference internal" href="#compatibility">Compatibility</a></li>
+<li><a :data-current="activeSection === '#installing-and-running-cubrid-on-linux'" class="reference internal" href="#installing-and-running-cubrid-on-linux">Installing and Running CUBRID on Linux</a></li>
+<li><a :data-current="activeSection === '#installing-and-running-cubrid-on-windows'" class="reference internal" href="#installing-and-running-cubrid-on-windows">Installing and Running CUBRID on Windows</a></li>
+<li><a :data-current="activeSection === '#installing-with-a-compressed-package'" class="reference internal" href="#installing-with-a-compressed-package">Installing with a Compressed Package</a><ul>
+<li><a :data-current="activeSection === '#installing-cubrid-with-tar-gz-on-linux'" class="reference internal" href="#installing-cubrid-with-tar-gz-on-linux">Installing CUBRID with tar.gz on Linux</a></li>
+<li><a :data-current="activeSection === '#installing-cubrid-with-zip-on-windows'" class="reference internal" href="#installing-cubrid-with-zip-on-windows">Installing CUBRID with zip on Windows</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="_static/documentation_options.js?v=f79b1e7e"></script>
+<script src="_static/doctools.js?v=fd6eb6e6"></script>
+<script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="_static/theme.js?v=b0acb063"></script>
+<script src="_static/design-tabs.js?v=f930bc37"></script>
+<script src="_static/version-switcher.js?v=993d9931"></script>
+<script src="_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CUBRID SQL | CUBRID 11.4 User Manual</title>
+<meta content="CUBRID SQL | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="CUBRID SQL | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="syntax.html" rel="next" title="Writing Rules"/>
+<link href="../csql.html" rel="prev" title="CSQL Interpreter"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/index.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_upgrade.html">Installing and Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="current reference internal expandable" href="#">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/index.html">CUBRID Procedural Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">CUBRID Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_note/index.html">Release Notes</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">CUBRID SQL</span>
+</nav>
+<div id="content" role="main">
+<section id="cubrid-sql">
+<span id="id1"></span><h1>CUBRID SQL<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-sql"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>This chapter describes SQL syntax such as data types, functions and operators, data retrieval or table manipulation. You can also find SQL statements used for index, trigger, partition, serial and changing user information.</p>
+<p>The main topics covered in this chapter are as follows:</p>
+<ul class="simple">
+<li><p>Writing Rules</p>
+<ul>
+<li><p>Identifier: Describes how to write, the identifier, string allowed to be used as a name of a table, index, and column.</p></li>
+<li><p>Reserved words: Lists reserved words in CUBRID. To use a reserved word as an identifier, enclose the identifier by using double quotes, backticks (`), or brackets ([]).</p></li>
+<li><p>Comment</p></li>
+<li><p>Literal: Describes how to write constant values.</p></li>
+</ul>
+</li>
+<li><p>Data types: Describes the data types, the format to store data.</p></li>
+<li><p>Data Definition Statements: Describes how to create, alter, drop, and rename a table, an index, a view and a serial.</p></li>
+<li><p>Operators and Functions: Describes the operators and functions used for query statements.</p></li>
+<li><p>Data Manipulation Statements: Describes the SELECT, INSERT, UPDATE, and DELETE statements.</p></li>
+<li><p>Query Optimization: Describes the query optimization by using the index, hint, and the index hint syntax.</p></li>
+<li><p>Partitioning: Describes how to partition one table into several independent logical units.</p></li>
+<li><p>Trigger: Describes how to create, alter, drop, and rename a trigger that is automatically executed in response to certain events.</p></li>
+<li><p>Class Inheritance: Describes how to inherit the attribute from the parent to the child table (class).</p></li>
+<li><p>Database Administration: Describes about user management, SET and SHOW statements.</p></li>
+<li><p>User Schema: Describes a logical collection of objects in a database that is created with users.</p></li>
+<li><p>System Catalog: Describes the CUBRID system catalog, the internal information of the CUBRID database.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="syntax.html">Writing Rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="identifier.html">Identifier</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="identifier.html#guidelines-for-creating-identifiers">Guidelines for Creating Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="identifier.html#legal-identifiers">Legal Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="identifier.html#illegal-identifiers">Illegal Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="identifier.html#the-maximum-length-of-an-identifier-name">The maximum length of an identifier name</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="keyword.html">Reserved Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comment.html">Comment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="literal.html">Literal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="literal.html#number">Number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="literal.html#date-time">Date/Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="literal.html#bit-string">Bit String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="literal.html#character-string">Character String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="literal.html#collection">Collection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="literal.html#null">NULL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="datatype_index.html">Data Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datatype.html">Data Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#numeric-types">Numeric Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#date-time-types">Date/Time Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#date-time-types-with-timezone">Date/Time Types with Timezone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#bit-strings">Bit Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#character-strings">Character Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#enum-data-type">ENUM Data Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#blob-clob-data-types">BLOB/CLOB Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#collection-types">Collection Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#json-data-type">JSON Data Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datatype.html#implicit-type-conversion">Implicit Type Conversion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="schema/index.html">Data Definition Statements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="schema/table_stmt.html">TABLE DEFINITION STATEMENTS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schema/table_stmt.html#create-table">CREATE TABLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/table_stmt.html#alter-table">ALTER TABLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/table_stmt.html#drop-table">DROP TABLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/table_stmt.html#rename-table">RENAME TABLE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index_stmt.html">INDEX DEFINITION STATEMENTS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schema/index_stmt.html#create-index">CREATE INDEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/index_stmt.html#alter-index">ALTER INDEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/index_stmt.html#drop-index">DROP INDEX</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schema/view_stmt.html">VIEW DEFINITION STATEMENTS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schema/view_stmt.html#create-view">CREATE VIEW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/view_stmt.html#alter-view">ALTER VIEW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/view_stmt.html#drop-view">DROP VIEW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/view_stmt.html#rename-view">RENAME VIEW</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schema/serial_stmt.html">SERIAL DEFINITION STATEMENTS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schema/serial_stmt.html#create-serial">CREATE SERIAL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/serial_stmt.html#alter-serial">ALTER SERIAL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/serial_stmt.html#drop-serial">DROP SERIAL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/serial_stmt.html#accessing-serial">Accessing Serial</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schema/synonym_stmt.html">SYNONYM DEFINITION STATEMENTS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schema/synonym_stmt.html#create-synonym">CREATE SYNONYM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/synonym_stmt.html#alter-synonym">ALTER SYNONYM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/synonym_stmt.html#drop-synonym">DROP SYNONYM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/synonym_stmt.html#rename-synonym">RENAME SYNONYM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/synonym_stmt.html#use-synonym">USE SYNONYM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schema/server_stmt.html">SERVER DEFINITION STATEMENTS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schema/server_stmt.html#create-server">CREATE SERVER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/server_stmt.html#rename-server">RENAME SERVER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/server_stmt.html#drop-server">DROP SERVER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/server_stmt.html#alter-server">ALTER SERVER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schema/stored_routine_stmt.html">STORED FUNCTION/PROCEDURE DEFINITION STATEMENTS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schema/stored_routine_stmt.html#create-procedure">CREATE PROCEDURE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/stored_routine_stmt.html#create-function">CREATE FUNCTION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/stored_routine_stmt.html#drop-procedure">DROP PROCEDURE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema/stored_routine_stmt.html#drop-function">DROP FUNCTION</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="function/index.html">Operators and Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function/logical_op.html">Logical Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/comparison_op.html">Comparison Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/arithmetic_op.html">Arithmetic Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/arithmetic_op.html#arithmetic-operations-and-type-casting-of-numeric-data-types">Arithmetic Operations and Type Casting of Numeric Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/arithmetic_op.html#arithmetic-operations-and-type-casting-of-date-time-data-types">Arithmetic Operations and Type Casting of DATE/TIME Data Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/set_op.html">Set Arithmetic Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/set_op.html#set-multiset-list">SET, MULTISET, LIST</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/stmt_set_op.html">Statement Set Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/stmt_set_op.html#union-difference-intersection">UNION, DIFFERENCE, INTERSECTION</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/containment_op.html">Containment Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/containment_op.html#seteq">SETEQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/containment_op.html#setneq">SETNEQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/containment_op.html#superset">SUPERSET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/containment_op.html#superseteq">SUPERSETEQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/containment_op.html#subset">SUBSET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/containment_op.html#subseteq">SUBSETEQ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/bit_fn.html">BIT Functions and Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/bit_fn.html#bitwise-operator">Bitwise Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/bit_fn.html#bit-and">BIT_AND</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/bit_fn.html#bit-or">BIT_OR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/bit_fn.html#bit-xor">BIT_XOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/bit_fn.html#bit-count">BIT_COUNT</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/string_fn.html">String Functions and Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#concatenation-operator">Concatenation Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#ascii">ASCII</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#bin">BIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#bit-length">BIT_LENGTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#char-length-character-length-lengthb-length">CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#chr">CHR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#concat">CONCAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#concat-ws">CONCAT_WS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#elt">ELT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#field">FIELD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#find-in-set">FIND_IN_SET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#from-base64">FROM_BASE64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#insert">INSERT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#instr">INSTR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#lcase-lower">LCASE, LOWER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#left">LEFT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#locate">LOCATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#lpad">LPAD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#ltrim">LTRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#mid">MID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#octet-length">OCTET_LENGTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#position">POSITION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#repeat">REPEAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#replace">REPLACE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#reverse">REVERSE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#right">RIGHT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#rpad">RPAD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#rtrim">RTRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#space">SPACE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#strcmp">STRCMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#substr">SUBSTR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#substring">SUBSTRING</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#substring-index">SUBSTRING_INDEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#to-base64">TO_BASE64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#translate">TRANSLATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#trim">TRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/string_fn.html#ucase-upper">UCASE, UPPER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/regex_fn.html">Regular Expressions Functions and Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/regex_fn.html#regular-expressions-pattern-syntax">Regular Expressions Pattern Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/regex_fn.html#regexp-rlike">REGEXP, RLIKE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/regex_fn.html#regexp-count">REGEXP_COUNT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/regex_fn.html#regexp-instr">REGEXP_INSTR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/regex_fn.html#regexp-like">REGEXP_LIKE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/regex_fn.html#regexp-replace">REGEXP_REPLACE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/regex_fn.html#regexp-substr">REGEXP_SUBSTR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/numeric_fn.html">Numeric/Mathematical Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#abs">ABS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#acos">ACOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#asin">ASIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#atan">ATAN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#atan2">ATAN2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#ceil">CEIL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#conv">CONV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#cos">COS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#cot">COT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#crc32">CRC32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#degrees">DEGREES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#drandom-drand">DRANDOM, DRAND</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#exp">EXP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#floor">FLOOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#hex">HEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#ln">LN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#log">LOG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#log2">LOG2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#log10">LOG10</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#mod">MOD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#pi">PI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#pow-power">POW, POWER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#radians">RADIANS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#random-rand">RANDOM, RAND</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#round">ROUND</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#sign">SIGN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#sin">SIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#sqrt">SQRT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#tan">TAN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#trunc-truncate">TRUNC, TRUNCATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/numeric_fn.html#width-bucket">WIDTH_BUCKET</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/datetime_fn.html">Date/Time Functions and Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#adddate-date-add">ADDDATE, DATE_ADD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#addtime">ADDTIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#add-months">ADD_MONTHS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#curdate-current-date">CURDATE, CURRENT_DATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#current-datetime-now">CURRENT_DATETIME, NOW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#curtime-current-time">CURTIME, CURRENT_TIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#current-timestamp-localtime-localtimestamp">CURRENT_TIMESTAMP, LOCALTIME, LOCALTIMESTAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#date">DATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#datediff">DATEDIFF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#date-sub-subdate">DATE_SUB, SUBDATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#day-dayofmonth">DAY, DAYOFMONTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#dayofweek">DAYOFWEEK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#dayofyear">DAYOFYEAR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#extract">EXTRACT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#from-days">FROM_DAYS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#from-tz">FROM_TZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#from-unixtime">FROM_UNIXTIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#hour">HOUR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#last-day">LAST_DAY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#makedate">MAKEDATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#maketime">MAKETIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#minute">MINUTE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#month">MONTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#months-between">MONTHS_BETWEEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#new-time">NEW_TIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#quarter">QUARTER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#round">ROUND</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#sec-to-time">SEC_TO_TIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#second">SECOND</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#sys-date-sysdate">SYS_DATE, SYSDATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#sys-datetime-sysdatetime">SYS_DATETIME, SYSDATETIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#sys-time-systime">SYS_TIME, SYSTIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#sys-timestamp-systimestamp">SYS_TIMESTAMP, SYSTIMESTAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#time">TIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#time-to-sec">TIME_TO_SEC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#timediff">TIMEDIFF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#timestamp">TIMESTAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#to-days">TO_DAYS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#trunc">TRUNC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#tz-offset">TZ_OFFSET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#unix-timestamp">UNIX_TIMESTAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#utc-date">UTC_DATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#utc-time">UTC_TIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#week">WEEK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#weekday">WEEKDAY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/datetime_fn.html#year">YEAR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/json_fn.html">JSON functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#introduction-to-json-functions">Introduction to JSON functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-array">JSON_ARRAY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-object">JSON_OBJECT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-keys">JSON_KEYS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-depth">JSON_DEPTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-length">JSON_LENGTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-valid">JSON_VALID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-type">JSON_TYPE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-quote">JSON_QUOTE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-unquote">JSON_UNQUOTE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-pretty">JSON_PRETTY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-search">JSON_SEARCH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-extract">JSON_EXTRACT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#fn-json-arrow">-&gt;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#fn-json-double-arrow">-&gt;&gt;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-contains-path">JSON_CONTAINS_PATH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-contains">JSON_CONTAINS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-merge-patch">JSON_MERGE_PATCH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-merge-preserve">JSON_MERGE_PRESERVE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-merge">JSON_MERGE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-array-append">JSON_ARRAY_APPEND</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-array-insert">JSON_ARRAY_INSERT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-insert">JSON_INSERT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-set">JSON_SET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-replace">JSON_REPLACE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-remove">JSON_REMOVE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/json_fn.html#json-table">JSON_TABLE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/lob_fn.html">LOB Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#bit-to-blob">BIT_TO_BLOB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#blob-from-file">BLOB_FROM_FILE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#blob-length">BLOB_LENGTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#blob-to-bit">BLOB_TO_BIT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#char-to-blob">CHAR_TO_BLOB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#char-to-clob">CHAR_TO_CLOB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#clob-from-file">CLOB_FROM_FILE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#clob-length">CLOB_LENGTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/lob_fn.html#clob-to-char">CLOB_TO_CHAR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/typecast_fn.html">Data Type Casting Functions and Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#cast">CAST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#date-format">DATE_FORMAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#format">FORMAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#str-to-date">STR_TO_DATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#time-format">TIME_FORMAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-char-date-time">TO_CHAR(date_time)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-char-number">TO_CHAR(number)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-date">TO_DATE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-datetime">TO_DATETIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-datetime-tz">TO_DATETIME_TZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-number">TO_NUMBER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-time">TO_TIME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-timestamp">TO_TIMESTAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/typecast_fn.html#to-timestamp-tz">TO_TIMESTAMP_TZ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/analysis_fn.html">Aggregate/Analytic Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#aggregate-vs-analytic">Aggregate vs. Analytic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#analytic-functions-which-order-by-clause-must-be-specified-in-over-function">Analytic functions which “ORDER BY” clause must be specified in OVER function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#avg">AVG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#count">COUNT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#cume-dist">CUME_DIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#dense-rank">DENSE_RANK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#first-value">FIRST_VALUE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#group-concat">GROUP_CONCAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#lag">LAG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#last-value">LAST_VALUE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#lead">LEAD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#max">MAX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#median">MEDIAN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#min">MIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#nth-value">NTH_VALUE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#ntile">NTILE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#percent-rank">PERCENT_RANK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#percentile-cont">PERCENTILE_CONT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#percentile-disc">PERCENTILE_DISC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#rank">RANK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#row-number">ROW_NUMBER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#stddev-stddev-pop">STDDEV, STDDEV_POP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#stddev-samp">STDDEV_SAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#sum">SUM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#variance-var-pop">VARIANCE, VAR_POP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#var-samp">VAR_SAMP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#json-arrayagg">JSON_ARRAYAGG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/analysis_fn.html#json-objectagg">JSON_OBJECTAGG</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/clickcounter_fn.html">Click Counter Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/clickcounter_fn.html#incr-decr">INCR, DECR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/rownum_fn.html">ROWNUM Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/rownum_fn.html#rownum-inst-num">ROWNUM, INST_NUM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/rownum_fn.html#orderby-num">ORDERBY_NUM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/rownum_fn.html#groupby-num">GROUPBY_NUM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/information_fn.html">Information Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#charset">CHARSET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#coercibility">COERCIBILITY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#collation">COLLATION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#current-user-user">CURRENT_USER, USER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#database-schema">DATABASE, SCHEMA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#dbtimezone">DBTIMEZONE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#default">DEFAULT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#disk-size">DISK_SIZE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#index-cardinality">INDEX_CARDINALITY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#inet-aton">INET_ATON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#inet-ntoa">INET_NTOA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#last-insert-id">LAST_INSERT_ID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#list-dbs">LIST_DBS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#row-count">ROW_COUNT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#sessiontimezone">SESSIONTIMEZONE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#user-system-user">USER, SYSTEM_USER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/information_fn.html#version">VERSION</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/encryption_fn.html">Encryption Function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/encryption_fn.html#md5">MD5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/encryption_fn.html#sha1">SHA1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/encryption_fn.html#sha2">SHA2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/condition_op.html">Comparison Expression</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#simple-comparison-expression">Simple Comparison Expression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#any-some-all-quantifiers">ANY/SOME/ALL quantifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#between">BETWEEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#exists">EXISTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#in">IN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#is-null">IS NULL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#like">LIKE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_op.html#case">CASE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/condition_fn.html">Comparison Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#coalesce">COALESCE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#decode">DECODE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#greatest">GREATEST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#if">IF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#ifnull-nvl">IFNULL, NVL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#isnull">ISNULL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#least">LEAST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#nullif">NULLIF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/condition_fn.html#nvl2">NVL2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="function/other_fn.html">Other functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="function/other_fn.html#sleep">SLEEP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="function/other_fn.html#sys-guid">SYS_GUID</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="query/select.html">SELECT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#from-clause">FROM Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#where-clause">WHERE Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#group-by-having-clause">GROUP BY … HAVING Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#order-by-clause">ORDER BY Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#limit-clause">LIMIT Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#join-query">Join Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#subquery">Subquery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#values">VALUES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/select.html#for-update">FOR UPDATE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/hq.html">Hierarchical Query</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#start-with-clause">START WITH Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#connect-by-clause">CONNECT BY Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#hierarchical-query-execution">Hierarchical Query Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#pseudo-columns-for-hierarchical-query">Pseudo Columns for Hierarchical Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#operators-for-hierarchical-query">Operators for Hierarchical Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#functions-for-hierarchical-query">Functions for Hierarchical Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#examples-of-hierarchical-query">Examples of Hierarchical Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/hq.html#performance-of-hierarchical-query">Performance of Hierarchical Query</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/insert.html">INSERT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/insert.html#insert-select-statement">INSERT … SELECT Statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/insert.html#insert-into-remote-table-spec-select-statement">INSERT INTO &lt;remote-table-spec&gt;… SELECT statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/insert.html#on-duplicate-key-update-clause">ON DUPLICATE KEY UPDATE Clause</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/update.html">UPDATE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/replace.html">REPLACE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/delete.html">DELETE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/delete.html#caution">Caution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/merge.html">MERGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/truncate.html">TRUNCATE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/prepare.html">PREPARED STATEMENT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/prepare.html#prepare-statement">PREPARE Statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/prepare.html#execute-statement">EXECUTE Statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/prepare.html#deallocate-prepare-drop-prepare-statements">DEALLOCATE PREPARE/DROP PREPARE Statements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/do.html">DO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/cte.html">CTE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/cte.html#cte-column-names">CTE column names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/cte.html#recursive-clause">RECURSIVE clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/cte.html#cte-usage-in-dmls-and-create">CTE Usage in DMLs and CREATE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/call.html">CALL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tuning_index.html">Query Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html">Join Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#nested-loop-join">Nested Loop Join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#sort-merge-join">Sort-Merge Join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#hash-join">Hash Join</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#updating-statistics">Updating Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#checking-statistics-information">Checking Statistics Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#viewing-query-plan">Viewing Query Plan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#optimizer-principle">Optimizer Principle</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#selectivity">Selectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#expected-number-of-rows">Expected number of rows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#cost-of-sequential-scan">Cost of sequential scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#cost-of-index-scan">Cost of index scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#cost-of-join">Cost of join</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#query-profiling">Query Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#using-sql-hint">Using SQL Hint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#index-hint">Index Hint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#using-index">USING INDEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#use-force-ignore-index">USE, FORCE, IGNORE INDEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#examples-of-index-hint">Examples of index hint</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#special-indexes">Special Indexes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#filtered-index">Filtered Index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#function-based-index">Function-based Index</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#optimization-using-indexes">Optimization Using Indexes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#covering-index">Covering Index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#optimizing-order-by-clause">Optimizing ORDER BY Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#index-scan-in-descending-order">Index Scan in Descending Order</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#optimizing-group-by-clause">Optimizing GROUP BY Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#multiple-key-ranges-optimization">Multiple Key Ranges Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#index-skip-scan">Index Skip Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#loose-index-scan">Loose Index Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#in-memory-sort">In Memory Sort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#sort-limit-optimization">SORT-LIMIT optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#optimization-using-rewrite">Optimization Using Rewrite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#join-transforming-optimization">Join transforming Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#view-merging-optimization">View Merging Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#predicate-push">Predicate Push</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#subquery-unnest">Subquery unnest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#transitive-predicate">Transitive predicate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tuning.html#query-cache">QUERY CACHE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tuning.html#subquery-cache-correlated">SUBQUERY CACHE (correlated)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="partition_index.html">Partitioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partitioning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#partitioning-key">Partitioning key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#range-partitioning">Range Partitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#hash-partitioning">Hash Partitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#list-partitioning">List Partitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#partition-pruning">Partition Pruning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#partitioning-management">Partitioning Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#indexes-on-partitioned-tables">Indexes on Partitioned Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#notes-on-partitioning">Notes on Partitioning</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="i18n_index.html">Globalization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html">An Overview of Globalization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#character-data">Character data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#related-terms">Related Terms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#locale-attributes">Locale Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#collation-properties">Collation Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#collation-naming-rules">Collation Naming Rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#files-for-locale-setting">Files For Locale Setting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#locale-setting">Locale Setting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#step-1-selecting-a-locale">Step 1: Selecting a Locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#step-2-compiling-locale">Step 2: Compiling Locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#step-3-setting-cubrid-to-use-a-specific-locale">Step 3: Setting CUBRID to Use a Specific Locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#step-4-creating-a-database-with-the-selected-locale-setting">Step 4: Creating a Database with the Selected Locale Setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#step-5-optional-manually-verifying-the-locale-file">Step 5 (optional): Manually Verifying the Locale File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#step-6-starting-cubrid-related-processes">Step 6: Starting CUBRID-Related Processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#synchronization-of-database-collations-with-system-collations">Synchronization of Database Collations with System Collations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#collation">Collation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#charset-and-collation-of-column">Charset and Collation of Column</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#charset-and-collation-of-tables">Charset and Collation of Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#charset-and-collation-of-string-literals">Charset and Collation of String Literals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#charset-and-collation-of-expressions">Charset and Collation of Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#charset-and-collation-of-system-data">Charset and Collation of System Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#impact-of-charset-specified-when-creating-db">Impact of Charset Specified When Creating DB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#string-literal-input-and-output">String literal input and output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#contraction-and-expansion-of-collation">Contraction and Expansion of Collation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#operations-requiring-collation-and-charset">Operations Requiring Collation and Charset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#collation-settings-impacting-cubrid-features">Collation settings impacting CUBRID features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#viewing-collation-information">Viewing Collation Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#using-i18n-characters-with-jdbc">Using i18n characters with JDBC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#timezone-setting">Timezone Setting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#compiling-timezone-library">Compiling Timezone Library</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#configuration-guide-for-characters">Configuration Guide for Characters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#locale">Locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#char-and-varchar">CHAR and VARCHAR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#choosing-charset">Choosing Charset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#choosing-collation">Choosing Collation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#normalization">Normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#cast-vs-collate">CAST vs COLLATE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#remark">Remark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#guide-for-adding-locales-and-collations">Guide for Adding Locales and Collations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#ldml-calendar-information">LDML Calendar Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#ldml-numbers-information">LDML Numbers information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#ldml-alphabet">LDML Alphabet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#ldml-console-conversion">LDML Console Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i18n.html#ldml-collation">LDML Collation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transaction.html">Database Transaction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#transaction-commit">Transaction Commit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#transaction-rollback">Transaction Rollback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#savepoint-and-partial-rollback">Savepoint and Partial Rollback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transaction.html#cursor-holdability">Cursor Holdability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction.html#database-concurrency">Database Concurrency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction.html#multiversion-concurrency-control">Multiversion Concurrency Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#versioning-visibility-and-snapshot">Versioning, visibility and snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#vacuum">VACUUM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transaction.html#lock-protocol">Lock Protocol</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#granularity-locking">Granularity Locking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#lock-mode-types-and-compatibility">Lock Mode Types And Compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#locking-to-protect-unique-constraint">Locking to protect unique constraint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#transaction-deadlock">Transaction Deadlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#transaction-lock-timeout">Transaction Lock Timeout</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transaction.html#transaction-isolation-level">Transaction Isolation Level</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#set-transaction-isolation-level">SET TRANSACTION ISOLATION LEVEL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#get-transaction-isolation-level">GET TRANSACTION ISOLATION LEVEL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#read-committed-isolation-level">READ COMMITTED Isolation Level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#repeatable-read-isolation-level">REPEATABLE READ Isolation Level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#serializable-isolation-level">SERIALIZABLE Isolation Level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#how-to-handle-dirty-record">How to Handle Dirty Record</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transaction.html#transaction-termination-and-restoration">Transaction Termination and Restoration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transaction.html#restarting-database">Restarting Database</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trigger.html">Trigger</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#create-trigger">CREATE TRIGGER</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#guidelines-for-trigger-definition">Guidelines for Trigger Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#trigger-definition">Trigger Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#event-time">Event Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#trigger-type">Trigger Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#trigger-event-type">Trigger Event Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#trigger-event-target">Trigger Event Target</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#combination-of-event-type-and-target">Combination of Event Type and Target</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#trigger-condition">Trigger Condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#correlation-name">Correlation Name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#trigger-action">Trigger Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#trigger-s-comment">Trigger’s COMMENT</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#alter-trigger">ALTER TRIGGER</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#id7">Trigger’s COMMENT</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#drop-trigger">DROP TRIGGER</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#rename-trigger">RENAME TRIGGER</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#deferred-condition-and-action">Deferred Condition and Action</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#executing-deferred-condition-and-action">Executing Deferred Condition and Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#dropping-deferred-condition-and-action">Dropping Deferred Condition and Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#granting-trigger-authorization">Granting Trigger Authorization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#trigger-on-replace-and-insert-on-duplicate-key-update">Trigger on REPLACE and INSERT … ON DUPLICATE KEY UPDATE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#trigger-debugging">Trigger Debugging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#viewing-trigger-execution-log">Viewing Trigger Execution Log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trigger.html#limiting-nested-trigger">Limiting Nested Trigger</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html#trigger-example">Trigger Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dblink.html">CUBRID DBLink</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#introduction-to-cubrid-dblink">Introduction to CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#cubrid-dblink-diagram">CUBRID DBLink diagram</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#homogeneous-dblink-diagram">Homogeneous DBLink diagram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#heterogeneous-dblink-diagram">Heterogeneous DBLink diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#gateway">GATEWAY</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#cub-cas-cgw">cub_cas_cgw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#cub-gateway">cub_gateway</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#shared-memory">Shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#start-gateway">Start GATEWAY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#restarting-gateway">Restarting GATEWAY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#checking-gateway-status">Checking GATEWAY Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#starting-the-gateway-together-when-the-cubrid-service-starts">Starting the GATEWAY together when the CUBRID service starts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#cubrid-dblink-settings">CUBRID DBLINK settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#heterogeneous-dblink-setting">Heterogeneous DBLink Setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#gateway-configuration-file">Gateway configuration file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#gateway-parameter">GATEWAY Parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#install-unixodbc">Install unixODBC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#odbc-driver-information-setting">ODBC Driver information setting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#oracle-setting-for-dblink">Oracle Setting for DBLink</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#oracle-environment-configuration">Oracle Environment Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#mysql-configuration-for-dblink">MySQL Configuration for DBLink</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#mysql-environment-configuration">MySQL Environment Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#mariadb-configuration-for-dblink">MariaDB Configuration for DBLink</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#mariadb-environment-configuration">MariaDB Environment Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#how-to-use-cubrid-dblink">How to use Cubrid DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#notice">Notice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html#constraints">Constraints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#common-constraints">Common Constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dblink.html#cubrid-constraints">CUBRID Constraints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oodb.html">Class Inheritance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html#class-attribute-and-method">Class Attribute and Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html#order-rule-for-inheritance">Order Rule for Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html#inherit-clause">INHERIT Clause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html#add-superclass-clause">ADD SUPERCLASS Clause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html#drop-superclass-clause">DROP SUPERCLASS Clause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html#class-conflict-resolution">Class Conflict Resolution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="oodb.html#resolution-specifier">Resolution Specifier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="oodb.html#superclass-conflict">Superclass Conflict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="oodb.html#sub-class-conflict">Sub class Conflict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="oodb.html#schema-invariant">Schema Invariant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="oodb.html#rule-for-schema-changes">Rule for Schema Changes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="db_admin.html">Database Administration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="authorization.html">User Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#database-user">Database User</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#create-user">CREATE USER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#alter-user">ALTER USER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#drop-user">DROP USER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#grant">GRANT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#revoke">REVOKE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#alter-owner">ALTER … OWNER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authorization.html#user-authorization-management-method">User Authorization Management METHOD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/set.html">SET</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/set.html#system-parameter">System Parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/set.html#user-variables">User Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query/kill.html">KILL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/show.html">SHOW</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#desc-describe">DESC, DESCRIBE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#explain">EXPLAIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-tables">SHOW TABLES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-columns">SHOW COLUMNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-index">SHOW INDEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-collation">SHOW COLLATION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-timezones">SHOW TIMEZONES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-grants">SHOW GRANTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-create-table">SHOW CREATE TABLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-create-view">SHOW CREATE VIEW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-access-status">SHOW ACCESS STATUS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#show-exec-statistics">SHOW EXEC STATISTICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query/show.html#diagnostics">Diagnostics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_schema.html">User Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog.html">System Catalog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html#system-catalog-classes">System Catalog Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-class">_db_class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-attribute">_db_attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-domain">_db_domain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-charset">_db_charset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-collation">_db_collation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-method">_db_method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-meth-sig">_db_meth_sig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-meth-arg">_db_meth_arg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-meth-file">_db_meth_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-query-spec">_db_query_spec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-index">_db_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-index-key">_db_index_key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-auth">_db_auth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-data-type">_db_data_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-partition">_db_partition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-stored-procedure">_db_stored_procedure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-stored-procedure-args">_db_stored_procedure_args</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-stored-procedure-code">_db_stored_procedure_code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-server">_db_server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-synonym">_db_synonym</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-user">db_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-authorization">db_authorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-serial">db_serial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-trigger">db_trigger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-ha-apply-info">db_ha_apply_info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#dual">dual</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html#system-catalog-virtual-class">System Catalog Virtual Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id27">DB_CLASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-direct-super-class">DB_DIRECT_SUPER_CLASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-vclass">DB_VCLASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id31">DB_ATTRIBUTE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-attr-setdomain-elm">DB_ATTR_SETDOMAIN_ELM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id34">DB_CHARSET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id36">DB_COLLATION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id38">DB_METHOD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id40">DB_METH_ARG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-meth-arg-setdomain-elm">DB_METH_ARG_SETDOMAIN_ELM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id43">DB_METH_FILE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id45">DB_INDEX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id47">DB_INDEX_KEY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id49">DB_AUTH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#db-trig">DB_TRIG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id52">DB_PARTITION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id54">DB_STORED_PROCEDURE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id56">DB_STORED_PROCEDURE_ARGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id58">DB_SERVER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="catalog.html#id60">DB_SYNONYM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html#catalog-class-virtual-class-authorization">Catalog Class/Virtual Class Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html#querying-on-catalog">Querying on Catalog</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="../csql.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        CSQL Interpreter
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="syntax.html">
+        Writing Rules
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=582b20c5"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

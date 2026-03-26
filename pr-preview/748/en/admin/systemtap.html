@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>SystemTap | CUBRID 11.4 User Manual</title>
+<meta content="SystemTap | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="SystemTap | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="scripts.html" rel="next" title="cubrid scripts"/>
+<link href="config.html" rel="prev" title="System Parameters"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/admin/systemtap.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_upgrade.html">Installing and Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sql/index.html">CUBRID SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/index.html">CUBRID Procedural Language</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">System Parameters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_note/index.html">Release Notes</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID Management</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">SystemTap</span>
+</nav>
+<div id="content" role="main">
+<section id="systemtap">
+<h1>SystemTap<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#systemtap"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="overview">
+<h2>Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#overview" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#overview'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>SystemTap is a tool that can be used to dynamically monitor and track the process of running. CUBRID supports SystemTap; therefore, it is possible to find the cause of a performance bottleneck.</p>
+<p>The basic idea of ​​SystemTap script is that you can specify the name of the event and grant a handler there. Handler is script statements that specify the action to be performed each time an event occurs.</p>
+<p>To monitor the performance of CUBRID using SystemTap, you need to install SystemTap. After installing SystemTap, you can write and run a SystemTap script which is like a C language. With this script, you can monitor the performance of the System.</p>
+<p>SystemTap supports only on Linux.</p>
+<p>See <a class="reference external" href="https://sourceware.org/systemtap/index.html">https://sourceware.org/systemtap/index.html</a> for further information and installation.</p>
+</section>
+<section id="installing-systemtap">
+<h2>Installing SystemTap<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-systemtap" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-systemtap'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="checking-installation">
+<h3>Checking Installation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#checking-installation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#checking-installation'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<ol class="arabic">
+<li><p>Check if you have group accounts, stapusr and stapdev in /etc/group file.
+If they don’t exist, SystemTap may not be installed.</p></li>
+<li><p>Add CUBRID user account when you install CUBRID into stapusr and stapdev group accounts. Here let’s assume the CUBRID user account as “cubrid”.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ vi /etc/group
+</span><span id="line-2">
+</span><span id="line-3">stapusr:x:156:cubrid
+</span><span id="line-4">stapdev:x:158:cubrid
+</span></code></pre></div>
+</div>
+</li>
+<li><p>To check if SystemTap is runnable, simply run the below command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ stap -ve 'probe begin { log("hello world") exit() }'
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="version">
+<h3>Version<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#version" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#version'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>To execute SystemTap scripts in CUBRID, you should use SystemTap 2.2 or higher.</p>
+<p>The below is an example to install SystemTap in CentOS 6.3. Checking version and installing SystemTap can be different among Linux distributors.</p>
+<ol class="arabic">
+<li><p>Check the current version of the installed SystemTap.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ sudo yum list|grep  systemtap
+</span><span id="line-2">systemtap.x86_64                       1.7-5.el6_3.1                 @update
+</span><span id="line-3">systemtap-client.x86_64                1.7-5.el6_3.1                 @update
+</span><span id="line-4">systemtap-devel.x86_64                 1.7-5.el6_3.1                 @update
+</span><span id="line-5">systemtap-runtime.x86_64               1.7-5.el6_3.1                 @update
+</span><span id="line-6">systemtap-grapher.x86_64               1.7-5.el6_3.1                 update
+</span><span id="line-7">systemtap-initscript.x86_64            1.7-5.el6_3.1                 update
+</span><span id="line-8">systemtap-sdt-devel.i686               1.7-5.el6_3.1                 update
+</span><span id="line-9">systemtap-sdt-devel.x86_64             1.7-5.el6_3.1                 update
+</span><span id="line-10">systemtap-server.x86_64                1.7-5.el6_3.1                 update
+</span><span id="line-11">systemtap-testsuite.x86_64             1.7-5.el6_3.1                 update
+</span></code></pre></div>
+</div>
+</li>
+<li><p>If the lower version of SystemTap than 2.2 version is installed, remove it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ sudo yum remove systemtap-runtime
+</span><span id="line-2">$ sudo yum remove systemtap-devel
+</span><span id="line-3">$ sudo yum remove systemtap
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Install the RPM distributed package of SystemTap 2.2 or higher. You can find the RPM distributed package in <a class="reference external" href="http://rpmfind.net/linux/rpm2html/">http://rpmfind.net/linux/rpm2html/</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ sudo rpm -ivh systemtap-devel-2.3-3.el6.x86_64.rpm
+</span><span id="line-2">$ sudo rpm -ivh systemtap-runtime-2.3-3.el6.x86_64.rpm
+</span><span id="line-3">$ sudo rpm -ivh systemtap-client-2.3-3.el6.x86_64.rpm
+</span><span id="line-4">$ sudo rpm -ivh systemtap-2.3-3.el6.x86_64.rpm
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="related-terms">
+<h2>Related Terms<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#related-terms" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#related-terms'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="marker">
+<h3>Marker<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#marker" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#marker'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A marker placed in code provides a hook to call a function (probe) that you can provide at runtime. The function you provide is called each time the marker is executed, in the execution context of the caller. When the function provided ends its execution, it returns to the caller.</p>
+<p>The function a user provides, the probe can be used for tracing and performance accounting.</p>
+</section>
+<section id="probe">
+<h3>Probe<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#probe" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#probe'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Probe is a kind of function to define the behavior when a certain event occurs; it is separated into an event and a handler.</p>
+<p>SystemTap script defines a specific event, that is, the behavior when a marker occurs.</p>
+<p>SystemTap script is able to have several probes; a handler of the probe is called as probe body.</p>
+<p>SystemTap script accepts the insertion of the probing code without recompiling codes and gives more flexibility for handlers. Events are executed as triggers as handlers can be run. Handler can write data and be specified as the action to print out the data.</p>
+<p>For CUBRID’s markers, see <a class="reference internal" href="#cubrid-marker"><span class="std std-ref">CUBRID markers</span></a>.</p>
+</section>
+<section id="asynchronous-events">
+<h3>Asynchronous Events<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#asynchronous-events" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#asynchronous-events'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Asynchronous events are defined internally; it is not dependent on special jobs or locations on the code. These kinds of probing events are mainly counter and timer, etc.</p>
+<p>Examples of asynchronous events are as follows.</p>
+<ul>
+<li><p>begin</p>
+<p>The start of SystemTap session.</p>
+<p>e.g. The moment the SystemTap starts.</p>
+</li>
+<li><p>end</p>
+<p>The end of SystemTap.</p>
+</li>
+<li><p>timer events</p>
+<p>The event specifying the handler works periodically</p>
+<p>e.g. The below prints “hello world” per 5 seconds.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">probe</span> <span class="n">timer</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span id="line-2"><span class="p">{</span>
+</span><span id="line-3">  <span class="n">printf</span><span class="p">(</span><span class="s2">"hello world</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="using-systemtap-in-cubrid">
+<h2>Using SystemTap in CUBRID<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#using-systemtap-in-cubrid" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#using-systemtap-in-cubrid'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="building-cubrid-source">
+<h3>Building CUBRID source<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#building-cubrid-source" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#building-cubrid-source'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>SystemTap can be used only on Linux.</p>
+<p>To use SystemTap by building CUBRID source, <strong>ENABLE_SYSTEMTAP</strong> is <strong>ON</strong> which is set by default.</p>
+<p>This option is already included in the release build, a user not building the CUBRID source but installing CUBRID with the installation package can also use SystemTap script.</p>
+<p>The below is an example of building the CUBRID source.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">build</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">m</span> <span class="n">release</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="running-systemtap-script">
+<h3>Running SystemTap script<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#running-systemtap-script" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#running-systemtap-script'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Examples of SystemTap scripts in CUBRID are located in $CUBRID/share/systemtap directory.</p>
+<p>The below is an example of running buffer_access.stp file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">cd $CUBRID/share/systemtap/tapset/scripts
+</span><span id="line-2">stap -k buffer_access.stp -o result.txt
+</span></code></pre></div>
+</div>
+</section>
+<section id="printing-results">
+<h3>Printing Results<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#printing-results" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#printing-results'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>When you run a certain script, it displays the requested result to the console by the script code. With “-o <em>filename</em>” option, it writes the requested result to the <em>filename</em>.</p>
+<p>The below is the result of the above example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Page</span> <span class="n">buffer</span> <span class="n">hit</span> <span class="n">count</span><span class="p">:</span> <span class="mi">172</span>
+</span><span id="line-2"><span class="n">Page</span> <span class="n">buffer</span> <span class="n">miss</span> <span class="n">count</span><span class="p">:</span> <span class="mi">172</span>
+</span><span id="line-3"><span class="n">Miss</span> <span class="n">ratio</span><span class="p">:</span> <span class="mi">50</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="cubrid-markers">
+<span id="cubrid-marker"></span><h2>CUBRID markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cubrid-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>A very useful feature of SystemTap is the possibility of placing markers in the user source code (CUBRID code) and writing probes that triggers when these markers are reached. Below is the list of CUBRID markers and their meaning.</p>
+<section id="connection-markers">
+<h3>Connection markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#connection-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#connection-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>We might be interested in gathering information helpful for an analysis related to connection activity (number of connections, duration of individual connections, average duration of a connection, maximum number of connections achieved etc.) during a period of time. In order for such monitoring scripts to be written, we must provide at least two helpful markers: connection-start and connection-end.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="conn_start">
+<span class="sig-name descname"><span class="pre">conn_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#conn_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#conn_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when the query execution process on the server has begun.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> – an integer containing the connection ID.</p></li>
+<li><p><strong>user</strong> – The username used by this connection.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="conn_end">
+<span class="sig-name descname"><span class="pre">conn_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#conn_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#conn_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when the query execution process on the server has ended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> – an integer containing the connection ID.</p></li>
+<li><p><strong>user</strong> – The username used by this connection.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</section>
+<section id="query-markers">
+<h3>Query markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#query-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#query-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Markers for query execution related events can prove very useful in monitor tasks, although they do not contain global information related to the entire system. At least two markers are essential: those corresponding to the start of the execution of a query and the end of the execution.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="query_exec_start">
+<span class="sig-name descname"><span class="pre">query_exec_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#query_exec_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#query_exec_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after the query execution has begun on the server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_string</strong> – string representing the query to be executed</p></li>
+<li><p><strong>query_id</strong> – Query identifier</p></li>
+<li><p><strong>connection_id</strong> – Connection ID</p></li>
+<li><p><strong>user</strong> – The username used by this connection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="query_exec_end">
+<span class="sig-name descname"><span class="pre">query_exec_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#query_exec_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#query_exec_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when the query execution process on the server has ended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_string</strong> – string representing the query to be executed</p></li>
+<li><p><strong>query_id</strong> – Query identifier</p></li>
+<li><p><strong>connection_id</strong> – Connection ID</p></li>
+<li><p><strong>user</strong> – The username used by this connection</p></li>
+<li><p><strong>status</strong> – The status returned by the query execution (Success, Error)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</section>
+<section id="object-operation-markers">
+<h3>Object operation markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#object-operation-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#object-operation-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Operations involving the storage engine are critical and probing updates in a table at object level can greatly help monitor database activity. Markers will be triggered for each object inserted/updated/deleted, which may bring performance drawbacks on both the monitoring scripts and the server.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="obj_insert_start">
+<span class="sig-name descname"><span class="pre">obj_insert_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#obj_insert_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#obj_insert_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before an object is inserted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>table</strong> – Target table of the operation</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="obj_insert_end">
+<span class="sig-name descname"><span class="pre">obj_insert_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#obj_insert_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#obj_insert_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after an object has been inserted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – Target table of the operation</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended with success or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="obj_update_start">
+<span class="sig-name descname"><span class="pre">obj_update_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#obj_update_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#obj_update_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before an object is updated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>table</strong> – Target table of the operation</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="obj_update_end">
+<span class="sig-name descname"><span class="pre">obj_update_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#obj_update_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#obj_update_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after an object has been updated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – Target table of the operation</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended with success or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="obj_deleted_start">
+<span class="sig-name descname"><span class="pre">obj_deleted_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#obj_deleted_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#obj_deleted_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before an object is deleted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>table</strong> – Target table of the operation</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="obj_delete_end">
+<span class="sig-name descname"><span class="pre">obj_delete_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#obj_delete_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#obj_delete_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after an object has been deleted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – Target table of the operation</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended with success or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</section>
+<section id="index-operation-markers">
+<h3>Index operation markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#index-operation-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#index-operation-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The object operation markers presented above are table-related, but below are index-related markers.</p>
+<p>Indexes and their misuse can be the cause of many problems in a system and the possibility of monitoring them can be very helpful. The proposed markers are similar to those used for tables, since indexes support the same operations.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="idx_insert_start">
+<span class="sig-name descname"><span class="pre">idx_insert_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#idx_insert_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#idx_insert_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before an insertion in the B-Tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classname</strong> – Name of the class having the target index</p></li>
+<li><p><strong>index_name</strong> – Target index of the operation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="idx_insert_end">
+<span class="sig-name descname"><span class="pre">idx_insert_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#idx_insert_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#idx_insert_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after an insertion in the B-Tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classname</strong> – Name of the class having the target index</p></li>
+<li><p><strong>index_name</strong> – Target index_name of the operation</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended with success or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="idx_update_start">
+<span class="sig-name descname"><span class="pre">idx_update_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#idx_update_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#idx_update_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before an update in the B-Tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classname</strong> – Name of the class having the target index</p></li>
+<li><p><strong>index_name</strong> – Target index_name of the operation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="idx_update_end">
+<span class="sig-name descname"><span class="pre">idx_update_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#idx_update_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#idx_update_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after an update in the B-Tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classname</strong> – Name of the class having the target index</p></li>
+<li><p><strong>index_name</strong> – Target index_name of the operation</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended with success or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="idx_delete_start">
+<span class="sig-name descname"><span class="pre">idx_delete_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#idx_delete_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#idx_delete_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before a deletion in the B-Tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classname</strong> – Name of the class having the target index</p></li>
+<li><p><strong>index_name</strong> – Target index_name of the operation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="idx_delete_end">
+<span class="sig-name descname"><span class="pre">idx_delete_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#idx_delete_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#idx_delete_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after a deletion in the B-Tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classname</strong> – Name of the class having the target index</p></li>
+<li><p><strong>index_name</strong> – Target index_name of the operation</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended with success or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</section>
+<section id="locking-markers">
+<h3>Locking markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#locking-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#locking-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Markers that involve locking events are perhaps the most important for global monitoring tasks. The locking system has a deep impact on the server performance and a comprehensive analysis on lock waiting times and count, number of deadlocks and aborted transactions is very useful in finding problems.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lock_acquire_start">
+<span class="sig-name descname"><span class="pre">lock_acquire_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">OID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#lock_acquire_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#lock_acquire_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before a lock is requested.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OID</strong> – Target object of the lock request.</p></li>
+<li><p><strong>table</strong> – Table holding the object</p></li>
+<li><p><strong>type</strong> – Lock type (X_LOCK, S_LOCK etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="lock_acquire_end">
+<span class="sig-name descname"><span class="pre">lock_acquire_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">OID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#lock_acquire_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#lock_acquire_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after a lock request has been completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OID</strong> – Target object of the lock request.</p></li>
+<li><p><strong>table</strong> – Table holding the object</p></li>
+<li><p><strong>type</strong> – Lock type (X_LOCK, S_LOCK etc.)</p></li>
+<li><p><strong>status</strong> – Value showing whether the request has been granted or not.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="lock_release_start">
+<span class="sig-name descname"><span class="pre">lock_release_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">OID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#lock_release_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#lock_release_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered before a lock is released.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OID</strong> – Target object of the lock request.</p></li>
+<li><p><strong>table</strong> – Table holding the object</p></li>
+<li><p><strong>type</strong> – Lock type (X_LOCK, S_LOCK etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="lock_release_end">
+<span class="sig-name descname"><span class="pre">lock_release_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">OID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#lock_release_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#lock_release_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after a lock release operation has been completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OID</strong> – Target object of the lock request</p></li>
+<li><p><strong>table</strong> – Table holding the object</p></li>
+<li><p><strong>type</strong> – Lock type(X_LOCK, S_LOCK etc)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</section>
+<section id="transaction-markers">
+<h3>Transaction markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#transaction-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#transaction-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Another interesting measure in server monitoring is transaction activity. A simple example: the number of transactions aborted is closely related to the number of deadlocks occurred, a very important performance indicator. Another straightforward use of such markers is the availability of a simple method of gathering system performance statistics such as TPS by using a simple SystemTap script.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tran_commit">
+<span class="sig-name descname"><span class="pre">tran_commit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tran_id</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#tran_commit" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#tran_commit'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after a transaction completes successfully.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tran_id</strong> – Transaction identifier.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="tran_abort">
+<span class="sig-name descname"><span class="pre">tran_abort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tran_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#tran_abort" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#tran_abort'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after a transaction has been aborted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tran_id</strong> – Transaction identifier.</p></li>
+<li><p><strong>status</strong> – Exit status.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="tran_start">
+<span class="sig-name descname"><span class="pre">tran_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tran_id</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#tran_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#tran_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered after a transaction is started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tran_id</strong> – Transaction identifier.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="tran_deadlock">
+<span class="sig-name descname"><span class="pre">tran_deadlock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#tran_deadlock" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#tran_deadlock'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a deadlock has been detected.</p>
+</dd></dl>
+</section>
+<section id="i-o-markers">
+<h3>I/O markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#i-o-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#i-o-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>I/O access is the main bottleneck of a RDBMS and we should provide markers that allow the monitoring of I/O performance. The markers should be placed in a manner that will make it possible for user scripts to measure I/O page access time and aggregate various and complex statistics based on this measure.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pgbuf_hit">
+<span class="sig-name descname"><span class="pre">pgbuf_hit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pgbuf_hit" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pgbuf_hit'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a requested page was found in the page buffer and there is no need to retrieve it from disk.</p>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="pgbuf_miss">
+<span class="sig-name descname"><span class="pre">pgbuf_miss</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pgbuf_miss" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pgbuf_miss'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a requested page was not found in the page buffer and it must be retrieved from disk.</p>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="io_write_start">
+<span class="sig-name descname"><span class="pre">io_write_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_id</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#io_write_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#io_write_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a the process of writing a page onto disk has begun.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query_id</strong> – Query identifier</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="io_write_end">
+<span class="sig-name descname"><span class="pre">io_write_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#io_write_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#io_write_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a the process of writing a page onto disk has ended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_id</strong> – Query identifier</p></li>
+<li><p><strong>size</strong> – number of bytes written</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended successfully or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="io_read_start">
+<span class="sig-name descname"><span class="pre">io_read_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_id</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#io_read_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#io_read_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a the process of reading a page from disk has begun.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query_id</strong> – Query identifier</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="io_read_end">
+<span class="sig-name descname"><span class="pre">io_read_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#io_read_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#io_read_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a the process of reading a page from disk has ended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_id</strong> – Query identifier</p></li>
+<li><p><strong>size</strong> – number of bytes read</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended successfully or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</section>
+<section id="other-markers">
+<h3>Other markers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#other-markers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#other-markers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="sort_start">
+<span class="sig-name descname"><span class="pre">sort_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sort_start" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sort_start'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a sort operation is started.</p>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="sort_end">
+<span class="sig-name descname"><span class="pre">sort_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nr_rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sort_end" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sort_end'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This marker is triggered when a sort operation has been completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nr_rows</strong> – number of rows sorted</p></li>
+<li><p><strong>status</strong> – Value showing whether the operation ended successfully or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="config.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        System Parameters
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="scripts.html">
+        cubrid scripts
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#overview'" class="reference internal" href="#overview">Overview</a></li>
+<li><a :data-current="activeSection === '#installing-systemtap'" class="reference internal" href="#installing-systemtap">Installing SystemTap</a><ul>
+<li><a :data-current="activeSection === '#checking-installation'" class="reference internal" href="#checking-installation">Checking Installation</a></li>
+<li><a :data-current="activeSection === '#version'" class="reference internal" href="#version">Version</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#related-terms'" class="reference internal" href="#related-terms">Related Terms</a><ul>
+<li><a :data-current="activeSection === '#marker'" class="reference internal" href="#marker">Marker</a></li>
+<li><a :data-current="activeSection === '#probe'" class="reference internal" href="#probe">Probe</a></li>
+<li><a :data-current="activeSection === '#asynchronous-events'" class="reference internal" href="#asynchronous-events">Asynchronous Events</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#using-systemtap-in-cubrid'" class="reference internal" href="#using-systemtap-in-cubrid">Using SystemTap in CUBRID</a><ul>
+<li><a :data-current="activeSection === '#building-cubrid-source'" class="reference internal" href="#building-cubrid-source">Building CUBRID source</a></li>
+<li><a :data-current="activeSection === '#running-systemtap-script'" class="reference internal" href="#running-systemtap-script">Running SystemTap script</a></li>
+<li><a :data-current="activeSection === '#printing-results'" class="reference internal" href="#printing-results">Printing Results</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#cubrid-markers'" class="reference internal" href="#cubrid-markers">CUBRID markers</a><ul>
+<li><a :data-current="activeSection === '#connection-markers'" class="reference internal" href="#connection-markers">Connection markers</a><ul>
+<li><a :data-current="activeSection === '#conn_start'" class="reference internal" href="#conn_start"><code class="docutils literal notranslate"><span class="pre">conn_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#conn_end'" class="reference internal" href="#conn_end"><code class="docutils literal notranslate"><span class="pre">conn_end()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#query-markers'" class="reference internal" href="#query-markers">Query markers</a><ul>
+<li><a :data-current="activeSection === '#query_exec_start'" class="reference internal" href="#query_exec_start"><code class="docutils literal notranslate"><span class="pre">query_exec_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#query_exec_end'" class="reference internal" href="#query_exec_end"><code class="docutils literal notranslate"><span class="pre">query_exec_end()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#object-operation-markers'" class="reference internal" href="#object-operation-markers">Object operation markers</a><ul>
+<li><a :data-current="activeSection === '#obj_insert_start'" class="reference internal" href="#obj_insert_start"><code class="docutils literal notranslate"><span class="pre">obj_insert_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#obj_insert_end'" class="reference internal" href="#obj_insert_end"><code class="docutils literal notranslate"><span class="pre">obj_insert_end()</span></code></a></li>
+<li><a :data-current="activeSection === '#obj_update_start'" class="reference internal" href="#obj_update_start"><code class="docutils literal notranslate"><span class="pre">obj_update_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#obj_update_end'" class="reference internal" href="#obj_update_end"><code class="docutils literal notranslate"><span class="pre">obj_update_end()</span></code></a></li>
+<li><a :data-current="activeSection === '#obj_deleted_start'" class="reference internal" href="#obj_deleted_start"><code class="docutils literal notranslate"><span class="pre">obj_deleted_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#obj_delete_end'" class="reference internal" href="#obj_delete_end"><code class="docutils literal notranslate"><span class="pre">obj_delete_end()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#index-operation-markers'" class="reference internal" href="#index-operation-markers">Index operation markers</a><ul>
+<li><a :data-current="activeSection === '#idx_insert_start'" class="reference internal" href="#idx_insert_start"><code class="docutils literal notranslate"><span class="pre">idx_insert_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#idx_insert_end'" class="reference internal" href="#idx_insert_end"><code class="docutils literal notranslate"><span class="pre">idx_insert_end()</span></code></a></li>
+<li><a :data-current="activeSection === '#idx_update_start'" class="reference internal" href="#idx_update_start"><code class="docutils literal notranslate"><span class="pre">idx_update_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#idx_update_end'" class="reference internal" href="#idx_update_end"><code class="docutils literal notranslate"><span class="pre">idx_update_end()</span></code></a></li>
+<li><a :data-current="activeSection === '#idx_delete_start'" class="reference internal" href="#idx_delete_start"><code class="docutils literal notranslate"><span class="pre">idx_delete_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#idx_delete_end'" class="reference internal" href="#idx_delete_end"><code class="docutils literal notranslate"><span class="pre">idx_delete_end()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#locking-markers'" class="reference internal" href="#locking-markers">Locking markers</a><ul>
+<li><a :data-current="activeSection === '#lock_acquire_start'" class="reference internal" href="#lock_acquire_start"><code class="docutils literal notranslate"><span class="pre">lock_acquire_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#lock_acquire_end'" class="reference internal" href="#lock_acquire_end"><code class="docutils literal notranslate"><span class="pre">lock_acquire_end()</span></code></a></li>
+<li><a :data-current="activeSection === '#lock_release_start'" class="reference internal" href="#lock_release_start"><code class="docutils literal notranslate"><span class="pre">lock_release_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#lock_release_end'" class="reference internal" href="#lock_release_end"><code class="docutils literal notranslate"><span class="pre">lock_release_end()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#transaction-markers'" class="reference internal" href="#transaction-markers">Transaction markers</a><ul>
+<li><a :data-current="activeSection === '#tran_commit'" class="reference internal" href="#tran_commit"><code class="docutils literal notranslate"><span class="pre">tran_commit()</span></code></a></li>
+<li><a :data-current="activeSection === '#tran_abort'" class="reference internal" href="#tran_abort"><code class="docutils literal notranslate"><span class="pre">tran_abort()</span></code></a></li>
+<li><a :data-current="activeSection === '#tran_start'" class="reference internal" href="#tran_start"><code class="docutils literal notranslate"><span class="pre">tran_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#tran_deadlock'" class="reference internal" href="#tran_deadlock"><code class="docutils literal notranslate"><span class="pre">tran_deadlock()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#i-o-markers'" class="reference internal" href="#i-o-markers">I/O markers</a><ul>
+<li><a :data-current="activeSection === '#pgbuf_hit'" class="reference internal" href="#pgbuf_hit"><code class="docutils literal notranslate"><span class="pre">pgbuf_hit()</span></code></a></li>
+<li><a :data-current="activeSection === '#pgbuf_miss'" class="reference internal" href="#pgbuf_miss"><code class="docutils literal notranslate"><span class="pre">pgbuf_miss()</span></code></a></li>
+<li><a :data-current="activeSection === '#io_write_start'" class="reference internal" href="#io_write_start"><code class="docutils literal notranslate"><span class="pre">io_write_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#io_write_end'" class="reference internal" href="#io_write_end"><code class="docutils literal notranslate"><span class="pre">io_write_end()</span></code></a></li>
+<li><a :data-current="activeSection === '#io_read_start'" class="reference internal" href="#io_read_start"><code class="docutils literal notranslate"><span class="pre">io_read_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#io_read_end'" class="reference internal" href="#io_read_end"><code class="docutils literal notranslate"><span class="pre">io_read_end()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#other-markers'" class="reference internal" href="#other-markers">Other markers</a><ul>
+<li><a :data-current="activeSection === '#sort_start'" class="reference internal" href="#sort_start"><code class="docutils literal notranslate"><span class="pre">sort_start()</span></code></a></li>
+<li><a :data-current="activeSection === '#sort_end'" class="reference internal" href="#sort_end"><code class="docutils literal notranslate"><span class="pre">sort_end()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 26, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=582b20c5"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

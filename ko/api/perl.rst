@@ -26,7 +26,7 @@ Perl 설치 및 설정
 
 *   CUBRID: Perl 드라이버를 빌드하기 위해 CCI 드라이버가 필요하며, 이를 위해 CUBRID를 설치해야 한다. CUBRID는 https://www.cubrid.org/downloads\ 에서 다운로드한다.
 
-*   DBI: http://code.activestate.com/ppm/DBI/
+*   DBI: https://metacpan.org/dist/DBI/
 
 *   C 컴파일러: 대부분의 경우에는 **DBD::cubrid** 바이너리(https://www.cubrid.org/downloads#perl)를 사용할 수 있으나, 만약 소스코드에서 드라이버를 빌드하려면 C 컴파일러가 필요하다. C 컴파일러를 사용하려면 Perl과 CUBRID를 컴파일한 컴파일러와 같은 컴파일러를 사용해야 한다. 그렇지 않으면 C 런타임 라이브러리 차이 때문에 문제가 발생할 수 있다.
 

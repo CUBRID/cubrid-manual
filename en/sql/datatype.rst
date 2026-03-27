@@ -2158,10 +2158,10 @@ the string is not a valid JSON.
   Invalid JSON: 'abc'.
 
 JSON type columns with stricter validation rules can be defined using the
-`draft JSON Schema standard <https://json-schema.org/specification.html>`_.
+`draft JSON Schema standard <https://json-schema.org/specification>`_.
 If you are not familiar with JSON Schema, you may refer to
 `Understanding JSON Schema
-<https://json-schema.org/understanding-json-schema/index.html>`_.
+<https://json-schema.org/understanding-json-schema/reference>`_.
 
 A simple example of how schema can be used:
 

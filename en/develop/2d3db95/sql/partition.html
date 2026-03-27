@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Partitioning | CUBRID 11.4 User Manual</title>
+<meta content="Partitioning | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Partitioning | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="i18n_index.html" rel="next" title="Globalization"/>
+<link href="partition_index.html" rel="prev" title="Partitioning"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/partition.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="partition_index.html">Partitioning</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Partitioning</span>
+</nav>
+<div id="content" role="main">
+<section id="partitioning">
+<h1>Partitioning<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitioning"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="partitioning-key">
+<span id="id1"></span><h2>Partitioning key<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitioning-key" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partitioning-key'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The partitioning key is an expression which is used by the partitioning method to distribute data across defined partitions. The following data types are supported for the partitioning key:</p>
+<ul class="simple">
+<li><p><strong>CHAR</strong></p></li>
+<li><p><strong>VARCHAR</strong></p></li>
+<li><p><strong>SMALLINT</strong></p></li>
+<li><p><strong>INT</strong></p></li>
+<li><p><strong>BIGINT</strong></p></li>
+<li><p><strong>DATE</strong></p></li>
+<li><p><strong>TIME</strong></p></li>
+<li><p><strong>TIMESTAMP</strong></p></li>
+<li><p><strong>DATETIME</strong></p></li>
+</ul>
+<p>The following restrictions apply to the partitioning key:</p>
+<ul class="simple">
+<li><p>The partitioning key must use exactly one column from the partitioned table.</p></li>
+<li><p><a class="reference internal" href="function/analysis_fn.html"><span class="doc">Aggregate functions, analytic functions</span></a>, <a class="reference internal" href="function/logical_op.html"><span class="doc">logical operators</span></a> and <a class="reference internal" href="function/comparison_op.html"><span class="doc">comparison operators</span></a> are not allowed in the partitioning key expression.</p></li>
+<li><p>The following functions and expressions are not allowed in the partitioning key expression:</p>
+<ul>
+<li><p><a class="reference internal" href="function/condition_op.html#case-expr"><span class="std std-ref">CASE</span></a></p></li>
+<li><p><a class="reference internal" href="function/information_fn.html#CHARSET" title="CHARSET"><code class="xref py py-func docutils literal notranslate"><span class="pre">CHARSET()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/string_fn.html#CHR" title="CHR"><code class="xref py py-func docutils literal notranslate"><span class="pre">CHR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#COALESCE" title="COALESCE"><code class="xref py py-func docutils literal notranslate"><span class="pre">COALESCE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="schema/serial_stmt.html#SERIAL_CURRENT_VALUE" title="SERIAL_CURRENT_VALUE"><code class="xref py py-func docutils literal notranslate"><span class="pre">SERIAL_CURRENT_VALUE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="schema/serial_stmt.html#SERIAL_NEXT_VALUE" title="SERIAL_NEXT_VALUE"><code class="xref py py-func docutils literal notranslate"><span class="pre">SERIAL_NEXT_VALUE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#DECODE" title="DECODE"><code class="xref py py-func docutils literal notranslate"><span class="pre">DECODE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/clickcounter_fn.html#DECR" title="DECR"><code class="xref py py-func docutils literal notranslate"><span class="pre">DECR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/clickcounter_fn.html#INCR" title="INCR"><code class="xref py py-func docutils literal notranslate"><span class="pre">INCR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/numeric_fn.html#DRAND" title="DRAND"><code class="xref py py-func docutils literal notranslate"><span class="pre">DRAND()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/numeric_fn.html#DRANDOM" title="DRANDOM"><code class="xref py py-func docutils literal notranslate"><span class="pre">DRANDOM()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#GREATEST" title="GREATEST"><code class="xref py py-func docutils literal notranslate"><span class="pre">GREATEST()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#LEAST" title="LEAST"><code class="xref py py-func docutils literal notranslate"><span class="pre">LEAST()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#IF" title="IF"><code class="xref py py-func docutils literal notranslate"><span class="pre">IF()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#IFNULL" title="IFNULL"><code class="xref py py-func docutils literal notranslate"><span class="pre">IFNULL()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/string_fn.html#INSTR" title="INSTR"><code class="xref py py-func docutils literal notranslate"><span class="pre">INSTR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#NVL" title="NVL"><code class="xref py py-func docutils literal notranslate"><span class="pre">NVL()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#NVL2" title="NVL2"><code class="xref py py-func docutils literal notranslate"><span class="pre">NVL2()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/rownum_fn.html#c.ROWNUM" title="ROWNUM"><code class="xref c c-macro docutils literal notranslate"><span class="pre">ROWNUM</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/rownum_fn.html#INST_NUM" title="INST_NUM"><code class="xref py py-func docutils literal notranslate"><span class="pre">INST_NUM()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/information_fn.html#c.USER" title="USER"><code class="xref c c-macro docutils literal notranslate"><span class="pre">USER</span></code></a></p></li>
+<li><p><a class="reference internal" href="query/hq.html#prior-operator"><span class="std std-ref">PRIOR</span></a></p></li>
+<li><p><a class="reference internal" href="function/numeric_fn.html#WIDTH_BUCKET" title="WIDTH_BUCKET"><code class="xref py py-func docutils literal notranslate"><span class="pre">WIDTH_BUCKET()</span></code></a></p></li>
+</ul>
+</li>
+<li><p>The partitioning key needs to be present in the key of each unique index (including primary keys). For more information on this aspect, please see <a class="reference internal" href="#index-partitions"><span class="std std-ref">here</span></a>.</p></li>
+<li><p>The partitioning expression’s length must not exceed 1024 bytes.</p></li>
+</ul>
+</section>
+<section id="range-partitioning">
+<span id="id2"></span><h2>Range Partitioning<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#range-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#range-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Range partitioning is a partitioning method in which a table is partitioned using a user specified range of values of the partitioning key for each partition. Ranges are defined as continuous non-overlapping intervals. This partitioning method is most useful when table data can be divided into range intervals (e.g. order placement date for an orders table or age intervals for a user’s table). Range partitioning is the most versatile partitioning method in terms of <a class="reference internal" href="#partition-pruning"><span class="std std-ref">Partition Pruning</span></a> because almost all search predicates can be used to identify matching ranges.</p>
+<p>Tables can be partitioned by range by using the <strong>PARTITION BY RANGE</strong> clause in <strong>CREATE</strong> or <strong>ALTER</strong> statements.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="p">(</span>
+</span><span id="line-2">   <span class="o">...</span>
+</span><span id="line-3"><span class="p">)</span>
+</span><span id="line-4"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">RANGE</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-5">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-6">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-7">    <span class="o">...</span>
+</span><span id="line-8"><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-11"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">RANGE</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-12">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-13">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-14">    <span class="o">...</span>
+</span><span id="line-15"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>partitioning_key</em> : specifies the <a class="reference internal" href="#partitioning-key"><span class="std std-ref">Partitioning key</span></a>.</p></li>
+<li><p><em>partition_name</em> : specifies the partition name.</p></li>
+<li><p><em>range_value</em> : specifies the upper limit of the partitioning key value. All tuples for which the evaluation of partitioning key is less than (but not equal to) the <em>range_value</em> will be stored in this partition.</p></li>
+<li><p><em>comment_string</em>: specifies a comment for each partition.</p></li>
+</ul>
+<p>The following example shows how to create the <em>participant2</em> table which holds countries participating at the Olympics and partition this table into partitions holding participants before year 2000(<em>before_2000</em> partition) and participants before year 2008(<em>before_2008</em> partition):</p>
+<div class="highlight-sql notranslate" id="range-participant2-table"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">host_year</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">gold</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">silver</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">bronze</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-7"><span class="p">)</span>
+</span><span id="line-8"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="w"> </span><span class="p">(</span><span class="n">host_year</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">),</span>
+</span><span id="line-10"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2008</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2008</span><span class="p">)</span>
+</span><span id="line-11"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. In the above example, the created range intervals are [-inf, 2000) and [2000, 2008). The identifier <strong>MAXVALUE</strong> can be used to specify an infinite upper limit for a partition.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2012</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2012</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">last_one</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="k">MAXVALUE</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>When inserting a tuple into a range-partitioned table, CUBRID identifies the range to which the tuple belongs by evaluating the partitioning key. If the partitioning key value is <strong>NULL</strong>, the data is stored in the partition with the smallest specified range value. If there is no range which would accept the partitioning key value, CUBRID returns an error. CUBRID also returns an error when updating a tuple if the new value of the partitioning key does not belong to any of the defined ranges.</p>
+<p>The below is an example to add a comment for each partition.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">int</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">less_1000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'less 1000 comment'</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">less_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'less 2000 comment'</span>
+</span><span id="line-4"><span class="p">);</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">less_1000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'new partition comment'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>To see a partition comment, refer to <a class="reference internal" href="#show-partition-comment"><span class="std std-ref">COMMENT of Partition</span></a>.</p>
+</section>
+<section id="hash-partitioning">
+<span id="id3"></span><h2>Hash Partitioning<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Hash partitioning is a partitioning method which is used to distribute data across a specified number of partition. This partitioning method is useful when table data contains values for which ranges or lists would be meaningless (for example, a keywords table or an users table for which user_id is the most interesting value). If the values for the partitioning key are evenly distributed across the table data, hash-partitioning technique divides table data evenly between the defined partitions. For hash partitioning, <a class="reference internal" href="#partition-pruning"><span class="std std-ref">Partition Pruning</span></a> can only be applied on equality predicates (e.g. predicates using <strong>=</strong> and <a class="reference internal" href="function/condition_op.html#in-expr"><span class="std std-ref">IN</span></a> expressions), making hash partitioning useful only if most of the queries specify such a predicate for the partitioning key.</p>
+<p>Tables can be partitioned by hash by using the <strong>PARTITION BY HASH</strong> clause in <strong>CREATE</strong> or <strong>ALTER</strong> statements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="p">(</span>
+</span><span id="line-2">   <span class="o">...</span>
+</span><span id="line-3"><span class="p">)</span>
+</span><span id="line-4"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">HASH</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span>
+</span><span id="line-5"><span class="n">PARTITIONS</span> <span class="p">(</span> <span class="n">number_of_partitions</span> <span class="p">)</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-8"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">HASH</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span><span class="p">)</span>
+</span><span id="line-9"><span class="n">PARTITIONS</span> <span class="p">(</span><span class="n">number_of_partitions</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>partitioning_key</em> : Specifies the <a class="reference internal" href="#partitioning-key"><span class="std std-ref">Partitioning key</span></a>.</p></li>
+<li><p><em>number_of_partitions</em> : Specifies the number of partitions to be created.</p></li>
+</ul>
+<p>The following example shows how to create the <em>nation2</em> table with country <em>code</em> and country names, and define 4 hash partitions based on code values. Only the number of partitions, not the name, is defined in hash partitioning.</p>
+<div class="highlight-sql notranslate" id="hash-nation2-table"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">nation2</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">  </span><span class="n">code</span><span class="w"> </span><span class="nb">CHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">)</span>
+</span><span id="line-5"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">HASH</span><span class="w"> </span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITIONS</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>When a value is inserted into a hash-partitioned table, the partition to store the data is determined by the hash value of the partitioning key. If the partitioning key value is <strong>NULL</strong>, the data is stored in the first partition.</p>
+</section>
+<section id="list-partitioning">
+<span id="id4"></span><h2>List Partitioning<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#list-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#list-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>List partitioning is a partitioning method in which a table is divided into partitions according to user specified list of values for the partitioning key. The lists of values for partitions must be disjoint sets. This partitioning method is useful when table data can be divided into lists of possible values which have a certain meaning (e.g. department id for an employees table or country code for a user’s table). As for hash partitioning, <a class="reference internal" href="#partition-pruning"><span class="std std-ref">Partition Pruning</span></a> for list partitioned tables can only be applied on equality predicates (e.g. predicates using <strong>=</strong> and <a class="reference internal" href="function/condition_op.html#in-expr"><span class="std std-ref">IN</span></a> expressions).</p>
+<p>Tables can be partitioned by list by using the <strong>PARTITION BY LIST</strong> clause in <strong>CREATE</strong> or <strong>ALTER</strong> statements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="p">(</span>
+</span><span id="line-2">  <span class="o">...</span>
+</span><span id="line-3"><span class="p">)</span>
+</span><span id="line-4"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">LIST</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-5">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-6">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-7">  <span class="o">...</span>
+</span><span id="line-8"><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-11"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">LIST</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-12">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-13">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-14">  <span class="o">...</span>
+</span><span id="line-15"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>partitioning_key</em>: specifies the <a class="reference internal" href="#partitioning-key"><span class="std std-ref">Partitioning key</span></a>.</p></li>
+<li><p><em>partition_name</em>: specifies the partition name.</p></li>
+<li><p><em>value_list</em>: specifies the list of values for the partitioning key.</p></li>
+<li><p><em>comment_string</em>: specifies a comment for each partition.</p></li>
+</ul>
+<p>The following example shows how to create the <em>athlete2</em> table with athlete names and sport events, and define list partitions based on event values.</p>
+<div class="highlight-sql notranslate" id="list-athlete2-table"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Swimming'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Athletics'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">),</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event3</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Football'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Basketball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">)</span>
+</span><span id="line-6"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>When inserting a tuple into a list-partitioned table, the value of the partitioning key must belong to one of the value lists defined for partitions. For this partitioning model, CUBRID does not automatically assign a partition for <strong>NULL</strong> values of the partitioning key. To be able to store <strong>NULL</strong> values into a list-partitioned table, a partition which includes the <strong>NULL</strong> value in the values list must be created:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Swimming'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Athletics'</span><span class="w"> </span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">),</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event3</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Football'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Basketball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">)</span>
+</span><span id="line-6"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>The below is examples of adding comments for each partition.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Swimming'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Athletics'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G1'</span><span class="p">,</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G2'</span><span class="p">,</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event3</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Football'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Basketball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G3'</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete3</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">));</span>
+</span><span id="line-8"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete3</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Handball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Volleyball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Tennis'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G1'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<section id="comment-of-partition">
+<span id="show-partition-comment"></span><h3>COMMENT of Partition<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#comment-of-partition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#comment-of-partition'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A partition’s comment can be written only for the range partition and the list partition. You cannot write the comment about the hash partition. The partition comment can be shown by running this syntax.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="p">[</span><span class="k">schema_name</span><span class="p">.]</span><span class="k">table_name</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">class_name</span><span class="p">,</span><span class="w"> </span><span class="n">partition_name</span><span class="p">,</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_partition</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">class_name</span><span class="w"> </span><span class="o">=</span><span class="s1">'table_name'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Or you can use CSQL interpreter by running ;sc command.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="err">$</span><span class="w"> </span><span class="n">csql</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="n">dba</span><span class="w"> </span><span class="n">demodb</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="n">sc</span><span class="w"> </span><span class="n">tbl</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="partition-pruning">
+<span id="id5"></span><h2>Partition Pruning<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partition-pruning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partition-pruning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Partition pruning is an optimization method, limiting the scope of a search on a partitioned table by eliminating partitions. During partition pruning, CUBRID examines the <strong>WHERE</strong> clause of the query to identify partitions for which this clause is always false, as considering the way partitioning was defined. In the following example, the <strong>SELECT</strong> query will only be applied to partitions <em>before_2008</em> and <em>before_2012</em>, since CUBRID knows that the rest of partitions hold data for which <em>YEAR (opening_date)</em> is less than 2004.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">olympic2</span><span class="w"> </span><span class="p">(</span><span class="n">opening_date</span><span class="w"> </span><span class="nb">DATE</span><span class="p">,</span><span class="w"> </span><span class="n">host_nation</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="w"> </span><span class="p">(</span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">))</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_1996</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1996</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">),</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2004</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2004</span><span class="p">),</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2008</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2008</span><span class="p">),</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2012</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2012</span><span class="p">)</span>
+</span><span id="line-8"><span class="p">);</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="k">SELECT</span><span class="w"> </span><span class="n">opening_date</span><span class="p">,</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-11"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-12"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2004</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Partition pruning greatly reduces the disk I/O and the amount of data which must be processed during query execution. It is important to understand when pruning is performed in order to fully benefit from it. In order for CUBRID to successfully prune partitions, the following conditions have to be met:</p>
+<ul class="simple">
+<li><p>Partitioning key must be used in the <em>WHERE</em> clause directly (without applying other expressions to it)</p></li>
+<li><p>For range-partitioning, the partitioning key must be used in range predicates (<strong>&lt;</strong>, <strong>&gt;</strong>, <strong>BETWEEN</strong>, etc) or equality predicates (<strong>=</strong>, <strong>IN</strong>, etc).</p></li>
+<li><p>For list and hash partitioning, the partitioning key must be used in equality predicates (<strong>=</strong>, <strong>IN</strong>, etc).</p></li>
+</ul>
+<p>The following queries explain how pruning is performed on the <em>olympic2</em> table from the example above:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- prune all partitions except before_2012</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-4"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="w"> </span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2008</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="c1">-- prune all partitions except before_2008</span>
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-8"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-9"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">2005</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="mi">2007</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="c1">-- no partition is pruned because partitioning key is not used</span>
+</span><span id="line-12"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-13"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-14"><span class="k">WHERE</span><span class="w"> </span><span class="n">opening_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'2008-01-02'</span><span class="p">;</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="c1">-- no partition is pruned because partitioning key is not used directly</span>
+</span><span id="line-17"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-18"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-19"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2008</span><span class="p">;</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="c1">-- no partition is pruned because there is no useful predicate in the WHERE clause</span>
+</span><span id="line-22"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-23"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-24"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2008</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In versions older than CUBRID 9.0, partition pruning was performed during query compilation stage. Starting with CUBRID 9.0, partition pruning is performed during the query execution stage, because executing partition pruning during query execution allows CUBRID to apply this optimization on much more complex queries. However, pruning information is not displayed in query planning stage anymore, since query planning happens before query execution and this information is not available at that time.</p>
+</div>
+<p>Users can also access partitions directly (independent of the partitioned table) either by using the table name assigned by CUBRID to a partition or by using the <em>table PARTITION (name)</em> clause:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- to specify a partition with its table name</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2__p__before_2008</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- to specify a partition with PARTITION clause</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="p">(</span><span class="n">before_2008</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>Both of the queries above access partition <em>before_2008</em> as if it were a normal table (not a partition). This is a very useful feature because it allows certain query optimizations to be used even though they are disabled on partitioned tables (see <a class="reference internal" href="#partitioning-notes"><span class="std std-ref">Notes on Partitioning</span></a> for more info). Users should note that, when accessing partitions directly, the scope of the query is limited to that partition. This means that tuples from other partitions are not considered (even though the <strong>WHERE</strong> clause includes them) and, for <strong>INSERT</strong> and <strong>UPDATE</strong> statements, if the tuple inserted/updated does not belong to the specified partition, an error is returned.</p>
+<p>By executing queries on a partition rather than the partitioned table, some of the benefits of partitioning are lost. For example, if users only execute queries on the partitioned table, this table can be repartitioned or partitions can be dropped without having to modify the user application. If users access partitions directly, this benefit is lost. Users should also note that, even though using partitions in <strong>INSERT</strong> statements is allowed (for consistency), it is discouraged because there is no performance gain from it.</p>
+</section>
+<section id="partitioning-management">
+<h2>Partitioning Management<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitioning-management" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partitioning-management'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Partitioned tables can be managed using partition specific clauses of the <strong>ALTER</strong> statement. CUBRID allows several actions to be performed on partitions:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#remove-partitioning"><span class="std std-ref">Modifying a partitioned table into a regular table</span></a>.</p></li>
+<li><p><a class="reference internal" href="#reorganize-partitions"><span class="std std-ref">Partitions reorganization</span></a>.</p></li>
+<li><p><a class="reference internal" href="#add-partitions"><span class="std std-ref">Adding partitions to an already partitioned table</span></a>.</p></li>
+<li><p><a class="reference internal" href="#drop-partitions"><span class="std std-ref">Dropping partitions</span></a>.</p></li>
+<li><p><a class="reference internal" href="#promote-partitions"><span class="std std-ref">Promote partitions to regular tables</span></a>.</p></li>
+</ol>
+<section id="modifying-a-partitioned-table-into-a-regular-table">
+<span id="remove-partitioning"></span><h3>Modifying a Partitioned Table into a Regular Table<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#modifying-a-partitioned-table-into-a-regular-table" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#modifying-a-partitioned-table-into-a-regular-table'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Changing a partitioned table into a regular table can be done using the <strong>REMOVE PARTITIONING</strong> clause of the <strong>ALTER</strong> statement:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="n">REMOVE</span> <span class="n">PARTITIONING</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: Specifies the schema name of the table. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>table_name</em> : Specifies the name of the table to be altered.</p></li>
+</ul>
+<p>When removing partitioning, CUBRID moves all data from partitions into the partitioned table. This is a costly operation and should be carefully planned.</p>
+</section>
+<section id="partition-reorganization">
+<span id="reorganize-partitions"></span><h3>Partition Reorganization<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partition-reorganization" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partition-reorganization'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Partition reorganization is a process through which a partition can be divided into smaller partitions or a group of partitions can be merged into a single partition. For this purpose, CUBRID implements the <strong>REORGANIZE PARTITION</strong> clause of the <strong>ALTER</strong> statement:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span> <span class="n">PARTITION</span> <span class="o">&lt;</span><span class="n">alter_partition_name_comma_list</span><span class="o">&gt;</span>
+</span><span id="line-3"><span class="n">INTO</span> <span class="s2">"("</span> <span class="o">&lt;</span><span class="n">partition_definition_comma_list</span><span class="o">&gt;</span> <span class="s2">")"</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">partition_definition_comma_list</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-6"><span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="s2">"("</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="s2">")"</span><span class="p">,</span> <span class="o">...</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: Specifies the schema name of the table. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>table_name</em> : Specifies the name of the table to be redefined.</p></li>
+<li><p><em>alter_partition_name_comma_list</em> : Specifies the partition to be redefined(current partitions). Multiple partitions are separated by commas (,).</p></li>
+<li><p><em>partition_definition_comma_list</em> : Specifies the redefined partitions(new partitions). Multiple partitions are separated by commas (,).</p></li>
+</ul>
+<p>This clause applies only to range and list partitioning. Since data distribution in hash-partitioning method is semantically different, hash-partitioned tables only allow adding and dropping partitions. See <a class="reference internal" href="#hash-reorganization"><span class="std std-ref">Hash Partitioning Reorganization</span></a> for details.</p>
+<p>The following example shows how to reorganize the <em>before_2000</em> partition of the <a class="reference internal" href="#range-participant2-table"><span class="std std-ref">participant2</span></a> table into the <em>before_1996</em> and <em>before_2000</em> partitions.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_1996</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1996</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to merge the two partitions defined in the above example back into a single <em>before_2000</em> partition.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_1996</span><span class="p">,</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to reorganize partitions defined on the <a class="reference internal" href="#list-athlete2-table"><span class="std std-ref">athlete2</span></a>, dividing the  <em>event2</em> partition into <em>event2_1</em> (Judo) and <em>event2_2</em> (Taekwondo, Boxing).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2_1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2_2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to combine the <em>event2_1</em> and <em>event2_2</em> partitions back into a single <em>event2</em> partition.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2_1</span><span class="p">,</span><span class="w"> </span><span class="n">event2_2</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>In a range-partitioned table, only adjacent partitions can be reorganized.</p></li>
+<li><p>During partition reorganization, CUBRID moves data between partitions in order to reflect the new partitioning schema. Depending on the size of the reorganized partitions, this might be a time consuming operations and should be carefully planned.</p></li>
+<li><p>The <strong>REORGANIZE PARTITION</strong> clause cannot be used to change the partitioning method. For example, a range-partitioned table cannot be changed into a hash-partitioned one.</p></li>
+<li><p>There must be at least one partition remaining after deleting partitions.</p></li>
+</ul>
+</div>
+</section>
+<section id="adding-partitions">
+<span id="add-partitions"></span><h3>Adding Partitions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#adding-partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#adding-partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Partitions can be added to a partitioned table by using the <em>ADD PARTITION</em> clause of the <em>ALTER</em> statement.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">able_name</span>
+</span><span id="line-2"><span class="n">ADD</span> <span class="n">PARTITION</span> <span class="s2">"("</span> <span class="o">&lt;</span><span class="n">partition_definitions_comma_list</span><span class="o">&gt;</span> <span class="s2">")"</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: Specifies the schema name of the table. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>table_name</em> : Specifies the name of the table to which partitions are added.</p></li>
+<li><p><em>partition_definitions_comma_list</em> : Specifies the partitions to be added. Multiple partitions are separated by commas (,).</p></li>
+</ul>
+<p>The following example shows how to add the <em>before_2012</em> and <em>last_one</em> partitions to the <a class="reference internal" href="#range-participant2-table"><span class="std std-ref">participant2</span></a> table.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2012</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2012</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">last_one</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="k">MAXVALUE</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>For range-partitioned tables, range values for added partitions must be greater than the largest range value of the existing partitions.</p></li>
+<li><p>For range-partitioned tables, if the upper limit of the range of one of the existing partitions is specified by <strong>MAXVALUE</strong>, <strong>ADD PARTITION</strong> clause will always return an error (the <a class="reference internal" href="#reorganize-partitions"><span class="std std-ref">REORGANIZE PARTITION</span></a> clause should be used instead).</p></li>
+<li><p>The <em>ADD PARTITION</em> clause can only be used on already partitioned tables.</p></li>
+<li><p>This clause has different semantics when executed on hash-partitioned tables. See <a class="reference internal" href="#hash-reorganization"><span class="std std-ref">Hash Partitioning Reorganization</span></a> for details.</p></li>
+</ul>
+</div>
+</section>
+<section id="dropping-partitions">
+<span id="drop-partitions"></span><h3>Dropping Partitions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dropping-partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dropping-partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Partitions can be dropped from a partitioned table by using the <strong>DROP PARTITION</strong> clause of the <strong>ALTER</strong> statement.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">DROP</span> <span class="n">PARTITION</span> <span class="n">partition_name_list</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: Specifies the schema name of the table. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>table_name</em> : Specifies the name of the partitioned table.</p></li>
+<li><p>&lt;<em>partition_name_list</em>&gt; : Specifies the names of the partitions to be dropped, separated by comma(,).</p></li>
+</ul>
+<p>The following example shows how to drop the <em>before_2000</em> partition in the <a class="reference internal" href="#range-participant2-table"><span class="std std-ref">participant2</span></a> table.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>When dropping a partition, all stored data in the partition is deleted. If you want to change the partitioning of a table without losing data, use the <strong>ALTER TABLE</strong> … <strong>REORGANIZE PARTITION</strong> statement.</p></li>
+<li><p>The number of rows deleted is not returned when a partition is dropped. If you want to delete the data, but want to maintain the table and partitions, use the <strong>DELETE</strong> statement.</p></li>
+</ul>
+</div>
+<p>This statement is not allowed on hash-partitioned tables. To drop partitions of a hash-partitioned table, use the hash partitioning specific <a class="reference internal" href="#hash-reorganization"><span class="std std-ref">alter clauses</span></a>.</p>
+</section>
+<section id="hash-partitioning-reorganization">
+<span id="hash-reorganization"></span><h3>Hash Partitioning Reorganization<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash-partitioning-reorganization" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash-partitioning-reorganization'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Because data distribution among partitions in a hash-partitioned table is controlled internally by CUBRID, hash-partitioning reorganization behaves differently for hash-partitioned tables than for list or range partitioned tables. CUBRID allows the number of partitions defined on a hash-partitioned table to be increased or reduced. When modifying the number of partitions of a hash-partitioned table, no data is lost. However, because the domain of the hashing function is modified, table data has to be redistributed between the new partitions in order to maintain hash-partitioning consistency.</p>
+<p>The number of partitions defined on a hash-partitioned table can be reduced using the  <strong>COALESCE PARTITION</strong> clause of the <strong>ALTER</strong> statement.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">COALESCE</span> <span class="n">PARTITION</span> <span class="n">number_of_shrinking_partitions</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: Specifies the schema name of the table. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>table_name</em> : Specifies the name of the table to be redefined.</p></li>
+<li><p><em>number_of_shrinking_partitions</em> : Specifies the number of partitions to be deleted.</p></li>
+</ul>
+<p>The following example shows how to decrease the number of partitions in the <a class="reference internal" href="#hash-nation2-table"><span class="std std-ref">nation2</span></a> table from 4 to 3.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">nation2</span><span class="w"> </span><span class="k">COALESCE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The number of partitions defined on a hash partitioned table can be increased using the <strong>ADD PARTITION</strong> clause of the <strong>ALTER</strong> statement.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">ADD</span> <span class="n">PARTITION</span> <span class="n">PARTITIONS</span> <span class="n">number</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: Specifies the schema name of the table. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>table_name</em> : Specifies the name of the table to be redefined.</p></li>
+<li><p><em>number</em> : Specifies the number of partitions to be added.</p></li>
+</ul>
+<p>The following example shows how to add 3 partitions to the <a class="reference internal" href="#hash-nation2-table"><span class="std std-ref">nation2</span></a>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">nation2</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">PARTITIONS</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="partition-promotion">
+<span id="promote-partitions"></span><h3>Partition Promotion<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partition-promotion" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partition-promotion'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <strong>PROMOTE</strong> clause of the <strong>ALTER</strong> statement promotes a partition of a partitioned table to a regular table. This feature is useful when a certain partition contains historic data which is almost never used. By promoting the partition to a regular table, performance on the partitioned table is increased and the data removed from this table (contained in the promoted partition) can still be accessed. Promoting a partition is an irreversible process, promoted partitions cannot be added back to the partitioned table.</p>
+<p>The partition <strong>PROMOTE</strong> statement is allowed only on range and list-partitioned tables. Since users do not control how data is distributed among hash partitions, promoting such a partition does not make sense.</p>
+<p>When the partition is promoted to a standalone table, this table inherits the data and ordinary indexes only. The following constraints are not available on the promoted partition:</p>
+<ul class="simple">
+<li><p>Primary Key</p></li>
+<li><p>Foreign key</p></li>
+<li><p>Unique index</p></li>
+<li><p><strong>AUTO_INCREMENT</strong> attribute and serial</p></li>
+<li><p>Triggers</p></li>
+<li><p>Methods</p></li>
+<li><p>Inheritance relationship (super-class and sub-class)</p></li>
+</ul>
+<p>The syntax for promoting partitions is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="n">PROMOTE</span> <span class="n">PARTITION</span> <span class="o">&lt;</span><span class="n">partition_name_list</span><span class="o">&gt;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>partition_name_list</em>: The user defined names of partitions to promote separated by comma(,)</p></li>
+</ul>
+<p>The following example creates a partitioned table, inserts some tuples into it and then promotes two of its partitions:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>Schema and data of table <em>t</em> are shown below.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="k">schema</span><span class="w"> </span><span class="n">t</span>
+</span><span id="line-2"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Help</span><span class="p">:</span><span class="w"> </span><span class="k">Schema</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">Class</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-3"><span class="p">...</span>
+</span><span id="line-4"><span class="w"> </span><span class="o">&lt;</span><span class="n">Partitions</span><span class="o">&gt;</span>
+</span><span id="line-5"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">([</span><span class="n">i</span><span class="p">])</span>
+</span><span id="line-6"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+</span><span id="line-7"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
+</span><span id="line-8"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="k">Result</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Line</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">i</span>
+</span><span id="line-14"><span class="o">=============</span>
+</span><span id="line-15"><span class="w">            </span><span class="mi">1</span>
+</span><span id="line-16"><span class="w">            </span><span class="mi">2</span>
+</span><span id="line-17"><span class="w">            </span><span class="mi">3</span>
+</span><span id="line-18"><span class="w">            </span><span class="mi">4</span>
+</span><span id="line-19"><span class="w">            </span><span class="mi">5</span>
+</span><span id="line-20"><span class="w">            </span><span class="mi">6</span>
+</span></code></pre></div>
+</div>
+<p>The following statement promotes partitions <em>p0</em> and <em>p2</em>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="n">PROMOTE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">p2</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>After promotion, table <em>t</em> has only one partition (<em>p1</em>) and contains the following data.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="k">schema</span><span class="w"> </span><span class="n">t</span>
+</span><span id="line-2"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Help</span><span class="p">:</span><span class="w"> </span><span class="k">Schema</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">Class</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-3"><span class="w"> </span><span class="o">&lt;</span><span class="k">Class</span><span class="w"> </span><span class="n">Name</span><span class="o">&gt;</span>
+</span><span id="line-4"><span class="w">     </span><span class="n">t</span>
+</span><span id="line-5"><span class="w"> </span><span class="p">...</span>
+</span><span id="line-6"><span class="w"> </span><span class="o">&lt;</span><span class="n">Partitions</span><span class="o">&gt;</span>
+</span><span id="line-7"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">([</span><span class="n">i</span><span class="p">])</span>
+</span><span id="line-8"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="k">Result</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Line</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">i</span>
+</span><span id="line-14"><span class="o">=============</span>
+</span><span id="line-15"><span class="w">            </span><span class="mi">3</span>
+</span><span id="line-16"><span class="w">            </span><span class="mi">4</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="indexes-on-partitioned-tables">
+<span id="index-partitions"></span><h2>Indexes on Partitioned Tables<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#indexes-on-partitioned-tables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#indexes-on-partitioned-tables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>All indexes created on a partitioning table are local indexes. With local indexes, data for each partition is stored in a separate(local) index. This increases concurrency on a partitioned table’s indexes, since transactions access data from different partitions also do different, local, indexes.</p>
+<p>In order to ensure local unique indexes, the following restriction must be satisfied when creating unique indexes on partitions:</p>
+<ul class="simple">
+<li><p>The partitioning key must be part of the primary key’s and the all the unique indexes’ definition.</p></li>
+</ul>
+<p>If this is not satisfied, CUBRID will return an error:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">HASH</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITIONS</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">Execute</span><span class="w"> </span><span class="n">OK</span><span class="p">.</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">142929</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w"> </span><span class="k">Committed</span><span class="p">.</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="mi">1</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span><span id="line-5"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span><span id="line-6"><span class="k">Execute</span><span class="w"> </span><span class="n">OK</span><span class="p">.</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">123776</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w"> </span><span class="k">Committed</span><span class="p">.</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="mi">1</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span><span id="line-9"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx2</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="k">In</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="n">ERROR</span><span class="p">:</span><span class="w"> </span><span class="n">Partition</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">attributes</span><span class="w"> </span><span class="n">must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">present</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">key</span><span class="p">.</span>
+</span><span id="line-14">
+</span><span id="line-15">
+</span><span id="line-16"><span class="mi">0</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span></code></pre></div>
+</div>
+<p>It is important to understand the benefits of local indexes. In a global index scan, for each partition that was not pruned a separate index scan would have been performed. This leads to poorer performance than scanning local indexes because data from other partitions is fetched from disk and then discarded (it belongs to another partition than the one being scanned at the moment). <strong>INSERT</strong> statements also show better performance on local indexes since these indexes are smaller.</p>
+</section>
+<section id="notes-on-partitioning">
+<span id="partitioning-notes"></span><h2>Notes on Partitioning<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#notes-on-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#notes-on-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Partitioned tables normally behave like regular tables. However there are some notes that should be taken into consideration in order to fully benefit from partitioning a table.</p>
+<section id="statistics-on-partitioning-tables">
+<h3>Statistics on Partitioning Tables<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#statistics-on-partitioning-tables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#statistics-on-partitioning-tables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Since CUBRID 9.0, the clause <strong>ANALYZE PARTITION</strong> of the <strong>ALTER</strong> statement has been deprecated. Since partition pruning happens during query execution, this statement will not produce any useful results. Since 9.0, CUBRID keeps separated statistics on each partition. The statistics on the partitioned table are computed as a mean value of the statistics of the table partitions. This is done to optimize the usual case in which, for a query, all partitions are pruned except one.</p>
+</section>
+<section id="restrictions-on-partitioned-tables">
+<h3>Restrictions on Partitioned Tables<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#restrictions-on-partitioned-tables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#restrictions-on-partitioned-tables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The following restrictions apply to partitioned tables:</p>
+<ul class="simple">
+<li><p>The maximum number of partitions which can be defined on a table is 1,024.</p></li>
+<li><p>Partitions cannot be a part of the inheritance chain. Classes cannot inherit a partition and partitions cannot inherit other classes than the partitioned class (which it inherits by default).</p></li>
+<li><p>The following query optimizations are not performed on partitioned tables:</p>
+<ul>
+<li><p>ORDER BY skip (for details, see <a class="reference internal" href="tuning.html#order-by-skip-optimization"><span class="std std-ref">Optimizing ORDER BY Clause</span></a>)</p></li>
+<li><p>GROUP BY skip (for details, see <a class="reference internal" href="tuning.html#group-by-skip-optimization"><span class="std std-ref">Optimizing GROUP BY Clause</span></a>)</p></li>
+<li><p>Multi-key range optimization (for details, see <a class="reference internal" href="tuning.html#multi-key-range-opt"><span class="std std-ref">Multiple Key Ranges Optimization</span></a>)</p></li>
+<li><p>INDEX JOIN</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="partitioning-key-and-charset-collation">
+<h3>Partitioning Key and Charset, Collation<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitioning-key-and-charset-collation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partitioning-key-and-charset-collation'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Partitioning keys and partition definition must have the same character set. The following query will return an error:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span><span class="k">c</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_bin</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="k">c</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="n">_utf8</span><span class="s1">'x'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="n">_iso88591</span><span class="s1">'y'</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">codeset</span> <span class="s1">'_iso88591'</span> <span class="k">for</span> <span class="n">partition</span> <span class="n">value</span><span class="o">.</span> <span class="n">Expecting</span> <span class="s1">'_utf8'</span> <span class="n">codeset</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>CUBRID uses the collation defined on the table when performing comparisons on the partitioning key. The following example will return an error because, for utf8_en_ci collation ‘test’ equals ‘TEST’.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">str</span><span class="w"> </span><span class="n">STRING</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_en_ci</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">str</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'test'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'TEST'</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Partition</span> <span class="n">definition</span> <span class="ow">is</span> <span class="n">duplicated</span><span class="o">.</span> <span class="s1">'p1'</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="partition_index.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Partitioning
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="i18n_index.html">
+        Globalization
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#partitioning-key'" class="reference internal" href="#partitioning-key">Partitioning key</a></li>
+<li><a :data-current="activeSection === '#range-partitioning'" class="reference internal" href="#range-partitioning">Range Partitioning</a></li>
+<li><a :data-current="activeSection === '#hash-partitioning'" class="reference internal" href="#hash-partitioning">Hash Partitioning</a></li>
+<li><a :data-current="activeSection === '#list-partitioning'" class="reference internal" href="#list-partitioning">List Partitioning</a><ul>
+<li><a :data-current="activeSection === '#comment-of-partition'" class="reference internal" href="#comment-of-partition">COMMENT of Partition</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#partition-pruning'" class="reference internal" href="#partition-pruning">Partition Pruning</a></li>
+<li><a :data-current="activeSection === '#partitioning-management'" class="reference internal" href="#partitioning-management">Partitioning Management</a><ul>
+<li><a :data-current="activeSection === '#modifying-a-partitioned-table-into-a-regular-table'" class="reference internal" href="#modifying-a-partitioned-table-into-a-regular-table">Modifying a Partitioned Table into a Regular Table</a></li>
+<li><a :data-current="activeSection === '#partition-reorganization'" class="reference internal" href="#partition-reorganization">Partition Reorganization</a></li>
+<li><a :data-current="activeSection === '#adding-partitions'" class="reference internal" href="#adding-partitions">Adding Partitions</a></li>
+<li><a :data-current="activeSection === '#dropping-partitions'" class="reference internal" href="#dropping-partitions">Dropping Partitions</a></li>
+<li><a :data-current="activeSection === '#hash-partitioning-reorganization'" class="reference internal" href="#hash-partitioning-reorganization">Hash Partitioning Reorganization</a></li>
+<li><a :data-current="activeSection === '#partition-promotion'" class="reference internal" href="#partition-promotion">Partition Promotion</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#indexes-on-partitioned-tables'" class="reference internal" href="#indexes-on-partitioned-tables">Indexes on Partitioned Tables</a></li>
+<li><a :data-current="activeSection === '#notes-on-partitioning'" class="reference internal" href="#notes-on-partitioning">Notes on Partitioning</a><ul>
+<li><a :data-current="activeSection === '#statistics-on-partitioning-tables'" class="reference internal" href="#statistics-on-partitioning-tables">Statistics on Partitioning Tables</a></li>
+<li><a :data-current="activeSection === '#restrictions-on-partitioned-tables'" class="reference internal" href="#restrictions-on-partitioned-tables">Restrictions on Partitioned Tables</a></li>
+<li><a :data-current="activeSection === '#partitioning-key-and-charset-collation'" class="reference internal" href="#partitioning-key-and-charset-collation">Partitioning Key and Charset, Collation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 27, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

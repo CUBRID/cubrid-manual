@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>System Management Errors | CUBRID 11.4 User Manual</title>
+<meta content="System Management Errors | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="System Management Errors | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="error_log_sql.html" rel="next" title="Query (SQL) Related Errors"/>
+<link href="error_log.html" rel="prev" title="Database Error Logs"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/admin/error_log_system.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID Management</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="error_log.html">Database Error Logs</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">System Management Errors</span>
+</nav>
+<div id="content" role="main">
+<section id="system-management-errors">
+<h1>System Management Errors<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#system-management-errors"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p id="error-3"><strong>ERROR CODE: -3, ‘Out of virtual memory: unable to allocate %1$zu memory bytes.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to allocate a certain amount of virtual memory from the operating system, but the allocation failed because there was not enough virtual memory available on the system; virtual memory includes physical RAM and disk swap space, and CUBRID uses a large amount of memory for database work (e.g., query execution, buffer cache, transaction management, internal data structures); this message typically occurs when the system has insufficient physical RAM, the swap space is exhausted, or the memory limit assigned to the CUBRID process has been exceeded, and as a result it can interfere with normal database service.</p></li>
+</ul>
+<p id="error-7"><strong>ERROR CODE: -7, ‘Trying to format disk volume “%1$s” with an incorrect value %2$d for number of pages.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to format a particular disk volume, but the format operation failed because the specified number of pages is invalid or not an allowed value; it mainly occurs in the file-open stage due to incorrect settings, exceeding system limits, or an internal logic error, and it can interfere with database creation or volume expansion operations.</p></li>
+</ul>
+<p id="error-8"><strong>ERROR CODE: -8, ‘Unable to format disk volume “%1$s” with %2$d pages (%3$lld bytes).’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to format a particular disk volume to the specified size, but the format operation failed due to a file-system–level problem; it mainly occurs in the file-open stage due to a file system error, a permission problem, a hardware problem, or a volume-file path problem, and it can interfere with database creation or volume expansion operations.</p></li>
+</ul>
+<p id="error-9"><strong>ERROR CODE: -9, ‘Unable to format disk volume “%1$s” with %2$d pages (%3$lld Kbytes) due to insufficient space. Current space available is %4$d pages (%5$lld Kbytes).’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to format a particular disk volume, but the format operation failed because the available disk space is less than the requested size; it mainly occurs due to insufficient disk space, an error in volume-size configuration, or file-system limits, and it can interfere with database creation or volume expansion operations.</p></li>
+</ul>
+<p id="error-10"><strong>ERROR CODE: -10, ‘Unable to mount disk volume “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to mount a particular disk volume, but the operation failed due to an operating-system or file-system–level problem; it mainly occurs due to file system corruption, a missing volume file, insufficient permissions, or a hardware problem, and it can interfere with normal database startup or recovery operations.</p></li>
+</ul>
+<p id="error-11"><strong>ERROR CODE: -11, ‘Unable to mount disk volume “%1$s”. The database “%2$s”, to which the disk volume belongs, is in use by user %3$s on process %4$d of host %5$s since %6$s.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to mount a particular disk volume, but the mount failed because the database to which that volume belongs is already in use by another CUBRID process; it is mainly an error that occurs when creating a lock file, and it happens when a lock file has already been created by another process or when the lock file cannot be created; this message typically occurs when two or more CUBRID server instances try to access the same database at the same time, and it is an important mechanism for protecting database consistency.</p></li>
+</ul>
+<p id="error-12"><strong>ERROR CODE: -12, ‘Unable to dismount disk volume “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to dismount a particular volume, but the operation failed due to an operating-system or file-system–level problem; it mainly occurs in the file-close stage due to issues such as file system errors, permission problems, or hardware problems, and it can interfere with safe database shutdown or volume management operations.</p></li>
+</ul>
+<p id="error-13"><strong>ERROR CODE: -13, ‘Unable to read page %1$d of disk volume “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to read a specific page of a particular volume from disk, but the read operation failed due to an error during the I/O operation; it mainly occurs due to disk errors, file system problems, permission problems, or hardware problems, and it can affect database stability and can lead to data corruption.</p></li>
+</ul>
+<p id="error-14"><strong>ERROR CODE: -14, ‘Unable to write page %1$d of disk volume “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to write a specific page of a particular volume to disk, but the write operation failed due to an error during the I/O operation; it mainly occurs due to disk errors, file system problems, permission problems, or hardware problems, and it can affect database stability and can lead to data corruption.</p></li>
+</ul>
+<p id="error-15"><strong>ERROR CODE: -15, ‘Unable to write page %1$d of disk volume “%2$s” due to insufficient space.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to write a specific page of a particular volume to disk, but the write operation failed because there was not enough disk space at the operating-system level; it mainly occurs due to a full disk, file-system quota/limits, or improper disk-space management, and it can interfere with normal database operation and volume growth.</p></li>
+</ul>
+<p id="error-16"><strong>ERROR CODE: -16, ‘Unable to rename disk volume “%1$s” to “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID system attempted to rename a particular disk volume, but the operation failed due to a file-system–level problem; it mainly occurs due to insufficient permissions, conflicts with an existing target file/directory, the source file being in use, or other file-system issues, and it can interfere with volume management operations such as database maintenance, backup/restore, or storage migration.</p></li>
+</ul>
+<p id="error-78"><strong>ERROR CODE: -78, ‘Internal error: an I/O error occurred while reading logical log page %1$lld (physical page %2$lld) of “%3$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message is an internal error indicating that, when the CUBRID system tried to read a logical log page from a physical page, an I/O (input/output) error occurred on the specified operating-system device and the read operation failed; this mainly occurs due to hardware issues (disk failure), file system corruption, OS-level I/O problems, or driver errors.</p></li>
+</ul>
+<p id="error-79"><strong>ERROR CODE: -79, ‘Internal error: an I/O error occurred while writing logical log page %1$lld (physical page %2$lld) of “%3$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message is an internal error indicating that, when the CUBRID system tried to write a logical log page to a physical page, an I/O (input/output) error occurred on the specified operating-system device and the write operation failed; this mainly occurs due to hardware issues (disk failure), file system corruption, OS-level I/O problems, or driver errors.</p></li>
+</ul>
+<p id="error-82"><strong>ERROR CODE: -82, ‘Unable to mount log volume “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error where the CUBRID database system failed to “mount” or access the specified log disk volume or file; this mainly occurs due to file-system permission problems, missing or corrupted files, disk-space shortages, or other storage-related I/O problems, and it can interfere with database startup, recovery, and transaction logging.</p></li>
+</ul>
+<p id="error-101"><strong>ERROR CODE: -101, ‘Not a database volume file - %1$s.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error that occurs when the CUBRID system tries to access or process a particular user file, but the file does not exist, the path is incorrect, or it is a file that the system cannot recognize; it mainly occurs when the file specified in the <code class="docutils literal notranslate"><span class="pre">createdb</span></code> command with the <code class="docutils literal notranslate"><span class="pre">--more-volume-file</span></code> option cannot be found, or when the volume information file (DBname_vinf) cannot be found.</p></li>
+</ul>
+<p id="error-102"><strong>ERROR CODE: -102, ‘Unexpected EOF in volume information file.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed while the CUBRID system reads the volume information (DBname_vinf) file; it mainly occurs when the file is incomplete or corrupted, or when it has been recorded/entered in a way that does not match the actual database volume information.</p></li>
+</ul>
+<p id="error-103"><strong>ERROR CODE: -103, ‘The first volume in volume information file is not in order.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed while the CUBRID system searches for the first volume in the database volume information (DBname_vinf) file; it means that the entries in the volume information file must be sorted sequentially, but their order has been changed or there are missing entries.</p></li>
+</ul>
+<p id="error-104"><strong>ERROR CODE: -104, ‘The first volume in volume information file is not found.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed while the CUBRID system searches for the first volume in the database volume information (DBname_vinf) file; it may indicate a database integrity issue, file corruption, or that the file has possibly been modified manually.</p></li>
+</ul>
+<p id="error-105"><strong>ERROR CODE: -105, ‘Unable to open backup file “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system tries to access a backup file but cannot access it due to file-system permission problems, file corruption, or the file not existing; backup or restore operations can fail because this file-access failure blocks access to the backup file.</p></li>
+</ul>
+<p id="error-111"><strong>ERROR CODE: -111, ‘Transaction was aborted.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system unilaterally aborts an active transaction due to a server failure or a mode change; it means the system forcibly terminated the transaction without the client’s request or consent, and it mainly occurs when the server process is terminated unexpectedly or during failover/failback or other mode transitions, which can lead to client errors and rollback of in-flight work.</p></li>
+</ul>
+<p id="error-113"><strong>ERROR CODE: -113, ‘Cannot restart server.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system fails while trying to restart or initialize the database server; during server restart/initialization, this can occur due to insufficient system resources, permission problems, port conflicts, or other system-level errors, and it can prevent normal database service from starting.</p></li>
+</ul>
+<p id="error-114"><strong>ERROR CODE: -114, ‘Unknown database “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system cannot recognize the specified path or name as a database; it means that database volumes or files have been renamed or copied outside of the database domain, so CUBRID cannot find the correct database structure.</p></li>
+</ul>
+<p id="error-118"><strong>ERROR CODE: -118, ‘Unable to determine the current working directory.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system fails while checking the current working directory; such failures mainly occur due to file-system permission problems, the directory having been deleted, or process permission issues.</p></li>
+</ul>
+<p id="error-123"><strong>ERROR CODE: -123, ‘Unable to create database volumes.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system tries to create volumes or files required for the database but fails due to file-system permissions, insufficient disk space, path problems, and similar issues; database volume creation can fail because the needed files cannot be created, which can block database creation, volume expansion, or certain maintenance operations.</p></li>
+</ul>
+<p id="error-130"><strong>ERROR CODE: -130, ‘Unable to allocate %1$zu bytes.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID database system cannot allocate the required memory; it is printed when the system’s virtual memory is insufficient or when a memory allocation request fails, which indicates that the system’s memory resources have been exhausted.</p></li>
+</ul>
+<p id="error-313"><strong>ERROR CODE: -313, ‘Memory allocation failure.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs during the process of reading database object data, and it is an important memory-related error that mainly occurs during object loading or unloading.</p></li>
+</ul>
+<p id="error-320"><strong>ERROR CODE: -320, ‘Encountered corrupted disk representation of object.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when the representation of an object stored on disk is corrupted in a CUBRID database; it occurs when reading object data during the B-tree loading process, and it can be caused by disk I/O errors, memory corruption, or database file corruption.</p></li>
+</ul>
+<p id="error-542"><strong>ERROR CODE: -542, ‘Corrupted disk volume. The number of remaining free sectors in volume header does not match the bitmap’s.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs on a particular volume (disk file) in the CUBRID database when the number of remaining free sectors recorded in the volume header (metadata) differs from the number of remaining free sectors calculated from the actual bitmap (the internal table that represents sector allocation status); such a mismatch means a consistency error in disk-space management, and it can appear when there were problems in the process of allocating/freeing storage space, or when the metadata and actual state became inconsistent due to physical damage, abnormal shutdown, bugs, and similar causes.</p></li>
+</ul>
+<p id="error-543"><strong>ERROR CODE: -543, ‘Corrupted disk volume. Disk volume header is broken.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs on a particular volume (disk file) in the CUBRID database when the disk header (metadata that represents the volume’s structure and state) is damaged or when the internally expected values differ from the actual values; because the disk header contains important metadata such as volume size, allocation information, version, and checksums, any mismatch can affect the entire storage structure of the database; it can mainly occur due to abnormal shutdown, disk errors, file-system corruption, bugs, and similar causes.</p></li>
+</ul>
+<p id="error-599"><strong>ERROR CODE: -599, ‘I/O error while synchronizing the volume status.’</strong></p>
+<ul class="simple">
+<li><p>This message appears when an I/O error occurs while the CUBRID database synchronizes a volume’s status with disk; a volume is the physical storage unit of a CUBRID database and refers to a data file, and synchronization is the process of forcibly writing in-memory data to disk in order to guarantee data consistency and durability.</p></li>
+</ul>
+<p id="error-705"><strong>ERROR CODE: -705, ‘Permanent volume number mismatch. Permanent volumes in boot page (%1$d). Permanent volumes in volume information file (%2$d).’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when, during CUBRID database boot or recovery, the number of permanent volumes recorded in the boot page (boot page) does not match the number of permanent volumes actually found by the system; this means there is a problem with the database’s volume configuration and it can affect database consistency and integrity; this message occurs when the CUBRID database server starts up or recovers after a crash.</p></li>
+</ul>
+<p id="error-708"><strong>ERROR CODE: -708, ‘Not enough space in temporary volume.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when the CUBRID database attempts to extend a temporary disk volume but fails because there is not enough disk space; it can occur when CUBRID extends temporary volumes for large query processing or temporary table creation.</p></li>
+</ul>
+<p id="error-780"><strong>ERROR CODE: -780, ‘Cannot get system time.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates that, when CUBRID tries to obtain the system time, it is in a situation where the system time cannot be obtained; this occurs in CUBRID’s system-time mechanism and can mainly be caused by failures in OS-level time-related function calls.</p></li>
+</ul>
+<p id="error-792"><strong>ERROR CODE: -792, ‘Internal error: connection entry allocation error.’</strong></p>
+<ul class="simple">
+<li><p>This message is an internal error that occurs when the CUBRID system fails to allocate memory related to a connection entry; a memory allocation failure prevents the module from functioning normally and has a critical impact on client connection management and server communication; this mainly occurs due to insufficient system memory, memory fragmentation, or operating-system memory-allocation limits.</p></li>
+</ul>
+<p id="error-864"><strong>ERROR CODE: -864, ‘Cannot open backupdb/restoredb verbose file ‘%1$s’.’</strong></p>
+<p>This error occurs when, during a database backup or restore operation, the detailed (verbose) log file cannot be created or opened; it is an I/O-related error that can be caused by file-system permissions, insufficient disk space, path problems, and similar issues.</p>
+<p id="error-879"><strong>ERROR CODE: -879, ‘Failed to get permission for “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when CUBRID tries to query file-system permission information for a particular file or directory; this typically occurs when access permissions for database files or log files need to be checked, and it mainly appears when the user account running the CUBRID process does not have permission to query information about that file.</p></li>
+</ul>
+<p id="error-880"><strong>ERROR CODE: -880, ‘Failed to set permission for “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when CUBRID tries to change file-system permissions for a particular file or directory; this typically occurs when access permissions for database files or log files need to be adjusted, and it mainly appears when the user account running the CUBRID process does not have permission to modify that file.</p></li>
+</ul>
+<p id="error-881"><strong>ERROR CODE: -881, ‘Failed to acquire lock for “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when CUBRID tries to acquire a lock for a particular file; this typically occurs when opening or mounting database volumes and is related to the file system’s lock-management mechanism; it can be caused by file-system access problems, permission problems, a lock being held by another process, insufficient system resources, and similar issues.</p></li>
+</ul>
+<p id="error-882"><strong>ERROR CODE: -882, ‘Failed to release lock for “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when CUBRID tries to release a lock set on a particular file; this typically occurs when closing or unmounting database volumes and is related to the file system’s lock-management mechanism; it can be caused by file-system access problems, permission problems, insufficient system resources, and similar issues.</p></li>
+</ul>
+<p id="error-980"><strong>ERROR CODE: -980, ‘Thread %1$u waited %2$lld milliseconds during %3$s.’</strong></p>
+<ul class="simple">
+<li><p>This message is a warning that occurs when a thread in the CUBRID database waits longer than the configured threshold while performing a particular task (entering a critical section, acquiring a lock, file I/O, and so on); it is part of a performance monitoring feature that detects situations where a thread is waiting longer than expected and notifies the system administrator; this is not an error but an informational message that helps discover performance issues early and respond to them, and it mainly occurs in critical sections, lock management, and file I/O operations and is useful for identifying bottlenecks or resource contention.</p></li>
+</ul>
+<p id="error-1015"><strong>ERROR CODE: -1015, ‘Specified directory ‘%1$s’ does not exist.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when the path of volume files used by the database server is incorrect, or when the directory cannot be created/used and therefore the required directory does not exist.</p></li>
+</ul>
+<p id="error-1113"><strong>ERROR CODE: -1113, ‘Element index out of range.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when, in a CUBRID database, an attempt is made to add an element to a Binary Heap data structure and the heap’s maximum capacity has been exceeded; that is, it means an insertion was attempted while the binary heap was already full; this is a protective error intended to ensure memory management and system stability, because the binary heap is an important data structure used for sorting, priority queues, heap sort, and so on, and exceeding its capacity could lead to memory overflow or unexpected behavior.</p></li>
+</ul>
+<p id="error-1185"><strong>ERROR CODE: -1185, ‘Unexpected page refix on page %1$d,%2$d, while trying to fix page %3$d,%4$d.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs in the page buffer management system of the CUBRID database. When trying to fix a particular page in memory for access, it indicates that another page was unexpectedly refixed; this means that there is a problem with the internal consistency or state management of the page buffer, and in general it is an abnormal situation that should not occur. Because the page buffer is a core component of the database, this kind of error can lead to data integrity issues or system instability.</p></li>
+</ul>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Database Error Logs
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log_sql.html">
+        Query (SQL) Related Errors
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Mar 27, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

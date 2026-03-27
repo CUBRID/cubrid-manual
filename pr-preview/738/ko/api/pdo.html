@@ -324,7 +324,7 @@
 <section id="id3">
 <h3>미리 정의된 상수<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>CUBRID PDO 드라이버에 의해 정의되는 상수(predefined constants)는 CUBRID PDO 드라이버가 PHP와 함께 컴파일되거나 런타임에 동적으로 로드되는 경우에만 사용할 수 있다. 이처럼 특정 드라이버에 의해 정의된 상수를 다른 드라이버와 함께 사용하면 예상과 다르게 동작할 수도 있다.</p>
-<p>코드가 여러 개의 드라이버와 함께 실행될 수 있다면, <strong>PDO_ATTR_DRIVER_NAME</strong> 속성 값을 얻어 드라이버를 확인하기 위해 <a class="reference external" href="http://docs.php.net/manual/en/pdo.getattribute.php">PDO::getAttribute()</a> 함수를 사용할 수 있다.</p>
+<p>코드가 여러 개의 드라이버와 함께 실행될 수 있다면, <strong>PDO_ATTR_DRIVER_NAME</strong> 속성 값을 얻어 드라이버를 확인하기 위해 <a class="reference external" href="https://www.php.net/manual/en/pdo.getattribute.php">PDO::getAttribute()</a> 함수를 사용할 수 있다.</p>
 <p>다음 상수는 <a class="reference external" href="https://www.php.net/manual/en/pdo.cubrid-schema.php">PDO::cubrid_schema</a> () 함수를 이용하여 스키마 정보를 얻을 때 사용할 수 있다.</p>
 <table class="docutils align-default">
 <thead>
@@ -415,7 +415,7 @@
 <h2>PDO 예제 프로그램<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <section id="cubrid-pdo">
 <h3>CUBRID PDO 드라이버 확인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-pdo" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cubrid-pdo'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>사용 가능한 PDO 드라이버를 확인하려면 다음과 같이 <a class="reference external" href="http://docs.php.net/manual/en/pdo.getavailabledrivers.php">PDO::getAvailableDrivers</a> () 함수를 사용한다.</p>
+<p>사용 가능한 PDO 드라이버를 확인하려면 다음과 같이 <a class="reference external" href="https://www.php.net/manual/en/pdo.getavailabledrivers.php">PDO::getAvailableDrivers</a> () 함수를 사용한다.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">&lt;?php</span>
 </span><span id="line-2"><span class="k">echo</span><span class="s1">'PDO Drivers available:</span>
 </span><span id="line-3"><span class="s1">'</span><span class="p">;</span>
@@ -479,12 +479,12 @@
 <h3>SELECT 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#select" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#select'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격에 따라 다음 중 하나의 방법을 사용할 수 있다.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://docs.php.net/manual/en/pdo.exec.php">query</a> () 함수 사용</p></li>
-<li><p>prepared statements( <a class="reference external" href="http://docs.php.net/manual/en/pdo.prepare.php">prepare</a> ()/ <a class="reference external" href="http://docs.php.net/manual/en/pdostatement.execute.php">execute</a> ()) 함수 사용</p></li>
-<li><p><a class="reference external" href="http://docs.php.net/manual/en/pdo.exec.php">exec</a> () 함수 사용</p></li>
+<li><p><a class="reference external" href="https://www.php.net/manual/en/pdo.query.php">query</a> () 함수 사용</p></li>
+<li><p>prepared statements( <a class="reference external" href="https://www.php.net/manual/en/pdo.prepare.php">prepare</a> ()/ <a class="reference external" href="https://www.php.net/manual/en/pdostatement.execute.php">execute</a> ()) 함수 사용</p></li>
+<li><p><a class="reference external" href="https://www.php.net/manual/en/pdo.exec.php">exec</a> () 함수 사용</p></li>
 </ul>
-<p>다음 예제에서는 가장 간단한 <a class="reference external" href="http://docs.php.net/manual/en/pdo.exec.php">query</a> () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs[“column_name”]와 같이 칼럼 이름을 이용하여 얻을 수 있다.</p>
-<p><a class="reference external" href="http://docs.php.net/manual/en/pdo.exec.php">query</a> () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 <a class="reference external" href="https://www.php.net/manual/en/pdo.quote.php">PDO::quote</a> ()를 참고한다.</p>
+<p>다음 예제에서는 가장 간단한 <a class="reference external" href="https://www.php.net/manual/en/pdo.query.php">query</a> () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs[“column_name”]와 같이 칼럼 이름을 이용하여 얻을 수 있다.</p>
+<p><a class="reference external" href="https://www.php.net/manual/en/pdo.query.php">query</a> () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 <a class="reference external" href="https://www.php.net/manual/en/pdo.quote.php">PDO::quote</a> ()를 참고한다.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">&lt;?php</span>
 </span><span id="line-2"><span class="k">include</span><span class="p">(</span><span class="s2">"_db_config.php"</span><span class="p">);</span>
 </span><span id="line-3"><span class="k">include</span><span class="p">(</span><span class="s2">"_db_connect.php"</span><span class="p">);</span>
@@ -522,7 +522,7 @@
 </section>
 <section id="update">
 <h3>UPDATE 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#update" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#update'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>다음은 prepared statement와 파라미터를 사용하여 UPDATE를 실행하는 예제이다. prepared statement 대신 <a class="reference external" href="http://docs.php.net/manual/en/pdo.exec.php">exec</a> () 함수를 사용할 수도 있다.</p>
+<p>다음은 prepared statement와 파라미터를 사용하여 UPDATE를 실행하는 예제이다. prepared statement 대신 <a class="reference external" href="https://www.php.net/manual/en/pdo.exec.php">exec</a> () 함수를 사용할 수도 있다.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">&lt;?php</span>
 </span><span id="line-2"><span class="k">include</span><span class="p">(</span><span class="s2">"_db_config.php"</span><span class="p">);</span>
 </span><span id="line-3"><span class="k">include</span><span class="p">(</span><span class="s2">"_db_connect.php"</span><span class="p">);</span>
@@ -684,15 +684,15 @@
 </section>
 <section id="id8">
 <h3>PDO::getAttribute() 사용<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id8'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><a class="reference external" href="http://docs.php.net/manual/en/pdo.getattribute.php">PDO::getAttribute</a> () 함수는 다음과 같은 데이터베이스 연결 속성을 조회할 때 유용하다.</p>
+<p><a class="reference external" href="https://www.php.net/manual/en/pdo.getattribute.php">PDO::getAttribute</a> () 함수는 다음과 같은 데이터베이스 연결 속성을 조회할 때 유용하다.</p>
 <ul class="simple">
 <li><p>드라이버 이름</p></li>
 <li><p>데이터베이스 버전</p></li>
 <li><p>자동 커밋 모드 여부</p></li>
 <li><p>오류 모드</p></li>
 </ul>
-<p>속성을 쓸 수 있다면 <a class="reference external" href="http://docs.php.net/manual/en/pdo.setattribute.php">PDO::setAttribute</a> () 함수를 사용하여 속성을 설정할 수 있다.</p>
-<p>다음은 <a class="reference external" href="http://docs.php.net/manual/en/pdo.getattribute.php">PDO::getAttribute</a> () 함수를 사용하여 클라이언트와 서버의 현재 버전을 조회하는 PHP PDO 스크립트이다.</p>
+<p>속성을 쓸 수 있다면 <a class="reference external" href="https://www.php.net/manual/en/pdo.setattribute.php">PDO::setAttribute</a> () 함수를 사용하여 속성을 설정할 수 있다.</p>
+<p>다음은 <a class="reference external" href="https://www.php.net/manual/en/pdo.getattribute.php">PDO::getAttribute</a> () 함수를 사용하여 클라이언트와 서버의 현재 버전을 조회하는 PHP PDO 스크립트이다.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">&lt;?php</span>
 </span><span id="line-2"><span class="k">include</span><span class="p">(</span><span class="s2">"_db_config.php"</span><span class="p">);</span>
 </span><span id="line-3"><span class="k">include</span><span class="p">(</span><span class="s2">"_db_connect.php"</span><span class="p">);</span>
@@ -747,7 +747,7 @@
 </section>
 <section id="pdo-api">
 <h2>PDO API<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pdo-api" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pdo-api'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>PDO API와 관련하여 <a class="reference external" href="http://docs.php.net/manual/en/book.pdo.php">http://docs.php.net/manual/en/book.pdo.php</a>를 참고한다.</p>
+<p>PDO API와 관련하여 <a class="reference external" href="https://www.php.net/manual/en/book.pdo.php">https://www.php.net/manual/en/book.pdo.php</a>를 참고한다.</p>
 <p>CUBRID PDO 드라이버가 제공하는 PDO API는 <a class="reference external" href="http://ftp.cubrid.org/CUBRID_Docs/Drivers/PDO/">http://ftp.cubrid.org/CUBRID_Docs/Drivers/PDO/</a>를 참고한다.</p>
 </section>
 </section>
@@ -801,7 +801,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 3월 26, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 3월 27, 2026. </p>
 </div>
 </div>
 </footer>

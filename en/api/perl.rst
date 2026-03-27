@@ -26,7 +26,7 @@ Installing and Configuring Perl
 
 *   CUBRID: To build CUBRID Perl driver, you need to get the CCI driver. You can get it from installing CUBRID. You can download the CUBRID Perl driver's source code from https://www.cubrid.org/downloads .
 
-*   DBI: http://code.activestate.com/ppm/DBI/ .
+*   DBI: https://metacpan.org/dist/DBI/ .
 
 *   C compiler: In most cases, there are binary distributions of **DBD::cubrid** ( https://www.cubrid.org/downloads#perl ) available. However, if you want to build the driver from source code, a C compiler is required. Make sure to use the same C compiler that was used for compiling Perl and CUBRID. Otherwise, you will encounter problems because of differences in the underlying C runtime libraries.
 

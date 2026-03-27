@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>트리거 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="트리거 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="트리거 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="dblink.html" rel="next" title="CUBRID DBLink"/>
+<link href="transaction.html" rel="prev" title="데이터베이스 트랜잭션"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/sql/trigger.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">트리거</span>
+</nav>
+<div id="content" role="main">
+<section id="id1">
+<h1>트리거<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="create-trigger">
+<span id="id2"></span><h2>CREATE TRIGGER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#create-trigger" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#create-trigger'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id3">
+<h3>트리거 정의를 위한 가이드라인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거 정의로 다양하고 강력한 기능을 만들 수 있다. 트리거를 생성하기 전에 다음과 같은 정의 사항을 고려해야 한다.</p>
+<ul>
+<li><p><strong>트리거의 조건 영역 표현식이 데이터베이스에 예측할 수 없는 결과(side effect)를 가져오지는 않는가?</strong></p>
+<p>SQL 문을 예측이 가능한 범위 내에서 사용해야 한다.</p>
+</li>
+<li><p><strong>트리거의 실행 영역이 트리거의 이벤트 대상으로 주어진 테이블을 변경하지는 않는가?</strong></p>
+<p>이러한 유형의 설계가 트리거의 정의에서 사용이 금지되어 있지는 않지만, 무한 루프로 빠지는 트리거가 만들어질 수 있어 주의해서 사용해야 한다. 트리거 실행 영역이 이벤트 대상 테이블을 수정할 때, 같은 트리거가 다시 불려질 수 있다. 또한 <strong>WHERE</strong> 절을 포함하는 문장에 의해 트리거가 발생하면, 해당 트리거는 <strong>WHERE</strong> 절에 의해 수행되는 테이블에는 일반적으로 부작용이 없다.</p>
+</li>
+<li><p><strong>트리거가 불필요한 오버헤드를 만들어 내고 있지는 않는가?</strong></p>
+<p>원하는 동작이 소스 내에서 조금 더 효과적으로 표현될 수 있다면 직접 소스 내에서 구현하도록 한다.</p>
+</li>
+<li><p><strong>트리거가 재귀적으로 실행되고 있지는 않는가?</strong></p>
+<p>트리거의 실행 영역이 트리거를 호출하고 이 트리거가 다시 처음 트리거를 호출하면  재귀 루프(recursive loop)가 데이터베이스에 만들어진다. 재귀 루프가 만들어지면, 트리거가 정확히 수행되지 않거나 진행 중인 루프를 단절하기 위해 현재 세션을 강제로 종료해야 할 수도 있다.</p>
+</li>
+<li><p><strong>트리거의 정의는 유일한가?</strong></p>
+<p>동일한 테이블에서 정의된 트리거나, 동일한 실행 영역에서 시작된 트리거는 복구할 수 없는 에러의 원인이 된다. 동일한 테이블에 있는 트리거는 다른 트리거 이벤트를 가져야 한다. 또한, 트리거의 우선순위는 명시적으로 정의되어 있거나 모호하지 않아야 한다.</p>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h3>트리거 정의 구문<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>CREATE TRIGGER</strong> 문을 사용하여 새로운 트리거를 생성하고, 트리거 대상, 실행 조건과 수행할 내용을 정의할 수 있다. 트리거는 데이터베이스 객체로서, 특정 이벤트가 대상 테이블에 대해 발생하면 정의된 동작을 수행한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TRIGGER</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">trigger_name</span>
+</span><span id="line-2"><span class="p">[</span> <span class="n">STATUS</span> <span class="p">{</span> <span class="n">ACTIVE</span> <span class="o">|</span> <span class="n">INACTIVE</span> <span class="p">}</span> <span class="p">]</span>
+</span><span id="line-3"><span class="p">[</span> <span class="n">PRIORITY</span> <span class="n">key</span> <span class="p">]</span>
+</span><span id="line-4"><span class="o">&lt;</span><span class="n">event_time</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">event_target</span><span class="o">&gt;</span><span class="p">]</span>
+</span><span id="line-5"><span class="p">[</span> <span class="n">IF</span> <span class="n">condition</span> <span class="p">]</span>
+</span><span id="line-6"><span class="n">EXECUTE</span> <span class="p">[</span> <span class="n">AFTER</span> <span class="o">|</span> <span class="n">DEFERRED</span> <span class="p">]</span> <span class="n">action</span>
+</span><span id="line-7"><span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'trigger_comment'</span><span class="p">];</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="o">&lt;</span><span class="n">event_time</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-10">    <span class="n">BEFORE</span> <span class="o">|</span>
+</span><span id="line-11">    <span class="n">AFTER</span>  <span class="o">|</span>
+</span><span id="line-12">    <span class="n">DEFERRED</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-15">    <span class="n">INSERT</span> <span class="o">|</span>
+</span><span id="line-16">    <span class="n">STATEMENT</span> <span class="n">INSERT</span> <span class="o">|</span>
+</span><span id="line-17">    <span class="n">UPDATE</span> <span class="o">|</span>
+</span><span id="line-18">    <span class="n">STATEMENT</span> <span class="n">UPDATE</span> <span class="o">|</span>
+</span><span id="line-19">    <span class="n">DELETE</span> <span class="o">|</span>
+</span><span id="line-20">    <span class="n">STATEMENT</span> <span class="n">DELETE</span> <span class="o">|</span>
+</span><span id="line-21">    <span class="n">ROLLBACK</span> <span class="o">|</span>
+</span><span id="line-22">    <span class="n">COMMIT</span>
+</span><span id="line-23">
+</span><span id="line-24"><span class="o">&lt;</span><span class="n">event_target</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-25">    <span class="n">ON</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="o">|</span>
+</span><span id="line-26">    <span class="n">ON</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="p">[</span> <span class="p">(</span><span class="n">column_name</span><span class="p">)</span> <span class="p">]</span>
+</span><span id="line-27">
+</span><span id="line-28"><span class="o">&lt;</span><span class="n">condition</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-29">    <span class="n">expression</span>
+</span><span id="line-30">
+</span><span id="line-31"><span class="o">&lt;</span><span class="n">action</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-32">    <span class="n">REJECT</span> <span class="o">|</span>
+</span><span id="line-33">    <span class="n">INVALIDATE</span> <span class="n">TRANSACTION</span> <span class="o">|</span>
+</span><span id="line-34">    <span class="n">PRINT</span> <span class="n">message_string</span> <span class="o">|</span>
+</span><span id="line-35">    <span class="n">INSERT</span> <span class="n">statement</span> <span class="o">|</span>
+</span><span id="line-36">    <span class="n">UPDATE</span> <span class="n">statement</span> <span class="o">|</span>
+</span><span id="line-37">    <span class="n">DELETE</span> <span class="n">statement</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>trigger_name</em>: 정의하려는 트리거의 이름을 지정한다.</p></li>
+<li><p>[ <strong>STATUS</strong> { <strong>ACTIVE</strong> | <strong>INACTIVE</strong> } ]: 트리거의 상태를 정의한다(정의하지 않을 경우 기본값은 <strong>ACTIVE</strong> ).</p>
+<ul>
+<li><p><strong>ACTIVE</strong> 상태인 경우 관련 이벤트가 발생할 때마다 트리거를 실행한다.</p></li>
+<li><p><strong>INACTIVE</strong> 상태인 경우 관련 이벤트가 발생하여도 트리거를 실행하지 않는다. 트리거의 활성 여부는 변경할 수 있다. 자세한 내용은 <a class="reference internal" href="#alter-trigger"><span class="std std-ref">ALTER TRIGGER</span></a> 을 참조한다.</p></li>
+</ul>
+</li>
+<li><p>[ <strong>PRIORITY</strong> <em>key</em> ]: 하나의 이벤트에 대해서 다수의 트리거가 불려질 경우 실행되는 우선순위를 부여한다. <em>key</em> 값은 반드시 음수가 아닌 부동 소수점 값이어야 한다. 우선순위를 정의하지 않을 경우 가장 낮은 우선순위인 0을 할당한다. 같은 우선순위를 가지는 트리거는 임의의 순서로 실행된다. 트리거의 우선순위는 변경할 수 있다. 자세한 내용은 <a class="reference internal" href="#alter-trigger"><span class="std std-ref">ALTER TRIGGER</span></a> 을 참조한다.</p></li>
+<li><p>&lt;<em>event_time</em>&gt;: 트리거의 조건 영역과 실행 영역이 실행되는 시점을 지정하며 <strong>BEFORE</strong>, <strong>AFTER</strong>, <strong>DEFERRED</strong> 가 있다. 자세한 내용은 <a class="reference internal" href="#trigger-event-time"><span class="std std-ref">이벤트 시점</span></a> 을 참조한다.</p></li>
+<li><p>&lt;<em>event_type</em>&gt;: 트리거 타입은 사용자 트리거와 테이블 트리거로 나뉜다. 자세한 내용은 <a class="reference internal" href="#trigger-event-type"><span class="std std-ref">트리거 이벤트 타입</span></a> 을 참조한다.</p></li>
+<li><p>&lt;<em>event_target</em>&gt;: 이벤트 대상은 트리거가 호출되기 위한 대상을 지정할 때 쓰인다. 자세한 내용은 <a class="reference internal" href="#trigger-event-target"><span class="std std-ref">트리거 이벤트 대상</span></a> 을 참조한다.</p></li>
+<li><p>&lt;<em>condition</em>&gt;: 트리거의 조건영역을 지정한다. 자세한 내용은 <a class="reference internal" href="#trigger-condition"><span class="std std-ref">트리거 조건 영역</span></a> 을 참조한다.</p></li>
+<li><p>&lt;<em>action</em>&gt;: 트리거의 실행영역을 지정한다. 자세한 내용은 <a class="reference internal" href="#trigger-action"><span class="std std-ref">트리거 실행 영역</span></a> 을 참조한다.</p></li>
+<li><p><em>trigger_comment</em>: 트리거의 커멘트를 지정한다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p><strong>DBA</strong> 와 <strong>DBA</strong> 멤버는 다른 스키마에 트리거를 생성할 수 있다. 사용자가 <strong>DBA</strong> 도 아니고 <strong>DBA</strong> 멤버도 아니면 해당 사용자의 스키마에서만 트리거를 생성할 수 있다.</p></li>
+</ul>
+</div>
+<p>다음은 <em>participant</em> 테이블의 레코드를 갱신할 때 획득 메달의 개수가 0보다 작을 경우 갱신을 거절하는 트리거를 생성하는 예제이다.
+2004년도 올림픽에 한국이 획득한 금메달의 개수를 음수로 갱신할 경우 갱신이 거절되는 것을 알 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trigger</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">silver</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">bronze</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">UPDATE</span><span class="w"> </span><span class="n">participant</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">gold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">5</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'KOR'</span>
+</span><span id="line-7"><span class="k">AND</span><span class="w"> </span><span class="n">host_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2004</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">The</span> <span class="n">operation</span> <span class="n">has</span> <span class="n">been</span> <span class="n">rejected</span> <span class="n">by</span> <span class="n">trigger</span> <span class="s2">"medal_trigger"</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="trigger-event-time">
+<span id="id5"></span><h3>이벤트 시점<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#trigger-event-time" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#trigger-event-time'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거의 조건 영역과 실행 영역이 실행되는 시점을 지정한다. 이벤트 시점의 종류에는 <strong>BEFORE</strong>, <strong>AFTER</strong>, <strong>DEFERRED</strong> 가 있다.</p>
+<ul class="simple">
+<li><p><strong>BEFORE</strong>: 이벤트가 처리되기 전에 조건을 검사한다.</p></li>
+<li><p><strong>AFTER</strong>: 이벤트가 처리된 후에 조건을 검사한다.</p></li>
+<li><p><strong>DEFERRED</strong>: 이벤트에 대한 트랜잭션의 끝에서 조건을 검사한다. <strong>DEFERRED</strong> 로 지정할 경우 이벤트 타입에 <strong>COMMIT</strong> 이나 <strong>ROLLBACK</strong> 을 사용할 수 없다.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>트리거 타입<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>사용자 트리거(User Trigger)</strong></p>
+<ul class="simple">
+<li><p>데이터베이스의 특정 사용자와 관련된 트리거를 사용자 트리거(user trigger)라고 한다.</p></li>
+<li><p>사용자 트리거는 이벤트 대상이 없으며 트리거의 소유자(트리거를 생성한 사용자)에 의해서만 실행된다.</p></li>
+<li><p>사용자 트리거를 정의하는 이벤트 타입은 <strong>COMMIT</strong> 과 <strong>ROLLBACK</strong> 이 있다.</p></li>
+</ul>
+<p><strong>테이블 트리거(Table Trigger)</strong></p>
+<ul class="simple">
+<li><p>특정 테이블을 이벤트 대상으로 가지는 트리거를 테이블 트리거(클래스 트리거)라 한다.</p></li>
+<li><p>테이블 트리거는 대상 테이블에 <strong>SELECT</strong> 권한을 가지는 모든 사용자가 볼 수 있다.</p></li>
+<li><p>테이블 트리거를 정의하는 이벤트 타입은 인스턴스 이벤트와 문장 이벤트가 있다.</p></li>
+</ul>
+</section>
+<section id="trigger-event-type">
+<span id="id7"></span><h3>트리거 이벤트 타입<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#trigger-event-type" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#trigger-event-type'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<ul class="simple">
+<li><p>인스턴스 이벤트(instance event) : 인스턴스 이벤트는 이벤트 연산의 단위가 인스턴스(레코드)인 이벤트 타입을 말한다. 인스턴스 이벤트의 종류는 다음과 같다.</p>
+<ul>
+<li><p><strong>INSERT</strong></p></li>
+<li><p><strong>UPDATE</strong></p></li>
+<li><p><strong>DELETE</strong></p></li>
+</ul>
+</li>
+<li><p>문장 이벤트(statement event): 이벤트 타입을 문장 이벤트로 정의하면 주어진 문장(이벤트)에 의해 영향을 받는 객체(인스턴스)가 많더라도, 트리거는 문장이 시작할 때 한 번만 불려지게 된다. 문장 이벤트의 종류는 다음과 같다.</p>
+<ul>
+<li><p><strong>STATEMENT INSERT</strong></p></li>
+<li><p><strong>STATEMENT UPDATE</strong></p></li>
+<li><p><strong>STATEMENT DELETE</strong></p></li>
+</ul>
+</li>
+<li><p>기타 이벤트: <strong>COMMIT</strong> 과 <strong>ROLLBACK</strong> 은 개별적인 인스턴스에는 적용할 수 없다.</p>
+<ul>
+<li><p><strong>COMMIT</strong></p></li>
+<li><p><strong>ROLLBACK</strong></p></li>
+</ul>
+</li>
+</ul>
+<p>다음은 인스턴스 이벤트를 사용하는 예제이다. <em>example</em> 트리거는 데이터베이스 갱신에 의해 영향을 받는 각각의 인스턴스에 대해서 한번씩 불려진다. 예를 들어, <em>history</em> 테이블의 다섯 개 인스턴스의 <em>score</em> 를 변경했다면, 이 트리거는 다섯 번 불려진다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">update_logs</span><span class="p">(</span><span class="n">event_code</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="n">DATETIME</span><span class="p">);</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">example</span>
+</span><span id="line-4"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">history</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">EXECUTE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">update_logs</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">event_code</span><span class="p">,</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="n">score</span><span class="p">,</span><span class="w"> </span><span class="n">SYSDATETIME</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>만약 <em>score</em> 칼럼의 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 호출되게 하려면, 아래의 예와 같이 <strong>STATEMENT UPDATE</strong> 형식을 사용한다.</p>
+<p>다음은 문장 이벤트를 사용하는 예제이다. 문장 이벤트를 지정하면 갱신의 영향을 받는 인스턴스가 많더라도, 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 불려지게 된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">example</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">STATEMENT</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">history</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+</span><span id="line-3"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">PRINT</span><span class="w"> </span><span class="s1">'There was an update on history table'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>이벤트 타입으로 인스턴스 이벤트와 문장 이벤트를 지정할 경우에는 반드시 이벤트 대상을 명시해야 한다.</p></li>
+<li><p><strong>COMMIT</strong> 과 <strong>ROLLBACK</strong> 은 이벤트 대상을 가질 수 없다.</p></li>
+</ul>
+</div>
+</section>
+<section id="trigger-event-target">
+<span id="id8"></span><h3>트리거 이벤트 대상<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#trigger-event-target" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#trigger-event-target'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>이벤트 대상은 트리거가 호출되기 위한 대상을 지정할 때 쓰인다. 트리거 이벤트의 대상은 테이블명 혹은 테이블명과 칼럼명으로 지정할 수 있으며 칼럼명을 지정하면 해당 칼럼이 이벤트의 영향을 받을 때에만 트리거가 불려진다. 만약 칼럼을 지정하지 않으면 지정된 테이블 내에 어떤 칼럼이 영향을 받더라도 트리거가 호출된다. 오직 <strong>UPDATE</strong>, <strong>STATEMENT UPDATE</strong> 이벤트만이 이벤트 대상에 칼럼을 지정할 수 있다.</p>
+<p>다음은 <em>example</em> 트리거의 이벤트 대상을 <em>history</em> 테이블의 <em>score</em> 칼럼으로 지정한 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">update_logs</span><span class="p">(</span><span class="n">event_code</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="n">DATETIME</span><span class="p">);</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">example</span>
+</span><span id="line-4"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">history</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">EXECUTE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">update_logs</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">event_code</span><span class="p">,</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="n">score</span><span class="p">,</span><span class="w"> </span><span class="n">SYSDATETIME</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id9">
+<h3>이벤트 타입과 대상 조합<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id9" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id9'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거를 호출하는 데이터베이스 이벤트는 트리거 이벤트 타입과 트리거 정의 내의 이벤트 대상에 의해 식별된다. 다음은 트리거 이벤트 타입과 대상 조합, 트리거 이벤트가 나타내는 CUBRID 데이터베이스 이벤트의 활동을 표로 정리한 것이다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>이벤트 타입</p></th>
+<th class="head"><p>이벤트 대상</p></th>
+<th class="head"><p>대응되는 데이터베이스 활동</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>UPDATE</strong></p></td>
+<td><p>테이블</p></td>
+<td><p>테이블에 <strong>UPDATE</strong> 문이 실행되었을 때 트리거가 호출된다.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>INSERT</strong></p></td>
+<td><p>테이블</p></td>
+<td><p>테이블에 <strong>INSERT</strong> 문이 실행되었을 때 트리거가 호출된다.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DELETE</strong></p></td>
+<td><p>테이블</p></td>
+<td><p>테이블에 <strong>DELETE</strong> 문이 실행되었을 때 트리거가 호출된다.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>COMMIT</strong></p></td>
+<td><p>없음</p></td>
+<td><p>데이터베이스 트랜잭션이 커밋되었을 때 트리거가 호출된다.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ROLLBACK</strong></p></td>
+<td><p>없음</p></td>
+<td><p>데이터베이스의 트랜잭션이 롤백되었을 때 트리거가 호출된다.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="trigger-condition">
+<span id="id10"></span><h3>트리거 조건 영역<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#trigger-condition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#trigger-condition'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거를 정의할 때 조건 영역을 정의하여 트리거의 수행 영역에 대한 수행 여부를 결정한다.</p>
+<ul class="simple">
+<li><p>트리거 조건 영역이 기술된다면, 참 또는 거짓을 평가할 수 있는 단독적인 복합 표현식으로 쓰여질 수 있다. 이 경우에 표현식은 <strong>SELECT</strong> 문의 <strong>WHERE</strong> 절에 허용되는 산술 연산자와 논리 연산자를 포함할 수 있다. 조건 영역이 참이면, 트리거 실행 영역이 수행되고, 거짓이면 실행되지 않는다.</p></li>
+<li><p>트리거의 조건 영역을 생략하면 조건 없는 트리거(unconditional trigger)가 되며 트리거가 호출될 때 항상 트리거의 실행 영역이 수행된다.</p></li>
+</ul>
+<p>다음은 조건 영역 내의 표현식에 상관명을 이용한 예제이다. 이벤트 타입이 <strong>INSERT</strong>, <strong>UPDATE</strong>, <strong>DELETE</strong> 인 경우에, 조건 영역 내의 표현식은 특정 칼럼 값에 접근하기 위하여 상관명 <strong>obj</strong>, <strong>new</strong>, <strong>old</strong> 를 사용할 수 있다. 예제에서 <em>example</em> 트리거는 칼럼의 새로운 값을 이용해서 조건 영역을 검사하기 위해 트리거 조건 영역에 <strong>new</strong> 를 칼럼 이름 앞에 사용하였다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">example</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">silver</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">bronze</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>다음은 조건 영역 내의 표현식에 <strong>SELECT</strong> 문을 사용한 예제이다. 예제의 트리거는 집계함수 <strong>COUNT</strong> (*)를 사용하는 <strong>SELECT</strong> 문을 사용하여 그 값과 상수를 비교한다. <strong>SELECT</strong> 문은 반드시 괄호로 싸여 있어야 하고, 표현식의 마지막에 위치해야 한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">example</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="o">&gt;</span><span class="w">  </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">participant</span><span class="p">)</span>
+</span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>트리거 조건 영역에 주어진 표현식은 조건 영역이 수행되는 동안에 메서드가 호출되면 데이터베이스에 부작용을 초래할 수 있다. 트리거 조건 영역은 데이터베이스에 생각지 못한 부작용이 발생하지 않도록 구성해야 한다.</p>
+</div>
+</section>
+<section id="correlation-name">
+<h3>상관명(correlation name)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#correlation-name" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#correlation-name'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거를 정의할 때 상관명을 사용하여 대상 테이블의 칼럼 값에 접근할 수 있다. 상관명은 실제적으로 트리거를 호출하는 데이터베이스 연산에 의해 영향을 받는 인스턴스를 나타낸다. 상관명은 트리거의 조건 영역이나 실행 영역에도 기술할 수 있다.</p>
+<p>상관명의 종류에는 <strong>new</strong>, <strong>old</strong>, <strong>obj</strong> 가 있으며 이러한 상관명은 인스턴스 트리거에서 <strong>INSERT</strong>, <strong>UPDATE</strong>, <strong>DELETE</strong> 의 이벤트 타입을 가지고 있는 트리거에서만 사용할 수 있다.</p>
+<p>상관명의 사용은 아래 표와 같이 트리거 조건 영역에 정의된 이벤트 시점에 의해 더욱 제한된다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BEFORE</p></th>
+<th class="head"><p>AFTER or DERERRED</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>INSERT</strong></p></td>
+<td><p><strong>new</strong></p></td>
+<td><p><strong>obj</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>UPDATE</strong></p></td>
+<td><p><strong>obj</strong></p>
+<p><strong>new</strong></p>
+</td>
+<td><p><strong>obj</strong></p>
+<p><strong>old</strong> (AFTER)</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><strong>DELETE</strong></p></td>
+<td><p><strong>obj</strong></p></td>
+<td><p>N/A</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>상관명</p></th>
+<th class="head"><p>대표 속성 값</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>obj</strong></p></td>
+<td><p>인스턴스의 현재 속성 값을 나타낸다. 인스턴스가 갱신되거나 삭제되기 전에 속성값에 접근하기 위해서 사용한다.
+그리고 인스턴스가 갱신되거나 삽입된 후에 속성 값에 접근하기 위해 사용한다.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>new</strong></p></td>
+<td><p>삽입이나 갱신 연산에 의해 제시되는 속성값을 나타낸다.
+새로운 값은 인스턴스가 실제적으로 삽입되거나 갱신되기 전에만 접근할 수 있다.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>old</strong></p></td>
+<td><p>갱신 연산의 완료 전에 존재하던 속성값을 나타낸다. 이 값은 트리거가 수행되는 동안만 유지된다.
+트리거가 종료되면 <strong>old</strong> 값은 잃어버리게 된다.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="trigger-action">
+<span id="id11"></span><h3>트리거 실행 영역<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#trigger-action" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#trigger-action'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거 실행 영역은 트리거의 조건 영역이 참이거나 조건 영역이 생략된 경우 수행될 내용을 기술하는 영역이다. 실행 영역 절에 특정 시점(<strong>AFTER</strong> 나 <strong>DEFERRED</strong>)이 주어지지 않으면, 실행 영역은 트리거 이벤트와 같은 시점에서 수행된다.</p>
+<p>아래 목록은 트리거를 정의할 때 사용할 수 있는 실행 영역의 목록이다.</p>
+<ul class="simple">
+<li><p><strong>REJECT</strong>: 트리거에서 조건 영역이 참이 아닌 경우 트리거를 발동시킨 연산은 거절되고 데이터베이스의 예전 상태를 그대로 유지한다. 연산이 수행된 후에는 거절할 수 없기 때문에 <strong>REJECT</strong> 는 실행 시점이 <strong>BEFORE</strong> 일 때만 허용된다. 따라서 실행 시점이 <strong>AFTER</strong> 나 <strong>DERERRED</strong> 인 경우 <strong>REJECT</strong> 를 사용해서는 안 된다.</p></li>
+<li><p><strong>INVALIDATE TRANSACTION</strong>: 트리거를 부른 이벤트 연산은 수행되지만, 커밋을 포함하고 있는 트랜잭션은 수행되지 않도록 한다. 트랜잭션이 유효하지 않으면 반드시 <strong>ROLLBACK</strong> 문으로 취소시켜야 한다. 이러한 실행은 데이터를 변경하는 이벤트가 발생한 후에 유효하지 않은 데이터를 가지는 것으로부터 데이터베이스를 보호하기 위해 사용된다.</p></li>
+<li><p><strong>PRINT</strong>: 터미널 화면에 텍스트 메시지로 트리거 활동을 가시적으로 보여주기 때문에 트리거의 개발이나 시험하는 도중에 사용될 수 있다. 이벤트 연산의 결과를 거절하거나 무효화시키지는 않는다.</p></li>
+<li><p><strong>INSERT</strong>: 테이블에 하나 혹은 그 이상의 새로운 인스턴스를 추가한다.</p></li>
+<li><p><strong>UPDATE</strong>: 테이블에 있는 하나 혹은 그 이상의 칼럼 값을 변경한다.</p></li>
+<li><p><strong>DELETE</strong>: 테이블로부터 하나 혹은 그 이상의 인스턴스를 제거한다.</p></li>
+</ul>
+<p>다음은 트리거 생성 시에 실행영역의 정의 방법을 보여주는 예제이다. <em>medal_trig</em> 트리거는 실행 영역에 <strong>REJECT</strong> 를 지정하였다. <strong>REJECT</strong> 는 실행 시점이 <strong>BEFORE</strong> 일 때만 지정 가능하다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trig</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">silver</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">bronze</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p><strong>INSERT</strong> 이벤트가 정의된 트리거의 실행 영역에 <strong>INSERT</strong> 를 사용할 때는 트리거가 무한 루프에 빠질 수 있으므로 주의해야 한다.</p></li>
+<li><p><strong>UPDATE</strong> 이벤트가 정의된 트리거가 분할된 테이블에서 동작하는 경우, 정의된 분할이 깨지거나 의도하지 않은 오동작이 발생할 수 있으므로 주의해야 한다. 이를 방지하기 위해 CUBRID는 트리거가 동작중인 경우 분할 변경을 야기하는 <strong>UPDATE</strong> 가 실행되지 않도록 오류 처리한다. <strong>UPDATE</strong> 이벤트가 정의된 트리거의 실행 영역에 <strong>UPDATE</strong> 를 사용할 때는 무한 루프에 빠질 수 있으므로 주의해야 한다.</p></li>
+</ul>
+</div>
+</section>
+<section id="id12">
+<h3>트리거의 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id12" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id12'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거의 커멘트를 다음과 같이 명시할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trg_ab</span><span class="w"> </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">abc</span><span class="p">(</span><span class="k">c</span><span class="p">)</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">cube_ab</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">sumc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sumc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="line-2"><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'test trigger comment'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>트리거의 커멘트는 다음 구문에서 확인할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_trigger</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">trigger_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_trig</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 트리거의 커멘트를 확인할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="err">$</span><span class="w"> </span><span class="n">csql</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="n">dba</span><span class="w"> </span><span class="n">demodb</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="n">sc</span><span class="w"> </span><span class="n">tbl</span>
+</span></code></pre></div>
+</div>
+<p>트리거 커멘트의 변경은 아래의 <strong>ALTER TRIGGER</strong> 문을 참고한다.</p>
+</section>
+</section>
+<section id="alter-trigger">
+<span id="id13"></span><h2>ALTER TRIGGER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alter-trigger" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#alter-trigger'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>트리거 정의에서 <strong>STATUS</strong> 와 <strong>PRIORITY</strong> 옵션에 대해 <strong>ALTER</strong> 구문을 이용하여 변경할 수 있다. 만약 트리거의 다른 부분에 대해 변경(이벤트 대상 또는 조건 표현식)이 필요하면, 트리거를 삭제한 후 재생성해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="n">TRIGGER</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">trigger_name</span> <span class="o">&lt;</span><span class="n">trigger_option</span><span class="o">&gt;</span> <span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">&lt;</span><span class="n">trigger_option</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-4">    <span class="n">STATUS</span> <span class="p">{</span> <span class="n">ACTIVE</span> <span class="o">|</span> <span class="n">INACTIVE</span> <span class="p">}</span> <span class="o">|</span>
+</span><span id="line-5">    <span class="n">PRIORITY</span> <span class="n">key</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>trigger_name</em>: 변경할 트리거의 이름을 지정한다.</p></li>
+<li><p><strong>STATUS</strong> { <strong>ACTIVE</strong> | <strong>INACTIVE</strong> }: 트리거의 상태를 변경한다.</p></li>
+<li><p><strong>PRIORITY</strong> <em>key</em>: 우선순위를 변경한다.</p></li>
+</ul>
+<p>다음은 medal_trig 트리거를 생성하고 트리거의 상태를 <strong>INACTIVE</strong> 로, 우선순위를 0.7로 변경하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trig</span>
+</span><span id="line-2"><span class="n">STATUS</span><span class="w"> </span><span class="n">ACTIVE</span>
+</span><span id="line-3"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-4"><span class="k">IF</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">silver</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">bronze</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-5"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">ALTER</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trig</span><span class="w"> </span><span class="n">STATUS</span><span class="w"> </span><span class="n">INACTIVE</span><span class="p">;</span>
+</span><span id="line-8"><span class="k">ALTER</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trig</span><span class="w"> </span><span class="n">PRIORITY</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">7</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>같은 <strong>ALTER TRIGGER</strong> 문 내에서는 한 개의 <em>trigger_option</em> 만 기술할 수 있다.</p></li>
+<li><p>만약 테이블 트리거를 변경하려면, 해당 트리거의 소유자이거나, 해당 트리거가 있는 테이블에 대해 <strong>ALTER</strong> 권한이 부여되어 있어야 한다.</p></li>
+<li><p>사용자 트리거를 변경하기 위해서는 반드시 해당 트리거의 소유자여야 한다. <em>trigger_option</em> 에 대한 자세한 내용은 <a class="reference internal" href="#create-trigger"><span class="std std-ref">CREATE TRIGGER</span></a> 을 참조한다. <strong>PRIORITY</strong> 옵션과 같이 기술하는 key는 반드시 음이 아닌 부동 소수점 값(non-negative floating point value)이어야 한다.</p></li>
+</ul>
+</div>
+<section id="id14">
+<h3>트리거 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id14" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id14'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거 커멘트는 <strong>ALTER TRIGGER</strong> 문을 실행하여 다음과 같이 변경할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">ALTER TRIGGER [schema_name.]trigger_name [trigger_option]
+</span><span id="line-2">[COMMENT ‘comment_string’];
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>trigger_name</em>: 변경할 트리거의 이름을 지정한다.</p></li>
+<li><p><em>comment_string</em>: 트리거의 커멘트를 지정한다.</p></li>
+</ul>
+<p>트리거의 커멘트만 변경하는 경우 트리거 옵션(trigger_option)을 생략할 수 있다.</p>
+<p><em>trigger_option</em>은 위의 <a class="reference internal" href="#alter-trigger"><span class="std std-ref">ALTER TRIGGER</span></a> 구문을 참고한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trg_ab</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'new trigger comment'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="drop-trigger">
+<h2>DROP TRIGGER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#drop-trigger" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#drop-trigger'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>DROP TRIGGER</strong> 구문을 이용하여 트리거를 삭제한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">DROP</span> <span class="n">TRIGGER</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">trigger_name</span> <span class="p">;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>trigger_name</em>: 삭제할 트리거의 이름을 지정한다.</p></li>
+</ul>
+<p>다음은 medal_trig 트리거를 삭제하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trig</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>트리거가 사용자 트리거(즉 트리거 이벤트가 <strong>COMMIT</strong> 이거나 <strong>ROLLBACK</strong>)이면, 트리거의 소유자만 볼 수 있고 소유자만 제거할 수 있다.</p></li>
+<li><p>한 개의 <strong>DROP TRIGGER</strong> 문에서는 한 개의 트리거만 제거할 수 있다.테이블 트리거는 트리거가 속해 있는 테이블에 대해 <strong>ALTER</strong> 권한이 있는 사용자에 의해 제거될 수 있다.</p></li>
+</ul>
+</div>
+</section>
+<section id="rename-trigger">
+<h2>RENAME TRIGGER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#rename-trigger" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#rename-trigger'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>트리거의 이름은 <strong>RENAME</strong> 구문의 <strong>TRIGGER</strong> 예약어를 이용해서 변경한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">RENAME</span> <span class="n">TRIGGER</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">old_trigger_name</span> <span class="p">{</span><span class="n">AS</span> <span class="o">|</span> <span class="n">TO</span><span class="p">}</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">new_trigger_name</span> <span class="p">;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다. 현재 트리거의 스키마와 변경할 트리거의 스키마가 동일해야 한다.</p></li>
+<li><p><em>old_trigger_name</em>: 트리거의 현재 이름을 입력한다.</p></li>
+<li><p><em>new_trigger_name</em>: 변경할 트리거의 이름을 지정한다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">RENAME</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trigger</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">medal_trig</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>트리거 이름은 사용자가 소유하고 있는 트리거 중에서 유일해야 한다. 하지만 데이터베이스 내의 테이블 이름과 같거나 다른 소유자가 소유하고 있는 트리거의 이름과는 같을 수 있다.</p></li>
+<li><p>만약 테이블 트리거의 이름을 변경하려면, 트리거의 소유자이거나, 해당 트리거가 있는 테이블에 대해 <strong>ALTER</strong> 권한이 부여되어 있어야 한다. 사용자 트리거는 트리거의 소유자만 이름을 변경할 수 있다.</p></li>
+</ul>
+</div>
+</section>
+<section id="id15">
+<h2>지연된 트리거<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id15" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id15'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>지연된 트리거 실행영역과 조건 영역은 나중에 실행되거나 취소될 수 있다. 이러한 트리거들은 이벤트 시점(event time)이나 실행 영역(action) 절에 <strong>DEFERRED</strong> 시간 옵션을 포함하고 있다. <strong>DEFERRED</strong> 옵션이 이벤트 시점에 기술되고, 실행 영역 앞에 시간이 생략되었다면, 실행 영역은 자동으로 지연된다.</p>
+<section id="id16">
+<h3>지연된 영역 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id16" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id16'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>지연된 트리거의 조건 영역이나 실행 영역을 즉시 실행시킨다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">EXECUTE</span> <span class="n">DEFERRED</span> <span class="n">TRIGGER</span> <span class="o">&lt;</span><span class="n">trigger_identifier</span><span class="o">&gt;</span> <span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">&lt;</span><span class="n">trigger_identifier</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-4">    <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">trigger_name</span> <span class="o">|</span>
+</span><span id="line-5">    <span class="n">ALL</span> <span class="n">TRIGGERS</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>trigger_name</em>: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 실행된다.</p></li>
+<li><p><strong>ALL TRIGGERS</strong>: 현재 모든 지연된 활동이 실행된다.</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>지연된 영역 취소<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id17" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id17'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>지연된 트리거의 조건 영역과 실행 영역을 취소한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">DROP</span> <span class="n">DEFERRED</span> <span class="n">TRIGGER</span> <span class="o">&lt;</span><span class="n">trigger_identifier</span><span class="o">&gt;</span> <span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">&lt;</span><span class="n">trigger_identifier</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-4">    <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">trigger_name</span> <span class="o">|</span>
+</span><span id="line-5">    <span class="n">ALL</span> <span class="n">TRIGGERS</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 트리거의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>trigger_name</em>: 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 취소된다.</p></li>
+<li><p><strong>ALL TRIGGERS</strong>: 현재 모든 지연된 활동이 취소된다.</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>트리거 권한 부여<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id18" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id18'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>트리거에 대한 권한은 명시적으로 부여되지 않는다. 트리거의 정의에 기술된 이벤트 대상 테이블에 권한이 부여되었을 때 사용자는 테이블 트리거에 대한 권한을 자동적으로 획득한다. 다시 말하자면, 테이블 대상(<strong>INSERT</strong>, <strong>UPDATE</strong> 등)을 가지는 트리거는 해당 테이블에 적절한 권한을 가지는 모든 사용자에게 보인다. 사용자 트리거(<strong>COMMIT</strong> 과 <strong>ROLLBACK</strong>)는 트리거를 정의한 사용자만 볼 수 있다. 트리거의 소유자이면 모든 권한은 자동적으로 부여된다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>테이블 트리거를 정의하기 위해서는 관련된 테이블에 <strong>ALTER</strong> 권한이 반드시 있어야 한다.</p></li>
+<li><p>사용자 트리거를 정의하기 위해서는 유효한 사용자를 이용하여 데이터베이스에 접근하는 것이 필요하다.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="replace-insert-on-duplicate-key-update">
+<h2>REPLACE와 INSERT … ON DUPLICATE KEY UPDATE에서의 트리거<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#replace-insert-on-duplicate-key-update" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#replace-insert-on-duplicate-key-update'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CUBRID에서는 <strong>REPLACE</strong> 문과 <strong>INSERT … ON DUPLICATE KEY UPDATE</strong> 문 실행 시 내부적으로 <strong>DELETE</strong>, <strong>UPDATE</strong>, <strong>INSERT</strong> 작업이 발생하면서 해당 트리거가 실행된다. 다음 표는 <strong>REPLACE</strong> 혹은 <strong>INSERT … ON DUPLICATE KEY UPDATE</strong> 문이 수행될 때 발생하는 이벤트에 따라 CUBRID에서 트리거가 어떤 순서로 동작하는지를 나타낸다. <strong>REPLACE</strong> 문과 <strong>INSERT … ON DUPLICATE KEY UPDATE</strong> 문 모두 상속받은 클래스(테이블)에서는 트리거가 동작하지 않는다.</p>
+<p><strong>REPLACE와 INSERT … ON DUPLICATE KEY UPDATE 문에서 트리거의 동작 순서</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>이벤트</p></th>
+<th class="head"><p>트리거 동작 순서</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>REPLACE
+레코드가 삭제되고 삽입될 때</p></td>
+<td><p>BEFORE DELETE &gt;
+AFTER DELETE &gt;
+BEFORE INSERT &gt;
+AFTER INSERT</p></td>
+</tr>
+<tr class="row-odd"><td><p>INSERT … ON DUPLICATE KEY UPDATE
+레코드가 업데이트될 때</p></td>
+<td><p>BEFORE UPDATE &gt;
+AFTER UPDATE</p></td>
+</tr>
+<tr class="row-even"><td><p>REPLACE, INSERT … ON DUPLCATE KEY UPDATE
+레코드가 삽입만 될 때</p></td>
+<td><p>BEFORE INSERT &gt;
+AFTER INSERT</p></td>
+</tr>
+</tbody>
+</table>
+<p>다음은 <em>with_trigger</em> 테이블에 <strong>INSERT … ON DUPLICATE KEY UPDATE</strong> 와 <strong>RELPACE</strong> 를 수행하면 트리거가 동작하여 <em>trigger_actions</em> 테이블에 레코드를 삽입하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">with_trigger</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">with_trigger</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">11</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">trigger_actions</span><span class="w"> </span><span class="p">(</span><span class="n">val</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trig_1</span><span class="w"> </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">with_trigger</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">trigger_actions</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trig_2</span><span class="w"> </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">with_trigger</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">trigger_actions</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span id="line-8"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trig_3</span><span class="w"> </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">with_trigger</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">trigger_actions</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">with_trigger</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">DUPLICATE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">22</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">trigger_actions</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">          <span class="n">va</span>
+</span><span id="line-2"><span class="o">==============</span>
+</span><span id="line-3">            <span class="mi">2</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">REPLACE</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">with_trigger</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">22</span><span class="p">);</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">trigger_actions</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">          <span class="n">va</span>
+</span><span id="line-2"><span class="o">==============</span>
+</span><span id="line-3">            <span class="mi">2</span>
+</span><span id="line-4">            <span class="mi">3</span>
+</span><span id="line-5">            <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id19">
+<h2>트리거 디버깅<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id19" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id19'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>트리거를 정의한 후에는 트리거가 의도한 대로 동작하는지 검사하는 것이 좋다. 종종 트리거가 기대했던 것보다 처리하는데 오랜 시간이 걸리는 경우가 있다. 이는 시스템에 너무 많은 오버헤드를 주거나, 재귀적 루프에 빠졌다는 뜻이다. 이 절에서는 트리거를 디버그하는 몇 가지 방법을 설명한다.</p>
+<p>다음은 호출되면 재귀적으로 루프에 빠지도록 정의한 트리거이다. <em>loop_trg</em> 트리거는 목적이 다소 인위적이지만 트리거를 디버그하기 위한 예제로 사용될 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">loop_tgr</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-5"><span class="w">        </span><span class="k">SET</span><span class="w"> </span><span class="n">gold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="line-6"><span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="n">nation_code</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">host_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="n">host_year</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<section id="id20">
+<h3>트리거 실행 로그 보기<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id20" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id20'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>SET TRIGGER TRACE</strong> 문을 이용하여 터미널에서 트리거의 실행 로그를 볼 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">SET</span> <span class="n">TRIGGER</span> <span class="n">TRACE</span> <span class="o">&lt;</span><span class="n">switch</span><span class="o">&gt;</span> <span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">&lt;</span><span class="n">switch</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-4">    <span class="n">ON</span> <span class="o">|</span>
+</span><span id="line-5">    <span class="n">OFF</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>ON</strong>: <strong>TRACE</strong> 가 작동되며 <strong>OFF</strong> 하거나 현재 데이터베이스 세션을 종료할 때까지 계속 유지된다.</p></li>
+<li><p><strong>OFF</strong>: <strong>TRACE</strong> 의 작동을 멈춘다.</p></li>
+</ul>
+<p>다음 예제는 트리거의 실행 로그를 보기 위해 <strong>TRACE</strong> 를 작동시키고 <em>loop_trg</em> 트리거를 작동시키는 예제이다. 트리거가 호출될 때 수행된 각각의 조건 영역과 실행 영역에 대한 추적을 식별하기 위한 메시지가 터미널에 나타난다. <em>loop_trg</em> 트리거는 <em>gold</em> 값이 0이 될 때까지 실행되므로 예제에서는 아래의 메세지가 15번 나타난다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">TRACE</span><span class="w"> </span><span class="k">ON</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">UPDATE</span><span class="w"> </span><span class="n">participant</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">gold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'KOR'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">host_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1988</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">TRACE</span><span class="p">:</span> <span class="n">Evaluating</span> <span class="n">condition</span> <span class="k">for</span> <span class="n">trigger</span> <span class="s2">"loop"</span><span class="o">.</span>
+</span><span id="line-2"><span class="n">TRACE</span><span class="p">:</span> <span class="n">Executing</span> <span class="n">action</span> <span class="k">for</span> <span class="n">trigger</span> <span class="s2">"loop"</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id21">
+<h3>중첩된 트리거 제한<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id21" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id21'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>SET TRIGGER</strong> 문의 <strong>MAXIMUM DEPTH</strong> 키워드를 이용하여 단계적으로 발동되는 트리거 수를 제한할 수 있다. 이를 이용하면 재귀적으로 호출되는 트리거가 무한루프에 빠지는 것을 막을 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">SET</span> <span class="n">TRIGGER</span> <span class="p">[</span> <span class="n">MAXIMUM</span> <span class="p">]</span> <span class="n">DEPTH</span> <span class="n">count</span> <span class="p">;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>count</em>: 양의 정수값으로 트리거가 다른 트리거나 자신을 재귀적으로 발동할 수 있는 횟수를 지정한다. 트리거의 수가 최대 깊이에 도달하면 데이터베이스 요청은 중단되고 트랜잭션은 유효하지 않은 것처럼 표시된다. 설정된 <strong>DEPTH</strong> 는 현재 세션을 제외한 나머지 모든 트리거에 적용된다. 최대값은 32이다.</p></li>
+</ul>
+<p>다음은 재귀적 트리거 호출의 최대 값을 10으로 설정하는 예제이다. 이는 이후에 발동하는 모든 트리거에 적용된다. 이 예제에서 <em>gold</em> 칼럼에 대한 값은 15로 갱신되어 트리거는 총 16번 불려지게 된다. 이는 현재 설정된 최대 깊이를 초과하게 되고 아래와 같은 에러 메시지가 발생한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">MAXIMUM</span><span class="w"> </span><span class="n">DEPTH</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">UPDATE</span><span class="w"> </span><span class="n">participant</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">gold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'KOR'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">host_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1988</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Maximum</span> <span class="n">trigger</span> <span class="n">depth</span> <span class="mi">10</span> <span class="n">exceeded</span> <span class="n">at</span> <span class="n">trigger</span> <span class="s2">"loop_tgr"</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="id22">
+<h2>트리거를 이용한 응용<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id22" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id22'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>여기에서는 데모 데이터베이스에 있는 트리거 정의에 대해 알아본다. <em>demodb</em> 데이터베이스에 생성되어 있는 트리거는 그리 복잡하지는 않지만 CUBRID에서 사용할 수 있는 대부분의 기능을 활용한다. 이러한 트리거를 테스트할 때, <em>demodb</em> 데이터베이스의 원형을 유지하고 싶다면 데이터에 변경이 발생한 후 롤백을 수행해야 한다.</p>
+<p>사용자 데이터베이스에 직접 생성한 트리거는 사용자가 만든 응용 프로그램만큼이나 강력할 수 있다.</p>
+<p><em>participant</em> 테이블에 만들어진 아래 트리거는 제시된 값이 0보다 작을 때 메달 칼럼(<em>gold</em>, <em>silver</em>, <em>bronze</em>)에 대한 업데이트를 거절한다. 트리거의 조건에 상관명 new가 사용되었기 때문에 시작 시점(evaluation time)은 반드시 <strong>BEFORE</strong> 가 되어야 한다. 비록 기술하지는 않았지만, 이 트리거에서 실행 시점(action time) 또한 <strong>BEFORE</strong> 이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trigger</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">silver</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">bronze</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>국가 코드가 ‘BLA’인 나라의 금메달(<em>gold</em>) 수를 업데이트 할 때, <em>medal_trigger</em> 트리거가 발동한다. 금메달 수가 음수인 경우를 허용하지 않도록 트리거를 생성하였으므로, 업데이트를 허용하지 않는다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">UPDATE</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-2"><span class="k">SET</span><span class="w"> </span><span class="n">gold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span>
+</span><span id="line-3"><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'BLA'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>아래 트리거는 위의 예제와 같은 조건인데, <strong>STATUS ACTIVE</strong> 가 추가된 경우이다. <strong>STATUS</strong> 문이 생략될 경우 기본값은 <strong>ACTIVE</strong> 이며, <strong>ALTER TRIGGER</strong> 문에 의해 <strong>STATUS</strong> 를 <strong>INACTIVE</strong> 로 변경할 수 있다.</p>
+<p><strong>STATUS</strong> 의 값에 따라 트리거의 실행 여부를 지정할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trig</span>
+</span><span id="line-2"><span class="n">STATUS</span><span class="w"> </span><span class="n">ACTIVE</span>
+</span><span id="line-3"><span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-4"><span class="k">IF</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">silver</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">bronze</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-5"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">ALTER</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">medal_trig</span>
+</span><span id="line-8"><span class="n">STATUS</span><span class="w"> </span><span class="n">INACTIVE</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>다음 트리거는 트랜잭션이 커밋되었을 때 어떻게 무결성 제약 조건을 강제적으로 수행하는지 보여 준다. 하나의 트리거가 여러 테이블에 대해 지정 조건을 넣을 수 있다는 점이 앞의 예제와 다르다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">check_null_first</span>
+</span><span id="line-2"><span class="k">BEFORE</span><span class="w"> </span><span class="k">COMMIT</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">gender</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">)</span>
+</span><span id="line-4"><span class="k">OR</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">game</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">REJECT</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>다음 트리거는 <em>record</em> 테이블에 대해서 트랜잭션이 커밋될 때까지 업데이트 무결성 제약조건 검사를 지연시킨다. <strong>DEFERRED</strong> 키워드가 이벤트 시점으로 주어졌기 때문에 업데이트 실행 시점에 즉시 트리거가 실행되지는 않는다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">deferred_check_on_record</span>
+</span><span id="line-2"><span class="k">DEFERRED</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">record</span>
+</span><span id="line-3"><span class="k">IF</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="n">score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'100'</span>
+</span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">INVALIDATE</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><em>record</em> 테이블에서 업데이트가 완료되었을 때, 해당 업데이트는 현재 트랜잭션의 마지막(커밋이나 롤백할 때)에 확인하게 된다. 상관명 <strong>old</strong> 는 <strong>DEFERRED UPDATE</strong> 를 사용하는 트리거의 조건 절에 사용할 수 없다. 따라서 아래와 같은 트리거는 생성할 수 없다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="nb">int</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">foo_trigger</span>
+</span><span id="line-3"><span class="w">    </span><span class="k">DEFERRED</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">foo</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">EXECUTE</span><span class="w"> </span><span class="n">PRINT</span><span class="w"> </span><span class="s1">'foo_trigger'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>위와 같이 트리거를 생성하려고 하면 다음과 같은 에러 메시지를 보여주고, 실패한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Error</span> <span class="n">compiling</span> <span class="n">condition</span> <span class="k">for</span> <span class="s1">'foo_trigger'</span> <span class="p">:</span> <span class="n">old</span><span class="o">.</span><span class="n">n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">defined</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>상관명 <strong>old</strong> 는 트리거의 조건 시간이 <strong>AFTER</strong> 일 때에만 사용될 수 있다.</p>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="transaction.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        데이터베이스 트랜잭션
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="dblink.html">
+        CUBRID DBLink
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#create-trigger'" class="reference internal" href="#create-trigger">CREATE TRIGGER</a><ul>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">트리거 정의를 위한 가이드라인</a></li>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">트리거 정의 구문</a></li>
+<li><a :data-current="activeSection === '#trigger-event-time'" class="reference internal" href="#trigger-event-time">이벤트 시점</a></li>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">트리거 타입</a></li>
+<li><a :data-current="activeSection === '#trigger-event-type'" class="reference internal" href="#trigger-event-type">트리거 이벤트 타입</a></li>
+<li><a :data-current="activeSection === '#trigger-event-target'" class="reference internal" href="#trigger-event-target">트리거 이벤트 대상</a></li>
+<li><a :data-current="activeSection === '#id9'" class="reference internal" href="#id9">이벤트 타입과 대상 조합</a></li>
+<li><a :data-current="activeSection === '#trigger-condition'" class="reference internal" href="#trigger-condition">트리거 조건 영역</a></li>
+<li><a :data-current="activeSection === '#correlation-name'" class="reference internal" href="#correlation-name">상관명(correlation name)</a></li>
+<li><a :data-current="activeSection === '#trigger-action'" class="reference internal" href="#trigger-action">트리거 실행 영역</a></li>
+<li><a :data-current="activeSection === '#id12'" class="reference internal" href="#id12">트리거의 커멘트</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#alter-trigger'" class="reference internal" href="#alter-trigger">ALTER TRIGGER</a><ul>
+<li><a :data-current="activeSection === '#id14'" class="reference internal" href="#id14">트리거 커멘트</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#drop-trigger'" class="reference internal" href="#drop-trigger">DROP TRIGGER</a></li>
+<li><a :data-current="activeSection === '#rename-trigger'" class="reference internal" href="#rename-trigger">RENAME TRIGGER</a></li>
+<li><a :data-current="activeSection === '#id15'" class="reference internal" href="#id15">지연된 트리거</a><ul>
+<li><a :data-current="activeSection === '#id16'" class="reference internal" href="#id16">지연된 영역 실행</a></li>
+<li><a :data-current="activeSection === '#id17'" class="reference internal" href="#id17">지연된 영역 취소</a></li>
+<li><a :data-current="activeSection === '#id18'" class="reference internal" href="#id18">트리거 권한 부여</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#replace-insert-on-duplicate-key-update'" class="reference internal" href="#replace-insert-on-duplicate-key-update">REPLACE와 INSERT … ON DUPLICATE KEY UPDATE에서의 트리거</a></li>
+<li><a :data-current="activeSection === '#id19'" class="reference internal" href="#id19">트리거 디버깅</a><ul>
+<li><a :data-current="activeSection === '#id20'" class="reference internal" href="#id20">트리거 실행 로그 보기</a></li>
+<li><a :data-current="activeSection === '#id21'" class="reference internal" href="#id21">중첩된 트리거 제한</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id22'" class="reference internal" href="#id22">트리거를 이용한 응용</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 3월 27, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

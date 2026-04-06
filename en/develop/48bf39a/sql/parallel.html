@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Parallel Execution | CUBRID 11.4 User Manual</title>
+<meta content="Parallel Execution | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Parallel Execution | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="partition_index.html" rel="next" title="Partitioning"/>
+<link href="parallel_index.html" rel="prev" title="Parallel Execution"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/parallel.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="parallel_index.html">Parallel Execution</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Parallel Execution</span>
+</nav>
+<div id="content" role="main">
+<section id="parallel-execution">
+<span id="parallel-query"></span><h1>Parallel Execution<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parallel-execution"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>CUBRID provides parallel query execution capabilities to efficiently process large amounts of data. Parallel query execution divides a single query into multiple work units, which are then processed by multiple worker threads simultaneously, dramatically reducing response time.</p>
+<section id="overview">
+<h2>Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#overview" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#overview'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Parallel queries provide the following key features:</p>
+<ul class="simple">
+<li><p><strong>Parallel Heap Scan</strong>: Multiple worker threads divide and scan heap regions, improving large table scanning performance.</p></li>
+<li><p><strong>Parallel Subquery Execution</strong>: Independent subqueries (uncorrelated subqueries) are processed simultaneously by individual workers, improving query response time.</p></li>
+<li><p><strong>Parallel Hash Join</strong>: Parallelizes both the build and probe phases, improving response time during hash join operations.</p></li>
+<li><p><strong>Parallel Sort</strong>: Divides data to be sorted among multiple worker threads, sorts in parallel, then merges the results, improving sort response time.</p></li>
+</ul>
+<section id="configuration">
+<h3>Configuration<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#configuration" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#configuration'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel query execution can be controlled through system parameters and SQL hints.</p>
+<ul class="simple">
+<li><p>Setting the <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> parameter to 2 or higher enables the optimizer to determine parallel query execution during query processing.</p></li>
+<li><p>Use the <strong>PARALLEL</strong> ( <em>degree</em> ) hint to explicitly specify the degree of parallelism for each query. <em>degree</em> is the number of workers to use and must be an integer value of 2 or higher. Hint-specified values take precedence over the parallelism parameter setting.</p></li>
+<li><p>The <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> parameter sets the maximum number of parallel worker threads that can be executed simultaneously across the entire server (default: 100).</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The max_parallel_workers and parallelism parameters are set to default values of 100 and 4 respectively, so you can use parallel queries without additional configuration.</p>
+</div>
+</section>
+</section>
+<section id="parallel-heap-scan">
+<span id="id1"></span><h2>Parallel Heap Scan<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parallel-heap-scan" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parallel-heap-scan'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Parallel Heap Scan is a feature that improves heap table scanning performance by using multiple worker threads when scanning large amounts of data. Performance can be significantly improved over single-threaded heap scanning, especially when selectivity is low (typically 0.05 or less) and processing large amounts of data.</p>
+<section id="heap-scan-overview">
+<h3>Heap Scan Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#heap-scan-overview" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#heap-scan-overview'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel heap scan divides large tables into logical units for simultaneous scanning by multiple worker threads, with each worker thread independently scanning assigned pages while processing filter conditions (predicates). The processed results are collected through a result queue, and the main thread integrates these results to generate the final result and returns it to the user.</p>
+<p>The <strong>NO_PARALLEL_HEAP_SCAN</strong> hint can be used to disable parallel heap scan. When used together with the <strong>PARALLEL</strong> hint, the <strong>NO_PARALLEL_HEAP_SCAN</strong> hint takes precedence.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The actual degree of parallelism for parallel heap scan is automatically optimized by throughput rules within the user-configured upper limit. For more details, see <a class="reference internal" href="#parallel-query-throughput-rules"><span class="std std-ref">Parallel Query Throughput Rules</span></a>.</p>
+</div>
+</section>
+<section id="constraints">
+<h3>Constraints<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#constraints" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#constraints'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>If any of the following conditions apply, parallel heap scan is not supported and executes in single-threaded mode:</p>
+<ul class="simple">
+<li><p>Statements that do not support concurrent processing</p>
+<ul>
+<li><p>When using stored procedures (JavaSP, PL/CSQL)</p></li>
+<li><p>When referencing session variables</p></li>
+<li><p>When using Recursive CTE or Connect By clauses</p></li>
+<li><p>When using CUBRID object DBMS specific features</p></li>
+</ul>
+</li>
+<li><p>Cases requiring exclusive lock (X-LOCK) acquisition</p>
+<ul>
+<li><p>SELECT … FOR UPDATE clause</p></li>
+<li><p>When using incr() function</p></li>
+<li><p>update, delete, merge statements</p></li>
+</ul>
+</li>
+<li><p>When not the first (driving) table in a JOIN</p></li>
+<li><p>When it is a correlated subquery</p></li>
+<li><p>When reading data through index scan</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The default values of the max_parallel_workers and parallelism parameters provide defaults that allow parallel queries without additional settings. Performance can be further optimized by modifying these values in the cubrid.conf file according to system resources and application workload.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># cubrid.conf</span>
+</span><span id="line-2"><span class="n">max_parallel_workers</span><span class="o">=</span><span class="mi">200</span>  <span class="c1"># default: 100</span>
+</span><span id="line-3"><span class="n">parallelism</span><span class="o">=</span><span class="mi">8</span>             <span class="c1"># default: 4</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Examples where parallel heap scan is not applied</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">-- Disabled by hint</span>
+</span><span id="line-4"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ NO_PARALLEL_HEAP_SCAN */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-5"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="c1">-- When using index scan</span>
+</span><span id="line-8"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(4) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-9"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span>
+</span><span id="line-10"><span class="k">WHERE</span><span class="w"> </span><span class="n">indexed_column</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">idx_large_table_indexed_column</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="c1">-- SELECT FOR UPDATE</span>
+</span><span id="line-13"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(4) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-14"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span>
+</span><span id="line-15"><span class="k">FOR</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">;</span>
+</span><span id="line-16">
+</span><span id="line-17"><span class="c1">-- Using session variables</span>
+</span><span id="line-18"><span class="k">SET</span><span class="w"> </span><span class="o">@</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="p">;</span>
+</span><span id="line-19"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(4) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-20"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-21"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">@</span><span class="n">user_id</span><span class="p">;</span>
+</span><span id="line-22">
+</span><span id="line-23"><span class="c1">-- Using SERIAL</span>
+</span><span id="line-24"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(4) */</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">order_seq</span><span class="p">.</span><span class="n">NEXT_VALUE</span>
+</span><span id="line-25"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="heap-scan-performance-considerations">
+<h3>Heap Scan Performance Considerations<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#heap-scan-performance-considerations" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#heap-scan-performance-considerations'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel heap scan has significant performance improvements in the following cases:</p>
+<ul class="simple">
+<li><p>When large table data needs to be scanned (more effective with more table pages)</p></li>
+<li><p>When selectivity is low (approximately 0.05 or less)</p></li>
+<li><p>When sufficient CPU cores are available</p></li>
+<li><p>When CPU processing is the bottleneck rather than disk I/O</p></li>
+</ul>
+<p>On the other hand, performance may degrade in the following cases:</p>
+<ul class="simple">
+<li><p>When scanning small table data</p></li>
+<li><p>When index scan is more efficient</p></li>
+<li><p>When system resources (CPU, memory) are insufficient</p></li>
+</ul>
+<p>When using parallel queries, the <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> parameter should be set appropriately to prevent system resource contention. It is generally recommended to set it to the level of the actual physical CPU core count.</p>
+</section>
+<section id="heap-scan-optimization-mergeable-list">
+<h3>Heap Scan Optimization (Mergeable List)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#heap-scan-optimization-mergeable-list" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#heap-scan-optimization-mergeable-list'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel heap scan operates with “mergeable list” optimization when certain conditions are met. In this method, each worker thread does not pass temporary results to the main thread but directly returns the final processed results to the main thread, significantly improving processing performance.</p>
+<p>Especially when processing large amounts of data (approximately 10 million records or more) with 8 or more cores, it shows much faster performance than the row-by-row method (receiving results one by one from each thread).</p>
+<p><strong>Constraints</strong></p>
+<p>When the following conditions are met, the mergeable list optimization is not applied and row-by-row processing is used:</p>
+<ul class="simple">
+<li><p>When the heap scan includes conditions that cannot be evaluated while scanning the target table</p></li>
+<li><p>When performing hash aggregation (hash group by)</p></li>
+<li><p>When there is a stored procedure (JavaSP or PL/CSQL) in the select-list</p></li>
+<li><p>When ROWNUM is used</p></li>
+<li><p>When performing topn_sort (sorting to extract top N)</p></li>
+<li><p>When there is a LIMIT clause</p></li>
+<li><p>When result_cache is enabled</p></li>
+</ul>
+<p><strong>Representative Application Examples</strong></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Simple table full scan without join</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span>
+</span><span id="line-4"><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'active'</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="c1">-- Table full scan followed by ORDER BY</span>
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-8"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span>
+</span><span id="line-9"><span class="k">WHERE</span><span class="w"> </span><span class="n">created_date</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="s1">'2024-01-01'</span>
+</span><span id="line-10"><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="c1">-- Parallel heap scan in uncorrelated subquery</span>
+</span><span id="line-13"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-14"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-15"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-16"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="n">customer_id</span>
+</span><span id="line-17"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+</span><span id="line-18"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-19"><span class="p">);</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="c1">-- Apply parallel heap scan to each sub-SELECT in UNION statement</span>
+</span><span id="line-22"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">order_date</span>
+</span><span id="line-23"><span class="k">FROM</span><span class="w"> </span><span class="n">orders_2023</span>
+</span><span id="line-24"><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'completed'</span>
+</span><span id="line-25"><span class="k">UNION</span>
+</span><span id="line-26"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">order_date</span>
+</span><span id="line-27"><span class="k">FROM</span><span class="w"> </span><span class="n">orders_2024</span>
+</span><span id="line-28"><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'completed'</span><span class="p">;</span>
+</span><span id="line-29">
+</span><span id="line-30"><span class="c1">-- Parallel heap scan on partitioned table</span>
+</span><span id="line-31"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-32"><span class="k">FROM</span><span class="w"> </span><span class="n">sales_partitioned</span>
+</span><span id="line-33"><span class="k">WHERE</span><span class="w"> </span><span class="n">sale_date</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="s1">'2024-01-01'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="s1">'2024-12-31'</span><span class="p">;</span>
+</span><span id="line-34">
+</span><span id="line-35"><span class="c1">-- INSERT SELECT statement (copying large amounts of data)</span>
+</span><span id="line-36"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">archive_orders</span>
+</span><span id="line-37"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-38"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-39"><span class="k">WHERE</span><span class="w"> </span><span class="n">order_date</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="s1">'2023-01-01'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<section id="count-optimization">
+<h4>COUNT Optimization<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#count-optimization"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>Parallel heap scan provides special optimization mechanisms for <strong>COUNT(*)</strong>, <strong>COUNT(column)</strong>, and <strong>COUNT(DISTINCT column)</strong> aggregate functions, which are the most frequently used. This method works by having each worker thread first calculate intermediate counts within their scanned range, and then finally summing the results.</p>
+<p><strong>Conditions for COUNT Optimization</strong></p>
+<p>COUNT-specific optimization is applied when all of the following conditions are met:</p>
+<ul class="simple">
+<li><p>Contains only <strong>COUNT(*)</strong>, <strong>COUNT(column)</strong>, or <strong>COUNT(DISTINCT column)</strong> aggregate functions</p></li>
+<li><p>No ROWNUM or stored procedures in the condition clause</p></li>
+<li><p>Simple query without other joins or subqueries</p></li>
+</ul>
+<p><strong>COUNT Optimization Operation</strong></p>
+<ul class="simple">
+<li><p><strong>COUNT(*)</strong>: Each worker increments a simple counter, and finally the main thread sums all worker counts</p></li>
+<li><p><strong>COUNT(column)</strong>: Each worker counts only non-NULL values, and finally the main thread sums all worker counts</p></li>
+<li><p><strong>COUNT(DISTINCT column)</strong>: Each worker stores values in a separate list file to remove duplicates and passes them on, and the main thread merges all lists received from workers to calculate the total DISTINCT count</p></li>
+</ul>
+<p><strong>COUNT Optimization Examples</strong></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- COUNT(*) optimization</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span>
+</span><span id="line-4"><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'active'</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="c1">-- COUNT(column) optimization</span>
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">customer_id</span><span class="p">)</span>
+</span><span id="line-8"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-9"><span class="k">WHERE</span><span class="w"> </span><span class="n">order_date</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="s1">'2024-01-01'</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="c1">-- COUNT(DISTINCT) optimization</span>
+</span><span id="line-12"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">customer_id</span><span class="p">)</span>
+</span><span id="line-13"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="p">;</span>
+</span><span id="line-14">
+</span><span id="line-15"><span class="c1">-- Usage in UPDATE STATISTICS</span>
+</span><span id="line-16"><span class="k">UPDATE</span><span class="w"> </span><span class="k">STATISTICS</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">large_table</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">FULLSCAN</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>COUNT optimization is a specialized optimization for simple aggregation. When used with other aggregate functions (SUM, AVG, etc.) or when complex joins are included, it is not applied and processing uses the general parallel heap scan method (mergeable list or row-by-row).</p>
+</div>
+</section>
+</section>
+<section id="heap-scan-sql-trace">
+<h3>Heap Scan SQL Trace<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#heap-scan-sql-trace" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#heap-scan-sql-trace'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>When parallel heap scan is performed, parallel processing details are additionally output in the <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">SQL trace</span></a> results.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="n">trace</span><span class="w"> </span><span class="k">on</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(4) RECOMPILE */</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-4"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span>
+</span><span id="line-5"><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'active'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Trace</span> <span class="n">Statistics</span><span class="p">:</span>
+</span><span id="line-2">    <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">2405</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">143277</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">1287</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">123467</span><span class="p">)</span>
+</span><span id="line-3">        <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">large_table</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">2395</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">143277</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">123467</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-4">             <span class="p">(</span><span class="n">parallel</span> <span class="n">workers</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mf">2390..2395</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mf">1249989..1250011</span><span class="p">,</span>
+</span><span id="line-5">              <span class="n">rows</span><span class="p">:</span> <span class="mf">1249989..1250011</span><span class="p">,</span> <span class="n">gather</span><span class="p">:</span> <span class="n">mergeable</span> <span class="nb">list</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>The description of parallel heap scan trace output items is as follows:</p>
+<ul class="simple">
+<li><p><strong>parallel workers</strong>: Number of worker threads used</p></li>
+<li><p><strong>heap time</strong>: Range of heap scan time for each worker (min..max, milliseconds)</p></li>
+<li><p><strong>readrows</strong>: Range of rows read by each worker (min..max)</p></li>
+<li><p><strong>rows</strong>: Range of rows returned by each worker (min..max)</p></li>
+<li><p><strong>gather</strong>: Result collection method</p>
+<ul>
+<li><p><strong>mergeable list</strong>: Optimized method that directly uses each worker’s results without separate merging</p></li>
+<li><p><strong>row-by-row</strong>: Basic method that collects and merges each worker’s results one by one</p></li>
+<li><p><strong>count</strong>: COUNT-specific optimization method where each worker performs local counting and merges final results</p></li>
+</ul>
+</li>
+</ul>
+<p>When the <strong>gather</strong> item shows <strong>mergeable list</strong> or <strong>count</strong>, it indicates that parallel heap scan optimization is applied, showing better performance.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The time and number of rows for parallel workers are displayed as ranges (min..max), and ideally all workers should perform similar amounts of work. If the range is wide, you may suspect data distribution or system resource contention issues.</p>
+</div>
+<p><strong>COUNT Optimization Trace Information Example</strong></p>
+<p>When COUNT optimization is applied, <strong>gather: count</strong> is displayed:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="n">trace</span><span class="w"> </span><span class="k">on</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) RECOMPILE */</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-4"><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Trace</span> <span class="n">Statistics</span><span class="p">:</span>
+</span><span id="line-2">    <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">100000</span><span class="p">)</span>
+</span><span id="line-3">        <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">large_table</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">1490</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-4">             <span class="p">(</span><span class="n">parallel</span> <span class="n">workers</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mf">1485..1490</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mf">1250000..1250000</span><span class="p">,</span>
+</span><span id="line-5">              <span class="n">rows</span><span class="p">:</span> <span class="mf">0..0</span><span class="p">,</span> <span class="n">gather</span><span class="p">:</span> <span class="n">count</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>COUNT optimization shows rows as 0 because the result is a single row, and the actual count result is returned through the aggregate function.</p>
+</section>
+</section>
+<section id="parallel-subquery-execution">
+<span id="id2"></span><h2>Parallel Subquery Execution<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parallel-subquery-execution" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parallel-subquery-execution'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Parallel Subquery Execution is a feature that improves query performance by using multiple worker threads to simultaneously execute subqueries that can run independently.</p>
+<section id="subquery-execution-overview">
+<h3>Subquery Execution Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#subquery-execution-overview" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#subquery-execution-overview'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Since subqueries can be executed independently of other subqueries, when there are multiple subqueries, executing them in parallel can reduce overall query response time. Each subquery is executed in an independent worker thread, and when all subqueries are completed, the results are merged to generate the final result.</p>
+<p>Parallel execution of subqueries is possible if the <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> parameter is set to 2 or higher, or if the degree of parallelism is specified to 2 or higher using the <strong>PARALLEL</strong> ( <em>degree</em> ) hint.</p>
+<p>The <strong>NO_PARALLEL_SUBQUERY</strong> hint can be used to disable parallel execution of subqueries. When used together with the <strong>PARALLEL</strong> hint, the <strong>NO_PARALLEL_SUBQUERY</strong> hint takes precedence.</p>
+</section>
+<section id="execution-conditions">
+<h3>Execution Conditions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#execution-conditions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#execution-conditions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel execution of subqueries is possible when all of the following conditions are met:</p>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> parameter is set to 2 or higher, and available worker threads exist</p></li>
+<li><p>The <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> parameter is set to 2 or higher, or a <strong>PARALLEL</strong> (2) or higher hint is specified</p></li>
+<li><p>The subquery is directly connected to the top-level query (top-level XASL)</p></li>
+<li><p>The <strong>NO_PARALLEL_SUBQUERY</strong> hint is not used</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- parallelism parameter setting (cubrid.conf)</span>
+</span><span id="line-2"><span class="c1">-- parallelism=4</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- Subquery parallel execution example</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-6"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-7"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-9"><span class="p">)</span>
+</span><span id="line-10"><span class="k">AND</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
+</span><span id="line-12"><span class="p">);</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="c1">-- Example using hint</span>
+</span><span id="line-15"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(4) */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-16"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-17"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-18"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-19"><span class="p">)</span>
+</span><span id="line-20"><span class="k">AND</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-21"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
+</span><span id="line-22"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="cases-not-applied">
+<h3>Cases Not Applied<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cases-not-applied" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cases-not-applied'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel execution of subqueries is not applied if any of the following conditions apply:</p>
+<ul class="simple">
+<li><p>The subquery is not directly connected to the top-level query (such as subqueries inside nested subqueries)</p></li>
+<li><p>CTE (Common Table Expression) recursive part exists or there are references between CTEs</p></li>
+<li><p>References between subqueries exist due to derived tables (inline views), etc.</p></li>
+<li><p>Object DBMS features are used (such as path expressions, etc.)</p></li>
+<li><p><strong>JSON_TABLE</strong> or SET type table scans are included</p></li>
+<li><p>The subquery condition clause contains stored procedures</p></li>
+<li><p>When it is a correlated subquery</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Examples where parallel execution is not applied</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">-- Using NO_PARALLEL_SUBQUERY hint</span>
+</span><span id="line-4"><span class="c1">-- Two subqueries exist, but parallel execution is disabled by hint</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ NO_PARALLEL_SUBQUERY */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-6"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-7"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-9"><span class="p">)</span>
+</span><span id="line-10"><span class="k">AND</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
+</span><span id="line-12"><span class="p">);</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="c1">-- When there are references between CTEs</span>
+</span><span id="line-15"><span class="c1">-- cte2 references cte1, so they are not independent</span>
+</span><span id="line-16"><span class="k">WITH</span><span class="w"> </span><span class="n">cte1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-17"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">table1</span>
+</span><span id="line-18"><span class="p">),</span>
+</span><span id="line-19"><span class="n">cte2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-20"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cte1</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="w">  </span><span class="c1">-- references cte1</span>
+</span><span id="line-21"><span class="p">)</span>
+</span><span id="line-22"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cte2</span><span class="p">;</span>
+</span><span id="line-23">
+</span><span id="line-24"><span class="c1">-- Using JSON_TABLE</span>
+</span><span id="line-25"><span class="c1">-- When JSON_TABLE is included, parallel execution is not applied even with 2+ subqueries</span>
+</span><span id="line-26"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-27"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="p">,</span>
+</span><span id="line-28"><span class="n">JSON_TABLE</span><span class="p">(</span><span class="n">json_column</span><span class="p">,</span><span class="w"> </span><span class="s1">'$[*]'</span><span class="w"> </span><span class="n">COLUMNS</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">PATH</span><span class="w"> </span><span class="s1">'$.id'</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">jt</span>
+</span><span id="line-29"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-30"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-31"><span class="p">)</span>
+</span><span id="line-32"><span class="k">AND</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-33"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
+</span><span id="line-34"><span class="p">);</span>
+</span><span id="line-35">
+</span><span id="line-36"><span class="c1">-- When stored procedure is included in condition clause</span>
+</span><span id="line-37"><span class="c1">-- Two subqueries exist, but one contains a stored procedure, so no parallel execution</span>
+</span><span id="line-38"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-39"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-40"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-41"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">check_region_sp</span><span class="p">(</span><span class="n">region</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="line-42"><span class="p">)</span>
+</span><span id="line-43"><span class="k">AND</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-44"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
+</span><span id="line-45"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="subquery-performance-considerations">
+<h3>Subquery Performance Considerations<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#subquery-performance-considerations" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#subquery-performance-considerations'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel execution of subqueries has significant performance improvements in the following cases:</p>
+<ul class="simple">
+<li><p>When multiple independent subqueries exist</p></li>
+<li><p>When each subquery’s execution time is sufficiently long</p></li>
+<li><p>When sufficient CPU cores are available</p></li>
+</ul>
+<p>On the other hand, performance may degrade in the following cases:</p>
+<ul class="simple">
+<li><p>When subquery execution time is very short (parallel processing overhead may be greater)</p></li>
+<li><p>When only one subquery exists</p></li>
+<li><p>When system resources (CPU, memory) are insufficient</p></li>
+<li><p>When <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> setting is inappropriate</p></li>
+</ul>
+</section>
+<section id="related-parameters">
+<h3>Related Parameters<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#related-parameters" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#related-parameters'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>To effectively use parallel execution of subqueries, the following parameters should be set appropriately:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a>: Maximum number of parallel workers across the server</p></li>
+<li><p><a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a>: Default degree of parallelism</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- cubrid.conf configuration example</span>
+</span><span id="line-2"><span class="n">max_parallel_workers</span><span class="o">=</span><span class="mi">16</span>
+</span><span id="line-3"><span class="n">parallelism</span><span class="o">=</span><span class="mi">4</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="subquery-trace-information">
+<h3>Subquery Trace Information<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#subquery-trace-information" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#subquery-trace-information'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>When parallel execution of subqueries is performed, parallel processing details are additionally output in the <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">SQL trace</span></a> results.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="n">trace</span><span class="w"> </span><span class="k">on</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(4) RECOMPILE */</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-4"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-5"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-7"><span class="p">)</span>
+</span><span id="line-8"><span class="k">AND</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
+</span><span id="line-10"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Trace</span> <span class="n">Statistics</span><span class="p">:</span>
+</span><span id="line-2">    <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">1710</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">51619</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-3">        <span class="n">SCAN</span> <span class="p">(</span><span class="n">temp</span> <span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">125</span><span class="p">)</span>
+</span><span id="line-4">            <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">orders</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">1677</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">51500</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">12500000</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">25000</span><span class="p">)</span>
+</span><span id="line-5">                <span class="n">SCAN</span> <span class="p">(</span><span class="nb">hash</span> <span class="n">temp</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">build</span> <span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">350</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">17</span><span class="p">)</span>
+</span><span id="line-6">        <span class="n">SUBQUERY</span> <span class="p">(</span><span class="n">uncorrelated</span><span class="p">)</span>
+</span><span id="line-7">            <span class="p">(</span><span class="n">parallel</span> <span class="n">workers</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-8">            <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-9">                <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">customers</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">333</span><span class="p">)</span>
+</span><span id="line-10">                <span class="n">ORDERBY</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-11">            <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-12">                <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">products</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">125</span><span class="p">)</span>
+</span><span id="line-13">                <span class="n">ORDERBY</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>The description of subquery parallel execution SQL trace output items is as follows:</p>
+<ul class="simple">
+<li><p><strong>SUBQUERY (uncorrelated)</strong>: Indicates subquery execution</p></li>
+<li><p><strong>parallel workers</strong>: Number of worker threads used for parallel execution</p></li>
+<li><p><strong>time</strong>: Time spent on parallel execution (milliseconds)</p></li>
+<li><p>Each subquery is displayed as an independent SELECT, and execution statistics for each are output</p></li>
+</ul>
+<p>In the above example, 2 subqueries (customers table query, products table query) were executed in parallel using 2 worker threads.</p>
+</section>
+</section>
+<section id="parallel-query-throughput-rules">
+<span id="id3"></span><h2>Parallel Query Throughput Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parallel-query-throughput-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parallel-query-throughput-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="throughput-rules-overview">
+<h3>Throughput Rules Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#throughput-rules-overview" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#throughput-rules-overview'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>While parallel query execution dramatically reduces query response time, it also consumes significant server resources (CPU, memory, I/O, etc.). If a small number of queries excessively occupy server resources through parallel execution, the performance of other queries may degrade. To prevent this, CUBRID applies <strong>throughput rules</strong> to selectively allow parallel execution only for queries with significant parallel execution benefits.</p>
+<p>The actual degree of parallelism for each parallel operation is determined by the following factors:</p>
+<ul class="simple">
+<li><p>Throughput rules such as table size and number of partitions</p></li>
+<li><p>Values explicitly specified by <strong>PARALLEL</strong> hints</p></li>
+<li><p>Upper limit set by the <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> parameter</p></li>
+<li><p>Global worker pool size set by the <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> parameter</p></li>
+</ul>
+<p>The degree of parallelism calculated by throughput rules cannot exceed the <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> parameter value. The degree of parallelism specified by hints can exceed the <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> parameter value but cannot exceed the maximum value (the smaller of 32 or the number of system cores).</p>
+</section>
+<section id="heap-scan-throughput-rules">
+<h3>Heap Scan Throughput Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#heap-scan-throughput-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#heap-scan-throughput-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The degree of parallelism for parallel heap scan is determined by the number of pages in the target table to be scanned.</p>
+<p><strong>Activation Condition</strong></p>
+<ul class="simple">
+<li><p>Activated when the target table has 4,096 or more pages (approximately 64MB when db_page_size is 16K)</p></li>
+<li><p>If this condition is not met, parallel heap scan is not activated even if the <strong>PARALLEL</strong> hint is present</p></li>
+</ul>
+<p><strong>Degree Determination</strong></p>
+<p>The degree of parallelism is determined according to the number of pages in the table as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%"/>
+<col style="width: 33.3%"/>
+<col style="width: 33.3%"/>
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Number of Pages</p></th>
+<th class="head"><p>Throughput</p></th>
+<th class="head"><p>Throughput Rule Calculation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2,048</p></td>
+<td><p>32 MB</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>4,096</p></td>
+<td><p>64 MB</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>8,192</p></td>
+<td><p>128 MB</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>16,384</p></td>
+<td><p>256 MB</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>32,768</p></td>
+<td><p>512 MB</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>65,536</p></td>
+<td><p>1.0 GB</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-even"><td><p>131,072</p></td>
+<td><p>2.0 GB</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>262,144</p></td>
+<td><p>4.0 GB</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td><p>524,288</p></td>
+<td><p>8.0 GB</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p>1,048,576</p></td>
+<td><p>16.0 GB</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-even"><td><p>2,097,152</p></td>
+<td><p>32.0 GB</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-odd"><td><p>4,194,304</p></td>
+<td><p>64.0 GB</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-even"><td><p>8,388,608</p></td>
+<td><p>128.0 GB</p></td>
+<td><p>14</p></td>
+</tr>
+</tbody>
+</table>
+<p>Starting from 2,048 pages, the degree of parallelism calculated by throughput rule increases by 1 each time the number of pages doubles from the previous increase threshold.</p>
+<p><strong>The degree of parallelism determined by throughput rules cannot exceed the</strong> <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> <strong>parameter value:</strong></p>
+<ul class="simple">
+<li><p><strong>MIN (throughput rule calculation, parallelism parameter value)</strong></p></li>
+</ul>
+<p>For example, when parallelism=4 (default):</p>
+<ul class="simple">
+<li><p>Page count 4,096 → throughput rule calculates 2 → MIN(2, 4) = <strong>2</strong> applied</p></li>
+<li><p>Page count 65,536 → throughput rule calculates 6 → MIN(6, 4) = <strong>4</strong> applied (cannot exceed parallelism)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When the degree of parallelism is explicitly specified using the <strong>PARALLEL</strong> hint, the throughput rules are not applied and the hint value is used.</p>
+</div>
+<p><strong>Example</strong></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Create table and insert data</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">large_table</span><span class="w"> </span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">large_table</span>
+</span><span id="line-5"><span class="k">WITH</span><span class="w"> </span><span class="k">RECURSIVE</span><span class="w"> </span><span class="n">cte</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cte</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2000</span>
+</span><span id="line-9"><span class="p">)</span>
+</span><span id="line-10"><span class="k">SELECT</span><span class="w"> </span><span class="n">ROWNUM</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cte</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">cte</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">cte</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">2200000</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="k">UPDATE</span><span class="w"> </span><span class="k">STATISTICS</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">large_table</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">FULLSCAN</span><span class="p">;</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="c1">-- Check table statistics</span>
+</span><span id="line-15"><span class="c1">-- Total pages in class heap: 4215 (approximately 66MB when db_page_size is 16K)</span>
+</span><span id="line-16"><span class="c1">-- Total objects: 2200000</span>
+</span><span id="line-17">
+</span><span id="line-18"><span class="c1">-- When parallelism parameter is set to 4</span>
+</span><span id="line-19"><span class="c1">-- Page count 4215 is 4,096 or more, so degree of parallelism 2 is automatically applied</span>
+</span><span id="line-20"><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span><span class="p">;</span>
+</span><span id="line-21">
+</span><span id="line-22"><span class="c1">-- Explicit specification with hint</span>
+</span><span id="line-23"><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ PARALLEL(8) */</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">large_table</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="hash-join-throughput-rules">
+<h3>Hash Join Throughput Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash-join-throughput-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash-join-throughput-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The degree of parallelism for parallel hash join is determined according to throughput rules, and the determined degree of parallelism should be less than or equal to the number of partitions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Detailed throughput rules for parallel hash join will be added in future versions.</p>
+</div>
+</section>
+<section id="sort-throughput-rules">
+<h3>Sort Throughput Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sort-throughput-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sort-throughput-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The degree of parallelism for parallel sort is determined according to throughput rules, and the determined degree of parallelism should be less than or equal to the number of input pages.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Detailed throughput rules for parallel sort will be added in future versions.</p>
+</div>
+</section>
+<section id="subquery-throughput-rules">
+<h3>Subquery Throughput Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#subquery-throughput-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#subquery-throughput-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Parallel execution of subqueries is activated when multiple subqueries have an independent structure where they do not reference each other’s results.</p>
+<ul class="simple">
+<li><p>The degree of parallelism for subquery parallel execution is fixed at 2. For example, even if there are 4 independent subqueries within a query, the system allocates 2 parallel workers for processing.</p></li>
+<li><p>Whether each subquery is executed in parallel is determined by the “throughput rules”.</p></li>
+<li><p>When multiple independent subqueries exist, the effect of parallel execution is significant</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Parallel subquery execution example</span>
+</span><span id="line-2"><span class="c1">-- When parallelism=4, 2 subqueries are executed in parallel</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="line-4"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+</span><span id="line-5"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-7"><span class="p">)</span>
+</span><span id="line-8"><span class="k">AND</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
+</span><span id="line-10"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="worker-thread-pool-management">
+<h3>Worker Thread Pool Management<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#worker-thread-pool-management" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#worker-thread-pool-management'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>If the parallel thread pool is insufficient, only some operations may be performed in parallel, or parallel execution may not be performed at all.</p>
+<ul class="simple">
+<li><p>Set the maximum thread count for the global parallel processing worker pool with the <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> parameter</p></li>
+<li><p>Each worker thread reserves the required number of parallel workers from the parallel worker pool before parallel query execution, and returns them after task completion</p></li>
+<li><p>If the reservation fails, the query is executed in the normal single-threaded manner</p></li>
+<li><p>The sum of the degrees of parallelism used in the entire query can exceed the <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> parameter value, but cannot exceed the <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> value</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- cubrid.conf configuration example</span>
+</span><span id="line-2"><span class="n">max_parallel_workers</span><span class="o">=</span><span class="mi">100</span><span class="w">  </span><span class="o">#</span><span class="w"> </span><span class="k">Global</span><span class="w"> </span><span class="n">worker</span><span class="w"> </span><span class="n">pool</span><span class="w"> </span><span class="k">size</span>
+</span><span id="line-3"><span class="n">parallelism</span><span class="o">=</span><span class="mi">4</span><span class="w">             </span><span class="o">#</span><span class="w"> </span><span class="k">Upper</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">single</span><span class="w"> </span><span class="n">parallel</span><span class="w"> </span><span class="k">operation</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="throughput-performance-considerations">
+<h3>Throughput Performance Considerations<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#throughput-performance-considerations" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#throughput-performance-considerations'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Optimization through parallel query throughput rules:</p>
+<ul class="simple">
+<li><p>Prevents unnecessary parallel execution on small tables to reduce overhead</p></li>
+<li><p>Automatically adjusts the degree of parallelism proportional to table size</p></li>
+<li><p>Prevents system resource contention due to excessive parallel execution</p></li>
+<li><p>Concentrates parallel resources on queries with significant benefits</p></li>
+</ul>
+<p>Recommended Settings:</p>
+<ul class="simple">
+<li><p><strong>max_parallel_workers</strong>: Set considering the number of simultaneously executable parallel queries and the average degree of parallelism for each query</p></li>
+<li><p><strong>parallelism</strong>: Set considering the number of physical cores in the system (usually 4~8 is appropriate)</p></li>
+<li><p>In environments with many large tables, set <strong>max_parallel_workers</strong> value high</p></li>
+<li><p>In environments with many small tables, using default values is recommended</p></li>
+</ul>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="parallel_index.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Parallel Execution
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="partition_index.html">
+        Partitioning
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#overview'" class="reference internal" href="#overview">Overview</a><ul>
+<li><a :data-current="activeSection === '#configuration'" class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#parallel-heap-scan'" class="reference internal" href="#parallel-heap-scan">Parallel Heap Scan</a><ul>
+<li><a :data-current="activeSection === '#heap-scan-overview'" class="reference internal" href="#heap-scan-overview">Heap Scan Overview</a></li>
+<li><a :data-current="activeSection === '#constraints'" class="reference internal" href="#constraints">Constraints</a></li>
+<li><a :data-current="activeSection === '#heap-scan-performance-considerations'" class="reference internal" href="#heap-scan-performance-considerations">Heap Scan Performance Considerations</a></li>
+<li><a :data-current="activeSection === '#heap-scan-optimization-mergeable-list'" class="reference internal" href="#heap-scan-optimization-mergeable-list">Heap Scan Optimization (Mergeable List)</a><ul>
+<li><a :data-current="activeSection === '#count-optimization'" class="reference internal" href="#count-optimization">COUNT Optimization</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#heap-scan-sql-trace'" class="reference internal" href="#heap-scan-sql-trace">Heap Scan SQL Trace</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#parallel-subquery-execution'" class="reference internal" href="#parallel-subquery-execution">Parallel Subquery Execution</a><ul>
+<li><a :data-current="activeSection === '#subquery-execution-overview'" class="reference internal" href="#subquery-execution-overview">Subquery Execution Overview</a></li>
+<li><a :data-current="activeSection === '#execution-conditions'" class="reference internal" href="#execution-conditions">Execution Conditions</a></li>
+<li><a :data-current="activeSection === '#cases-not-applied'" class="reference internal" href="#cases-not-applied">Cases Not Applied</a></li>
+<li><a :data-current="activeSection === '#subquery-performance-considerations'" class="reference internal" href="#subquery-performance-considerations">Subquery Performance Considerations</a></li>
+<li><a :data-current="activeSection === '#related-parameters'" class="reference internal" href="#related-parameters">Related Parameters</a></li>
+<li><a :data-current="activeSection === '#subquery-trace-information'" class="reference internal" href="#subquery-trace-information">Subquery Trace Information</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#parallel-query-throughput-rules'" class="reference internal" href="#parallel-query-throughput-rules">Parallel Query Throughput Rules</a><ul>
+<li><a :data-current="activeSection === '#throughput-rules-overview'" class="reference internal" href="#throughput-rules-overview">Throughput Rules Overview</a></li>
+<li><a :data-current="activeSection === '#heap-scan-throughput-rules'" class="reference internal" href="#heap-scan-throughput-rules">Heap Scan Throughput Rules</a></li>
+<li><a :data-current="activeSection === '#hash-join-throughput-rules'" class="reference internal" href="#hash-join-throughput-rules">Hash Join Throughput Rules</a></li>
+<li><a :data-current="activeSection === '#sort-throughput-rules'" class="reference internal" href="#sort-throughput-rules">Sort Throughput Rules</a></li>
+<li><a :data-current="activeSection === '#subquery-throughput-rules'" class="reference internal" href="#subquery-throughput-rules">Subquery Throughput Rules</a></li>
+<li><a :data-current="activeSection === '#worker-thread-pool-management'" class="reference internal" href="#worker-thread-pool-management">Worker Thread Pool Management</a></li>
+<li><a :data-current="activeSection === '#throughput-performance-considerations'" class="reference internal" href="#throughput-performance-considerations">Throughput Performance Considerations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Apr 06, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

@@ -942,7 +942,7 @@ SQL 힌트
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
     PARALLEL (<degree>) |
-    NO_PARALLEL_HEAP_SCAN |
+    NO_PARALLEL_SCAN |
     NO_PARALLEL_SUBQUERY |
     RECOMPILE
 
@@ -1015,19 +1015,19 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 .. _parallel-hint:
 
-*   **PARALLEL** ( *degree* ): 병렬 질의 실행(병렬 힙 스캔, 병렬 부질의 실행, 병렬 해시 조인, 병렬 정렬)을 활성화하고 병렬 처리 정도를 지정하는 힌트이다. *degree* 는 0 이상의 정수 값이어야 하며, 병렬로 처리할 워커 스레드의 수를 의미한다. 0이나 1로 지정할 경우 병렬 처리 기능이 비활성화된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+*   **PARALLEL** ( *degree* ): 병렬 질의 실행(병렬 스캔(힙/리스트/인덱스), 병렬 부질의 실행, 병렬 해시 조인, 병렬 정렬)을 활성화하고 병렬 처리 정도를 지정하는 힌트이다. *degree* 는 0 이상의 정수 값이어야 하며, 병렬로 처리할 워커 스레드의 수를 의미한다. 0이나 1로 지정할 경우 병렬 처리 기능이 비활성화된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
 
     .. code-block:: sql
 
         SELECT /*+ PARALLEL(4) */ * FROM large_table WHERE condition;
 
-.. _no-parallel-heap-scan:
+.. _no-parallel-scan:
 
-*   **NO_PARALLEL_HEAP_SCAN**: 병렬 힙 스캔을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+*   **NO_PARALLEL_SCAN**: 해당 쿼리 블록의 모든 병렬 스캔(힙/리스트/인덱스)을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
 
     .. code-block:: sql
 
-        SELECT /*+ NO_PARALLEL_HEAP_SCAN */ * FROM large_table WHERE condition;
+        SELECT /*+ NO_PARALLEL_SCAN */ * FROM large_table WHERE condition;
 
 .. _no-parallel-subquery:
 

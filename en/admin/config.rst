@@ -746,7 +746,7 @@ The following are parameters related to the memory used by the database server o
 
     **max_parallel_workers** is a parameter that sets the maximum number of parallel query worker threads that can be executed simultaneously across the entire server. The default value is **100**, the minimum value is **0**, and the maximum value is **1000**.
 
-    If this parameter is set to **0**, the parallel query feature is disabled. When set to **2 or higher**, various parallel processing features such as Parallel Heap Scan, Parallel Subquery Execution, Parallel Hash Join, and Parallel Sort can be used.
+    If this parameter is set to **0**, the parallel query feature is disabled. When set to **2 or higher**, various parallel processing features such as Parallel Scan (heap/list/index), Parallel Subquery Execution, Parallel Hash Join, and Parallel Sort can be used.
 
     The server manages parallel query execution through a **global worker pool**. Even when multiple sessions simultaneously request parallel queries or complex parallel operations are performed within a single session, the total number of active parallel workers across the entire server cannot exceed the **max_parallel_workers** value.
 

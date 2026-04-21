@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>조인 방식 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="조인 방식 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="조인 방식 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/sql/join_method.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">조인 방식</span>
+</nav>
+<div id="content" role="main">
+<section id="join-method">
+<span id="id1"></span><h1>조인 방식<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#join-method"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>관계형 데이터베이스는 정규화를 통해 데이터를 여러 테이블로 나누어 저장한다.
+이 방법은 데이터 중복을 줄이고 데이터 무결성을 보장하는 데 효과적이다.
+그러나 나누어진 데이터를 통합적으로 질의하려면 테이블 간의 관계를 결합해야 한다.
+조인 연산은 이러한 관계를 결합하여 마치 단일 테이블에서 가져온 것처럼 결과를 반환한다.</p>
+<p class="rubric">조인 유형</p>
+<p>조인 결과에 포함되는 레코드는 지정된 조인 유형에 따라 달라진다.
+자세한 내용은 <a class="reference internal" href="query/select.html#join-query"><span class="std std-ref">조인 질의</span></a>에서 확인할 수 있다.</p>
+<p class="rubric">조인 방식</p>
+<p>테이블 간 레코드를 결합하는 방식은 조인 방식에 따라 달라진다. CUBRID는 다음과 같은 조인 방식을 지원한다:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="tuning.html#join-method-nested-loop"><span class="std std-ref">중첩 반복(Nested Loop) 조인</span></a></p></li>
+<li><p><a class="reference internal" href="tuning.html#join-method-sort-merge"><span class="std std-ref">정렬 병합(Sort-Merge) 조인</span></a></p></li>
+<li><p><a class="reference internal" href="tuning.html#join-method-hash"><span class="std std-ref">해시(Hash) 조인</span></a></p></li>
+</ul>
+</div></blockquote>
+<p>조인 방식은 질의 최적화기가 비용 비교를 통해 결정하며, 사용자가 직접 지정할 수도 있다.
+질의 최적화기는 데이터베이스가 수집한 통계 정보를 바탕으로 각 조인 방식의 비용을 계산한 뒤
+가장 낮은 비용을 가진 방식을 선택한다.
+질의에 두 개 이상의 조인이 포함된 경우, 각 조인에 다른 조인 방식을 적용할 수 있다.
+각 조인 방식은 한 번에 두 개의 테이블만 처리하며, 순차적으로 수행된다.
+즉, 다음 조인은 이전 조인이 완료된 후에만 수행된다.</p>
+<p>CUBRID에서는 기본적으로 <strong>정렬 병합 조인</strong> 또는 <strong>해시 조인</strong>에 대한 실행 계획이 생성되지 않는다.
+질의 최적화기가 이 두 조인 방식을 고려하도록 하려면 <a class="reference internal" href="tuning.html#sql-hint"><span class="std std-ref">SQL 힌트</span></a>를 사용해야 한다.
+<strong>optimizer_enable_merge_join</strong> 파라미터를 <strong>yes</strong>(기본값은 <strong>no</strong>)로 설정하면 <strong>USE_MERGE</strong> 힌트를 사용하지 않고도 <strong>정렬 병합 조인</strong>을 수행할 수 있다.
+자세한 내용은 <a class="reference internal" href="../admin/config.html#other-parameters"><span class="std std-ref">기타 파라미터</span></a>에서 확인할 수 있다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>여기서 <strong>테이블</strong>은 물리적 테이블뿐만 아니라 뷰(가상 테이블) 및 파생 테이블을 포함하는 넓은 개념으로 사용된다.</p>
+</div>
+<section id="nested-loop">
+<span id="join-method-nested-loop"></span><h2>중첩 반복(Nested Loop) 조인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nested-loop" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#nested-loop'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>중첩 반복 조인은 외부 테이블에서 레코드를 하나씩 읽은 후, 해당 레코드와 일치하는 내부 테이블의 레코드를 찾아 결합하는 방식이다.
+이 방식은 프로그래밍에서 사용하는 중첩 반복문의 개념과 유사하다.
+외부 반복에 사용되는 테이블을 <strong>드라이빙 테이블(driving table)</strong>이라고 하며, 내부 반복에 사용되는 테이블은 <strong>드리븐 테이블(driven table)</strong>이라고 한다.</p>
+<p class="rubric">드라이빙 테이블</p>
+<p>두 테이블 중 하나를 드라이빙 테이블로 설정할 때는 일반적으로 레코드 수가 적은 테이블을 선택하는 것이 더 효율적이다.
+드라이빙 테이블의 레코드 수가 적을수록 조인 연산 횟수가 줄어들어 전체 조인 비용이 감소한다.
+랜덤 액세스 비용은 대체로 일정하므로, 드리븐 테이블에 대한 조인 연산 횟수가 줄어들면 성능이 더욱 향상된다.
+질의 최적화기는 이러한 조인 비용을 비교하여 드라이빙 테이블을 자동으로 선택한다.
+사용자가 <strong>ORDERED</strong> 또는 <strong>LEADING</strong> 힌트를 사용해 드라이빙 테이블을 직접 지정할 수도 있다.</p>
+<p class="rubric">드리븐 테이블</p>
+<p>중첩 반복 조인은 드리븐 테이블에 랜덤 액세스가 가능한 경우 가장 효율적으로 작동한다.
+이를 위해서는 조인 조건에 적합한 인덱스가 드리븐 테이블에 생성되어 있어야 한다.
+만약 조인 조건에 적합한 인덱스가 없다면, 드리븐 테이블의 모든 레코드를 순차적으로 읽어야 하므로 조인 성능이 저하된다.
+조인 조건에 적합한 인덱스를 통해 드리븐 테이블에 랜덤 액세스할 수 있으면,
+실행 계획에서 중첩 반복 조인은 <strong>인덱스 조인(idx-join)</strong>으로 표시된다.</p>
+<p class="rubric">부분 범위 처리</p>
+<p>중첩 반복 조인은 두 테이블에서 각각 하나의 레코드를 읽은 상태에서도 조인 연산을 수행할 수 있으며,
+모든 레코드에 대해서 조인이 완료되지 않은 상태에서도 즉시 반환할 수 있는 조인 결과를 유지한다.
+이러한 동작은 부분 범위 처리를 가능하게 하므로, 처음 N개의 결과만 필요한 경우 N개의 결과가 준비되는 즉시 반환할 수 있다.
+부분 범위 처리를 통해 불필요한 조인 연산을 피함으로써 전체적인 조인 성능이 향상된다.</p>
+<p class="rubric">해시 리스트 스캔</p>
+<p>드리븐 테이블이 뷰 또는 파생 테이블인 경우, 인덱스를 사용할 수 없으므로
+임시 결과의 레코드를 순차적으로 읽는 리스트 스캔 방식으로 조인을 수행한다.
+해시 리스트 스캔은 리스트 스캔의 한 종류로, 임시 결과에서 조인 조건을 만족하는 레코드를 랜덤 액세스하기 위해 사용된다.
+리스트 스캔은 임시 결과의 레코드를 읽는 방식이므로 물리적 테이블에는 사용할 수 없다.
+따라서 해시 리스트 스캔도 드리븐 테이블이 뷰 또는 파생 테이블인 경우에만 사용된다.
+해시 리스트 스캔은 <a class="reference internal" href="tuning.html#join-method-hash"><span class="std std-ref">해시 조인</span></a>과 동작 방식이 유사하며, 조인 조건이 모두 동등 비교 조건일 때만 사용할 수 있다.
+해시 리스트 스캔이 사용되었는지는 <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">질의 프로파일링</span></a>을 통해 확인할 수 있다.</p>
+<p>해시 리스트 스캔과 해시 조인의 차이점은 다음 두 가지이다:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>해시 리스트 스캔은 해시 테이블 빌드에 드리븐 테이블만 사용한다.</p></li>
+<li><p>해시 리스트 스캔은 중첩 반복 조인의 일부로 사용되므로 때문에 부분 범위 처리가 가능하다.</p></li>
+</ol>
+</div></blockquote>
+<p>질의 최적화기는 조인 비용을 계산할 때 해시 리스트 스캔의 수행 여부는 반영하지 않는다.</p>
+<p class="rubric" id="example-join-method-nested-loop-no-index">예시 1. 인덱스 스캔을 수행하지 않는 중첩 반복 조인</p>
+<p>이 예시에서는 중첩 반복 조인 수행 시 드리븐 테이블에서 인덱스 스캔이 수행되지 않는다.
+<strong>ORDERED</strong> 힌트를 사용하여 조인 순서를 고정했으며, 그 결과 nation 테이블이 드라이빙 테이블이 되고, athlete 테이블이 드리븐 테이블이 된다.
+드리븐 테이블에 조인 조건에 적합한 인덱스가 없기 때문에, nation 테이블의 각 레코드에 대해 athlete 테이블의 모든 레코드를 순차적으로 읽어야 한다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_nl */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">nl-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: a node[1]
+</span><span id="line-11">               sargs: term[0] AND term[1]
+</span><span id="line-12">               cost:  49 card 202
+</span><span id="line-13">    cost:  4697 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 92, fetch: 1720, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.nation), (heap time: 0, fetch: 216, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-4">      SCAN (table: public.athlete), (heap time: 92, fetch: 1504, ioread: 0, readrows: 313819, rows: 103)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><strong>수행 과정:</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드를 읽는다.</p></li>
+<li><p>athlete 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)과 조인 조건(<code class="docutils literal notranslate"><span class="pre">n.code</span> <span class="pre">=</span> <span class="pre">a.nation_code</span></code>)을 만족하는 레코드를 읽는다.</p></li>
+<li><p>조건이 만족되면 두 레코드를 결합해 결과에 추가한다.</p></li>
+<li><p>athlete 테이블에서 다음 레코드를 읽은 후 <strong>2단계</strong>를 반복한다.</p></li>
+<li><p>nation 테이블에서 다음 레코드를 읽은 후 <strong>1~3단계</strong>를 반복한다.</p></li>
+<li><p>모든 레코드를 처리할 때까지 이 과정을 반복한다.</p></li>
+</ol>
+</div></blockquote>
+<p class="rubric" id="example-join-method-nested-loop-index">예시 2. 인덱스를 사용한 중첩 반복 조인</p>
+<p>이 예시에서는 드리븐 테이블에서 인덱스 스캔을 사용하는 중첩 반복 조인을 수행한다.
+드리븐 테이블(athlete)에 조인 조건에 적합한 인덱스를 생성한다.
+그 결과, nation 테이블의 각 레코드에 대해 athlete 테이블의 모든 레코드를 읽을 필요 없이 랜덤 액세스가 가능하다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="p">(</span><span class="n">nation_code</span><span class="p">);</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_nl */</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-8"><span class="k">where</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: sscan
+</span><span id="line-5">               class: n node[0]
+</span><span id="line-6">               sargs: term[2]
+</span><span id="line-7">               cost:  2 card 31
+</span><span id="line-8">    inner: iscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               index: i_athlete_nation_code term[0]
+</span><span id="line-11">               sargs: term[1]
+</span><span id="line-12">               cost:  4 card 202
+</span><span id="line-13">    cost:  68 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 1265, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.nation), (heap time: 1, fetch: 216, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-4">      SCAN (index: public.athlete.i_athlete_nation_code), (btree time: 0, fetch: 1045, ioread: 0, readkeys: 24, filteredkeys: 0, rows: 948) (lookup time: 0, rows: 103)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><a class="reference internal" href="tuning.html#example-join-method-nested-loop-no-index"><span class="std std-ref">예시 1</span></a>과 비교했을 때,
+조인 조건을 비교하기 전 athlete 테이블에서 읽는 레코드 수가 크게 감소했다 (<code class="docutils literal notranslate"><span class="pre">readrows:</span> <span class="pre">313,819</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">rows:</span> <span class="pre">948</span></code>).</p>
+<p class="rubric" id="example-join-method-nested-loop-driving">예시 3. 드라이빙 테이블에 따른 성능 차이</p>
+<p>이 예시에서는 이전 두 예시와 달리 드라이빙 테이블을 athlete로 변경한다.
+<strong>LEADING</strong> 힌트를 사용해 조인 순서를 지정했으며, 결과적으로 athlete 테이블이 드라이빙 테이블, nation 테이블이 드리븐 테이블이 된다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile leading(a, n) use_nl */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: sscan
+</span><span id="line-5">               class: a node[0]
+</span><span id="line-6">               sargs: term[1]
+</span><span id="line-7">               cost:  49 card 202
+</span><span id="line-8">    inner: iscan
+</span><span id="line-9">               class: n node[1]
+</span><span id="line-10">               index: pk_nation_code term[0]
+</span><span id="line-11">               sargs: term[2]
+</span><span id="line-12">               cost:  2 card 31
+</span><span id="line-13">    cost:  161 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 7168, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
+</span><span id="line-4">      SCAN (index: public.nation.pk_nation_code), (btree time: 0, fetch: 458, ioread: 0, readkeys: 229, filteredkeys: 0, rows: 229) (lookup time: 0, rows: 103)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>athlete 테이블을 드라이빙 테이블로 사용하면 레코드 수가 많아 성능이 저하될 수 있다.</p>
+<p class="rubric" id="example-join-method-nested-loop-with-hash-list">예시 4. 해시 리스트 스캔이 포함된 중첩 반복 조인</p>
+<p>이 예시에서는 드리븐 테이블에서 해시 리스트 스캔이 수행되는 중첩 반복 조인을 보여준다.
+<strong>ORDERED</strong> 및 <strong>NO_MERGE</strong> 힌트를 사용해 인덱스 스캔이 불가능한 인라인 뷰를 드리븐 테이블로 설정한다.
+또한, 질의는 상위 20개의 결과만 조회해 해시 리스트 스캔과 부분 범위 처리를 함께 수행한다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_nl */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-6"><span class="w">            </span><span class="k">select</span><span class="w"> </span><span class="cm">/*+ no_merge */</span>
+</span><span id="line-7"><span class="w">                </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-8"><span class="w">            </span><span class="k">from</span>
+</span><span id="line-9"><span class="w">                </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span>
+</span><span id="line-10"><span class="w">            </span><span class="k">where</span>
+</span><span id="line-11"><span class="w">                </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span>
+</span><span id="line-12"><span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-13"><span class="k">where</span>
+</span><span id="line-14"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-15"><span class="k">limit</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">nl-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[1] AND term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: v node[1]
+</span><span id="line-11">               sargs: term[0]
+</span><span id="line-12">               cost:  2 card 202
+</span><span id="line-13">    sargs: term[1]
+</span><span id="line-14">    cost:  148 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 26, rows: 8)
+</span><span id="line-4">      SCAN (hash temp(m), build time: 0, time: 0, fetch: 0, ioread: 0, readrows: 249, rows: 20)
+</span><span id="line-5">    SUBQUERY (uncorrelated)
+</span><span id="line-6">      SELECT (time: 2, fetch: 32, fetch_time: 0, ioread: 0)
+</span><span id="line-7">        SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 229)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>실제로 해시 리스트 스캔이 드리븐 테이블에서 수행되었는지는 실행 계획에서 확인할 수 없지만, 질의 프로파일링을 통해 확인할 수 있다.</p>
+</section>
+<section id="sort-merge">
+<span id="join-method-sort-merge"></span><h2>정렬 병합(Sort-Merge) 조인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sort-merge" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sort-merge'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>정렬 병합 조인은 두 테이블의 데이터를 조인 조건에 따라 정렬한 뒤, 정렬된 데이터를 순차적으로 비교하며 결합하는 방식이다.
+이 방식은 조인 조건이 동등 조건일 때만 수행할 수 있다.</p>
+<p>조인 전에 두 테이블의 데이터를 정렬하는 과정은 실시간으로 인덱스를 생성하는 것과 유사하다.
+하지만 조인 조건에 적합한 인덱스가 존재하더라도 정렬 과정은 생략되지 않는다.
+정렬된 데이터를 결합하는 과정은,
+정렬된 두 임시 결과에서 각각 하나의 레코드를 읽으며 조인 연산을 수행한다는 점에서 중첩 반복 조인과 동작 방식이 비슷하다.
+정렬 과정에서 사용되는 버퍼 크기는 <strong>sort_buffer_size</strong> 파라미터로 설정할 수 있으며,
+자세한 내용은 <a class="reference internal" href="../admin/config.html#memory-parameters"><span class="std std-ref">메모리 관련 파라미터</span></a>에서 확인할 수 있다.</p>
+<p class="rubric">조인 비용</p>
+<p>정렬 병합 조인은 정렬 단계에서 비용이 크게 발생할 경우 비효율적일 수 있다.
+질의 최적화기가 조인 비용을 비교할 때, 중첩 반복 조인은 사전 작업이 필요하지 않고,
+해시 조인은 두 테이블 중 하나의 데이터만 사용해 해시 테이블을 빌드하므로 상대적으로 비용이 낮게 평가될 수 있다.
+반면, 정렬 병합 조인은 두 테이블의 데이터를 모두 정렬해야 하므로 더 높은 비용으로 평가된다.</p>
+<p class="rubric">부분 범위 처리</p>
+<p>정렬 병합 조인은 두 테이블의 정렬이 완료된 후에만 조인을 수행할 수 있으므로 부분 범위 처리가 불가능하다.
+따라서 처음 N개의 결과만 필요한 경우에도 조인 작업이 모두 완료된 후에야 결과를 조회할 수 있다.</p>
+<p class="rubric" id="example-join-method-sort-merge">예시 1. 정렬 병합 조인의 수행 과정</p>
+<p>이 예시는 정렬 병합 조인을 수행하는 과정을 보여준다.
+<strong>ORDERED</strong> 힌트는 조인 성능에 직접적인 영향을 미치지 않지만, 여기서는 조인이 아래 지정된 순서대로 실행되도록 하기 위해 사용되었다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="p">(</span><span class="n">continent</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_event_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">nation_code</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_merge */</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-6"><span class="k">from</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-9"><span class="k">where</span>
+</span><span id="line-10"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="p">;</span>
+</span><span id="line-14"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_event_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">temp
+</span><span id="line-4">    order: UNORDERED
+</span><span id="line-5">    subplan: m-join (inner join)
+</span><span id="line-6">                 edge:  term[0]
+</span><span id="line-7">                 outer: temp
+</span><span id="line-8">                            order: code[0]
+</span><span id="line-9">                            subplan: iscan
+</span><span id="line-10">                                         class: n node[0]
+</span><span id="line-11">                                         index: i_nation_continent_code term[1]
+</span><span id="line-12">                                         cost:  2 card 1
+</span><span id="line-13">                            cost:  8 card 1
+</span><span id="line-14">                 inner: temp
+</span><span id="line-15">                            order: nation_code[1]
+</span><span id="line-16">                            subplan: iscan
+</span><span id="line-17">                                         class: a node[1]
+</span><span id="line-18">                                         index: i_athlete_event_nation_code term[2]
+</span><span id="line-19">                                         cost:  2 card 7
+</span><span id="line-20">                            cost:  8 card 7
+</span><span id="line-21">                 cost:  17 card 1
+</span><span id="line-22">    cost:  23 card 1
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 287, fetch_time: 1, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
+</span><span id="line-4">      MERGELIST
+</span><span id="line-5">        SELECT (time: 0, fetch: 52, fetch_time: 0, ioread: 0)
+</span><span id="line-6">          SCAN (index: public.nation.i_nation_continent_code), (btree time: 0, fetch: 49, ioread: 0, readkeys: 47, filteredkeys: 0, rows: 47) (lookup time: 0, rows: 47)
+</span><span id="line-7">          ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+</span><span id="line-8">        SELECT (time: 1, fetch: 235, fetch_time: 1, ioread: 0)
+</span><span id="line-9">          SCAN (index: public.athlete.i_athlete_event_nation_code), (btree time: 1, fetch: 231, ioread: 0, readkeys: 6, filteredkeys: 0, rows: 229) (lookup time: 1, rows: 229)
+</span><span id="line-10">          ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><strong>수행 과정:</strong></p>
+<ol class="arabic simple">
+<li><p>nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드를 가져와 code 컬럼 값으로 정렬한다.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>athlete 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)을 만족하는 레코드를 가져와 natione_code 컬럼 값으로 정렬한다.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>두 정렬된 결과에서 레코드를 하나씩 순차적으로 읽고, 조인 조건(<code class="docutils literal notranslate"><span class="pre">n.code</span> <span class="pre">=</span> <span class="pre">a.nation_code</span></code>)을 비교한다. 조건이 만족되면 두 레코드를 결합하여 결과에 추가한다.</p></li>
+<li><p>모든 레코드가 처리될 때까지 이 과정을 반복하여 조인을 완료한다.</p></li>
+</ol>
+</section>
+<section id="hash">
+<span id="join-method-hash"></span><h2>해시(Hash) 조인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>해시 조인은 해시 함수를 사용해 동일한 해시 값을 가지는 두 테이블의 레코드를 결합하는 방식이다.
+동일한 해시 값을 가지는 레코드를 효율적으로 비교하기 위해 해시 테이블이 사용된다.
+두 테이블 중 하나는 해시 테이블을 <strong>빌드(Build)</strong>하는 데 사용되고, 다른 하나는 해시 테이블을 <strong>프로브(Probe)</strong>하는 데 사용된다.
+해시 값은 조인 컬럼 값을 입력으로 사용하는 해시 함수에 의해 생성된다.
+다른 입력 값에서 동일한 해시 값이 생성될 경우 이를 해시 충돌이라고 한다.
+해시 충돌이 발생하면 동일한 해시 값을 가진 레코드를 순차적으로 조사하며 조인 조건을 확인한다.
+해시 조인은 모든 조인 조건이 동등 비교 조건인 경우에만 수행할 수 있다.</p>
+<p class="rubric">SQL 힌트</p>
+<p>해시 조인과 관련된 힌트는 두 가지가 있다:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>USE_HASH</strong>: 질의 최적화기가 해시 조인에 대한 실행 계획을 생성할 수 있도록 허용한다.</p></li>
+<li><p><strong>NO_USE_HASH</strong>: 질의 최적화기가 해시 조인에 대한 실행 계획을 생성하지 못하도록 방지한다.</p></li>
+</ul>
+</div></blockquote>
+<p>두 힌트 모두 하나 이상의 테이블을 지정해서 사용할 수 있다.
+힌트에 특정 테이블이 명시된 경우, 해당 힌트는 내부 테이블(드리븐 테이블)에 적용된다.
+테이블이 명시되지 않은 경우, 힌트는 모든 테이블에 적용된다.
+동일한 테이블에 대해 <strong>USE_HASH</strong>와 <strong>NO_USE_HASH</strong> 힌트가 모두 사용된 경우, <strong>NO_USE_HASH</strong> 힌트가 우선 적용된다.</p>
+<p class="rubric">비용 계산</p>
+<p>해시 조인에 참여하는 각 테이블은 해시 테이블을 빌드하거나 프로브하는 데 사용될 수 있다.
+따라서 두 가지 경우의 비용을 계산하여 비교한 뒤, 더 낮은 비용을 해시 조인의 최종 비용으로 결정한다.
+예를 들어, 다음 두 가지 경우를 비교하여 비용이 낮은 방식을 선택한다:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>외부 테이블(드라이빙 테이블)로 해시 테이블을 빌드하고, 내부 테이블(드리븐 테이블)로 이를 프로브하는 경우.</p></li>
+<li><p>내부 테이블(드리븐 테이블)로 해시 테이블을 빌드하고, 외부 테이블(드라이빙 테이블)로 이를 프로브하는 경우.</p></li>
+</ul>
+</div></blockquote>
+<p class="rubric">해시 테이블을 빌드하는 데 사용되는 테이블</p>
+<p>해시 테이블을 빌드할 테이블은 <strong>ORDERED</strong> 또는 <strong>LEADING</strong> 힌트를 사용해 지정할 수 없다.
+일반적으로 레코드 수가 적은 테이블이 해시 테이블 빌드에 사용된다.
+그러나 외부 조인의 경우, 조인 방향에 따라 해시 테이블을 빌드할 테이블이 고정된다:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>왼쪽 외부 조인</strong>: 오른쪽 테이블이 해시 테이블 빌드에 사용된다.</p></li>
+<li><p><strong>오른쪽 외부 조인</strong>: 왼쪽 테이블이 해시 테이블 빌드에 사용된다.</p></li>
+</ul>
+</div></blockquote>
+<p class="rubric">해시 테이블을 빌드하는 방식</p>
+<p>해시 테이블을 빌드하는 방식은 임시 결과 크기와 해시 테이블의 최대 크기에 따라 결정된다.
+해시 테이블의 최대 크기는 <strong>max_hash_list_scan_size</strong> 파라미터를 통해 설정할 수 있다.
+자세한 내용은 <a class="reference internal" href="../admin/config.html#memory-parameters"><span class="std std-ref">메모리 관련 파라미터</span></a>에서 확인할 수 있다.</p>
+<p>CUBRID는 다음과 같은 해시 방식을 지원한다:</p>
+<blockquote>
+<div><ul>
+<li><p><strong>메모리 해시</strong>: 임시 결과를 모두 해시 테이블에 저장할 수 있는 경우 사용된다.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">임시 결과 페이지 수 * 페이지 크기 &lt;= 해시 테이블 최대 크기
+</span></code></pre></div>
+</div>
+</li>
+<li><p><strong>하이브리드 해시</strong>: 해시 테이블이 임시 결과 레코드의 위치를 저장할 수 있는 경우 사용된다.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">임시 결과 레코드 수 * (해시 엔트리 크기 + 위치 정보 크기) &lt;= 해시 테이블 최대 크기
+</span></code></pre></div>
+</div>
+</li>
+<li><p><strong>파일 해시</strong>: 위 두 방식 모두 사용할 수 없는 경우 사용된다.</p></li>
+<li><p><strong>스킵 해시</strong>: 두 임시 결과 중 하나가 비어 있거나 불필요한 경우(외부 조인 시), 해시 테이블 빌드는 생략된다.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>하이브리드 해시</strong>와 <strong>파일 해시</strong>는 레코드 위치를 해시 테이블에 저장하므로, 레코드를 읽기 전에 위치를 찾는 과정이 추가로 필요하다.</p>
+<p><strong>메모리 해시</strong>와 <strong>하이브리드 해시</strong>는 메모리 페이지를 사용해 해시 테이블을 빌드하지만, <strong>파일 해시</strong>는 임시 볼륨의 페이지를 사용해 해시 테이블을 빌드한다.
+임시 볼륨의 페이지 접근 시 논리적 I/O가 추가로 발생하며, 이는 성능 저하를 초래할 수 있다.</p>
+<p>질의를 실행하는 동안, 조인이 완료되면 해시 테이블은 삭제되고 사용된 메모리는 반환된다.
+해시 조인을 수행할 때 실제로 사용된 방식은 질의 프로파일링을 통해 확인할 수 있으며,
+자세한 내용은 <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">질의 프로파일링</span></a>에서 확인할 수 있다.</p>
+<p class="rubric">부분 범위 처리</p>
+<p>해시 조인은 해시 테이블 빌드가 완료된 이후에만 조인이 진행되므로, 부분 범위 처리는 불가능하다.</p>
+<p class="rubric" id="example-join-method-hash">예시 1. 해시 조인의 수행 과정</p>
+<p>이 예시는 해시 조인을 수행하는 과정을 설명한다.
+<strong>ORDERED</strong> 힌트를 사용하더라도 해시 테이블을 빌드할 테이블은 지정할 수 없다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_hash */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: a node[1]
+</span><span id="line-11">               sargs: term[1]
+</span><span id="line-12">               cost:  49 card 202
+</span><span id="line-13">    cost:  63 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
+</span><span id="line-4">      HASHJOIN (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-8">        PROBE (time: 2, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 103, rows: 103, max_collisions: 1)
+</span><span id="line-9">          SELECT (time: 2, fetch: 32, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 229)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>nation 테이블에서는 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드가 47개이고,
+athlete 테이블에서는 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)을 만족하는 레코드가 229개다.
+따라서 더 적은 레코드를 가진 nation 테이블이 해시 테이블을 빌드하는 데 사용된다.</p>
+<p><strong>질의 프로파일링 결과:</strong></p>
+<p>여기서는 해시 조인과 관련된 항목들만 설명한다. 다른 항목들에 대해서는 <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">질의 프로파일링</span></a>에서 확인할 수 있다.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>HASHJOIN</strong></p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>time</strong>: 해시 조인 전체 실행 시간(ms)</p></li>
+<li><p><strong>fetch</strong>: 해시 조인에서 fetch한 페이지 수</p></li>
+<li><p><strong>fetch_time</strong>: 해시 조인에서 페이지를 fetch하는 데 걸린 시간(ms)</p></li>
+<li><p><strong>ioread</strong>: 해시 조인에서 페이지를 fetch하는 동안 발생한 물리적 I/O 읽기 횟수</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong>BUILD</strong>: <strong>time</strong>을 제외하고, 나머지 항목들은 임시 결과를 조회할 때 누적된 정보를 포함하지 않는다.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>time</strong>: 임시 결과 조회를 포함한 해시 테이블 빌드 시간(ms)</p></li>
+<li><p><strong>build_time</strong>: 해시 테이블 빌드 시간(ms)</p></li>
+<li><p><strong>fetch</strong>: 해시 테이블 빌드를 위해 fetch한 페이지 수</p></li>
+<li><p><strong>fetch_time</strong>: 해시 테이블 빌드에서 페이지를 fetch하는 데 걸린 시간(ms)</p></li>
+<li><p><strong>ioread</strong>: 해시 테이블 빌드에서 발생한 물리적 I/O 읽기 횟수</p></li>
+<li><p><strong>hash_method</strong>: 해시 테이블 빌드에 사용된 방식 (<strong>memory</strong>, <strong>hybrid</strong>, <strong>file</strong>, 또는 <strong>skip</strong>)</p>
+<ul>
+<li><p><strong>memory</strong>: 메모리 해시 방식 사용</p></li>
+<li><p><strong>hybrid</strong>: 하이브리드 해시 방식 사용</p></li>
+<li><p><strong>file</strong>: 파일 해시 방식 사용</p></li>
+<li><p><strong>skip</strong>: 해시 테이블 빌드를 생략</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p><strong>PROBE</strong>: <strong>time</strong>을 제외하고, 나머지 항목들은 임시 결과를 조회할 때 누적된 정보를 포함하지 않는다.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>time</strong>: 임시 결과 조회를 포함한 해시 테이블 프로브 시간(ms)</p></li>
+<li><p><strong>probe_time</strong>: 해시 테이블 프로브 시간(ms)</p></li>
+<li><p><strong>fetch</strong>: 해시 테이블 프로브를 위해 fetch한 페이지 수</p></li>
+<li><p><strong>fetch_time</strong>: 해시 테이블 프로브에서 페이지를 fetch하는 데 걸린 시간(ms)</p></li>
+<li><p><strong>ioread</strong>: 해시 테이블 프로브에서 발생한 물리적 I/O 읽기 횟수</p></li>
+<li><p><strong>readkeys</strong>: 해시 테이블 프로브 중 해시 값이 일치한 레코드 수</p></li>
+<li><p><strong>rows</strong>: 해시 테이블 프로브 중 조인 조건을 만족하는 레코드 수 (<strong>readkeys &gt;= rows</strong>)</p></li>
+<li><p><strong>max_collisions</strong>: 해시 테이블 프로브 중 하나의 해시 값에 대해 읽은 최대 레코드 수</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><strong>수행 과정:</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드를 가져와 임시 결과를 생성한다.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>athlete 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)을 만족하는 레코드를 가져와 임시 결과를 생성한다.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>nation 테이블의 임시 결과를 읽어 해시 테이블을 빌드한다.</p></li>
+<li><p>athlete 테이블의 임시 결과에서 각 레코드에 대해 nation 테이블의 해시 테이블을 프로브한다.</p></li>
+<li><p>동일한 해시 값을 가진 레코드를 찾아(<code class="docutils literal notranslate"><span class="pre">readkeys</span></code>) 조인 조건(<code class="docutils literal notranslate"><span class="pre">n.code</span> <span class="pre">=</span> <span class="pre">a.nation_code</span></code>)을 비교한다. 조건이 만족(<code class="docutils literal notranslate"><span class="pre">rows</span></code>)되면 두 레코드를 결합하여 결과에 추가한다.</p></li>
+<li><p>동일한 해시 값을 가진 다음 레코드에 대해 <strong>5단계</strong>를 반복한다.</p></li>
+<li><p>athlete 테이블의 다음 레코드에 대해 <strong>4~6단계</strong>를 반복한다.</p></li>
+<li><p>모든 레코드가 처리될 때까지 이 과정을 계속 반복하여 조인을 완료한다.</p></li>
+</ol>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-hint">예시 2. 힌트를 사용한 해시 조인</p>
+<p>이 예시는 <strong>USE_HASH</strong> 및 <strong>NO_USE_HASH</strong> 힌트를 사용해 특정 테이블에 대해 해시 조인을 수행하거나 수행하지 않는 방법을 보여준다.
+<strong>ORDERED</strong> 힌트를 사용하여 내부 테이블(드리븐 테이블)을 고정한다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_hash no_use_hash(r) */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">medal</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">athlete_code</span>
+</span><span id="line-7"><span class="k">where</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Shooting'</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">host_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1992</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: hash-join (inner join)
+</span><span id="line-5">               edge:  term[0]
+</span><span id="line-6">               outer: sscan
+</span><span id="line-7">                          class: n node[0]
+</span><span id="line-8">                          sargs: term[3]
+</span><span id="line-9">                          cost:  2 card 31
+</span><span id="line-10">               inner: sscan
+</span><span id="line-11">                          class: a node[1]
+</span><span id="line-12">                          sargs: term[2]
+</span><span id="line-13">                          cost:  49 card 202
+</span><span id="line-14">               cost:  63 card 29
+</span><span id="line-15">    inner: iscan
+</span><span id="line-16">               class: r node[2]
+</span><span id="line-17">               index: pk_record_host_year_event_code_athlete_code_medal term[4] (covers)
+</span><span id="line-18">               filtr: term[1]
+</span><span id="line-19">               cost:  5 card 400
+</span><span id="line-20">    cost:  109 card 2
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><strong>USE_HASH</strong> 힌트를 통해 nation과 athlete 테이블에 대해 해시 조인이 수행된다.</p>
+<p><strong>NO_USE_HASH</strong> 힌트를 사용하여 record 테이블에서는 해시 조인이 수행되지 않는다.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 139, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 35, rows: 35)
+</span><span id="line-4">      SCAN (index: public.record.pk_record_host_year_event_code_athlete_code_medal), (btree time: 3, fetch: 105, ioread: 0, readkeys: 7, filteredkeys: 0, rows: 7, covered: true)
+</span><span id="line-5">      HASHJOIN (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-6">        BUILD (time: 1, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-7">          SELECT (time: 1, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-8">            SCAN (table: public.nation), (heap time: 1, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-9">        PROBE (time: 1, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 35, rows: 35, max_collisions: 1)
+</span><span id="line-10">          SELECT (time: 1, fetch: 32, fetch_time: 0, ioread: 0)
+</span><span id="line-11">            SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 173)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-index-skip-scan">예시 3. 인덱스 스킵 스캔을 수행하는 해시 조인</p>
+<p>이 예시는 해시 조인을 수행할 때 인덱스 스킵 스캔을 사용하여 임시 결과를 가져오는 방법을 보여준다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* for nested loop join */</span>
+</span><span id="line-2"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code_event</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="p">(</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="cm">/* for hash join */</span>
+</span><span id="line-5"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="p">(</span><span class="n">continent</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash index_ss */</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-9"><span class="k">from</span>
+</span><span id="line-10"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-12"><span class="k">where</span>
+</span><span id="line-13"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-14"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code_event</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="p">;</span>
+</span><span id="line-17"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: iscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               index: i_nation_continent_code term[1]
+</span><span id="line-8">               cost:  2 card 1
+</span><span id="line-9">    inner: iscan
+</span><span id="line-10">               class: a node[1]
+</span><span id="line-11">               index: i_athlete_nation_code_event term[2] (index skip scan)
+</span><span id="line-12">               cost:  13 card 202
+</span><span id="line-13">    cost:  25 card 1
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 748, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
+</span><span id="line-4">      HASHJOIN (time: 1, fetch: 748, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-6">          SELECT (time: 0, fetch: 52, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (index: public.nation.i_nation_continent_code), (btree time: 0, fetch: 49, ioread: 0, readkeys: 47, filteredkeys: 0, rows: 47) (lookup time: 0, rows: 47)
+</span><span id="line-8">        PROBE (time: 1, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 103, rows: 103, max_collisions: 1)
+</span><span id="line-9">          SELECT (time: 1, fetch: 696, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (index: public.athlete.i_athlete_nation_code_event), (btree time: 1, fetch: 692, ioread: 0, readkeys: 121, filteredkeys: 0, rows: 229) (lookup time: 0, rows: 229)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-right-outer">예시 4. 해시 오른쪽 외부 조인</p>
+<p>이 예시는 외부 조인의 방향에 따라 해시 테이블을 빌드하는 테이블이 결정되는 방식을 보여준다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">participant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">p</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">right</span><span class="w"> </span><span class="k">outer</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">nation_code</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (right outer join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: p node[0]
+</span><span id="line-7">               sargs: term[1]
+</span><span id="line-8">               cost:  5 card 92
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: n node[1]
+</span><span id="line-11">               sargs: term[2]
+</span><span id="line-12">               cost:  2 card 31
+</span><span id="line-13">    cost:  15 card 31
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 70, rows: 70)
+</span><span id="line-4">      HASHJOIN (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-6">          SELECT (time: 0, fetch: 3, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.participant), (heap time: 0, fetch: 3, ioread: 0, readrows: 916, rows: 228)
+</span><span id="line-8">        PROBE (time: 0, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 36, rows: 70, max_collisions: 5)
+</span><span id="line-9">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>participant 테이블에는 필터 조건(<code class="docutils literal notranslate"><span class="pre">p.gold</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>)을 만족하는 레코드가 228개 있고,
+nation 테이블에는 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드가 47개 있다.
+participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의 경우 왼쪽 테이블(participant)이 해시 테이블을 빌드한다.</p>
+<p class="rubric" id="example-join-method-hash-skip-build">예시 5. 해시 테이블 빌드를 생략한 해시 외부 조인</p>
+<p>이 예시는 해시 외부 조인에서 해시 테이블 빌드를 생략하는 경우를 보여준다.
+왼쪽 외부 조인의 경우 오른쪽 테이블이 해시 테이블을 빌드한다.
+그러나 participant 테이블에 필터 조건(<code class="docutils literal notranslate"><span class="pre">p.gold</span> <span class="pre">&gt;</span> <span class="pre">100</span></code>)을 만족하는 레코드가 없으므로 해시 테이블 빌드가 생략된다.
+대신 nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드가 질의 결과로 반환된다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">left</span><span class="w"> </span><span class="k">outer</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">participant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">nation_code</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (left outer join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: p node[1]
+</span><span id="line-11">               sargs: term[1]
+</span><span id="line-12">               cost:  5 card 92
+</span><span id="line-13">    cost:  15 card 31
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 47, rows: 47)
+</span><span id="line-4">      HASHJOIN (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 1, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: skip)
+</span><span id="line-6">          SELECT (time: 1, fetch: 3, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.participant), (heap time: 1, fetch: 3, ioread: 0, readrows: 916, rows: 0)
+</span><span id="line-8">        PROBE (time: 0, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 0, rows: 47, max_collisions: 0)
+</span><span id="line-9">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><strong>BUILD</strong> 항목에서는 해시 테이블 빌드 방식이 <code class="docutils literal notranslate"><span class="pre">hash_method:</span> <span class="pre">skip</span></code>으로 표시된다.
+<code class="docutils literal notranslate"><span class="pre">skip</span></code>은 해시 테이블 빌드가 생략되었음을 의미한다.
+대신 nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드가 질의 결과로 반환된다.</p>
+<p class="rubric" id="example-join-method-hash-method-hybrid">예시 6. 하이브리드 해시 방식을 사용한 해시 조인</p>
+<p>이 예시는 하이브리드 해시 조인을 수행하는 방법을 보여준다.
+예시 데이터의 양이 적기 때문에, 하이브리드 해시 방식을 사용하려면 해시 테이블의 최대 크기를 낮춰야 한다.
+이를 위해 <strong>max_hash_list_scan_size</strong> 파라미터를 <strong>12K</strong>(기본값: <strong>8M</strong>)로 설정한다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=12k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               cost:  2 card 215
+</span><span id="line-8">    inner: sscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               cost:  49 card 6677
+</span><span id="line-11">    cost:  400 card 6677
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 126, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 19, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      HASHJOIN (time: 5, fetch: 105, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: hybrid)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 215)
+</span><span id="line-8">        PROBE (time: 5, probe_time: 2, fetch: 49, fetch_time: 0, ioread: 0, readkeys: 6692, rows: 6677, max_collisions: 2)
+</span><span id="line-9">          SELECT (time: 3, fetch: 53, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>동일한 테이블에 하나 이상의 조인 힌트를 사용하면,
+질의 최적화기는 지정된 조인 방식들의 비용을 비교해 더 비용이 적은 방식을 선택한다.
+생성된 실행 계획을 통해 질의 최적화기가 선택한 조인 방식을 확인할 수 있다.
+다음은 <strong>USE_HASH</strong>와 <strong>USE_NL</strong> 힌트를 함께 사용했을 때,
+질의 최적화기가 하이브리드 해시 방식을 선택하여 해시 조인으로 실행 계획을 생성하고 수행한 예시이다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=12k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash use_nl */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               cost:  2 card 215
+</span><span id="line-8">    inner: sscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               cost:  49 card 6677
+</span><span id="line-11">    cost:  400 card 6677
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 126, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 1, fetch: 19, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      HASHJOIN (time: 4, fetch: 105, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: hybrid)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 215)
+</span><span id="line-8">        PROBE (time: 4, probe_time: 2, fetch: 49, fetch_time: 0, ioread: 0, readkeys: 6692, rows: 6677, max_collisions: 2)
+</span><span id="line-9">          SELECT (time: 2, fetch: 53, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-method-file">예시 7. 파일 해시 방식을 사용한 해시 조인</p>
+<p>이 예시는 파일 해시 방식을 사용하여 해시 조인을 수행하는 방법을 보여준다.
+예시 데이터의 양이 적기 때문에, 파일 해시 방식을 사용하려면 해시 테이블의 최대 크기를 <strong>12K</strong>보다 더 낮춰야 한다.
+이를 위해 <strong>max_hash_list_scan_size</strong> 파라미터를 <strong>8K</strong>(기본값: <strong>8M</strong>)로 설정한다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               cost:  2 card 215
+</span><span id="line-8">    inner: sscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               cost:  49 card 6677
+</span><span id="line-11">    cost:  3846 card 6677
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>질의 최적화기는 데이터베이스가 수집한 통계를 바탕으로, 다음 계산을 통해 메모리 해시 방식 또는 하이브리드 해시 방식의 사용 가능 여부를 평가한다:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">임시 결과의 레코드 수 * (해시 엔트리 크기 + 위치 정보 크기) &lt;= 해시 테이블 최대 크기
+</span><span id="line-2">                              215 * (32 byte * 16 byte) &lt;= 8,192 byte
+</span><span id="line-3">                                                 10,320 &lt;= 8192 byte (False)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>계산 결과가 설정된 메모리 값보다 커서 메모리나 하이브리드 방식 대신 파일 해시 방식이 선택된다.
+파일 해시 방식(cost: 3,846)은 임시 볼륨 페이지를 사용하므로 다른 해시 방식(cost: 400)보다 비용이 더 높게 평가된다.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 10, fetch: 27510, fetch_time: 3, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 19, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      HASHJOIN (time: 10, fetch: 27489, fetch_time: 3, ioread: 0)
+</span><span id="line-5">        BUILD (time: 1, build_time: 1, fetch: 645, fetch_time: 1, ioread: 0, hash_method: file)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 215)
+</span><span id="line-8">        PROBE (time: 9, probe_time: 7, fetch: 26772, fetch_time: 2, ioread: 0, readkeys: 6692, rows: 6677, max_collisions: 2)
+</span><span id="line-9">          SELECT (time: 2, fetch: 53, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><a class="reference internal" href="tuning.html#example-join-method-hash-method-hybrid"><span class="std std-ref">예시 6</span></a>의 질의 프로파일링 결과와 비교했을 때,
+파일 해시 방식이 비용과 비례해서 수행시간이 느린 것을 확인할 수 있다.</p>
+<p>동일한 테이블에 하나 이상의 조인 힌트를 사용하면,
+질의 최적화기는 지정된 조인 방식들의 비용을 비교해 더 비용이 적은 방식을 선택한다.
+생성된 실행 계획을 통해 질의 최적화기가 선택한 조인 방식을 확인할 수 있다.
+다음은 <strong>USE_HASH</strong>와 <strong>USE_NL</strong> 힌트를 함께 사용했을 때,
+파일 해시 방식의 해시 조인 비용(cost: 3,846)이 높아 질의 최적화기가 중첩 반복 조인(cost: 3,405)으로 실행 계획을 생성하고 수행한 예시이다.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash use_nl */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: sscan
+</span><span id="line-5">               class: a node[1]
+</span><span id="line-6">               cost:  49 card 6677
+</span><span id="line-7">    inner: iscan
+</span><span id="line-8">               class: n node[0]
+</span><span id="line-9">               index: pk_nation_code term[0] (covers)
+</span><span id="line-10">               cost:  2 card 215
+</span><span id="line-11">    cost:  3405 card 6677
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 19, fetch: 13387, fetch_time: 1, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.athlete), (heap time: 4, fetch: 6709, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      SCAN (index: public.nation.pk_nation_code), (btree time: 10, fetch: 6677, ioread: 0, readkeys: 6677, filteredkeys: 0, rows: 0, covered: true, count_only: true)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#nested-loop'" class="reference internal" href="#nested-loop">중첩 반복(Nested Loop) 조인</a></li>
+<li><a :data-current="activeSection === '#sort-merge'" class="reference internal" href="#sort-merge">정렬 병합(Sort-Merge) 조인</a></li>
+<li><a :data-current="activeSection === '#hash'" class="reference internal" href="#hash">해시(Hash) 조인</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 4월 21, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

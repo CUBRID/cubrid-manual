@@ -221,7 +221,7 @@ DROP PACKAGE 문의 문법은 아래와 같다.
 
 ::
 
-    DROP PACKAGE [ BODY ] [schema_name.]<package_name> ;
+    DROP PACKAGE [ BODY ] [schema_name.]<package_name> [{, [schema_name.]<package_name>}...] ;
 
 등록된 패키지 전체나 패키지 Body를 삭제한다.
 

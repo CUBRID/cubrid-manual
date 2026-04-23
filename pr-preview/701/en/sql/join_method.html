@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Join Methods | CUBRID 11.4 User Manual</title>
+<meta content="Join Methods | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Join Methods | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/join_method.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_upgrade.html">Installing and Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">CUBRID SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/index.html">CUBRID Procedural Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">CUBRID Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_note/index.html">Release Notes</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Join Methods</span>
+</nav>
+<div id="content" role="main">
+<section id="join-methods">
+<span id="join-method"></span><h1>Join Methods<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#join-methods"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>A Relational database stores data by dividing it into multiple tables through normalization.
+This approach effectively reduces data redundancy and ensures data integrity.
+However, to query the divided data in an integrated manner, relationships between tables must be combined.
+A join operation combines these relationships and returns results as if they were from a single table.</p>
+<p class="rubric">Join Type</p>
+<p>The records included in the join results depend on the specified type of join.
+For more details, refer to <a class="reference internal" href="query/select.html#join-query"><span class="std std-ref">Join Query</span></a>.</p>
+<p class="rubric">Join Method</p>
+<p>The way records are combined between tables depends on the join method used. CUBRID supports the following join methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="tuning.html#join-method-nested-loop"><span class="std std-ref">Nested Loop Join</span></a></p></li>
+<li><p><a class="reference internal" href="tuning.html#join-method-sort-merge"><span class="std std-ref">Sort-Merge Join</span></a></p></li>
+<li><p><a class="reference internal" href="tuning.html#join-method-hash"><span class="std std-ref">Hash Join</span></a></p></li>
+</ul>
+</div></blockquote>
+<p>Join methods are determined by the query optimizer based on a cost comparison, though users can also specify them manually.
+The query optimizer calculates the cost of each join method using statistics collected by the database.
+It then selects the method with the lowest cost.
+When a query includes two or more joins, different join methods can be applied to each join.
+Each join method operates on only two tables at a time and is executed sequentially.
+In other words, the next join is performed only after the previous one has been completed.</p>
+<p>By default, CUBRID does not generate execution plans for <strong>Sort-Merge Joins</strong> or <strong>Hash Joins</strong>.
+<a class="reference internal" href="tuning.html#sql-hint"><span class="std std-ref">SQL hints</span></a> are required for the optimizer to consider these join methods.
+The <strong>optimizer_enable_merge_join</strong> parameter can be set to <strong>yes</strong> (default is <strong>no</strong>) to enable a <strong>Sort-Merge Join</strong> without requiring the <strong>USE_MERGE</strong> hint.
+For more details, refer to <a class="reference internal" href="../admin/config.html#other-parameters"><span class="std std-ref">Other Parameters</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The term <strong>table</strong> here is used broadly to include not only physical tables but also views (virtual tables) and derived tables.</p>
+</div>
+<section id="nested-loop-join">
+<span id="join-method-nested-loop"></span><h2>Nested Loop Join<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nested-loop-join" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#nested-loop-join'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>A nested loop join reads records from the outer table one at a time and combines each record with matching records from the inner table.
+This approach is similar to the concept of nested loops in programming.
+The table used in the outer loop is referred to as the <strong>driving table</strong>, while the table in the inner loop is called the <strong>driven table</strong>.</p>
+<p class="rubric">Driving Table</p>
+<p>When selecting a driving table from two tables, it is generally more efficient to choose the table with fewer records.
+Fewer records in the driving table result in fewer join operations, reducing the overall cost of the join.
+Since random access costs are typically constant, fewer join operations on the driven table lead to lower join costs and better performance.
+The query optimizer automatically selects the driving table by comparing join costs,
+but users can specify the driving table explicitly using <strong>ORDERED</strong> or <strong>LEADING</strong> hints.</p>
+<p class="rubric">Driven Table</p>
+<p>A nested loop join performs efficiently when random access to the driven table is possible.
+For random access, a join-compatible index must be created on the driven table.
+If no such index exists, all records in the driven table must be read sequentially, which degrades join performance.
+When random access to the driven table is enabled through a join-compatible index,
+the nested loop join is displayed as an <strong>Index Join (idx-join)</strong> in the execution plan.</p>
+<p class="rubric">Partial Range Processing</p>
+<p>Nested loop joins can perform join operations by reading just one record from each table,
+and they maintain join results that can be returned immediately, even if the join is not completed for all records.
+This behavior enables partial range processing: if only the first N results are needed, they are returned as soon as those N results are ready.
+Partial range processing improves overall join performance by avoiding unnecessary join operations.</p>
+<p class="rubric">Hash List Scan</p>
+<p>If the driven table is a view or a derived table, the index cannot be used,
+so the join is performed using the list scan method, which sequentially reads records from the temporary result.
+Hash list scan is a type of list scan that allows random access to records in the temporary result that satisfy the join condition.
+Since list scan reads records from a temporary result, it cannot be used for physical tables.
+Therefore, hash list scan can only be used when the driven table is a view or a derived table.
+Hash list scan operates similarly to a <a class="reference internal" href="tuning.html#join-method-hash"><span class="std std-ref">hash join</span></a> and can be used only when all join conditions are equality conditions.
+The use of hash list scan can be verified through <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">query profiling</span></a>.</p>
+<p>The differences between hash list scan and hash join are as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Hash list scan builds the hash table using only the driven table.</p></li>
+<li><p>Hash list scan is part of a nested loop join, enabling partial range processing.</p></li>
+</ol>
+</div></blockquote>
+<p>The query optimizer does not consider whether a hash list scan is performed when calculating the cost of a join.</p>
+<p class="rubric" id="example-join-method-nested-loop-no-index">Example 1. Nested Loop Join without Index Scans</p>
+<p>In this example, the driven table does not utilize an index scan during the nested loop join.
+The <strong>ORDERED</strong> hint is applied to enforce the join order, making the nation table the driving table and the athlete table the driven table.
+Since the driven table lacks an index appropriate for the join condition, all records in the athlete table are read sequentially for each record in the nation table.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_nl */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">nl-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: a node[1]
+</span><span id="line-11">               sargs: term[0] AND term[1]
+</span><span id="line-12">               cost:  49 card 202
+</span><span id="line-13">    cost:  4697 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 92, fetch: 1720, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.nation), (heap time: 0, fetch: 216, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-4">      SCAN (table: public.athlete), (heap time: 92, fetch: 1504, ioread: 0, readrows: 313819, rows: 103)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><strong>Execution Steps:</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Read a record from the nation table that satisfies the filter condition (<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>).</p></li>
+<li><p>Read a record from the athlete table that satisfies both the filter condition (<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>) and join condition (<code class="docutils literal notranslate"><span class="pre">n.code</span> <span class="pre">=</span> <span class="pre">a.nation_code</span></code>).</p></li>
+<li><p>If the condition is met, combine the two records and add them to the result.</p></li>
+<li><p>Repeat <strong>step 2</strong> for the next record in the athlete table.</p></li>
+<li><p>Repeat <strong>steps 1-3</strong> for the next record in the nation table.</p></li>
+<li><p>Continue until all records from both tables are processed.</p></li>
+</ol>
+</div></blockquote>
+<p class="rubric" id="example-join-method-nested-loop-index">Example 2. Nested Loop Join with Index Scans</p>
+<p>This example demonstrates a nested loop join where the driven table uses an index scan.
+An index suitable for the join condition is created on the driven table (athlete).
+As a result, not all records in the athlete table need to be scanned for each record in the nation table, enabling random access.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="p">(</span><span class="n">nation_code</span><span class="p">);</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_nl */</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-8"><span class="k">where</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: sscan
+</span><span id="line-5">               class: n node[0]
+</span><span id="line-6">               sargs: term[2]
+</span><span id="line-7">               cost:  2 card 31
+</span><span id="line-8">    inner: iscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               index: i_athlete_nation_code term[0]
+</span><span id="line-11">               sargs: term[1]
+</span><span id="line-12">               cost:  4 card 202
+</span><span id="line-13">    cost:  68 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 1265, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.nation), (heap time: 1, fetch: 216, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-4">      SCAN (index: public.athlete.i_athlete_nation_code), (btree time: 0, fetch: 1045, ioread: 0, readkeys: 24, filteredkeys: 0, rows: 948) (lookup time: 0, rows: 103)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>Compared to <a class="reference internal" href="tuning.html#example-join-method-nested-loop-no-index"><span class="std std-ref">Example 1</span></a>,
+the number of records read from the athlete table before comparing the join conditions is significantly reduced (<code class="docutils literal notranslate"><span class="pre">readrows:</span> <span class="pre">313,819</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">rows:</span> <span class="pre">948</span></code>).</p>
+<p class="rubric" id="example-join-method-nested-loop-driving">Example 3. Performance Differences Depending on the Driving Table</p>
+<p>This example changes the driving table to athlete, unlike previous examples where nation was the driving table.
+The <strong>LEADING</strong> hint is used to specify the join order, making athlete the driving table and nation the driven table.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile leading(a, n) use_nl */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: sscan
+</span><span id="line-5">               class: a node[0]
+</span><span id="line-6">               sargs: term[1]
+</span><span id="line-7">               cost:  49 card 202
+</span><span id="line-8">    inner: iscan
+</span><span id="line-9">               class: n node[1]
+</span><span id="line-10">               index: pk_nation_code term[0]
+</span><span id="line-11">               sargs: term[2]
+</span><span id="line-12">               cost:  2 card 31
+</span><span id="line-13">    cost:  161 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 7168, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.athlete), (heap time: 5, fetch: 6709, ioread: 0, readrows: 6677, rows: 229)
+</span><span id="line-4">      SCAN (index: public.nation.pk_nation_code), (btree time: 0, fetch: 458, ioread: 0, readkeys: 229, filteredkeys: 0, rows: 229) (lookup time: 0, rows: 103)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>Using athlete as the driving table leads to a decrease in performance due to its higher number of records.</p>
+<p class="rubric" id="example-join-method-nested-loop-with-hash-list">Example 4. Nested Loop Join with Hash List Scan</p>
+<p>This example demonstrates a nested loop join where a hash list scan is performed on the driven table.
+By combining the <strong>ORDERED</strong> and <strong>NO_MERGE</strong> hints, an inline view that cannot perform an index scan is used as the driven table.
+Additionally, the query retrieves only the first 20 results, allowing partial range processing to be combined with the hash list scan.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_nl */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-6"><span class="w">            </span><span class="k">select</span><span class="w"> </span><span class="cm">/*+ no_merge */</span>
+</span><span id="line-7"><span class="w">                </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-8"><span class="w">            </span><span class="k">from</span>
+</span><span id="line-9"><span class="w">                </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span>
+</span><span id="line-10"><span class="w">            </span><span class="k">where</span>
+</span><span id="line-11"><span class="w">                </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span>
+</span><span id="line-12"><span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-13"><span class="k">where</span>
+</span><span id="line-14"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-15"><span class="k">limit</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">nl-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[1] AND term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: v node[1]
+</span><span id="line-11">               sargs: term[0]
+</span><span id="line-12">               cost:  2 card 202
+</span><span id="line-13">    sargs: term[1]
+</span><span id="line-14">    cost:  148 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 26, rows: 8)
+</span><span id="line-4">      SCAN (hash temp(m), build time: 0, time: 0, fetch: 0, ioread: 0, readrows: 249, rows: 20)
+</span><span id="line-5">    SUBQUERY (uncorrelated)
+</span><span id="line-6">      SELECT (time: 2, fetch: 32, fetch_time: 0, ioread: 0)
+</span><span id="line-7">        SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 229)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>Hash list scans can be confirmed through query profiling but are not explicitly shown in the execution plan.</p>
+</section>
+<section id="sort-merge-join">
+<span id="join-method-sort-merge"></span><h2>Sort-Merge Join<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sort-merge-join" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sort-merge-join'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>A sort merge join combines records from two tables by first sorting them based on the join condition and then sequentially comparing the sorted records.
+This method can only be performed when the join condition is an equality condition.</p>
+<p>The process of sorting data from two tables before joining is similar to creating an index in real time.
+However, the sorting process is not skipped even if a join-compatible index exists.
+The process of combining the sorted data is similar to a nested loop join
+in that it performs the join operation by reading one record from each of the two sorted temporary results.
+The buffer size used during the sorting process can be set with the <strong>sort_buffer_size</strong> parameter.
+For more details, refer to <a class="reference internal" href="../admin/config.html#memory-parameters"><span class="std std-ref">Memory-Related Parameters</span></a>.</p>
+<p class="rubric">Join Cost</p>
+<p>Sort-merge joins can become inefficient when the sorting step incurs a high cost.
+When the query optimizer compares the costs of join methods, nested loop joins are often evaluated as having relatively low cost because they do not require preprocessing,
+Hash joins also tend to have lower cost since they build a hash table using data from only one of the two tables.
+In contrast, sort-merge joins are evaluated as having higher cost because they need to sort the data from both tables.</p>
+<p class="rubric">Partial Range Processing</p>
+<p>Sort-merge joins cannot perform partial range processing because they can only proceed after the sorting of both tables is complete.
+As a result, even if only the first N results are needed, the query will return results only after the entire join process has finished.</p>
+<p class="rubric" id="example-join-method-sort-merge">Example 1. Execution Process of a Sort-Merge Join</p>
+<p>This example demonstrates the steps involved in executing a sort-merge join.
+Although the <strong>ORDERED</strong> hint does not directly impact join performance, it is included here to ensure the join is performed in the specified order.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="p">(</span><span class="n">continent</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_event_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">nation_code</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_merge */</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-6"><span class="k">from</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-9"><span class="k">where</span>
+</span><span id="line-10"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="p">;</span>
+</span><span id="line-14"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_event_nation_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">temp
+</span><span id="line-4">    order: UNORDERED
+</span><span id="line-5">    subplan: m-join (inner join)
+</span><span id="line-6">                 edge:  term[0]
+</span><span id="line-7">                 outer: temp
+</span><span id="line-8">                            order: code[0]
+</span><span id="line-9">                            subplan: iscan
+</span><span id="line-10">                                         class: n node[0]
+</span><span id="line-11">                                         index: i_nation_continent_code term[1]
+</span><span id="line-12">                                         cost:  2 card 1
+</span><span id="line-13">                            cost:  8 card 1
+</span><span id="line-14">                 inner: temp
+</span><span id="line-15">                            order: nation_code[1]
+</span><span id="line-16">                            subplan: iscan
+</span><span id="line-17">                                         class: a node[1]
+</span><span id="line-18">                                         index: i_athlete_event_nation_code term[2]
+</span><span id="line-19">                                         cost:  2 card 7
+</span><span id="line-20">                            cost:  8 card 7
+</span><span id="line-21">                 cost:  17 card 1
+</span><span id="line-22">    cost:  23 card 1
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 287, fetch_time: 1, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
+</span><span id="line-4">      MERGELIST
+</span><span id="line-5">        SELECT (time: 0, fetch: 52, fetch_time: 0, ioread: 0)
+</span><span id="line-6">          SCAN (index: public.nation.i_nation_continent_code), (btree time: 0, fetch: 49, ioread: 0, readkeys: 47, filteredkeys: 0, rows: 47) (lookup time: 0, rows: 47)
+</span><span id="line-7">          ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+</span><span id="line-8">        SELECT (time: 1, fetch: 235, fetch_time: 1, ioread: 0)
+</span><span id="line-9">          SCAN (index: public.athlete.i_athlete_event_nation_code), (btree time: 1, fetch: 231, ioread: 0, readkeys: 6, filteredkeys: 0, rows: 229) (lookup time: 1, rows: 229)
+</span><span id="line-10">          ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p><strong>Execution Steps:</strong></p>
+<ol class="arabic simple">
+<li><p>Retrieve records from the nation table that meet the filter condition (<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>) and sort them by the code column.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Retrieve records from the athlete table that meet the filter condition (<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>) and sort them by the nation_code column.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Sequentially read records from the two sorted results, compare the join condition (<code class="docutils literal notranslate"><span class="pre">n.code</span> <span class="pre">=</span> <span class="pre">a.nation_code</span></code>), and if the condition is satisfied, combine the two records and add them to the result.</p></li>
+<li><p>Repeat this process until all records have been processed and the join is complete.</p></li>
+</ol>
+</section>
+<section id="hash-join">
+<span id="join-method-hash"></span><h2>Hash Join<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash-join" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash-join'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>A hash join combines records from two tables by using a hash function to match records with the same hash value.
+To efficiently compare records with the same hash value, a hash table is used.
+One of the two tables is used to <strong>build</strong> the hash table, while the other is used to <strong>probe</strong> it.
+The hash value is generated by applying a hash function to the join column values.
+When different input values produce the same hash value, a hash collision occurs.
+In such cases, records with the same hash value are sequentially examined, and the join condition is checked.
+A hash join can only be performed when all join conditions are equality conditions.</p>
+<p class="rubric">SQL Hints</p>
+<p>There are two hints associated with hash joins:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>USE_HASH</strong>: Allows the query optimizer to generate an execution plan using a hash join.</p></li>
+<li><p><strong>NO_USE_HASH</strong>: Prevents the query optimizer from generating an execution plan using a hash join.</p></li>
+</ul>
+</div></blockquote>
+<p>Both hints can specify one or more tables.
+The hint applies to the inner table (driven table) if a table is explicitly specified.
+If no table is specified, the hint applies to all tables.
+If the same table is specified in both the <strong>USE_HASH</strong> and <strong>NO_USE_HASH</strong> hints, the <strong>NO_USE_HASH</strong> hint takes precedence.</p>
+<p class="rubric">Cost Calculation</p>
+<p>Each table in a hash join can either be used to build the hash table or to probe it.
+To determine the most efficient approach, the costs of both options are calculated and compared, with the lower cost being selected as the hash join cost.
+For example, the following scenarios are compared, and the one with the lower cost is selected:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Building the hash table with the outer table (driving table) and probing it with the inner table (driven table).</p></li>
+<li><p>Building the hash table with the inner table (driven table) and probing it with the outer table (driving table).</p></li>
+</ul>
+</div></blockquote>
+<p class="rubric">Table used to build the hash table</p>
+<p>The table used to build the hash table cannot be explicitly specified using <strong>ORDERED</strong> or <strong>LEADING</strong> hints.
+The table with fewer records is typically chosen for building the hash table.
+However, in the case of outer joins, the table used to build the hash table is fixed based on the join direction:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Left Outer Join</strong>: The right table is used to build the hash table.</p></li>
+<li><p><strong>Right Outer Join</strong>: The left table is used to build the hash table.</p></li>
+</ul>
+</div></blockquote>
+<p class="rubric">How to build the hash table</p>
+<p>The method used to build the hash table depends on the size of the temporary results and the maximum size of the hash table.
+The maximum hash table size can be configured using the <strong>max_hash_list_scan_size</strong> parameter.
+For more details, refer to <a class="reference internal" href="../admin/config.html#memory-parameters"><span class="std std-ref">Memory-Related Parameters</span></a>.</p>
+<p>CUBRID supports the following hashing methods:</p>
+<blockquote>
+<div><ul>
+<li><p><strong>Memory Hash</strong>: Used when all temporary results can fit in the hash table.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Number of temporary result pages * Page size &lt;= Maximum hash table size
+</span></code></pre></div>
+</div>
+</li>
+<li><p><strong>Hybrid Hash</strong>: Used when the hash table can store the positions of all temporary result records.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Number of temporary result records * (Hash entry size + Position information size &lt;= Maximum hash table size
+</span></code></pre></div>
+</div>
+</li>
+<li><p><strong>File Hash</strong>:  Used when neither of the above methods is applicable.</p></li>
+<li><p><strong>Skip Hash</strong>: If either of the two temporary results is empty or unnecessary (in the case of an outer join), building the hash table is skipped.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Hybrid Hash</strong> and <strong>File Hash</strong> store record positions in the hash table, requiring an additional step to locate records before reading them.</p>
+<p><strong>Memory Hash</strong> and <strong>Hybrid Hash</strong> use memory pages to build the hash table, whereas <strong>File Hash</strong> uses temporary volume pages.
+Accessing pages in a temporary volume incurs additional logical I/O, which can lead to performance degradation.</p>
+<p>During query execution, once the join is complete, the hash table is deleted, and the memory it occupied is released.
+The specific hash method used during a hash join can be identified through query profiling.
+For details, refer to <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">Query Profiling</span></a>.</p>
+<p class="rubric">Partial Range Processing</p>
+<p>Hash joins cannot perform partial range processing because the join can only proceed after the hash table has been fully built.</p>
+<p class="rubric" id="example-join-method-hash">Example 1. Execution Process of a Hash Join</p>
+<p>This example explains the steps involved in performing a hash join.
+Even with the <strong>ORDERED</strong> hint, the table used to build the hash table cannot be explicitly specified.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_hash */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: a node[1]
+</span><span id="line-11">               sargs: term[1]
+</span><span id="line-12">               cost:  49 card 202
+</span><span id="line-13">    cost:  63 card 29
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
+</span><span id="line-4">      HASHJOIN (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-8">        PROBE (time: 2, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 103, rows: 103, max_collisions: 1)
+</span><span id="line-9">          SELECT (time: 2, fetch: 32, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 229)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>The nation table contains 47 records that satisfy the filter condition (<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>),
+and the athlete table contains 229 records that satisfy the filter condition (<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>).
+Thus, the nation table with fewer records is selected to build the hash table.</p>
+<p><strong>Query Profiling Results:</strong></p>
+<p>This section describes only the query profiling items related to hash joins. For details on other items, refer to <a class="reference internal" href="tuning.html#query-profiling"><span class="std std-ref">Query Profiling</span></a>.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>HASHJOIN</strong></p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>time</strong>: Total execution time for hash join (ms)</p></li>
+<li><p><strong>fetch</strong>: Pages fetched during the hash join</p></li>
+<li><p><strong>fetch_time</strong>: Time spent fetching pages for the hash join (ms)</p></li>
+<li><p><strong>ioread</strong>: Number of physical I/O reads during page fetches for the hash join</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong>BUILD</strong>: Except for <strong>time</strong>, the remaining items do not include cumulative information when querying temporary results.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>time</strong>: Total time for building the hash table, including temporary results (ms)</p></li>
+<li><p><strong>build_time</strong>: : Time specifically spent building the hash table (ms)</p></li>
+<li><p><strong>fetch</strong>: Pages fetched during the hash table build</p></li>
+<li><p><strong>fetch_time</strong>: Time spent fetching pages for the hash table build (ms)</p></li>
+<li><p><strong>ioread</strong>: Physical I/O reads during the hash table build</p></li>
+<li><p><strong>hash_method</strong>: Method used to build the hash table (<strong>memory</strong>, <strong>hybrid</strong>, <strong>file</strong>, or <strong>skip</strong>)</p>
+<ul>
+<li><p><strong>memory</strong>: Use the memory hashing method</p></li>
+<li><p><strong>hybrid</strong>: Use the hybrid hashing method</p></li>
+<li><p><strong>file</strong>:  Use the file hashing method</p></li>
+<li><p><strong>skip</strong>: Skip building the hash table</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p><strong>PROBE</strong>: Except for <strong>time</strong>, the remaining items do not include cumulative information when querying temporary results.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>time</strong>: Total time for probing the hash table, including temporary results (ms)</p></li>
+<li><p><strong>probe_time</strong>: Time specifically spent probing the hash table (ms)</p></li>
+<li><p><strong>fetch</strong>: Pages fetched during the hash table probe</p></li>
+<li><p><strong>fetch_time</strong>: Time spent fetching pages for the hash table probe (ms)</p></li>
+<li><p><strong>ioread</strong>: Physical I/O reads during the hash table probe</p></li>
+<li><p><strong>readkeys</strong>: Number of records with matching hash values during the probe</p></li>
+<li><p><strong>rows</strong>: Number of records satisfying the join condition (<strong>readkeys</strong> &gt;= <strong>rows</strong>)</p></li>
+<li><p><strong>max_collisions</strong>: Maximum number of records read for a single hash value during probing</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><strong>Execution Steps:</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Retrieve records from the nation table that satisfy the filter condition (<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>) and create a temporary result.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Retrieve records from the athlete table that satisfy the filter condition (<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>) and create a temporary result.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Read the temporary result from the nation table and build a hash table.</p></li>
+<li><p>For each record in the temporary result from the athlete table, probe the hash table of the nation table.</p></li>
+<li><p>Match records(<code class="docutils literal notranslate"><span class="pre">readkeys</span></code>) in the hash table with the same hash value and compare them against the join condition (<code class="docutils literal notranslate"><span class="pre">n.code</span> <span class="pre">=</span> <span class="pre">a.nation_code</span></code>). If the condition is satisfied(<code class="docutils literal notranslate"><span class="pre">rows</span></code>), combine the records and add them to the result.</p></li>
+<li><p>Repeat <strong>step 5</strong> for subsequent records with the same hash value.</p></li>
+<li><p>Repeat <strong>steps 4-6</strong> for the next record in the athlete table.</p></li>
+<li><p>Continue until all join operations are complete.</p></li>
+</ol>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-hint">예시 2. Hash join using hints</p>
+<p>This example demonstrates how to use the <strong>USE_HASH</strong> and <strong>NO_USE_HASH</strong> hints to control which tables perform a hash join.
+The <strong>ORDERED</strong> hint is used to fix the inner table (driven table) for applying the hint.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile ordered use_hash no_use_hash(r) */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">medal</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">athlete_code</span>
+</span><span id="line-7"><span class="k">where</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Shooting'</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">host_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1992</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: hash-join (inner join)
+</span><span id="line-5">               edge:  term[0]
+</span><span id="line-6">               outer: sscan
+</span><span id="line-7">                          class: n node[0]
+</span><span id="line-8">                          sargs: term[3]
+</span><span id="line-9">                          cost:  2 card 31
+</span><span id="line-10">               inner: sscan
+</span><span id="line-11">                          class: a node[1]
+</span><span id="line-12">                          sargs: term[2]
+</span><span id="line-13">                          cost:  49 card 202
+</span><span id="line-14">               cost:  63 card 29
+</span><span id="line-15">    inner: iscan
+</span><span id="line-16">               class: r node[2]
+</span><span id="line-17">               index: pk_record_host_year_event_code_athlete_code_medal term[4] (covers)
+</span><span id="line-18">               filtr: term[1]
+</span><span id="line-19">               cost:  5 card 400
+</span><span id="line-20">    cost:  109 card 2
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>The <strong>USE_HASH</strong> hint specifies that a hash join is performed for the nation and athlete tables.</p>
+<p>The <strong>NO_USE_HASH</strong> hint ensures that a hash join is not performed for the record table.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 139, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 35, rows: 35)
+</span><span id="line-4">      SCAN (index: public.record.pk_record_host_year_event_code_athlete_code_medal), (btree time: 3, fetch: 105, ioread: 0, readkeys: 7, filteredkeys: 0, rows: 7, covered: true)
+</span><span id="line-5">      HASHJOIN (time: 2, fetch: 33, fetch_time: 0, ioread: 0)
+</span><span id="line-6">        BUILD (time: 1, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-7">          SELECT (time: 1, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-8">            SCAN (table: public.nation), (heap time: 1, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span><span id="line-9">        PROBE (time: 1, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 35, rows: 35, max_collisions: 1)
+</span><span id="line-10">          SELECT (time: 1, fetch: 32, fetch_time: 0, ioread: 0)
+</span><span id="line-11">            SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 173)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-index-skip-scan">Example 3. Hash join with index skip scan</p>
+<p>This example demonstrates using an index skip scan to retrieve temporary results during a hash join.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* for nested loop join */</span>
+</span><span id="line-2"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code_event</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="p">(</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="cm">/* for hash join */</span>
+</span><span id="line-5"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="p">(</span><span class="n">continent</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash index_ss */</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-9"><span class="k">from</span>
+</span><span id="line-10"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span>
+</span><span id="line-12"><span class="k">where</span>
+</span><span id="line-13"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span>
+</span><span id="line-14"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">;</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_athlete_nation_code_event</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">athlete</span><span class="p">;</span>
+</span><span id="line-17"><span class="k">drop</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">i_nation_continent_code</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nation</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: iscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               index: i_nation_continent_code term[1]
+</span><span id="line-8">               cost:  2 card 1
+</span><span id="line-9">    inner: iscan
+</span><span id="line-10">               class: a node[1]
+</span><span id="line-11">               index: i_athlete_nation_code_event term[2] (index skip scan)
+</span><span id="line-12">               cost:  13 card 202
+</span><span id="line-13">    cost:  25 card 1
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 748, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 103, rows: 103)
+</span><span id="line-4">      HASHJOIN (time: 1, fetch: 748, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-6">          SELECT (time: 0, fetch: 52, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (index: public.nation.i_nation_continent_code), (btree time: 0, fetch: 49, ioread: 0, readkeys: 47, filteredkeys: 0, rows: 47) (lookup time: 0, rows: 47)
+</span><span id="line-8">        PROBE (time: 1, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 103, rows: 103, max_collisions: 1)
+</span><span id="line-9">          SELECT (time: 1, fetch: 696, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (index: public.athlete.i_athlete_nation_code_event), (btree time: 1, fetch: 692, ioread: 0, readkeys: 121, filteredkeys: 0, rows: 229) (lookup time: 0, rows: 229)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-right-outer">Example 4. Hash Right Outer Join</p>
+<p>This example illustrates how the direction of an outer join determines which table is used to build the hash table.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">participant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">p</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">right</span><span class="w"> </span><span class="k">outer</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">nation_code</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (right outer join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: p node[0]
+</span><span id="line-7">               sargs: term[1]
+</span><span id="line-8">               cost:  5 card 92
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: n node[1]
+</span><span id="line-11">               sargs: term[2]
+</span><span id="line-12">               cost:  2 card 31
+</span><span id="line-13">    cost:  15 card 31
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 70, rows: 70)
+</span><span id="line-4">      HASHJOIN (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: memory)
+</span><span id="line-6">          SELECT (time: 0, fetch: 3, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.participant), (heap time: 0, fetch: 3, ioread: 0, readrows: 916, rows: 228)
+</span><span id="line-8">        PROBE (time: 0, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 36, rows: 70, max_collisions: 5)
+</span><span id="line-9">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>The participant table contains 228 records that satisfy the filter condition (<code class="docutils literal notranslate"><span class="pre">p.gold</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>),
+while the nation table contains 47 records that meet the filter condition (<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>).
+Even though the participant table has more records, in a right outer join, the left table (participant) is used to build the hash table.</p>
+<p class="rubric" id="example-join-method-hash-skip-build">Example 5. Hash Outer Join Skipping Hash Table Build</p>
+<p>This example demonstrates a hash outer join where the hash table build is skipped.
+In a left outer join, the right table is typically used to build the hash table.
+However, since no records in the participant table satisfy the filter condition (<code class="docutils literal notranslate"><span class="pre">p.gold</span> <span class="pre">&gt;</span> <span class="pre">100</span></code>), the hash table build is skipped.
+Instead, records from the nation table that satisfy the filter condition (<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>) are directly returned as the query result.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span>
+</span><span id="line-3"><span class="k">from</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">left</span><span class="w"> </span><span class="k">outer</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">participant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">nation_code</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">gold</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="line-6"><span class="k">where</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (left outer join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               sargs: term[2]
+</span><span id="line-8">               cost:  2 card 31
+</span><span id="line-9">    inner: sscan
+</span><span id="line-10">               class: p node[1]
+</span><span id="line-11">               sargs: term[1]
+</span><span id="line-12">               cost:  5 card 92
+</span><span id="line-13">    cost:  15 card 31
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 0, ioread: 0, readrows: 47, rows: 47)
+</span><span id="line-4">      HASHJOIN (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 1, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: skip)
+</span><span id="line-6">          SELECT (time: 1, fetch: 3, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.participant), (heap time: 1, fetch: 3, ioread: 0, readrows: 916, rows: 0)
+</span><span id="line-8">        PROBE (time: 0, probe_time: 0, fetch: 0, fetch_time: 0, ioread: 0, readkeys: 0, rows: 47, max_collisions: 0)
+</span><span id="line-9">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 47)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>In the <strong>BUILD</strong> section, the hash table build method is displayed as <code class="docutils literal notranslate"><span class="pre">hash_method:</span> <span class="pre">skip</span></code>.
+This indicates that the hash table was not built.
+Instead, the records from the nation table satisfying the filter condition (<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>) constitute the query result.</p>
+<p class="rubric" id="example-join-method-hash-method-hybrid">Example 6. Hash Join Using the Hybrid Hash Method</p>
+<p>This example demonstrates how to perform a hash join using the hybrid hash method.
+Because the data set is small, the hash table’s maximum size must be reduced to use the hybrid hash method.
+To do this, set the <strong>max_hash_list_scan_size</strong> parameter to <strong>12K</strong> (default: <strong>8M</strong>).</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=12k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               cost:  2 card 215
+</span><span id="line-8">    inner: sscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               cost:  49 card 6677
+</span><span id="line-11">    cost:  400 card 6677
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 126, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 19, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      HASHJOIN (time: 5, fetch: 105, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: hybrid)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 215)
+</span><span id="line-8">        PROBE (time: 5, probe_time: 2, fetch: 49, fetch_time: 0, ioread: 0, readkeys: 6692, rows: 6677, max_collisions: 2)
+</span><span id="line-9">          SELECT (time: 3, fetch: 53, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>When more than one join hint is used on the same table,
+the query optimizer compares the costs of the specified join methods and selects the one with the lower cost.
+The selected join method can be verified through the generated execution plan.
+The following is an example where the <strong>USE_HASH</strong> and <strong>USE_NL</strong> hints are used together,
+and the query optimizer selects the hybrid hash method, generating and executing the execution plan as a hash join.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=12k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash use_nl */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               cost:  2 card 215
+</span><span id="line-8">    inner: sscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               cost:  49 card 6677
+</span><span id="line-11">    cost:  400 card 6677
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 5, fetch: 126, fetch_time: 0, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 1, fetch: 19, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      HASHJOIN (time: 4, fetch: 105, fetch_time: 0, ioread: 0)
+</span><span id="line-5">        BUILD (time: 0, build_time: 0, fetch: 0, fetch_time: 0, ioread: 0, hash_method: hybrid)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 215)
+</span><span id="line-8">        PROBE (time: 4, probe_time: 2, fetch: 49, fetch_time: 0, ioread: 0, readkeys: 6692, rows: 6677, max_collisions: 2)
+</span><span id="line-9">          SELECT (time: 2, fetch: 53, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 2, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p class="rubric" id="example-join-method-hash-method-file">Example 7. Hash Join Using the File Hash Method</p>
+<p>This example demonstrates how to perform a hash join using the file hash method.
+Because the data set is small, the hash table’s maximum size must be reduced to below <strong>12K</strong> to use the file hash method.
+To do this, set the <strong>max_hash_list_scan_size</strong> parameter to <strong>8K</strong> (default: <strong>8M</strong>).</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">hash-join (inner join)
+</span><span id="line-4">    edge:  term[0]
+</span><span id="line-5">    outer: sscan
+</span><span id="line-6">               class: n node[0]
+</span><span id="line-7">               cost:  2 card 215
+</span><span id="line-8">    inner: sscan
+</span><span id="line-9">               class: a node[1]
+</span><span id="line-10">               cost:  49 card 6677
+</span><span id="line-11">    cost:  3846 card 6677
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>The query optimizer evaluates whether memory hashing or hybrid hashing can be used by calculating based on statistics collected by the database:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Temporary result record count * (Hash entry size + Location info size) &lt;= Maximum hash table size
+</span><span id="line-2">                                             215 * (32 byte * 16 byte) &lt;= 8,192 byte
+</span><span id="line-3">                                                                10,320 &lt;= 8192 byte (False)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>Since the calculated size exceeds the maximum size of the hash table, the file hash method is chosen instead of the memory or hybrid method.
+File hash methods (cost: 3,846) are more expensive than other hash methods (cost: 400) due to the use of temporary volume pages.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 10, fetch: 27510, fetch_time: 3, ioread: 0)
+</span><span id="line-3">    SCAN (temp time: 0, fetch: 19, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      HASHJOIN (time: 10, fetch: 27489, fetch_time: 3, ioread: 0)
+</span><span id="line-5">        BUILD (time: 1, build_time: 1, fetch: 645, fetch_time: 1, ioread: 0, hash_method: file)
+</span><span id="line-6">          SELECT (time: 0, fetch: 1, fetch_time: 0, ioread: 0)
+</span><span id="line-7">            SCAN (table: public.nation), (heap time: 0, fetch: 1, ioread: 0, readrows: 215, rows: 215)
+</span><span id="line-8">        PROBE (time: 9, probe_time: 7, fetch: 26772, fetch_time: 2, ioread: 0, readkeys: 6692, rows: 6677, max_collisions: 2)
+</span><span id="line-9">          SELECT (time: 2, fetch: 53, fetch_time: 0, ioread: 0)
+</span><span id="line-10">            SCAN (table: public.athlete), (heap time: 1, fetch: 32, ioread: 0, readrows: 6677, rows: 6677)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<p>When compared with the query profiling results from <a class="reference internal" href="tuning.html#example-join-method-hash-method-hybrid"><span class="std std-ref">Example 6</span></a>,
+It can be seen that the execution time of the file hash method is slow in proportion to the cost.</p>
+<p>When more than one join hint is used on the same table,
+the query optimizer compares the costs of the specified join methods and selects the one with the lower cost.
+The selected join method can be verified through the generated execution plan.
+The following is an example where the <strong>USE_HASH</strong> and <strong>USE_NL</strong> hints are used together,
+and the query optimizer generates and executes a plan with a nested loop join (cost: 3,405) because the cost of a hash join (cost: 3,846) using the file hash method) is high.</p>
+<blockquote>
+<div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8k'</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile use_hash use_nl */</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">count</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">from</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">set</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="s1">'max_hash_list_scan_size=8M'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
+</span><span id="line-2">
+</span><span id="line-3">idx-join (inner join)
+</span><span id="line-4">    outer: sscan
+</span><span id="line-5">               class: a node[1]
+</span><span id="line-6">               cost:  49 card 6677
+</span><span id="line-7">    inner: iscan
+</span><span id="line-8">               class: n node[0]
+</span><span id="line-9">               index: pk_nation_code term[0] (covers)
+</span><span id="line-10">               cost:  2 card 215
+</span><span id="line-11">    cost:  3405 card 6677
+</span></code></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Trace Statistics:
+</span><span id="line-2">  SELECT (time: 19, fetch: 13387, fetch_time: 1, ioread: 0)
+</span><span id="line-3">    SCAN (table: public.athlete), (heap time: 4, fetch: 6709, ioread: 0, readrows: 6677, rows: 6677)
+</span><span id="line-4">      SCAN (index: public.nation.pk_nation_code), (btree time: 10, fetch: 6677, ioread: 0, readkeys: 6677, filteredkeys: 0, rows: 0, covered: true, count_only: true)
+</span></code></pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#nested-loop-join'" class="reference internal" href="#nested-loop-join">Nested Loop Join</a></li>
+<li><a :data-current="activeSection === '#sort-merge-join'" class="reference internal" href="#sort-merge-join">Sort-Merge Join</a></li>
+<li><a :data-current="activeSection === '#hash-join'" class="reference internal" href="#hash-join">Hash Join</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Apr 23, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=582b20c5"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

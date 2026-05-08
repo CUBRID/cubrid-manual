@@ -204,7 +204,7 @@ DROP PACKAGE 문을 사용해서 패키지를 삭제하고, ALTER PACKAGE 문을
 </span><span id="line-31">
 </span><span id="line-32">        <span class="o">&lt;</span><span class="n">cursor_decl_or_def</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
 </span><span id="line-33">            <span class="n">CURSOR</span> <span class="o">&lt;</span><span class="n">cursor_name</span><span class="o">&gt;</span> <span class="p">[</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">seq_of_cursor_parameters</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">]</span> <span class="n">RETURN</span> <span class="o">&lt;</span><span class="n">rowtype</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">COMMENT</span> <span class="s1">'comment_string'</span> <span class="p">]</span> <span class="p">;</span>
-</span><span id="line-34">          <span class="o">|</span> <span class="n">CURSOR</span> <span class="o">&lt;</span><span class="n">cursor_name</span><span class="o">&gt;</span> <span class="p">[</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">seq_of_cursor_parameters</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">]</span> <span class="p">[</span> <span class="n">RETURN</span> <span class="o">&lt;</span><span class="n">rowtype</span><span class="o">&gt;</span> <span class="p">]</span> <span class="n">IS</span> <span class="o">&lt;</span><span class="n">select_statement</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">COMMENT</span> <span class="s1">'comment_string'</span> <span class="p">]</span> <span class="p">;</span>
+</span><span id="line-34">          <span class="o">|</span> <span class="n">CURSOR</span> <span class="o">&lt;</span><span class="n">cursor_name</span><span class="o">&gt;</span> <span class="p">[</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">seq_of_cursor_parameters</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">]</span> <span class="n">IS</span> <span class="o">&lt;</span><span class="n">select_statement</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">COMMENT</span> <span class="s1">'comment_string'</span> <span class="p">]</span> <span class="p">;</span>
 </span><span id="line-35">
 </span><span id="line-36">            <span class="o">&lt;</span><span class="n">seq_of_cursor_parameters</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="o">&lt;</span><span class="n">cursor_parameter</span><span class="o">&gt;</span> <span class="p">{</span> <span class="p">,</span> <span class="o">&lt;</span><span class="n">cursor_parameter</span><span class="o">&gt;</span> <span class="p">}</span><span class="o">...</span>
 </span><span id="line-37">            <span class="o">&lt;</span><span class="n">cursor_parameter</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="o">&lt;</span><span class="n">parameter_name</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">IN</span> <span class="p">]</span> <span class="o">&lt;</span><span class="n">type_spec</span><span class="o">&gt;</span>
@@ -221,7 +221,7 @@ DROP PACKAGE 문을 사용해서 패키지를 삭제하고, ALTER PACKAGE 문을
 </span><span id="line-48">        <span class="o">&lt;</span><span class="n">record_type_def</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
 </span><span id="line-49">            <span class="n">TYPE</span> <span class="o">&lt;</span><span class="n">record_type_name</span><span class="o">&gt;</span> <span class="n">IS</span> <span class="n">RECORD</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">field_decl</span><span class="o">&gt;</span> <span class="p">{</span> <span class="p">,</span> <span class="o">&lt;</span><span class="n">field_decl</span><span class="o">&gt;</span> <span class="p">}</span><span class="o">...</span> <span class="p">)</span> <span class="p">[</span> <span class="n">COMMENT</span> <span class="s1">'comment_string'</span> <span class="p">]</span> <span class="p">;</span>
 </span><span id="line-50">
-</span><span id="line-51">            <span class="o">&lt;</span><span class="n">field_decl</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="o">&lt;</span><span class="n">field_name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">type_spec</span><span class="o">&gt;</span> <span class="p">[</span> <span class="p">[</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="p">]</span> <span class="o">&lt;</span><span class="n">initial_value_part</span><span class="o">&gt;</span> <span class="p">]</span>
+</span><span id="line-51">            <span class="o">&lt;</span><span class="n">field_decl</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="o">&lt;</span><span class="n">field_name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">type_spec</span><span class="o">&gt;</span>
 </span></code></pre></div>
 </div>
 <ul class="simple">
@@ -248,11 +248,10 @@ SELECT 문을 지정하지 않았을 때는 RETURN 절을 포함하여 커서가
 구현은 아래에서 설명할 CREATE PACKAGE BODY 문을 이용해서 제공한다.
 함수의 경우에는 DETERMINISTIC 혹은 NOT DETERMINISTIC 수식어를 사용하여 <a class="reference internal" href="pl_tuning.html#pl-deterministic"><span class="std std-ref">결정적 함수</span></a>인지 여부를 지정할 수 있다.
 둘 중 아무 것도 지정하지 않았을 때는 NOT DETERMINISTIC을 지정한 것처럼 동작한다.</p>
-<p>레코드 타입은 주로 커서의 리턴 타입을 지정하기 위해 필요하다.
-즉, 커서가 리턴하는 레코드가 어떤 이름과 타입의 컬럼들로 이루어져 있는지 나타내기 위해 주로 사용된다.
-레코드 타입은 <a class="reference internal" href="plcsql_overview.html#percent-rowtype"><span class="std std-ref">%ROWTYPE</span></a>으로 사용할 수 있지만 위 문법의 <em>record_type_def</em>대로 사용자가 정의해서 사용할 수도 있다.
-레코드 컬럼을 나타내는 필드는 각각 NOT NULL 수식어와 디폴트값을 가질 수 있다.</p>
-<p>커서의 리턴 타입 뿐만 아니라 PL/CSQL 문에서 타입 지정이 필요한 모든 위치에 레코드 타입을 쓸 수 있다.</p>
+<p>레코드 타입은 주로 커서 선언에서 리턴 타입을 지정하기 위해 필요하다.
+즉, 커서가 리턴하는 레코드가 어떤 이름과 타입의 컬럼들로 이루어져 있는지 나타내기 위해 주로 사용된다
+(레코드 타입을 지정하는 또 다른 방법은 <a class="reference internal" href="plcsql_overview.html#percent-rowtype"><span class="std std-ref">%ROWTYPE</span></a>이다).
+커서의 리턴 타입 뿐만 아니라 PL/CSQL 문에서 타입 지정이 필요한 모든 위치에 레코드 타입을 쓸 수 있다.</p>
 </section>
 <section id="create-package-body">
 <h3>CREATE PACKAGE BODY<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#create-package-body" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#create-package-body'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
@@ -326,13 +325,11 @@ SELECT 문을 지정하지 않았을 때는 RETURN 절을 포함하여 커서가
 </ul>
 <p>CREATE PACKAGE BODY 문의 기능은 아래와 같다.</p>
 <ul class="simple">
-<li><p>CREATE PACKAGE 문에서 선언한 프로시저와 함수에 대해서 구현(body)을 제공</p></li>
-<li><p>CREATE PACKAGE 문에서 커서 선언에 SELECT 문을 포함하지 않았을 때 이를 제공</p></li>
+<li><p>CREATE PACKAGE 문에서 선언한 프로시저, 함수, 커서에 대해서 구현을 제공</p></li>
 <li><p>패키지 상태 인스턴스 초기화 코드를 제공 (위 문법에서 <em>pb_initialize_section</em>)</p></li>
 <li><p>패키지 구현 내부에서만 사용하는 (사용자가 참조할 수 없는) 패키지 private 항목들 정의</p></li>
 </ul>
-<p>CREATE PACKAGE 문에서 선언한 커서, 프로시저, 함수에 대해서 구현을 제공할 때에는 선언부까지의 텍스트가 동일해야 한다.
-그렇지 않으면 컴파일 에러이다.</p>
+<p>선언한 프로시저, 함수, 커서 중에서 어느 하나라도 구현이 제공되지 않은 상태에서 그 패키지를 사용하면 컴파일은 성공하지만 실행 시간에 에러가 발생한다.</p>
 <p>CREATE PACKAGE 문에서 선언한 항목들에 대해서 구현을 제공하는 것이 아니라 같은 이름으로 다시 선언하는 경우에는 컴파일 에러이다.</p>
 <p>CREATE PACKAGE 문과 달리 CREATE PACKAGE BODY 문과 그 안에서 정의하는 항목들에 대해서는 COMMENT 절을 추가할 수 없다.
 COMMENT는 사용자가 참조할 수 있는 패키지 명세와 패키지 멤버들에 대해서만 의미가 있기 때문이다.</p>
@@ -343,7 +340,9 @@ COMMENT는 사용자가 참조할 수 있는 패키지 명세와 패키지 멤�
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">DROP</span> <span class="n">PACKAGE</span> <span class="p">[</span> <span class="n">BODY</span> <span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="o">&lt;</span><span class="n">package_name</span><span class="o">&gt;</span> <span class="p">[{,</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="o">&lt;</span><span class="n">package_name</span><span class="o">&gt;</span><span class="p">}</span><span class="o">...</span><span class="p">]</span> <span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>등록된 패키지 전체나 패키지 Body를 삭제한다.</p>
+<p>DROP PACKAGE 문은 지정된 패키지 각각의 명세와 구현을 모두 삭제한다.
+DROP PACKAGE BODY 문은 지정된 패키지 각각의 구현만을 삭제한다.
+구현을 삭제했을 때 명세가 남아 있는 경우 해당 패키지를 다시 컴파일한다.</p>
 </section>
 <section id="alter-package">
 <h3>ALTER PACKAGE<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alter-package" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#alter-package'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
@@ -592,7 +591,7 @@ PUT_LINE 함수는 저장 함수 개발자가 사용하고 ENABLE, DISABLE, GET_
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 4월 23, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 5월 08, 2026. </p>
 </div>
 </div>
 </footer>

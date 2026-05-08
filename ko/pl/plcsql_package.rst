@@ -72,7 +72,7 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
 
             <cursor_decl_or_def> ::=
                 CURSOR <cursor_name> [ ( <seq_of_cursor_parameters> ) ] RETURN <rowtype> [ COMMENT 'comment_string' ] ;
-              | CURSOR <cursor_name> [ ( <seq_of_cursor_parameters> ) ] [ RETURN <rowtype> ] IS <select_statement> [ COMMENT 'comment_string' ] ;
+              | CURSOR <cursor_name> [ ( <seq_of_cursor_parameters> ) ] IS <select_statement> [ COMMENT 'comment_string' ] ;
 
                 <seq_of_cursor_parameters> ::= <cursor_parameter> { , <cursor_parameter> }...
                 <cursor_parameter> ::= <parameter_name> [ IN ] <type_spec>
@@ -89,7 +89,7 @@ CREATE PACKAGE 문의 문법은 아래와 같다.
             <record_type_def> ::=
                 TYPE <record_type_name> IS RECORD ( <field_decl> { , <field_decl> }... ) [ COMMENT 'comment_string' ] ;
 
-                <field_decl> ::= <field_name> <type_spec> [ [ NOT NULL ] <initial_value_part> ]
+                <field_decl> ::= <field_name> <type_spec>
 
 * *..._name*: :ref:`PL/CSQL 작성 규칙 <plcsql_identifier>`\에 설명된 식별자
 * *builtin_type*: :ref:`PL/CSQL 데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
@@ -120,11 +120,9 @@ SELECT 문을 지정하지 않았을 때는 RETURN 절을 포함하여 커서가
 함수의 경우에는 DETERMINISTIC 혹은 NOT DETERMINISTIC 수식어를 사용하여 :ref:`결정적 함수 <pl-deterministic>`\인지 여부를 지정할 수 있다.
 둘 중 아무 것도 지정하지 않았을 때는 NOT DETERMINISTIC을 지정한 것처럼 동작한다.
 
-레코드 타입은 주로 커서의 리턴 타입을 지정하기 위해 필요하다.
-즉, 커서가 리턴하는 레코드가 어떤 이름과 타입의 컬럼들로 이루어져 있는지 나타내기 위해 주로 사용된다.
-레코드 타입은 :ref:`%ROWTYPE <percent_rowtype>`\으로 사용할 수 있지만 위 문법의 *record_type_def*\대로 사용자가 정의해서 사용할 수도 있다.
-레코드 컬럼을 나타내는 필드는 각각 NOT NULL 수식어와 디폴트값을 가질 수 있다.
-
+레코드 타입은 주로 커서 선언에서 리턴 타입을 지정하기 위해 필요하다.
+즉, 커서가 리턴하는 레코드가 어떤 이름과 타입의 컬럼들로 이루어져 있는지 나타내기 위해 주로 사용된다
+(레코드 타입을 지정하는 또 다른 방법은 :ref:`%ROWTYPE <percent_rowtype>`\이다).
 커서의 리턴 타입 뿐만 아니라 PL/CSQL 문에서 타입 지정이 필요한 모든 위치에 레코드 타입을 쓸 수 있다.
 
 CREATE PACKAGE BODY
@@ -201,13 +199,11 @@ CREATE PACKAGE BODY 문의 문법은 아래와 같다.
 
 CREATE PACKAGE BODY 문의 기능은 아래와 같다.
 
-* CREATE PACKAGE 문에서 선언한 프로시저와 함수에 대해서 구현(body)을 제공
-* CREATE PACKAGE 문에서 커서 선언에 SELECT 문을 포함하지 않았을 때 이를 제공
+* CREATE PACKAGE 문에서 선언한 프로시저, 함수, 커서에 대해서 구현을 제공
 * 패키지 상태 인스턴스 초기화 코드를 제공 (위 문법에서 *pb_initialize_section*)
 * 패키지 구현 내부에서만 사용하는 (사용자가 참조할 수 없는) 패키지 private 항목들 정의
 
-CREATE PACKAGE 문에서 선언한 커서, 프로시저, 함수에 대해서 구현을 제공할 때에는 선언부까지의 텍스트가 동일해야 한다.
-그렇지 않으면 컴파일 에러이다.
+선언한 프로시저, 함수, 커서 중에서 어느 하나라도 구현이 제공되지 않은 상태에서 그 패키지를 사용하면 컴파일은 성공하지만 실행 시간에 에러가 발생한다.
 
 CREATE PACKAGE 문에서 선언한 항목들에 대해서 구현을 제공하는 것이 아니라 같은 이름으로 다시 선언하는 경우에는 컴파일 에러이다.
 
@@ -223,7 +219,9 @@ DROP PACKAGE 문의 문법은 아래와 같다.
 
     DROP PACKAGE [ BODY ] [schema_name.]<package_name> [{, [schema_name.]<package_name>}...] ;
 
-등록된 패키지 전체나 패키지 Body를 삭제한다.
+DROP PACKAGE 문은 지정된 패키지 각각의 명세와 구현을 모두 삭제한다.
+DROP PACKAGE BODY 문은 지정된 패키지 각각의 구현만을 삭제한다.
+구현을 삭제했을 때 명세가 남아 있는 경우 해당 패키지를 다시 컴파일한다.
 
 ALTER PACKAGE
 --------------

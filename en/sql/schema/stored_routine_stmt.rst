@@ -25,8 +25,8 @@ Create stored procedure using the **CREATE PROCEDURE** statement.
         <parameter_definition> ::= parameter_name [mode] sql_type [ { DEFAULT | = } <default_expr> ] [COMMENT 'parameter_comment_string']
         <lang> ::= [PLCSQL | JAVA]
         <mode> ::= IN | OUT | IN OUT | INOUT
-        <procedure_properties> ::= 
-          <authid> = AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
+        <procedure_properties> ::= <authid>
+            <authid> ::= AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
 
 You can use the **OR REPLACE** clause to replace or create a new stored function/procedure.
 
@@ -122,9 +122,9 @@ Create stored function using the **CREATE FUNCTION** statement.
     
         <parameter_definition> ::= parameter_name [mode] sql_type [<default_arg>] [COMMENT 'param_comment_string']
             <default_arg> ::= { DEFAULT | = } <default_expr>
-        <procedure_properties> ::= <authid> | <deterministic>
-            <authid> = AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
-            <deterministic> = [NOT DETERMINISTIC | DETERMINISTIC]
+        <function_properties> ::= [<authid>] [<deterministic>]
+            <authid> ::= AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
+            <deterministic> ::= [NOT DETERMINISTIC | DETERMINISTIC]
         <lang> ::= [PLCSQL | JAVA]
         <mode> ::= IN | OUT | IN OUT | INOUT
 

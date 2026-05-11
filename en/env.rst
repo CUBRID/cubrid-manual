@@ -120,7 +120,26 @@ OS Environment
 
       ::
 
-         예) export LD_PRELOAD=/usr/lib64/jemalloc.so.1
+         ex) export LD_PRELOAD=/usr/lib64/jemalloc.so.1
+
+    *  THP (Transparent Huge Pages) is a Linux kernel feature (supported since kernel version 2.6.38) that is enabled by default in many Linux environments to improve memory management efficiency. It automatically combines small memory pages (4 KB) into larger pages (typically 2 MB), thereby reducing TLB (Translation Lookaside Buffer) overhead.
+
+       However, in DBMS environments such as CUBRID, the automatic memory compaction and page migration mechanisms of THP may lead to increased system CPU usage (sys CPU) and memory allo    cation latency, which can negatively impact performance. Therefore, to ensure stable and predictable service behavior, disabling THP by setting it to never is strongly recommended. 
+    *  Checking THP Enablement Status
+
+      :: 
+
+         ex) [root]# cat /sys/kernel/mm/transparent_hugepage/enabled
+             [always] madvise never
+         disabled) [root]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+    *  Checking THP Defragmentation Status
+
+      :: 
+
+         ex) [root]# cat /sys/kernel/mm/transparent_hugepage/defrag
+             always madvise [never]
+         disabled) [root]# echo never > /sys/kernel/mm/transparent_hugepage/defrag
 
 
 Configuring the Environment Variable

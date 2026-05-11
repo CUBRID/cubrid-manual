@@ -116,7 +116,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --cached-pages=NUMBER
 
-    The **\-\-cached-pages** option specifies the number of pages of tables to be cached in the memory. Each page is 4,096 bytes. The administrator can configure the number of pages taking into account the memory size and speed. If this option is not specified, the default value is 100 pages.
+    CUBRID supports object-oriented features that allow a specific class (table) to be defined as a data type of another class. In such a structure, OID (Object Identifier) references occur, where a specific record directly points to another record to represent relationships between data. The --cached-pages option allows you to specify the number of pages allocated to a hash table in order to efficiently process object references (OID references) that occur during data extraction. Each page is 4,096 bytes in size, and the administrator can adjust this value considering system memory capacity and performance requirements. If this option is not specified, the default value is 100 pages.
     
     ::
 

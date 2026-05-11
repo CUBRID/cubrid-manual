@@ -649,9 +649,13 @@ CUBRID는 1시간 주기로 **ha_ping_hosts**\에 명시된 호스트를 점검�
 
 그러나 ICMP 프로토콜이 비활성화 되어 있는 경우 핑 체크는 정상적으로 동작하지 않는다. CUBRID는 이 경우를 대비하여 **ha_tcp_ping_hosts**\를 지원한다.
 
+이 파라미터는 동적으로 변경할 수 있으며, 변경하면 :ref:`cubrid heartbeat reload <cubrid-heartbeat>`\ 를 실행해야 한다.
+
 **ha_tcp_ping_hosts**
 
 **ha_tcp_ping_hosts**\는 ICMP 프로토콜이 비활성화 되어 **ha_ping_hosts**\를 사용할 수 없는 경우 대안으로 사용될 수 있다. **ha_tcp_ping_hosts**\는 **ha_ping_hosts**\와 똑같이 동작하지만 핑 체크를 위해 IP 계층 대신 TCP 계층을 사용한다는 차이가 있다. 기본값은 **NULL**\이며, 여러 개의 호스트 이름은 쉼표(,)로 호스트 이름과 포트 번호는 콜론(:)으로 구분한다. 예를들어, "ha_tcp_ping_hosts=host1:port1,host2:port2"와 같은 형식으로 설정할 수 있다. TCP 계층을 이용한 핑 체크가 정상적으로 동작하기 위해서는 반드시 **ha_tcp_ping_hosts**\에 설정된 호스트 상에서 해당 포트 번호를 갖는 소켓이 네트워크 요청을 정상적으로 수신할 수 있어야 하며, 방화벽에 의해 네트워크 요청이 차단되지 않아야 한다. **ha_ping_hosts**\가 설정된 경우 **ha_tcp_ping_hosts**\는 사용되지 않고 무시된다.
+
+이 파라미터는 동적으로 변경할 수 있으며, 변경하면 :ref:`cubrid heartbeat reload <cubrid-heartbeat>`\ 를 실행해야 한다.
 
 복제
 ^^^^
@@ -930,7 +934,7 @@ CAS가 연결할 호스트 순서를 결정할 때 **$CUBRID_DATABASES/databases
 *   *host4* : standby 상태, 복제 지연
 *   *host5* : standby 상태, 복제 지연 없음
 
-이면 브로커는 먼저 복제 지연 상태인 2개의 호스트 *host2* , *host4* 까지 접속을 시도하고, *ho:1106st4* 에 접속하는 것으로 결정한다.
+이면 브로커는 먼저 복제 지연 상태인 2개의 호스트 *host2* , *host4* 까지 접속을 시도하고, *host4* 에 접속하는 것으로 결정한다.
 
 이렇게 동작하는 이유는 **MAX_NUM_DELAYED_HOSTS_LOOKUP**\ 에서 명시한 개수까지만 복제 지연이 있다면 이후의 호스트들에도 복제 지연이 있을 것이라는 가정을 하기 때문이며, 따라서 더 이상 뒤의 호스트에 대해 접속 시도를 하지 않고 복제 지연이 있지만 가장 마지막에 접속을 시도했던 호스트에 접속하기로 결정하는 것이다. 단, **PREFERRED_HOSTS**\ 가 같이 명시되는 경우 **PREFERRED_HOSTS**\ 에 명시된 모든 호스트들에 대해 접속을 먼저 시도한 후 다시 db-host 리스트의 처음부터 접속을 시도한다. 
 

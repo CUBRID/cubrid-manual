@@ -12,19 +12,19 @@ You can easily get various schema information from the SQL statement by using th
 
 .. code-block:: sql
 
-    -- Classes that refer to the 'db_user' class
+    -- Classes that refer to the '_db_user' class
     SELECT class_name
     FROM db_attribute
-    WHERE domain_class_name = 'db_user';
+    WHERE domain_class_name = '_db_user';
      
     -- The number of classes that the current user can access
     SELECT COUNT(*)
     FROM db_class;
      
-    -- Attribute of the 'db_user' class
+    -- Attribute of the '_db_user' class
     SELECT attr_name, data_type
     FROM db_attribute
-    WHERE class_name = 'db_user';
+    WHERE class_name = '_db_user';
     
 System Catalog Classes
 ======================
@@ -58,11 +58,11 @@ Class Name                       Description
 :ref:`-db-stored-procedure-code` Stored procedure code information
 :ref:`-db-server`                Server information for DBLink
 :ref:`-db-synonym`               Target object information of synonyms
+:ref:`-db-user`                  User information
+:ref:`-db-authorization`         User authorization information of classes
 :ref:`-db-serial`                Serial information
 :ref:`-db-trigger`               Trigger information
 :ref:`-db-ha-apply-info`         The progress status the **applylogdb** utility applies replication logs
-:ref:`db-user`                   User information
-:ref:`db-authorization`          User authorization information of classes
 :ref:`dual`                      Dummy table
 ================================ =======================================================================
 
@@ -91,7 +91,7 @@ Represents class information. An index for unique_name and an index for class_na
 | is_system_class    | INTEGER                   | 0 for a user-defined class, and 1 for a system class                                     |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
-| owner              | db_user                   | Class owner                                                                              |
+| owner              | _db_user                  | Class owner                                                                              |
 |                    |                           |                                                                                          |
 +--------------------+---------------------------+------------------------------------------------------------------------------------------+
 | inst_attr_count    | INTEGER                   | The number of instance attributes                                                        |
@@ -437,11 +437,11 @@ The following example shows how to retrieve class methods of the class with a cl
       class_name            sequence((select meth_name from _db_method m where m in c.class_meths))
     ============================================
       '_db_serial'          {'change_serial_owner'}
-      'db_authorization'    {'check_authorization'}
-      'db_root'             {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner', 
+      '_db_user'            {'set_password', 'set_password_encoded', 'set_password_encoded_sha1', 'add_member',
+                             'drop_member', 'print_authorizations', 'add_user', 'drop_user', 'find_user', 'login'}
+      'db_root'             {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner',
                              'change_trigger_owner', 'get_owner', 'change_sp_owner'}
-      'db_serial'           {'change_serial_owner'}
-      'db_user'             {'add_user', 'drop_user', 'find_user', 'login'}
+      'db_user'             {'find_user', 'login'}
 
 .. _-db-meth-sig:
 
@@ -623,7 +623,7 @@ The following example shows how to retrieve names of indexes that belong to the 
       '_db_synonym'         'i__db_synonym_name_owner_is_public'
       'athlete'             'pk_athlete_code'
       'code'                'pk_code'
-      'db_user'             'u_db_user_name'
+      '_db_user'            'u__db_user_name'
       'event'               'pk_event_code'
       'female_event'        'pk_event_code'
       'game'                'pk_game_host_year_event_code_athlete_code'
@@ -700,9 +700,9 @@ Represents user authorization information for objects. An index is created on gr
 +--------------------+---------------+--------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                                                        |
 +====================+===============+======================================================================================+
-| grantor            | db_user       | Authorization grantor                                                                |
+| grantor            | _db_user      | Authorization grantor                                                                |
 +--------------------+---------------+--------------------------------------------------------------------------------------+
-| grantee            | db_user       | Authorization grantee                                                                |
+| grantee            | _db_user      | Authorization grantee                                                                |
 +--------------------+---------------+--------------------------------------------------------------------------------------+
 | object_type        | INTEGER       | Type of the object for which authorization is granted (0: class, 5: stored procedure)|
 +--------------------+---------------+--------------------------------------------------------------------------------------+
@@ -833,7 +833,7 @@ directive            INTEGER                               Execution behavior at
 sql_data_access      INTEGER                               SQL data access attribute (0: NO SQL, 1: CONTAINS SQL, 2: READS SQL DATA, 3: MODIFIES SQL DATA)
 target_class         VARCHAR(1024)                         Class name of the stored procedure to execute
 target_method        VARCHAR(4096)                         Method name of the stored procedure to execute
-owner                db_user                               Owner
+owner                _db_user                              Owner
 comment              VARCHAR(1024)                         Comment to describe the stored procedure
 created_time         DATETIME                              Stored procedure creation time
 updated_time         DATETIME                              Stored procedure modification time
@@ -932,7 +932,7 @@ Attribute Name       Data Type                      Description
 ==================== ============================= =================================================================
 name                 CHARACTER VARYING(1024)       Name of the stored procedure code
 created_time         CHARACTER VARYING(16)         Creation time
-owner                db_user                       Owner
+owner                _db_user                      Owner
 is_static            INTEGER                       Indicates whether the stored procedure code is loaded statically
 is_system_generated  INTEGER                       Indicates whether the stored procedure code is system-generated
 stype                INTEGER                       Type of the source code
@@ -980,7 +980,7 @@ db_name        VARCHAR(255)        Database name of a server
 user_name      VARCHAR(255)        Database user name of a server
 password       VARCHAR(1073741823) Database user password of a server
 properties     VARCHAR(2048)       Property information used for connection
-owner          db_user             The owner of this connection information
+owner          _db_user            The owner of this connection information
 comment        VARCHAR(1024)       Comment to describe the server
 created_time   DATETIME            Server creation time
 updated_time   DATETIME            Server modification time
@@ -998,11 +998,11 @@ Attribute Name     Data Type     Description
 ================== ============= =======================================================
 unique_name        VARCHAR(255)  Name prefixed with the schema name of the synonym
 name               VARCHAR(255)  The name of the synonym
-owner              db_user       The owner of the synonym
+owner              _db_user      The owner of the synonym
 is_public          INTEGER       1 for a public synonym, and 0 for a private synonym.
 target_unique_name VARCHAR(255)  Name prefixed with the schema name of the target object
 target_name        VARCHAR(255)  The name of the target object
-target_owner       db_user       The owner name of the target object
+target_owner       _db_user      The owner name of the target object
 comment            VARCHAR(2048) Comment to describe the synonym
 created_time       DATETIME      Synonym creation time
 updated_time       DATETIME      Synonym modification time
@@ -1012,47 +1012,107 @@ updated_time       DATETIME      Synonym modification time
     
     It does not support public synonym yet.
 
+.. _-db-user:
+
+_db_user
+--------
+
+Represents user information. An index for name is created.
+
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type         |   Description                                                                     |
++====================+=====================+===================================================================================+
+| name               | VARCHAR(32)         | User name                                                                         |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| id                 | INTEGER             | User identifier                                                                   |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| password           | _db_password        | User password. Not displayed to the user.                                         |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| direct_groups      | SET OF _db_user     | Groups to which the user belongs directly                                         |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| groups             | SET OF _db_user     | Groups to which the user belongs directly or indirectly                           |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| authorization      | _db_authorization   | Information of the authorization owned by the user                                |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                                           |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| is_loginable       | INTEGER             | 1 if the user is allowed to log in, 0 otherwise                                   |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| is_system_created  | INTEGER             | 1 if the user is created by the system (for example, **DBA** and **PUBLIC**),     |
+|                    |                     | 0 otherwise                                                                       |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| comment            | VARCHAR(1024)       | Comment to describe the user                                                      |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| created_time       | DATETIME            | User creation time                                                                |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+| updated_time       | DATETIME            | User modification time                                                            |
++--------------------+---------------------+-----------------------------------------------------------------------------------+
+
+**Function Names**
+
+*   **set_password** ()
+*   **set_password_encoded** ()
+*   **set_password_encoded_sha1** ()
+*   **add_member** ()
+*   **drop_member** ()
+*   **print_authorizations** ()
+*   **add_user** ()
+*   **drop_user** ()
+*   **find_user** ()
+*   **login** ()
+
+.. _-db-authorization:
+
+_db_authorization
+-----------------
+
+Represents user authorization information of classes.
+
++--------------------+--------------------+----------------------------------------------------------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type        |   Description                                                                                                                    |
++====================+====================+==================================================================================================================================+
+| owner              | _db_user           | Owner of this authorization object                                                                                               |
++--------------------+--------------------+----------------------------------------------------------------------------------------------------------------------------------+
+| grants             | SEQUENCE           | Sequence of {object for which the user has authorization, authorization grantor of the object, authorization type} for each grant|
++--------------------+--------------------+----------------------------------------------------------------------------------------------------------------------------------+
+
 .. _-db-serial:
 
 _db_serial
 ----------
 
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| Attribute Name | Data Type           | Description                                                                               |
-+================+=====================+===========================================================================================+
-| unique_name    | VARCHAR(1073741823) | Serial name prefixed with schema name.                                                    |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| name           | VARCHAR(1073741823) | Serial name.                                                                              |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| owner          | db_user             | Serial owner.                                                                             |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| current_val    | NUMERIC(38,0)       | Current serial value. Default is 1.                                                       |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| increment_val  | NUMERIC(38,0)       | Interval of serial values. Default is 1.                                                  |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| max_val        | NUMERIC(38,0)       | The maximum value of the serial. Default is 99999999999999999999999999999999999999.       |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| min_val        | NUMERIC(38,0)       | The minimum value of the cereal. Default is 1.                                            |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| start_val      | NUMERIC(38,0)       | The starting value of the serial. Default is 1.                                           |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| cyclic         | INTEGER             | 1 (CYCLE) if a value can be generated by cycling after reaching the maximum               |
-|                |                     | or minimum value of the serial; 0 (NOCYCLE) if not.                                       |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| started        | INTEGER             | 1 if the value has been created at least once after creation, otherwise 0.                |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| class_name     | VARCHAR(1073741823) | AUTO_INCREMENT In case of serial, the table name is stored. or **NULL**.                  |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| attr_name      | VARCHAR(1073741823) | AUTO_INCREMENT In case of serial, the column name is stored. or **NULL**.                 |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| cached_num     | INTEGER             | The number of serial values to pre-create in memory to improve performance. Default is 0. |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| comment        | VARCHAR (1024)      | Comment to describe the serial.                                                           |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| created_time   | DATETIME            | Serial creation time                                                                      |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
-| updated_time   | DATETIME            | Serial modification time                                                                  |
-+----------------+---------------------+-------------------------------------------------------------------------------------------+
+Represents serial information. An index for unique_name and an index for name and owner are created.
+
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+|   Attribute Name  |   Data Type          |   Description                                                                                       |
++===================+======================+=====================================================================================================+
+| unique_name       | VARCHAR(1073741823)  | Serial name prefixed with schema name.                                                              |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| name              | VARCHAR(1073741823)  | Serial name.                                                                                        |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| owner             | _db_user             | Serial owner.                                                                                       |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| current_val       | NUMERIC(38,0)        | Current serial value. Default is 1.                                                                 |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| increment_val     | NUMERIC(38,0)        | Interval of serial values. Default is 1.                                                            |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| max_val           | NUMERIC(38,0)        | The maximum value of the serial. Default is 99999999999999999999999999999999999999.                 |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| min_val           | NUMERIC(38,0)        | The minimum value of the cereal. Default is 1.                                                      |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| cyclic            | INTEGER              | 1 (CYCLE) if a value can be generated by cycling after reaching the maximum                         |
+|                   |                      | or minimum value of the serial; 0 (NOCYCLE) if not.                                                 |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| started           | INTEGER              | 1 if the value has been created at least once after creation, otherwise 0.                          |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| class_name        | VARCHAR(1073741823)  | AUTO_INCREMENT In case of serial, the table name is stored. or **NULL**.                            |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| attr_name         | VARCHAR(1073741823)  | AUTO_INCREMENT In case of serial, the column name is stored. or **NULL**.                           |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| cached_num        | INTEGER              | The number of serial values to pre-create in memory to improve performance. Default is 0.           |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| comment           | VARCHAR (1024)       | Comment to describe the serial.                                                                     |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 
 **Method Name**
 
@@ -1063,12 +1123,14 @@ _db_serial
 _db_trigger
 -----------
 
+Represents trigger information.
+
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |   Attribute Name       |   Data Type         |   Description                                                                                                                                              |
 +========================+=====================+============================================================================================================================================================+
 | unique_name            | VARCHAR(1073741823) | Trigger name prefixed with schema name                                                                                                                     |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| owner                  | db_user             | Trigger owner                                                                                                                                              |
+| owner                  | _db_user            | Trigger owner                                                                                                                                              |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | name                   | VARCHAR(1073741823) | Trigger name                                                                                                                                               |
 +------------------------+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1180,69 +1242,6 @@ A table that stores the progress status every time the **applylogdb** utility ap
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 | start_time           | DATETIME        | Time when the applylogdb process accessed the slave database                                                                                       |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-
-.. _db-user:
-
-db_user
--------
-
-+--------------------+---------------------+---------------------------------------------------------+
-|   Attribute Name   |   Data Type         |   Description                                           |
-+====================+=====================+=========================================================+
-| name               | VARCHAR(32)         | User name                                               |
-+--------------------+---------------------+---------------------------------------------------------+
-| id                 | INTEGER             | User identifier                                         |
-+--------------------+---------------------+---------------------------------------------------------+
-| password           | db_password         | User password. Not displayed to the user.               |
-+--------------------+---------------------+---------------------------------------------------------+
-| direct_groups      | SET OF VARCHAR(32)  | Groups to which the user belongs directly               |
-+--------------------+---------------------+---------------------------------------------------------+
-| groups             | SET OF VARCHAR(32)  | Groups to which the user belongs directly or indirectly |
-+--------------------+---------------------+---------------------------------------------------------+
-| authorization      | db_authorization    | Information of the authorization owned by the user      |
-+--------------------+---------------------+---------------------------------------------------------+
-| triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                 |
-+--------------------+---------------------+---------------------------------------------------------+
-| is_loginable       | INTEGER             | Indicates whether the user can log in                   |
-+--------------------+---------------------+---------------------------------------------------------+
-| is_system_created  | INTEGER             | Indicates whether the user is system-created            |
-+--------------------+---------------------+---------------------------------------------------------+
-| comment            | VARCHAR (1024)      | Comment to describe the user                            |
-+--------------------+---------------------+---------------------------------------------------------+
-| created_time       | DATETIME            | User creation time                                      |
-+--------------------+---------------------+---------------------------------------------------------+
-| updated_time       | DATETIME            | User modification time                                  |
-+--------------------+---------------------+---------------------------------------------------------+
-
-**Function Names**
-
-*   **set_password** ()
-*   **set_password_encoded** ()
-*   **set_password_encoded_sha1** ()
-*   **add_member** ()
-*   **drop_member** ()
-*   **print_authorizations** ()
-*   **add_user** ()
-*   **drop_user** ()
-*   **find_user** ()
-*   **login** ()
-
-.. _db-authorization:
-
-db_authorization
-----------------
-
-+--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type        |   Description                                                                                                      |
-+====================+====================+====================================================================================================================+
-| owner              | VARCHAR(32)        | User information                                                                                                   |
-+--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
-| grants             | SEQUENCE OF        | Sequence of {object for which the user has authorization, authorization grantor of the object, authorization type} |
-+--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
-
-**Method Name**
-
-*   **check_authorization** (varchar(255), integer)
 
 .. _dual:
 
@@ -1428,9 +1427,7 @@ The following example shows how to retrieve system classes that can be accessed 
     
       class_name
     ======================
-      'db_authorization'
       'db_root'
-      'db_user'
       'dual'
 
 .. _db-direct-super-class:
@@ -1517,7 +1514,7 @@ The following example shows how to retrieve SQL definition statements of the *db
     
       vclass_def
     ======================
-      'SELECT [c].[class_name], [c].[owner].[name], CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE [c].[tde_algorithm] WHEN 0 THEN 'NONE' WHEN 1 THEN 'AES' WHEN 2 THEN 'ARIA' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END, [coll].[coll_name], [c].[comment] FROM [_db_class] [c], [_db_collation] [coll] WHERE [c].[collation_id] = [coll].[coll_id] AND (CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ (SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ ( SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au] WHERE {[au].[grantee].[name]} SUBSETEQ ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) AND [au].[auth_type] = 'SELECT'))'
+      'SELECT [c].[class_name], [c].[owner].[name], CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE [c].[tde_algorithm] WHEN 0 THEN 'NONE' WHEN 1 THEN 'AES' WHEN 2 THEN 'ARIA' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END, [coll].[coll_name], [c].[comment] FROM [_db_class] [c], [_db_collation] [coll] WHERE [c].[collation_id] = [coll].[coll_id] AND (CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ (SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [_db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ ( SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au] WHERE {[au].[grantee].[name]} SUBSETEQ ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [_db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) AND [au].[auth_type] = 'SELECT'))'
 
 .. _db-attribute:
 
@@ -1762,13 +1759,13 @@ Represents method information of a class for which the current user has access a
 | func_name          | VARCHAR(255)  | Name of the C function for the method                                                                                                         |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
 
-The following example shows how to retrieve methods of the *db_user* class.
+The following example shows how to retrieve methods of the *_db_user* class.
 
 .. code-block:: sql
 
     SELECT meth_name, meth_type, func_name
     FROM db_method
-    WHERE class_name = 'db_user'
+    WHERE class_name = '_db_user'
     ORDER BY meth_type, meth_name;
     
 ::
@@ -1819,13 +1816,13 @@ Represents the input/output argument information of the method of the class for 
 | domain_owner_name  | VARCHAR(32)   | Owner name of the domain class if the data type of the argument is an object.                                                            |
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
 
-The following example shows how to retrieve input arguments of the method of the *db_user* class.
+The following example shows how to retrieve input arguments of the method of the *_db_user* class.
 
 .. code-block:: sql
 
     SELECT meth_name, data_type, prec
     FROM db_meth_arg
-    WHERE class_name = 'db_user';
+    WHERE class_name = '_db_user';
     
 ::
 
@@ -1960,7 +1957,7 @@ The following example shows how to retrieve index information of the class.
 
       class_name            index_name                                           is_unique
     ========================================================================================
-      'db_user'             'u_db_user_name'                                     'YES'
+      '_db_user'            'u__db_user_name'                                    'YES'
       'athlete'             'pk_athlete_code'                                    'YES'
       'event'               'pk_event_code'                                      'YES'
       'female_event'        'pk_event_code'                                      'YES'
@@ -2016,7 +2013,7 @@ The following example shows how to retrieve index key information of the class.
 
       class_name            key_attr_name         index_name
     ==================================================================
-      'db_user'             'name'                'u_db_user_name'
+      '_db_user'            'name'                'u__db_user_name'
       'athlete'             'code'                'pk_athlete_code'
       'code'                's_name'              'pk_code'
       'event'               'code'                'pk_event_code'
@@ -2079,12 +2076,65 @@ The following example show how to retrieve authorization information for objects
       'db_attribute'           'SELECT'              'DBA'
       'db_auth'                'SELECT'              'DBA'
       'db_authorization'       'SELECT'              'DBA'
-      'db_authorization'       'EXECUTE'             'DBA'
+
+.. _db-user:
+
+DB_USER
+-------
+
+Represents information of users for which the current user has access authorization to a database.
+
++--------------------+---------------------+----------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type         |   Description                                                                    |
++====================+=====================+==================================================================================+
+| name               | VARCHAR(32)         | User name                                                                        |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| id                 | INTEGER             | User identifier                                                                  |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| password           | _db_password        | Always **NULL** (kept for backward compatibility)                                |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| direct_groups      | SET OF VARCHAR(32)  | Names of groups to which the user belongs directly                               |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| groups             | SET OF VARCHAR(32)  | Names of groups to which the user belongs directly or indirectly                 |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| authorization      | _db_authorization   | Always **NULL** (kept for backward compatibility)                                |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| triggers           | SEQUENCE OF object  | Triggers that occur due to user actions                                          |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| is_loginable       | VARCHAR(3)          | 'YES' if the user is allowed to log in, 'NO' otherwise                           |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| is_system_created  | VARCHAR(3)          | 'YES' if the user is a system-created account (for example, **DBA** and          |
+|                    |                     | **PUBLIC**), 'NO' otherwise                                                      |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| comment            | VARCHAR(1024)       | Comment to describe the user                                                     |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| created_time       | DATETIME            | User creation time                                                               |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+| updated_time       | DATETIME            | User modification time                                                           |
++--------------------+---------------------+----------------------------------------------------------------------------------+
+
+.. _db-authorization:
+
+DB_AUTHORIZATION
+----------------
+
+Represents user authorization information of classes for which the current user has access authorization to a database.
+
++--------------------+--------------------+-----------------------------------------------------------------------------------+
+|   Attribute Name   |   Data Type        |   Description                                                                     |
++====================+====================+===================================================================================+
+| owner              | VARCHAR(32)        | Owner of this authorization object                                                |
++--------------------+--------------------+-----------------------------------------------------------------------------------+
+| grants             | SEQUENCE           | Sequence of {object for which the user has authorization, authorization grantor   |
+|                    |                    | of the object, authorization type} for each grant                                 |
++--------------------+--------------------+-----------------------------------------------------------------------------------+
 
 .. _db-serial:
 
 DB_SERIAL
 ---------
+
+Represents information of serials for which the current user has access authorization to a database.
 
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 | Attribute Name | Data Type           | Description                                                                               |
@@ -2512,7 +2562,7 @@ Updating catalog classes/virtual classes is automatically performed by the syste
 Querying on Catalog
 ===================
 
-To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes. But, DB user name is changed as uppercases and stored into db_user system catalog table.
+To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes. But, DB user name is changed as uppercases and stored into _db_user system catalog table.
 
 .. code-block:: sql
 
@@ -2536,7 +2586,7 @@ To query on catalog classes, you must convert identifiers such as class, virtual
 .. code-block:: sql
 
     CREATE USER tester PASSWORD 'testpwd';
-    SELECT name, password FROM db_user;
+    SELECT name, password FROM _db_user;
     
 ::
 
@@ -2544,4 +2594,4 @@ To query on catalog classes, you must convert identifiers such as class, virtual
     ============================================
       'DBA'                 NULL
       'PUBLIC'              NULL
-      'TESTER'              db_password
+      'TESTER'              _db_password

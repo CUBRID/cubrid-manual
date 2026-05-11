@@ -1189,15 +1189,15 @@ db_user
 +--------------------+---------------------+---------------------------------------------------------+
 |   Attribute Name   |   Data Type         |   Description                                           |
 +====================+=====================+=========================================================+
-| name               | VARCHAR(1073741823) | User name                                               |
+| name               | VARCHAR(32)         | User name                                               |
 +--------------------+---------------------+---------------------------------------------------------+
 | id                 | INTEGER             | User identifier                                         |
 +--------------------+---------------------+---------------------------------------------------------+
 | password           | db_password         | User password. Not displayed to the user.               |
 +--------------------+---------------------+---------------------------------------------------------+
-| direct_groups      | SET OF db_user      | Groups to which the user belongs directly               |
+| direct_groups      | SET OF VARCHAR(32)  | Groups to which the user belongs directly               |
 +--------------------+---------------------+---------------------------------------------------------+
-| groups             | SET OF db_user      | Groups to which the user belongs directly or indirectly |
+| groups             | SET OF VARCHAR(32)  | Groups to which the user belongs directly or indirectly |
 +--------------------+---------------------+---------------------------------------------------------+
 | authorization      | db_authorization    | Information of the authorization owned by the user      |
 +--------------------+---------------------+---------------------------------------------------------+
@@ -1235,7 +1235,7 @@ db_authorization
 +--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type        |   Description                                                                                                      |
 +====================+====================+====================================================================================================================+
-| owner              | db_user            | User information                                                                                                   |
+| owner              | VARCHAR(32)        | User information                                                                                                   |
 +--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
 | grants             | SEQUENCE OF        | Sequence of {object for which the user has authorization, authorization grantor of the object, authorization type} |
 +--------------------+--------------------+--------------------------------------------------------------------------------------------------------------------+
@@ -1331,7 +1331,7 @@ Represents information of classes for which the current user has access authoriz
 +====================+===============+==========================================================+
 | class_name         | VARCHAR(255)  | Class name                                               |
 +--------------------+---------------+----------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner Name of class                                      |
+| owner_name         | VARCHAR(32)   | Owner Name of class                                      |
 +--------------------+---------------+----------------------------------------------------------+
 | class_type         | VARCHAR(6)    | 'CLASS' for a class, and 'VCLASS' for a virtual class    |
 +--------------------+---------------+----------------------------------------------------------+
@@ -1445,11 +1445,11 @@ Represents the names of super classes (if any) of the class for which the curren
 +====================+===============+===========================+
 | class_name         | VARCHAR(255)  | Class name                |
 +--------------------+---------------+---------------------------+
-| owner_name         | VARCHAR(255)  | Owner Name of class       |
+| owner_name         | VARCHAR(32)   | Owner Name of class       |
 +--------------------+---------------+---------------------------+
 | super_class_name   | VARCHAR(255)  | Super class name          |
 +--------------------+---------------+---------------------------+
-| super_owner_name   | VARCHAR(255)  | Owner Name of super class |
+| super_owner_name   | VARCHAR(32)   | Owner Name of super class |
 +--------------------+---------------+---------------------------+
 
 The following example shows how to retrieve super classes of the *female_event* class. (see :ref:`add-superclass`)
@@ -1496,7 +1496,7 @@ The data type of attribute 'vclass_def' is VARCHAR (4096) for prior versions inc
 +====================+=====================+===============================================+===============================+
 | vclass_name        | VARCHAR(255)        | Virtual class name                            |                               |
 +--------------------+---------------------+-----------------------------------------------+-------------------------------+
-| owner_name         | VARCHAR(255)        | Owner name of virtual class                   |                               |
+| owner_name         | VARCHAR(32)         | Owner name of virtual class                   |                               |
 +--------------------+---------------------+-----------------------------------------------+-------------------------------+
 |                    | VARCHAR(1073741823) |                                               | 10.1 Patch 4 or later         | 
 + vclass_def         +---------------------+ SQL definition statement of the virtual class +-------------------------------+
@@ -1517,7 +1517,7 @@ The following example shows how to retrieve SQL definition statements of the *db
     
       vclass_def
     ======================
-      'SELECT [c].[class_name], CAST([c].[owner].[name] AS VARCHAR(255)), CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE [c].[tde_algorithm] WHEN 0 THEN 'NONE' WHEN 1 THEN 'AES' WHEN 2 THEN 'ARIA' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END, [coll].[coll_name], [c].[comment] FROM [_db_class] [c], [_db_collation] [coll] WHERE [c].[collation_id] = [coll].[coll_id] AND (CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ (SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ ( SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au] WHERE {[au].[grantee].[name]} SUBSETEQ ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) AND [au].[auth_type] = 'SELECT'))'
+      'SELECT [c].[class_name], [c].[owner].[name], CASE [c].[class_type] WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END, CASE WHEN MOD([c].[is_system_class], 2) = 1 THEN 'YES' ELSE 'NO' END, CASE [c].[tde_algorithm] WHEN 0 THEN 'NONE' WHEN 1 THEN 'AES' WHEN 2 THEN 'ARIA' END, CASE WHEN [c].[sub_classes] IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM [_db_partition] [p] WHERE [p].[class_of] = [c] and [p].[pname] IS NULL), 'NO') END, CASE WHEN MOD([c].[is_system_class] / 8, 2) = 1 THEN 'YES' ELSE 'NO' END, [coll].[coll_name], [c].[comment] FROM [_db_class] [c], [_db_collation] [coll] WHERE [c].[collation_id] = [coll].[coll_id] AND (CURRENT_USER = 'DBA' OR {[c].[owner].[name]} SUBSETEQ (SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) OR {[c]} SUBSETEQ ( SELECT SUM(SET{[au].[class_of]}) FROM [_db_auth] [au] WHERE {[au].[grantee].[name]} SUBSETEQ ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{[t].[g].[name]}), SET{}) FROM [db_user] [u], TABLE([groups]) AS [t]([g]) WHERE [u].[name] = CURRENT_USER) AND [au].[auth_type] = 'SELECT'))'
 
 .. _db-attribute:
 
@@ -1533,7 +1533,7 @@ Represents the attribute information of a class for which the current user has a
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | class_name        | VARCHAR(255)  | Name of the class to which the attribute belongs                                                              |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-| owner_name        | VARCHAR(255)  | Owner name of the class to which the attribute belongs                                                        |
+| owner_name        | VARCHAR(32)   | Owner name of the class to which the attribute belongs                                                        |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | attr_type         | VARCHAR(8)    | 'INSTANCE' for an instance attribute, 'CLASS' for a class attribute, and 'SHARED' for a shared attribute.     |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
@@ -1542,7 +1542,7 @@ Represents the attribute information of a class for which the current user has a
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | from_class_name   | VARCHAR(255)  | If the attribute is inherited, the super class in which it is defined is used. Otherwise, **NULL**.           |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-| from_owner_name   | VARCHAR(255)  | If the attribute is inherited, the owner name of the super class in which it is defined is used.              |
+| from_owner_name   | VARCHAR(32)   | If the attribute is inherited, the owner name of the super class in which it is defined is used.              |
 |                   |               | Otherwise, **NULL**.                                                                                          |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | from_attr_name    | VARCHAR(255)  | If the attribute is inherited and its name is changed to resolve a name conflict, the original name           |
@@ -1561,7 +1561,7 @@ Represents the attribute information of a class for which the current user has a
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | domain_class_name | VARCHAR(255)  | Domain class name if the data type is an object.  **NULL** otherwise.                                         |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-| domain_owner_name | VARCHAR(255)  | Owner name of the domain class if the data type is an object.  **NULL** otherwise.                            |
+| domain_owner_name | VARCHAR(32)   | Owner name of the domain class if the data type is an object.  **NULL** otherwise.                            |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | default_value     | VARCHAR(255)  | Saved as a character string by default, regardless of data types. If no default value is specified,           |
 |                   |               | **NULL** is stored. If a default value is  **NULL**, it is displayed as 'NULL'.                               |
@@ -1647,7 +1647,7 @@ Among attributes of the class to which the current user has access authorization
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
 | class_name         | VARCHAR(255)  | Name of the class to which the attribute belongs                                                          |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class to which the attribute belongs                                                    |
+| owner_name         | VARCHAR(32)   | Owner name of the class to which the attribute belongs                                                    |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
 | attr_type          | VARCHAR(8)    | 'INSTANCE' for an instance attribute, 'CLASS' for a class attribute, and 'SHARED' for a shared attribute. |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
@@ -1661,7 +1661,7 @@ Among attributes of the class to which the current user has access authorization
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
 | domain_class_name  | VARCHAR(255)  | Domain class name if the data type of the element is an object                                            |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
-| domain_owner_name  | VARCHAR(255)  | Owner name of the domain class if the data type of the element is an object                               |
+| domain_owner_name  | VARCHAR(32)   | Owner name of the domain class if the data type of the element is an object                               |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
 
 If the set_attr attribute of class D is of a SET (A, B, C) type, the following three records exist.
@@ -1746,14 +1746,14 @@ Represents method information of a class for which the current user has access a
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
 | class_name         | VARCHAR(255)  | Name of the class to which the method belongs                                                                                                 |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class to which the method belongs                                                                                           |
+| owner_name         | VARCHAR(32)   | Owner name of the class to which the method belongs                                                                                           |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
 | meth_type          | VARCHAR(8)    | 'INSTANCE' for an instance method, and 'CLASS' for a class method.                                                                            |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
 | from_class_name    | VARCHAR(255)  | If the method is inherited, the super class in which it is defined is used otherwise                                                          |
 |                    |               | **NULL**                                                                                                                                      |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| from_owner_name    | VARCHAR(255)  | If the method is inherited, the owner name of the superclass in which the method is defined is used otherwise                                 |
+| from_owner_name    | VARCHAR(32)   | If the method is inherited, the owner name of the superclass in which the method is defined is used otherwise                                 |
 |                    |               | **NULL**                                                                                                                                      |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
 | from_meth_name     | VARCHAR(255)  | If the method is inherited and its name is changed to resolve a name conflict, the original name defined in the super class is used otherwise |
@@ -1800,7 +1800,7 @@ Represents the input/output argument information of the method of the class for 
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
 | class_name         | VARCHAR(255)  | Name of the class to which the method belongs                                                                                            |
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class to which the method belongs                                                                                      |
+| owner_name         | VARCHAR(32)   | Owner name of the class to which the method belongs                                                                                      |
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
 | meth_type          | VARCHAR(8)    | 'INSTANCE' for an instance method, and 'CLASS' for a class method.                                                                       |
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1816,7 +1816,7 @@ Represents the input/output argument information of the method of the class for 
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
 | domain_class_name  | VARCHAR(255)  | Domain class name if the data type of the argument is an object.                                                                         |
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| domain_owner_name  | VARCHAR(255)  | Owner name of the domain class if the data type of the argument is an object.                                                            |
+| domain_owner_name  | VARCHAR(32)   | Owner name of the domain class if the data type of the argument is an object.                                                            |
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve input arguments of the method of the *db_user* class.
@@ -1847,7 +1847,7 @@ If the data type of the input/output argument of the method of the class is a se
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
 | class_name         | VARCHAR(255)  | Name of the class to which the method belongs                                                                                  |
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class to which the method belongs                                                                            |
+| owner_name         | VARCHAR(32)   | Owner name of the class to which the method belongs                                                                            |
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
 | meth_type          | VARCHAR(8)    | 'INSTANCE' for an instance method, and 'CLASS' for a class method.                                                             |
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
@@ -1863,7 +1863,7 @@ If the data type of the input/output argument of the method of the class is a se
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
 | domain_class_name  | VARCHAR(255)  | Domain class name if the data type of the element is an object                                                                 |
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
-| domain_owner_name  | VARCHAR(255)  | Owner name of the domain class if the data type of the element is an object                                                    |
+| domain_owner_name  | VARCHAR(32)   | Owner name of the domain class if the data type of the element is an object                                                    |
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
 
 .. _db-meth-file:
@@ -1878,14 +1878,14 @@ Represents information of a file in which the method of the class for which the 
 +====================+===============+=======================================================================================================+
 | class_name         | VARCHAR(255)  | Name of the class to which the method file belongs                                                    |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class to which the method file belongs                                              |
+| owner_name         | VARCHAR(32)   | Owner name of the class to which the method file belongs                                              |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------+
 | path_name          | VARCHAR(255)  | File path in which the C function is defined                                                          |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------+
 | from_class_name    | VARCHAR(255)  | Name of the super class in which the method file is defined if the method is inherited,               |
 |                    |               | and otherwise **NULL**                                                                                |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------+
-| from_owner_name    | VARCHAR(255)  | Owner Name of the super class in which the method file is defined if the method is inherited,         |
+| from_owner_name    | VARCHAR(32)   | Owner Name of the super class in which the method file is defined if the method is inherited,         |
 |                    |               | and otherwise **NULL**                                                                                |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------+
 
@@ -1907,7 +1907,7 @@ Represents information of indexes created for the class for which the current us
 +------------------------------------+----------------------+-----------------------------------------------------+
 | class_name                         | VARCHAR(255)         | Name of the class to which the index belongs        |
 +------------------------------------+----------------------+-----------------------------------------------------+
-| owner_name                         | VARCHAR(255)         | Owner name of the class to which the index belongs  |
+| owner_name                         | VARCHAR(32)          | Owner name of the class to which the index belongs  |
 +------------------------------------+----------------------+-----------------------------------------------------+
 | key_count                          | INTEGER              | The number of attributes that comprise the key      |
 +------------------------------------+----------------------+-----------------------------------------------------+
@@ -1921,7 +1921,7 @@ Represents information of indexes created for the class for which the current us
 +------------------------------------+----------------------+-----------------------------------------------------+
 | status                             | VARCHAR(255)         | Index status                                        |
 +------------------------------------+----------------------+-----------------------------------------------------+
-| referential_index_class_owner_name | VARCHAR(255)         | Owner name of the class referenced by foreign key   |
+| referential_index_class_owner_name | VARCHAR(32)          | Owner name of the class referenced by foreign key   |
 +------------------------------------+----------------------+-----------------------------------------------------+
 | referential_index_class_name       | VARCHAR(255)         | Class name of the index referenced by foreign key   |
 +------------------------------------+----------------------+-----------------------------------------------------+
@@ -1990,7 +1990,7 @@ Represents the key information of indexes created for the class for which the cu
 +--------------------+---------------+-----------------------------------------------------------------------------+
 | class_name         | VARCHAR(255)  | Name of the class to which the index belongs                                |
 +--------------------+---------------+-----------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the class to which the index belongs                          |
+| owner_name         | VARCHAR(32)   | Owner name of the class to which the index belongs                          |
 +--------------------+---------------+-----------------------------------------------------------------------------+
 | key_attr_name      | VARCHAR(255)  | Name of attributes that comprise the key                                    |
 +--------------------+---------------+-----------------------------------------------------------------------------+
@@ -2047,15 +2047,15 @@ Represents authorization information for objects the current user is authorized 
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                                                             |
 +====================+===============+===========================================================================================+
-| grantor_name       | VARCHAR(255)  | Name of the user who grants authorization                                                 |
+| grantor_name       | VARCHAR(32)   | Name of the user who grants authorization                                                 |
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
-| grantee_name       | VARCHAR(255)  | Name of the user who is granted authorization                                             |
+| grantee_name       | VARCHAR(32)   | Name of the user who is granted authorization                                             |
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
 | object_type        | VARCHAR(16)   | Type of the object for which authorization is granted (CLASS, VCLASS, PROCEDURE, FUNCTION)|
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
 | object_name        | VARCHAR(255)  | Name of the object for which authorization is granted                                     |
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of the object for which authorization is granted                               |
+| owner_name         | VARCHAR(32)   | Owner name of the object for which authorization is granted                               |
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
 | auth_type          | VARCHAR(7)    | Name of the authorization type granted                                                    |
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
@@ -2091,7 +2091,7 @@ DB_SERIAL
 +================+=====================+===========================================================================================+
 | name           | VARCHAR(255)        | Serial name.                                                                              |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
-| owner          | VARCHAR(255)        | Serial owner.                                                                             |
+| owner          | VARCHAR(32)         | Serial owner.                                                                             |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 | current_val    | NUMERIC(38,0)       | Current serial value.                                                                     |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
@@ -2138,11 +2138,11 @@ Represents information of a trigger that has the class for which the current use
 +====================+===============+===============================================================================================================================+
 | trigger_name       | VARCHAR(255)  | Trigger name                                                                                                                  |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
-| owner_name         | VARCHAR(255)  | Owner name of trigger                                                                                                         |
+| owner_name         | VARCHAR(32)   | Owner name of trigger                                                                                                         |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 | target_class_name  | VARCHAR(255)  | Target class name                                                                                                             |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
-| target_owner_name  | VARCHAR(255)  | Target class owner name                                                                                                       |
+| target_owner_name  | VARCHAR(32)   | Target class owner name                                                                                                       |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 | target_attr_name   | VARCHAR(255)  | Target attribute. If not specified in the trigger, **NULL**                                                                   |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
@@ -2248,7 +2248,7 @@ Represents information of partitioned classes for which the current user has acc
 +======================+===============+============================================================================================+
 | class_name           | VARCHAR(255)  | Class name                                                                                 |
 +----------------------+---------------+--------------------------------------------------------------------------------------------+
-| owner_name           | VARCHAR(255)  | Owner name                                                                                 |
+| owner_name           | VARCHAR(32)   | Owner name                                                                                 |
 +----------------------+---------------+--------------------------------------------------------------------------------------------+
 | partition_name       | VARCHAR(255)  | Partition name                                                                             |
 +----------------------+---------------+--------------------------------------------------------------------------------------------+
@@ -2302,7 +2302,7 @@ lang                 VARCHAR(16)                 Implementation language name
 authid               VARCHAR(16)                 Execution privileges of the stored procedure
 is_deterministic     VARCHAR(3)                  Indicates whether the function is deterministic
 target               VARCHAR(4096)               Name of the target stored procedure code to execute
-owner                VARCHAR(256)                Owner
+owner                VARCHAR(32)                 Owner
 code                 VARCHAR(1073741823)         Source code of the stored procedure
 comment              VARCHAR(1024)               Comment to describe the stored procedure
 created_time         DATETIME                    Stored procedure creation time
@@ -2393,7 +2393,7 @@ Represents argument information of Stored procedure for which the current user h
 Attribute Name       Data Type                    Description
 ==================== =========================== =========================================================
 sp_name              VARCHAR(255)                Stored procedure name
-owner_name           VARCHAR(255)                Owner
+owner_name           VARCHAR(32)                 Owner
 pkg_name             VARCHAR(255)                Package name containing the stored procedure
 index_of             INTEGER                     Order of the arguments
 arg_name             VARCHAR(255)                Argument name
@@ -2470,7 +2470,7 @@ port           INTEGER       Connection port of a server
 db_name        VARCHAR(255)  Database name of a server
 user_name      VARCHAR(255)  Database user name of a server
 properties     VARCHAR(2048) Property information used for connection
-owner          VARCHAR(256)  The name of the owner of this connection information
+owner          VARCHAR(32)   The name of the owner of this connection information
 comment        VARCHAR(1024) Comment to describe the server
 created_time   DATETIME      Server creation time
 updated_time   DATETIME      Server modification time
@@ -2487,10 +2487,10 @@ Represents target object information for the synonym to which the current user h
 Attribute Name     Data Type     Description
 ================== ============= ==========================================================
 synonym_name       VARCHAR(255)  The name of the synonym
-synonym_owner_name VARCHAR(255)  The owner of the synonym
+synonym_owner_name VARCHAR(32)   The owner of the synonym
 is_public_synonym  VARCHAR(3)    "YES" for a public synonym, and "NO" for a private synonym
 target_name        VARCHAR(255)  The name of the target object
-target_owner_name  VARCHAR(255)  The owner name of the target object
+target_owner_name  VARCHAR(32)   The owner name of the target object
 comment            VARCHAR(2048) Comment to describe the synonym
 created_time       DATETIME      Synonym creation time
 updated_time       DATETIME      Synonym modification time

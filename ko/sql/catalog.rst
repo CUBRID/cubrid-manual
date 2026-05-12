@@ -294,7 +294,7 @@ _db_attribute
 | 5         | UTF8 - UTF8 encoding         |
 +-----------+------------------------------+
 
-다음 예제에서는 사용자 **PUBLIC** 이 소유하고 있는 클래스 중에서 사용자 클래스(from_class_of.is_system_class = 0)인 것을 검색한다.
+다음 예제에서는 사용자 **PUBLIC** 이 소유하고 있는 클래스 중에서 사용자 클래스(from_class_of.is_system_class = 0)인 것을 검색한다(결과로 보이는 *female_event* 클래스는 :ref:`add-superclass` 의 예제를 참조한다).
 
 .. code-block:: sql
 
@@ -627,7 +627,6 @@ _db_index
       'code'                'pk_code'
       '_db_user'            'u__db_user_name'
       'event'               'pk_event_code'
-      'female_event'        'pk_event_code'
       'game'                'pk_game_host_year_event_code_athlete_code'
       'game'                'fk_game_event_code'
       'game'                'fk_game_athlete_code'
@@ -1391,7 +1390,6 @@ DB_CLASS
       'game'                'PUBLIC'
       'record'              'PUBLIC'
       'history'             'PUBLIC'
-      'female_event'        'PUBLIC'
 
 다음 예제에서는 현재 사용자가 접근할 수 있는 가상 클래스를 검색한다.
 
@@ -1475,7 +1473,7 @@ DB_DIRECT_SUPER_CLASS
     ======================
       'event'
 
-다음 예제에서는 현재 사용자가 소유하고 있는 클래스의 상위 클래스를 검색한다.
+다음 예제에서는 현재 사용자가 소유하고 있는 클래스의 상위 클래스를 검색한다. (:ref:`add-superclass` 참조)
 
 .. code-block:: sql
 
@@ -1600,7 +1598,7 @@ DB_ATTRIBUTE
       'gender'              'CHAR'                NULL
       'players'             'INTEGER'             NULL
 
-다음 예제에서는 클래스 *female_event* 와 그 상위 클래스의 속성을 검색한다.
+다음 예제에서는 클래스 *female_event* 와 그 상위 클래스의 속성을 검색한다. (:ref:`add-superclass` 참조)
 
 .. code-block:: sql
 
@@ -1637,7 +1635,6 @@ DB_ATTRIBUTE
       'code'                'f_name'
       'code'                's_name'
       'event'               'name'
-      'female_event'        'name'
       'nation'              'name'
       'stadium'             'name'
 
@@ -1971,7 +1968,6 @@ DB_INDEX
       '_db_user'            'u__db_user_name'                                    'YES'
       'athlete'             'pk_athlete_code'                                    'YES'
       'event'               'pk_event_code'                                      'YES'
-      'female_event'        'pk_event_code'                                      'YES'
       'game'                'pk_game_host_year_event_code_athlete_code'          'YES'
       'game'                'fk_game_event_code'                                 'NO'
       'game'                'fk_game_athlete_code'                               'NO'
@@ -2028,7 +2024,6 @@ DB_INDEX_KEY
       'athlete'             'code'                'pk_athlete_code'
       'code'                's_name'              'pk_code'
       'event'               'code'                'pk_event_code'
-      'female_event'        'code'                'pk_event_code'
       'game'                'athlete_code'        'fk_game_athlete_code'
       'game'                'host_year'           'pk_game_host_year_event_code_athlete_code'
       'game'                'event_code'          'fk_game_event_code'

@@ -291,7 +291,7 @@ Represents attribute information. An index for class_of, attr_name and attr_type
 | 5         | UTF8 - UTF8 encoding         |
 +-----------+------------------------------+
 
-The following example shows how to retrieve user classes (from_class_of.is_system_class = 0) among the ones owned by user '**PUBLIC**'.'
+The following example shows how to retrieve user classes (from_class_of.is_system_class = 0) among the ones owned by user '**PUBLIC**' (for the *female_event* class in the result, see the example in :ref:`add-superclass`).
 
 .. code-block:: sql
 
@@ -625,7 +625,6 @@ The following example shows how to retrieve names of indexes that belong to the 
       'code'                'pk_code'
       '_db_user'            'u__db_user_name'
       'event'               'pk_event_code'
-      'female_event'        'pk_event_code'
       'game'                'pk_game_host_year_event_code_athlete_code'
       'game'                'fk_game_event_code'
       'game'                'fk_game_athlete_code'
@@ -1379,7 +1378,6 @@ The following example shows how to retrieve classes owned by the current user.
       'game'                'PUBLIC'
       'record'              'PUBLIC'
       'history'             'PUBLIC'
-      'female_event'        'PUBLIC'
 
 The following example shows how to retrieve virtual classes that can be accessed by the current user.
 
@@ -1463,7 +1461,7 @@ The following example shows how to retrieve super classes of the *female_event* 
     ======================
       'event'
 
-The following example shows how to retrieve super classes of the class owned by the current user.
+The following example shows how to retrieve super classes of the class owned by the current user. (see :ref:`add-superclass`)
 
 .. code-block:: sql
 
@@ -1589,7 +1587,7 @@ The following example shows how to retrieve attributes and data types of the *ev
       'gender'              'CHAR'                NULL
       'players'             'INTEGER'             NULL
 
-The following example shows how to retrieve attributes of the *female_event* class and its super class.
+The following example shows how to retrieve attributes of the *female_event* class and its super class. (see :ref:`add-superclass`)
 
 .. code-block:: sql
 
@@ -1626,7 +1624,6 @@ The following example shows how to retrieve classes whose attribute names are si
       'code'                'f_name'
       'code'                's_name'
       'event'               'name'
-      'female_event'        'name'
       'nation'              'name'
       'stadium'             'name'
 
@@ -1960,7 +1957,6 @@ The following example shows how to retrieve index information of the class.
       '_db_user'            'u__db_user_name'                                    'YES'
       'athlete'             'pk_athlete_code'                                    'YES'
       'event'               'pk_event_code'                                      'YES'
-      'female_event'        'pk_event_code'                                      'YES'
       'game'                'pk_game_host_year_event_code_athlete_code'          'YES'
       'game'                'fk_game_event_code'                                 'NO'
       'game'                'fk_game_athlete_code'                               'NO'
@@ -2017,7 +2013,6 @@ The following example shows how to retrieve index key information of the class.
       'athlete'             'code'                'pk_athlete_code'
       'code'                's_name'              'pk_code'
       'event'               'code'                'pk_event_code'
-      'female_event'        'code'                'pk_event_code'
       'game'                'athlete_code'        'fk_game_athlete_code'
       'game'                'host_year'           'pk_game_host_year_event_code_athlete_code'
       'game'                'event_code'          'fk_game_event_code'

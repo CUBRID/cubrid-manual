@@ -2196,11 +2196,6 @@ Represents information of serials for which the current user has access authoriz
 | updated_time   | DATETIME            | Serial modification time                                                                  |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 
-**Method Name**
-
-*   **change_serial_owner** ()
-
-
 .. _db-trigger:
 
 DB_TRIGGER

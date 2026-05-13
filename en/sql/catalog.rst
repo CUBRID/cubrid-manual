@@ -2131,6 +2131,11 @@ Represents information of users for which the current user has access authorizat
 | updated_time       | DATETIME            | User modification time                                                           |
 +--------------------+---------------------+----------------------------------------------------------------------------------+
 
+**Function Names**
+
+*   **find_user** ()
+*   **login** ()
+
 .. _db-authorization:
 
 DB_AUTHORIZATION

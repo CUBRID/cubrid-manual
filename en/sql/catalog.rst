@@ -59,7 +59,7 @@ Class Name                       Description
 :ref:`-db-server`                Server information for DBLink
 :ref:`-db-synonym`               Target object information of synonyms
 :ref:`-db-user`                  User information
-:ref:`-db-authorization`         User authorization information of classes
+:ref:`-db-authorization`         Authorization summary per user
 :ref:`-db-serial`                Serial information
 :ref:`-db-trigger`               Trigger information
 :ref:`-db-ha-apply-info`         The progress status the **applylogdb** utility applies replication logs

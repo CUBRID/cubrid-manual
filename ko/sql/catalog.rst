@@ -59,7 +59,7 @@
 :ref:`-db-server`                DBLink에 대한 서버 정보
 :ref:`-db-synonym`               동의어에 대한 대상 객체 정보
 :ref:`-db-user`                  사용자에 대한 정보
-:ref:`-db-authorization`         클래스에 대한 사용자 권한 정보
+:ref:`-db-authorization`         사용자별 권한 요약
 :ref:`-db-serial`                시리얼에 대한 정보
 :ref:`-db-trigger`               트리거에 대한 정보
 :ref:`-db-ha-apply-info`         **applylogdb** 유틸리티가 복제 로그를 적용하는 진행 상태

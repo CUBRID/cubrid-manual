@@ -696,7 +696,7 @@ The following example shows how to retrieve the names of index that belongs to t
 _db_auth
 --------
 
-Represents user authorization information for objects. An index is created on grantee.
+Represents user authorization information for objects. An index for grantee and an index for object_of are created.
 
 +--------------------+---------------+--------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                                                        |

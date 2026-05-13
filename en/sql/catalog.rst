@@ -521,6 +521,8 @@ The data type of attribute 'spec' is VARCHAR (4096) for prior versions including
 + spec               +---------------------+ SQL definition statement of the virtual class +-------------------------------+
 |                    | VARCHAR(4096)       |                                               | 10.1 Patch 3 or earlier       |
 +--------------------+---------------------+-----------------------------------------------+-------------------------------+
+| invalidated_time   | DATETIME            | Time when the view query was invalidated      |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
 
 .. _-db-index:
 
@@ -710,6 +712,10 @@ Represents user authorization information for objects. An index is created on gr
 | auth_type          | VARCHAR(7)    | Type name of the authorization granted                                               |
 +--------------------+---------------+--------------------------------------------------------------------------------------+
 | is_grantable       | INTEGER       | 1 if authorization for the object can be granted to other users, and 0 otherwise.    |
++--------------------+---------------+--------------------------------------------------------------------------------------+
+| created_time       | DATETIME      | Time when authorization was granted                                                  |
++--------------------+---------------+--------------------------------------------------------------------------------------+
+| updated_time       | DATETIME      | Time when authorization was updated                                                  |
 +--------------------+---------------+--------------------------------------------------------------------------------------+
 
 Authorization types supported by CUBRID are as follows:
@@ -969,21 +975,22 @@ ocode                CHARACTER VARYING(1073741823) Object code
 _db_server
 ----------
 
-============== =================== ========================================
-Attribute Name Data Type           Description
-============== =================== ========================================
-link_name      VARCHAR(255)        Connection name
-host           VARCHAR(255)        Hostname of a server
-port           INTEGER             Connection port of a server
-db_name        VARCHAR(255)        Database name of a server
-user_name      VARCHAR(255)        Database user name of a server
-password       VARCHAR(1073741823) Database user password of a server
-properties     VARCHAR(2048)       Property information used for connection
-owner          _db_user            The owner of this connection information
-comment        VARCHAR(1024)       Comment to describe the server
-created_time   DATETIME            Server creation time
-updated_time   DATETIME            Server modification time
-============== =================== ========================================
+================ =================== ===================================================================
+Attribute Name   Data Type           Description
+================ =================== ===================================================================
+link_name        VARCHAR(255)        Connection name
+host             VARCHAR(255)        Hostname of a server
+port             INTEGER             Connection port of a server
+db_name          VARCHAR(255)        Database name of a server
+user_name        VARCHAR(255)        Database user name of a server
+password         VARCHAR(1073741823) Database user password of a server
+properties       VARCHAR(2048)       Property information used for connection
+owner            _db_user            The owner of this connection information
+comment          VARCHAR(1024)       Comment to describe the server
+created_time     DATETIME            Server creation time
+updated_time     DATETIME            Server modification time
+invalidated_time DATETIME            Time when the external server connection was invalidated
+================ =================== ===================================================================
 
 .. _-db-synonym:
 
@@ -1099,6 +1106,8 @@ Represents serial information. An index for unique_name and an index for name an
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 | min_val           | NUMERIC(38,0)        | The minimum value of the cereal. Default is 1.                                                      |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| start_val         | NUMERIC(38,0)        | The start value of the serial. Default is 1.                                                        |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 | cyclic            | INTEGER              | 1 (CYCLE) if a value can be generated by cycling after reaching the maximum                         |
 |                   |                      | or minimum value of the serial; 0 (NOCYCLE) if not.                                                 |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
@@ -1111,6 +1120,10 @@ Represents serial information. An index for unique_name and an index for name an
 | cached_num        | INTEGER              | The number of serial values to pre-create in memory to improve performance. Default is 0.           |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 | comment           | VARCHAR (1024)       | Comment to describe the serial.                                                                     |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| created_time      | DATETIME             | Serial creation time.                                                                               |
++-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
+| updated_time      | DATETIME             | Serial modification time.                                                                           |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 
 **Method Name**
@@ -1498,6 +1511,12 @@ The data type of attribute 'vclass_def' is VARCHAR (4096) for prior versions inc
 |                    | VARCHAR(4096)       |                                               | 10.1 Patch 3 or earlier       | 
 +--------------------+---------------------+-----------------------------------------------+-------------------------------+
 | comment            | VARCHAR(2048)       | Comment to describe the virtual class         |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+| created_time       | DATETIME            | Virtual class creation time                   |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+| updated_time       | DATETIME            | Virtual class modification time               |                               |
++--------------------+---------------------+-----------------------------------------------+-------------------------------+
+| invalidated_time   | DATETIME            | Time when the view query was invalidated      |                               |
 +--------------------+---------------------+-----------------------------------------------+-------------------------------+
 
 The following example shows how to retrieve SQL definition statements of the *db_class* virtual class.
@@ -2053,6 +2072,10 @@ Represents authorization information for objects the current user is authorized 
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
 | is_grantable       | VARCHAR(3)    | 'YES' if authorization for the object can be granted to other users, and 'NO' otherwise.  |
 +--------------------+---------------+-------------------------------------------------------------------------------------------+
+| created_time       | DATETIME      | Time when authorization was granted                                                       |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
+| updated_time       | DATETIME      | Time when authorization was updated                                                       |
++--------------------+---------------+-------------------------------------------------------------------------------------------+
 
 The following example show how to retrieve authorization information for objects whose names begin with *db_a*.
 
@@ -2134,6 +2157,8 @@ Represents information of serials for which the current user has access authoriz
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 | Attribute Name | Data Type           | Description                                                                               |
 +================+=====================+===========================================================================================+
+| unique_name    | VARCHAR(255)        | Serial name prefixed with schema name.                                                    |
++----------------+---------------------+-------------------------------------------------------------------------------------------+
 | name           | VARCHAR(255)        | Serial name.                                                                              |
 +----------------+---------------------+-------------------------------------------------------------------------------------------+
 | owner          | VARCHAR(32)         | Serial owner.                                                                             |
@@ -2312,6 +2337,10 @@ Represents information of partitioned classes for which the current user has acc
 +----------------------+---------------+--------------------------------------------------------------------------------------------+
 | comment              | VARCHAR(1024) | Comment to describe the partition                                                          |
 +----------------------+---------------+--------------------------------------------------------------------------------------------+
+| created_time         | DATETIME      | Class creation time (from parent class)                                                    |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
+| updated_time         | DATETIME      | Class modification time (from parent class)                                                |
++----------------------+---------------+--------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve the partition information currently configured for the :ref:`participant2 <range-participant2-table>` class.
 
@@ -2349,6 +2378,7 @@ is_deterministic     VARCHAR(3)                  Indicates whether the function 
 target               VARCHAR(4096)               Name of the target stored procedure code to execute
 owner                VARCHAR(32)                 Owner
 code                 VARCHAR(1073741823)         Source code of the stored procedure
+sql_data_access      VARCHAR(17)                 SQL data-access mode (NO SQL, CONTAINS SQL, READS SQL DATA, MODIFIES SQL DATA)
 comment              VARCHAR(1024)               Comment to describe the stored procedure
 created_time         DATETIME                    Stored procedure creation time
 updated_time         DATETIME                    Stored procedure modification time
@@ -2506,20 +2536,21 @@ The following example shows how to retrieve arguments the 'process_order' Stored
 DB_SERVER
 ---------
 
-============== ============= ====================================================
-Attribute Name Data Type     Description
-============== ============= ====================================================
-link_name      VARCHAR(255)  Connection name
-host           VARCHAR(255)  Hostname of a server
-port           INTEGER       Connection port of a server
-db_name        VARCHAR(255)  Database name of a server
-user_name      VARCHAR(255)  Database user name of a server
-properties     VARCHAR(2048) Property information used for connection
-owner          VARCHAR(32)   The name of the owner of this connection information
-comment        VARCHAR(1024) Comment to describe the server
-created_time   DATETIME      Server creation time
-updated_time   DATETIME      Server modification time
-============== ============= ====================================================
+================ ============= ====================================================================
+Attribute Name   Data Type     Description
+================ ============= ====================================================================
+link_name        VARCHAR(255)  Connection name
+host             VARCHAR(255)  Hostname of a server
+port             INTEGER       Connection port of a server
+db_name          VARCHAR(255)  Database name of a server
+user_name        VARCHAR(255)  Database user name of a server
+properties       VARCHAR(2048) Property information used for connection
+owner            VARCHAR(32)   The name of the owner of this connection information
+comment          VARCHAR(1024) Comment to describe the server
+created_time     DATETIME      Server creation time
+updated_time     DATETIME      Server modification time
+invalidated_time DATETIME      Time when the external server connection was invalidated
+================ ============= ====================================================================
 
 .. _db-synonym:
 

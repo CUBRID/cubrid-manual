@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>unloaddb | CUBRID 11.4 User Manual</title>
+<meta content="unloaddb | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="unloaddb | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/admin/migration.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">unloaddb</span>
+</nav>
+<div id="content" role="main">
+<section id="unloaddb">
+<span id="id1"></span><h1>unloaddb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#unloaddb"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>The purposes of loading/unloading databases are as follows:</p>
+<ul class="simple">
+<li><p>To rebuild databases by volume reconfiguration</p></li>
+<li><p>To migrate database in different system environments</p></li>
+<li><p>To migrate database in different versions</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
+</span></code></pre></div>
+</div>
+<p><strong>cubrid unloaddb</strong> utility creates the following files:</p>
+<ul class="simple">
+<li><p>Schema file(<em>database-name</em><strong>_schema</strong>): A file that contains information on the schema defined in the database.</p></li>
+<li><p>Object file(<em>database-name</em><strong>_objects</strong>): A file that contains information on the records in the database.</p></li>
+<li><p>Index file(<em>database-name</em><strong>_indexes</strong>): A file that contains information on the indexes defined in the database.</p></li>
+<li><p>Trigger file(<em>database-name</em><strong>_trigger</strong>): A file that contains information on the triggers defined in the database. If you don’t want triggers to be running while loading the data, load the trigger definitions after the data loading has completed.</p></li>
+<li><p>Split schema files (<em>database-name</em><strong>_schema</strong><strong>_objecttype</strong>): When using the <strong>--split-schema-files</strong> option, the schema information defined in the database is split into object units and These files contain only object information. For a list of split files, see the <strong>--split-schema-files</strong> option.</p></li>
+<li><p>Schema list file (<em>database-name</em><strong>_schema</strong><strong>_info</strong>): When using the <strong>--split-schema-files</strong> option, this file contains a list of split schema information files.</p></li>
+</ul>
+<p>The schema, object, index, and trigger files are created in the same directory.</p>
+<p>The following is [options] used in <strong>cubrid unloaddb</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">-u, --user=ID               user ID for database access
+</span><span id="line-2">-p, --password=PASS         user password
+</span><span id="line-3">-i, --input-class-file=FILE input FILE of table names
+</span><span id="line-4">    --include-reference     include referenced tables
+</span><span id="line-5">    --input-class-only      include specified class only
+</span><span id="line-6">    --estimated-size=NUMBER estimated NUMBER of instances
+</span><span id="line-7">    --cached-pages=NUMBER   NUMBER of cached pages
+</span><span id="line-8">-O, --output-path=PATH      PATH of output directory
+</span><span id="line-9">-s, --schema-only           dump schema only
+</span><span id="line-10">-d, --data-only             dump objects only
+</span><span id="line-11">    --output-prefix=PREFIX  PREFIX for output files
+</span><span id="line-12">    --hash-file=FILE        FILE for hash
+</span><span id="line-13">    --latest-image          when dumping objects, it dumps the latest image of objects in data volumes.
+</span><span id="line-14">-t, --thread-count=COUNT    number of threads; default: 1 maximum: 127
+</span><span id="line-15">    --enhanced-estimates    obtain the exact number of records in the table to unload; default: disabled
+</span><span id="line-16">-v, --verbose               enable verbose status messages
+</span><span id="line-17">    --use-delimiter         use '"' where an identifier begins and ends
+</span><span id="line-18">-S, --SA-mode               stand-alone mode execution
+</span><span id="line-19">-C, --CS-mode               client-server mode execution
+</span><span id="line-20">    --datafile-per-class    create a object file for each class
+</span><span id="line-21">    --split-schema-files    split schema information by object and generate each file
+</span><span id="line-22">    --skip-index-detail     Do not print the specified WITH clause options when creating the index
+</span><span id="line-23">    --as-dba                If the login user is a member of the DBA group, extract the same schema file as the DBA.
+</span></code></pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-u">
+<span id="cmdoption-unloaddb-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"><span class="pre">=ID</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-u" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-u'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Specify a user account of a database to be unloaded. If this is not specified, the default is <strong>DBA</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-p">
+<span id="cmdoption-unloaddb-password"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--password</span></span><span class="sig-prename descclassname"><span class="pre">=PASS</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-p" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-p'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Specify a user’s password of a database to be unloaded. If this is not specified, it is regarded as the empty string is entered.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">p</span> <span class="n">dba_pwd</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-i">
+<span id="cmdoption-unloaddb-input-class-file"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input-class-file</span></span><span class="sig-prename descclassname"> <span class="pre">FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-i" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-i'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Unload all schema and index of all tables; however, only the data of specified tables in this file are unloaded. If the to-be-unloaded schema (See the -u option) of the user and the schema of the table are different, the table name must be prefixed with the schema name.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows an input file (table_list.txt).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">table_1</span>
+</span><span id="line-2"><span class="n">table_2</span>
+</span><span id="line-3"><span class="o">..</span>
+</span><span id="line-4"><span class="n">table_n</span>
+</span></code></pre></div>
+</div>
+<p>If this option is used together with the <strong>--input-class-only</strong> option, it creates schema, index, and data files of tables only specified in the input file of <strong>-i</strong> option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">only</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>If this option is used together with the <strong>--include-reference</strong> option, it unloads the referenced tables as well.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">include</span><span class="o">-</span><span class="n">reference</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-include-reference">
+<span class="sig-name descname"><span class="pre">--include-reference</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-include-reference" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-include-reference'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option is used together with the <strong>-i</strong> option, and also unloads the referenced tables.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-input-class-only">
+<span class="sig-name descname"><span class="pre">--input-class-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-input-class-only" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-input-class-only'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option is used together with the <strong>-i</strong> option, and creates only a schema file of tables specified in the input file of <strong>-i</strong> option.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-estimated-size">
+<span class="sig-name descname"><span class="pre">--estimated-size</span></span><span class="sig-prename descclassname"><span class="pre">=NUMBER</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-estimated-size" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-estimated-size'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option allows you to assign hash memory to store records of the database to be unloaded. If the <strong>--estimated-size</strong> option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">estimated</span><span class="o">-</span><span class="n">size</span><span class="o">=</span><span class="mi">1000</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-cached-pages">
+<span class="sig-name descname"><span class="pre">--cached-pages</span></span><span class="sig-prename descclassname"><span class="pre">=NUMBER</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-cached-pages" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-cached-pages'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>CUBRID supports object-oriented features that allow a specific class (table) to be defined as a data type of another class. In such a structure, OID (Object Identifier) references occur, where a specific record directly points to another record to represent relationships between data. The –cached-pages option allows you to specify the number of pages allocated to a hash table in order to efficiently process object references (OID references) that occur during data extraction. Each page is 4,096 bytes in size, and the administrator can adjust this value considering system memory capacity and performance requirements. If this option is not specified, the default value is 100 pages.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">cached</span><span class="o">-</span><span class="n">pages</span> <span class="mi">500</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-O">
+<span id="cmdoption-unloaddb-output-path"></span><span class="sig-name descname"><span class="pre">-O</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output-path</span></span><span class="sig-prename descclassname"><span class="pre">=PATH</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-O" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-O'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies the directory in which to create schema and object files. If this is not specified, files are created in the current directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">O</span> <span class="o">./</span><span class="n">CUBRID</span><span class="o">/</span><span class="n">Databases</span><span class="o">/</span><span class="n">demodb</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>If the specified directory does not exist, the following error message will be displayed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">unloaddb</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-s">
+<span id="cmdoption-unloaddb-schema-only"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--schema-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-s" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-s'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies that only the schema file will be created from amongst all the output files which can be created by the unload operation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-d">
+<span id="cmdoption-unloaddb-data-only"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--data-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-d" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-d'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies that only the data file will be created from amongst all of the output files which can be created by the unload operation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-output-prefix">
+<span class="sig-name descname"><span class="pre">--output-prefix</span></span><span class="sig-prename descclassname"><span class="pre">=PREFIX</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-output-prefix" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-output-prefix'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes <em>abcd_schema</em> and the object file name becomes <em>abcd_objects</em>. If the <strong>--output-prefix</strong> option is not specified, the name of the database to be unloaded is used as the prefix.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">prefix</span> <span class="n">abcd</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-hash-file">
+<span class="sig-name descname"><span class="pre">--hash-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-hash-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-hash-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies the name of the hash file.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-latest-image">
+<span class="sig-name descname"><span class="pre">--latest-image</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-latest-image" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-latest-image'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option makes it to unload the latest image of objects in data volumes when unloading instances (the MVCC version is ignored and it does not refer to the log volumes). It may include uncommitted data and deleted data that has not been vacuumed.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-t">
+<span id="cmdoption-unloaddb-thread-count"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--thread-count</span></span><span class="sig-prename descclassname"><span class="pre">=COUNT</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-t" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-t'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option sets the number of threads to be used in the unload process. It is performed in parallel using as many threads as the specified COUNT value, which must be in the range of 0 to 127.
+If this setting is omitted, it is the same as specifying COUNT as 1. If specified as 0, unloaddb does not operate in thread mode.
+Even if thread mode is specified, if a table contains an Object type or a Set, MultiSet, or Sequence (List) type that contains an Object type, it will not operate in thread mode for that table.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-enhanced-estimates">
+<span class="sig-name descname"><span class="pre">--enhanced-estimates</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-enhanced-estimates" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-enhanced-estimates'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The -v option must be specified together.
+When determining the number of records in the target table, this option obtains the actual number of records instead of relying on statistical information. Using this option may increase the execution time of unloaddb because doing so adds the time needed to calculate the number of records. Therefore, this option should be used with caution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">enhanced</span><span class="o">-</span><span class="n">estimates</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-v">
+<span id="cmdoption-unloaddb-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-v" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-v'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option displays detailed information on the database tables and records being unloaded while the unload operation is under way.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">v</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-use-delimiter">
+<span class="sig-name descname"><span class="pre">--use-delimiter</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-use-delimiter" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-use-delimiter'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option writes the double quote(”) on the beginning and end of an identifier. The default is not to write the double quote(“).</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-S">
+<span id="cmdoption-unloaddb-SA-mode"></span><span class="sig-name descname"><span class="pre">-S</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--SA-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-S" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-S'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>-S</strong> option performs the unload operation by accessing the database in standalone mode.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">S</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-C">
+<span id="cmdoption-unloaddb-CS-mode"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--CS-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-C" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-C'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>-C</strong> option performs the unload operation by accessing the database in client/server mode.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">C</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-datafile-per-class">
+<span class="sig-name descname"><span class="pre">--datafile-per-class</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-datafile-per-class" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-datafile-per-class'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as <em>&lt;Database Name&gt;_&lt;Table Name&gt;</em>_ <strong>objects</strong> for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see <a class="reference internal" href="#howtowrite-loadfile"><span class="std std-ref">How to Write Files to Load Database</span></a>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">datafile</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="k">class</span><span class="w"> </span><span class="nc">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-split-schema-files">
+<span class="sig-name descname"><span class="pre">--split-schema-files</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-split-schema-files" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-split-schema-files'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Schema information is splited and created in object units, and a file containing a list of splited files is also created. For details, see to <a class="reference internal" href="#loaddb"><span class="std std-ref">loaddb</span></a> ‘s –schema-file-list=FILE.
+If this option is not specified, a single schema file containing all objects is created.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">split</span><span class="o">-</span><span class="n">schema</span><span class="o">-</span><span class="n">files</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>List of files created by spliting schema information into object units</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_schema_user</span>
+</span><span id="line-2"><span class="n">demodb_schema_class</span>
+</span><span id="line-3"><span class="n">demodb_schema_vclass</span>
+</span><span id="line-4"><span class="n">demodb_schema_synonym</span>
+</span><span id="line-5"><span class="n">demodb_schema_serial</span>
+</span><span id="line-6"><span class="n">demodb_schema_procedure</span>
+</span><span id="line-7"><span class="n">demodb_schema_server</span>
+</span><span id="line-8"><span class="n">demodb_schema_pk</span>
+</span><span id="line-9"><span class="n">demodb_schema_fk</span>
+</span><span id="line-10"><span class="n">demodb_schema_uk</span>
+</span><span id="line-11"><span class="n">demodb_schema_grant</span>
+</span><span id="line-12"><span class="n">demodb_schema_vclass_query_spec</span>
+</span></code></pre></div>
+</div>
+<p>Filename containing a list of splited schema files</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_schema_info</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-as-dba">
+<span class="sig-name descname"><span class="pre">--as-dba</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-as-dba" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-as-dba'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>If the user is a member of the DBA group, create a schema file with the same contents as for the DBA user.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">u1_dba_group</span> <span class="o">--</span><span class="k">as</span><span class="o">-</span><span class="n">dba</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-skip-index-detail">
+<span class="sig-name descname"><span class="pre">--skip-index-detail</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-skip-index-detail" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-skip-index-detail'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><blockquote>
+<div><p>This option doesn’t output of the WITH clause options specified when creating the index. The default operation of unloaddb is to always print the WITH clause options regardless of the <strong>print_index_detail</strong> setting. If this option is specified, options of indexes in the WITH clause are omitted and printed. Affected output files are schema file (<em>database-name</em>_schema) and index file (<em>database-name</em>_indexes). If this option is omitted, even if <em>deduplicate level</em> is <strong>0</strong>, it will always be output explicitly.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">skip</span><span class="o">-</span><span class="n">index</span><span class="o">-</span><span class="n">detail</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>In the example below, you can see the difference whether this option is specified or not.</p>
+<p>Schema file</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>-–skip-index-detail not specified</p></td>
+<td><p>ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) WITH DEDUPLICATE=0 REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;</p></td>
+</tr>
+<tr class="row-even"><td><p>-–skip-index-detail specified</p></td>
+<td><p>ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;</p></td>
+</tr>
+</tbody>
+</table>
+<p>Index file</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>-–skip-index-detail not specified</p></td>
+<td><p>CREATE INDEX [idx_val] ON [dba].[ts] ([val]) WITH DEDUPLICATE=0;</p></td>
+</tr>
+<tr class="row-even"><td><p>-–skip-index-detail specified</p></td>
+<td><p>CREATE INDEX [idx_val] ON [dba].[ts] ([val]);</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To shorten the execution time of the unloaddb, it is possible to run multiple <strong>‘cubrid unloaddb’</strong> processes concurrently for groups of different tables. (or you can use <strong>unloaddb.sh</strong>, refer <a class="reference internal" href="scripts.html#cubrid-scripts-unloaddb-sh"><span class="std std-ref">unloaddb.sh script</span></a>).</p>
+</div>
+</section>
+<section id="loaddb">
+<span id="id2"></span><h1>loaddb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#loaddb"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>You can load a database by using the <strong>cubrid loaddb</strong> utility in the following situations:</p>
+<ul class="simple">
+<li><p>Migrating previous version of CUBRID database to new version of CUBRID database</p></li>
+<li><p>Migrating a third-party DBMS database to a CUBRID database</p></li>
+<li><p>Inserting massive amount of data faster than using the <strong>INSERT</strong> statement</p></li>
+</ul>
+<p>In general, the <strong>cubrid loaddb</strong> utility uses files (schema definition, object input, and index definition files) created by the <strong>cubrid unloaddb</strong> utility.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
+</span></code></pre></div>
+</div>
+<p><strong>Input Files</strong></p>
+<ul class="simple">
+<li><p>Schema file(<em>database-name</em><strong>_schema</strong>): A file generated by the unload operation; it contains schema information defined in the database.</p></li>
+<li><p>Object file(<em>database-name</em><strong>_objects</strong>): A file created by an unload operation. It contains information on the records in the database.</p></li>
+<li><p>Index file(<em>database-name</em><strong>_indexes</strong>): A file created by an unload operation. It contains information on the indexes defined in the database.</p></li>
+<li><p>Trigger file(<em>database-name</em><strong>_trigger</strong>): A file created by an unload operation. It contains information on the triggers defined in the database.</p></li>
+<li><p>User-defined object file(<em>user_defined_object_file</em>): A file in table format written by the user to enter mass data. (For details, see <a class="reference internal" href="#howtowrite-loadfile"><span class="std std-ref">How to Write Files to Load Database</span></a> .)</p></li>
+<li><p>Schema list file (<em>database-name</em><strong>_schema_info</strong>): A file created by unloading with the <strong>--split-schema-files</strong> option. This is a file that has a list of files in which schema information defined in the database is splited into object units.(For details, see <a class="reference internal" href="admin_utils.html#cmdoption-unloaddb-split-schema-files"><code class="xref std std-option docutils literal notranslate"><span class="pre">unloaddb</span> <span class="pre">--split-schema-files</span></code></a>.)</p></li>
+</ul>
+<p><strong>Execution order of input files</strong></p>
+<p>The <strong>cubrid loaddb</strong> utility follows a specific order of parsing and executing input files, ensuring both correctness and optimized performance. The order is as follows:</p>
+<ol class="arabic simple">
+<li><p>Load schema file (including primary keys)</p></li>
+<li><p>Load object file</p></li>
+<li><p>Load index file (secondary keys and foreign keys)</p></li>
+<li><p>Load trigger file</p></li>
+</ol>
+<p><strong>Loading modes</strong></p>
+<p>The <strong>cubrid loaddb</strong> utility provides two modes of loading the data into a database.</p>
+<ul class="simple">
+<li><p><strong>Stand-alone</strong> mode loads the data offline, within a single thread environment. CUBRID 10.1 and older versions run only in this mode.</p></li>
+<li><p><strong>Client-server</strong> mode connects to a server and loads the data online and in parallel. <strong>Client-server</strong> mode can be much faster, but object references and class/shared attributes are not supported in this mode and they can only be loaded in <strong>stand-alone</strong> mode</p></li>
+</ul>
+<p>The following table shows [options] available with the <strong>cubrid loaddb</strong> utility.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">-</span><span class="n">u</span><span class="p">,</span> <span class="o">--</span><span class="n">user</span><span class="o">=</span><span class="n">ID</span>                  <span class="n">user</span> <span class="n">ID</span> <span class="k">for</span> <span class="n">database</span> <span class="n">access</span>
+</span><span id="line-2"><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span><span class="o">=</span><span class="n">PASS</span>            <span class="n">user</span> <span class="n">password</span>
+</span><span id="line-3"><span class="o">-</span><span class="n">S</span><span class="p">,</span> <span class="o">--</span><span class="n">SA</span><span class="o">-</span><span class="n">mode</span>                  <span class="n">standalone</span> <span class="n">mode</span> <span class="n">execution</span>
+</span><span id="line-4"><span class="o">-</span><span class="n">C</span><span class="p">,</span> <span class="o">--</span><span class="n">CS</span><span class="o">-</span><span class="n">mode</span>                  <span class="n">client</span><span class="o">-</span><span class="n">server</span> <span class="n">mode</span> <span class="n">execution</span>
+</span><span id="line-5">    <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">check</span><span class="o">-</span><span class="n">only</span>     <span class="n">check</span> <span class="n">syntax</span> <span class="k">for</span> <span class="n">data</span> <span class="n">file</span> <span class="n">without</span> <span class="n">load</span>
+</span><span id="line-6"><span class="o">-</span><span class="n">l</span><span class="p">,</span> <span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">only</span>                <span class="n">load</span> <span class="n">data</span> <span class="n">file</span> <span class="n">without</span> <span class="n">prior</span> <span class="n">syntax</span> <span class="n">checking</span>
+</span><span id="line-7">    <span class="o">--</span><span class="n">estimated</span><span class="o">-</span><span class="n">size</span><span class="o">=</span><span class="n">NUMBER</span>    <span class="n">estimated</span> <span class="n">NUMBER</span> <span class="n">of</span> <span class="n">instances</span>
+</span><span id="line-8"><span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>                  <span class="n">enable</span> <span class="n">verbose</span> <span class="n">status</span> <span class="n">messages</span>
+</span><span id="line-9"><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="o">--</span><span class="n">periodic</span><span class="o">-</span><span class="n">commit</span><span class="o">=</span><span class="n">COUNT</span>    <span class="n">insertion</span> <span class="n">COUNT</span> <span class="k">for</span> <span class="n">periodic</span> <span class="n">commit</span>
+</span><span id="line-10">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">oid</span>                   <span class="n">don</span><span class="s1">'t use OID</span>
+</span><span id="line-11">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">statistics</span>            <span class="n">do</span> <span class="ow">not</span> <span class="n">update</span> <span class="n">the</span> <span class="n">statistics</span> <span class="k">while</span> <span class="n">loading</span>
+</span><span id="line-12"><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="o">--</span><span class="n">schema</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">[:</span><span class="n">LINE</span><span class="p">]</span>  <span class="n">create</span> <span class="n">schema</span> <span class="kn">from</span><span class="w"> </span><span class="nn">LINE</span> <span class="k">with</span> <span class="n">FILE</span>
+</span><span id="line-13"><span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="o">--</span><span class="n">index</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">[:</span><span class="n">LINE</span><span class="p">]</span>   <span class="n">create</span> <span class="n">index</span> <span class="kn">from</span><span class="w"> </span><span class="nn">LINE</span> <span class="k">with</span> <span class="n">FILE</span>
+</span><span id="line-14"><span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>           <span class="n">load</span> <span class="n">data</span> <span class="k">with</span> <span class="n">FILE</span>
+</span><span id="line-15"><span class="o">-</span><span class="n">t</span><span class="p">,</span> <span class="o">--</span><span class="n">table</span><span class="o">=</span><span class="n">TABLE</span>              <span class="n">table</span> <span class="n">name</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">substituted</span> <span class="k">for</span> <span class="n">missing</span> <span class="k">class</span><span class="w"> </span><span class="nc">header</span> <span class="ow">in</span> <span class="n">data</span> <span class="n">file</span>
+</span><span id="line-16">    <span class="o">--</span><span class="n">error</span><span class="o">-</span><span class="n">control</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>  <span class="n">FILE</span> <span class="n">to</span> <span class="n">control</span> <span class="n">error</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">during</span> <span class="n">loading</span>
+</span><span id="line-17">    <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>   <span class="nb">input</span> <span class="n">file</span> <span class="n">of</span> <span class="k">class</span><span class="w"> </span><span class="nc">names</span> <span class="n">that</span> <span class="n">skip</span> <span class="n">load</span>
+</span><span id="line-18">    <span class="o">--</span><span class="n">trigger</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">[:</span><span class="n">LINE</span><span class="p">]</span> <span class="n">create</span> <span class="n">trigger</span> <span class="kn">from</span><span class="w"> </span><span class="nn">LINE</span> <span class="k">with</span> <span class="n">FILE</span>
+</span><span id="line-19">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">specified</span><span class="o">-</span><span class="n">name</span>   <span class="n">Find</span> <span class="n">classes</span><span class="p">,</span> <span class="n">serials</span><span class="p">,</span> <span class="ow">and</span> <span class="n">triggers</span> <span class="n">by</span> <span class="n">their</span> <span class="nb">object</span> <span class="n">names</span> <span class="n">without</span> <span class="n">their</span> <span class="n">owner</span> <span class="n">names</span><span class="o">.</span>
+</span><span id="line-20">    <span class="o">--</span><span class="n">schema</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="nb">list</span><span class="o">=</span><span class="n">FILE</span>    <span class="n">The</span> <span class="n">content</span> <span class="n">of</span> <span class="n">this</span> <span class="n">file</span> <span class="ow">is</span> <span class="n">a</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">schema</span> <span class="n">file</span> <span class="n">names</span> <span class="n">to</span> <span class="n">be</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">loaddb</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-u">
+<span id="cmdoption-loaddb-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"><span class="pre">=ID</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-u" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-u'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies the user account of a database where records are loaded. If the option is not specified, the default value is <strong>PUBLIC</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">admin</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-p">
+<span id="cmdoption-loaddb-password"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--password</span></span><span class="sig-prename descclassname"><span class="pre">=PASS</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-p" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-p'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies the password of a database user who will load records. If the option is not specified, you will be prompted to enter the password.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">p</span> <span class="k">pass</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-S">
+<span id="cmdoption-loaddb-SA-MODE"></span><span class="sig-name descname"><span class="pre">-S</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--SA-MODE</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-S" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-S'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option loads data into a database in <strong>stand-alone</strong> mode. This is the default loading mode of <strong>loaddb</strong> and it is fully compatible with CUBRID 10.1 and older database versions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">S</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-C">
+<span id="cmdoption-loaddb-CS-MODE"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--CS-MODE</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-C" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-C'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option connects to a running server process. Unlike the <strong>stand-alone</strong> mode, the <strong>client-server</strong> mode loads the data using multiple threads, leading to greater performance for large amounts of data. Multiple <strong>loaddb</strong> sessions may run at the same time. Object references and class/shared attributes are not supported in this mode.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When in <strong>client-server</strong> mode (-C, --CS-MODE) on the <strong>HA</strong> (High Availability), only the -d option (data loading) is available.</p>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-data-file-check-only">
+<span class="sig-name descname"><span class="pre">--data-file-check-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-data-file-check-only" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-data-file-check-only'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option checks only the syntax of the data contained in demodb_objects, and does not load the data to the database.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">check</span><span class="o">-</span><span class="n">only</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-l">
+<span id="cmdoption-loaddb-load-only"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--load-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-l" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-l'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>Stand-alone</strong> mode does, by default, one prior syntax check on the whole data file before actually loading the data into the database. If a syntax error occurs, no data is loaded and the error is reported.</p>
+<p>Using the <strong>-l</strong> option, the prior syntax check is skipped, thus increasing the loading speed. Syntax is still checked before loading each row into the database. Loading is stopped if a syntax error occurs, but data may be partially loaded.</p>
+<p><strong>Client-server mode</strong> doesn’t do the prior syntax check, so this option has no effect.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">l</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-estimated-size">
+<span class="sig-name descname"><span class="pre">--estimated-size</span></span><span class="sig-prename descclassname"><span class="pre">=NUMBER</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-estimated-size" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-estimated-size'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option can be used to improve loading performance when the number of records to be unloaded exceeds the default value of 5,000. You can improve the load performance by assigning large hash memory for record storage with this option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">estimated</span><span class="o">-</span><span class="n">size</span> <span class="mi">8000</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-v">
+<span id="cmdoption-loaddb-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-v" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-v'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option shows how to display detailed information on the tables and records of the database being loaded while the database loading operation is performed. You can check the detailed information such as the progress, the class being loaded and the number of records to be entered.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">v</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-c">
+<span id="cmdoption-loaddb-periodic-commit"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--periodic-commit</span></span><span class="sig-prename descclassname"><span class="pre">=COUNT</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-c" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-c'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option commits periodically every time COUNT records are entered into the database. If this option is not specified, all records included in demodb_objects are loaded to the database before the transaction is committed. If this option is used together with the <strong>-s</strong> or <strong>-i</strong> option, commit is performed periodically every time 100 DDL statements are loaded.</p>
+<p>The recommended commit interval varies depending on the data to be loaded. It is recommended that the parameter of the <strong>-c</strong> option be configured to 50 for schema loading and 1 for index loading. For record loading, the recommended and default value is 10240.</p>
+<p>The previous versions of <strong>CUBRID</strong>, like 10.1 or older, did not have a default value for <strong>--periodic-commit</strong> and would commit the transation only after loading the whole data. With the current approach, if you want to use the replicate the same behavior, you have to set the <strong>--periodic-commit</strong> argument to a very high value, so that the commit is done after loading all the data.</p>
+</dd></dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">c</span> <span class="mi">100</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-no-oid">
+<span class="sig-name descname"><span class="pre">--no-oid</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-no-oid" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-no-oid'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The following is a command that loads records into newdb ignoring the OIDs in demodb_objects.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">oid</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-no-statistics">
+<span class="sig-name descname"><span class="pre">--no-statistics</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-no-statistics" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-no-statistics'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The following is a command that does not update the statistics information of newdb after loading demodb_objects. It is useful especially when small data is loaded to a relatively big database; you can improve the load performance by using this command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">statistics</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-s">
+<span id="cmdoption-loaddb-schema-file"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--schema-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE[:LINE]</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-s" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-s'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><blockquote>
+<div><p>This option loads the schema information defined in the schema file, from the LINE-th. You can load the actual records after loading the schema information first by using the <strong>-s</strong> option.</p>
+<p>On the following example, demodb_schema is a file created by the unload operation and contains the schema information of the unloaded database.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">    <span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb_schema</span> <span class="n">newdb</span>
+</span><span id="line-2">
+</span><span id="line-3">    <span class="n">Start</span> <span class="n">schema</span> <span class="n">loading</span><span class="o">.</span>
+</span><span id="line-4">    <span class="n">Total</span>       <span class="mi">86</span> <span class="n">statements</span> <span class="n">executed</span><span class="o">.</span>
+</span><span id="line-5">    <span class="n">Schema</span> <span class="n">loading</span> <span class="kn">from</span><span class="w"> </span><span class="nn">demodb_schema</span> <span class="n">finished</span><span class="o">.</span>
+</span><span id="line-6">    <span class="n">Statistics</span> <span class="k">for</span> <span class="n">Catalog</span> <span class="n">classes</span> <span class="n">have</span> <span class="n">been</span> <span class="n">updated</span><span class="o">.</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="n">The</span> <span class="n">following</span> <span class="n">loads</span> <span class="n">the</span> <span class="n">triggers</span> <span class="n">defined</span> <span class="ow">in</span> <span class="o">*</span><span class="n">demodb</span><span class="o">*</span> <span class="n">into</span> <span class="n">the</span> <span class="n">newly</span> <span class="n">created</span> <span class="n">newdb</span> <span class="n">database</span><span class="o">.</span> <span class="n">demodb_trigger</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">file</span> <span class="n">created</span> <span class="n">by</span> <span class="n">the</span> <span class="n">unload</span> <span class="n">operation</span> <span class="ow">and</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">trigger</span> <span class="n">information</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unloaded</span> <span class="n">database</span><span class="o">.</span> <span class="n">It</span> <span class="ow">is</span> <span class="n">recommended</span> <span class="n">to</span> <span class="n">load</span> <span class="n">the</span> <span class="n">schema</span> <span class="n">information</span> <span class="n">after</span> <span class="n">loading</span> <span class="n">the</span> <span class="n">records</span><span class="o">.</span> <span class="p">::</span>
+</span><span id="line-9">
+</span><span id="line-10">    <span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb_trigger</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-i">
+<span id="cmdoption-loaddb-index-file"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--index-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE[:LINE]</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-i" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-i'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The following loads the index information defined in the index file, from the LINE-th. On the following example, demodb_indexes is a file created by the unload operation and contains the index information of the unloaded database. You can create indexes with the <strong>-i</strong> option, after loading records with the <strong>-d</strong> option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">c</span> <span class="mi">100</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span><span id="line-2"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">i</span> <span class="n">demodb_indexes</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-d">
+<span id="cmdoption-loaddb-data-file"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--data-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-d" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-d'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option loads the record information into newdb by specifying the data file or the user-defined object file. demodb_objects is either an object file created by the unload operation or a user-defined object file written by the user for mass data loading.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-t">
+<span id="cmdoption-loaddb-table"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--table</span></span><span class="sig-prename descclassname"><span class="pre">=TABLE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-t" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-t'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies the table name if a table name header is omitted in the data file to be loaded. The table name must be prefixed with the schema name.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="o">-</span><span class="n">t</span> <span class="n">tbl_name</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-error-control-file">
+<span class="sig-name descname"><span class="pre">--error-control-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-error-control-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-error-control-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option specifies the file that describes how to handle specific errors occurring during database loading.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">error</span><span class="o">-</span><span class="n">control</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">error_test</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+<p>For the server error code name, see the <strong>$CUBRID/include/dbi.h</strong> file.</p>
+<p>For error messages by error code (error number), see the number under $set 5 MSGCAT_SET_ERROR in the <strong>$CUBRID/msg/</strong><em>&lt;character set name&gt;</em><strong>/cubrid.msg</strong> file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">vi $CUBRID/msg/en_US/cubrid.msg
+</span><span id="line-2">
+</span><span id="line-3">$set 5 MSGCAT_SET_ERROR
+</span><span id="line-4">1 Missing message for error code %1$d.
+</span><span id="line-5">2 Internal system failure: no more specific information is available.
+</span><span id="line-6">3 Out of virtual memory: unable to allocate %1$ld memory bytes.
+</span><span id="line-7">4 Has been interrupted.
+</span><span id="line-8">...
+</span><span id="line-9">670 Operation would have caused one or more unique constraint violations.
+</span><span id="line-10">...
+</span></code></pre></div>
+</div>
+<p>The format of a file that details specific errors is as follows:</p>
+<ul class="simple">
+<li><p>-&lt;error code&gt;: Configures to ignore the error that corresponds to the &lt;error code&gt; (<strong>loaddb</strong> is continuously executed even when an error occurs while it is being executed).</p></li>
+<li><p>+&lt;error code&gt;: Configures not to ignore the error that corresponds to the &lt;error code&gt; (<strong>loaddb</strong> is stopped when an error occurs while it is being executed).</p></li>
+<li><p>+DEFAULT: Configures not to ignore errors from 24 to 33.</p></li>
+</ul>
+<p>If the file that details errors is not specified by using the <strong>--error-control-file</strong> option, the <strong>loaddb</strong> utility is configured to ignore errors from 24 to 33 by default. As a warning error, it indicates that there is no enough space in the database volume. If there is no space in the assigned database volume, a generic volume is automatically created.</p>
+<p>The following example shows a file that details errors.</p>
+<ul>
+<li><p>The warning errors from 24 to 33 indicating DB volume space is insufficient are not ignored by configuring +DEFAULT.</p></li>
+<li><p>The error code 2 is not ignored because +2 has been specified later, even when -2 has been specified first.</p></li>
+<li><p>-670 has been specified to ignore the error code 670, which is a unique violation error.</p></li>
+<li><p>#-115 has been processed as a comment since # is added.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">vi</span> <span class="n">error_file</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">+</span><span class="n">DEFAULT</span>
+</span><span id="line-4"><span class="o">-</span><span class="mi">2</span>
+</span><span id="line-5"><span class="o">-</span><span class="mi">670</span>
+</span><span id="line-6"><span class="c1">#-115 --&gt; comment</span>
+</span><span id="line-7"><span class="o">+</span><span class="mi">2</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-ignore-class-file">
+<span class="sig-name descname"><span class="pre">--ignore-class-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-ignore-class-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-ignore-class-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>You can specify a file that lists classes to be ignored during loading records. All records of classes except ones specified in the file will be loaded.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">skip_class_list</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-trigger-file">
+<span class="sig-name descname"><span class="pre">--trigger-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE[:LINE]</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-trigger-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-trigger-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option loads the trigger information defined in the trigger file, from the LINE-th.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">trigger</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">demodb_triggers</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-no-user-specified-name">
+<span class="sig-name descname"><span class="pre">--no-user-specified-name</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-no-user-specified-name" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-no-user-specified-name'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Files unloaded in a version older than 11.2 can be loaded in version 11.2 only if the <strong>--no-user-specified-name</strong> option is used.</p>
+<p>This option works if <strong>DBA</strong> is specified as the user account of the database with the -u option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb_schema</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">specified</span><span class="o">-</span><span class="n">name</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <strong>--no-user-specified-name</strong> option must not be used to load a file unloaded in version 11.2 or after version 11.2.</p>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-schema-file-list">
+<span class="sig-name descname"><span class="pre">--schema-file-list</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-schema-file-list" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-schema-file-list'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This option loads all schema files included in the list at once. There must be a list of schema files, and they are loaded sequentially from the top schema file to the bottom of this list file. This option and the -s option cannot be used together.</p>
+<p>This list file is automatically created when using the <strong>--split-schema-files</strong> option in unloaddb.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">--</span><span class="n">schema</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="nb">list</span><span class="o">=</span><span class="n">demodb_schema_info</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You can change the order of schema files written in this file, but loading errors may occur if the order is wrong. For example, an error may occur if the PK file is loaded first while the file with CLASS information is not loaded. Therefore, in the list, the file name for loading CLASS information must be higher than the file for loading PK.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <strong>--no-logging</strong> option enables to load data file quickly when <strong>loaddb</strong> is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery. If you use this option, <strong>loaddb</strong> does not check the errors like unique violation. To use this option, you should consider these issues.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When running <strong>loaddb</strong>, foreign key constraints are not checked to ensure performance for loading large amounts of data and to minimize dependencies between loaded data. So, the data inconsistencies with the master node may occur because foreign key constraints are checked during the replication process of the slave or replica node in the HA environment if the <strong>-C</strong> option is used.</p>
+</div>
+<section id="how-to-write-files-to-load-database">
+<span id="howtowrite-loadfile"></span><h2>How to Write Files to Load Database<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#how-to-write-files-to-load-database" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#how-to-write-files-to-load-database'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You can add mass data to the database more rapidly by writing the object input file used in the <strong>cubrid loaddb</strong> utility. An object input file is a text file in simple table form that consists of comments and command/data lines.</p>
+<section id="comment">
+<h3>Comment<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#comment" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#comment'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>In CUBRID, a comment is represented by two hyphens (--).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">-- This is a comment!
+</span></code></pre></div>
+</div>
+</section>
+<section id="command-line">
+<span id="howtowrite-loadfile-command-line"></span><h3>Command Line<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#command-line" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#command-line'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A command line begins with a percent character (%) and consists of <strong>%class</strong> and <strong>%id</strong> commands; the former defines classes, and the latter defines aliases and identifiers used for class identification.</p>
+<ul id="assign-id-to-class">
+<li><p>Assigning an Identifier to a Class</p>
+<p>You can assign an identifier to class reference relations by using the <strong>%id</strong> command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">class_name</span> <span class="n">class_id</span>
+</span><span id="line-2"><span class="n">schema_name</span><span class="p">:</span>
+</span><span id="line-3">    <span class="n">identifier</span>
+</span><span id="line-4"><span class="n">class_name</span><span class="p">:</span>
+</span><span id="line-5">    <span class="n">identifier</span>
+</span><span id="line-6"><span class="n">class_id</span><span class="p">:</span>
+</span><span id="line-7">    <span class="n">integer</span>
+</span></code></pre></div>
+</div>
+<p>The <em>class_name</em> specified by the <strong>%id</strong> command is the class name defined in the database, and <em>class_id</em> is the numeric identifier which is assigned for object reference. The <em>class_name</em> uses the <em>schema_name</em> as a prefix and the <em>schema_name</em> is the name of the schema in which the class is defined.
+The <em>schema_name</em> can be omitted, and if the <em>schema_name</em> is omitted, the user name of the database specified with the -u option is used as the schema name.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">employee</span><span class="p">]</span> <span class="mi">21</span>
+</span><span id="line-2"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">office</span><span class="p">]</span> <span class="mi">22</span>
+</span><span id="line-3"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">project</span><span class="p">]</span> <span class="mi">23</span>
+</span><span id="line-4"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">phone</span><span class="p">]</span> <span class="mi">24</span>
+</span></code></pre></div>
+</div>
+<p>The <em>schema_name</em> and <em>class_name</em> must be enclosed in square brackets ([ ]). Each of <em>schema_name</em> and <em>class_name</em> or together can be enclosed in square brackets.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">employee</span><span class="p">]</span> <span class="mi">21</span>
+</span><span id="line-2"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">office</span><span class="p">]</span> <span class="mi">22</span>
+</span><span id="line-3"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">project</span><span class="p">]</span> <span class="mi">23</span>
+</span><span id="line-4"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">phone</span><span class="p">]</span> <span class="mi">24</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">employee</span><span class="p">]</span> <span class="mi">21</span>
+</span><span id="line-2"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">office</span><span class="p">]</span> <span class="mi">22</span>
+</span><span id="line-3"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">project</span><span class="p">]</span> <span class="mi">23</span>
+</span><span id="line-4"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">phone</span><span class="p">]</span> <span class="mi">24</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Specifying the Class and Attribute</p>
+<p>You can specify the classes (tables) and attributes (columns) upon loading data by using the <strong>%class</strong> command. The data line should be written based on the order of attributes specified. When a class name is provided by using the <strong>-t</strong> option while executing the <strong>cubrid loaddb</strong> utility, you don’t have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [schema_name.]class_name (attr_name [attr_name...])
+</span><span id="line-2">schema_name:
+</span><span id="line-3">    identifier
+</span><span id="line-4">class_name:
+</span><span id="line-5">    identifier
+</span><span id="line-6">attr_name:
+</span><span id="line-7">    identifier
+</span></code></pre></div>
+</div>
+<p>The class must be pre-defined in the database to be loaded.</p>
+<p>The <em>class_name</em> specified by the <strong>%class</strong> command is the class name defined in the database and the <em>schema_name</em> is the name of the schema in which the class is defined. The <em>attr_name</em> is the name of the attribute defined. The method of writing <em>schema_name</em> and <em>class_name</em> is the same as above.</p>
+<p>The following example shows how to specify a class and three attributes by using the <strong>%class</strong> command to enter data into a class named <em>employee</em>. Three pieces of data should be entered on the data lines after the <strong>%class</strong> command. For this, see <a class="reference internal" href="#conf-reference-relation"><span class="std std-ref">Configuring Reference Relation</span></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[employee] (name age department)
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="data-line">
+<h3>Data Line<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#data-line" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#data-line'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A data line comes after the <strong>%class</strong> command line. Data loaded must have the same type as the class attributes specified by the <strong>%class</strong> command. The data loading operation stops if these two types are different.</p>
+<p>Data for each attribute must be separated by at least one space and be basically written as a single line. However, if the data to be loaded takes more than one line, you should specify the plus sign (+) at the end of the first data line to enter data continuously on the following line. Note that no space is allowed between the last character of the data and the plus sign.</p>
+<ul>
+<li><p>Loading an Instance</p>
+<p>As shown below, you can load an instance that has the same type as the specified class attribute. Each piece of data is separated by at least one space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[employee] (name)
+</span><span id="line-2">'jordan'
+</span><span id="line-3">'james'
+</span><span id="line-4">'garnett'
+</span><span id="line-5">'malone'
+</span></code></pre></div>
+</div>
+</li>
+<li><p>Assigning an Instance Number</p>
+<p>You can assign a number to a given instance at the beginning of the data line. An instance number is a unique positive number in the specified class. Spaces are not allowed between the number and the colon (:). Assigning an instance number is used to configure the reference relation for later.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[employee] (name)
+</span><span id="line-2">1: 'jordan'
+</span><span id="line-3">2: 'james'
+</span><span id="line-4">3: 'garnett'
+</span><span id="line-5">4: 'malone'
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+<ul id="conf-reference-relation">
+<li><p>Configuring Reference Relation</p>
+<p>You can configure the object reference relation by specifying the reference class after an “at sign (<strong>@</strong>)” and the instance number after the “vertical line (|).”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nd">@class_ref</span> <span class="o">|</span> <span class="n">instance_no</span>
+</span><span id="line-2"><span class="n">class_ref</span><span class="p">:</span>
+</span><span id="line-3">    <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">class_name</span>
+</span><span id="line-4">    <span class="n">class_id</span>
+</span></code></pre></div>
+</div>
+<p>Specify a class name or a class id after the <strong>@</strong> sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|). The method of wirting <em>class_ref</em> is the same as the method of wirting <em>schema_name</em> and <em>class_name</em> in the <a class="reference internal" href="#howtowrite-loadfile-command-line"><span class="std std-ref">Command Line</span></a>. However, enclosing each of <em>schema_name</em> and <em>class_name</em> in square brackets ([ ]) is not allowed.</p>
+<p>The following example shows how to load class instances into the <em>paycheck</em> class. The <em>name</em> attribute references an instance of the <em>employee</em> class. As in the last line, data is loaded as <strong>NULL</strong> if you configure the reference relation by using an instance number not specified earlier.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[paycheck] (name department salary)
+</span><span id="line-2">@[public.employee]|1   'planning'   8000000
+</span><span id="line-3">@[public.employee]|2   'planning'   6000000
+</span><span id="line-4">@[public.employee]|3   'sales'   5000000
+</span><span id="line-5">@[public.employee]|4   'development'   4000000
+</span><span id="line-6">@[public.employee]|5   'development'   5000000
+</span></code></pre></div>
+</div>
+<p>Since the id 21 was assigned to the <em>employee</em> class by using the <strong>%id</strong> command in the <a class="reference internal" href="#assign-id-to-class"><span class="std std-ref">Assigning an Identifier to a Class</span></a> section, the above example can be written as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[paycheck] (name department salary)
+</span><span id="line-2">@21|1   'planning'   8000000
+</span><span id="line-3">@21|2   'planning'   6000000
+</span><span id="line-4">@21|3   'sales'   5000000
+</span><span id="line-5">@21|4   'development'   4000000
+</span><span id="line-6">@21|5   'development'   5000000
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="migrating-database">
+<h2>Migrating Database<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#migrating-database" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#migrating-database'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>To use a new version of CUBRID database, you may need to migrate an existing data to a new one. For this purpose, you can use the “Export to an ASCII text file” and “Import from an ASCII text file” features provided by CUBRID.</p>
+<p>The following section explains migration steps using the <strong>cubrid unloaddb</strong> and <strong>cubrid loaddb</strong> utilities.</p>
+<p><strong>Recommended Scenario and Procedures</strong></p>
+<p>The following steps describes migration scenario that can be applied while the existing version of CUBRID is running. For database migration, you should use the <strong>cubrid unloaddb</strong> and <strong>cubrid loaddb</strong> utilities. For details, see <a class="reference internal" href="#unloaddb"><span class="std std-ref">unloaddb</span></a> and <a class="reference internal" href="#loaddb"><span class="std std-ref">loaddb</span></a>.</p>
+<ol class="arabic">
+<li><p>Stop the existing CUBRID service</p>
+<blockquote>
+<div><p>Execute <strong>cubrid service stop</strong> to stop all service processes running on the existing CUBRID and then check whether all CUBRID-related processes have been successfully stopped.</p>
+<p>To verify whether all CUBRID-related processes have been successfully stopped, execute <strong>ps -ef | grep cub_</strong> in Linux. If there is no process starting with cub_, all CUBRID-related processes have been successfully stopped. In Windows, press the &lt;Ctrl+Alt+Delete&gt; key and select [Start Task Manager]. If there is no process starting with cub_ in the [Processes] tab, all CUBRID-related processes have been successfully stopped. In Linux, when the related processes remain even after the CUBRID service has been terminated, use <strong>kill</strong> command to forcibly terminate them, and use <strong>ipcs -m</strong> command to check and release the memory shard by CUBRID broker. To forcibly terminate related processes in Windows, go to the [Processes] tab of Task Manager, right-click the image name, and then select [End Process].</p>
+</div></blockquote>
+</li>
+<li><p>Back up the existing database</p>
+<blockquote>
+<div><p>Perform backup of the existing version of the database by using the <strong>cubrid backupdb</strong> utility. The purpose of this step is to safeguard against failures that might occur during the database unload/load operations. For details on the database backup, see <a class="reference internal" href="backup.html#backupdb"><span class="std std-ref">backupdb</span></a>.</p>
+</div></blockquote>
+</li>
+<li><p>Unload the existing database</p>
+<blockquote>
+<div><p>Unload the database created for the existing version of CUBRID by using the <strong>cubrid unloaddb</strong> utility. For details on unloading a database, see <a class="reference internal" href="#unloaddb"><span class="std std-ref">unloaddb</span></a> .</p>
+</div></blockquote>
+</li>
+<li><p>Store the existing CUBRID configuration files</p>
+<blockquote>
+<div><p>Store the configurations files such as <strong>cubrid.conf</strong>, <strong>cubrid_broker.conf</strong> and <strong>cm.conf ** in the **CUBRID/conf</strong> directory. The purpose of this step is to conveniently apply parameter values for the existing CUBRID database environment to the new one.</p>
+</div></blockquote>
+</li>
+<li><p>Install a new version of CUBRID</p>
+<blockquote>
+<div><p>Once backing up and unloading of the data created by the existing version of CUBRID have been completed, delete the existing version of CUBRID and its databases and then install the new version of CUBRID. For details on installing CUBRID, see <a class="reference internal" href="../start.html"><span class="doc">Getting Started</span></a>.</p>
+</div></blockquote>
+</li>
+<li><p>Configure the new CUBRID environment</p>
+<blockquote>
+<div><p>Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, “ <strong>Store the existing CUBRID configuration files</strong> .” For details on configuring new environment, see <a class="reference internal" href="../install.html"><span class="doc">Installing and Running CUBRID</span></a> in “Getting Started.”</p>
+</div></blockquote>
+</li>
+<li><p>Load the new database</p>
+<blockquote>
+<div><p>Create a database by using the <strong>cubrid createdb</strong> utility and then load the data which had previously been unloaded into the new database by using the <strong>cubrid loaddb</strong> utility. Please see <a class="reference internal" href="admin_utils.html#creating-database"><span class="std std-ref">createdb</span></a> for creating a database and <a class="reference internal" href="#loaddb"><span class="std std-ref">loaddb</span></a> for loading a database.</p>
+</div></blockquote>
+</li>
+<li><p>Back up the new database</p>
+<blockquote>
+<div><p>Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the <strong>cubrid backupdb</strong> utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see <a class="reference internal" href="backup.html#backupdb"><span class="std std-ref">backupdb</span></a> .</p>
+</div></blockquote>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Even if the version is identical, the 32-bit database volume and the 64-bit database volume are not compatible for backup and recovery. Therefore, it is not recommended to recover a 32-bit database backup on the 64-bit CUBRID or vice versa.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When using the TDE feature in CUBRID 11, it does not provide backward compatibility. So, the unloaded file in CUBRID 11 cannot be loaded into a lower version if more the one TDE table exists.</p>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li></li>
+<li><a :data-current="activeSection === '#loaddb'" class="reference internal" href="#loaddb">loaddb</a><ul>
+<li><a :data-current="activeSection === '#how-to-write-files-to-load-database'" class="reference internal" href="#how-to-write-files-to-load-database">How to Write Files to Load Database</a><ul>
+<li><a :data-current="activeSection === '#comment'" class="reference internal" href="#comment">Comment</a></li>
+<li><a :data-current="activeSection === '#command-line'" class="reference internal" href="#command-line">Command Line</a></li>
+<li><a :data-current="activeSection === '#data-line'" class="reference internal" href="#data-line">Data Line</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#migrating-database'" class="reference internal" href="#migrating-database">Migrating Database</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: May 13, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

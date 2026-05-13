@@ -1072,7 +1072,7 @@ Represents user information. An index for name is created.
 _db_authorization
 -----------------
 
-Represents user authorization information of classes.
+Represents authorization summary per user.
 
 +--------------------+--------------------+----------------------------------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type        |   Description                                                                                                                    |

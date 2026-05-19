@@ -363,7 +363,7 @@ Raise Error When ``ha_mode`` is **on** and **myhost** is Included in **ha_node_l
 Others
 ~~~~~~
 
-Column Name Changed in System Table db_serial (att_name → attr_name)
+Column Name Changed in System Table _db_serial (att_name → attr_name)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Queries that explicitly reference att_name in versions prior to 11.4 must be updated, as they will result in errors in version 11.4.

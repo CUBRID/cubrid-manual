@@ -31,7 +31,7 @@ To access the object, the user must use the path expression of "schema_name.tabl
             ======================
               'Fernandez Jesus'
 
-A unique_name column has been added to the system tables (_db_class, db_serial, db_trigger) that manage tables, serials, and triggers. The unique_name column stores names prefixed with schema names. In the unique_name column of _db_class, the system table name is not prefixed with the schema name.
+A unique_name column has been added to the system tables (_db_class, _db_serial, _db_trigger) that manage tables, serials, and triggers. The unique_name column stores names prefixed with schema names. In the unique_name column of _db_class, the system table name is not prefixed with the schema name.
 
 .. code-block:: shell
 
@@ -63,7 +63,6 @@ A unique_name column has been added to the system tables (_db_class, db_serial, 
           'db_attribute'           'db_attribute'           'DBA'
           'db_auth'                'db_auth'                'DBA'
           'db_authorization'       'db_authorization'       'DBA'
-          'db_authorizations'      'db_authorizations'      'DBA'
               ...
           'public.athlete'         'athlete'                'PUBLIC'
           'public.code'            'code'                   'PUBLIC'
@@ -71,7 +70,7 @@ A unique_name column has been added to the system tables (_db_class, db_serial, 
           'public.game'            'game'                   'PUBLIC'
           'public.history'         'history'                'PUBLIC'
 
-    SELECT unique_name, name, owner.name FROM db_serial ORDER BY unique_name;
+    SELECT unique_name, name, owner.name FROM _db_serial ORDER BY unique_name;
 
           unique_name               name               owner.name
         =========================================================
@@ -79,7 +78,7 @@ A unique_name column has been added to the system tables (_db_class, db_serial, 
           'public.event_no'         'event_no'         'PUBLIC'
           'public.stadium_no'       'stadium_no'       'PUBLIC'
 
-    SELECT unique_name, name, owner.name FROM db_trigger ORDER BY unique_name;
+    SELECT unique_name, name, owner.name FROM _db_trigger ORDER BY unique_name;
 
           unique_name         name         owner.name
         =============================================

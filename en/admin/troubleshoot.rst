@@ -267,7 +267,7 @@ The following describes the error messages when **copylogdb** or **applylogdb** 
 | are already deleted.                                          |                                                                                                  |
 |                                                               | Internal error: logical log page 81 may be corrupted.                                            |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| Different between db_ha_apply_info catalog time and           | HA generic: Failed to initialize db_ha_apply_info.                                               |
+| Different between _db_ha_apply_info catalog time and          | HA generic: Failed to initialize _db_ha_apply_info.                                              |
 | DB creation time in the current replication logs.             |                                                                                                  |
 | That is, it's not the previous log to be being applied.       |                                                                                                  |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -282,5 +282,5 @@ How to fix when a Failure on HA start
 Status                                                            How to fix                                                         
 ================================================================= ==================================================================================================
 When the source node, the cause of failure, is in master status.  Rebuild replication.
-When the source node, the cause of failure, is in slave status.   Initialize replicated logs and db_ha_apply_info catalog then restart.
+When the source node, the cause of failure, is in slave status.   Initialize replicated logs and _db_ha_apply_info catalog then restart.
 ================================================================= ==================================================================================================

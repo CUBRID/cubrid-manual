@@ -1,0 +1,56 @@
+name: Daily Build Cleanup
+
+on:
+  schedule:
+    # Run at 03:00 KST (18:00 UTC) every day
+    - cron: '0 18 * * *'
+  workflow_dispatch:  # Allows manual execution by administrators
+
+jobs:
+  purge-old-builds:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Delete builds older than 60 days
+        run: |
+          echo "Starting cleanup for builds older than 60 days..."
+
+          # 1. Clean up temporary PR preview folders (pr-preview/*)
+          if [ -d "pr-preview" ]; then
+            find pr-preview/* -maxdepth 0 -type d -mtime +60 -exec rm -rf {} \;
+            echo "Cleaned up old pr-preview folders."
+          fi
+
+          # 2. Clean up per-commit deploy directories ({lang}/{branch}/{short_sha}/)
+          echo "Searching for old per-commit deploy directories..."
+          for lang_dir in en ko; do
+            if [ -d "$lang_dir" ]; then
+              for branch_dir in "$lang_dir"/*/; do
+                if [ -d "$branch_dir" ]; then
+                  find "$branch_dir" -maxdepth 1 -type d -mtime +60 ! -name "$(basename "$branch_dir")" -exec rm -rf {} \;
+                fi
+              done
+            fi
+          done
+
+          # Git configuration for automated commits
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage deletion changes
+          git add .
+
+          # Check for changes and push if there is anything to commit
+          if ! git diff --cached --quiet; then
+            git commit -m "Cleanup: Purge archived builds older than 60 days"
+            git push origin gh-pages
+            echo "✅ Successfully pushed cleanup changes."
+          else
+            echo "ℹ️ No old builds found to delete. Everything is clean."
+          fi

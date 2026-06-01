@@ -66,12 +66,12 @@ CREATE SERIAL
     --creating serial with specifying the number of cached serial values
     CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000 CACHE 3;
      
-    --selecting serial information from the db_serial class
-    SELECT * FROM db_serial;
+    --selecting serial information from the db_serial
+    SELECT name, current_val, increment_val, max_val, min_val, cyclic, started, cached_num, attr_name FROM db_serial;
 
 ::
 
-      name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
+      name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        attr_name
     ====================================================================================================================================================
     'order_no'      10006            2                     20000           10000                0            1                3            NULL
 

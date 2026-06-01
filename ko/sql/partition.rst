@@ -608,13 +608,13 @@
 
 .. code-block:: text
 
-      host_year  host_nation           host_city             mascot
-  ===============================================================================
-           1972  'Germany'             'Munich'              'Waldi'
-           1976  'Canada'              'Montreal'            'Amik'
-           1980  'USSR'                'Moscow'              'Misha'
-           1984  'USA'                 'Los Angeles'         'Sam'
-           1988  'Korea'               'Seoul'               'HODORI'
+    opening_year  host_nation           host_city             mascot
+  ================================================================================
+            1972  'Germany'             'Munich'              'Waldi'
+            1976  'Canada'              'Montreal'            'Amik'
+            1980  'USSR'                'Moscow'              'Misha'
+            1984  'USA'                 'Los Angeles'         'Sam'
+            1988  'Korea'               'Seoul'               'HODORI'
 
 질의 실행 후 프로파일링 결과를 확인하면,
 ``YEAR (o.opening_date) between 1970 and 1990`` 조건을 만족하는 ``before_1980``\과 ``before_2000`` 분할만 스캔되었으며,

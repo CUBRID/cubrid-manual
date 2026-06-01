@@ -414,7 +414,7 @@ while each **PARTITION** entry shows scan information for its respective partiti
 Any partition that does not appear as a **PARTITION** entry has been excluded from the scan target.
 
 In this example, only the ``before_2000`` and ``latest`` partitions were scanned
-because they satisfy the ``s.nation_code = 'KOR'`` predicate.
+because they satisfy the ``o.host_year > 1990`` predicate.
 All other partitions were successfully excluded from the scan target.
 
 .. code-block:: sql
@@ -630,13 +630,13 @@ Additionally, partition pruning can be applied because range partitioning suppor
 
 .. code-block:: text
 
-      host_year  host_nation           host_city             mascot
-  ===============================================================================
-           1972  'Germany'             'Munich'              'Waldi'
-           1976  'Canada'              'Montreal'            'Amik'
-           1980  'USSR'                'Moscow'              'Misha'
-           1984  'USA'                 'Los Angeles'         'Sam'
-           1988  'Korea'               'Seoul'               'HODORI'
+    opening_year  host_nation           host_city             mascot
+  ================================================================================
+            1972  'Germany'             'Munich'              'Waldi'
+            1976  'Canada'              'Montreal'            'Amik'
+            1980  'USSR'                'Moscow'              'Misha'
+            1984  'USA'                 'Los Angeles'         'Sam'
+            1988  'Korea'               'Seoul'               'HODORI'
 
 Upon checking the profiling output after query execution,
 we can observe that only the ``before_1980`` and ``before_2000`` partitions were scanned
@@ -1038,7 +1038,7 @@ because the bound value is identifiable at the open stage of query execution.
         p.host_year, p.gold, p.nation_code;
   ';
 
-  execute q using 1988;
+  execute q using '1988-01-01';
 
   show trace;
 

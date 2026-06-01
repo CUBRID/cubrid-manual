@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Information Schema | CUBRID 11.4 User Manual</title>
+<meta content="Information Schema | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Information Schema | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../pl/index.html" rel="next" title="CUBRID Procedural Language"/>
+<link href="catalog.html" rel="prev" title="System Catalog"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/information_schema.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">System Catalog</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Information Schema</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Information Schema</span>
+</nav>
+<div id="content" role="main">
+<section id="information-schema">
+<span id="id1"></span><h1>Information Schema<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#information-schema"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p><strong>Information Schema</strong> is a set of read-only views that expose metadata about the objects in the current database, such as tables, columns, constraints, routines, and privileges. The Information Schema is defined in the SQL standard (ISO/IEC 9075-11), so it is portable and stable. This contrasts with the CUBRID <a class="reference internal" href="catalog.html#catalog"><span class="std std-ref">System Catalog</span></a>, which is specific to CUBRID and modeled after implementation concerns.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Tables owned by the user 'public'</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">table_type</span>
+</span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span>
+</span><span id="line-4"><span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'public'</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="c1">-- Columns of the 'game' table</span>
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="k">column_name</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="p">,</span><span class="w"> </span><span class="n">is_nullable</span>
+</span><span id="line-8"><span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">columns</span>
+</span><span id="line-9"><span class="k">WHERE</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'game'</span>
+</span><span id="line-10"><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">ordinal_position</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<section id="information-schema-views">
+<h2>Information Schema Views<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#information-schema-views" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#information-schema-views'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The following table summarizes the Information Schema views. For details on each view, see its description below.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>View Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-column-privileges"><span class="std std-ref">column_privileges</span></a></p></td>
+<td><p>Privileges defined on columns</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-columns"><span class="std std-ref">columns</span></a></p></td>
+<td><p>Columns in each table</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-domains"><span class="std std-ref">domains</span></a></p></td>
+<td><p>Domain information</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-foreign-servers"><span class="std std-ref">foreign_servers</span></a></p></td>
+<td><p>Foreign server information</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-key-column-usage"><span class="std std-ref">key_column_usage</span></a></p></td>
+<td><p>Key columns of constraints</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-parameters"><span class="std std-ref">parameters</span></a></p></td>
+<td><p>Routine parameters</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-partitions"><span class="std std-ref">partitions</span></a></p></td>
+<td><p>Table partition information</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-referential-constraints"><span class="std std-ref">referential_constraints</span></a></p></td>
+<td><p>Foreign key information</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-routine-privileges"><span class="std std-ref">routine_privileges</span></a></p></td>
+<td><p>Privileges defined on routines</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-routines"><span class="std std-ref">routines</span></a></p></td>
+<td><p>Routine information</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-schemata"><span class="std std-ref">schemata</span></a></p></td>
+<td><p>Schema information</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-sequences"><span class="std std-ref">sequences</span></a></p></td>
+<td><p>Sequence information</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-statistics"><span class="std std-ref">statistics</span></a></p></td>
+<td><p>Table index statistics</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-synonyms"><span class="std std-ref">synonyms</span></a></p></td>
+<td><p>Synonym information</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-table-constraints"><span class="std std-ref">table_constraints</span></a></p></td>
+<td><p>Table constraint information</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-table-privileges"><span class="std std-ref">table_privileges</span></a></p></td>
+<td><p>Privileges defined on tables</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#information-schema-tables"><span class="std std-ref">tables</span></a></p></td>
+<td><p>Table information</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-triggers"><span class="std std-ref">triggers</span></a></p></td>
+<td><p>Trigger information</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id2"><span class="std std-ref">views</span></a></p></td>
+<td><p>View information</p></td>
+</tr>
+</tbody>
+</table>
+<section id="column-privileges">
+<span id="information-schema-column-privileges"></span><h3>column_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#column-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#column-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">column_privileges</span></code> view identifies all privileges granted on columns to or by the current user. CUBRID does not support column-level privileges, so this view is always empty.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>grantor</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>grantee</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>column_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>privilege_type</p></td>
+<td><p>VARCHAR(7)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>is_grantable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="columns">
+<span id="information-schema-columns"></span><h3>columns<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#columns" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#columns'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">columns</span></code> view contains information about all columns of the tables and views in the current database. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table (always the current
+database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table</p></td>
+</tr>
+<tr class="row-even"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the table</p></td>
+</tr>
+<tr class="row-odd"><td><p>column_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the column</p></td>
+</tr>
+<tr class="row-even"><td><p>ordinal_position</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Ordinal position of the column within the table (count starts at
+1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>column_default</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Default expression of the column</p></td>
+</tr>
+<tr class="row-even"><td><p>is_nullable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘NO’ if a NOT NULL constraint is set, and ‘YES’ otherwise</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_type</p></td>
+<td><p>VARCHAR(16)</p></td>
+<td><p>Data type of the column</p></td>
+</tr>
+<tr class="row-even"><td><p>character_maximum_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Maximum length in characters for character or bit-string types
+(NULL for other data types)</p></td>
+</tr>
+<tr class="row-odd"><td><p>character_octet_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Maximum length in bytes for character types (NULL for other data
+types)</p></td>
+</tr>
+<tr class="row-even"><td><p>numeric_precision</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Precision of numeric types (NULL for other data types)</p></td>
+</tr>
+<tr class="row-odd"><td><p>numeric_scale</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Scale of exact numeric types (NULL for other data types)</p></td>
+</tr>
+<tr class="row-even"><td><p>datetime_precision</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Fractional-seconds precision of date/time types (NULL for other
+data types)</p></td>
+</tr>
+<tr class="row-odd"><td><p>character_set_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the character set for character types (NULL for other
+data types)</p></td>
+</tr>
+<tr class="row-even"><td><p>collation_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the collation for character types (NULL for other data
+types)</p></td>
+</tr>
+<tr class="row-odd"><td><p>domain_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>domain_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>domain_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>udt_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>udt_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>udt_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>extra</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Space-separated flags (auto_increment, partition_key)</p></td>
+</tr>
+<tr class="row-even"><td><p>privileges</p></td>
+<td><p>VARCHAR(512)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>column_comment</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Comment to describe the column</p></td>
+</tr>
+<tr class="row-even"><td><p>is_generated</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the column is a generated column (always ‘NEVER’)</p></td>
+</tr>
+<tr class="row-odd"><td><p>generation_expression</p></td>
+<td><p>STRING</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>is_updatable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the column is updatable (always ‘YES’)</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_visible</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘NO’ for an invisible column, and ‘YES’ otherwise</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="domains">
+<span id="information-schema-domains"></span><h3>domains<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#domains" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#domains'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">domains</span></code> view contains all domains defined in the current database. CUBRID does not support user-defined domains, so this view is always empty.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>domain_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>domain_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>domain_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>data_type</p></td>
+<td><p>VARCHAR(16)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>character_maximum_length</p></td>
+<td><p>BIGINT</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>character_octet_length</p></td>
+<td><p>BIGINT</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>character_set_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>character_set_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>character_set_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>collation_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>collation_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>collation_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>numeric_precision</p></td>
+<td><p>INTEGER</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>numeric_precision_radix</p></td>
+<td><p>INTEGER</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>numeric_scale</p></td>
+<td><p>INTEGER</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>datetime_precision</p></td>
+<td><p>INTEGER</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>domain_default</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>udt_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>udt_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>udt_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>domain_comment</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="foreign-servers">
+<span id="information-schema-foreign-servers"></span><h3>foreign_servers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#foreign-servers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#foreign-servers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">foreign_servers</span></code> view contains all foreign servers defined in the current database. Only those servers are shown that the current user has access to (by way of being the owner or having some privilege on the server).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>foreign_server_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the foreign server (always
+the current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>foreign_server_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the foreign server</p></td>
+</tr>
+<tr class="row-even"><td><p>foreign_data_wrapper_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>foreign_data_wrapper_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>foreign_server_type</p></td>
+<td><p>STRING</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>foreign_server_version</p></td>
+<td><p>STRING</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>authorization_identifier</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the owner of the foreign server</p></td>
+</tr>
+<tr class="row-odd"><td><p>server_host</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Target host</p></td>
+</tr>
+<tr class="row-even"><td><p>server_port</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Target port</p></td>
+</tr>
+<tr class="row-odd"><td><p>server_database</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the target database</p></td>
+</tr>
+<tr class="row-even"><td><p>server_user</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the connection user</p></td>
+</tr>
+<tr class="row-odd"><td><p>server_properties</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Connection properties</p></td>
+</tr>
+<tr class="row-even"><td><p>server_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the server</p></td>
+</tr>
+<tr class="row-odd"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Foreign server creation time</p></td>
+</tr>
+<tr class="row-even"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Foreign server modification time</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="key-column-usage">
+<span id="information-schema-key-column-usage"></span><h3>key_column_usage<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#key-column-usage" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#key-column-usage'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">key_column_usage</span></code> view identifies all columns in the current database that are restricted by some UNIQUE, PRIMARY KEY, or FOREIGN KEY constraint. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>constraint_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the constraint (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>constraint_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the constraint</p></td>
+</tr>
+<tr class="row-even"><td><p>constraint_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the constraint</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table (always the current
+database)</p></td>
+</tr>
+<tr class="row-even"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the table that contains the column that is restricted by
+this constraint</p></td>
+</tr>
+<tr class="row-even"><td><p>column_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the column that is restricted by this constraint</p></td>
+</tr>
+<tr class="row-odd"><td><p>ordinal_position</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Ordinal position of the column within the constraint key (count
+starts at 1)</p></td>
+</tr>
+<tr class="row-even"><td><p>position_in_unique_constraint</p></td>
+<td><p>INTEGER</p></td>
+<td><p>For a foreign-key constraint, the ordinal position of the
+referenced column within its unique constraint (count starts at
+1); otherwise NULL</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="parameters">
+<span id="information-schema-parameters"></span><h3>parameters<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parameters" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parameters'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">parameters</span></code> view contains information about the parameters of all procedures and functions in the current database. Only the parameters of routines that the current user has access to are shown (by way of being the owner or having some privilege).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>specific_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the routine (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>specific_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the routine</p></td>
+</tr>
+<tr class="row-even"><td><p>specific_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Unique routine name</p></td>
+</tr>
+<tr class="row-odd"><td><p>ordinal_position</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Ordinal position of the parameter in the argument list of the
+routine (count starts at 1)</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter_mode</p></td>
+<td><p>VARCHAR(5)</p></td>
+<td><p>Parameter mode (IN: input, OUT: output, INOUT: input/output)</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_result</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the parameter represents the function’s return value
+(always ‘NO’)</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_type</p></td>
+<td><p>VARCHAR(16)</p></td>
+<td><p>Parameter data type</p></td>
+</tr>
+<tr class="row-even"><td><p>character_maximum_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Maximum length in characters, for a character-string parameter
+(always NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>character_octet_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Maximum length in bytes, for a character-string parameter
+(always NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>character_set_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Character set of a character-string parameter (always NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>collation_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Collation of a character-string parameter (always NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>numeric_precision</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Numeric precision of a numeric parameter (always NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>numeric_scale</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Numeric scale of a numeric parameter (always NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>datetime_precision</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Fractional-seconds precision of date/time types (NULL for other
+data types)</p></td>
+</tr>
+<tr class="row-odd"><td><p>dtd_identifier</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>routine_type</p></td>
+<td><p>VARCHAR(9)</p></td>
+<td><p>Type of the routine (PROCEDURE, FUNCTION)</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter_default</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Default expression of the parameter (NULL if none)</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the parameter</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="partitions">
+<span id="information-schema-partitions"></span><h3>partitions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">partitions</span></code> view contains all partitions of the partitioned tables in the current database. Only those partitions are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table (always the current
+database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table</p></td>
+</tr>
+<tr class="row-even"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Partitioned (super) table name</p></td>
+</tr>
+<tr class="row-odd"><td><p>partition_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the partition</p></td>
+</tr>
+<tr class="row-even"><td><p>partition_ordinal_position</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Ordinal position of the partition within the table (always NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>partition_method</p></td>
+<td><p>VARCHAR(5)</p></td>
+<td><p>Partitioning method (HASH, RANGE, LIST)</p></td>
+</tr>
+<tr class="row-even"><td><p>partition_expression</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Partitioning key expression</p></td>
+</tr>
+<tr class="row-odd"><td><p>partition_description</p></td>
+<td><p>STRING</p></td>
+<td><p>For RANGE/LIST partitions, the boundary values; NULL for HASH
+partitions</p></td>
+</tr>
+<tr class="row-even"><td><p>subpartition_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>subpartition_ordinal_position</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>subpartition_method</p></td>
+<td><p>VARCHAR(5)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>subpartition_expression</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>table_rows</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated number of rows in the partition</p></td>
+</tr>
+<tr class="row-odd"><td><p>avg_row_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated average row length in bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>data_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated total data length in bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_free</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated free space in bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>tablespace_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>partition_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the partition</p></td>
+</tr>
+<tr class="row-even"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Partition creation time</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Partition modification time</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="referential-constraints">
+<span id="information-schema-referential-constraints"></span><h3>referential_constraints<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#referential-constraints" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#referential-constraints'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">referential_constraints</span></code> view contains all referential (foreign key) constraints in the current database. Only those constraints are shown for which the current user has write access to the referencing table (by way of being the owner or having some privilege other than SELECT).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>constraint_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the constraint (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>constraint_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the constraint</p></td>
+</tr>
+<tr class="row-even"><td><p>constraint_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the constraint</p></td>
+</tr>
+<tr class="row-odd"><td><p>unique_constraint_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the unique or primary key
+constraint that the foreign key constraint references (always
+the current database)</p></td>
+</tr>
+<tr class="row-even"><td><p>unique_constraint_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the unique or primary key
+constraint that the foreign key constraint references</p></td>
+</tr>
+<tr class="row-odd"><td><p>unique_constraint_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the unique or primary key constraint that the foreign
+key constraint references</p></td>
+</tr>
+<tr class="row-even"><td><p>match_option</p></td>
+<td><p>VARCHAR(7)</p></td>
+<td><p>Match option of the foreign key constraint (NONE, PARTIAL, FULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_rule</p></td>
+<td><p>VARCHAR(9)</p></td>
+<td><p>Update rule of the foreign key constraint (RESTRICT, NO ACTION,
+SET NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>delete_rule</p></td>
+<td><p>VARCHAR(9)</p></td>
+<td><p>Delete rule of the foreign key constraint (CASCADE, RESTRICT, NO
+ACTION, SET NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Referencing table</p></td>
+</tr>
+<tr class="row-even"><td><p>referenced_table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Referenced table</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="routine-privileges">
+<span id="information-schema-routine-privileges"></span><h3>routine_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#routine-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#routine-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">routine_privileges</span></code> view identifies all privileges granted on procedures and functions to or by the current user. There is one row for each combination of routine, grantor, and grantee.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>grantor</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>User who granted the privilege</p></td>
+</tr>
+<tr class="row-odd"><td><p>grantee</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>User who received the privilege</p></td>
+</tr>
+<tr class="row-even"><td><p>specific_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the routine (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>specific_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the routine</p></td>
+</tr>
+<tr class="row-even"><td><p>specific_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Unique routine name</p></td>
+</tr>
+<tr class="row-odd"><td><p>routine_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the routine (always the
+current database)</p></td>
+</tr>
+<tr class="row-even"><td><p>routine_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the routine</p></td>
+</tr>
+<tr class="row-odd"><td><p>routine_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the routine</p></td>
+</tr>
+<tr class="row-even"><td><p>privilege_type</p></td>
+<td><p>VARCHAR(7)</p></td>
+<td><p>Type of the privilege (always EXECUTE)</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_grantable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the grantee may grant the privilege to others (always
+‘NO’)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="routines">
+<span id="information-schema-routines"></span><h3>routines<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#routines" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#routines'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">routines</span></code> view contains all procedures and functions in the current database. Only those routines are shown that the current user has access to (by way of being the owner or having some privilege).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>specific_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Unique routine name</p></td>
+</tr>
+<tr class="row-odd"><td><p>routine_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the routine (always the
+current database)</p></td>
+</tr>
+<tr class="row-even"><td><p>routine_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the routine</p></td>
+</tr>
+<tr class="row-odd"><td><p>routine_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the routine</p></td>
+</tr>
+<tr class="row-even"><td><p>routine_type</p></td>
+<td><p>VARCHAR(9)</p></td>
+<td><p>Type of the routine (PROCEDURE, FUNCTION)</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_type</p></td>
+<td><p>VARCHAR(16)</p></td>
+<td><p>Return data type of the function (NULL for a procedure)</p></td>
+</tr>
+<tr class="row-even"><td><p>character_maximum_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Maximum length in characters, for a character-string return
+value (always NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>character_octet_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Maximum length in bytes, for a character-string return value
+(always NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>character_set_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Character set of the return value, for string return types</p></td>
+</tr>
+<tr class="row-odd"><td><p>collation_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Collation of a character-string return value (always NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>numeric_precision</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Numeric precision of a numeric return value (always NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>numeric_scale</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Numeric scale of a numeric return value (always NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>datetime_precision</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Fractional-seconds precision of date/time types (NULL for other
+data types)</p></td>
+</tr>
+<tr class="row-odd"><td><p>dtd_identifier</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>routine_body</p></td>
+<td><p>VARCHAR(8)</p></td>
+<td><p>Type of the routine body (always EXTERNAL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>routine_definition</p></td>
+<td><p>STRING</p></td>
+<td><p>PL/CSQL source text</p></td>
+</tr>
+<tr class="row-even"><td><p>external_name</p></td>
+<td><p>STRING</p></td>
+<td><p>External name of the routine (NULL if none)</p></td>
+</tr>
+<tr class="row-odd"><td><p>external_language</p></td>
+<td><p>VARCHAR(64)</p></td>
+<td><p>Implementation language of the routine (PLCSQL, JAVA)</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter_style</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Parameter-passing style of the routine (always SQL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_deterministic</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if the routine is declared DETERMINISTIC, otherwise ‘NO’</p></td>
+</tr>
+<tr class="row-even"><td><p>sql_data_access</p></td>
+<td><p>VARCHAR(17)</p></td>
+<td><p>SQL data access level (NO SQL, CONTAINS SQL, READS SQL DATA,
+MODIFIES SQL DATA)</p></td>
+</tr>
+<tr class="row-odd"><td><p>sql_path</p></td>
+<td><p>STRING</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>security_type</p></td>
+<td><p>VARCHAR(7)</p></td>
+<td><p>Security context under which the routine executes (INVOKER,
+DEFINER)</p></td>
+</tr>
+<tr class="row-odd"><td><p>routine_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the routine</p></td>
+</tr>
+<tr class="row-even"><td><p>created</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Routine creation time</p></td>
+</tr>
+<tr class="row-odd"><td><p>last_altered</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Routine modification time</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">routine_definition</span></code> exposes the PL/CSQL source code, so it is shown only to the DBA or the routine’s owner. For all other users it is NULL.</p>
+</div>
+</section>
+<section id="schemata">
+<span id="information-schema-schemata"></span><h3>schemata<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#schemata" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#schemata'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">schemata</span></code> view contains all schemas in the current database. Only those schemas are shown that the current user has access to (by way of being the owner or having some privilege).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>catalog_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the schema (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>schema_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema</p></td>
+</tr>
+<tr class="row-even"><td><p>schema_owner</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the owner of the schema</p></td>
+</tr>
+<tr class="row-odd"><td><p>default_character_set_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the default character set
+(always the current database)</p></td>
+</tr>
+<tr class="row-even"><td><p>default_character_set_schema</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the schema that contains the default character set
+(always NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>default_character_set_name</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Default character set of the database</p></td>
+</tr>
+<tr class="row-even"><td><p>sql_path</p></td>
+<td><p>STRING</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>schema_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the schema</p></td>
+</tr>
+<tr class="row-even"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Schema creation time</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In CUBRID a schema is the same as a database user.</p>
+</div>
+</section>
+<section id="sequences">
+<span id="information-schema-sequences"></span><h3>sequences<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sequences" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sequences'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">sequences</span></code> view contains all sequences defined in the current database. Only those sequences are shown that the current user has access to (by way of being the owner or having some privilege).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>sequence_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the sequence (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>sequence_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the sequence</p></td>
+</tr>
+<tr class="row-even"><td><p>sequence_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the sequence</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_type</p></td>
+<td><p>VARCHAR(16)</p></td>
+<td><p>Data type of the sequence (always NUMERIC)</p></td>
+</tr>
+<tr class="row-even"><td><p>numeric_precision</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Precision of the sequence data type (always 38)</p></td>
+</tr>
+<tr class="row-odd"><td><p>numeric_precision_radix</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Radix in which the precision is expressed (always 10)</p></td>
+</tr>
+<tr class="row-even"><td><p>numeric_scale</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Scale of the sequence data type (always 0)</p></td>
+</tr>
+<tr class="row-odd"><td><p>start_value</p></td>
+<td><p>NUMERIC(38,0)</p></td>
+<td><p>Start value of the sequence</p></td>
+</tr>
+<tr class="row-even"><td><p>minimum_value</p></td>
+<td><p>NUMERIC(38,0)</p></td>
+<td><p>Minimum value of the sequence</p></td>
+</tr>
+<tr class="row-odd"><td><p>maximum_value</p></td>
+<td><p>NUMERIC(38,0)</p></td>
+<td><p>Maximum value of the sequence</p></td>
+</tr>
+<tr class="row-even"><td><p>increment</p></td>
+<td><p>NUMERIC(38,0)</p></td>
+<td><p>Increment of the sequence</p></td>
+</tr>
+<tr class="row-odd"><td><p>cycle_option</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if the sequence cycles, otherwise ‘NO’</p></td>
+</tr>
+<tr class="row-even"><td><p>is_cached</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if caching is enabled, otherwise ‘NO’</p></td>
+</tr>
+<tr class="row-odd"><td><p>sequence_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the sequence</p></td>
+</tr>
+<tr class="row-even"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Sequence creation time</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Sequence modification time</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CUBRID <a class="reference internal" href="schema/serial_stmt.html"><span class="doc">serial</span></a> objects appear in this view as sequences. Sequences backing AUTO_INCREMENT columns are not shown.</p>
+</div>
+</section>
+<section id="statistics">
+<span id="information-schema-statistics"></span><h3>statistics<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#statistics" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#statistics'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">statistics</span></code> view contains information about the indexes on the tables in the current database. There is one row for each column of each index. Only those indexes are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table (always the current
+database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table</p></td>
+</tr>
+<tr class="row-even"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the table</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_unique</p></td>
+<td><p>INTEGER</p></td>
+<td><p>1 if the index is unique, otherwise 0</p></td>
+</tr>
+<tr class="row-even"><td><p>index_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the index</p></td>
+</tr>
+<tr class="row-odd"><td><p>index_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the index</p></td>
+</tr>
+<tr class="row-even"><td><p>seq_in_index</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Ordinal position of the column within the index (count starts at
+1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>column_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the indexed column</p></td>
+</tr>
+<tr class="row-even"><td><p>collation</p></td>
+<td><p>VARCHAR(1)</p></td>
+<td><p>Sort order of the column in the index (A: ascending, D:
+descending)</p></td>
+</tr>
+<tr class="row-odd"><td><p>cardinality</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Estimated number of distinct values in the index</p></td>
+</tr>
+<tr class="row-even"><td><p>sub_part</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Number of indexed characters when the column is prefix-indexed,
+NULL if the entire column is indexed</p></td>
+</tr>
+<tr class="row-odd"><td><p>nullable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if the indexed column is nullable, ‘NO’ if not</p></td>
+</tr>
+<tr class="row-even"><td><p>index_type</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Index method (always BTREE)</p></td>
+</tr>
+<tr class="row-odd"><td><p>comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>System-generated information about the index (always NULL in
+CUBRID)</p></td>
+</tr>
+<tr class="row-even"><td><p>index_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the index</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_visible</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if the index is visible to the optimizer, otherwise ‘NO’</p></td>
+</tr>
+<tr class="row-even"><td><p>expression</p></td>
+<td><p>VARCHAR(1023)</p></td>
+<td><p>Expression of a function-based index (NULL for a regular column)</p></td>
+</tr>
+<tr class="row-odd"><td><p>deduplicate_level</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Deduplication option level of the index</p></td>
+</tr>
+<tr class="row-even"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Index creation time</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Index modification time</p></td>
+</tr>
+<tr class="row-even"><td><p>access_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="synonyms">
+<span id="information-schema-synonyms"></span><h3>synonyms<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#synonyms" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#synonyms'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">synonyms</span></code> view contains all synonyms defined in the current database. Only those synonyms are shown that the current user has access to (by way of being the owner or for a public synonym).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>synonym_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the synonym (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>synonym_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the synonym</p></td>
+</tr>
+<tr class="row-even"><td><p>synonym_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the synonym</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_public_synonym</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if the synonym is public, otherwise ‘NO’</p></td>
+</tr>
+<tr class="row-even"><td><p>target_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the target object (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>target_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the target object</p></td>
+</tr>
+<tr class="row-even"><td><p>target_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the target object</p></td>
+</tr>
+<tr class="row-odd"><td><p>synonym_comment</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Comment to describe the synonym</p></td>
+</tr>
+<tr class="row-even"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Synonym creation time</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Synonym modification time</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="table-constraints">
+<span id="information-schema-table-constraints"></span><h3>table_constraints<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#table-constraints" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#table-constraints'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">table_constraints</span></code> view contains all PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints belonging to tables that the current user owns or has some privilege other than SELECT on.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>constraint_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the constraint (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>constraint_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the constraint</p></td>
+</tr>
+<tr class="row-even"><td><p>constraint_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the constraint</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table (always the current
+database)</p></td>
+</tr>
+<tr class="row-even"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the table</p></td>
+</tr>
+<tr class="row-even"><td><p>constraint_type</p></td>
+<td><p>VARCHAR(11)</p></td>
+<td><p>Type of the constraint (PRIMARY KEY, FOREIGN KEY, UNIQUE)</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_deferrable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the constraint is deferrable (always ‘NO’)</p></td>
+</tr>
+<tr class="row-even"><td><p>initially_deferred</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the constraint is initially deferred (always ‘NO’)</p></td>
+</tr>
+<tr class="row-odd"><td><p>enforced</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if the constraint is enforced, ‘NO’ if not</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only PRIMARY KEY, FOREIGN KEY, and UNIQUE constraints are listed; CHECK constraints are not included.</p>
+</div>
+</section>
+<section id="table-privileges">
+<span id="information-schema-table-privileges"></span><h3>table_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#table-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#table-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">table_privileges</span></code> view identifies all privileges granted on tables to or by the current user. There is one row for each combination of table, grantor, and grantee.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>grantor</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>User who granted the privilege</p></td>
+</tr>
+<tr class="row-odd"><td><p>grantee</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>User who received the privilege</p></td>
+</tr>
+<tr class="row-even"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table (always the current
+database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table</p></td>
+</tr>
+<tr class="row-even"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the table</p></td>
+</tr>
+<tr class="row-odd"><td><p>privilege_type</p></td>
+<td><p>VARCHAR(7)</p></td>
+<td><p>Type of the privilege (SELECT, INSERT, UPDATE, DELETE, ALTER,
+INDEX, EXECUTE)</p></td>
+</tr>
+<tr class="row-even"><td><p>is_grantable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>‘YES’ if the grantee may grant the privilege to others,
+otherwise ‘NO’</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tables">
+<span id="information-schema-tables"></span><h3>tables<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#tables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#tables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">tables</span></code> view contains all tables and views defined in the current database. Only those tables and views are shown that the current user has access to (by way of being the owner or having some privilege).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table (always the current
+database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table</p></td>
+</tr>
+<tr class="row-even"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the table</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_type</p></td>
+<td><p>VARCHAR(12)</p></td>
+<td><p>Type of the table (BASE TABLE, VIEW, SYSTEM TABLE, SYSTEM VIEW)</p></td>
+</tr>
+<tr class="row-even"><td><p>table_rows</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated number of rows</p></td>
+</tr>
+<tr class="row-odd"><td><p>avg_row_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated average row length in bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>data_length</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated total data length in bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_free</p></td>
+<td><p>BIGINT</p></td>
+<td><p>Estimated free space in bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>auto_increment</p></td>
+<td><p>NUMERIC(38,0)</p></td>
+<td><p>Next AUTO_INCREMENT value (NULL if not applicable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_collation</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Default collation of the table</p></td>
+</tr>
+<tr class="row-even"><td><p>create_options</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Table creation options as a space-separated list, including the
+OID-reuse setting (REUSE_OID or DONT_REUSE_OID) and the TDE
+setting (ENCRYPT=NONE, ENCRYPT=AES, or ENCRYPT=ARIA)</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_temporary</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the table is temporary (always ‘NO’)</p></td>
+</tr>
+<tr class="row-even"><td><p>table_comment</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Comment to describe the table</p></td>
+</tr>
+<tr class="row-odd"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Table creation time</p></td>
+</tr>
+<tr class="row-even"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Table modification time</p></td>
+</tr>
+<tr class="row-odd"><td><p>statistics_strategy</p></td>
+<td><p>VARCHAR(8)</p></td>
+<td><p>Strategy used to collect statistics (SAMPLING, FULLSCAN)</p></td>
+</tr>
+<tr class="row-even"><td><p>last_analyzed</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Table statistics information update time</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="triggers">
+<span id="information-schema-triggers"></span><h3>triggers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#triggers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#triggers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">triggers</span></code> view contains all triggers defined in the current database on tables that the current user owns or has some privilege other than SELECT on.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>trigger_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the trigger (always the
+current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>trigger_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the trigger</p></td>
+</tr>
+<tr class="row-even"><td><p>trigger_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the trigger</p></td>
+</tr>
+<tr class="row-odd"><td><p>event_manipulation</p></td>
+<td><p>VARCHAR(8)</p></td>
+<td><p>Event that fires the trigger (INSERT, UPDATE, DELETE)</p></td>
+</tr>
+<tr class="row-even"><td><p>event_object_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the table that the trigger is
+defined on (always the current database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>event_object_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the table that the trigger is
+defined on</p></td>
+</tr>
+<tr class="row-even"><td><p>event_object_table</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the table that the trigger is defined on</p></td>
+</tr>
+<tr class="row-odd"><td><p>event_object_column</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Target column of an UPDATE OF clause (NULL otherwise)</p></td>
+</tr>
+<tr class="row-even"><td><p>action_order</p></td>
+<td><p>INTEGER</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>action_condition</p></td>
+<td><p>STRING</p></td>
+<td><p>WHEN/IF condition of the trigger (NULL if none)</p></td>
+</tr>
+<tr class="row-even"><td><p>action_statement</p></td>
+<td><p>STRING</p></td>
+<td><p>Statement that is executed by the trigger</p></td>
+</tr>
+<tr class="row-odd"><td><p>action_orientation</p></td>
+<td><p>VARCHAR(9)</p></td>
+<td><p>Whether the trigger fires once per row or once per statement
+(ROW, STATEMENT)</p></td>
+</tr>
+<tr class="row-even"><td><p>action_timing</p></td>
+<td><p>VARCHAR(8)</p></td>
+<td><p>Time at which the trigger fires (BEFORE, AFTER, DEFERRED)</p></td>
+</tr>
+<tr class="row-odd"><td><p>action_reference_old_table</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-even"><td><p>action_reference_new_table</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Applies to a feature not available in CUBRID</p></td>
+</tr>
+<tr class="row-odd"><td><p>action_reference_old_row</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Alias used to reference the old row (always OLD)</p></td>
+</tr>
+<tr class="row-even"><td><p>action_reference_new_row</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Alias used to reference the new row (always NEW)</p></td>
+</tr>
+<tr class="row-odd"><td><p>trigger_comment</p></td>
+<td><p>VARCHAR(1024)</p></td>
+<td><p>Comment to describe the trigger</p></td>
+</tr>
+<tr class="row-even"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Trigger creation time</p></td>
+</tr>
+<tr class="row-odd"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>Trigger modification time</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only INSERT, UPDATE, and DELETE (DML) <a class="reference internal" href="trigger.html#create-trigger"><span class="std std-ref">triggers</span></a> appear in this view. CUBRID also supports COMMIT and ROLLBACK triggers, but those are not listed here.</p>
+</div>
+</section>
+<section id="views">
+<span id="id2"></span><h3>views<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#views" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#views'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">views</span></code> view contains all views defined in the current database. Only those views are shown that the current user has access to (by way of being the owner or having some privilege).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>table_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the database that contains the view (always the current
+database)</p></td>
+</tr>
+<tr class="row-odd"><td><p>table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>Name of the schema that contains the view</p></td>
+</tr>
+<tr class="row-even"><td><p>table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>Name of the view</p></td>
+</tr>
+<tr class="row-odd"><td><p>view_definition</p></td>
+<td><p>STRING</p></td>
+<td><p>Query expression defining the view</p></td>
+</tr>
+<tr class="row-even"><td><p>check_option</p></td>
+<td><p>VARCHAR(8)</p></td>
+<td><p>WITH CHECK OPTION setting of the view: CASCADED, LOCAL, or NONE
+if no CHECK OPTION is defined</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_updatable</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>Whether the view is updatable (always NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>view_comment</p></td>
+<td><p>VARCHAR(2048)</p></td>
+<td><p>Comment to describe the view</p></td>
+</tr>
+<tr class="row-odd"><td><p>create_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>View creation time</p></td>
+</tr>
+<tr class="row-even"><td><p>update_time</p></td>
+<td><p>DATETIME</p></td>
+<td><p>View modification time</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">is_updatable</span></code> is always NULL because CUBRID does not store view updatability as a fixed value.</p>
+</div>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="catalog.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        System Catalog
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="../pl/index.html">
+        CUBRID Procedural Language
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#information-schema-views'" class="reference internal" href="#information-schema-views">Information Schema Views</a><ul>
+<li><a :data-current="activeSection === '#column-privileges'" class="reference internal" href="#column-privileges">column_privileges</a></li>
+<li><a :data-current="activeSection === '#columns'" class="reference internal" href="#columns">columns</a></li>
+<li><a :data-current="activeSection === '#domains'" class="reference internal" href="#domains">domains</a></li>
+<li><a :data-current="activeSection === '#foreign-servers'" class="reference internal" href="#foreign-servers">foreign_servers</a></li>
+<li><a :data-current="activeSection === '#key-column-usage'" class="reference internal" href="#key-column-usage">key_column_usage</a></li>
+<li><a :data-current="activeSection === '#parameters'" class="reference internal" href="#parameters">parameters</a></li>
+<li><a :data-current="activeSection === '#partitions'" class="reference internal" href="#partitions">partitions</a></li>
+<li><a :data-current="activeSection === '#referential-constraints'" class="reference internal" href="#referential-constraints">referential_constraints</a></li>
+<li><a :data-current="activeSection === '#routine-privileges'" class="reference internal" href="#routine-privileges">routine_privileges</a></li>
+<li><a :data-current="activeSection === '#routines'" class="reference internal" href="#routines">routines</a></li>
+<li><a :data-current="activeSection === '#schemata'" class="reference internal" href="#schemata">schemata</a></li>
+<li><a :data-current="activeSection === '#sequences'" class="reference internal" href="#sequences">sequences</a></li>
+<li><a :data-current="activeSection === '#statistics'" class="reference internal" href="#statistics">statistics</a></li>
+<li><a :data-current="activeSection === '#synonyms'" class="reference internal" href="#synonyms">synonyms</a></li>
+<li><a :data-current="activeSection === '#table-constraints'" class="reference internal" href="#table-constraints">table_constraints</a></li>
+<li><a :data-current="activeSection === '#table-privileges'" class="reference internal" href="#table-privileges">table_privileges</a></li>
+<li><a :data-current="activeSection === '#tables'" class="reference internal" href="#tables">tables</a></li>
+<li><a :data-current="activeSection === '#triggers'" class="reference internal" href="#triggers">triggers</a></li>
+<li><a :data-current="activeSection === '#views'" class="reference internal" href="#views">views</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 01, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

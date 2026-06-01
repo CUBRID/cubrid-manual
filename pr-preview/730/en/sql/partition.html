@@ -582,7 +582,7 @@ The <strong>SCAN</strong> entry displays scan information for the entire partiti
 while each <strong>PARTITION</strong> entry shows scan information for its respective partition.
 Any partition that does not appear as a <strong>PARTITION</strong> entry has been excluded from the scan target.</p>
 <p>In this example, only the <code class="docutils literal notranslate"><span class="pre">before_2000</span></code> and <code class="docutils literal notranslate"><span class="pre">latest</span></code> partitions were scanned
-because they satisfy the <code class="docutils literal notranslate"><span class="pre">s.nation_code</span> <span class="pre">=</span> <span class="pre">'KOR'</span></code> predicate.
+because they satisfy the <code class="docutils literal notranslate"><span class="pre">o.host_year</span> <span class="pre">&gt;</span> <span class="pre">1990</span></code> predicate.
 All other partitions were successfully excluded from the scan target.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">show</span><span class="w"> </span><span class="n">trace</span><span class="p">;</span>
 </span></code></pre></div>
@@ -766,13 +766,13 @@ Additionally, partition pruning can be applied because range partitioning suppor
 </span><span id="line-12"><span class="k">show</span><span class="w"> </span><span class="n">trace</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">    host_year  host_nation           host_city             mascot
-</span><span id="line-2">===============================================================================
-</span><span id="line-3">         1972  'Germany'             'Munich'              'Waldi'
-</span><span id="line-4">         1976  'Canada'              'Montreal'            'Amik'
-</span><span id="line-5">         1980  'USSR'                'Moscow'              'Misha'
-</span><span id="line-6">         1984  'USA'                 'Los Angeles'         'Sam'
-</span><span id="line-7">         1988  'Korea'               'Seoul'               'HODORI'
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  opening_year  host_nation           host_city             mascot
+</span><span id="line-2">================================================================================
+</span><span id="line-3">          1972  'Germany'             'Munich'              'Waldi'
+</span><span id="line-4">          1976  'Canada'              'Montreal'            'Amik'
+</span><span id="line-5">          1980  'USSR'                'Moscow'              'Misha'
+</span><span id="line-6">          1984  'USA'                 'Los Angeles'         'Sam'
+</span><span id="line-7">          1988  'Korea'               'Seoul'               'HODORI'
 </span></code></pre></div>
 </div>
 <p>Upon checking the profiling output after query execution,
@@ -1117,7 +1117,7 @@ because the bound value is identifiable at the open stage of query execution.</p
 </span><span id="line-14"><span class="s1">      p.host_year, p.gold, p.nation_code;</span>
 </span><span id="line-15"><span class="s1">'</span><span class="p">;</span>
 </span><span id="line-16">
-</span><span id="line-17"><span class="k">execute</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="mi">1988</span><span class="p">;</span>
+</span><span id="line-17"><span class="k">execute</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="s1">'1988-01-01'</span><span class="p">;</span>
 </span><span id="line-18">
 </span><span id="line-19"><span class="k">show</span><span class="w"> </span><span class="n">trace</span><span class="p">;</span>
 </span></code></pre></div>

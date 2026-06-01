@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>User Management | CUBRID 11.4 User Manual</title>
+<meta content="User Management | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="User Management | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="query/set.html" rel="next" title="SET"/>
+<link href="db_admin.html" rel="prev" title="Database Administration"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/authorization.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="db_admin.html">Database Administration</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">User Management</span>
+</nav>
+<div id="content" role="main">
+<section id="user-management">
+<h1>User Management<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-management"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="database-user">
+<h2>Database User<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#database-user" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#database-user'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>To know the user name’s writing rule, see <a class="reference internal" href="identifier.html"><span class="doc">Identifier</span></a>.</p>
+<p>CUBRID has two types of users by default: <strong>DBA</strong> and <strong>PUBLIC</strong>. At the initial installation of the product, no passwords are set for these users.</p>
+<ul class="simple">
+<li><p>All database users are automatically members of <strong>PUBLIC</strong>, so they inherit any authorization granted to the <strong>PUBLIC</strong> user. Granting authorization to <strong>PUBLIC</strong> means granting it to all users.</p></li>
+<li><p>The <strong>DBA</strong> user has the authorization of the database administrator. The <strong>DBA</strong> automatically becomes the member of all users and groups. That is, the <strong>DBA</strong> is granted the access for all tables. Therefore, there is no need to grant authorization explicitly to the <strong>DBA</strong> and <strong>DBA</strong> members. Each database user has a unique name. The database administrator can create multiple users simultaneously using the <strong>cubrid createdb</strong> utility (see <a class="reference internal" href="../admin/admin_utils.html#cubrid-utilities"><span class="std std-ref">cubrid Utilities</span></a> for details). A database user cannot have a member who already has the same authorization. If authorization is granted to a user, all members of the user is automatically granted the same authorization.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From version 11.3 of CUBRID, <strong>DBA</strong> members can also query objects of all users in the system catalog virtual class.</p>
+</div>
+</section>
+<section id="create-user">
+<span id="id1"></span><h2>CREATE USER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#create-user" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#create-user'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You can create a user using the CREATE USER statement. The default DBA, PUBLIC user is created without a password.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">USER</span> <span class="n">user_name</span>
+</span><span id="line-2"><span class="p">[</span><span class="n">PASSWORD</span> <span class="n">password</span><span class="p">]</span>
+</span><span id="line-3"><span class="p">[</span><span class="n">GROUPS</span> <span class="n">user_name</span> <span class="p">[{,</span> <span class="n">user_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]]</span>
+</span><span id="line-4"><span class="p">[</span><span class="n">MEMBERS</span> <span class="n">user_name</span> <span class="p">[{,</span> <span class="n">user_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]]</span>
+</span><span id="line-5"><span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">];</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>user_name</em>: specifies the user name to create.</p></li>
+<li><p><em>password</em>: specifies the user password to create.</p></li>
+<li><p><em>comment_string</em>: specifies the user comment to create.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only <strong>DBA</strong> and <strong>DBA</strong> members can create users using the CREATE USER statement.</p>
+</div>
+<p>The following example creates a user test_user1 and specifies a password.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'password'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to create a user and add member to the user. By the following statement, <em>company</em> becomes a group that has <em>engineering</em>, <em>marketing</em> and <em>design</em> as its members. <em>marketing</em> becomes a group with members <em>smith</em> and <em>jones</em>, <em>design</em> becomes a group with a member <em>smith</em>, and <em>engineering</em> becomes a group with a member <em>brown</em>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">company</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">engineering</span><span class="w"> </span><span class="n">GROUPS</span><span class="w"> </span><span class="n">company</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">marketing</span><span class="w"> </span><span class="n">GROUPS</span><span class="w"> </span><span class="n">company</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">design</span><span class="w"> </span><span class="n">GROUPS</span><span class="w"> </span><span class="n">company</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">smith</span><span class="w"> </span><span class="n">GROUPS</span><span class="w"> </span><span class="n">design</span><span class="p">,</span><span class="w"> </span><span class="n">marketing</span><span class="p">;</span>
+</span><span id="line-6"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">jones</span><span class="w"> </span><span class="n">GROUPS</span><span class="w"> </span><span class="n">marketing</span><span class="p">;</span>
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">brown</span><span class="w"> </span><span class="n">GROUPS</span><span class="w"> </span><span class="n">engineering</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to create the same groups as above but use the <strong>MEMBERS</strong> keyword instead of <strong>GROUPS</strong>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">smith</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">brown</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">engineering</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">brown</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">marketing</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">smith</span><span class="p">,</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span><span id="line-6"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">design</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">smith</span><span class="p">;</span>
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">company</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">engineering</span><span class="p">,</span><span class="w"> </span><span class="n">marketing</span><span class="p">,</span><span class="w"> </span><span class="n">design</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<section id="user-s-comment">
+<h3>User’s COMMENT<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-s-comment" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#user-s-comment'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The following example creates a user test_user1 and adds a password and a comment.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'password'</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'new user'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>You can see a comment for a user with this syntax.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>To change user comment, refer to the description of the ALTER USER statement.</p>
+</section>
+</section>
+<section id="alter-user">
+<span id="id2"></span><h2>ALTER USER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alter-user" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#alter-user'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You can use the ALTER USER statement to change the password, members and comment of a created user.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="n">USER</span> <span class="n">user_name</span>
+</span><span id="line-2"><span class="p">[</span><span class="n">PASSWORD</span> <span class="n">password</span><span class="p">]</span> <span class="o">|</span>
+</span><span id="line-3"><span class="p">[</span><span class="n">ADD</span> <span class="n">MEMBERS</span> <span class="n">user_name</span> <span class="p">[{,</span> <span class="n">user_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]]</span> <span class="o">|</span>
+</span><span id="line-4"><span class="p">[</span><span class="n">DROP</span> <span class="n">MEMBERS</span> <span class="n">user_name</span> <span class="p">[{,</span> <span class="n">user_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]]</span>
+</span><span id="line-5"><span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">];</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>user_name</em>: specifies the user name to change.</p></li>
+<li><p><em>password</em>: specifies the user password to change.</p></li>
+<li><p><em>comment_string</em>: specifies the user comment to change.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>DBA</strong> and <strong>DBA</strong> members can use the ALTER USER statement to change the password, members and comment of <strong>all users</strong>.</p>
+<p><strong>General users</strong> can change <strong>their own</strong> password, member and comment using the ALTER USER statement.</p>
+</div>
+<p>The following example creates a user test_user1 and changes the password.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'1234'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example creates a user and adds members to the created user. This example does the same thing as the example in CREATE USER .. MEMBERS ..</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">company</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">engineering</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">marketing</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">design</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">smith</span><span class="p">;</span>
+</span><span id="line-6"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">brown</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">engineering</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">brown</span><span class="p">;</span>
+</span><span id="line-10"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">marketing</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">smith</span><span class="p">,</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">design</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">smith</span><span class="p">;</span>
+</span><span id="line-12"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">company</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">engineering</span><span class="p">,</span><span class="w"> </span><span class="n">marketing</span><span class="p">,</span><span class="w"> </span><span class="n">design</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example deletes the members of a created user group. The <em>marketing</em> member is deleted from the <em>company</em> group through the following sentence and the <em>marketing</em> group deletes <em>smith</em> and <em>jones</em> from the member.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">company</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">marketing</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">marketing</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="n">MEMBERS</span><span class="w"> </span><span class="n">smith</span><span class="p">,</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<section id="user-s-comment-change">
+<h3>User’s COMMENT Change<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-s-comment-change" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#user-s-comment-change'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The following example changes the comment for the created user.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'new user'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'old user'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="drop-user">
+<span id="id3"></span><h2>DROP USER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#drop-user" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#drop-user'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You can delete a user using the DROP USER statement. Users who own objects in table, view, trigger, stored function/procedure, serial, synonym, and server cannot be dropped.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">DROP</span> <span class="n">USER</span> <span class="n">user_name</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>user_name</em>: specifies the user name to delete.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only <strong>DBA</strong> and <strong>DBA</strong> members can delete users using the DROP USER statement.</p>
+</div>
+<p>The following example shows how to create a user (<em>test_user1</em>), change a password, and delete the user.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'1234'</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">DROP</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="grant">
+<span id="granting-authorization"></span><h2>GRANT<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#grant" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#grant'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>In CUBRID, the following database objects can be granted permissions:</p>
+<ul class="simple">
+<li><p><strong>Table</strong></p></li>
+<li><p><strong>View</strong></p></li>
+<li><p><strong>Procedure</strong></p></li>
+</ul>
+<p>To allow other users (groups) to access the database objects you created, you must grant them the appropriate permissions. All members of a group with granted permissions have the same permissions, so there is no need to grant permissions individually to each member. However, members of a group with the WITH GRANT OPTION permission, who are not part of the DBA or owner group, cannot grant the received permissions to other users.</p>
+<p>Database objects created by the <strong>PUBLIC</strong> user are accessible to all users.</p>
+<p>You can grant access permissions to a user using the following <strong>GRANT</strong> statement:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">Table</span> <span class="ow">and</span> <span class="n">View</span><span class="p">:</span>
+</span><span id="line-2">    <span class="n">GRANT</span> <span class="n">operation</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span><span class="n">operation</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]</span> <span class="n">ON</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">object_name</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">object_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]</span>
+</span><span id="line-3">    <span class="n">TO</span> <span class="n">user</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span><span class="n">user</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]</span> <span class="p">[</span> <span class="n">WITH</span> <span class="n">GRANT</span> <span class="n">OPTION</span> <span class="p">];</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">Stored</span> <span class="n">Procedure</span> <span class="ow">and</span> <span class="n">Function</span><span class="p">:</span>
+</span><span id="line-6">    <span class="n">GRANT</span> <span class="n">EXECUTE</span> <span class="n">ON</span> <span class="n">PROCEDURE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">object_name</span>
+</span><span id="line-7">    <span class="n">TO</span> <span class="n">user</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span><span class="n">user</span> <span class="p">}</span> <span class="o">...</span> <span class="p">];</span>
+</span></code></pre></div>
+</div>
+<ul>
+<li><p><em>operation</em>: Specifies an operation that can be used when granting authorization. The following table shows operations.</p>
+<blockquote>
+<div><ul>
+<li><ol class="arabic simple">
+<li><p>Table and View</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>SELECT</strong>: Allows reading the table definitions and retrieving instances. The most common type of permission.</p></li>
+<li><p><strong>INSERT</strong>: Allows creating instances in the table.</p></li>
+<li><p><strong>UPDATE</strong>: Allows modifying instances already existing in the table.</p></li>
+<li><p><strong>DELETE</strong>: Allows deleting instances in the table.</p></li>
+<li><p><strong>ALTER</strong>: Allows modifying the table definition, renaming, or deleting the table.</p></li>
+<li><p><strong>INDEX</strong>: Allows creating indexes on columns to improve search speed.</p></li>
+<li><p><strong>EXECUTE</strong>: Allows calling table methods or instance methods.</p></li>
+<li><p><strong>ALL PRIVILEGES</strong>: Includes all the above-mentioned permissions.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>Stored Procedure and Function</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>EXECUTE ON PROCEDURE</strong>: Allows calling a stored procedure or function.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><em>schema_name</em>: Specifies the schema name of the table or virtual table. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>table_name</em>: Specifies the name of a table or virtual table to be granted.</p></li>
+<li><p><em>user</em>: Specifies the name of a user (group) to be granted. Enter the login name of the database user or <strong>PUBLIC</strong>, a system-defined user. If <strong>PUBLIC</strong> is specified, all database users are granted with the permission.</p></li>
+<li><p><strong>WITH GRANT OPTION</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <strong>WITH GRANT OPTION</strong> allows the grantee of authorization to grant that same authorization to another user.</p></li>
+<li><p>The <strong>EXECUTE ON PROCEDURE</strong> permission for stored procedures and functions does not support the <strong>WITH GRANT OPTION</strong>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>The following example shows how to grant the <strong>SELECT</strong> authorization for the <em>olympic</em> table to <em>smith</em> (including his members).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">olympic</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">smith</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to grant the <strong>SELECT</strong>, <strong>INSERT</strong>, <strong>UPDATE</strong> and <strong>DELETE</strong> authorization on the <em>nation</em> and <em>athlete</em> tables to <em>brown</em> and <em>jones</em> (including their members).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">nation</span><span class="p">,</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">TO</span><span class="w">  </span><span class="n">brown</span><span class="p">,</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to grant every authorization on the <em>tbl1</em> and <em>tbl2</em> tables to all users(public).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl1</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl2</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">tbl1</span><span class="p">,</span><span class="w"> </span><span class="n">tbl2</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">public</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following <strong>GRANT</strong> statement example shows how to grant retrieval authorization on the <em>record</em> and <em>history</em> tables to <em>brown</em>. Using <strong>WITH GRANT OPTION</strong> allows <em>brown</em> to grant retrieval authorization to other users. <em>brown</em> can grant authorization to others within their own authorization.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">record</span><span class="p">,</span><span class="w"> </span><span class="n">history</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">brown</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="k">GRANT</span><span class="w"> </span><span class="k">OPTION</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The grantor of authorization must be the owner of all tables listed before the grant operation or have <strong>WITH GRANT OPTION</strong> specified.</p></li>
+<li><p>Before granting <strong>SELECT</strong>, <strong>UPDATE</strong>, <strong>DELETE</strong> and <strong>INSERT</strong> authorization for a virtual table, the owner of the virtual table must have <strong>SELECT</strong> and <strong>GRANT</strong> authorization for all the tables included in the query specification. The <strong>DBA</strong> user and the members of the <strong>DBA</strong> group are automatically granted all authorization for all tables.</p></li>
+<li><p>To execute the <strong>TRUNCATE</strong> statement, the <strong>ALTER</strong>, <strong>INDEX</strong>, and <strong>DELETE</strong> authorization is <strong>required</strong>.</p></li>
+</ul>
+</div>
+<p>The following example shows how to grant the permission to execute the <em>my_sp</em> procedure to <em>smith</em>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">my_sp</span><span class="w"> </span><span class="p">()</span>
+</span><span id="line-2"><span class="k">IS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">         </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'grant test'</span><span class="p">);</span>
+</span><span id="line-5"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-6"><span class="k">GRANT</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">my_sp</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">smith</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The <strong>GRANT</strong> statement can only grant permission to one object at a time for stored procedures and functions.</p></li>
+<li><p>The <strong>EXECUTE ON PROCEDURE</strong> operation is used for both stored procedures and functions.</p></li>
+<li><p>Currently, the <strong>WITH GRANT OPTION</strong> is not supported for granting permissions on stored procedures and functions, and will return a syntax error if used.</p></li>
+</ul>
+</div>
+</section>
+<section id="revoke">
+<span id="revoking-authorization"></span><h2>REVOKE<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#revoke" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#revoke'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You can revoke authorization using the <strong>REVOKE</strong> statement. The authorization granted to a user can be revoked at any time. If more than one type of authorization is granted to a user, all or part of the authorization can be revoked. Additionally, even if a single <strong>GRANT</strong> statement is used to grant authorization on multiple database objects to multiple users, selective revocation of authorization for specific users and specific database objects is possible.</p>
+<p>If the authorization is revoked from the grantor (<strong>WITH GRANT OPTION</strong>), the authorization granted to the grantee by that grantor is also revoked.</p>
+<p>The following <strong>REVOKE</strong> statement can be used to revoke the authorization granted to a user.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">For</span> <span class="n">tables</span> <span class="ow">and</span> <span class="n">views</span><span class="p">:</span>
+</span><span id="line-2">    <span class="n">REVOKE</span> <span class="n">operation</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span><span class="n">operation</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]</span> <span class="n">ON</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">object_name</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">object_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]</span>
+</span><span id="line-3">    <span class="n">FROM</span> <span class="n">user</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span><span class="n">user</span> <span class="p">}</span> <span class="o">...</span> <span class="p">];</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">For</span> <span class="n">stored</span> <span class="n">procedures</span> <span class="ow">and</span> <span class="n">functions</span><span class="p">:</span>
+</span><span id="line-6">    <span class="n">REVOKE</span> <span class="n">EXECUTE</span> <span class="n">ON</span> <span class="n">PROCEDURE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">object_name</span>
+</span><span id="line-7">    <span class="n">FROM</span> <span class="n">user</span> <span class="p">[</span> <span class="p">{</span> <span class="p">,</span><span class="n">user</span> <span class="p">}</span> <span class="o">...</span> <span class="p">];</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>operation</em>: Indicates the type of operation that can be revoked (see <a class="reference internal" href="#granting-authorization"><span class="std std-ref">GRANT</span></a> for details).</p></li>
+<li><p><em>schema_name</em>: Specifies the schema name of the database object. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>object_name</em>: Specifies the name of the database object for which the authorization is to be revoked.</p></li>
+<li><p><em>user</em>: Specifies the name of the user or group from which the authorization is to be revoked.</p></li>
+</ul>
+<p>The following example shows how to grant <strong>SELECT</strong>, <strong>INSERT</strong>, <strong>UPDATE</strong> and <strong>DELETE</strong> authorization to <em>smith</em> and <em>jones</em> so that they can perform on the <em>nation</em> and <em>athlete</em> tables.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">nation</span><span class="p">,</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">smith</span><span class="p">,</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to execute the <strong>REVOKE</strong> statement; this allows <em>jones</em> to have only <strong>SELECT</strong> authorization. If <em>jones</em> has granted authorization to another user, the user is also allowed to execute <strong>SELECT</strong> only.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">REVOKE</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">nation</span><span class="p">,</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">jones</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to execute the <strong>REVOKE</strong> statement revoking all authorization that has granted to <em>smith</em>. <em>smith</em> is not allowed to execute any operations on the <em>nation</em> and <em>athlete</em> tables once this statement is executed.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">REVOKE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">nation</span><span class="p">,</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">smith</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="alter-owner">
+<span id="change-owner"></span><h2>ALTER … OWNER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alter-owner" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#alter-owner'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Database Administrator (<strong>DBA</strong>) or a member of the <strong>DBA</strong> group can change the owner of table, view, trigger, stored functions/procedures, and serial by using the following query.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">(</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span> <span class="o">|</span> <span class="n">VIEW</span> <span class="o">|</span> <span class="n">VCLASS</span> <span class="o">|</span> <span class="n">TRIGGER</span> <span class="o">|</span> <span class="n">PROCEDURE</span> <span class="o">|</span> <span class="n">FUNCTION</span> <span class="o">|</span> <span class="n">SERIAL</span><span class="p">)</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">name</span> <span class="n">OWNER</span> <span class="n">TO</span> <span class="n">user_id</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: Specifies the schema of the object. If omitted, the schema name of the current session is used.</p></li>
+<li><p><em>name</em>: The name of schema object of which owner is to be changed</p></li>
+<li><p><em>user_id</em>: User ID</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">public</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">test_view</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">public</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">ALTER</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">test_trigger</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">public</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">ALTER</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_function</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">public</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">ALTER</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_procedure</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">public</span><span class="p">;</span>
+</span><span id="line-6"><span class="k">ALTER</span><span class="w"> </span><span class="nb">SERIAL</span><span class="w"> </span><span class="n">test_serial</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">public</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When the owner changes, privileges granted by the previous owner are transferred to the new owner.
+<strong>However, privileges on the object that were previously granted to the new owner by the previous owner are automatically revoked.</strong></p>
+</div>
+</section>
+<section id="user-authorization-management-method">
+<span id="authorization-method"></span><h2>User Authorization Management METHOD<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-authorization-management-method" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#user-authorization-management-method'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The database administrator (<strong>DBA</strong>) can check and modify user authorization by calling authorization-related methods defined in <strong>db_user</strong> where information about database user is stored, or <strong>db_root</strong> (the system root class). The administrator can specify <strong>db_user</strong> or <strong>db_root</strong> depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by <strong>DBA</strong> or members of <strong>DBA</strong> group.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that method call made by the master node is not applied to the slave node in the HA environment.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CALL</span> <span class="n">method_definition</span> <span class="n">ON</span> <span class="n">CLASS</span> <span class="n">auth_class</span> <span class="p">[</span> <span class="n">TO</span> <span class="n">variable</span> <span class="p">]</span> <span class="p">[</span> <span class="p">;</span> <span class="p">]</span>
+</span><span id="line-2"><span class="n">CALL</span> <span class="n">method_definition</span> <span class="n">ON</span> <span class="n">variable</span> <span class="p">[</span> <span class="p">;</span> <span class="p">]</span>
+</span></code></pre></div>
+</div>
+<p><strong>login( ) method</strong></p>
+<p>As a class method of <strong>db_user</strong> class, this method is used to change the users who are currently connected to the database. The name and password of a new user to connect are given as arguments, and they must be string type. If there is no password, a blank character (‘’) can be used as the argument. <strong>DBA</strong> and <strong>DBA</strong> members can call the <strong>login( )</strong> method without a password.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Connect as DBA user who has no password</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'dba'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- Connect as a user_1 whose password is cubrid</span>
+</span><span id="line-5"><span class="k">CALL</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'user_1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'cubrid'</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>add_user( ) method</strong></p>
+<p>As a class method of <strong>db_user</strong> class, this method is used to add a new user. The name and password of a new user to add are given as arguments, and they must be string type. At this time, the new user name should not duplicate any user name already registered in a database. The <strong>add_user( )</strong> can be called only by <strong>DBA</strong> or members of <strong>DBA</strong> group.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Add user_2 who has no password</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">add_user</span><span class="w"> </span><span class="p">(</span><span class="s1">'user_3'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- Add user_3 who has no password, and store the return value of a method into an admin variable</span>
+</span><span id="line-5"><span class="k">CALL</span><span class="w"> </span><span class="n">add_user</span><span class="w"> </span><span class="p">(</span><span class="s1">'user_2'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">admin</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>drop_user( ) method</strong></p>
+<p>As a class method of <strong>db_user</strong> class, this method is used to drop an existing user. Only the user name to be dropped is given as an argument, and it must be a string type. However, the owner of a class cannot be dropped thus <strong>DBA</strong> needs to specify a new owner of the class before dropping the user. The <strong>drop_user( )</strong> method can be also called only by <strong>DBA</strong> or members of <strong>DBA</strong>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Delete user_2</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">drop_user</span><span class="w"> </span><span class="p">(</span><span class="s1">'user_2'</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>find_user( ) method</strong></p>
+<p>As a class method of <strong>db_user</strong> class, this method is used to find a user who is given as an argument. The name of a user to be found is given as an argument, and the return value of the method is stored into a variable that follows ‘to’. The stored value can be used in a next query execution.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Find user_2 and store it into a variable called 'admin'</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">find_user</span><span class="w"> </span><span class="p">(</span><span class="s1">'user_2'</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">admin</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>set_password( ) method</strong></p>
+<p>This method is an instance method that can call each user instance, and it is used to change a user’s password. The new password of a specified user is given as an argument. General users other than <strong>DBA</strong> and <strong>DBA</strong> group members can only change their own passwords.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Add user_4 and store it into a variable called user_common</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">add_user</span><span class="w"> </span><span class="p">(</span><span class="s1">'user_4'</span><span class="p">,</span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">user_common</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- Change the password of user_4 to 'abcdef'</span>
+</span><span id="line-5"><span class="k">CALL</span><span class="w"> </span><span class="n">set_password</span><span class="p">(</span><span class="s1">'abcdef'</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">user_common</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>change_owner() method</strong></p>
+<p>As a class method of <strong>db_root</strong> class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. The table name must be prefixed with the schema name. If omitted, the schema name of the current session is used. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. <strong>change_owner( )</strong> can be called only by <strong>DBA</strong> or members of <strong>DBA</strong> group. The <strong>ALTER … OWNER</strong> query has the same role as the method. See <a class="reference internal" href="#change-owner"><span class="std std-ref">ALTER … OWNER</span></a>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Change the owner of table_1 owned by user_1 to user_4</span>
+</span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">change_owner</span><span class="w"> </span><span class="p">(</span><span class="s1">'user_1.table_1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'user_4'</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows a <strong>CALL</strong> statement that calls the find_user method defined in the system table <strong>db_user</strong>. It is called to determine whether the database user entered as the <strong>find_user</strong> exists. The first statement calls the table method defined in the <strong>db_user</strong> class. The name (<strong>db_user</strong> in this case) is stored in x if the user is registered in the database. Otherwise, <strong>NULL</strong> is stored.</p>
+<p>The second statement outputs the value stored in the variable x. In this query statement, the <strong>db_root</strong> is a system class that can have only one record. It can be used to output the value of sys_date or other registered variables. For this purpose, the <strong>db_root</strong> can be replaced by another table having only one record.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">find_user</span><span class="p">(</span><span class="s1">'dba'</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Result</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="n">db_user</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">x</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="n">db_user</span>
+</span></code></pre></div>
+</div>
+<p>With <strong>find_user</strong>, you can determine if the user exists in the database depending on whether the return value is <strong>NULL</strong> or not.</p>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="db_admin.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Database Administration
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="query/set.html">
+        SET
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#database-user'" class="reference internal" href="#database-user">Database User</a></li>
+<li><a :data-current="activeSection === '#create-user'" class="reference internal" href="#create-user">CREATE USER</a><ul>
+<li><a :data-current="activeSection === '#user-s-comment'" class="reference internal" href="#user-s-comment">User’s COMMENT</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#alter-user'" class="reference internal" href="#alter-user">ALTER USER</a><ul>
+<li><a :data-current="activeSection === '#user-s-comment-change'" class="reference internal" href="#user-s-comment-change">User’s COMMENT Change</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#drop-user'" class="reference internal" href="#drop-user">DROP USER</a></li>
+<li><a :data-current="activeSection === '#grant'" class="reference internal" href="#grant">GRANT</a></li>
+<li><a :data-current="activeSection === '#revoke'" class="reference internal" href="#revoke">REVOKE</a></li>
+<li><a :data-current="activeSection === '#alter-owner'" class="reference internal" href="#alter-owner">ALTER … OWNER</a></li>
+<li><a :data-current="activeSection === '#user-authorization-management-method'" class="reference internal" href="#user-authorization-management-method">User Authorization Management METHOD</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 01, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

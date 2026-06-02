@@ -1,6 +1,6 @@
 
 :meta-keywords: cubrid authorization, cubrid dba, cubrid user
-:meta-description: CUBRID has two types of users by default: DBA and PUBLIC.  DBA and DBA members can create, drop and alter users by using SQL statements.
+:meta-description: CUBRID provides three built-in users by default: DBA, PUBLIC, and INFORMATION_SCHEMA. DBA and DBA members can create, drop and alter users by using SQL statements.
 
 ***********
 사용자 관리
@@ -11,15 +11,17 @@
 
 사용자 이름 작성 원칙은 :doc:`identifier` 절을 참고한다.
 
-CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제공한다. 제품을 처음 설치하면 사용자의 비밀번호가 설정되어 있지 않다.
+CUBRID는 기본적으로 **DBA**, **PUBLIC**, **INFORMATION_SCHEMA** 세 가지 내장 사용자를 제공한다. 제품을 처음 설치하면 **DBA** 와 **PUBLIC** 사용자의 비밀번호가 설정되어 있지 않다.
 
-*  데이터베이스의 모든 사용자는 **PUBLIC**의 멤버가 되므로, **PUBLIC** 사용자에게 부여된 권한을 소유한다. 모든 사용자에게 권한을 부여하려면 **PUBLIC** 사용자에게 권한을 부여하면 된다.
+*  데이터베이스의 모든 사용자는 **PUBLIC** 의 멤버가 되므로, **PUBLIC** 사용자에게 부여된 권한을 소유한다. 모든 사용자에게 권한을 부여하려면 **PUBLIC** 사용자에게 권한을 부여하면 된다.
 
-*   **DBA** 는 데이터베이스 관리자 권한을 가진 사용자로,  자동으로 모든 사용자와 그룹의 멤버가 된다. 이로인해 **DBA** 는 모든 테이블에 대한 접근 할 수 있으며, 별도로 권한을 부여할 필요가 없다.
+*   **DBA** 는 데이터베이스 관리자 권한을 가진 사용자로, 자동으로 모든 사용자와 그룹의 멤버가 된다. 이로 인해 **DBA** 는 모든 테이블에 접근할 수 있으며, 별도로 권한을 부여할 필요가 없다.
+
+*   **INFORMATION_SCHEMA** 는 표준 메타데이터 뷰(:ref:`information-schema` 참고)를 소유하는 사용자로, 해당 목적으로만 예약되어 있으며 로그인이 불가하다.
 
 데이터베이스 사용자는 고유한 이름을 갖으며, 관리자는 **cubrid createdb** 유틸리티를 사용하여 사용자를 일괄적으로 생성할 수 있다(자세한 내용은 :ref:`cubrid-utilities` 참조). 
 
-사용자는 동일한 권한을 가지는 다른 멤버를  직접 소유할 수 없지만, 한 사용자에게 권한이 부여되면 해당 사용자의 모든 멤버가 동일한 권한을 자동으로 상속 받늗다.
+사용자는 동일한 권한을 가지는 다른 멤버를 직접 소유할 수 없지만, 한 사용자에게 권한이 부여되면 해당 사용자의 모든 멤버가 동일한 권한을 자동으로 상속 받는다.
 
 .. note::
 

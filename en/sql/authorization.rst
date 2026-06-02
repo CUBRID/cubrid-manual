@@ -1,6 +1,6 @@
 
 :meta-keywords: cubrid authorization, cubrid dba, cubrid user
-:meta-description: CUBRID has two types of users by default: DBA and PUBLIC. DBA and DBA members can create, drop and alter users by using SQL statements.
+:meta-description: CUBRID provides three built-in users by default: DBA, PUBLIC, and INFORMATION_SCHEMA. DBA and DBA members can create, drop and alter users by using SQL statements.
 
 ***************
 User Management
@@ -11,11 +11,13 @@ Database User
 
 To know the user name's writing rule, see :doc:`identifier`.
 
-CUBRID has two types of users by default: **DBA** and **PUBLIC**. At the initial installation of the product, no passwords are set for these users.
+CUBRID provides three built-in users by default: **DBA**, **PUBLIC**, and **INFORMATION_SCHEMA**. At the initial installation of the product, no passwords are set for **DBA** and **PUBLIC**.
 
 *   All database users are automatically members of **PUBLIC**, so they inherit any authorization granted to the **PUBLIC** user. Granting authorization to **PUBLIC** means granting it to all users.
 
 *   The **DBA** user has the authorization of the database administrator. The **DBA** automatically becomes the member of all users and groups. That is, the **DBA** is granted the access for all tables. Therefore, there is no need to grant authorization explicitly to the **DBA** and **DBA** members. Each database user has a unique name. The database administrator can create multiple users simultaneously using the **cubrid createdb** utility (see :ref:`cubrid-utilities` for details). A database user cannot have a member who already has the same authorization. If authorization is granted to a user, all members of the user is automatically granted the same authorization.
+
+*   The **INFORMATION_SCHEMA** user owns the standard metadata views (see :ref:`information-schema`). It is reserved for that purpose and cannot log in.
 
 .. note::
 

@@ -43,6 +43,8 @@ The main topics covered in this chapter are as follows:
 
 *   System Catalog: Describes the CUBRID system catalog, the internal information of the CUBRID database.
 
+*   Information Schema: Describes the SQL standard INFORMATION_SCHEMA views that expose database metadata in a portable way.
+
 .. toctree::
     :maxdepth: 3
     
@@ -62,4 +64,5 @@ The main topics covered in this chapter are as follows:
     db_admin.rst
     user_schema.rst
     catalog.rst
-    
+    information_schema.rst
+

@@ -271,7 +271,7 @@
 <td><p>테이블 파티션 정보</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-referential-constraints"><span class="std std-ref">referential_constraints</span></a></p></td>
-<td><p>외래 키 정보</p></td>
+<td><p>참조 제약 조건 정보</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#information-schema-routine-privileges"><span class="std std-ref">routine_privileges</span></a></p></td>
 <td><p>루틴에 정의된 권한</p></td>
@@ -462,7 +462,7 @@
 <td><p>칼럼 설명</p></td>
 </tr>
 <tr class="row-even"><td><p>is_generated</p></td>
-<td><p>VARCHAR(3)</p></td>
+<td><p>VARCHAR(6)</p></td>
 <td><p>칼럼이 생성 칼럼인지 여부(항상 ‘NEVER’)</p></td>
 </tr>
 <tr class="row-odd"><td><p>generation_expression</p></td>
@@ -662,7 +662,7 @@
 </section>
 <section id="key-column-usage">
 <span id="information-schema-key-column-usage"></span><h3>key_column_usage<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#key-column-usage" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#key-column-usage'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">key_column_usage</span></code> 뷰는 현재 데이터베이스에서 UNIQUE, PRIMARY KEY, FOREIGN KEY 제약 조건으로 제약된 모든 칼럼을 나타낸다. 현재 사용자가 접근할 수 있는 칼럼만 표시되며, 이는 테이블의 소유자이거나 해당 테이블에 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">key_column_usage</span></code> 뷰는 현재 데이터베이스에서 PRIMARY KEY, UNIQUE, FOREIGN KEY 제약 조건으로 제약된 모든 칼럼을 나타낸다. 현재 사용자가 접근할 수 있는 칼럼만 표시되며, 이는 테이블의 소유자이거나 해당 테이블에 어떤 권한을 가진 경우이다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>속성명</p></th>
@@ -957,7 +957,7 @@
 </section>
 <section id="routine-privileges">
 <span id="information-schema-routine-privileges"></span><h3>routine_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#routine-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#routine-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">routine_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 프로시저·함수에 대한 권한을 나타낸다. 루틴, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">routine_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 프로시저와 함수에 대한 권한을 나타낸다. 루틴, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>속성명</p></th>
@@ -1459,7 +1459,7 @@ MODIFIES SQL DATA)</p></td>
 </tr>
 <tr class="row-even"><td><p>constraint_type</p></td>
 <td><p>VARCHAR(11)</p></td>
-<td><p>제약 조건의 종류 (PRIMARY KEY, FOREIGN KEY, UNIQUE)</p></td>
+<td><p>제약 조건의 종류 (PRIMARY KEY, UNIQUE, FOREIGN KEY)</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_deferrable</p></td>
 <td><p>VARCHAR(3)</p></td>
@@ -1477,7 +1477,7 @@ MODIFIES SQL DATA)</p></td>
 </table>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>PRIMARY KEY, FOREIGN KEY, UNIQUE 제약 조건만 표시되며, CHECK 제약 조건은 표시되지 않는다.</p>
+<p>PRIMARY KEY, UNIQUE, FOREIGN KEY 제약 조건만 표시되며, CHECK 제약 조건은 표시되지 않는다.</p>
 </div>
 </section>
 <section id="table-privileges">
@@ -1518,7 +1518,7 @@ EXECUTE)</p></td>
 </tr>
 <tr class="row-even"><td><p>is_grantable</p></td>
 <td><p>VARCHAR(3)</p></td>
-<td><p>grantee가 다른 사용자에게 권한을 부여할 수 있으면 ‘YES’, 아니면
+<td><p>피부여자가 다른 사용자에게 권한을 부여할 수 있으면 ‘YES’, 아니면
 ‘NO’</p></td>
 </tr>
 </tbody>
@@ -1577,9 +1577,9 @@ EXECUTE)</p></td>
 </tr>
 <tr class="row-even"><td><p>create_options</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>테이블 생성 옵션을 공백으로 구분한 목록. OID 재사용
-설정(REUSE_OID 또는 DONT_REUSE_OID)과 TDE 설정(ENCRYPT=NONE,
-ENCRYPT=AES, ENCRYPT=ARIA)을 포함한다</p></td>
+<td><p>OID 재사용 설정(REUSE_OID 또는 DONT_REUSE_OID)과 TDE
+설정(ENCRYPT=NONE, ENCRYPT=AES, ENCRYPT=ARIA)을 포함하는,
+공백으로 구분된 테이블 생성 옵션 목록</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_temporary</p></td>
 <td><p>VARCHAR(3)</p></td>
@@ -1709,7 +1709,7 @@ ENCRYPT=AES, ENCRYPT=ARIA)을 포함한다</p></td>
 </section>
 <section id="views">
 <span id="information-schema-views"></span><h3>views<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#views" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#views'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">views</span></code> 뷰는 현재 데이터베이스에 정의된 모든 뷰를 담는다. 현재 사용자가 접근할 수 있는 뷰만 표시되며, 이는 소유자이거나 해당 뷰에 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">views</span></code> 뷰는 현재 데이터베이스에 정의된 모든 뷰를 담는다. 현재 사용자가 접근할 수 있는 뷰만 표시되며, 이는 소유자이거나 어떤 권한을 가진 경우이다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>속성명</p></th>
@@ -1814,7 +1814,7 @@ OPTION이 정의되어 있지 않으면 NONE</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 01, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 02, 2026. </p>
 </div>
 </div>
 </footer>

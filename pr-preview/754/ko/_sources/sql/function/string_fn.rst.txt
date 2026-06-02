@@ -327,7 +327,7 @@ COLLECTION_TO_STRING
 
 .. function:: COLLECTION_TO_STRING(collection)
 
-    컬렉션 값을 문자열로 직렬화한다. 결과는 모든 요소를 쉼표로 구분하고 중괄호로 묶은 형태이며, 예를 들어 ``{1, 2, 3}`` 과 같다. 문자열 요소는 작은따옴표로 묶인다. 이 함수는 :ref:`information_schema.partitions <information-schema-partitions>` 뷰의 **partition_description** 칼럼을 채우는 데 사용된다.
+    **COLLECTION_TO_STRING** 함수는 컬렉션 값을 문자열로 직렬화한다. 결과는 모든 요소를 쉼표로 구분하고 중괄호로 묶은 형태이며, 예를 들어 ``{1, 2, 3}`` 과 같다. 문자열 요소는 작은따옴표로 묶인다.
 
     :param collection: **SET**, **MULTISET**, **SEQUENCE** 타입의 컬렉션 값.
 

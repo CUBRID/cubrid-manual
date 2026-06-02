@@ -436,7 +436,7 @@ INDEX_CARDINALITY
 
       index_cardinality('t123', 'i_t1_i1_s1', 1)
     ============================================
-                                           NULL
+                                            NULL
 
 INET_ATON
 =========

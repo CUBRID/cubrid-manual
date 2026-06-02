@@ -327,7 +327,7 @@ COLLECTION_TO_STRING
 
 .. function:: COLLECTION_TO_STRING(collection)
 
-    Serializes a collection value into a character string. The result lists all elements separated by commas and enclosed in braces, for example ``{1, 2, 3}``; string elements are enclosed in single quotes. This function is used to fill the **partition_description** column of the :ref:`information_schema.partitions <information-schema-partitions>` view.
+    The **COLLECTION_TO_STRING** function serializes a collection value into a character string. The result lists all elements separated by commas and enclosed in braces, for example ``{1, 2, 3}``; string elements are enclosed in single quotes.
 
     :param collection: A collection value of type **SET**, **MULTISET**, or **SEQUENCE**.
 

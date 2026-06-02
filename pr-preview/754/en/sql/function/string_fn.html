@@ -590,7 +590,7 @@ The number of characters is returned as an integer. For details on character set
 <dl class="py function">
 <dt class="sig sig-object py" id="COLLECTION_TO_STRING">
 <span class="sig-name descname"><span class="pre">COLLECTION_TO_STRING</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#COLLECTION_TO_STRING" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#COLLECTION_TO_STRING'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Serializes a collection value into a character string. The result lists all elements separated by commas and enclosed in braces, for example <code class="docutils literal notranslate"><span class="pre">{1,</span> <span class="pre">2,</span> <span class="pre">3}</span></code>; string elements are enclosed in single quotes. This function is used to fill the <strong>partition_description</strong> column of the <a class="reference internal" href="../information_schema.html#information-schema-partitions"><span class="std std-ref">information_schema.partitions</span></a> view.</p>
+<dd><p>The <strong>COLLECTION_TO_STRING</strong> function serializes a collection value into a character string. The result lists all elements separated by commas and enclosed in braces, for example <code class="docutils literal notranslate"><span class="pre">{1,</span> <span class="pre">2,</span> <span class="pre">3}</span></code>; string elements are enclosed in single quotes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>collection</strong> – A collection value of type <strong>SET</strong>, <strong>MULTISET</strong>, or <strong>SEQUENCE</strong>.</p>
@@ -2499,7 +2499,7 @@ To make STRCMP case-insensitive, you should use case-insensitive collation(e.g.:
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 01, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 02, 2026. </p>
 </div>
 </div>
 </footer>

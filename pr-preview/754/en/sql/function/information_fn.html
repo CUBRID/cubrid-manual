@@ -623,7 +623,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table_name</strong> – Table name</p></li>
 <li><p><strong>index</strong> – Index name that exists in the table identified by <em>table_name</em></p></li>
-<li><p><strong>key_pos</strong> – <p>Partial key location. It <em>key_pos</em> starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the <em>key_pos</em> of the first column is 0. For the single column index, it is 0. It can be one of the following types.</p>
+<li><p><strong>key_pos</strong> – <p>Partial key location. <em>key_pos</em> starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the <em>key_pos</em> of the first column is 0. For the single column index, it is 0. It can be one of the following types.</p>
 <ul>
 <li><p>Character string that can be converted to a numeric type.</p></li>
 <li><p>Numeric type that can be converted to an integer type. The <strong>FLOAT</strong> or the <strong>DOUBLE</strong> types will be the value converted by the <strong>ROUND</strong> function.</p></li>
@@ -683,7 +683,7 @@
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">index_cardinality</span><span class="p">(</span><span class="s1">'t123'</span><span class="p">,</span> <span class="s1">'i_t1_i1_s1'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </span><span id="line-2"><span class="o">============================================</span>
-</span><span id="line-3">                                       <span class="n">NULL</span>
+</span><span id="line-3">                                        <span class="n">NULL</span>
 </span></code></pre></div>
 </div>
 </section>
@@ -1146,7 +1146,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 01, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 02, 2026. </p>
 </div>
 </div>
 </footer>

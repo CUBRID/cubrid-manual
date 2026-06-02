@@ -27,29 +27,29 @@ Information Schema Views
 
 The following table summarizes the Information Schema views. For details on each view, see its description below.
 
-================================================= ==============================
-View Name                                         Description                   
-================================================= ==============================
-:ref:`information-schema-column-privileges`       Privileges defined on columns 
-:ref:`information-schema-columns`                 Columns in each table         
-:ref:`information-schema-domains`                 Domain information            
-:ref:`information-schema-foreign-servers`         Foreign server information    
-:ref:`information-schema-key-column-usage`        Key columns of constraints    
-:ref:`information-schema-parameters`              Routine parameters            
-:ref:`information-schema-partitions`              Table partition information   
-:ref:`information-schema-referential-constraints` Foreign key information       
-:ref:`information-schema-routine-privileges`      Privileges defined on routines
-:ref:`information-schema-routines`                Routine information           
-:ref:`information-schema-schemata`                Schema information            
-:ref:`information-schema-sequences`               Sequence information          
-:ref:`information-schema-statistics`              Table index statistics        
-:ref:`information-schema-synonyms`                Synonym information           
-:ref:`information-schema-table-constraints`       Table constraint information  
-:ref:`information-schema-table-privileges`        Privileges defined on tables  
-:ref:`information-schema-tables`                  Table information             
-:ref:`information-schema-triggers`                Trigger information           
-:ref:`information-schema-views`                   View information              
-================================================= ==============================
+================================================= ==================================
+View Name                                         Description                       
+================================================= ==================================
+:ref:`information-schema-column-privileges`       Privileges defined on columns     
+:ref:`information-schema-columns`                 Columns in each table             
+:ref:`information-schema-domains`                 Domain information                
+:ref:`information-schema-foreign-servers`         Foreign server information        
+:ref:`information-schema-key-column-usage`        Key columns of constraints        
+:ref:`information-schema-parameters`              Routine parameters                
+:ref:`information-schema-partitions`              Table partition information       
+:ref:`information-schema-referential-constraints` Referential constraint information
+:ref:`information-schema-routine-privileges`      Privileges defined on routines    
+:ref:`information-schema-routines`                Routine information               
+:ref:`information-schema-schemata`                Schema information                
+:ref:`information-schema-sequences`               Sequence information              
+:ref:`information-schema-statistics`              Table index statistics            
+:ref:`information-schema-synonyms`                Synonym information               
+:ref:`information-schema-table-constraints`       Table constraint information      
+:ref:`information-schema-table-privileges`        Privileges defined on tables      
+:ref:`information-schema-tables`                  Table information                 
+:ref:`information-schema-triggers`                Trigger information               
+:ref:`information-schema-views`                   View information                  
+================================================= ==================================
 
 .. _information-schema-column-privileges:
 
@@ -143,7 +143,7 @@ The ``columns`` view contains information about all columns of the tables and vi
 +--------------------------+---------------+------------------------------------------------------------------+
 | column_comment           | VARCHAR(2048) | Comment to describe the column                                   |
 +--------------------------+---------------+------------------------------------------------------------------+
-| is_generated             | VARCHAR(3)    | Whether the column is a generated column (always 'NEVER')        |
+| is_generated             | VARCHAR(6)    | Whether the column is a generated column (always 'NEVER')        |
 +--------------------------+---------------+------------------------------------------------------------------+
 | generation_expression    | STRING        | Applies to a feature not available in CUBRID                     |
 +--------------------------+---------------+------------------------------------------------------------------+
@@ -256,7 +256,7 @@ The ``foreign_servers`` view contains all foreign servers defined in the current
 key_column_usage
 ----------------
 
-The ``key_column_usage`` view identifies all columns in the current database that are restricted by some UNIQUE, PRIMARY KEY, or FOREIGN KEY constraint. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
+The ``key_column_usage`` view identifies all columns in the current database that are restricted by some PRIMARY KEY, UNIQUE, or FOREIGN KEY constraint. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
 
 +-------------------------------+--------------+------------------------------------------------------------------+
 | Attribute Name                | Data Type    | Description                                                      |
@@ -740,7 +740,7 @@ The ``table_constraints`` view contains all PRIMARY KEY, UNIQUE, and FOREIGN KEY
 +--------------------+--------------+------------------------------------------------------------------+
 | table_name         | VARCHAR(255) | Name of the table                                                |
 +--------------------+--------------+------------------------------------------------------------------+
-| constraint_type    | VARCHAR(11)  | Type of the constraint (PRIMARY KEY, FOREIGN KEY, UNIQUE)        |
+| constraint_type    | VARCHAR(11)  | Type of the constraint (PRIMARY KEY, UNIQUE, FOREIGN KEY)        |
 +--------------------+--------------+------------------------------------------------------------------+
 | is_deferrable      | VARCHAR(3)   | Whether the constraint is deferrable (always 'NO')               |
 +--------------------+--------------+------------------------------------------------------------------+
@@ -751,7 +751,7 @@ The ``table_constraints`` view contains all PRIMARY KEY, UNIQUE, and FOREIGN KEY
 
 .. note::
 
-    Only PRIMARY KEY, FOREIGN KEY, and UNIQUE constraints are listed; CHECK constraints are not included.
+    Only PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints are listed; CHECK constraints are not included.
 
 .. _information-schema-table-privileges:
 

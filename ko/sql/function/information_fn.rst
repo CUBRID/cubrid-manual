@@ -269,21 +269,113 @@ DISK_SIZE
                    4               4              10             300
 
     
+ESTIMATED_AVG_ROW_LENGTH
+========================
+
+.. function:: ESTIMATED_AVG_ROW_LENGTH(table_name)
+
+    **ESTIMATED_AVG_ROW_LENGTH** 함수는 *table_name* 으로 식별되는 테이블의 추정 평균 행 길이를 바이트 단위로 반환한다. 이 값은 근사치임에 유의한다.
+
+    :param table_name: 테이블 이름
+
+    :rtype: BIGINT
+
+*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_AVG_ROW_LENGTH('game');
+
+::
+
+       estimated_avg_row_length('game')
+    ===================================
+                                     48
+
+ESTIMATED_DATA_FREE
+===================
+
+.. function:: ESTIMATED_DATA_FREE(table_name)
+
+    **ESTIMATED_DATA_FREE** 함수는 *table_name* 으로 식별되는 테이블에 할당된 힙 페이지 내의 추정 여유(미사용) 공간을 바이트 단위로 반환한다. 이 값은 근사치임에 유의한다.
+
+    :param table_name: 테이블 이름
+
+    :rtype: BIGINT
+
+*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_DATA_FREE('game');
+
+::
+
+       estimated_data_free('game')
+    ==============================
+                             91320
+
+ESTIMATED_DATA_LENGTH
+=====================
+
+.. function:: ESTIMATED_DATA_LENGTH(table_name)
+
+    **ESTIMATED_DATA_LENGTH** 함수는 *table_name* 으로 식별되는 테이블에 할당된 힙의 추정 총 데이터 길이를 바이트 단위로 반환한다. 이 값은 근사치임에 유의한다.
+
+    :param table_name: 테이블 이름
+
+    :rtype: BIGINT
+
+*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_DATA_LENGTH('game');
+
+::
+
+       estimated_data_length('game')
+    ================================
+                              506664
+
+ESTIMATED_TABLE_ROWS
+====================
+
+.. function:: ESTIMATED_TABLE_ROWS(table_name)
+
+    **ESTIMATED_TABLE_ROWS** 함수는 *table_name* 으로 식별되는 테이블의 추정 행 수를 반환한다. 이 값은 근사치임에 유의한다.
+
+    :param table_name: 테이블 이름
+
+    :rtype: BIGINT
+
+*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_TABLE_ROWS('game');
+
+::
+
+       estimated_table_rows('game')
+    ===============================
+                               8653
+
 INDEX_CARDINALITY
 =================
 
-.. function:: INDEX_CARDINALITY(table, index, key_pos)
+.. function:: INDEX_CARDINALITY(table_name, index, key_pos)
 
     **INDEX_CARDINALITY** 함수는 테이블에서 인덱스 카디널리티(cardinality)를 반환한다. 인덱스 카디널리티는 인덱스를 정의하는 고유한 값의 개수이다. 인덱스 카디널리티는 다중 칼럼 인덱스의 부분 키에 대해서도 적용할 수 있는데, 이때 세 번째 인자로 칼럼의 위치를 지정하여 부분 키에 대한 고유 값의 개수를 나타낸다. 이 값은 근사치임에 유의한다.
 
     갱신된 결과를 얻으려면 반드시 **UPDATE STATISTICS** 문을 먼저 수행해야 한다.
 
-    :param table: 테이블 이름
-    :param index: *table* 내에 존재하는 인덱스 이름
+    :param table_name: 테이블 이름
+    :param index: *table_name* 으로 식별되는 테이블 내에 존재하는 인덱스 이름
     :param key_pos: 부분 키의 위치. *key_pos* 는 0부터 시작하여 키를 구성하는 칼럼 개수보다 작은 범위를 갖는다. 즉, 첫 번째 칼럼의 *key_pos* 는 0이다. 단일 칼럼 인덱스의 경우에는 0이다. 다음 타입 중 하나가 될 수 있다.
     
         *   숫자형 타입으로 변환할 수 있는 문자열. 
-        *   정수형으로 변환할 수 있는 숫자형 타입. FLOAT나 DOUBLE 타입은 ROUND 함수로 변환한 값이 된다.
+        *   정수형으로 변환할 수 있는 숫자형 타입. **FLOAT** 나 **DOUBLE** 타입은 **ROUND** 함수로 변환한 값이 된다.
 
     :rtype: INT
     
@@ -344,7 +436,7 @@ INDEX_CARDINALITY
 
       index_cardinality('t123', 'i_t1_i1_s1', 1)
     ============================================
-                                           NULL
+                                            NULL
 
 INET_ATON
 =========

@@ -268,18 +268,110 @@ The size depends on the actual content of value, :ref:`string compression<string
                    4               4              10             300
                    
     
+ESTIMATED_AVG_ROW_LENGTH
+========================
+
+.. function:: ESTIMATED_AVG_ROW_LENGTH(table_name)
+
+    The **ESTIMATED_AVG_ROW_LENGTH** function returns the estimated average row length, in bytes, of the table identified by *table_name*. Note that this value is an approximate value.
+
+    :param table_name: Table name
+
+    :rtype: BIGINT
+
+Returns **NULL** if *table_name* is **NULL**, or if the table does not exist or is a view.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_AVG_ROW_LENGTH('game');
+
+::
+
+       estimated_avg_row_length('game')
+    ===================================
+                                     48
+
+ESTIMATED_DATA_FREE
+===================
+
+.. function:: ESTIMATED_DATA_FREE(table_name)
+
+    The **ESTIMATED_DATA_FREE** function returns the estimated free (unused) space, in bytes, within the heap pages allocated to the table identified by *table_name*. Note that this value is an approximate value.
+
+    :param table_name: Table name
+
+    :rtype: BIGINT
+
+Returns **NULL** if *table_name* is **NULL**, or if the table does not exist or is a view.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_DATA_FREE('game');
+
+::
+
+       estimated_data_free('game')
+    ==============================
+                             91320
+
+ESTIMATED_DATA_LENGTH
+=====================
+
+.. function:: ESTIMATED_DATA_LENGTH(table_name)
+
+    The **ESTIMATED_DATA_LENGTH** function returns the estimated total data length, in bytes, of the heap allocated to the table identified by *table_name*. Note that this value is an approximate value.
+
+    :param table_name: Table name
+
+    :rtype: BIGINT
+
+Returns **NULL** if *table_name* is **NULL**, or if the table does not exist or is a view.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_DATA_LENGTH('game');
+
+::
+
+       estimated_data_length('game')
+    ================================
+                              506664
+
+ESTIMATED_TABLE_ROWS
+====================
+
+.. function:: ESTIMATED_TABLE_ROWS(table_name)
+
+    The **ESTIMATED_TABLE_ROWS** function returns the estimated number of rows of the table identified by *table_name*. Note that this value is an approximate value.
+
+    :param table_name: Table name
+
+    :rtype: BIGINT
+
+Returns **NULL** if *table_name* is **NULL**, or if the table does not exist or is a view.
+
+.. code-block:: sql
+
+    SELECT ESTIMATED_TABLE_ROWS('game');
+
+::
+
+       estimated_table_rows('game')
+    ===============================
+                               8653
+
 INDEX_CARDINALITY
 =================
 
-.. function:: INDEX_CARDINALITY(table, index, key_pos)
+.. function:: INDEX_CARDINALITY(table_name, index, key_pos)
 
     The **INDEX_CARDINALITY** function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter. Note that this value is an approximate value.
 
     If you want the updated result from this function, you should run **UPDATE STATISTICS** statement.
     
-    :param table: Table name
-    :param index: Index name that exists in the *table*
-    :param key_pos: Partial key location. It *key_pos* starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the *key_pos* of the first column is 0. For the single column index, it is 0. It can be one of the following types.
+    :param table_name: Table name
+    :param index: Index name that exists in the table identified by *table_name*
+    :param key_pos: Partial key location. *key_pos* starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the *key_pos* of the first column is 0. For the single column index, it is 0. It can be one of the following types.
     
         *   Character string that can be converted to a numeric type.
         *   Numeric type that can be converted to an integer type. The **FLOAT** or the **DOUBLE** types will be the value converted by the **ROUND** function.
@@ -343,7 +435,7 @@ The return value is 0 or a positive integer and if any of the input parameters i
 
       index_cardinality('t123', 'i_t1_i1_s1', 1)
     ============================================
-                                           NULL
+                                            NULL
 
 INET_ATON
 =========

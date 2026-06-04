@@ -11,10 +11,10 @@ Information Schema
 
 .. code-block:: sql
 
-    -- 사용자 'public'이 소유한 테이블
+    -- 사용자 'PUBLIC'이 소유한 테이블
     SELECT table_name, table_type
     FROM information_schema.tables
-    WHERE table_schema = 'public';
+    WHERE table_schema = 'PUBLIC';
 
     -- 'game' 테이블의 칼럼
     SELECT column_name, data_type, is_nullable
@@ -27,29 +27,29 @@ Information Schema 뷰
 
 다음 표는 Information Schema 뷰를 요약한 것이다. 각 뷰의 자세한 내용은 아래 설명을 참고한다.
 
-================================================= =====================
-뷰 이름                                           설명                 
-================================================= =====================
-:ref:`information-schema-column-privileges`       칼럼에 정의된 권한   
-:ref:`information-schema-columns`                 각 테이블의 칼럼     
-:ref:`information-schema-domains`                 도메인 정보          
-:ref:`information-schema-foreign-servers`         외부 서버 정보       
-:ref:`information-schema-key-column-usage`        제약 조건의 키 칼럼  
-:ref:`information-schema-parameters`              루틴의 매개변수      
-:ref:`information-schema-partitions`              테이블 파티션 정보   
-:ref:`information-schema-referential-constraints` 참조 제약 조건 정보  
-:ref:`information-schema-routine-privileges`      루틴에 정의된 권한   
-:ref:`information-schema-routines`                루틴 정보            
-:ref:`information-schema-schemata`                스키마 정보          
-:ref:`information-schema-sequences`               시퀀스 정보          
-:ref:`information-schema-statistics`              테이블 인덱스 통계   
-:ref:`information-schema-synonyms`                동의어 정보          
-:ref:`information-schema-table-constraints`       테이블 제약 조건 정보
-:ref:`information-schema-table-privileges`        테이블에 정의된 권한 
-:ref:`information-schema-tables`                  테이블 정보          
-:ref:`information-schema-triggers`                트리거 정보          
-:ref:`information-schema-views`                   뷰 정보              
-================================================= =====================
+================================================= ========================
+뷰 이름                                           설명                    
+================================================= ========================
+:ref:`information-schema-column-privileges`       칼럼에 정의된 권한      
+:ref:`information-schema-columns`                 각 테이블의 칼럼        
+:ref:`information-schema-domains`                 도메인 정보             
+:ref:`information-schema-foreign-servers`         외부 서버 정보          
+:ref:`information-schema-key-column-usage`        제약 조건이 있는 키 칼럼
+:ref:`information-schema-parameters`              루틴의 매개변수         
+:ref:`information-schema-partitions`              테이블 파티션 정보      
+:ref:`information-schema-referential-constraints` 외래 키 정보            
+:ref:`information-schema-routine-privileges`      루틴에 정의된 권한      
+:ref:`information-schema-routines`                루틴 정보               
+:ref:`information-schema-schemata`                스키마 정보             
+:ref:`information-schema-sequences`               시퀀스 정보             
+:ref:`information-schema-statistics`              테이블 인덱스 통계      
+:ref:`information-schema-synonyms`                동의어 정보             
+:ref:`information-schema-table-constraints`       제약 조건이 있는 테이블 
+:ref:`information-schema-table-privileges`        테이블에 정의된 권한    
+:ref:`information-schema-tables`                  테이블 정보             
+:ref:`information-schema-triggers`                트리거 정보             
+:ref:`information-schema-views`                   뷰 정보                 
+================================================= ========================
 
 .. _information-schema-column-privileges:
 
@@ -259,9 +259,10 @@ key_column_usage
 +-------------------------------+--------------+------------------------------------------------------------------+
 | constraint_name               | VARCHAR(255) | 제약 조건 이름                                                   |
 +-------------------------------+--------------+------------------------------------------------------------------+
-| table_catalog                 | VARCHAR(255) | 테이블이 속한 데이터베이스 이름(항상 현재 데이터베이스)          |
+| table_catalog                 | VARCHAR(255) | 이 제약 조건으로 제약되는 칼럼이 속한 테이블의 데이터베이스      |
+|                               |              | 이름(항상 현재 데이터베이스)                                     |
 +-------------------------------+--------------+------------------------------------------------------------------+
-| table_schema                  | VARCHAR(32)  | 테이블이 속한 스키마 이름                                        |
+| table_schema                  | VARCHAR(32)  | 이 제약 조건으로 제약되는 칼럼이 속한 테이블의 스키마 이름       |
 +-------------------------------+--------------+------------------------------------------------------------------+
 | table_name                    | VARCHAR(255) | 이 제약 조건으로 제약되는 칼럼이 속한 테이블의 이름              |
 +-------------------------------+--------------+------------------------------------------------------------------+
@@ -488,7 +489,7 @@ routines
 +--------------------------+---------------+------------------------------------------------------------------+
 | parameter_style          | VARCHAR(3)    | 루틴의 매개변수 전달 방식(항상 SQL)                              |
 +--------------------------+---------------+------------------------------------------------------------------+
-| is_deterministic         | VARCHAR(3)    | DETERMINISTIC로 선언되었으면 'YES', 아니면 'NO'                  |
+| is_deterministic         | VARCHAR(3)    | DETERMINISTIC으로 선언되었으면 'YES', 아니면 'NO'                |
 +--------------------------+---------------+------------------------------------------------------------------+
 | sql_data_access          | VARCHAR(17)   | SQL 데이터 접근 수준 (NO SQL, CONTAINS SQL, READS SQL DATA,      |
 |                          |               | MODIFIES SQL DATA)                                               |
@@ -713,7 +714,7 @@ table_constraints
 table_privileges
 ----------------
 
-``table_privileges`` 뷰는 현재 사용자가 부여하거나 부여받은 테이블 권한을 나타낸다. 테이블, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.
+``table_privileges`` 뷰는 현재 사용자가 부여하거나 부여받은 테이블 또는 뷰 권한을 나타낸다. 테이블, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.
 
 +----------------+--------------+------------------------------------------------------------------+
 | 속성명         | 데이터 타입  | 설명                                                             |

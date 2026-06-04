@@ -11,10 +11,10 @@ Information Schema
 
 .. code-block:: sql
 
-    -- Tables owned by the user 'public'
+    -- Tables owned by the user 'PUBLIC'
     SELECT table_name, table_type
     FROM information_schema.tables
-    WHERE table_schema = 'public';
+    WHERE table_schema = 'PUBLIC';
 
     -- Columns of the 'game' table
     SELECT column_name, data_type, is_nullable
@@ -34,17 +34,17 @@ View Name                                         Description
 :ref:`information-schema-columns`                 Columns in each table             
 :ref:`information-schema-domains`                 Domain information                
 :ref:`information-schema-foreign-servers`         Foreign server information        
-:ref:`information-schema-key-column-usage`        Key columns of constraints        
+:ref:`information-schema-key-column-usage`        Which key columns have constraints
 :ref:`information-schema-parameters`              Routine parameters                
 :ref:`information-schema-partitions`              Table partition information       
-:ref:`information-schema-referential-constraints` Referential constraint information
+:ref:`information-schema-referential-constraints` Foreign key information           
 :ref:`information-schema-routine-privileges`      Privileges defined on routines    
 :ref:`information-schema-routines`                Routine information               
 :ref:`information-schema-schemata`                Schema information                
 :ref:`information-schema-sequences`               Sequence information              
 :ref:`information-schema-statistics`              Table index statistics            
 :ref:`information-schema-synonyms`                Synonym information               
-:ref:`information-schema-table-constraints`       Table constraint information      
+:ref:`information-schema-table-constraints`       Which tables have constraints     
 :ref:`information-schema-table-privileges`        Privileges defined on tables      
 :ref:`information-schema-tables`                  Table information                 
 :ref:`information-schema-triggers`                Trigger information               
@@ -106,8 +106,8 @@ The ``columns`` view contains information about all columns of the tables and vi
 +--------------------------+---------------+------------------------------------------------------------------+
 | data_type                | VARCHAR(16)   | Data type of the column                                          |
 +--------------------------+---------------+------------------------------------------------------------------+
-| character_maximum_length | BIGINT        | Maximum length in characters for character or bit-string types   |
-|                          |               | (NULL for other data types)                                      |
+| character_maximum_length | BIGINT        | Declared maximum length in characters for character or bit-      |
+|                          |               | string types (NULL for other data types)                         |
 +--------------------------+---------------+------------------------------------------------------------------+
 | character_octet_length   | BIGINT        | Maximum length in bytes for character types (NULL for other data |
 |                          |               | types)                                                           |
@@ -122,8 +122,8 @@ The ``columns`` view contains information about all columns of the tables and vi
 | character_set_name       | VARCHAR(32)   | Name of the character set for character types (NULL for other    |
 |                          |               | data types)                                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| collation_name           | VARCHAR(32)   | Name of the collation for character types (NULL for other data   |
-|                          |               | types)                                                           |
+| collation_name           | VARCHAR(32)   | Name of the collation of the column for character types (NULL    |
+|                          |               | for other data types)                                            |
 +--------------------------+---------------+------------------------------------------------------------------+
 | domain_catalog           | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
 +--------------------------+---------------+------------------------------------------------------------------+
@@ -214,7 +214,7 @@ The ``domains`` view contains all domains defined in the current database. CUBRI
 foreign_servers
 ---------------
 
-The ``foreign_servers`` view contains all foreign servers defined in the current database. Only those servers are shown that the current user has access to (by way of being the owner or having some privilege on the server).
+The ``foreign_servers`` view contains all foreign servers defined in the current database. Only those foreign servers are shown that the current user has access to (by way of being the owner or having some privilege).
 
 +------------------------------+---------------+------------------------------------------------------------------+
 | Attribute Name               | Data Type     | Description                                                      |
@@ -268,10 +268,12 @@ The ``key_column_usage`` view identifies all columns in the current database tha
 +-------------------------------+--------------+------------------------------------------------------------------+
 | constraint_name               | VARCHAR(255) | Name of the constraint                                           |
 +-------------------------------+--------------+------------------------------------------------------------------+
-| table_catalog                 | VARCHAR(255) | Name of the database that contains the table (always the current |
+| table_catalog                 | VARCHAR(255) | Name of the database that contains the table that contains the   |
+|                               |              | column that is restricted by this constraint (always the current |
 |                               |              | database)                                                        |
 +-------------------------------+--------------+------------------------------------------------------------------+
-| table_schema                  | VARCHAR(32)  | Name of the schema that contains the table                       |
+| table_schema                  | VARCHAR(32)  | Name of the schema that contains the table that contains the     |
+|                               |              | column that is restricted by this constraint                     |
 +-------------------------------+--------------+------------------------------------------------------------------+
 | table_name                    | VARCHAR(255) | Name of the table that contains the column that is restricted by |
 |                               |              | this constraint                                                  |
@@ -462,7 +464,8 @@ The ``routine_privileges`` view identifies all privileges granted on procedures 
 +------------------+--------------+------------------------------------------------------------------+
 | routine_name     | VARCHAR(255) | Name of the routine                                              |
 +------------------+--------------+------------------------------------------------------------------+
-| privilege_type   | VARCHAR(7)   | Type of the privilege (always EXECUTE)                           |
+| privilege_type   | VARCHAR(7)   | Type of the privilege; always EXECUTE (the only privilege type   |
+|                  |              | for routines)                                                    |
 +------------------+--------------+------------------------------------------------------------------+
 | is_grantable     | VARCHAR(3)   | Whether the grantee may grant the privilege to others (always    |
 |                  |              | 'NO')                                                            |
@@ -742,9 +745,10 @@ The ``table_constraints`` view contains all PRIMARY KEY, UNIQUE, and FOREIGN KEY
 +--------------------+--------------+------------------------------------------------------------------+
 | constraint_type    | VARCHAR(11)  | Type of the constraint (PRIMARY KEY, UNIQUE, FOREIGN KEY)        |
 +--------------------+--------------+------------------------------------------------------------------+
-| is_deferrable      | VARCHAR(3)   | Whether the constraint is deferrable (always 'NO')               |
+| is_deferrable      | VARCHAR(3)   | 'YES' if the constraint is deferrable, 'NO' if not (always 'NO') |
 +--------------------+--------------+------------------------------------------------------------------+
-| initially_deferred | VARCHAR(3)   | Whether the constraint is initially deferred (always 'NO')       |
+| initially_deferred | VARCHAR(3)   | 'YES' if the constraint is initially deferred, 'NO' if not       |
+|                    |              | (always 'NO')                                                    |
 +--------------------+--------------+------------------------------------------------------------------+
 | enforced           | VARCHAR(3)   | 'YES' if the constraint is enforced, 'NO' if not                 |
 +--------------------+--------------+------------------------------------------------------------------+
@@ -758,7 +762,7 @@ The ``table_constraints`` view contains all PRIMARY KEY, UNIQUE, and FOREIGN KEY
 table_privileges
 ----------------
 
-The ``table_privileges`` view identifies all privileges granted on tables to or by the current user. There is one row for each combination of table, grantor, and grantee.
+The ``table_privileges`` view identifies all privileges granted on tables or views to or by the current user. There is one row for each combination of table, grantor, and grantee.
 
 +----------------+--------------+------------------------------------------------------------------+
 | Attribute Name | Data Type    | Description                                                      |
@@ -864,8 +868,8 @@ The ``triggers`` view contains all triggers defined in the current database on t
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_statement           | STRING        | Statement that is executed by the trigger                        |
 +----------------------------+---------------+------------------------------------------------------------------+
-| action_orientation         | VARCHAR(9)    | Whether the trigger fires once per row or once per statement     |
-|                            |               | (ROW, STATEMENT)                                                 |
+| action_orientation         | VARCHAR(9)    | Identifies whether the trigger fires once for each processed row |
+|                            |               | or once for each statement (ROW, STATEMENT)                      |
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_timing              | VARCHAR(8)    | Time at which the trigger fires (BEFORE, AFTER, DEFERRED)        |
 +----------------------------+---------------+------------------------------------------------------------------+
@@ -907,8 +911,8 @@ The ``views`` view contains all views defined in the current database. Only thos
 +-----------------+---------------+------------------------------------------------------------------+
 | view_definition | STRING        | Query expression defining the view                               |
 +-----------------+---------------+------------------------------------------------------------------+
-| check_option    | VARCHAR(8)    | WITH CHECK OPTION setting of the view: CASCADED, LOCAL, or NONE  |
-|                 |               | if no CHECK OPTION is defined                                    |
+| check_option    | VARCHAR(8)    | CASCADED or LOCAL if the view has a CHECK OPTION defined on it,  |
+|                 |               | NONE if not                                                      |
 +-----------------+---------------+------------------------------------------------------------------+
 | is_updatable    | VARCHAR(3)    | Whether the view is updatable (always NULL)                      |
 +-----------------+---------------+------------------------------------------------------------------+

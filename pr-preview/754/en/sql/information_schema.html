@@ -225,10 +225,10 @@
 <section id="information-schema">
 <span id="id1"></span><h1>Information Schema<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#information-schema"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
 <p><strong>Information Schema</strong> is a set of read-only views that expose metadata about the objects in the current database, such as tables, columns, constraints, routines, and privileges. The Information Schema is defined in the SQL standard (ISO/IEC 9075-11), so it is portable and stable. This contrasts with the CUBRID <a class="reference internal" href="catalog.html#catalog"><span class="std std-ref">System Catalog</span></a>, which is specific to CUBRID and modeled after implementation concerns.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Tables owned by the user 'public'</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Tables owned by the user 'PUBLIC'</span>
 </span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">table_type</span>
 </span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span>
-</span><span id="line-4"><span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'public'</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'PUBLIC'</span><span class="p">;</span>
 </span><span id="line-5">
 </span><span id="line-6"><span class="c1">-- Columns of the 'game' table</span>
 </span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="k">column_name</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="p">,</span><span class="w"> </span><span class="n">is_nullable</span>
@@ -260,7 +260,7 @@
 <td><p>Foreign server information</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#information-schema-key-column-usage"><span class="std std-ref">key_column_usage</span></a></p></td>
-<td><p>Key columns of constraints</p></td>
+<td><p>Which key columns have constraints</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-parameters"><span class="std std-ref">parameters</span></a></p></td>
 <td><p>Routine parameters</p></td>
@@ -269,7 +269,7 @@
 <td><p>Table partition information</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-referential-constraints"><span class="std std-ref">referential_constraints</span></a></p></td>
-<td><p>Referential constraint information</p></td>
+<td><p>Foreign key information</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#information-schema-routine-privileges"><span class="std std-ref">routine_privileges</span></a></p></td>
 <td><p>Privileges defined on routines</p></td>
@@ -290,7 +290,7 @@
 <td><p>Synonym information</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#information-schema-table-constraints"><span class="std std-ref">table_constraints</span></a></p></td>
-<td><p>Table constraint information</p></td>
+<td><p>Which tables have constraints</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#information-schema-table-privileges"><span class="std std-ref">table_privileges</span></a></p></td>
 <td><p>Privileges defined on tables</p></td>
@@ -399,8 +399,8 @@ database)</p></td>
 </tr>
 <tr class="row-even"><td><p>character_maximum_length</p></td>
 <td><p>BIGINT</p></td>
-<td><p>Maximum length in characters for character or bit-string types
-(NULL for other data types)</p></td>
+<td><p>Declared maximum length in characters for character or bit-
+string types (NULL for other data types)</p></td>
 </tr>
 <tr class="row-odd"><td><p>character_octet_length</p></td>
 <td><p>BIGINT</p></td>
@@ -427,8 +427,8 @@ data types)</p></td>
 </tr>
 <tr class="row-even"><td><p>collation_name</p></td>
 <td><p>VARCHAR(32)</p></td>
-<td><p>Name of the collation for character types (NULL for other data
-types)</p></td>
+<td><p>Name of the collation of the column for character types (NULL
+for other data types)</p></td>
 </tr>
 <tr class="row-odd"><td><p>domain_catalog</p></td>
 <td><p>VARCHAR(255)</p></td>
@@ -593,7 +593,7 @@ types)</p></td>
 </section>
 <section id="foreign-servers">
 <span id="information-schema-foreign-servers"></span><h3>foreign_servers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#foreign-servers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#foreign-servers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">foreign_servers</span></code> view contains all foreign servers defined in the current database. Only those servers are shown that the current user has access to (by way of being the owner or having some privilege on the server).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">foreign_servers</span></code> view contains all foreign servers defined in the current database. Only those foreign servers are shown that the current user has access to (by way of being the owner or having some privilege).</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
@@ -692,12 +692,14 @@ current database)</p></td>
 </tr>
 <tr class="row-odd"><td><p>table_catalog</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>Name of the database that contains the table (always the current
+<td><p>Name of the database that contains the table that contains the
+column that is restricted by this constraint (always the current
 database)</p></td>
 </tr>
 <tr class="row-even"><td><p>table_schema</p></td>
 <td><p>VARCHAR(32)</p></td>
-<td><p>Name of the schema that contains the table</p></td>
+<td><p>Name of the schema that contains the table that contains the
+column that is restricted by this constraint</p></td>
 </tr>
 <tr class="row-odd"><td><p>table_name</p></td>
 <td><p>VARCHAR(255)</p></td>
@@ -1026,7 +1028,8 @@ current database)</p></td>
 </tr>
 <tr class="row-even"><td><p>privilege_type</p></td>
 <td><p>VARCHAR(7)</p></td>
-<td><p>Type of the privilege (always EXECUTE)</p></td>
+<td><p>Type of the privilege; always EXECUTE (the only privilege type
+for routines)</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_grantable</p></td>
 <td><p>VARCHAR(3)</p></td>
@@ -1506,11 +1509,12 @@ database)</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_deferrable</p></td>
 <td><p>VARCHAR(3)</p></td>
-<td><p>Whether the constraint is deferrable (always ‘NO’)</p></td>
+<td><p>‘YES’ if the constraint is deferrable, ‘NO’ if not (always ‘NO’)</p></td>
 </tr>
 <tr class="row-even"><td><p>initially_deferred</p></td>
 <td><p>VARCHAR(3)</p></td>
-<td><p>Whether the constraint is initially deferred (always ‘NO’)</p></td>
+<td><p>‘YES’ if the constraint is initially deferred, ‘NO’ if not
+(always ‘NO’)</p></td>
 </tr>
 <tr class="row-odd"><td><p>enforced</p></td>
 <td><p>VARCHAR(3)</p></td>
@@ -1525,7 +1529,7 @@ database)</p></td>
 </section>
 <section id="table-privileges">
 <span id="information-schema-table-privileges"></span><h3>table_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#table-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#table-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">table_privileges</span></code> view identifies all privileges granted on tables to or by the current user. There is one row for each combination of table, grantor, and grantee.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">table_privileges</span></code> view identifies all privileges granted on tables or views to or by the current user. There is one row for each combination of table, grantor, and grantee.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute Name</p></th>
@@ -1713,8 +1717,8 @@ defined on</p></td>
 </tr>
 <tr class="row-odd"><td><p>action_orientation</p></td>
 <td><p>VARCHAR(9)</p></td>
-<td><p>Whether the trigger fires once per row or once per statement
-(ROW, STATEMENT)</p></td>
+<td><p>Identifies whether the trigger fires once for each processed row
+or once for each statement (ROW, STATEMENT)</p></td>
 </tr>
 <tr class="row-even"><td><p>action_timing</p></td>
 <td><p>VARCHAR(8)</p></td>
@@ -1785,8 +1789,8 @@ database)</p></td>
 </tr>
 <tr class="row-even"><td><p>check_option</p></td>
 <td><p>VARCHAR(8)</p></td>
-<td><p>WITH CHECK OPTION setting of the view: CASCADED, LOCAL, or NONE
-if no CHECK OPTION is defined</p></td>
+<td><p>CASCADED or LOCAL if the view has a CHECK OPTION defined on it,
+NONE if not</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_updatable</p></td>
 <td><p>VARCHAR(3)</p></td>
@@ -1863,7 +1867,7 @@ if no CHECK OPTION is defined</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 02, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 04, 2026. </p>
 </div>
 </div>
 </footer>

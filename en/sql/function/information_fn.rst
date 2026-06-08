@@ -273,7 +273,7 @@ ESTIMATED_AVG_ROW_LENGTH
 
 .. function:: ESTIMATED_AVG_ROW_LENGTH(table_name)
 
-    The **ESTIMATED_AVG_ROW_LENGTH** function returns the estimated average row length, in bytes, of the table identified by *table_name*. Note that this value is an approximate value.
+    The **ESTIMATED_AVG_ROW_LENGTH** function returns the estimated average row length, in bytes, of the table identified by *table_name*. Note that this value is an estimate.
 
     :param table_name: Table name
 
@@ -296,7 +296,7 @@ ESTIMATED_DATA_FREE
 
 .. function:: ESTIMATED_DATA_FREE(table_name)
 
-    The **ESTIMATED_DATA_FREE** function returns the estimated free (unused) space, in bytes, within the heap pages allocated to the table identified by *table_name*. Note that this value is an approximate value.
+    The **ESTIMATED_DATA_FREE** function returns the estimated free (unused) space, in bytes, within the heap pages allocated to the table identified by *table_name*. Note that this value is an estimate.
 
     :param table_name: Table name
 
@@ -319,7 +319,7 @@ ESTIMATED_DATA_LENGTH
 
 .. function:: ESTIMATED_DATA_LENGTH(table_name)
 
-    The **ESTIMATED_DATA_LENGTH** function returns the estimated total data length, in bytes, of the heap allocated to the table identified by *table_name*. Note that this value is an approximate value.
+    The **ESTIMATED_DATA_LENGTH** function returns the estimated total data length, in bytes, of the heap allocated to the table identified by *table_name*. Note that this value is an estimate.
 
     :param table_name: Table name
 
@@ -342,7 +342,7 @@ ESTIMATED_TABLE_ROWS
 
 .. function:: ESTIMATED_TABLE_ROWS(table_name)
 
-    The **ESTIMATED_TABLE_ROWS** function returns the estimated number of rows of the table identified by *table_name*. Note that this value is an approximate value.
+    The **ESTIMATED_TABLE_ROWS** function returns the estimated number of rows of the table identified by *table_name*. Note that this value is an estimate.
 
     :param table_name: Table name
 
@@ -365,7 +365,7 @@ INDEX_CARDINALITY
 
 .. function:: INDEX_CARDINALITY(table_name, index, key_pos)
 
-    The **INDEX_CARDINALITY** function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter. Note that this value is an approximate value.
+    The **INDEX_CARDINALITY** function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter. Note that this value is an estimate.
 
     If you want the updated result from this function, you should run **UPDATE STATISTICS** statement.
     

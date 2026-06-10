@@ -8,7 +8,7 @@ Overrides the theme default to make the keyboard shortcut OS-aware:
       action="{{ pathto('search') }}"
       method="get"
       class="relative flex items-center group"
-      @keydown.k.window.meta="$refs.search.focus()"
+      @keydown.k.window.meta.prevent="$refs.search.focus()"
       @keydown.k.window.ctrl.prevent="$refs.search.focus()">
   <input x-ref="search"
           name="q"

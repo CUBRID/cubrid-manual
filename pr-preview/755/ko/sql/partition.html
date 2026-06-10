@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>분할 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="분할 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="분할 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="i18n_index.html" rel="next" title="다국어 지원"/>
+<link href="partition_index.html" rel="prev" title="분할"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/sql/partition.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="partition_index.html">분할</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">분할</span>
+</nav>
+<div id="content" role="main">
+<section id="id1">
+<h1>분할<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="partitioning-key">
+<span id="id2"></span><h2>분할 키<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitioning-key" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partitioning-key'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>분할 키는 정의된 분할들에 데이터를 분배하기 위해 분할 방식에서 사용하는 표현식이다. 분할 키로 사용할 수 있는 칼럼의 데이터 타입은 다음과 같다.</p>
+<ul class="simple">
+<li><p><strong>CHAR</strong></p></li>
+<li><p><strong>VARCHAR</strong></p></li>
+<li><p><strong>SMALLINT</strong></p></li>
+<li><p><strong>INT</strong></p></li>
+<li><p><strong>BIGINT</strong></p></li>
+<li><p><strong>DATE</strong></p></li>
+<li><p><strong>TIME</strong></p></li>
+<li><p><strong>TIMESTAMP</strong></p></li>
+<li><p><strong>DATETIME</strong></p></li>
+</ul>
+<p>분할 키에는 다음과 같은 제약 사항이 적용된다.</p>
+<ul class="simple">
+<li><p>분할 키는 분할 테이블에서 하나의 칼럼만을 사용해야 한다.</p></li>
+<li><p><a class="reference internal" href="function/analysis_fn.html"><span class="doc">집계 함수 및 분석 함수</span></a>, <a class="reference internal" href="function/logical_op.html"><span class="doc">논리 연산자</span></a>, <a class="reference internal" href="function/comparison_op.html"><span class="doc">비교 연산자</span></a>는 분할 키 표현식에 사용할 수 없다.</p></li>
+<li><p>다음 함수 및 표현식은 분할 키 표현식에서 허용되지 않는다.</p>
+<ul>
+<li><p><a class="reference internal" href="function/condition_op.html#case-expr"><span class="std std-ref">CASE</span></a></p></li>
+<li><p><a class="reference internal" href="function/information_fn.html#CHARSET" title="CHARSET"><code class="xref py py-func docutils literal notranslate"><span class="pre">CHARSET()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/string_fn.html#CHR" title="CHR"><code class="xref py py-func docutils literal notranslate"><span class="pre">CHR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#COALESCE" title="COALESCE"><code class="xref py py-func docutils literal notranslate"><span class="pre">COALESCE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="schema/serial_stmt.html#SERIAL_CURRENT_VALUE" title="SERIAL_CURRENT_VALUE"><code class="xref py py-func docutils literal notranslate"><span class="pre">SERIAL_CURRENT_VALUE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="schema/serial_stmt.html#SERIAL_NEXT_VALUE" title="SERIAL_NEXT_VALUE"><code class="xref py py-func docutils literal notranslate"><span class="pre">SERIAL_NEXT_VALUE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#DECODE" title="DECODE"><code class="xref py py-func docutils literal notranslate"><span class="pre">DECODE()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/clickcounter_fn.html#DECR" title="DECR"><code class="xref py py-func docutils literal notranslate"><span class="pre">DECR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/clickcounter_fn.html#INCR" title="INCR"><code class="xref py py-func docutils literal notranslate"><span class="pre">INCR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/numeric_fn.html#DRAND" title="DRAND"><code class="xref py py-func docutils literal notranslate"><span class="pre">DRAND()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/numeric_fn.html#DRANDOM" title="DRANDOM"><code class="xref py py-func docutils literal notranslate"><span class="pre">DRANDOM()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#GREATEST" title="GREATEST"><code class="xref py py-func docutils literal notranslate"><span class="pre">GREATEST()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#LEAST" title="LEAST"><code class="xref py py-func docutils literal notranslate"><span class="pre">LEAST()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#IF" title="IF"><code class="xref py py-func docutils literal notranslate"><span class="pre">IF()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#IFNULL" title="IFNULL"><code class="xref py py-func docutils literal notranslate"><span class="pre">IFNULL()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/string_fn.html#INSTR" title="INSTR"><code class="xref py py-func docutils literal notranslate"><span class="pre">INSTR()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#NVL" title="NVL"><code class="xref py py-func docutils literal notranslate"><span class="pre">NVL()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/condition_fn.html#NVL2" title="NVL2"><code class="xref py py-func docutils literal notranslate"><span class="pre">NVL2()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/rownum_fn.html#c.ROWNUM" title="ROWNUM"><code class="xref c c-macro docutils literal notranslate"><span class="pre">ROWNUM</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/rownum_fn.html#INST_NUM" title="INST_NUM"><code class="xref py py-func docutils literal notranslate"><span class="pre">INST_NUM()</span></code></a></p></li>
+<li><p><a class="reference internal" href="function/information_fn.html#c.USER" title="USER"><code class="xref c c-macro docutils literal notranslate"><span class="pre">USER</span></code></a></p></li>
+<li><p><a class="reference internal" href="query/hq.html#prior-operator"><span class="std std-ref">PRIOR</span></a></p></li>
+<li><p><a class="reference internal" href="function/numeric_fn.html#WIDTH_BUCKET" title="WIDTH_BUCKET"><code class="xref py py-func docutils literal notranslate"><span class="pre">WIDTH_BUCKET()</span></code></a></p></li>
+</ul>
+</li>
+<li><p>각각의 고유 인덱스 키 또는  기본 키는 분할 키를 포함해야 한다.  이에 대한 자세한 내용은 <a class="reference internal" href="#index-partitions"><span class="std std-ref">여기</span></a> 를 참고한다.</p></li>
+<li><p>분할 표현식의 길이는 1024바이트를 초과하면 안 된다.</p></li>
+</ul>
+</section>
+<section id="range-partitioning">
+<span id="id3"></span><h2>영역 분할<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#range-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#range-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>영역 분할(range partitioning)은 각 분할에 대해 지정된 값의 영역으로 테이블을 분할하는 방법이다. 범위는 겹치지 않는 연속된 구간으로 정의된다. 이 분할 방법은 테이블의 데이터가 영역 구간으로 나누어질 수 있을 때 가장 유용한 방법이다. 예를 들면, 주문 정보 테이블에서 주문 날짜 또는 사용자 테이블에서 나이 영역으로 분할하는 경우이다. 영역 분할은 거의 모든 검색 조건이 영역을 매칭하는데 사용될 수 있기 때문에 <a class="reference internal" href="#partition-pruning"><span class="std std-ref">분할 프루닝</span></a> 측면에서 가장 다양하게 활용되는 분할 기법이다.</p>
+<p>테이블은 <strong>CREATE</strong> 또는 <strong>ALTER</strong> 문에서 <strong>PARTITION BY RANGE</strong> 절을 사용하여 분할될 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="p">(</span>
+</span><span id="line-2">   <span class="o">...</span>
+</span><span id="line-3"><span class="p">)</span>
+</span><span id="line-4"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">RANGE</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-5">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-6">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-7">    <span class="o">...</span>
+</span><span id="line-8"><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-11"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">RANGE</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-12">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-13">    <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="p">,</span>
+</span><span id="line-14">    <span class="o">...</span>
+</span><span id="line-15"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>partitioning_key</em>: <a class="reference internal" href="#partitioning-key"><span class="std std-ref">분할 키</span></a>를 지정한다.</p></li>
+<li><p><em>partition_name</em>: 분할 이름을 지정한다.</p></li>
+<li><p><em>range_value</em>: 분할 키의 최대 값을 지정한다. <em>range_value</em> 보다 작은 분할 키 값을 가지는 레코드들은 모두 해당 분할에 저장된다.</p></li>
+<li><p><em>comment_string</em>: 각 분할의 커멘트를 지정한다.</p></li>
+</ul>
+<p>다음은 올림픽 참가국 정보를 담은 <em>participant2</em> 테이블을 참가한 올림픽의 개최연도를 기준으로 2000년도 전의 참가국(<em>before_2000</em> 분할)과 2008년도 전의 참가국(<em>before_2008</em> 분할)로 나누는 영역 분할을 생성하는 예제이다.</p>
+<div class="highlight-sql notranslate" id="range-participant2-table"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">host_year</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">nation</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">gold</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">silver</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">bronze</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-7"><span class="p">)</span>
+</span><span id="line-8"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="w"> </span><span class="p">(</span><span class="n">host_year</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">),</span>
+</span><span id="line-10"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2008</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2008</span><span class="p">)</span>
+</span><span id="line-11"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>분할을 생성할 때, 사용자가 제공한 영역을 가장 작은 값부터 가장 큰 값까지 정렬하고 정렬된 리스트에서 겹치지 않는 간격을 생성한다. 위 예에서 생성된 영역의 간격은 [-inf, 2000)와 [2000, 2008)이다. 분할에 대한 무제한의 최대값을 지정하고 싶으면 <strong>MAXVALUE</strong> 식별자를 사용한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2012</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2012</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">last_one</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="k">MAXVALUE</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>투플을 영역 분할 테이블에 삽입할 때, 시스템은 분할 키를 평가하여 해당 투플이 어느 분할 영역에 속하게 될 것인가를 식별한다. 분할 키 값이 <strong>NULL</strong>이면, 해당 투플은 가장 작은 영역의 분할에 저장된다. 분할 키 값에 해당하는 영역이 없으면 오류를 반환한다. 또한 투플을 업데이트할 때도 새로운 분할 키 값에 해당하는 영역이 존재하지 않으면 오류를 반환한다.</p>
+<p>다음은 각 분할에 커멘트를 추가하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">int</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">less_1000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'less 1000 comment'</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">less_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'less 2000 comment'</span>
+</span><span id="line-4"><span class="p">);</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">less_1000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'new partition comment'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>분할 커멘트를 확인하는 방법은 <a class="reference internal" href="#show-partition-comment"><span class="std std-ref">분할 커멘트</span></a>를 참고한다.</p>
+</section>
+<section id="hash-partitioning">
+<span id="id4"></span><h2>해시 분할<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>해시 분할은 지정된 개수의 분할로 데이터를 분배하기 위해 사용되는 분할 기법이다. 이 분할 기법은 테이블 데이터의 영역이나 리스트가 의미 없는 값을 포함할 때 유용하다. 예를 들어, 키워드 테이블이나 user_id가 가장 관심 있는 값인 사용자 테이블과 같은 경우에 해당된다. 분할 키 값이 테이블 데이터를 고르게 분배한다면, 해시 분할 기법은 정의된 분할들에 테이블 데이터를 고르게 배분해준다. 해시 분할에 대한 <a class="reference internal" href="#partition-pruning"><span class="std std-ref">분할 프루닝</span></a> 최적화는 동등 조건(<strong>=</strong>과 <a class="reference internal" href="function/condition_op.html#in-expr"><span class="std std-ref">IN</span></a> 조건)에만 적용될 수 있는데, 대부분의 질의가 분할 키에 대한 동등 조건으로 주어질 때에 해시 분할이 유용하다.</p>
+<p><strong>CREATE</strong> 또는 <strong>ALTER</strong> 문에서 <strong>PARTITION BY HASH</strong> 절을 사용하여 해시 분할을 할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="p">(</span>
+</span><span id="line-2">   <span class="o">...</span>
+</span><span id="line-3"><span class="p">)</span>
+</span><span id="line-4"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">HASH</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span>
+</span><span id="line-5"><span class="n">PARTITIONS</span> <span class="p">(</span> <span class="n">number_of_partitions</span> <span class="p">)</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-8"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">HASH</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span><span class="p">)</span>
+</span><span id="line-9"><span class="n">PARTITIONS</span> <span class="p">(</span><span class="n">number_of_partitions</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>partitioning_key</em>: <a class="reference internal" href="#partitioning-key"><span class="std std-ref">분할 키</span></a>를 지정한다.</p></li>
+<li><p><em>number_of_partitions</em>: 생성할 분할의 개수를 지정한다.</p></li>
+</ul>
+<p>다음은 국가 코드와 국가 이름의 정보를 담은 <em>nation2</em> 테이블을 생성하고 <em>code</em> 값을 기준으로 4개의 해시 분할을 정의하는 예제이다. 해시 분할은 분할의 개수만 지정하고 이름은 지정하지 않는다.</p>
+<div class="highlight-sql notranslate" id="hash-nation2-table"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">nation2</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">  </span><span class="n">code</span><span class="w"> </span><span class="nb">CHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">)</span>
+</span><span id="line-5"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">HASH</span><span class="w"> </span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITIONS</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>해시 분할 테이블에 삽입될 때 데이터를 저장할 분할은 분할 키의 해시 값에 의해 결정된다. 분할 키 값이 <strong>NULL</strong>이면, 해당 레코드는 첫번째 분할에 저장된다.</p>
+</section>
+<section id="list-partitioning">
+<span id="id5"></span><h2>리스트 분할<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#list-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#list-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>리스트 분할은 사용자가 지정한 분할 키 값의 리스트에 따라 테이블을 분할하는 기법이다. 분할을 위한 값의 리스트는 겹치는 값이 없어야 한다. 이 분할 기법은 사원 테이블의 부서 ID, 사용자 테이블의 국가 코드와 같은 경우처럼 테이블 데이터가 의미 있는 값의 리스트로 나누어질 때 유용하다. 해시 분할과 마찬가지로, 리스트 분할에 대한 <a class="reference internal" href="#partition-pruning"><span class="std std-ref">분할 프루닝</span></a> 최적화는 동등 조건(<strong>=</strong>과 <a class="reference internal" href="function/condition_op.html#in-expr"><span class="std std-ref">IN</span></a> 조건)에만 적용된다.</p>
+<p><strong>CREATE</strong> 또는 <strong>ALTER</strong> 문에서 <strong>PARTITION BY LIST</strong> 절을 사용하여 리스트 분할을 할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="p">(</span>
+</span><span id="line-2">  <span class="o">...</span>
+</span><span id="line-3"><span class="p">)</span>
+</span><span id="line-4"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">LIST</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-5">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-6">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-7">  <span class="o">...</span>
+</span><span id="line-8"><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-11"><span class="n">PARTITION</span> <span class="n">BY</span> <span class="n">LIST</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">partitioning_key</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">(</span>
+</span><span id="line-12">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-13">  <span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">values_list</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">],</span>
+</span><span id="line-14">  <span class="o">...</span>
+</span><span id="line-15"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>partitioning_key</em> : <a class="reference internal" href="#partitioning-key"><span class="std std-ref">분할 키</span></a>를 지정한다.</p></li>
+<li><p><em>partition_name</em> : 분할 명을 지정한다.</p></li>
+<li><p><em>partition_value_list</em> : 분할의 기준이 되는 값의 목록을 지정한다.</p></li>
+<li><p><em>comment_string</em>: 각 분할의 커멘트를 지정한다.</p></li>
+</ul>
+<p>다음은 선수의 이름과 종목 정보를 담고 있는 <em>athlete2</em> 테이블을 생성하고 종목에 따른 리스트 분할을 정의하는 예제이다.</p>
+<div class="highlight-sql notranslate" id="list-athlete2-table"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Swimming'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Athletics'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">),</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event3</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Football'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Basketball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">)</span>
+</span><span id="line-6"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>리스트 분할 테이블에 투플을 삽입할 때 분할 키 값은 분할에 정의된 리스트 값 중 하나에 속해야 한다. 리스트 분할의 경우 분할 키 값이 <strong>NULL</strong>일 때 자동으로 특정 분할을 할당하지 않고 오류가 발생된다. <strong>NULL</strong> 값을 저장하려면 다음의 예와 같이 <strong>NULL</strong>을 포함하는 분할을 생성해야 한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Swimming'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Athletics'</span><span class="w"> </span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">),</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event3</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Football'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Basketball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">)</span>
+</span><span id="line-6"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>다음은 각 분할에 커멘트를 추가하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Swimming'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Athletics'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G1'</span><span class="p">,</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G2'</span><span class="p">,</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event3</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Football'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Basketball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G3'</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete3</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">),</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">30</span><span class="p">));</span>
+</span><span id="line-8"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete3</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Handball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Volleyball'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Tennis'</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'G1'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<section id="show-partition-comment">
+<span id="id6"></span><h3>분할 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#show-partition-comment" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#show-partition-comment'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>분할 커멘트는 영역 분할과 리스트 분할에 대해서만 지정할 수 있으며, 해시 분할에서는 지정할 수 없다. 분할 커멘트는 다음 구문을 실행하여 확인할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="p">[</span><span class="k">schema_name</span><span class="p">.]</span><span class="k">table_name</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">class_name</span><span class="p">,</span><span class="w"> </span><span class="n">partition_name</span><span class="p">,</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_partition</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">class_name</span><span class="w"> </span><span class="o">=</span><span class="s1">'table_name'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="err">$</span><span class="w"> </span><span class="n">csql</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="n">dba</span><span class="w"> </span><span class="n">demodb</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="n">sc</span><span class="w"> </span><span class="n">tbl</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="partition-pruning">
+<span id="id7"></span><h2>분할 프루닝<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partition-pruning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partition-pruning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>분할 프루닝(partition pruning)은 검색 조건을 통해 데이터 검색 범위를 한정시키는 최적화 기법이다. 분할 프루닝을 수행하는 과정 중에 분할 정의를 고려하여 질의문에 대해 항상 거짓인 분할들을 식별한다. 다음 예의 <strong>SELECT</strong> 문에 대해 <em>before_2008</em>과 <em>before_2012</em> 분할을 제외한 나머지 분할들은 모두 <em>YEAR (opening_date)</em>가 2004 보다 작다는 것을 알 수 있기 때문에, <em>before_2008</em>과 <em>before_2012</em> 분할에 대해서만 질의가 이루어진다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">olympic2</span><span class="w"> </span><span class="p">(</span><span class="n">opening_date</span><span class="w"> </span><span class="nb">DATE</span><span class="p">,</span><span class="w"> </span><span class="n">host_nation</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">(</span><span class="mi">40</span><span class="p">))</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">RANGE</span><span class="w"> </span><span class="p">(</span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">))</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_1996</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1996</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">),</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2004</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2004</span><span class="p">),</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2008</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2008</span><span class="p">),</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2012</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2012</span><span class="p">)</span>
+</span><span id="line-8"><span class="p">);</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="k">SELECT</span><span class="w"> </span><span class="n">opening_date</span><span class="p">,</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-11"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-12"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2004</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>분할 프루닝은 디스크 I/O와 질의 수행 중 처리해야 할 데이터 양을 크게 줄여준다. 프루닝의 이점을 최대한 활용하기 위해서 프루닝이 수행되는 시점을 이해하는 것이 중요하다. 분할을 프루닝하려면 다음 조건들을 만족해야 한다.</p>
+<ul class="simple">
+<li><p>분할 키는 <em>WHERE</em> 절에서 다른 표현식을 통하지 않고 직접 사용되어야 한다.</p></li>
+<li><p>영역 분할에서 분할 키는 범위 조건(<strong>&lt;</strong>, <strong>&gt;</strong>, <strong>BETWEEN</strong> 등)이나 동등 조건(<strong>=</strong>, <strong>IN</strong> 등)으로 사용되어야 한다.</p></li>
+<li><p>리스트 분할과 해시 분할에서 분할 키는 동등 조건(<strong>=</strong>, <strong>IN</strong> 등)으로 사용되어야 한다.</p></li>
+</ul>
+<p>다음 예는 위의 <em>olympic2</em> 테이블을 가지고 프루닝이 어떻게 수행되는가를 설명한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- prune all partitions except before_2012</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-4"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="w"> </span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2008</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="c1">-- prune all partitions except before_2008</span>
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-8"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-9"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">2005</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="mi">2007</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="c1">-- no partition is pruned because partitioning key is not used</span>
+</span><span id="line-12"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-13"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-14"><span class="k">WHERE</span><span class="w"> </span><span class="n">opening_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'2008-01-02'</span><span class="p">;</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="c1">-- no partition is pruned because partitioning key is not used directly</span>
+</span><span id="line-17"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-18"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-19"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2008</span><span class="p">;</span>
+</span><span id="line-20">
+</span><span id="line-21"><span class="c1">-- no partition is pruned because there is no useful predicate in the WHERE clause</span>
+</span><span id="line-22"><span class="k">SELECT</span><span class="w"> </span><span class="n">host_nation</span>
+</span><span id="line-23"><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span>
+</span><span id="line-24"><span class="k">WHERE</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">opening_date</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2008</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>CUBRID 9.0 미만 버전에서 분할 프루닝은 질의 컴파일 단계에서 수행되었다. CUBRID 9.0부터 분할 프루닝은 질의 실행 단계에서 수행되는데, 질의를 실행하는 동안 분할 프루닝을 실행하면 훨씬 복잡한 질의에 대해서도 이 최적화를 적용할 수 있게 되기 때문이다. 그러나 질의 실행 계획은 질의 실행 전에 수행되어 프루닝 정보는 질의 실행 전에는 알 수 없으므로, 프루닝 정보는 더 이상 질의 실행 계획 단계에서 출력되지 않는다.</p>
+</div>
+<p>사용자는 분할 테이블을 접근하는 방법 외에 시스템에 의해 부여된 분할 이름을 직접 명시하거나 <em>table PARTITION (name)</em> 절을 사용하여 각 분할에 직접 접근할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- to specify a partition with its table name</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2__p__before_2008</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- to specify a partition with PARTITION clause</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">olympic2</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="p">(</span><span class="n">before_2008</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>위의 <em>before_2008</em> 분할에 접근하는 두 개의 질의는 분할(partition)이 아닌 일반 테이블인 것처럼 보인다. 분할 테이블(partitioned table)에서는 사용할 수 없는 최적화 기법(이에 대한 자세한 내용은 <a class="reference internal" href="#partitioning-notes"><span class="std std-ref">분할에 관한 노트</span></a> 참고)을 이 방법을 통해서 사용할 수 있기 때문에 매우 유용하게 활용될 수 있다. 사용자가 분할을 직접 명시하면 해당 질의는 지정한 분할에만 제한된다는 것을 유의해야 한다. 질의의 <strong>WHERE</strong> 절 조건을 만족하는 레코드를 포함하더라도 명시되지 않은 분할들은 질의 수행 시에 전혀 고려되지 않으며, <strong>INSERT</strong>와 <strong>UPDATE</strong> 문에 의해 삽입/수정되는 레코드가 지정된 분할에 속하지 않는 경우 오류가 발생된다.</p>
+<p>분할 테이블(partitioned table)이 아닌 각 분할(partition)에 대해 질의를 수행하면, 분할 기법의 몇 가지 이점을 잃게 된다. 예를 들어, 사용자가 단지 분할 테이블에 대해서만 질의를 수행하면 사용자의 응용 프로그램을 수정할 필요 없이 추후에 해당 테이블을 재분할하거나 특정 분할을 제거(drop)할 수 있다. 사용자가 분할에 직접 접근하면 이러한 이점을 잃게 된다. 또한, <strong>INSERT</strong> 문에서 특정 분할을 명시하는 것이 허용되기는 하지만 이로 인해 얻을 수 있는 성능 이득이 없으므로 권장되지 않는다.</p>
+</section>
+<section id="id8">
+<h2>분할 관리<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id8'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>ALTER</strong> 문의 분할 지정 절을 사용하여 다음과 같이 분할 테이블을 관리할 수 있다.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#remove-partitioning"><span class="std std-ref">분할 테이블을 일반 테이블로 변경</span></a></p></li>
+<li><p><a class="reference internal" href="#reorganize-partitions"><span class="std std-ref">분할 재구성</span></a></p></li>
+<li><p><a class="reference internal" href="#add-partitions"><span class="std std-ref">이미 존재하는 분할 테이블에 분할 추가</span></a></p></li>
+<li><p><a class="reference internal" href="#drop-partitions"><span class="std std-ref">분할 제거하기</span></a></p></li>
+<li><p><a class="reference internal" href="#promote-partitions"><span class="std std-ref">분할을 일반 테이블로 승격</span></a></p></li>
+</ol>
+<section id="remove-partitioning">
+<span id="id9"></span><h3>분할 테이블을 일반 테이블로 변경<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#remove-partitioning" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#remove-partitioning'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>분할 테이블을 일반 테이블로 변경하려면 <strong>ALTER TABLE</strong> 문을 이용한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="n">REMOVE</span> <span class="n">PARTITIONING</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 테이블의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>table_name</em>: 변경하고자 하는 테이블의 이름을 지정한다.</p></li>
+</ul>
+<p>분할 설정을 제거하면 각 분할에 있던 모든 데이터가 분할 테이블로 이동된다. 이는 비용이 많이 드는 작업으로 주의해서 계획해야 한다.</p>
+</section>
+<section id="reorganize-partitions">
+<span id="id10"></span><h3>분할 재구성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#reorganize-partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#reorganize-partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>분할 재구성은 하나의 분할을 더 작은 분할들로 나누거나 한 그룹의 분할들을 하나의 분할로 병합하는 작업이다. 이를 수행하려면 <strong>ALTER</strong> 문의 <strong>REORGANIZE PARTITION</strong> 절을 사용한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span> <span class="n">PARTITION</span> <span class="o">&lt;</span><span class="n">alter_partition_name_comma_list</span><span class="o">&gt;</span>
+</span><span id="line-3"><span class="n">INTO</span> <span class="s2">"("</span> <span class="o">&lt;</span><span class="n">partition_definition_comma_list</span><span class="o">&gt;</span> <span class="s2">")"</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">partition_definition_comma_list</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-6"><span class="n">PARTITION</span> <span class="n">partition_name</span> <span class="n">VALUES</span> <span class="n">LESS</span> <span class="n">THAN</span> <span class="s2">"("</span> <span class="o">&lt;</span><span class="n">range_value</span><span class="o">&gt;</span> <span class="s2">")"</span><span class="p">,</span> <span class="o">...</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 테이블의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>table_name</em>: 재정의할 테이블의 이름을 지정한다.</p></li>
+<li><p><em>alter_partition_name_comma_list</em>: 재정의할 현재 분할들을 지정한다. 여러 개의 분할은 쉼표(,)로 구분된다.</p></li>
+<li><p><em>partition_definition_comma_list</em>: 새 분할들을 지정한다. 여러 개의 분할은 쉼표(,)로 구분된다.</p></li>
+</ul>
+<p>이 절은 영역 분할 및 리스트 분할에만 적용된다. 해시 분할 기법에서 데이터 분배는 영역 분할과 리스트 분할과는 의미적으로 다르므로, 해시 분할 테이블은 분할 추가 및 삭제만 허용한다. 자세한 사항은 <a class="reference internal" href="#hash-reorganization"><span class="std std-ref">해시 분할 재구성</span></a> 절을 참고한다.</p>
+<p>다음 예는 <a class="reference internal" href="#range-participant2-table"><span class="std std-ref">participant2</span></a> 테이블의 <em>before_2000</em> 분할을 <em>before_1996</em> 분할과 <em>before_2000</em> 분할로 재구성하는 방법이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_1996</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">1996</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>다음 예는 위의 예에서 정의된 두 개의 분할을 다시 하나의 <em>before_2000</em>로 병합하는 방법이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_1996</span><span class="p">,</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>다음 예는 <a class="reference internal" href="#list-athlete2-table"><span class="std std-ref">athlete2</span></a> 테이블에서 정의된  <em>event2</em> 분할을 <em>event2_1</em> (Judo)와 <em>event2_2</em> (Taekwondo, Boxing)으로 재구성하는 방법이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2_1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2_2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>다음 예는 <em>event2_1</em>과 <em>event2_2</em> 분할을 다시 <em>event2</em> 분할로 합치는 방법이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">athlete2</span>
+</span><span id="line-2"><span class="n">REORGANIZE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2_1</span><span class="p">,</span><span class="w"> </span><span class="n">event2_2</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">event2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Judo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Taekwondo'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Boxing'</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>영역 분할 테이블에서 인접한 분할끼리만 재구성될 수 있다.</p></li>
+<li><p>분할 재구성을 수행하는 동안, 새로 분할된 스키마에 맞춰 분할 간에 데이터를 이동한다. 재구성되는 분할의 크기에 따라 시간이 많이 소요될 수 있으므로 주의 깊게 해당 작업을 계획할 필요가 있다.</p></li>
+<li><p><strong>REORGANIZE PARTITION</strong> 절은 분할 방법을 바꾸기 위해 사용할 수 없다. 예를 들어, 영역 분할 테이블을 해시 분할 테이블로 바꿀 수 없다.</p></li>
+<li><p>분할을 재구성한 후에 최소한 하나의 분할이 존재해야 한다.</p></li>
+</ul>
+</div>
+</section>
+<section id="add-partitions">
+<span id="id11"></span><h3>분할 추가<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#add-partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#add-partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><em>ALTER</em> 문의 <em>ADD PARTITION</em> 절을 사용하여 분할 테이블에 분할을 추가할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">ADD</span> <span class="n">PARTITION</span> <span class="s2">"("</span> <span class="o">&lt;</span><span class="n">partition_definitions_comma_list</span><span class="o">&gt;</span> <span class="s2">")"</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 테이블의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>table_name</em>: 분할이 추가될 테이블 이름을 지정한다.</p></li>
+<li><p><em>partition_definitions_comma_list</em>: 추가될 분할 이름을 지정한다. 여러 개인 경우 쉼표(,)로 구분한다.</p></li>
+</ul>
+<p>다음 예는 <a class="reference internal" href="#range-participant2-table"><span class="std std-ref">participant2</span></a> 테이블에 <em>before_2012</em> 분할과 <em>last_one</em> 분할을 추가하는 방법이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2012</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="p">(</span><span class="mi">2012</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">  </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">last_one</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">LESS</span><span class="w"> </span><span class="k">THAN</span><span class="w"> </span><span class="k">MAXVALUE</span>
+</span><span id="line-4"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>영역 분할 테이블에서 추가할 분할에 대한 영역 값은 기존 분할의 최대 영역 값보다 커야 한다.</p></li>
+<li><p>영역 분할 테이블에서 <strong>MAXVALUE</strong> 로 최대값이 설정되어 있으면 <strong>ADD PARTITION</strong> 절은 항상 오류를 반환한다. 이 경우에 대신 <a class="reference internal" href="#reorganize-partitions"><span class="std std-ref">REORGANIZE PARTITION</span></a> 절을 사용해야 한다.</p></li>
+<li><p><strong>ADD PARTITION</strong> 절은 이미 존재하는 분할 테이블에 대해서만 사용할 수 있다.</p></li>
+<li><p><strong>ADD PARTITION</strong> 절이 해시 분할 테이블에 적용될 때는 다른 의미를 가진다. 이에 대한 자세한 사항은 <a class="reference internal" href="#hash-reorganization"><span class="std std-ref">해시 분할 재구성</span></a> 절을 참고한다.</p></li>
+</ul>
+</div>
+</section>
+<section id="drop-partitions">
+<span id="id12"></span><h3>분할 제거<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#drop-partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#drop-partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>ALTER</strong> 문의 <strong>DROP PARTITION</strong> 절을 이용하여 분할 테이블에서 분할을 제거(drop)할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">DROP</span> <span class="n">PARTITION</span> <span class="n">partition_name_list</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 테이블의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>table_name</em>: 분할 테이블 이름을 지정한다.</p></li>
+<li><p><em>partition_name_list</em>: 제거할 분할 이름을 지정한다. 여러 개인 경우 쉼표(,)로 구분한다.</p></li>
+</ul>
+<p>다음은 <a class="reference internal" href="#range-participant2-table"><span class="std std-ref">participant2</span></a> 테이블에서 <em>before_2000</em> 분할을 제거하는 방법이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">participant2</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">before_2000</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>분할을 제거하면 해당 분할 내에 저장된 데이터도 모두 삭제된다. 데이터를 유지한 채로 테이블의 분할을 변경하고 싶다면 <strong>ALTER TABLE</strong> … <strong>REORGANIZE PARTITION</strong> 문을 사용하면 된다.</p></li>
+<li><p>분할을 제거할 경우 삭제된 행의 개수를 반환하지 않는다. 테이블과 분할을 유지한 채로 데이터만 삭제하고 싶은 경우 <strong>DELETE</strong> 문을 사용하면 된다.</p></li>
+</ul>
+</div>
+<p>해시 분할 테이블에 대해 이 구문을 사용할 수 없다. 해시 분할 테이블의 분할을 제거하려면 해시 분할에서만 사용하는 <a class="reference internal" href="#hash-reorganization"><span class="std std-ref">해시 분할 재구성</span></a> 절을 참고한다.</p>
+</section>
+<section id="hash-reorganization">
+<span id="id13"></span><h3>해시 분할 재구성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash-reorganization" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash-reorganization'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>해시 분할 테이블에서 분할 간의 데이터 분배는 CUBRID에 의해 내부적으로 관리되므로, 해시 분할 재구성은 리스트 분할이나 영역 분할에서의 재구성과 다르게 동작한다. 해시 분할 테이블에 정의된 분할 개수를 증가시키거나 감소시키는 것만 허용된다. 해시 분할 테이블의 분할 개수를 수정하더라도 데이터 손실은 발생되지 않는다. 그러나 해시 함수의 영역이 수정되기 때문에, 해시 분할의 일관성을 유지하기 위해 새로운 분할들 간에 데이터가 재분배되어야 한다.</p>
+<p>해시 분할 테이블에 정의된 분할 개수는 <strong>ALTER</strong> 문의 <strong>COALESCE PARTITION</strong> 절을 이용하여 줄일 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">COALESCE</span> <span class="n">PARTITION</span> <span class="n">number_of_shrinking_partitions</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 테이블의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>table_name</em> : 재정의할 테이블의 이름을 지정한다.</p></li>
+<li><p><em>number_of_shrinking_partitions</em> : 삭제하려는 분할 개수를 지정한다.</p></li>
+</ul>
+<p>다음은 <a class="reference internal" href="#hash-nation2-table"><span class="std std-ref">nation2</span></a> 테이블의 분할 개수를 4 개에서 3 개로 줄이는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">nation2</span><span class="w"> </span><span class="k">COALESCE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>ALTER</strong> 문의 <strong>ADD PARTITION</strong> 절을 사용하여 <strong>ALTER</strong> 해시 분할 테이블에 정의된 분할 개수를 늘릴 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">TABLE</span> <span class="o">|</span> <span class="n">CLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span>
+</span><span id="line-2"><span class="n">ADD</span> <span class="n">PARTITION</span> <span class="n">PARTITIONS</span> <span class="n">number</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>schema_name</em>: 테이블의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
+<li><p><em>table_name</em> : 분할 개수를 재정의할 테이블의 이름을 지정한다.</p></li>
+<li><p><em>number</em> : 추가할 분할 개수를 지정한다.</p></li>
+</ul>
+<p>다음은 <a class="reference internal" href="#hash-nation2-table"><span class="std std-ref">nation2</span></a> 테이블에 3 개의 분할을 추가하는 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">nation2</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">PARTITIONS</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="promote-partitions">
+<span id="id14"></span><h3>분할 승격<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#promote-partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#promote-partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>분할(partition) <strong>PROMOTE</strong> 문은 분할 테이블에서 사용자가 지정한 분할을 일반 테이블로 승격(promote)한다. 이것은 거의 사용하지 않는 오래된 데이터를 보관할(archiving) 목적으로 유지하고자 할 때 유용하다. 해당 분할을 일반 테이블로 승격함으로써 분할 테이블에 대한 접근 부하를 줄일 수 있고, 분할 테이블에서 제거된 데이터는 승격된 테이블에 유지되므로 여전히 해당 데이터를 접근할 수 있다. 분할을 승격(promote)하는 것은 비가역적인 작업으로 승격된 분할을 분할 테이블로 다시 되돌릴 수 없다.</p>
+<p>분할 <strong>PROMOTE</strong> 문은 영역 분할 테이블과 리스트 분할 테이블에만 허용된다. 해시 분할 테이블은 사용자가 해시 분할 간에 데이터 분배를 제어할 수 없으므로 승격을 허용하지 않는다.</p>
+<p>분할이 일반 테이블로 승격될 때 승격 테이블은 데이터와 일반 인덱스만 상속받는다. 다음의 테이블 속성들은 승격된 테이블에 저장되지 않는다.</p>
+<ul class="simple">
+<li><p>기본 키</p></li>
+<li><p>외래 키</p></li>
+<li><p>고유 인덱스</p></li>
+<li><p><strong>AUTO_INCREMENT</strong> 속성 및 시리얼</p></li>
+<li><p>트리거</p></li>
+<li><p>메서드</p></li>
+<li><p>상속 관계(수퍼클래스와 서브클래스)</p></li>
+</ul>
+<p>분할을 승격하는 구문은 다음과 같다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">table_name</span> <span class="n">PROMOTE</span> <span class="n">PARTITION</span> <span class="o">&lt;</span><span class="n">partition_name_list</span><span class="o">&gt;</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>&lt;<em>partition_name_list</em>&gt; :  승격할 분할 이름으로, 여러 개를 쉼표(,)로 구분한다.</p></li>
+</ul>
+<p>다음은 분할 테이블을 생성하고, 일부 투플을 삽입한 후 이들 중 2 개의 분할을 승격하는 예이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">),</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>테이블 <em>t</em> 의 스키마와 데이터는 다음과 같다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="k">schema</span><span class="w"> </span><span class="n">t</span>
+</span><span id="line-2"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Help</span><span class="p">:</span><span class="w"> </span><span class="k">Schema</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">Class</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-3"><span class="p">...</span>
+</span><span id="line-4"><span class="w"> </span><span class="o">&lt;</span><span class="n">Partitions</span><span class="o">&gt;</span>
+</span><span id="line-5"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">([</span><span class="n">i</span><span class="p">])</span>
+</span><span id="line-6"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+</span><span id="line-7"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
+</span><span id="line-8"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="k">Result</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Line</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">i</span>
+</span><span id="line-14"><span class="o">=============</span>
+</span><span id="line-15"><span class="w">            </span><span class="mi">1</span>
+</span><span id="line-16"><span class="w">            </span><span class="mi">2</span>
+</span><span id="line-17"><span class="w">            </span><span class="mi">3</span>
+</span><span id="line-18"><span class="w">            </span><span class="mi">4</span>
+</span><span id="line-19"><span class="w">            </span><span class="mi">5</span>
+</span><span id="line-20"><span class="w">            </span><span class="mi">6</span>
+</span></code></pre></div>
+</div>
+<p>다음 구문은 <em>p0</em> 분할과 <em>p2</em> 분할을 승격한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="n">PROMOTE</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">p2</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>승격(promotion) 이후, 테이블 <em>t</em>는 <em>p1</em>이라는 하나의 분할만 포함하며 다음 데이터를 유지한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="k">schema</span><span class="w"> </span><span class="n">t</span>
+</span><span id="line-2"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Help</span><span class="p">:</span><span class="w"> </span><span class="k">Schema</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">Class</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-3"><span class="w"> </span><span class="o">&lt;</span><span class="k">Class</span><span class="w"> </span><span class="n">Name</span><span class="o">&gt;</span>
+</span><span id="line-4"><span class="w">     </span><span class="n">t</span>
+</span><span id="line-5"><span class="w"> </span><span class="p">...</span>
+</span><span id="line-6"><span class="w"> </span><span class="o">&lt;</span><span class="n">Partitions</span><span class="o">&gt;</span>
+</span><span id="line-7"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">([</span><span class="n">i</span><span class="p">])</span>
+</span><span id="line-8"><span class="w">     </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="o">===</span><span class="w"> </span><span class="o">&lt;</span><span class="k">Result</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Line</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="o">===</span>
+</span><span id="line-13"><span class="w">            </span><span class="n">i</span>
+</span><span id="line-14"><span class="o">=============</span>
+</span><span id="line-15"><span class="w">            </span><span class="mi">3</span>
+</span><span id="line-16"><span class="w">            </span><span class="mi">4</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="index-partitions">
+<span id="id15"></span><h2>분할 테이블의 인덱스<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#index-partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#index-partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>분할 테이블에서 생성되는 모든 인덱스는 로컬 인덱스이다. 로컬 인덱스의 경우 각 분할에 대한 데이터가 별도의(로컬) 인덱스로 저장된다. 다른 분할의 데이터에 액세스하는 트랜잭션이 다른 로컬 인덱스에도 액세스하므로 분할 테이블 인덱스의 동시성을 향상시킨다.</p>
+<p>고유 인덱스를 생성할 때 다음 제약 사항을 충족해야 한다.</p>
+<ul class="simple">
+<li><p>고유 인덱스 키 또는  기본 키는 분할 키를 포함해야 한다.</p></li>
+</ul>
+<p>이를 충족하지 않으면 CUBRID에서 오류가 반환된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">HASH</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="n">PARTITIONS</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">Execute</span><span class="w"> </span><span class="n">OK</span><span class="p">.</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">142929</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w"> </span><span class="k">Committed</span><span class="p">.</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="mi">1</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span><span id="line-5"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span><span id="line-6"><span class="k">Execute</span><span class="w"> </span><span class="n">OK</span><span class="p">.</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">123776</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w"> </span><span class="k">Committed</span><span class="p">.</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="mi">1</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span><span id="line-9"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx2</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="k">In</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="n">ERROR</span><span class="p">:</span><span class="w"> </span><span class="n">Partition</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">attributes</span><span class="w"> </span><span class="n">must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">present</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">key</span><span class="p">.</span>
+</span><span id="line-14">
+</span><span id="line-15">
+</span><span id="line-16"><span class="mi">0</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span></code></pre></div>
+</div>
+<p>로컬 인덱스의 이점을 이해하는 것이 중요하다. 글로벌 인덱스 스캔의 경우 프루닝(pruning)되지 않은 분할에 대해 각각 별도의 인덱스 스캔이 수행된다. 디스크에서 다른 분할에 있는 데이터(지금 스캔 중인 분할이 아닌 다른 분할에 속한 데이터)를 가져온 다음 버리기 때문에 로컬 인덱스 스캔보다 성능이 저하된다. <strong>INSERT</strong> 질의문도 글로벌 인덱스보다 크기가 더 작은 로컬 인덱스에서 향상된 성능을 보인다.</p>
+</section>
+<section id="partitioning-notes">
+<span id="id16"></span><h2>분할에 관한 노트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitioning-notes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partitioning-notes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>분할된 테이블은 일반적인 테이블 처럼 정상적으로 동작한다. 하지만 분할된 테이블의 장점을 충분히 살리기 위해서 적용을 고려해야하는 노트가 있다.</p>
+<section id="id17">
+<h3>분할 테이블에 관한 통계<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id17" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id17'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID 9.0에서 부터, <strong>ALTER</strong> 문의 <strong>ANALYZE PARTITION</strong> 절은 더 이상 사용되지 않는다. 질의를 수행하는 동안 분할을 잘라내는 것이 발생하고, 이러한 경우 이 문은 유용한 결과를 생산하지 못한다. 9.0에서 부터, CUBRID는 각 분할에 대한 통계를 분리 유지한다. 분할된 테이블의 통계는 각 분할에 대한 통계의 평균 값으로 계산된다. 이것은 일상적인 경우의 최적화, 하나를 제외하고 모든 분할이 제거된 분할에 대한 질의, 등을 위해서 진행되었다.</p>
+</section>
+<section id="id18">
+<h3>분할된 테이블에 대한 제약들<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id18" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id18'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>다음의 제약이 분할된 테이블에 적용된다:</p>
+<ul class="simple">
+<li><p>하나의 테이블에 대해서 최대 1,024 까지의 분할이 정의될 수있다.</p></li>
+<li><p>분할은 상속 체인의 부분이 될 수 없다. 클래스는 하나의 분할을 상속할 수 없고, 분할은 분할된 클래스(기본으로 상속한다)를 제외한 다른 클래스를 상속할 수 없다.</p></li>
+<li><p>다음의 질의 최적화는 분할된 테이블에 대해서 수행되지 않는다:</p>
+<ul>
+<li><p>ORDER BY skip (for details, see <a class="reference internal" href="tuning.html#order-by-skip-optimization"><span class="std std-ref">ORDER BY 절 최적화</span></a>)</p></li>
+<li><p>GROUP BY skip (for details, see <a class="reference internal" href="tuning.html#group-by-skip-optimization"><span class="std std-ref">GROUP BY 절 최적화</span></a>)</p></li>
+<li><p>Multi-key range optimization (for details, see <a class="reference internal" href="tuning.html#multi-key-range-opt"><span class="std std-ref">다중 키 범위 최적화</span></a>)</p></li>
+<li><p>INDEX JOIN</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id19">
+<h3>분할 키와 문자셋, 콜레이션<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id19" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id19'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>분할하는 키들과 분할의 정의는 같은 문자셋이어야 한다. 아래의 질의는 오류를 반환한다:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span><span class="k">c</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_bin</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="k">c</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="n">_utf8</span><span class="s1">'x'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="n">_iso88591</span><span class="s1">'y'</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">codeset</span> <span class="s1">'_iso88591'</span> <span class="k">for</span> <span class="n">partition</span> <span class="n">value</span><span class="o">.</span> <span class="n">Expecting</span> <span class="s1">'_utf8'</span> <span class="n">codeset</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>분할 키에서 비교 작업을 수행할 때 분할 테이블에 정의된 콜레이션을 사용한다. 다음 예제에서 utf8_en_ci 콜레이션의 ‘test’는 ‘TEST’와 같으므로 오류를 반환한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">str</span><span class="w"> </span><span class="n">STRING</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_en_ci</span>
+</span><span id="line-2"><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">LIST</span><span class="w"> </span><span class="p">(</span><span class="n">str</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'test'</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">PARTITION</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'TEST'</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Partition</span> <span class="n">definition</span> <span class="ow">is</span> <span class="n">duplicated</span><span class="o">.</span> <span class="s1">'p1'</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="partition_index.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        분할
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="i18n_index.html">
+        다국어 지원
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#partitioning-key'" class="reference internal" href="#partitioning-key">분할 키</a></li>
+<li><a :data-current="activeSection === '#range-partitioning'" class="reference internal" href="#range-partitioning">영역 분할</a></li>
+<li><a :data-current="activeSection === '#hash-partitioning'" class="reference internal" href="#hash-partitioning">해시 분할</a></li>
+<li><a :data-current="activeSection === '#list-partitioning'" class="reference internal" href="#list-partitioning">리스트 분할</a><ul>
+<li><a :data-current="activeSection === '#show-partition-comment'" class="reference internal" href="#show-partition-comment">분할 커멘트</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#partition-pruning'" class="reference internal" href="#partition-pruning">분할 프루닝</a></li>
+<li><a :data-current="activeSection === '#id8'" class="reference internal" href="#id8">분할 관리</a><ul>
+<li><a :data-current="activeSection === '#remove-partitioning'" class="reference internal" href="#remove-partitioning">분할 테이블을 일반 테이블로 변경</a></li>
+<li><a :data-current="activeSection === '#reorganize-partitions'" class="reference internal" href="#reorganize-partitions">분할 재구성</a></li>
+<li><a :data-current="activeSection === '#add-partitions'" class="reference internal" href="#add-partitions">분할 추가</a></li>
+<li><a :data-current="activeSection === '#drop-partitions'" class="reference internal" href="#drop-partitions">분할 제거</a></li>
+<li><a :data-current="activeSection === '#hash-reorganization'" class="reference internal" href="#hash-reorganization">해시 분할 재구성</a></li>
+<li><a :data-current="activeSection === '#promote-partitions'" class="reference internal" href="#promote-partitions">분할 승격</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#index-partitions'" class="reference internal" href="#index-partitions">분할 테이블의 인덱스</a></li>
+<li><a :data-current="activeSection === '#partitioning-notes'" class="reference internal" href="#partitioning-notes">분할에 관한 노트</a><ul>
+<li><a :data-current="activeSection === '#id17'" class="reference internal" href="#id17">분할 테이블에 관한 통계</a></li>
+<li><a :data-current="activeSection === '#id18'" class="reference internal" href="#id18">분할된 테이블에 대한 제약들</a></li>
+<li><a :data-current="activeSection === '#id19'" class="reference internal" href="#id19">분할 키와 문자셋, 콜레이션</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 10, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

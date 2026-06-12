@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="./" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CUBRID SHARD | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="CUBRID SHARD | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="CUBRID SHARD | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="_static/logo_only.png" rel="icon"/>
+<link href="search.html" rel="search" title="검색"/>
+<link href="genindex.html" rel="index" title="색인"/>
+<link href="api/index.html" rel="next" title="API 레퍼런스"/>
+<link href="security.html" rel="prev" title="CUBRID 보안"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="./genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/shard.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="release_note/index.html">Release Note</a>
+<a href="./genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">CUBRID SHARD</span>
+</nav>
+<div id="content" role="main">
+<section id="cubrid-shard">
+<h1>CUBRID SHARD<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-shard"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="database-sharding">
+<h2>Database Sharding<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#database-sharding" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#database-sharding'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>수평 분할</strong></p>
+<p><strong>수평 분할(Horizontal Partitioning)</strong>이란, 동일한 스키마를 가진 데이터를 행(row) 단위로 나누어 두 개 이상의 테이블에 분산 저장하는 방식을 말한다.</p>
+<p>예를 들어, 하나의 ‘User Table’을 나이 기준으로 분할하여 13세 미만의 유저는 ‘User Table #0’, 13세 이상의 유저는 ‘User Table #1’에 저장하도록 설계할 수 있다.</p>
+<p>수평 분할을 적용하면 각 테이블의 데이터 및 인덱스 크기가 작아져 쿼리 성능이 향상되며, 작업의 동시성도 높아져 전체적인 성능 개선을 기대할 수 있다.</p>
+<p>수평 분할은 일반적으로 하나의 데이터베이스 내에서 이루어지며, 대용량 데이터를 효과적으로 관리하고 시스템 부하를 분산시키는 데 유용하다.</p>
+<img alt="_images/image38.png" src="_images/image38.png"/>
+<p><strong>database sharding</strong></p>
+<p>database sharding은 물리적으로 다른 데이터베이스에 데이터를 수평 분할(horizontal partitioning) 방식으로 분산 저장하고 조회하는 방법을 말한다. 예를 들어 ‘User Table’이 여러 데이터베이스에 있을 때 13세 미만의 유저를 0번 데이터베이스에 13세 이상의 유저를 1번 데이터베이스에 저장되도록 하는 방식이다. database sharding은 성능상 이유뿐 아니라 하나의 데이터베이스 인스턴스에 넣을 수 없는 큰 데이터를 분산하여 처리하기 위해 사용된다.</p>
+<p>분할된 각 데이터베이스를 shard 또는 database shard라고 부른다.</p>
+<img alt="_images/image39.png" src="_images/image39.png"/>
+<p><strong>CUBRID SHARD</strong></p>
+<p>CUBRID SHARD는 database sharding을 위한 미들웨어로, 다음과 같은 특징을 갖는다.</p>
+<ul class="simple">
+<li><p>기존 응용의 변경을 최소화하기 위한 미들웨어 형태로서, 흔히 사용되는 JDBC(Java Database Connectivity)나 CUBRID C API인 CCI(CUBRID C Interface)를 이용하여 투명하게 sharding된 데이터에 접근할 수 있다.</p></li>
+<li><p>힌트를 이용하여 실제 질의 수행할 shard를 선택하는 방식으로, 기존 사용하던 질의에 힌트를 추가하여 사용할 수 있다.</p></li>
+<li><p>일부 트랜잭션의 특성을 보장한다.</p></li>
+</ul>
+</section>
+<section id="shard-terminologies">
+<span id="id1"></span><h2>CUBRID SHARD 기본 용어<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-terminologies" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard-terminologies'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>다음은 앞으로 CUBRID SHARD를 설명하기 위해 사용되는 용어들로, 각 의미는 다음과 같다.</p>
+<ul class="simple">
+<li><p><strong>shard DB</strong> : 분할된 테이블과 데이터를 포함하고 있으며, 실제로 사용자 요청을 처리하는 데이터베이스</p></li>
+<li><p><strong>shard metadata</strong> : CUBRID SHARD의 동작을 위한 설정 정보. 요청된 질의를 분석하여 실제 질의를 수행할 shard DB를 선택하기 위한 정보 및 shard DB와의 데이터베이스 세션을 생성하기 위한 정보를 포함한다.</p></li>
+<li><p><strong>shard key (column)</strong> : sharding된 테이블에서 shard를 선택하기 위한 식별자로 사용되는 칼럼</p></li>
+<li><p><strong>shard key data</strong> : 질의 중 shard를 식별하기 위한 힌트에 해당하는 shard key의 값</p></li>
+<li><p><strong>shard ID</strong> : shard DB를 식별하기 위한 식별자</p></li>
+<li><p><strong>proxy</strong> : 사용자 질의에 포함된 힌트를 해석하고, 해석된 힌트와 shard metadata를 이용하여 실제 질의 처리할 shard DB로 요청을 전달하는 역할을 하는 CUBRID 미들웨어 프로세스</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2>CUBRID SHARD 주요 기능<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id3">
+<h3>미들웨어 구조<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID SHARD는 응용 프로그램과 물리적 또는 논리적으로 분할된 shard의 중간에 위치하는 미들웨어(middleware)로서, 동시에 다수의 응용 프로그램과의 연결을 유지하며, 응용의 요청이 있는 경우 적절한 shard로 전달하여 처리하고 결과를 응용에 반환하는 기능을 수행한다.</p>
+<img alt="_images/image40.png" src="_images/image40.png"/>
+<p>일반적으로 사용되는 JDBC(Java Database Connectivity)나 CUBRID C 인터페이스인 CCI(CUBRID C Interface)를 이용하여 CUBRID SHARD로 연결하여 응용의 요청을 처리할 수 있으며, 별도의 드라이버나 프레임워크가 필요 없기 때문에 기존 응용의 변경을 최소화할 수 있다.</p>
+<p>CUBRID SHARD middleware는 broker/proxy/CAS 세 개의 프로세스로 구성되며, 각 프로세스의 간략한 기능은 다음과 같다.</p>
+<img alt="_images/image41.png" src="_images/image41.png"/>
+<ul class="simple">
+<li><p><strong>broker</strong></p>
+<ul>
+<li><p>JDBC/CCI 등 드라이버로부터의 최초 연결 요청을 수신하고, 수신된 연결 요청을 부하 분산 정책에 따라 proxy로 전달</p></li>
+<li><p>proxy 프로세스와 CAS 프로세스의 상태 감시 및 복구</p></li>
+</ul>
+</li>
+<li><p><strong>proxy</strong></p>
+<ul>
+<li><p>드라이버로부터의 사용자 요청을 CAS로 전달하고, 처리한 결과를 응용에 반환</p></li>
+<li><p>드라이버 및 CAS와의 연결 상태 관리 및 트랜잭션 처리</p></li>
+</ul>
+</li>
+<li><p><strong>CAS</strong></p>
+<ul>
+<li><p>분할된 shard DB와 연결을 생성하고, 그 연결을 이용하여 proxy로부터 수신한 사용자 요청(질의)를 처리</p></li>
+<li><p>트랜잭션 처리</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="shard-sql-shard-db">
+<h3>shard SQL 힌트를 이용한 shard DB 선택<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-sql-shard-db" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard-sql-shard-db'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>shard SQL 힌트</strong></p>
+<p>CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용하여, 응용으로부터 요청된 질의를 실제로 처리할 shard DB를 선택한다. 사용 가능한 SQL 힌트의 종류는 다음과 같다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>SQL 힌트</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>/*+ shard_key */</strong></p></td>
+<td><p>shard key 칼럼에 해당하는 바인드 변수 또는 리터럴 값의 위치를 지정하기 위한 힌트</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>/*+ shard_val(</strong>
+<em>value</em>
+<strong>) */</strong></p></td>
+<td><p>질의 내에 shard key에 해당하는 칼럼이 존재하지 않는 경우 힌트 내에
+shard key를 명시적으로 지정하기 위한 힌트</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>/*+ shard_id(</strong>
+<em>shard_id</em>
+<strong>) */</strong></p></td>
+<td><p>사용자가 특정 shard DB를 지정하여 질의를 처리하고자 할 때 사용하는
+힌트</p></td>
+</tr>
+</tbody>
+</table>
+<p>설명을 위해 간략하게 용어를 정리하면 다음과 같다. 용어에 대한 보다 자세한 설명은 <a class="reference internal" href="#shard-terminologies"><span class="std std-ref">CUBRID SHARD 기본 용어</span></a>를 참고한다.</p>
+<ul class="simple">
+<li><p><strong>shard key</strong> : shard DB를 식별할 수 있는 칼럼. 일반적으로 shard DB 내의 모든 혹은 대부분의 테이블에 존재하는 칼럼으로서, DB 내에서 유일한 값을 갖는다.</p></li>
+<li><p><strong>shard id</strong> : shard를 논리적으로 구분할 수 있는 식별자. 예를 들어, 하나의 DB가 4개의 shard DB로 분할되면 4개의 shard id가 존재한다.</p></li>
+</ul>
+<p>힌트와 설정 정보를 이용한 자세한 질의 처리 절차는 <a class="reference internal" href="#using-shard-hint"><span class="std std-ref">shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차</span></a>를 참고한다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul>
+<li><p>하나의 질의 안에 두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">student</span> <span class="n">WHERE</span> <span class="n">shard_key</span> <span class="o">=</span> <span class="o">/*+</span> <span class="n">shard_key</span> <span class="o">*/</span> <span class="mi">250</span> <span class="n">OR</span> <span class="n">shard_key</span> <span class="o">=</span> <span class="o">/*+</span> <span class="n">shard_key</span> <span class="o">*/</span> <span class="mi">22</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.</p>
+</li>
+<li><p>여러 개의 값을 바인딩하는 배열로 질의를 일괄 처리하는 드라이버 함수(예: JDBC의 PreparedStatement.executeBatch, CCI의 cci_execute_array)에서 여러 개의 질의 중 하나라도 다른 shard에 접근하는 질의가 있으면 모두 오류 처리한다.</p></li>
+<li><p>shard 환경에서 한번에 여러 문장을 실행하는 함수(예: JDBC의 Statement.executeBatch, CCI의 cci_execute_batch)는 추후 지원할 예정이다.</p></li>
+</ul>
+</div>
+<p><strong>shard_key 힌트</strong></p>
+<p><strong>shard_key</strong> 힌트는 바인드 변수나 리터럴 값의 위치를 지정하기 위한 힌트로서, 반드시 바인드 변수나 리터럴 값의 앞에 위치해야 한다.</p>
+<p>예) 바인드 변수 위치 지정. 실행 시 바인딩되는 student_no 값에 해당하는 shard DB에서 질의를 수행.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">student_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/*+ shard_key */</span><span class="w"> </span><span class="o">?</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>예) 리터럴 값 위치 지정. 실행 시 리터럴 값인 student_no가 123에 해당하는 shard DB에서 질의를 수행</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">student_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/*+ shard_key */</span><span class="w"> </span><span class="mi">123</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>shard_val 힌트</strong></p>
+<p><strong>shard_val</strong> 힌트는 질의 내에 shard DB를 식별할 수 있는 shard key 칼럼이 존재하지 않는 경우 사용하며, 실제 질의 처리 시 무시되는 shard key 칼럼을 <strong>shard_val</strong> 힌트의 값으로 설정한다. <strong>shard_val</strong> 힌트는 SQL 구문의 어느 곳에나 위치할 수 있다.</p>
+<p>예) shard key가 student_no이나 질의 내에 포함되지 않은 경우. shard key인 student_no가 123에 해당하는 shard DB에서 질의를 수행</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=?</span><span class="w"> </span><span class="cm">/*+ shard_val(123) */</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><strong>shard_id 힌트</strong></p>
+<p><strong>shard_id</strong> 힌트는 shard key 칼럼의 값과 무관하게 사용자가 특정 shard를 지정하여 질의를 수행하고자 할 때 사용한다. <strong>shard_id</strong> 힌트는 SQL 구문의 어느 곳에나 위치할 수 있다.</p>
+<p>예) shard DB #3 에서 질의를 수행해야 하는 경우. shard DB #3에서 age가 17보다 큰 학생을 조회</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">17</span><span class="w"> </span><span class="cm">/*+ shard_id(3) */</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p id="using-shard-hint"><strong>shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차</strong></p>
+<ol class="arabic">
+<li><p>질의 수행</p>
+<p>다음은 사용자 질의 요청이 수행되는 과정이다.</p>
+<img alt="_images/image42.png" src="_images/image42.png"/>
+<ul class="simple">
+<li><p>응용 프로그램은 JDBC 인터페이스를 통해 CUBRID SHARD로 질의 처리를 요청하며, 실제로 질의가 수행될 shard DB를 지정하기 위해 SQL 구문 내에 <strong>shard_key</strong> 힌트를 추가한다.</p></li>
+<li><p>SQL 힌트는 SQL 구문 내에서 위 예에서와 마찬가지로 shard key로 설정된 칼럼의 바인드 또는 리터럴 값 바로 앞에 위치해야 한다.</p></li>
+</ul>
+<p>바인드 변수에 설정된 shard SQL 힌트는 다음과 같다.</p>
+<img alt="_images/image43.png" src="_images/image43.png"/>
+<p>리터럴 값에 지정된 shard SQL 힌트는 다음과 같다.</p>
+<img alt="_images/image44.png" src="_images/image44.png"/>
+</li>
+<li><p>질의 분석 및 실제 요청을 처리할 shard DB 선택</p>
+<p>질의를 분석하고 실제로 요청을 처리할 shard DB를 선택하는 과정은 다음과 같다.</p>
+<img alt="_images/image45.png" src="_images/image45.png"/>
+<ul>
+<li><p>사용자로부터 수신한 SQL 질의를 내부에서 처리하기 위한 형태로 다시 작성된다(query rewrite).</p></li>
+<li><p>사용자가 요청한 SQL 구문과 힌트를 이용하여 실제 질의를 수행한 shard DB를 선택한다.</p>
+<ul>
+<li><p>바인드 변수에 SQL 힌트가 설정된 경우, execute 시 shard_key 바인드 변수에 대입된 값을 해시한 결과와 설정 정보를 이용하여 실제 질의가 수행될 shard DB를 선택한다.</p></li>
+<li><p>해시 함수는 사용자가 별도로 지정할 수 있으며, 지정하지 않은 경우 기본 내장된 해시 함수를 이용하여 shard_key 값을 해싱한다. 기본 내장된 해시 함수는 다음과 같다.</p></li>
+<li><p>shard_key가 정수인 경우</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">기본</span> <span class="n">해시</span> <span class="n">함수</span><span class="p">(</span><span class="n">shard_key</span><span class="p">)</span> <span class="o">=</span> <span class="n">shard_key</span> <span class="n">mod</span> <span class="n">SHARD_KEY_MODULAR</span> <span class="n">파라미터</span><span class="p">(</span><span class="n">기본값</span> <span class="mi">256</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>shard_key가 문자열인 경우</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">기본</span> <span class="n">해시</span> <span class="n">함수</span><span class="p">(</span><span class="n">shard_key</span><span class="p">)</span> <span class="o">=</span> <span class="n">shard_key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="n">mod</span>  <span class="n">SHARD_KEY_MODULAR</span> <span class="n">파라미터</span><span class="p">(</span><span class="n">기본값</span> <span class="mi">256</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>shard_key 바인드 변수의 값이 100인 경우, “기본 hash 함수(shard_key) = 100 % 256 = 100”이므로, 설정에 의해 해시 결과 100에 해당하는 shard DB #1이 선택되며, 선택된 shard DB #1으로 사용자 요청을 전달하게 된다.</p>
+</div>
+</li>
+<li><p>질의 수행 결과 반환</p>
+<p>질의 수행 결과를 반환하는 과정은 다음과 같다.</p>
+<img alt="_images/image46.png" src="_images/image46.png"/>
+<ul class="simple">
+<li><p>shard DB #1 에서 수행한 처리 결과를 수신하여, 요청한 응용으로 결과를 반환한다.</p></li>
+</ul>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>여러 개의 값을 바인딩하는 배열로 질의를 일괄 처리하는 드라이버 함수(예: JDBC의 executeBatch, CCI의 cci_execute_array, cci_execute_batch)에서 다른 shard에 접근하는 값이 존재하면 오류 처리한다.</p>
+</div>
+</section>
+<section id="id4">
+<h3>트랜잭션 지원<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>트랜잭션 처리</strong></p>
+<blockquote>
+<div><p>CUBRID SHARD는 ACID 중 Atomicity(원자성)을 보장하기 위한 내부적인 처리 절차를 수행한다. 예를 들어, 트랜잭션 중 응용이 비정상 종료하는 등의 예외가 발생하면 해당 응용의 질의를 처리하던 shard DB로 롤백 요청을 전달하여 해당 트랜잭션 중 변경된 내용을 모두 무효화한다.</p>
+<p>그 외 일반적인 트랜잭션의 특성인 ACID는 backend DBMS의 특성과 설정에 따라 보장된다.</p>
+</div></blockquote>
+<p><strong>제약 사항</strong></p>
+<blockquote>
+<div><p>2PC(2 Phase commit)는 불가능하며, 이 때문에 하나의 트랜잭션 중 여러 개의 shard DB로 질의를 수행하는 경우 에러 처리된다.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id5">
+<h2>빠른 시작<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id6">
+<h3>구성 예<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>예로 설명될 CUBRID SHARD는 아래 그림과 같이 4개의 CUBRID SHARD DB로 구성되었으며, 응용은 JDBC 인터페이스를 사용하여 사용자 요청을 처리한다.</p>
+<img alt="_images/image49.png" src="_images/image49.png"/>
+<p><strong>shard DB 및 사용자 계정 생성 후 시작</strong></p>
+<p>위 구성의 예와 같이 각 shard DB 노드에서 shard DB 및 사용자 계정을 생성한 후 데이터베이스를 인스턴스를 시작한다.</p>
+<ul class="simple">
+<li><p>shard DB 이름 : <em>shard1</em></p></li>
+<li><p>shard DB 사용자 계정 : <em>shard</em></p></li>
+<li><p>shard DB 사용자 비밀번호 : <em>shard123</em></p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sh</span><span class="o">&gt;</span> <span class="c1"># CUBRID SHARD DB 생성</span>
+</span><span id="line-2"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">cubrid</span> <span class="n">createdb</span> <span class="n">shard1</span> <span class="n">en_US</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">sh</span><span class="o">&gt;</span> <span class="c1"># CUBRID SHARD 사용자 계정 생성</span>
+</span><span id="line-5"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">csql</span> <span class="o">-</span><span class="n">S</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="n">shard1</span> <span class="o">-</span><span class="n">c</span> <span class="s2">"create user shard password 'shard123'"</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="n">sh</span><span class="o">&gt;</span> <span class="c1"># CUBRID SHARD DB 시작</span>
+</span><span id="line-8"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">cubrid</span> <span class="n">server</span> <span class="n">start</span> <span class="n">shard1</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="shard">
+<h3>shard 설정 변경<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>cubrid_broker.conf</strong></p>
+<p><strong>cubrid_broker.conf.shard</strong>를 참조하여 <strong>cubrid_broker.conf</strong>를 아래와 같이 변경한다.</p>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p>포트 번호 및 공유 메모리 식별자는 현재 시스템에서 사용하지 않는 값으로 적절히 변경해야 한다.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">broker</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">MASTER_SHM_ID</span>           <span class="o">=</span><span class="mi">30001</span>
+</span><span id="line-3"><span class="n">ADMIN_LOG_FILE</span>          <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">cubrid_broker</span><span class="o">.</span><span class="n">log</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">[</span><span class="o">%</span><span class="n">shard1</span><span class="p">]</span>
+</span><span id="line-6"><span class="n">SERVICE</span>                 <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-7"><span class="n">BROKER_PORT</span>             <span class="o">=</span><span class="mi">36000</span>
+</span><span id="line-8"><span class="n">MIN_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">20</span>
+</span><span id="line-9"><span class="n">MAX_NUM_APPL_SERVER</span>     <span class="o">=</span><span class="mi">40</span>
+</span><span id="line-10"><span class="n">APPL_SERVER_SHM_ID</span>      <span class="o">=</span><span class="mi">36000</span>
+</span><span id="line-11"><span class="n">LOG_DIR</span>                 <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">sql_log</span>
+</span><span id="line-12"><span class="n">ERROR_LOG_DIR</span>           <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">error_log</span>
+</span><span id="line-13"><span class="n">SQL_LOG</span>                 <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-14"><span class="n">TIME_TO_KILL</span>            <span class="o">=</span><span class="mi">120</span>
+</span><span id="line-15"><span class="n">SESSION_TIMEOUT</span>         <span class="o">=</span><span class="mi">300</span>
+</span><span id="line-16"><span class="n">KEEP_CONNECTION</span>         <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-17"><span class="n">MAX_PREPARED_STMT_COUNT</span> <span class="o">=</span><span class="mi">1024</span>
+</span><span id="line-18"><span class="n">SHARD</span>                   <span class="o">=</span><span class="n">ON</span>
+</span><span id="line-19"><span class="n">SHARD_DB_NAME</span>           <span class="o">=</span><span class="n">shard1</span>
+</span><span id="line-20"><span class="n">SHARD_DB_USER</span>           <span class="o">=</span><span class="n">shard</span>
+</span><span id="line-21"><span class="n">SHARD_DB_PASSWORD</span>       <span class="o">=</span><span class="n">shard123</span>
+</span><span id="line-22"><span class="n">SHARD_NUM_PROXY</span>         <span class="o">=</span><span class="mi">1</span>
+</span><span id="line-23"><span class="n">SHARD_PROXY_LOG_DIR</span>     <span class="o">=</span><span class="n">log</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">proxy_log</span>
+</span><span id="line-24"><span class="n">SHARD_PROXY_LOG</span>         <span class="o">=</span><span class="n">ERROR</span>
+</span><span id="line-25"><span class="n">SHARD_MAX_CLIENTS</span>       <span class="o">=</span><span class="mi">256</span>
+</span><span id="line-26"><span class="n">SHARD_PROXY_SHM_ID</span>      <span class="o">=</span><span class="mi">36090</span>
+</span><span id="line-27"><span class="n">SHARD_CONNECTION_FILE</span>   <span class="o">=</span><span class="n">shard_connection</span><span class="o">.</span><span class="n">txt</span>
+</span><span id="line-28"><span class="n">SHARD_KEY_FILE</span>          <span class="o">=</span><span class="n">shard_key</span><span class="o">.</span><span class="n">txt</span>
+</span></code></pre></div>
+</div>
+<p>CUBRID의 경우 <strong>shard_connection.txt</strong>에 서버의 포트 번호를 별도로 설정하지 않고 <strong>cubrid.conf</strong> 설정 파일의 <strong>cubrid_port_id</strong> 파라미터를 사용하므로, <strong>cubrid.conf</strong> 의 <strong>cubrid_port_id</strong> 파라미터를 서버와 동일하게 설정한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># TCP port id for the CUBRID programs (used by all clients).</span>
+</span><span id="line-2"><span class="n">cubrid_port_id</span><span class="o">=</span><span class="mi">41523</span>
+</span></code></pre></div>
+</div>
+<p><strong>shard_key.txt</strong></p>
+<p>shard key 해시 값에 대한 shard DB 매핑 설정 파일인 <strong>shard_key.txt</strong> 파일을 아래와 같이 설정한다.</p>
+<ul class="simple">
+<li><p>[%shard_key] : shard key 섹션 설정</p></li>
+<li><p>기본 해시 함수에 의한 shard key 해시 결과가 0~63인 경우 shard #0 에서 질의 수행</p></li>
+<li><p>기본 해시 함수에 의한 shard key 해시 결과가 64~127인 경우 shard #1 에서 질의 수행</p></li>
+<li><p>기본 해시 함수에 의한 shard key 해시 결과가 128~191인 경우 shard #2 에서 질의 수행</p></li>
+<li><p>기본 해시 함수에 의한 shard key 해시 결과가 192~255인 경우 shard #3 에서 질의 수행</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="o">%</span><span class="n">shard_key</span><span class="p">]</span>
+</span><span id="line-2"><span class="c1">#min    max     shard_id</span>
+</span><span id="line-3"><span class="mi">0</span>       <span class="mi">63</span>      <span class="mi">0</span>
+</span><span id="line-4"><span class="mi">64</span>      <span class="mi">127</span>     <span class="mi">1</span>
+</span><span id="line-5"><span class="mi">128</span>     <span class="mi">191</span>     <span class="mi">2</span>
+</span><span id="line-6"><span class="mi">192</span>     <span class="mi">255</span>     <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+<p><strong>shard_connection.txt</strong></p>
+<p>shard 구성 데이터베이스 설정 파일인 <strong>shard_connection.txt</strong> 파일을 아래와 같이 설정한다.</p>
+<ul class="simple">
+<li><p>shard #0의 실제 데이터베이스 이름과 connection 정보</p></li>
+<li><p>shard #1의 실제 데이터베이스 이름과 connection 정보</p></li>
+<li><p>shard #2의 실제 데이터베이스 이름과 connection 정보</p></li>
+<li><p>shard #3의 실제 데이터베이스 이름과 connection 정보</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># shard-id  real-db-name  connection-info</span>
+</span><span id="line-2"><span class="c1">#                         * cubrid : hostname, hostname, ...</span>
+</span><span id="line-3"><span class="mi">0</span>           <span class="n">shard1</span>        <span class="n">HostA</span>
+</span><span id="line-4"><span class="mi">1</span>           <span class="n">shard1</span>        <span class="n">HostB</span>
+</span><span id="line-5"><span class="mi">2</span>           <span class="n">shard1</span>        <span class="n">HostC</span>
+</span><span id="line-6"><span class="mi">3</span>           <span class="n">shard1</span>        <span class="n">HostD</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>서비스 시작 및 모니터링<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>CUBRID SHARD 시작</strong></p>
+<p>CUBRID SHARD 기능을 사용하려면 아래와 같이 브로커를 구동한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">start</span>
+</span><span id="line-2"><span class="o">@</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">start</span>
+</span><span id="line-3"><span class="o">++</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">start</span><span class="p">:</span> <span class="n">success</span>
+</span></code></pre></div>
+</div>
+<p><strong>CUBRID SHARD 상태 조회</strong></p>
+<p>아래와 같이 CUBRID SHARD의 상태를 조회하여, 설정된 파라미터와 프로세스의 상태를 확인한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">status</span>
+</span><span id="line-2"><span class="o">@</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">status</span>
+</span><span id="line-3"><span class="o">%</span> <span class="n">shard1</span>
+</span><span id="line-4"><span class="o">----------------------------------------------------------------</span>
+</span><span id="line-5"><span class="n">ID</span>     <span class="n">PID</span>     <span class="n">QPS</span>   <span class="n">LQS</span> <span class="n">PSIZE</span> <span class="n">STATUS</span>
+</span><span id="line-6"><span class="o">----------------------------------------------------------------</span>
+</span><span id="line-7"><span class="mi">1</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21272</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>
+</span><span id="line-8"><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21273</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>
+</span><span id="line-9"><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21274</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>
+</span><span id="line-10"><span class="mi">1</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21275</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">status</span> <span class="o">-</span><span class="n">f</span>
+</span><span id="line-13"><span class="o">@</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">status</span>
+</span><span id="line-14"><span class="o">%</span> <span class="n">shard1</span>
+</span><span id="line-15"><span class="o">----------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+</span><span id="line-16"><span class="n">ID</span>     <span class="n">PID</span>     <span class="n">QPS</span>   <span class="n">LQS</span> <span class="n">PSIZE</span> <span class="n">STATUS</span>          <span class="n">LAST</span> <span class="n">ACCESS</span> <span class="n">TIME</span>               <span class="n">DB</span>             <span class="n">HOST</span>   <span class="n">LAST</span> <span class="n">CONNECT</span> <span class="n">TIME</span>    <span class="n">SQL_LOG_MODE</span>
+</span><span id="line-17"><span class="o">----------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+</span><span id="line-18"><span class="mi">1</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21272</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>         <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">24</span>    <span class="n">shard1</span><span class="nd">@HostA</span>           <span class="n">HostA</span> <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">25</span>               <span class="o">-</span>
+</span><span id="line-19"><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21273</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>         <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">24</span>    <span class="n">shard1</span><span class="nd">@HostB</span>           <span class="n">HostB</span> <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">25</span>               <span class="o">-</span>
+</span><span id="line-20"><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21274</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>         <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">24</span>    <span class="n">shard1</span><span class="nd">@HostC</span>           <span class="n">HostC</span> <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">25</span>               <span class="o">-</span>
+</span><span id="line-21"><span class="mi">1</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">1</span>  <span class="mi">21275</span>     <span class="mi">0</span>     <span class="mi">0</span> <span class="mi">53292</span> <span class="n">IDLE</span>         <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">24</span>    <span class="n">shard1</span><span class="nd">@HostD</span>           <span class="n">HostD</span> <span class="mi">2013</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">31</span> <span class="mi">15</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">25</span>               <span class="o">-</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>응용 예제 프로그램 작성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id8'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>간단한 Java 프로그램을 이용하여 CUBRID SHARD 기능이 정상 동작함을 확인한다.</p>
+<p><strong>예제 테이블 생성</strong></p>
+<p>모든 shard DB에서 예제 프로그램을 위한 임시 테이블을 아래와 같이 생성한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">csql</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">u</span> <span class="n">shard</span> <span class="o">-</span><span class="n">p</span> <span class="s1">'shard123'</span> <span class="n">shard1</span><span class="nd">@localhost</span> <span class="o">-</span><span class="n">c</span> <span class="s2">"create table student (s_no int, s_name varchar, s_age int, primary key(s_no))"</span>
+</span></code></pre></div>
+</div>
+<p><strong>예제 프로그램 작성</strong></p>
+<p>다음은 0~1023번의 학생 정보를 shard DB로 입력하는 예제 프로그램이다. 앞선 절차에서 수정한 <strong>cubrid_broker.conf</strong> 를 확인하여 주소/포트 및 사용자 정보를 연결 URL에 설정한다.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.DriverManager</span><span class="p">;</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Connection</span><span class="p">;</span>
+</span><span id="line-3"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.SQLException</span><span class="p">;</span>
+</span><span id="line-4"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Statement</span><span class="p">;</span>
+</span><span id="line-5"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.ResultSet</span><span class="p">;</span>
+</span><span id="line-6"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.ResultSetMetaData</span><span class="p">;</span>
+</span><span id="line-7"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.PreparedStatement</span><span class="p">;</span>
+</span><span id="line-8"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Date</span><span class="p">;</span>
+</span><span id="line-9"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.*</span><span class="p">;</span>
+</span><span id="line-10"><span class="kn">import</span><span class="w"> </span><span class="nn">cubrid.jdbc.driver.*</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TestInsert</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-13">
+</span><span id="line-14"><span class="w">        </span><span class="kd">static</span><span class="w">  </span><span class="p">{</span>
+</span><span id="line-15"><span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-16"><span class="w">                        </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"cubrid.jdbc.driver.CUBRIDDriver"</span><span class="p">);</span>
+</span><span id="line-17"><span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ClassNotFoundException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-18"><span class="w">                        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+</span><span id="line-19"><span class="w">                </span><span class="p">}</span>
+</span><span id="line-20"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-21">
+</span><span id="line-22"><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">DoTest</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">thread_id</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">SQLException</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-23"><span class="w">                </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="line-24">
+</span><span id="line-25"><span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-26"><span class="w">                        </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:cubrid:localhost:36000:shard1:::?charSet=utf8"</span><span class="p">,</span><span class="w"> </span><span class="s">"shard"</span><span class="p">,</span><span class="w"> </span><span class="s">"shard123"</span><span class="p">);</span>
+</span><span id="line-27"><span class="w">                        </span><span class="n">connection</span><span class="p">.</span><span class="na">setAutoCommit</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span><span id="line-28">
+</span><span id="line-29"><span class="w">                        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-30"><span class="w">                                </span><span class="n">String</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"INSERT INTO student VALUES (/*+ shard_key */ ?, ?, ?)"</span><span class="p">;</span>
+</span><span id="line-31"><span class="w">                                </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">query_stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">query</span><span class="p">);</span>
+</span><span id="line-32">
+</span><span id="line-33"><span class="w">                                </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="s">"name_"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span id="line-34"><span class="w">                                </span><span class="n">query_stmt</span><span class="p">.</span><span class="na">setInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+</span><span id="line-35"><span class="w">                                </span><span class="n">query_stmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+</span><span id="line-36"><span class="w">                                </span><span class="n">query_stmt</span><span class="p">.</span><span class="na">setInt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">%</span><span class="mi">64</span><span class="p">)</span><span class="o">+</span><span class="mi">10</span><span class="p">);</span>
+</span><span id="line-37">
+</span><span id="line-38"><span class="w">                                </span><span class="n">query_stmt</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+</span><span id="line-39"><span class="w">                                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+</span><span id="line-40">
+</span><span id="line-41"><span class="w">                                </span><span class="n">query_stmt</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-42"><span class="w">                                </span><span class="n">connection</span><span class="p">.</span><span class="na">commit</span><span class="p">();</span>
+</span><span id="line-43"><span class="w">                        </span><span class="p">}</span>
+</span><span id="line-44">
+</span><span id="line-45"><span class="w">                        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-46"><span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="n">SQLException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-47"><span class="w">                        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="s">"exception occurs : "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getErrorCode</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" - "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+</span><span id="line-48"><span class="w">                        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">();</span>
+</span><span id="line-49"><span class="w">                        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="line-50"><span class="w">                </span><span class="p">}</span>
+</span><span id="line-51"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-52">
+</span><span id="line-53">
+</span><span id="line-54"><span class="w">        </span><span class="cm">/**</span>
+</span><span id="line-55"><span class="cm">         * @param args</span>
+</span><span id="line-56"><span class="cm">         */</span>
+</span><span id="line-57"><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-58"><span class="w">                </span><span class="c1">// TODO Auto-generated method stub</span>
+</span><span id="line-59">
+</span><span id="line-60"><span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-61"><span class="w">                        </span><span class="n">DoTest</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-62"><span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">){</span>
+</span><span id="line-63"><span class="w">                        </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+</span><span id="line-64"><span class="w">                </span><span class="p">}</span>
+</span><span id="line-65"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-66"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>예제 프로그램 수행</strong></p>
+<p>위에서 작성한 예제 프로그램을 다음과 같이 수행한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">javac</span> <span class="o">-</span><span class="n">cp</span> <span class="s2">".:$CUBRID/jdbc/cubrid_jdbc.jar"</span> <span class="o">*.</span><span class="n">java</span>
+</span><span id="line-2"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">java</span> <span class="o">-</span><span class="n">cp</span> <span class="s2">".:$CUBRID/jdbc/cubrid_jdbc.jar"</span> <span class="n">TestInsert</span>
+</span></code></pre></div>
+</div>
+<p><strong>결과 확인</strong></p>
+<p>각 shard DB에서 질의를 수행하여 의도한 대로 분할된 정보가 정확하게 입력되었는지 확인한다.</p>
+<ul>
+<li><p>shard #0</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sh</span><span class="o">&gt;</span> <span class="n">csql</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">u</span> <span class="n">shard</span> <span class="o">-</span><span class="n">p</span> <span class="s1">'shard123'</span> <span class="n">shard1</span><span class="nd">@localhost</span> <span class="o">-</span><span class="n">c</span> <span class="s2">"select * from student order by s_no"</span>
+</span><span id="line-2">
+</span><span id="line-3">         <span class="n">s_no</span>  <span class="n">s_name</span>                      <span class="n">s_age</span>
+</span><span id="line-4"><span class="o">================================================</span>
+</span><span id="line-5">            <span class="mi">0</span>  <span class="s1">'name_0'</span>                       <span class="mi">10</span>
+</span><span id="line-6">            <span class="mi">1</span>  <span class="s1">'name_1'</span>                       <span class="mi">11</span>
+</span><span id="line-7">            <span class="mi">2</span>  <span class="s1">'name_2'</span>                       <span class="mi">12</span>
+</span><span id="line-8">            <span class="mi">3</span>  <span class="s1">'name_3'</span>                       <span class="mi">13</span>
+</span><span id="line-9">            <span class="o">...</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>shard #1</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">sh&gt; $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
+</span><span id="line-2">
+</span><span id="line-3">         s_no  s_name                      s_age
+</span><span id="line-4">================================================
+</span><span id="line-5">           64  'name_64'                      10
+</span><span id="line-6">           65  'name_65'                      11
+</span><span id="line-7">           66  'name_66'                      12
+</span><span id="line-8">           67  'name_67'                      13
+</span><span id="line-9">           ...
+</span></code></pre></div>
+</div>
+</li>
+<li><p>shard #2</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">sh&gt; $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
+</span><span id="line-2">
+</span><span id="line-3">          s_no  s_name                      s_age
+</span><span id="line-4">=================================================
+</span><span id="line-5">           128  'name_128'                     10
+</span><span id="line-6">           129  'name_129'                     11
+</span><span id="line-7">           130  'name_130'                     12
+</span><span id="line-8">           131  'name_131'                     13
+</span><span id="line-9">           ...
+</span></code></pre></div>
+</div>
+</li>
+<li><p>shard #3</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">sh&gt; $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
+</span><span id="line-2">
+</span><span id="line-3">         s_no  s_name                      s_age
+</span><span id="line-4">================================================
+</span><span id="line-5">          192  'name_192'                     10
+</span><span id="line-6">          193  'name_193'                     11
+</span><span id="line-7">          194  'name_194'                     12
+</span><span id="line-8">          195  'name_195'                     13
+</span><span id="line-9">          ...
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="shard-configuration">
+<span id="id9"></span><h2>구성 및 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-configuration" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard-configuration'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id10">
+<h3>구성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id10" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id10'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID SHARD는 미들웨어로서 아래의 그림과 같이 broker, proxy, CAS 프로세스로 구성된다.</p>
+<img alt="_images/image50.png" src="_images/image50.png"/>
+</section>
+<section id="default-shard-conf">
+<span id="id11"></span><h3>설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#default-shard-conf" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#default-shard-conf'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID SHARD 기능을 사용하려면 <strong>cubrid_broker.conf</strong> 파일에서 SHARD 관련 프로세스들의 실행에 필요한 파라미터를 설정하고, shard 연결 파일(SHARD_CONNECTION_FILE)과 shard key 파일(SHARD_KEY_FILE)을 설정해야 한다.</p>
+<section id="cubrid-broker-conf">
+<h4>cubrid_broker.conf<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-broker-conf"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p><strong>cubrid_broker.conf</strong> 는 CUBRID SHARD 기능을 설정할 때 사용한다. 설정 시 <strong>cubrid_broker.conf.shard</strong>를 참고하며, <strong>cubrid_broker.conf</strong>에 대한 자세한 내용은 <a class="reference internal" href="admin/config.html#broker-configuration"><span class="std std-ref">브로커 설정</span></a>을 참고한다.</p>
+</section>
+<section id="shard-shard-connection-file">
+<span id="shard-connection-file"></span><h4>shard 연결 파일(SHARD_CONNECTION_FILE)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-shard-connection-file"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>CUBRID SHARD는 브로커 구동 시  <strong>cubrid_broker.conf</strong>의 <strong>SHARD_CONNECTION_FILE</strong> 파라미터에 지정된 shard 연결 설정 파일을 로딩하여 backend shard DB와의 연결을 수행한다.</p>
+<p>설정 할 수 있는 shard DB 의 최대 개수는 256개 이다.</p>
+<p><strong>cubrid_broker.conf</strong>에 <strong>SHARD_CONNECTION_FILE</strong>을 별도로 지정하지 않은 경우에는 기본값인 <strong>shard_connection.txt</strong> 파일을 로딩한다.</p>
+<p><strong>기본 형식</strong></p>
+<p>shard 연결 설정 파일의 기본적인 예와 형식은 아래와 같다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">#</span>
+</span><span id="line-2"><span class="c1"># shard-id      real-db-name    connection-info</span>
+</span><span id="line-3"><span class="c1">#                               * cubrid : hostname, hostname, ...</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="c1"># CUBRID</span>
+</span><span id="line-6"><span class="mi">0</span>               <span class="n">shard1</span>          <span class="n">HostA</span>
+</span><span id="line-7"><span class="mi">1</span>               <span class="n">shard1</span>          <span class="n">HostB</span>
+</span><span id="line-8"><span class="mi">2</span>               <span class="n">shard1</span>          <span class="n">HostC</span>
+</span><span id="line-9"><span class="mi">3</span>               <span class="n">shard1</span>          <span class="n">HostD</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>일반적인 CUBRID 설정과 마찬가지로 # 이후 내용은 주석으로 처리된다.</p>
+</div>
+<p><strong>CUBRID</strong></p>
+<p>backend shard DB가 CUBRID인 경우 연결 설정 파일의 형식은 다음과 같다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># CUBRID</span>
+</span><span id="line-2"><span class="c1"># shard-id      real-db-name            connection-info</span>
+</span><span id="line-3"><span class="c1"># shard 식별자( &gt;0 )        각 backend shard DB 의 실제 이름    호스트 이름</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="mi">0</span>           <span class="n">shard_db_1</span>          <span class="n">host1</span>
+</span><span id="line-6"><span class="mi">1</span>           <span class="n">shard_db_2</span>          <span class="n">host2</span>
+</span><span id="line-7"><span class="mi">2</span>           <span class="n">shard_db_3</span>          <span class="n">host3</span>
+</span><span id="line-8"><span class="mi">3</span>           <span class="n">shard_db_4</span>          <span class="n">host4</span>
+</span></code></pre></div>
+</div>
+<p>CUBRID의 경우 별도의 backend shard DB의 포트 번호를 위 설정 파일에 지정하지 않고, <strong>cubrid.conf</strong>의 <strong>CUBRID_PORT_ID</strong> 파라미터를 사용한다. <strong>cubrid.conf</strong> 파일은 기본적으로 <strong>$CUBRID/conf</strong> 디렉터리에 위치한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ vi cubrid.conf
+</span><span id="line-2">
+</span><span id="line-3">...
+</span><span id="line-4">
+</span><span id="line-5"># TCP port id for the CUBRID programs (used by all clients).
+</span><span id="line-6">cubrid_port_id=41523
+</span></code></pre></div>
+</div>
+</section>
+<section id="shard-key-shard-key-file">
+<span id="shard-key-configuration-file"></span><h4>shard key 파일(SHARD_KEY_FILE)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-key-shard-key-file"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>CUBRID SHARD는 시작 시 기본 설정 파일인 <strong>cubrid_broker.conf</strong> 의 <strong>SHARD_KEY_FILE</strong> 파라미터에 지정된 shard key 설정 파일을 로딩하여 사용자 요청을 어떤 backend shard DB에서 처리해야 할지 결정하는 데 사용한다.</p>
+<p><strong>cubrid_broker.conf</strong> 에 <strong>SHARD_KEY_FILE</strong> 을 별도로 지정하지 않은 경우에는 기본값인 <strong>shard_key.txt</strong> 파일을 로딩한다.</p>
+<p><strong>형식</strong></p>
+<p>shard key 설정 파일의 예와 형식은 다음과 같다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="o">%</span><span class="n">student_no</span><span class="p">]</span>
+</span><span id="line-2"><span class="c1">#min    max     shard_id</span>
+</span><span id="line-3"><span class="mi">0</span>       <span class="mi">31</span>      <span class="mi">0</span>
+</span><span id="line-4"><span class="mi">32</span>      <span class="mi">63</span>      <span class="mi">1</span>
+</span><span id="line-5"><span class="mi">64</span>      <span class="mi">95</span>      <span class="mi">2</span>
+</span><span id="line-6"><span class="mi">96</span>      <span class="mi">127</span>     <span class="mi">3</span>
+</span><span id="line-7"><span class="mi">128</span>     <span class="mi">159</span>     <span class="mi">0</span>
+</span><span id="line-8"><span class="mi">160</span>     <span class="mi">191</span>     <span class="mi">1</span>
+</span><span id="line-9"><span class="mi">192</span>     <span class="mi">223</span>     <span class="mi">2</span>
+</span><span id="line-10"><span class="mi">224</span>     <span class="mi">255</span>     <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>[%shard_key_name] : shard key의 이름을 지정</p></li>
+<li><p>min : shard key 해시 결과의 최소값 범위</p></li>
+<li><p>max : shard key 해시 결과의 최대 범위</p></li>
+<li><p>shard_id : shard 식별자</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>일반적인 CUBRID 설정과 마찬가지로 # 이후 내용은 주석으로 처리된다.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<ul class="simple">
+<li><p>shard key의 min은 항상 0부터 시작해야 한다.</p></li>
+<li><p>max는 최대 255까지 설정해야 한다.</p></li>
+<li><p>min~max 사이에는 빈 값이 존재하면 안 된다.</p></li>
+<li><p>내장 해시 함수를 사용하는 경우 <strong>SHARD_KEY_MODULAR</strong> 파라미터 값(최소 1, 최대 256)을 초과할 수 없다.</p></li>
+<li><p>shard key 해시 결과는 0 ~ (<strong>SHARD_KEY_MODULAR</strong> - 1)의 범위에 반드시 포함되어야 한다.</p></li>
+</ul>
+</div>
+</section>
+<section id="setting-user-defined-hash-function">
+<span id="id12"></span><h4>사용자 정의 해시 함수<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#setting-user-defined-hash-function"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>CUBRID SHARD는 질의를 수행할 shard를 선택하기 위해 shard key를 해싱한 결과와 메타데이터 설정 정보를 이용한다. 이를 위해 기본 내장된 해시 함수를 사용하거나, 또는 사용자가 별도로 해시 함수를 정의할 수 있다.</p>
+<p><strong>내장된 기본 해시 함수</strong></p>
+<p><strong>cubrid_broker.conf</strong> 의 <strong>SHARD_KEY_LIBRARY_NAME</strong>, <strong>SHARD_KEY_FUNCTION_NAME</strong> 파라미터를 설정하지 않는 경우 기본 내장된 해시 함수를 이용하여 shard key를 해시하며, 기본 해시 함수의 내용은 아래와 같다.</p>
+<ul>
+<li><p>shard_key가 정수인 경우</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">기본</span> <span class="n">해시</span> <span class="n">함수</span><span class="p">(</span><span class="n">shard_key</span><span class="p">)</span> <span class="o">=</span> <span class="n">shard_key</span> <span class="n">mod</span> <span class="n">SHARD_KEY_MODULAR</span> <span class="n">파라미터</span><span class="p">(</span><span class="n">기본값</span> <span class="mi">256</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>shard_key가 문자열인 경우</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">기본</span> <span class="n">해시</span> <span class="n">함수</span><span class="p">(</span><span class="n">shard_key</span><span class="p">)</span> <span class="o">=</span> <span class="n">shard_key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="n">mod</span> <span class="n">SHARD_KEY_MODULAR</span> <span class="n">파라미터</span><span class="p">(</span><span class="n">기본값</span> <span class="mi">256</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+<p><strong>사용자 해시 함수 설정</strong></p>
+<p>CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 함수를 이용하여 질의에 포함된 shard key를 해싱할 수 있다.</p>
+<blockquote>
+<div><p><strong>라이브러리 구현 및 생성</strong></p>
+<p>사용자 정의 해시 함수는 실행 시간에 로딩 가능한 <strong>.so</strong> 형태의 라이브러리로 구현되어야 하며 프로토타입은 아래와 같다.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/*</span>
+</span><span id="line-2"><span class="cm">   return value :</span>
+</span><span id="line-3"><span class="cm">        success - shard key id(&gt;0)</span>
+</span><span id="line-4"><span class="cm">        fail    - invalid argument(ERROR_ON_ARGUMENT), shard key id make fail(ERROR_ON_MAKE_SHARD_KEY)</span>
+</span><span id="line-5"><span class="cm">   type         : shard key value type</span>
+</span><span id="line-6"><span class="cm">   val          : shard key value</span>
+</span><span id="line-7"><span class="cm">*/</span>
+</span><span id="line-8"><span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">FN_GET_SHARD_KEY</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">shard_key</span><span class="p">,</span><span class="w"> </span><span class="n">T_SHARD_U_TYPE</span><span class="w"> </span><span class="n">type</span><span class="p">,</span>
+</span><span id="line-9"><span class="w">                                   </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">val_size</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>해시 함수의 반환 값은 <strong>shard_key.txt</strong> 설정 파일의 해시 결과 범위에 반드시 포함되어야 한다.</p></li>
+<li><p>라이브러리를 빌드하기 위해서는 반드시 <strong>$CUBRID/include/shard_key.h</strong> 파일을 include해야 한다. 이 파일에서 반환 가능한 에러 코드 등 자세한 내용도 확인할 수 있다.</p></li>
+</ul>
+<p><strong>cubrid_broker.conf 설정 파일 변경</strong></p>
+<p>생성한 사용자 정의 해시 함수를 반영하기 위해서는 <strong>cubrid_broker.conf</strong>의 <strong>SHARD_KEY_LIBRARY_NAME</strong>, <strong>SHARD_KEY_FUNCTION_NAME</strong> 파라미터를 구현 내용에 맞도록 설정해야 한다.</p>
+<ul class="simple">
+<li><p><strong>SHARD_KEY_LIBRARY_NAME</strong> : 사용자 정의 해시 라이브러리의 (절대) 경로</p></li>
+<li><p><strong>SHARD_KEY_FUNCTION_NAME</strong> : 사용자 정의 해시 함수의 이름</p></li>
+</ul>
+<p><strong>예제</strong></p>
+<p>다음은 사용자 정의 해시 함수를 사용한 예이다. 먼저 <strong>shard_key.txt</strong> 설정 파일을 확인한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="o">%</span><span class="n">student_no</span><span class="p">]</span>
+</span><span id="line-2"><span class="c1">#min    max     shard_id</span>
+</span><span id="line-3"><span class="mi">0</span>       <span class="mi">31</span>      <span class="mi">0</span>
+</span><span id="line-4"><span class="mi">32</span>      <span class="mi">63</span>      <span class="mi">1</span>
+</span><span id="line-5"><span class="mi">64</span>      <span class="mi">95</span>      <span class="mi">2</span>
+</span><span id="line-6"><span class="mi">96</span>      <span class="mi">127</span>     <span class="mi">3</span>
+</span><span id="line-7"><span class="mi">128</span>     <span class="mi">159</span>     <span class="mi">0</span>
+</span><span id="line-8"><span class="mi">160</span>     <span class="mi">191</span>     <span class="mi">1</span>
+</span><span id="line-9"><span class="mi">192</span>     <span class="mi">223</span>     <span class="mi">2</span>
+</span><span id="line-10"><span class="mi">224</span>     <span class="mi">255</span>     <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+<p>사용자 지정 해시 함수를 설정하기 위해서는 실행 시간에 로딩 가능한 <strong>.so</strong> 형태의 공유 라이브러리를 먼저 구현해야 한다. 해시 함수의 결과는 앞선 과정에서 확인한 <strong>shard_key.txt</strong> 설정 파일에 정의된 해시 결과의 범위 안에 포함되는 값이어야 한다. 다음은 간단한 구현 예이다.</p>
+<ul class="simple">
+<li><p>shard_key가 정수인 경우</p>
+<ul>
+<li><p>shard_key가 홀수인 경우 shard #0을 선택</p></li>
+<li><p>shard_key가 짝수인 경우 shard #1을 선택</p></li>
+</ul>
+</li>
+<li><p>shard_key가 문자열인 경우</p>
+<ul>
+<li><p>shard_key 문자열이 ‘a’, ‘A’로 시작되는 경우 shard #0을 선택</p></li>
+<li><p>shard_key 문자열이 ‘b’, ‘B’로 시작되는 경우 shard #1을 선택</p></li>
+<li><p>shard_key 문자열이 ‘c’, ‘C’로 시작되는 경우 shard #2를 선택</p></li>
+<li><p>shard_key 문자열이 ‘d’, ‘D’로 시작되는 경우 shard #3을 선택</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">// &lt;shard_key_udf.c&gt;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+</span><span id="line-4"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+</span><span id="line-5"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+</span><span id="line-6"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"shard_key.h"</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="kt">int</span>
+</span><span id="line-9"><span class="nf">fn_shard_key_udf</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">shard_key</span><span class="p">,</span><span class="w"> </span><span class="n">T_SHARD_U_TYPE</span><span class="w"> </span><span class="n">type</span><span class="p">,</span>
+</span><span id="line-10"><span class="w">                  </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">value_len</span><span class="p">)</span>
+</span><span id="line-11"><span class="p">{</span>
+</span><span id="line-12"><span class="w">  </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ival</span><span class="p">;</span>
+</span><span id="line-13"><span class="w">  </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+</span><span id="line-14">
+</span><span id="line-15"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
+</span><span id="line-16"><span class="w">    </span><span class="p">{</span>
+</span><span id="line-17"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">ERROR_ON_ARGUMENT</span><span class="p">;</span>
+</span><span id="line-18"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-19">
+</span><span id="line-20"><span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">)</span>
+</span><span id="line-21"><span class="w">    </span><span class="p">{</span>
+</span><span id="line-22"><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">SHARD_U_TYPE_INT</span><span class="p">:</span>
+</span><span id="line-23"><span class="w">      </span><span class="n">ival</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+</span><span id="line-24"><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ival</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+</span><span id="line-25"><span class="w">        </span><span class="p">{</span>
+</span><span id="line-26"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span><span class="w">            </span><span class="c1">// shard #1</span>
+</span><span id="line-27"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-28"><span class="w">      </span><span class="k">else</span>
+</span><span id="line-29"><span class="w">        </span><span class="p">{</span>
+</span><span id="line-30"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">             </span><span class="c1">// shard #0</span>
+</span><span id="line-31"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-32"><span class="w">      </span><span class="k">break</span><span class="p">;</span>
+</span><span id="line-33">
+</span><span id="line-34"><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">SHARD_U_TYPE_STRING</span><span class="p">:</span>
+</span><span id="line-35"><span class="w">      </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="p">)</span><span class="w"> </span><span class="p">(((</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span id="line-36"><span class="w">      </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span><span id="line-37"><span class="w">        </span><span class="p">{</span>
+</span><span id="line-38"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'a'</span><span class="p">:</span>
+</span><span id="line-39"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'A'</span><span class="p">:</span>
+</span><span id="line-40"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">             </span><span class="c1">// shard #0</span>
+</span><span id="line-41"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'b'</span><span class="p">:</span>
+</span><span id="line-42"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'B'</span><span class="p">:</span>
+</span><span id="line-43"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span><span class="w">            </span><span class="c1">// shard #1</span>
+</span><span id="line-44"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'c'</span><span class="p">:</span>
+</span><span id="line-45"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'C'</span><span class="p">:</span>
+</span><span id="line-46"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w">            </span><span class="c1">// shard #2</span>
+</span><span id="line-47"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'d'</span><span class="p">:</span>
+</span><span id="line-48"><span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">'D'</span><span class="p">:</span>
+</span><span id="line-49"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="mi">96</span><span class="p">;</span><span class="w">            </span><span class="c1">// shard #3</span>
+</span><span id="line-50"><span class="w">        </span><span class="k">default</span><span class="o">:</span>
+</span><span id="line-51"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="n">ERROR_ON_ARGUMENT</span><span class="p">;</span>
+</span><span id="line-52"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-53">
+</span><span id="line-54"><span class="w">      </span><span class="k">break</span><span class="p">;</span>
+</span><span id="line-55">
+</span><span id="line-56"><span class="w">    </span><span class="k">default</span><span class="o">:</span>
+</span><span id="line-57"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">ERROR_ON_ARGUMENT</span><span class="p">;</span>
+</span><span id="line-58"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-59"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">ERROR_ON_MAKE_SHARD_KEY</span><span class="p">;</span>
+</span><span id="line-60"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>사용자 지정 해시 함수를 공유 라이브러리 형태로 빌드한다. 다음은 해시 함수 빌드를 위한 Makefile의 예이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"># Makefile
+</span><span id="line-2">
+</span><span id="line-3">CC = gcc
+</span><span id="line-4">LIBS = $(LIB_FLAG)
+</span><span id="line-5">CFLAGS = $(CFLAGS_COMMON) -fPIC -I$(CUBRID)/include -I$(CUBRID_SRC)/src/broker
+</span><span id="line-6">
+</span><span id="line-7">SHARD_CC = gcc -g -shared -Wl,-soname,shard_key_udf.so
+</span><span id="line-8">SHARD_KEY_UDF_OBJS = shard_key_udf.o
+</span><span id="line-9">
+</span><span id="line-10">all:$(SHARD_KEY_UDF_OBJS)
+</span><span id="line-11">        $(SHARD_CC) $(CFLAGS) -o shard_key_udf.so $(SHARD_KEY_UDF_OBJS) $(LIBS)
+</span><span id="line-12">
+</span><span id="line-13">clean:
+</span><span id="line-14">        -rm -f *.o core shard_key_udf.so
+</span></code></pre></div>
+</div>
+<p>사용자 정의 해시 함수를 포함하기 위해 <strong>SHARD_KEY_LIBRARY_NAME</strong>, <strong>SHARD_KEY_FUNCTION_NAME</strong> 파라미터를 위 구현과 일치하도록 수정한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">[%student_no]
+</span><span id="line-2">SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
+</span><span id="line-3">SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>응용 프로그램에서 사용자 해시 함수를 정의할 때 shard key의 입력 값으로 16bit(short), 32bit(int), 64bit(INT64) integer를 사용할 수 있다.</p></li>
+<li><p>VARCHAR를 사용해야 하는 경우 사용자가 해시 함수를 정의해야 한다.</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="shard-start-monitoring">
+<span id="id13"></span><h2>구동 및 모니터링<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-start-monitoring" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard-start-monitoring'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>cubrid broker 유틸리티를 이용하여 CUBRID SHARD 기능을 구동하거나 정지할 수 있고, 각종 상태 정보를 조회할 수 있다.
+보다 자세한 내용은 <a class="reference internal" href="admin/control.html#broker"><span class="std std-ref">브로커</span></a>를 참고한다.</p>
+</section>
+<section id="id14">
+<h2>설정 테스트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id14" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id14'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>cubrid broker test 명령을 이용하여 설정이 정상 동작하는지 테스트할 수 있다. 보다 자세한 내용은 <a class="reference internal" href="admin/control.html#broker-test"><span class="std std-ref">브로커와 DB 간 연결 테스트</span></a>를 참고한다.</p>
+</section>
+<section id="shard-logs">
+<span id="id15"></span><h2>CUBRID SHARD 로그<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-logs" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard-logs'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>SHARD 구동과 관련된 로그에는 접속 로그, 프록시 로그, SQL 로그, 에러 로그가 있다. 각각 로그의 저장 디렉터리 변경은 SHARD 환경 설정 파일(<strong>cubrid_broker.conf</strong>) 의 <strong>LOG_DIR</strong>, <strong>ERROR_LOG_DIR</strong>, <strong>PROXY_LOG_DIR</strong> 파라미터를 통해 설정할 수 있다.</p>
+<section id="shard-proxy">
+<h3>SHARD PROXY 로그<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-proxy" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard-proxy'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>접속 로그</strong></p>
+<ul class="simple">
+<li><p>파라미터: <strong>ACCESS_LOG</strong></p></li>
+<li><p>설명: 클라이언트의 접속을 logging한다(기존 브로커는 CAS에서 로그를 남긴다).</p></li>
+<li><p>기본 저장 디렉터리: $CUBRID/log/broker/</p></li>
+<li><p>파일 이름: &lt;broker_name&gt;_&lt;proxy_index&gt;.access</p></li>
+<li><p>로그 형식: CAS에서 남기는 access log와 cas_index 이외의 모든 string 동일</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mf">10.24.18.67</span> <span class="o">-</span> <span class="o">-</span> <span class="mf">1340243427.828</span> <span class="mf">1340243427.828</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">27</span> <span class="o">~</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">27</span> <span class="mi">23377</span> <span class="o">-</span> <span class="o">-</span><span class="mi">1</span> <span class="n">shard1</span>     <span class="n">shard1</span>
+</span><span id="line-2"><span class="mf">10.24.18.67</span> <span class="o">-</span> <span class="o">-</span> <span class="mf">1340243427.858</span> <span class="mf">1340243427.858</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">27</span> <span class="o">~</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">27</span> <span class="mi">23377</span> <span class="o">-</span> <span class="o">-</span><span class="mi">1</span> <span class="n">shard1</span>     <span class="n">shard1</span>
+</span><span id="line-3"><span class="mf">10.24.18.67</span> <span class="o">-</span> <span class="o">-</span> <span class="mf">1340243446.791</span> <span class="mf">1340243446.791</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">46</span> <span class="o">~</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">46</span> <span class="mi">23377</span> <span class="o">-</span> <span class="o">-</span><span class="mi">1</span> <span class="n">shard1</span>     <span class="n">shard1</span>
+</span><span id="line-4"><span class="mf">10.24.18.67</span> <span class="o">-</span> <span class="o">-</span> <span class="mf">1340243446.821</span> <span class="mf">1340243446.821</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">46</span> <span class="o">~</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">46</span> <span class="mi">23377</span> <span class="o">-</span> <span class="o">-</span><span class="mi">1</span> <span class="n">shard1</span>     <span class="n">shard1</span>
+</span></code></pre></div>
+</div>
+<p><strong>프록시 로그</strong></p>
+<ul class="simple">
+<li><p>파라미터: <strong>SHARD_PROXY_LOG_DIR</strong></p></li>
+<li><p>설명: proxy 내부의 동작을 logging한다.</p></li>
+<li><p>기본 저장 디렉터리: $CUBRID/log/broker/proxy_log</p></li>
+<li><p>파일 이름: &lt;broker_name&gt;_&lt;proxy_index&gt;.log</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">46.822</span> <span class="p">[</span><span class="n">SRD</span><span class="p">]</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">shard_proxy_io</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">1045</span><span class="p">):</span> <span class="n">New</span> <span class="n">socket</span> <span class="n">io</span> <span class="n">created</span><span class="o">.</span> <span class="p">(</span><span class="n">fd</span><span class="p">:</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span>
+</span><span id="line-2"><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">46.822</span> <span class="p">[</span><span class="n">SRD</span><span class="p">]</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">shard_proxy_io</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">2517</span><span class="p">):</span> <span class="n">New</span> <span class="n">client</span> <span class="n">connected</span><span class="o">.</span> <span class="n">client</span><span class="p">(</span><span class="n">client_id</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="n">is_busy</span><span class="p">:</span><span class="n">Y</span><span class="p">,</span> <span class="n">fd</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span> <span class="n">ctx_cid</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="n">ctx_uid</span><span class="p">:</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span>
+</span><span id="line-3"><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">46.825</span> <span class="p">[</span><span class="n">DBG</span><span class="p">]</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">shard_proxy_io</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">3298</span><span class="p">):</span> <span class="n">Shard</span> <span class="n">status</span><span class="o">.</span> <span class="p">(</span><span class="n">num_cas_in_tran</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span>
+</span><span id="line-4"><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">46.827</span> <span class="p">[</span><span class="n">DBG</span><span class="p">]</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">shard_proxy_io</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">3385</span><span class="p">):</span> <span class="n">Shard</span> <span class="n">status</span><span class="o">.</span> <span class="p">(</span><span class="n">num_cas_in_tran</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p><strong>프록시 로그 레벨</strong></p>
+<ul class="simple">
+<li><p>파라미터: <strong>SHARD_PROXY_LOG</strong></p></li>
+<li><p>프록시 로그 레벨 정책: 상위 level을 설정하면 하위의 모든 로그가 남는다.</p>
+<ul>
+<li><p>예) SCHEDULE을 설정하면, ERROR | TIMEOUT | NOTICE | SHARD | SCHEDULE 로그를 모두 남긴다.</p></li>
+</ul>
+</li>
+<li><p>프록시 로그 레벨 항목</p>
+<ul>
+<li><p>NONE or OFF: 로그를 남기지 않는다.</p></li>
+<li><p>ERROR(default): 내부적으로 에러가 발생하여 정상적으로 처리되지 못하는 경우</p></li>
+<li><p>TIMEOUT: session timeout이나 query timeout 등의 timeout</p></li>
+<li><p>NOTICE: 힌트 없는 query 및 기타 에러는 아닌 경우</p></li>
+<li><p>SHARD: client 의 request가 어떤 shard의 어떤 CAS로 갔는지, 그것이 다시 client response 되었는지 등의 scheduling</p></li>
+<li><p>SCHEDULE: 힌트 parsing 및 hash를 통해 shard key id 가져오는 것 등의 shard processing</p></li>
+<li><p>ALL: 모든 로그</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="shard-cas">
+<h3>SHARD CAS 로그<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#shard-cas" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#shard-cas'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>SQL 로그</strong></p>
+<ul class="simple">
+<li><p>파라미터 : <strong>SQL_LOG</strong></p></li>
+<li><p>설명 : prepare/execute/fetch 등의 query 및 기타 CAS 정보를 logging한다.</p></li>
+<li><p>기본 저장 디렉터리 : $CUBRID/log/broker/sql_log</p></li>
+<li><p>파일 이름 : &lt;broker_name&gt;_&lt;proxy_index&gt;_&lt;shard_index&gt;_&lt;cas_index&gt;.sql.log</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">00.005</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">STATE</span> <span class="n">idle</span>
+</span><span id="line-2"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">01.035</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">CAS</span> <span class="n">TERMINATED</span> <span class="n">pid</span> <span class="mi">31595</span>
+</span><span id="line-3"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mf">20.198</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">CAS</span> <span class="n">STARTED</span> <span class="n">pid</span> <span class="mi">23378</span>
+</span><span id="line-4"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mf">21.227</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">connect</span> <span class="n">db</span> <span class="n">shard1</span><span class="nd">@HostA</span> <span class="n">user</span> <span class="n">dba</span> <span class="n">url</span> <span class="n">shard1</span> <span class="n">session</span> <span class="nb">id</span> <span class="mi">3</span>
+</span><span id="line-5"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mf">21.227</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">DEFAULT</span> <span class="n">isolation_level</span> <span class="mi">3</span><span class="p">,</span> <span class="n">lock_timeout</span> <span class="o">-</span><span class="mi">1</span>
+</span><span id="line-6"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">28.259</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">prepare</span> <span class="n">srv_h_id</span> <span class="mi">1</span>
+</span><span id="line-7"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">28.259</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">auto_rollback</span>
+</span><span id="line-8"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">28.259</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">auto_rollback</span> <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<p><strong>에러 로그</strong></p>
+<ul class="simple">
+<li><p>파라미터 : <strong>ERROR_LOG_DIR</strong></p></li>
+<li><p>설명 : CUBRID의 경우 cs library에서 EID 및 error string을 해당 파일에 logging한다.</p></li>
+<li><p>기본 저장 디렉터리 : $CUBRID/log/broker/error_log</p></li>
+<li><p>파일 이름 : &lt;broker_name&gt;_&lt;proxy_index&gt;_&lt;shard_index&gt;_&lt;cas_index&gt;.err</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">21</span><span class="o">/</span><span class="mi">13</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">27.776</span> <span class="o">-</span> <span class="n">DEBUG</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">boot_cl</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1409</span>
+</span><span id="line-2"><span class="n">trying</span> <span class="n">to</span> <span class="n">connect</span> <span class="s1">'shard1@localhost'</span>
+</span><span id="line-3"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">21</span><span class="o">/</span><span class="mi">13</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">27.776</span> <span class="o">-</span> <span class="n">DEBUG</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">boot_cl</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1418</span>
+</span><span id="line-4"><span class="n">ping</span> <span class="n">server</span> <span class="k">with</span> <span class="n">handshake</span>
+</span><span id="line-5"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">21</span><span class="o">/</span><span class="mi">13</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">27.777</span> <span class="o">-</span> <span class="n">DEBUG</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">boot_cl</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">966</span>
+</span><span id="line-6"><span class="n">boot_restart_client</span><span class="p">:</span> <span class="n">register</span> <span class="n">client</span> <span class="p">{</span> <span class="nb">type</span> <span class="mi">4</span> <span class="n">db</span> <span class="n">shard1</span> <span class="n">user</span> <span class="n">dba</span> <span class="n">password</span> <span class="p">(</span><span class="n">null</span><span class="p">)</span> <span class="n">program</span> <span class="n">cubrid_cub_cas_1</span> <span class="n">login</span> <span class="n">cubrid_user</span> <span class="n">host</span> <span class="n">HostA</span> <span class="n">pid</span> <span class="mi">23270</span> <span class="p">}</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="id16">
+<h2>제약 사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id16" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id16'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>Linux만 지원</strong></p>
+<p>Linux에서만 CUBRID SHARD 기능을 사용할 수 있다.</p>
+<p><strong>하나의 트랜잭션은 하나의 shard DB에서만 수행 가능</strong></p>
+<p>하나의 트랜잭션은 오직 하나의 shard DB에서만 수행되어야 하며, 따라서 아래와 같은 제약사항이 존재한다.</p>
+<ul class="simple">
+<li><p>shard key 변경(<strong>UPDATE</strong>)으로 인해 여러 shard DB의 데이터를 변경하는 것은 불가능하며, 필요하다면 <strong>DELETE</strong> / <strong>INSERT</strong> 를 이용한다.</p></li>
+<li><p>2개 이상의 샤드에 대한 질의(join, sub-query, or, union, group by, between, like, in, exist, any/some/all 등)를 지원하지 않는다.</p></li>
+</ul>
+<p><strong>세션 정보는 각 shard DB 내에서만 유효</strong></p>
+<p>세션 정보가 각 shard DB 내에서만 유효하므로, <a class="reference internal" href="sql/function/information_fn.html#LAST_INSERT_ID" title="LAST_INSERT_ID"><code class="xref py py-func docutils literal notranslate"><span class="pre">LAST_INSERT_ID()</span></code></a>와 같은 세션 관련 함수의 결과가 의도한 바와 다를 수 있다.</p>
+<p><strong>SET NAMES 문 지원 안 함</strong></p>
+<p>SHARD 구성 환경에서는 SET NAMES 문이 정상 동작하지 않을 수 있으므로, 사용을 권장하지 않는다.</p>
+<p><strong>auto increment는 각 shard DB 내에서만 유효</strong></p>
+<p>auto increment 속성 또는 SERIAL 등의 값이 각 shard DB 내에서만 유효하므로, 의도한 것과 다른 값을 반환할 수 있다.</p>
+<p><strong>SHARD 힌트 구문이 작성된 DDL 구문은 지원 안함</strong></p>
+<p>SHARD 구성 환경에서 스키마 생성 및 변경 등의 DDL구문은 SHARD 힌트가 지원 되지 않으므로 각각의 SHARD DB에 접속하여 스키마 생성 및 변경을 처리하여야 한다. shard_id(0)은 정상적으로 처리되며, shard_id(1)부터는 에러를 발생시킨다.</p>
+<p>오류 예시)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">foo</span> <span class="p">(</span><span class="n">col1</span> <span class="n">INT</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="p">)</span> <span class="o">/*+</span> <span class="n">SHARD_ID</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">DROP</span> <span class="n">TABLE</span> <span class="n">IF</span> <span class="n">EXISTS</span> <span class="n">foo</span> <span class="o">/+</span> <span class="n">SHARD_ID</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*/</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="security.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        CUBRID 보안
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="api/index.html">
+        API 레퍼런스
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#database-sharding'" class="reference internal" href="#database-sharding">Database Sharding</a></li>
+<li><a :data-current="activeSection === '#shard-terminologies'" class="reference internal" href="#shard-terminologies">CUBRID SHARD 기본 용어</a></li>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">CUBRID SHARD 주요 기능</a><ul>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">미들웨어 구조</a></li>
+<li><a :data-current="activeSection === '#shard-sql-shard-db'" class="reference internal" href="#shard-sql-shard-db">shard SQL 힌트를 이용한 shard DB 선택</a></li>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">트랜잭션 지원</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">빠른 시작</a><ul>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">구성 예</a></li>
+<li><a :data-current="activeSection === '#shard'" class="reference internal" href="#shard">shard 설정 변경</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">서비스 시작 및 모니터링</a></li>
+<li><a :data-current="activeSection === '#id8'" class="reference internal" href="#id8">응용 예제 프로그램 작성</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#shard-configuration'" class="reference internal" href="#shard-configuration">구성 및 설정</a><ul>
+<li><a :data-current="activeSection === '#id10'" class="reference internal" href="#id10">구성</a></li>
+<li><a :data-current="activeSection === '#default-shard-conf'" class="reference internal" href="#default-shard-conf">설정</a><ul>
+<li><a :data-current="activeSection === '#cubrid-broker-conf'" class="reference internal" href="#cubrid-broker-conf">cubrid_broker.conf</a></li>
+<li><a :data-current="activeSection === '#shard-shard-connection-file'" class="reference internal" href="#shard-shard-connection-file">shard 연결 파일(SHARD_CONNECTION_FILE)</a></li>
+<li><a :data-current="activeSection === '#shard-key-shard-key-file'" class="reference internal" href="#shard-key-shard-key-file">shard key 파일(SHARD_KEY_FILE)</a></li>
+<li><a :data-current="activeSection === '#setting-user-defined-hash-function'" class="reference internal" href="#setting-user-defined-hash-function">사용자 정의 해시 함수</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#shard-start-monitoring'" class="reference internal" href="#shard-start-monitoring">구동 및 모니터링</a></li>
+<li><a :data-current="activeSection === '#id14'" class="reference internal" href="#id14">설정 테스트</a></li>
+<li><a :data-current="activeSection === '#shard-logs'" class="reference internal" href="#shard-logs">CUBRID SHARD 로그</a><ul>
+<li><a :data-current="activeSection === '#shard-proxy'" class="reference internal" href="#shard-proxy">SHARD PROXY 로그</a></li>
+<li><a :data-current="activeSection === '#shard-cas'" class="reference internal" href="#shard-cas">SHARD CAS 로그</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id16'" class="reference internal" href="#id16">제약 사항</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 12, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="_static/documentation_options.js?v=dcb1e111"></script>
+<script src="_static/doctools.js?v=fd6eb6e6"></script>
+<script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="_static/theme.js?v=b0acb063"></script>
+<script src="_static/translations.js?v=afa94a99"></script>
+<script src="_static/design-tabs.js?v=f930bc37"></script>
+<script src="_static/version-switcher.js?v=993d9931"></script>
+<script src="_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

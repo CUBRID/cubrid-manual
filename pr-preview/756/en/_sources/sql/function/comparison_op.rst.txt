@@ -66,7 +66,7 @@ The comparison operators compare the operand on the left and on the right, and t
 
     *   **NULL**: The **NULL** value is not included in the value range of any data type. Therefore, comparison between **NULL** values is only allowed to determine if the given value is **NULL** or not. An implicit type cast does not take place when a **NULL** value is assigned to a different data type. For example, when an attribute of **INTEGER** type has a **NULL** and is compared with a floating point type, the **NULL** value is not coerced to **FLOAT** before comparison is made. A comparison operation on the **NULL** value does not return a result.
 
-*   <*logical_expression*>: An expression that evaluates to a boolean (logical) value, such as the result of a comparison (e.g., a = 1) or a logical operation (e.g., a AND b).
+*   <*logical_expression*>: An expression that evaluates to a boolean (logical) value, such as the result of a comparison (e.g., a = 1) or a logical operation (e.g., (a = 1) AND (b = 2)).
 
 The following table shows the comparison operators supported by CUBRID and their return values.
 
@@ -96,11 +96,11 @@ The following table shows the comparison operators supported by CUBRID and their
 | **<=**                  | The value of left operand is less than or equal to that of right operand.                   | 1<=2               | 1              |
 |                         | If any operand value is  **NULL**, **NULL** is returned.                                    |                    |                |
 +-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
-| **IS**                  | Compares whether the value of the left operand is the same as boolean value of the right.   | (1=1) IS FALSE     | 0              |
-| *boolean_value*         | The boolean value may be **TRUE**, **FALSE** (or **NULL**).                                 |                    |                |
+| **IS**                  | Compares whether the value of the left operand is the same as the truth value of the right. | (1=1) IS FALSE     | 0              |
+| *truth_value*           | The truth value may be **TRUE**, **FALSE**, or **UNKNOWN**.                                 |                    |                |
 +-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
-| **IS NOT**              | Compares whether the value of the left operand is the same as boolean value of the right.   | (1=1) IS NOT FALSE | 1              |
-| *boolean_value*         | The boolean value may be **TRUE**, **FALSE** (or **NULL**).                                 |                    |                |
+| **IS NOT**              | Compares whether the value of the left operand differs from the truth value of the right.   | (1=1) IS NOT FALSE | 1              |
+| *truth_value*           | The truth value may be **TRUE**, **FALSE**, or **UNKNOWN**.                                 |                    |                |
 +-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
 
 .. note::

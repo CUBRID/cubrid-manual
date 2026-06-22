@@ -282,7 +282,7 @@
 <li><p><strong>NULL</strong>: The <strong>NULL</strong> value is not included in the value range of any data type. Therefore, comparison between <strong>NULL</strong> values is only allowed to determine if the given value is <strong>NULL</strong> or not. An implicit type cast does not take place when a <strong>NULL</strong> value is assigned to a different data type. For example, when an attribute of <strong>INTEGER</strong> type has a <strong>NULL</strong> and is compared with a floating point type, the <strong>NULL</strong> value is not coerced to <strong>FLOAT</strong> before comparison is made. A comparison operation on the <strong>NULL</strong> value does not return a result.</p></li>
 </ul>
 </li>
-<li><p>&lt;<em>logical_expression</em>&gt;: An expression that evaluates to a boolean (logical) value, such as the result of a comparison (e.g., a = 1) or a logical operation (e.g., a AND b).</p></li>
+<li><p>&lt;<em>logical_expression</em>&gt;: An expression that evaluates to a boolean (logical) value, such as the result of a comparison (e.g., a = 1) or a logical operation (e.g., (a = 1) AND (b = 2)).</p></li>
 </ul>
 <p>The following table shows the comparison operators supported by CUBRID and their return values.</p>
 <p><strong>Comparison Operators</strong></p>
@@ -342,16 +342,16 @@ If any operand value is  <strong>NULL</strong>, <strong>NULL</strong> is returne
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>IS</strong>
-<em>boolean_value</em></p></td>
-<td><p>Compares whether the value of the left operand is the same as boolean value of the right.
-The boolean value may be <strong>TRUE</strong>, <strong>FALSE</strong> (or <strong>NULL</strong>).</p></td>
+<em>truth_value</em></p></td>
+<td><p>Compares whether the value of the left operand is the same as the truth value of the right.
+The truth value may be <strong>TRUE</strong>, <strong>FALSE</strong>, or <strong>UNKNOWN</strong>.</p></td>
 <td><p>(1=1) IS FALSE</p></td>
 <td><p>0</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>IS NOT</strong>
-<em>boolean_value</em></p></td>
-<td><p>Compares whether the value of the left operand is the same as boolean value of the right.
-The boolean value may be <strong>TRUE</strong>, <strong>FALSE</strong> (or <strong>NULL</strong>).</p></td>
+<em>truth_value</em></p></td>
+<td><p>Compares whether the value of the left operand differs from the truth value of the right.
+The truth value may be <strong>TRUE</strong>, <strong>FALSE</strong>, or <strong>UNKNOWN</strong>.</p></td>
 <td><p>(1=1) IS NOT FALSE</p></td>
 <td><p>1</p></td>
 </tr>

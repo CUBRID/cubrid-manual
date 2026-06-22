@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>질의(SQL) 관련 오류 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="질의(SQL) 관련 오류 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="질의(SQL) 관련 오류 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="error_log_admin.html" rel="next" title="데이터베이스 관리 오류"/>
+<link href="error_log_system.html" rel="prev" title="시스템 관리 오류"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/admin/error_log_sql.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID 운영</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="error_log.html">데이터베이스 오류 로그</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">질의(SQL) 관련 오류</span>
+</nav>
+<div id="content" role="main">
+<section id="sql">
+<h1>질의(SQL) 관련 오류<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sql"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p id="error-64"><strong>ERRORCODE:-64 , ‘Unknown class “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템에서 지정된 테이블 이름을 찾을 수 없을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-65"><strong>ERROR CODE: -65, ‘Class “%1$s” already exists.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템에서 이미 존재하는 테이블 이름으로 새로운 테이블을 생성하려고 시도했을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-176"><strong>ERROR CODE: -176, ‘Conversion error in date format.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 날짜/시간 관련 데이터 타입의 형식 변환 과정에서 오류가 발생했을 때 나타나는 오류입니다, 문자열을 날짜/시간 타입으로 변환하거나, 날짜/시간 값의 유효성을 검증하는 과정에서 발생합니다, 잘못된 날짜 형식, 범위를 벗어난 값, 또는 변환할 수 없는 형식의 데이터로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-181"><strong>ERROR CODE: -181, ‘Cannot coerce value of domain “%1$s” to domain “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 한 데이터 타입의 값을 다른 데이터 타입으로 변환할 때, 변환이 불가능하거나 호환되지 않을 때 발생하는 오류입니다, 데이터 타입 간의 호환성 문제나 변환 규칙에 맞지 않는 값으로 인해 발생합니다, 예를 들어, 문자열을 숫자로 변환하거나, 서로 다른 데이터 타입 간의 연산을 수행할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-182"><strong>ERROR CODE: -182, ‘Cannot coerce value of domain “%1$s” to domain “%2$s” without overflow.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 한 데이터 타입의 값을 다른 데이터 타입으로 변환할 때, 오버플로우가 발생하여 변환이 불가능할 때 나타나는 오류입니다, 데이터 타입 변환 과정에서 값의 범위가 목표 데이터 타입의 허용 범위를 초과하여 변환할 수 없음을 의미합니다, 예를 들어, 매우 큰 정수 값을 작은 정수 타입으로 변환하려고 할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-202"><strong>ERROR CODE: -202, ‘Attribute “%1$s” was not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 지정된 이름의 컬럼을 찾을 수 없을 때 발생하는 오류입니다, 주로 잘못된 컬럼 이름 참조, 존재하지 않는 컬럼 접근, 또는 스키마 정의 오류로 인해 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-203"><strong>ERROR CODE: -203, ‘Value for attribute “%1$s” must be of type “%2$s”, not type “%3$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 컬럼의 데이터 타입과 할당하려는 값의 타입이 일치하지 않을 때 발생하는 오류입니다, 주로 잘못된 타입의 값을 할당하려고 할 때, 데이터 타입 정의 또는 데이터 타입 변환 실패로 인해 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-205"><strong>ERROR CODE: -205, ‘Attribute “%1$s” cannot be made NULL.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 NOT NULL 제약 조건이 설정된 컬럼에 NULL 값을 할당하려고 할 때 발생하는 오류입니다, 주로 잘못된 데이터 삽입, 업데이트 시 NULL 값 할당, 또는 스키마 정의와 데이터 간의 불일치로 인해 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-208"><strong>ERROR CODE: -208, ‘Method “%1$s” not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 지정된 이름의 메소드를 찾을 수 없을 때 발생하는 오류입니다, 주로 잘못된 메소드 이름 참조, 존재하지 않는 메소드 접근, 또는 스키마 정의 오류로 인해 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-218"><strong>ERROR CODE: -218, ‘Invalid object in db_get path expression.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>db_get</cite> 함수의 경로 표현식(path expression) 처리 중 유효하지 않은 객체가 발견되었을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-219"><strong>ERROR CODE: -219, ‘Invalid db_get path expression.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>db_get</cite> 함수의 경로 표현식(path expression)이 유효하지 않을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-220"><strong>ERROR CODE: -220, ‘Invalid set in db_get path expression.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>db_get</cite> 함수의 경로 표현식(path expression)을 처리하는 도중, set 타입이 아닌 객체에 대해 set 관련 연산이 시도되었을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-221"><strong>ERROR CODE: -221, ‘Invalid set index in db_get path expression.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>db_get</cite> 함수의 경로 표현식(path expression)을 처리하는 도중, set, multiset, 또는 sequence 타입의 컬렉션 객체에 대해 유효하지 않은 인덱스가 사용되었을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-222"><strong>ERROR CODE: -222, ‘Attempt to assign string value greater than %2$d characters to attribute “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 객체의 특정 컬럼에 문자열 값을 할당하려 할 때, 할당하려는 문자열의 길이가 해당 컬럼이 허용하는 최대 문자열 길이를 초과하여 발생하는 오류입니다, 주로 <cite>VARCHAR</cite> 또는 <cite>CHAR</cite> 타입의 컬럼에 대해 정의된 최대 길이를 넘어서는 데이터를 삽입하거나 업데이트할 때 발생합니다.</p></li>
+</ul>
+<p id="error-225"><strong>ERROR CODE: -225, ‘Missing value for attribute “%1$s” with the NOT NULL constraint.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>NOT NULL</cite> 제약 조건이 설정된 컬럼에 대해 값이 제공되지 않았거나 <cite>NULL</cite> 값이 할당되려고 할 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-226"><strong>ERROR CODE: -226, ‘Empty component list in class.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블 또는 객체에 대한 작업을 수행하는 도중, 해당 테이블이나 객체가 필수적으로 가져야 할 컴포넌트(컬럼, 속성 등) 목록이 비어 있거나 유효하지 않을 때 발생하는 오류입니다, 주로 스키마 언로드, 쿼리 결과 처리, 또는 특정 객체 정보 조회와 같은 작업에서 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-227"><strong>ERROR CODE: -227, ‘Attempt to assign value to attribute “%1$s” more than once.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 객체 템플릿을 사용하여 객체를 생성할 때, 동일한 컬럼에 값을 두 번 이상 할당하려고 할 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-228"><strong>ERROR CODE: -228, ‘Method “%1$s” called with %2$d arguments. The system allows a maximum of %3$d arguments.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 메소드를 호출할 때, 허용된 최대 인자 개수를 초과하는 인자를 전달했을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-229"><strong>ERROR CODE: -229, ‘Method “%1$s” requires argument %2$d to be within the domain “%3$s”. An invalid value of domain “%4$s” was given.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 메소드를 호출할 때, 특정 인자의 값이 예상된 도메인을 벗어나는 경우 발생하는 오류입니다, 주로 잘못된 타입의 값을 메소드 인자로 전달했거나, 데이터 타입 변환(coercion)이 불가능할 때 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-233"><strong>ERROR CODE: -233, ‘Cannot create class with basic type name “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블을 생성할 때 기본 타입 이름을 테이블 이름으로 사용하려고 할 때 발생하는 스키마 정의 오류입니다, CUBRID는 기본 타입(primitive type)과 예약어(reserved word)를 테이블 이름으로 사용하는 것을 금지합니다. 이는 타입 시스템의 일관성을 유지하고 이름 충돌을 방지하기 위함입니다, 이는 잘못된 테이블 이름을 사용했거나, 기본 타입이나 예약어를 테이블 이름으로 사용하려고 할 때 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-234"><strong>ERROR CODE: -234, ‘Method file “%1$s” not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 스키마 템플릿에서 특정 이름을 가진 메소드 파일을 찾을 수 없을 때 발생하는 스키마 정의 오류입니다, 잘못된 메소드 파일 이름을 사용했거나, 해당 메소드 파일이 이미 삭제되었거나, 스키마 템플릿이 올바르게 초기화되지 않았을 때 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-235"><strong>ERROR CODE: -235, ‘%1$d unresolved method functions after linking.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 동적 링킹 과정이 완료된 후에도 여전히 해결되지 않은(구현을 찾을 수 없는) 메소드 함수가 존재함을 나타내는 스키마 정의 오류입니다, 메소드 파일에 문제가 있거나, 함수 이름이 잘못되었거나, 필요한 라이브러리가 로드되지 않았거나, 메소드 파일 내에서 참조하는 함수가 누락되었을 때 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-236"><strong>ERROR CODE: -236, ‘Unresolved method “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 동적 링킹 과정에서 특정 메소드(주로 Java 저장 함수/프로시저)의 함수 구현을 찾을 수 없을 때 발생하는 스키마 정의 오류입니다, 메소드 파일이 손상되었거나, 함수 이름이 잘못되었거나, 링커 설정에 문제가 있을 때 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-239"><strong>ERROR CODE: -239, ‘Attribute “%1$s” was not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 이름을 가진 컬럼을 찾을 수 없을 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-240"><strong>ERROR CODE: -240, ‘Method “%1$s” was not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 이름을 가진 메소드를 찾을 수 없을 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-241"><strong>ERROR CODE: -241, ‘There is no attribute or method with name “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 이름을 가진 컬럼나 메소드를 찾을 수 없을 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-242"><strong>ERROR CODE: -242, ‘Signature for %2$s not found for method “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 메소드에 대해 지정된 시그니처를 찾을 수 없을 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-243"><strong>ERROR CODE: -243, ‘Argument %2$d of method “%1$s” is undefined.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 메소드의 지정된 인덱스에 해당하는 인자가 정의되지 않았을 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-244"><strong>ERROR CODE: -244, ‘Domain name “%1$s” is not the name of a class or basic type.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 컬럼이나 메소드의 데이터 타입으로 지정된 이름이 유효한 테이블 이름이나 기본 데이터 타입이 아닐 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-245"><strong>ERROR CODE: -245, ‘The name “%1$s” has already been used as an attribute name.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 새로운 메소드, 테이블 메소드, 또는 다른 스키마 구성 요소의 이름을 정의하려고 할 때, 해당 이름이 이미 기존 컬럼의 이름으로 사용되고 있어서 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-246"><strong>ERROR CODE: -246, ‘The name “%1$s” has already been used as a method name.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 새로운 컬럼, 테이블 컬럼, 또는 다른 스키마 구성 요소의 이름을 정의하려고 할 때, 해당 이름이 이미 기존 메소드의 이름으로 사용되고 있어서 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-248"><strong>ERROR CODE: -248, ‘The attribute domain “%1$s” is not suitable for use with the %2$s constraint.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 컬럼에 대해 UNIQUE 제약 조건을 적용하려고 할 때, 해당 데이터 타입이 UNIQUE 제약 조건에 적합하지 않아서 발생하는 스키마 정의 오류입니다, CUBRID는 UNIQUE 제약 조건을 특정 데이터 타입에만 적용할 수 있도록 제한하고 있습니다. 인덱싱이 가능한 데이터 타입만이 UNIQUE 제약 조건을 가질 수 있습니다.</p></li>
+</ul>
+<p id="error-250"><strong>ERROR CODE: -250, ‘Cannot create index on attribute “%1$s”, defined with a shared value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 공유 값(shared value)으로 정의된 컬럼에 대해 인덱스를 생성하려고 할 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-251"><strong>ERROR CODE: -251, ‘Signature %2$s already exists for method “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 메소드에 대해 동일한 시그니처를 가진 정의가 이미 존재할 때 발생하는 스키마 정의 오류입니다.</p></li>
+</ul>
+<p id="error-252"><strong>ERROR CODE: -252, ‘Attribute “%1$s” must have a set domain for that operation.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 컬럼에 대해 SET 타입(SET, MULTISET 등 컬렉션 타입)이 필요한 작업을 수행하려고 할 때, 해당 컬럼의 데이터 타입이 SET 타입이 아니어서 발생하는 스키마 정의 오류입니다, 주로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 컬럼을 정의하거나 수정할 때, 또는 특정 메소드나 함수가 SET 타입 컬럼을 인자로 요구할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-253"><strong>ERROR CODE: -253, ‘Attribute “%1$s” cannot be defined with a nested set domain.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 컬럼을 중첩된 SET 데이터 타입으로 정의하려고 할 때 발생하는 스키마 정의 오류입니다, CUBRID는 SET 타입의 컬렉션(예: SET, MULTISET) 내부에 또 다른 SET 타입을 중첩하는 것을 허용하지 않습니다, 주로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 컬럼을 정의하거나 수정할 때 발생합니다.</p></li>
+</ul>
+<p id="error-254"><strong>ERROR CODE: -254, ‘Unable to remove domain “%2$s” from attribute “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 데이터 타입을 제거하려고 할 때 발생하는 오류입니다, 주로 <cite>DROP TABLE</cite> 문을 사용하여 컬럼의 데이터 타입을 제거하려고 할 때, 해당 데이터 타입이 컬럼에서 제거될 수 없는 상황(예: 데이터 타입이 존재하지 않거나, 다른 제약 조건에 의해 참조되거나, 컬럼의 기본 데이터 타입인 경우)에서 발생합니다.</p></li>
+</ul>
+<p id="error-260"><strong>ERROR CODE: -260, ‘Argument %2$d of method “%1$s” is not of a set domain.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 메소드 정의 시 특정 인자의 도메인이 set 타입이 아닐 때 발생하는 스키마 정의 오류입니다, CUBRID에서 set 타입은 set, multiset 등의 컬렉션 타입을 의미합니다, 주로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 메소드를 정의하거나 수정할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-269"><strong>ERROR CODE: -269, ‘Cannot define index on domain “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 데이터 타입에 인덱스를 생성하려고 할 때 발생하는 스키마 정의 오류입니다, CUBRID는 모든 데이터 타입에 대해 인덱스 생성을 허용하지 않으며, 인덱스 생성이 가능한 데이터 타입(“SET”, “MULTISET”, “BLOB”, “CLOB” 등)은 제한되어 있습니다.</p></li>
+</ul>
+<p id="error-272"><strong>ERROR CODE: -272, ‘Index “%2$s” already defined for class “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 동일한 이름의 인덱스를 중복으로 생성하려고 할 때 발생하는 스키마 관리 오류를 나타냅니다, 특정 테이블에 이미 존재하는 인덱스와 동일한 이름으로 새로운 인덱스를 생성하려고 시도했을 때 발생합니다.</p></li>
+</ul>
+<p id="error-273"><strong>ERROR CODE: -273, ‘Index “%1$s” does not exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 인덱스를 찾을 수 없을 때 발생하는 스키마 관리 오류를 나타냅니다, 이는 주로 <cite>DROP INDEX</cite>, <cite>ALTER INDEX</cite>, 또는 인덱스를 사용하는 쿼리 실행 등 인덱스 DDL 작업 중에 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-274"><strong>ERROR CODE: -274, ‘Illegal characters in name: “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 스키마 객체(테이블, 컬럼, 메소드, 인덱스 등)의 이름을 정의하거나 변경할 때, 해당 이름이 NULL 또는 empty string 인 경우 발생합니다, 이는 주로 <cite>CREATE TABLE</cite>, <cite>ALTER TABLE</cite>, <cite>CREATE VIEW</cite> 등의 DDL(Data Definition Language) 문을 실행할 때 발생합니다.</p></li>
+</ul>
+<p id="error-293"><strong>ERROR CODE: -293, ‘Operation not allowed for this class type.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 테이블 타입에 대해 허용되지 않는 작업을 시도했을 때 발생하는 오류입니다, 주로 스키마 정의, 테이블 변경, 또는 특정 객체 관련 작업을 수행하는 과정에서 발생하며, 해당 테이블의 특성을 이해하고 허용된 작업을 수행해야 함을 나타냅니다.</p></li>
+</ul>
+<p id="error-294"><strong>ERROR CODE: -294, ‘Undefined environment variable “%1$s” referenced in method file.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 메소드 파일의 경로에 포함된 환경 변수가 정의되지 않았을 때 발생하는 오류입니다, 메소드 파일은 CUBRID에서 사용자 정의 메소드(함수)를 구현한 외부 라이브러리 파일로 이 메시지는 주로 동적 링킹 과정에서 메소드 파일을 찾을 수 없어서 발생하는 문제입니다.</p></li>
+</ul>
+<p id="error-305"><strong>ERROR CODE: -305, ‘Sequence index %1$d is out of bounds.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 시퀀스(sequence) 컬렉션의 인덱스가 유효한 범위를 벗어났을 때 나타나는 오류입니다, 시퀀스 객체 관리 시스템에서 인덱스 범위 검증 과정에서 발생하며 주로 시퀀스 요소에 접근할 때 인덱스가 0보다 작거나 시퀀스 크기보다 큰 경우입니다.</p></li>
+</ul>
+<p id="error-308"><strong>ERROR CODE: -308, ‘Element value is not within the domain of the set.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 set(집합) 타입의 컬렉션에 요소를 추가할 때, 해당 요소의 값이 set의 도메인과 호환되지 않을 때 나타나는 오류입니다, 주로 요소 값이 set의 도메인 규칙을 위반할 때 발생합니다.</p></li>
+</ul>
+<p id="error-309"><strong>ERROR CODE: -309, ‘Illegal set element index given: %1$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 set(집합) 타입의 컬렉션에 잘못된 인덱스가 전달되었을 때 나타나는 오류입니다, 주로 음수 인덱스나 컬렉션 크기를 초과하는 인덱스가 전달될 때 발생합니다.</p></li>
+</ul>
+<p id="error-311"><strong>ERROR CODE: -311, ‘Element not found in sequence.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 sequence(순서가 있는 컬렉션)에서 특정 요소를 찾을 수 없을 때 나타나는 오류입니다, sequence는 순서가 있는 데이터 구조로 이 메시지는 주로 요소 검색 시 해당 값이 sequence에 존재하지 않을 때 발생합니다.</p></li>
+</ul>
+<p id="error-312"><strong>ERROR CODE: -312, ‘”%1$s” is not a valid set domain.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 set(집합) 타입이 유효하지 않을 때 나타나는 오류입니다, 주로 잘못된 set(집합) 타입이 전달되거나 NULL인 경우 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-424"><strong>ERROR CODE: -424, ‘No statement to execute.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 실행할 SQL 문장이 없을 때 나타나는 오류입니다, 문장 검증 과정에서 세션에 문장이 없거나 문장 배열이 비어있을 때입니다.</p></li>
+</ul>
+<p id="error-427"><strong>ERROR CODE: -427, ‘Data overflow on data type “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 데이터 타입에 대해 오버플로우가 발생했을 때 나타나는 오류입니다, 데이터 타입 변환 과정에서 데이터 값이 해당 데이터 타입의 허용 범위를 초과했을 때입니다.</p></li>
+</ul>
+<p id="error-428"><strong>ERROR CODE: -428, ‘Statement is not updatable.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 수정할 수 없는 문장(statement)에 대해 수정 작업을 시도했을 때 나타나는 오류입니다, 문장의 수정 가능성 검사 과정에서 뷰테이블에서 수정할 수 없는 문장에 대해 수정을 시도할 때입니다.</p></li>
+</ul>
+<p id="error-435"><strong>ERROR CODE: -435, ‘Multiple statements not allowed.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 여러 개의 SQL 문장이 동시에 실행되거나 처리될 수 없는 컨텍스트에서 여러 문장이 제공되었을 때 나타나는 오류입니다, SQL 문장 처리 과정에서 단일 문장만 허용되는 API 호출이나 실행 환경에서 세미콜론 등으로 구분된 여러 문장이 입력된 경우입니다.</p></li>
+</ul>
+<p id="error-454"><strong>ERROR CODE: -454, ‘Invalid data type referenced.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 존재하지 않거나 잘못된 데이터 타입이 참조되었을 때 나타나는 오류입니다, 쿼리에서 데이터 타입 검증 과정에서 발생합니다, 즉, 정의되지 않은 데이터 타입이나 잘못된 데이터 타입 식별자가 사용된 경우입니다.</p></li>
+</ul>
+<p id="error-457"><strong>ERROR CODE: -457, ‘Invalid query result type.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 쿼리 결과 구조체의 타입이 유효하지 않을 때 나타나는 오류입니다, 쿼리 결과 타입 검증 과정에서 발생합니다, 즉, 지원되지 않는 쿼리 결과 타입이 사용된 경우입니다.</p></li>
+</ul>
+<p id="error-458"><strong>ERROR CODE: -458, ‘Overflow occurred in addition context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 산술 연산 중 덧셈을 수행할 때 오버플로우가 발생했을 때 나타나는 오류입니다, 쿼리에서 산술 연산 처리 과정에서 발생합니다,  즉, 데이터 타입의 최대값을 초과하는 덧셈 연산이 수행된 경우입니다.</p></li>
+</ul>
+<p id="error-459"><strong>ERROR CODE: -459, ‘Query result contains more than a single tuple.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 단일 튜플(행)을 반환해야 하는 쿼리가 여러 개의 튜플을 반환했을 때 나타나는 오류입니다, 쿼리에서 단일 튜플 검증 과정에서 발생합니다, 즉, 서브쿼리나 특정 연산에서 정확히 하나의 결과만 반환되어야 하는데 여러 개가 반환된 경우입니다.</p></li>
+</ul>
+<p id="error-482"><strong>ERROR CODE: -482, ‘”%1$s” is not a virtual class.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 ‘virtual class’(가상 테이블, 뷰테이블) 아닌 객체를 가상 테이블로 사용하려고 할 때 나타나는 오류입니다, ‘virtual class’는 가상 테이블, 뷰테이블과 같은 개념으로 실제 데이터를 저장하지 않고 쿼리 결과를 보여주는 테이블입니다, 이 메시지는 가상 테이블 관련 작업을 수행하려고 할 때 해당 객체가 가상 테이블가 아닌 경우에 발생합니다.</p></li>
+</ul>
+<p id="error-486"><strong>ERROR CODE: -486, ‘Object is not an updatable virtual class instance.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 가상 테이블(virtual class)의 인스턴스가 수정 가능하지 않을 때 나타나는 오류입니다, 수정 불가능한 가상 테이블 인스턴스(레코드)에 대해 수정 작업을 시도할 때 발생합니다.</p></li>
+</ul>
+<p id="error-492"><strong>ERROR CODE: -492, ‘%1$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파서에서 일반 오류가 발생할 때 나타나는 오류입니다, 이 는 질의 파싱 중 오류가 발생할 경우 라인(line), 컬럼(colum)을 표시하기 위해 사용하는 오류입니다.</p></li>
+</ul>
+<p id="error-493"><strong>ERROR CODE: -493, ‘Syntax: %1$s %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파서에서 구문 오류가 발생할 때 나타나는 오류입니다, 이는 파서의 구문 분석 단계에서 발생하는 오류로, SQL 쿼리의 문법적 분석 중에 문제가 발생했을 때 이 오류가 발생됩니다.</p></li>
+</ul>
+<p id="error-494"><strong>ERROR CODE: -494, ‘Semantic: %1$s %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파서에서 시맨틱 오류가 발생할 때 나타나는 오류입니다, 파서의 시맨틱 분석 단계에서 발생하는 오류로, 쿼리의 의미적 분석 중에 문제가 발생했을 때 사용됩니다, 주로 쿼리의 의미적 오류나 타입 불일치 등의 상황에서 발생합니다.</p></li>
+</ul>
+<p id="error-495"><strong>ERROR CODE: -495, ‘Execute: %1$s %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파서에서 실행 오류가 발생할 때 나타나는 오류입니다, 이는 파서의 실행 단계에서 발생하는 오류로 XASL로 수행 처리를 할 수 없는 경우 발생합니다, 주로 쿼리 실행 실패나 파서 내부 오류 상황에서 발생합니다.</p></li>
+</ul>
+<p id="error-501"><strong>ERROR CODE: -501, ‘Invalid trigger priority.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 우선순위(priority)가 유효하지 않을 때 나타나는 오류입니다, 이는 트리거 정의의 유효성을 검사하는 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-502"><strong>ERROR CODE: -502, ‘Missing target class in trigger.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거를 정의할 때 대상 테이블이 지정되지 않았을 때 나타나는 오류입니다, 트리거는 특정 테이블의 이벤트(INSERT, UPDATE, DELETE)에 반응하도록 정의되므로, 대상 테이블는 필수적으로 지정되어야 합니다, 이는 트리거 정의의 유효성을 검사하는 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-503"><strong>ERROR CODE: -503, ‘Trigger “%1$s” was not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 지정된 이름의 트리거를 찾을 수 없을 때 나타나는 오류입니다, 트리거가 존재하지 않거나, 사용자가 해당 트리거에 접근할 권한이 없을 때 발생합니다, 이는 트리거 조회 및 접근 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-505"><strong>ERROR CODE: -505, ‘A trigger with the name “%1$s” already exists.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 동일한 이름의 트리거가 이미 존재할 때 나타나는 오류입니다, 트리거 이름은 전역적으로 고유해야 하므로, 중복된 이름으로 트리거를 생성하거나 이미 존재한 이름으로 변경할 수 없습니다, 이는 트리거 정의의 유효성을 검사하는 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-506"><strong>ERROR CODE: -506, ‘A trigger cannot be defined on “%1$s” because it is a virtual class.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 가상 테이블(virtual class)에 트리거를 정의하려고 할 때 나타나는 오류입니다, 가상 테이블는 뷰(view)와 같은 가상적인 테이블로, 실제 데이터를 저장하지 않기 때문에 트리거를 정의할 수 없습니다, 이는 트리거 정의의 유효성을 검사하는 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-507"><strong>ERROR CODE: -507 , ‘Inappropriate trigger target class “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 대상 테이블가 부적절할 때 나타나는 오류입니다, 트리거가 특정 테이블을 대상으로 할 때, 해당 테이블이 존재하지 않거나 적절하지 않은 경우 발생합니다, 이는 트리거 정의의 유효성을 검사하는 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-508"><strong>ERROR CODE: -508, ‘Inappropriate trigger target attribute “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 대상 컬럼이 부적절할 때 나타나는 오류입니다, 트리거가 특정 컬럼을 대상으로 할 때, 해당 컬럼이 존재하지 않거나 적절하지 않은 경우 발생합니다, 이는 트리거 정의의 유효성을 검사하는 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-511"><strong>ERROR CODE: -511, ‘Not authorized to access trigger “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 현재 사용자가 특정 트리거에 액세스(읽기/조회)할 권한이 없을 때 나타나는 오류입니다, 트리거의 정보를 조회하거나 참조하려고 할 때 권한이 부족한 경우 발생합니다.</p></li>
+</ul>
+<p id="error-512"><strong>ERROR CODE: -512, ‘Not authorized to delete trigger “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 현재 사용자가 특정 트리거를 삭제할 권한이 없을 때 나타나는 오류입니다, 트리거를 완전히 제거하려고 할 때 권한이 부족한 경우 발생합니다.</p></li>
+</ul>
+<p id="error-514"><strong>ERROR CODE: -514, ‘Not authorized to alter trigger “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 현재 사용자가 특정 트리거를 변경할 권한이 없을 때 나타나는 오류입니다, 트리거의 이름 변경, 상태 변경, 우선순위 변경, 주석 변경 등의 작업을 수행하려고 할 때 권한이 부족한 경우 발생합니다.</p></li>
+</ul>
+<p id="error-515"><strong>ERROR CODE: -515, ‘Trigger action execution time of %2$s cannot be earlier than condition execution time of %1$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 액션 실행 시간이 조건 실행 시간보다 빠를 수 없다는 규칙을 위반했을 때 나타나는 오류입니다, 트리거의 조건(condition)이 실행된 후에 액션(action)이 실행되어야 하는데, 액션이 조건보다 먼저 실행되도록 설정된 경우 발생합니다, 이는 트리거의 논리적 실행 순서를 보장하기 위한 안전장치입니다.</p></li>
+</ul>
+<p id="error-516"><strong>ERROR CODE: -516, ‘Maximum trigger depth %1$d exceeded at trigger “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 재귀 호출 깊이가 최대 허용 깊이를 초과했을 때 나타나는 오류입니다, 트리거가 다른 트리거를 호출하고, 그 트리거가 또 다른 트리거를 호출하는 과정에서 재귀 호출이 무한히 반복되거나 최대 깊이를 초과했을 때 발생합니다, 이는 트리거의 재귀 호출로 인한 무한 루프나 스택 오버플로우를 방지하기 위한 안전장치입니다.</p></li>
+</ul>
+<p id="error-517"><strong>ERROR CODE: -517, ‘he operation has been rejected by trigger “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 작업(예: INSERT, UPDATE, DELETE)이 트리거의 <cite>REJECT</cite> 액션에 의해 거부되었을 때 나타나는 오류입니다, <cite>REJECT</cite> 액션은 트리거가 실행될 때 현재 트랜잭션을 롤백하고 오류를 발생시켜 작업을 중단시킵니다, 이는 트리거가 정의된 조건에 따라 데이터 변경 작업을 명시적으로 차단했음을 의미합니다.</p></li>
+</ul>
+<p id="error-518"><strong>ERROR CODE: -518, ‘Internal error: processing trigger “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거를 처리하는 과정에서 내부 오류가 발생했을 때 나타나는 오류입니다, 트리거 컴파일 과정에서 파서 오류가 발생했지만 구체적인 오류 정보를 가져올 수 없는 상황에서 발생합니다, 이는 CUBRID의 트리거 시스템에서 예상치 못한 내부 상태 오류를 나타냅니다.</p></li>
+</ul>
+<p id="error-519"><strong>ERROR CODE: -519, ‘Illegal trigger condition type.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 조건 타입이 유효하지 않을 때 나타나는 오류입니다, 이는 CUBRID의 트리거 조건이 적합한 표현식이어야 한다는 제약사항을 나타냅니다.</p></li>
+</ul>
+<p id="error-520"><strong>ERROR CODE: -520, ‘The REJECT action cannot be used with an action time of AFTER or DEFERRED.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거를 생성할 때 REJECT 액션을 AFTER 또는 DEFERRED 액션 시간과 함께 사용하려고 할 때 나타나는 오류입니다, REJECT 액션은 트리거가 실행될 때 트랜잭션을 거부하는 액션으로, AFTER나 DEFERRED 액션 시간과는 호환되지 않습니다, 이는 CUBRID의 트리거 시스템에서 특정 액션과 액션 시간 조합이 허용되지 않는다는 제약사항을 나타냅니다.</p></li>
+</ul>
+<p id="error-521"><strong>ERROR CODE: -521, ‘The REJECT action cannot be used with the ABORT or TIMEOUT events.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거를 생성할 때 REJECT 액션을 ABORT 또는 TIMEOUT 이벤트와 함께 사용하려고 할 때 나타나는 오류입니다, REJECT 액션은 트리거가 실행될 때 트랜잭션을 거부하는 액션으로, ABORT나 TIMEOUT 이벤트와는 호환되지 않습니다, 이는 CUBRID의 트리거 시스템에서 특정 액션과 이벤트 조합이 허용되지 않는다는 제약사항을 나타냅니다.</p></li>
+</ul>
+<p id="error-523"><strong>ERROR CODE: -523, ‘Trigger action expression was not given.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거를 생성할 때 액션 타입이 <cite>EXPRESSION`으로 설정되었지만, 액션 소스 문자열(`action_source</cite>)이 제공되지 않았을 때 나타나는 오류입니다, 트리거 액션은 트리거가 실행될 때 수행할 작업을 정의하는 부분이며, 액션 타입이 표현식(<cite>EXPRESSION</cite>)인 경우 반드시 액션 소스 문자열이 제공되어야 합니다, 이 메시지는 트리거 생성 과정에서 필수 파라미터가 누락되었을 때 발생합니다.</p></li>
+</ul>
+<p id="error-524"><strong>ERROR CODE: -524, ‘The specified activity cannot be removed because it is owned by another user.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 지연된 액티비티(deferred activity)를 제거하려고 할 때, 해당 액티비티가 현재 사용자가 아닌 다른 사용자가 소유하고 있어서 제거할 수 없다는 오류입니다, 트리거 액티비티는 트리거가 실행될 때 수행되는 작업을 나타내며, 지연된 액티비티는 트리거 실행이 지연된 상태에서 관리되는 액티비티입니다, 권한 문제로 인해 발생하며, 보안상의 이유로 다른 사용자가 소유한 액티비티를 제거할 수 없도록 제한합니다.</p></li>
+</ul>
+<p id="error-525"><strong>ERROR CODE: -525, ‘Error compiling condition for “%1$s”: %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 조건을 컴파일하는 과정에서 오류가 발생했을 때 나타나는 오류입니다, 주로 트리거의 조건 부분에 정의된 SQL 문이나 스크립트를 파싱하고 컴파일할 때 문법 오류나 컴파일 오류가 발생했을 때 나타납니다.</p></li>
+</ul>
+<p id="error-526"><strong>ERROR CODE: -526, ‘Error compiling action for “%1$s”, %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 액션을 컴파일하는 과정에서 오류가 발생했을 때 나타나는 오류입니다, 주로 트리거의 액션 부분에 정의된 SQL 문이나 스크립트를 파싱하고 컴파일할 때 문법 오류나 컴파일 오류가 발생했을 때 나타납니다.</p></li>
+</ul>
+<p id="error-527"><strong>ERROR CODE: -527, ‘Error evaluating condition for “%1$s”: %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 조건을 평가(실행)하는 과정에서 오류가 발생했을 때 나타나는 오류입니다, 주로 트리거의 조건 부분에서 SQL 문이나 스크립트를 실행할 때 문법 오류나 실행 오류가 발생했을 때 나타납니다.</p></li>
+</ul>
+<p id="error-528"><strong>ERROR CODE: -528, ‘Error evaluating action for “%1$s”, %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거의 액션을 평가(실행)하는 과정에서 오류가 발생했을 때 나타나는 오류입니다, 주로 트리거의 액션 부분에서 SQL 문이나 스크립트를 실행할 때 문법 오류나 실행 오류가 발생했을 때 나타납니다.</p></li>
+</ul>
+<p id="error-529"><strong>ERROR CODE: -529, ‘Transaction cannot be committed, it was invalidated by trigger “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트랜잭션을 커밋하려고 할 때, 트리거에 의해 트랜잭션이 무효화되어 커밋할 수 없을 때 나타나는 오류입니다, 주로 트리거의 액션이 <a href="#id1"><span class="problematic" id="id2">`</span></a>INVALIDATE`로 설정되어 있을 때 발생합니다.</p></li>
+</ul>
+<p id="error-539"><strong>ERROR CODE: -539, ‘Attempt to divide by zero.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 0으로 나누기 연산을 시도할 때 나타나는 오류입니다, 주로 쿼리 처리 과정에서 나누기 연산의 피제수가 0일 때 발생합니다, 수학적으로 정의되지 않은 연산이므로 CUBRID에서 오류로 처리합니다.</p></li>
+</ul>
+<p id="error-552"><strong>ERROR CODE: -552, ‘Date arithmetic underflow.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 날짜 연산 또는 함수를 수행할 때 언더플로우가 발생했을 때 나타나는 오류입니다, 이는 주로 날짜 값에서 다른 값을 빼거나 연산할 때 결과가 날짜 범위를 벗어날 때 발생합니다, 날짜 연산 결과가 최소 날짜 값보다 작아질 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-553"><strong>ERROR CODE: -553, ‘Time arithmetic underflow.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 시간 연산 또는 함수를 수행할 때 언더플로우가 발생했을 때 나타나는 오류입니다, 이는 주로 시간 값에서 다른 값을 빼거나 연산할 때 결과가 시간 범위를 벗어날 때 발생합니다, 시간 연산 결과가 최소 시간 값보다 작아질 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-618"><strong>ERROR CODE: -618, ‘Attribute is not updatable.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 컬럼을 업데이트하려고 시도했지만, 해당 컬럼이 업데이트 불가능한 유형일 때 나타납니다, 뷰테이블(view table)의 특정 컬럼이나 시스템에 의해 관리되는 컬럼을 직접 업데이트할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-621"><strong>ERROR CODE: -621, ‘Invalid data type. The arguments contain an invalid data type.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 함수나 연산에 전달된 인수의 데이터 타입이 유효하지 않을 때 나타납니다, 예를 들어, 문자열 함수에 숫자 타입을 전달하거나, 숫자 연산에 문자열 타입을 전달할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-622"><strong>ERROR CODE: -622, ‘Incompatible code sets. The code sets of the arguments are incompatible.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 문자열 비교 또는 연산 시 인수로 전달된 문자열들의 문자셋(character set)가 서로 호환되지 않을 때 나타납니다, 예를 들어, UTF-8 문자열과 EUC-KR 문자열을 직접 비교하거나 연산하려고 할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-623"><strong>ERROR CODE: -623, ‘Invalid escape sequence. An invalid escape sequence has caused an error in the regular expression compiler.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 LIKE 연산자의 ESCAPE 절에 잘못된 이스케이프 시퀀스를 사용할 때 나타납니다, SQL 구문의 LIKE 연산자에서 특수 문자를 이스케이프할 때 사용하는 시퀀스가 유효하지 않을 때 발생합니다.</p></li>
+</ul>
+<p id="error-624"><strong>ERROR CODE: -624, ‘Invalid escape character. The escape character is non-NULL with a length greater than 1.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 LIKE 연산자의 ESCAPE 절에 잘못된 이스케이프 문자를 사용할 때 나타납니다.</p></li>
+</ul>
+<p id="error-628"><strong>ERROR CODE: -628, ‘Invalid currency type: %1$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 통화(monetary) 데이터 타입을 처리할 때 발생하는 오류입니다, 이는 지원되지 않는 통화 타입이 지정되었을 때 발생합니다.</p></li>
+</ul>
+<p id="error-631"><strong>ERROR CODE: -631, ‘SQL statement violated NOT NULL constraint.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 SQL 문장이 NOT NULL 제약 조건을 위반했을 때 발생하는 오류입니다, 테이블의 컬럼에 NOT NULL 제약 조건이 설정되어 있는데, INSERT나 UPDATE 문장에서 해당 컬럼에 NULL 값을 입력하려고 할 때 나타납니다.</p></li>
+</ul>
+<p id="error-649"><strong>ERROR CODE: -649, ‘Given precision of %1$d is invalid; it should be greater than %2$d and no greater than %3$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 데이터 타입의 정밀도(precision) 값이 유효하지 않을 때 발생하는 오류입니다, 지정된 정밀도 값이 해당 데이터 타입에서 허용되는 범위를 벗어났을 때 발생합니다, 이는 데이터 타입 정의 시 정밀도 값이 너무 작거나 너무 클 때 발생하는 검증 실패를 의미합니다.</p></li>
+</ul>
+<p id="error-670"><strong>ERROR CODE: -670, ‘Operation would have caused one or more unique constraint violations. INDEX %1$s%2$s ON CLASS %3$s%4$s. key: %5$s%6$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 UNIQUE 제약 조건을 위반하는 작업이 시도되었을 때 발생합니다, B+tree 인덱스에서 중복된 키 값이 발견되어 UNIQUE 제약 조건을 위반하게 되는 상황을 나타냅니다, 이는 데이터 무결성을 보장하기 위해 중복된 값을 허용하지 않는 UNIQUE 제약 조건이 위반되었음을 의미합니다.</p></li>
+</ul>
+<p id="error-683"><strong>ERROR CODE: -683, ‘Attempted to create string with illegal length %1$d’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 문자열을 생성하려고 할 때, 지정된 길이가 유효하지 않을 때 발생하는 오류입니다, 문자열 길이는 CUBRID에서 정의된 최대 길이를 초과하거나 음수일 수 없습니다, 주로 clob_to_char() 함수에서 LOB(Large Object) 데이터를 문자열로 변환하는 과정에서 발생합니다.</p></li>
+</ul>
+<p id="error-685"><strong>ERROR CODE: -685, ‘Class “%1$s” is invalid.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 owner 변경 시 지정된 테이블가 유효하지 않을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-704"><strong>ERROR CODE: -704, ‘Evaluation of generic server function failed.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 자바 프로시저를 평가(evaluation)하는 과정에서 실패했을 때 발생합니다,</p></li>
+</ul>
+<p id="error-709"><strong>ERROR CODE: -709, ‘Constraint “%1$s” not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 이름의 제약조건(constraint)을 찾을 수 없을 때 나타나는 오류입니다, CUBRID는 제약조건을 삭제하거나 수정할 때 해당 제약조건이 존재하는지 확인합니다, 이 메시지는 CUBRID 데이터베이스에서 제약조건을 삭제하거나 수정하는 과정에서 발생합니다</p></li>
+</ul>
+<p id="error-710"><strong>ERROR CODE: -710, ‘Invalid constraint.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 제약조건(constraint)이 유효하지 않을 때 나타나는 오류입니다, CUBRID는 제약조건을 생성하거나 관리할 때 해당 제약조건이 유효한지 검증합니다, 이 메시지는 CUBRID 데이터베이스에서 제약조건을 생성하거나 관리하는 과정에서 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-711"><strong>ERROR CODE: -711, ‘An object with the supplied attribute value doesn’t exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 컬럼 값을 가진 객체를 찾을 수 없을 때 나타나는 오류입니다, CUBRID는 객체 검색이나 쿼리 실행 중에 해당 조건을 만족하는 객체가 존재하지 않을 때 이 오류를 발생시킵니다.</p></li>
+</ul>
+<p id="error-712"><strong>ERROR CODE: -712, ‘Constraint” %1$s” already exists.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 동일한 이름의 제약조건(constraint)이 이미 존재할 때 나타나는 오류입니다, CUBRID는 테이블이나 테이블에 제약조건을 추가할 때 중복된 이름을 허용하지 않습니다.</p></li>
+</ul>
+<p id="error-713"><strong>ERROR CODE: -713, ‘An index does not exist on this attribute.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 컬럼에 대해 인덱스가 존재하지 않을 때 나타나는 오류입니다, CUBRID 데이터베이스에서 객체 검색이나 인덱스 관련 작업 중 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-716"><strong>ERROR CODE: -716, ‘NOT NULL constraints are not allowed in virtual or proxy classes.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 가상 테이블(virtual class), 뷰테이블에 NOT NULL 제약 조건을 추가하려고 할 때 나타나는 오류입니다.</p></li>
+</ul>
+<p id="error-717"><strong>ERROR CODE: -717, ‘UNIQUE constraints are not allowed in virtual or proxy classes.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 가상 테이블(virtual class), 뷰테이블에 UNIQUE 제약 조건을 추가하려고 할 때 나타나는 오류입니다.</p></li>
+</ul>
+<p id="error-721"><strong>ERROR CODE: -721, ‘Insert query yields more than one row.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 INSERT 문을 실행할 때 결과가 하나의 행이 아닌 여러 행을 반환했을 때 나타나는 오류입니다, INSERT 문은 일반적으로 하나의 행만 삽입해야 하는데, 서브쿼리나 VALUES 절에서 여러 행이 반환되면 이 오류가 발생합니다, 이 메시지는 주로 INSERT 문의 VALUES 절이 여러 개이거나, 서브쿼리가 여러 행을 반환할 때 발생합니다.</p></li>
+</ul>
+<p id="error-722"><strong>ERROR CODE: -722, ‘Wrong number of attributes for NOT NULL constraint.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 NOT NULL 제약 조건을 생성하거나 삭제할 때 컬럼의 개수가 잘못되었을 때 나타나는 오류입니다, NOT NULL 제약 조건은 하나의 컬럼에만 적용할 수 있는 제약 조건입니다, 이 메시지는 여러 컬럼에 NOT NULL 제약 조건을 동시에 적용하려고 하거나, 컬럼이 지정되지 않았을 때 발생합니다.</p></li>
+</ul>
+<p id="error-723"><strong>ERROR CODE: -723, ‘Cannot modify the domain of an existing attribute.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 이미 존재하는 컬럼의 데이터 타입을 변경하려고 시도했을 때 나타나는 오류입니다.</p></li>
+</ul>
+<p id="error-724"><strong>ERROR CODE: -724, ‘Invalid parameter(s) for default constraint name generation.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 인덱스를 삭제 시 인덱스 이름이 NULL인 경우 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-727"><strong>ERROR CODE: -727, ‘Invalid trigger event.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 트리거(trigger)를 생성하거나 관리하는 과정에서 유효하지 않은 트리거 이벤트가 사용되었을 때 나타나는 오류입니다, 트리거 이벤트는 트리거가 언제 실행될지를 결정하는 조건으로, INSERT, UPDATE, DELETE 등의 데이터베이스 작업과 연관됩니다, 이 메시지는 유효하지 않은 이벤트 타입이 트리거에 지정되었을 때 발생합니다.</p></li>
+</ul>
+<p id="error-729"><strong>ERROR CODE: -729, ‘Overflow occurred in subtraction context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 뺄셈 연산을 수행하는 과정에서 오버플로우가 발생했을 때 나타나는 오류입니다, 오버플로우는 연산 결과가 해당 데이터 타입이 표현할 수 있는 최대 범위를 초과할 때 발생합니다, 이는 주로 두 숫자의 차이가 정수(INT, BIGINT, SHORT) 또는 부동 소수점(FLOAT, DOUBLE) 타입의 최대값을 초과할 때 발생합니다, 또한 복합 연산에서 뺄셈 부분이 오버플로우를 유발할 때도 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-730"><strong>ERROR CODE: -730, ‘Overflow occurred in multiplication context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 곱셈 연산을 수행하는 과정에서 오버플로우가 발생했을 때 나타나는 오류입니다, 오버플로우는 연산 결과가 해당 데이터 타입이 표현할 수 있는 최대 범위를 초과할 때 발생합니다, 이는 주로 두 숫자의 곱이 정수(INT, BIGINT, SHORT) 또는 부동 소수점(FLOAT, DOUBLE) 타입의 최대값을 초과할 때 발생합니다, 또한 NUMERIC 타입의 곱셈에서도 결과가 표현 가능한 범위를 초과할 때도 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-731"><strong>ERROR CODE: -731, ‘Overflow occurred in division context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 나눗셈 연산을 수행하는 과정에서 오버플로우가 발생했을 때 나타나는 오류입니다, 오버플로우는 연산 결과가 해당 데이터 타입이 표현할 수 있는 최대 범위를 초과할 때 발생합니다, 이는 주로 부동 소수점 나눗셈에서 매우 큰 값이 생성되거나, 정수 나눗셈에서 특정 조건(예: INT_MIN / -1)에서 결과가 범위를 초과할 때 발생할 수 있습니다, 또한 NUMERIC 타입의 나눗셈에서도 결과가 표현 가능한 범위를 초과할 때도 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-732"><strong>ERROR CODE: -732, ‘Overflow occurred in unary minus context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 단항 마이너스 연산을 수행하는 과정에서 오버플로우가 발생했을 때 나타나는 오류입니다, 단항 마이너스는 숫자 값의 부호를 바꾸는 연산으로, 양수를 음수로, 음수를 양수로 변환합니다, 이 메시지는 특정 데이터 타입의 최소값에 단항 마이너스 연산을 적용할 때 발생합니다, 예를 들어, INT 타입의 최소값(-2,147,483,648)에 단항 마이너스 연산을 적용하면 양수 최대값(2,147,483,648)이 되어 INT 타입의 범위를 초과합니다.</p></li>
+</ul>
+<p id="error-751"><strong>ERROR CODE: -751, ‘The OID of a new object isn’t available in a BEFORE INSERT trigger.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 BEFORE INSERT 트리거를 정의할 때, 트리거 내에서 새 객체를 직접 참조하려고 할 때 발생합니다, BEFORE INSERT 트리거는 데이터가 실제로 테이블에 삽입되기 전에 실행되므로, 새 객체의 OID는 아직 할당되지 않은 상태입니다, 트리거 내에서 “new” 객체 자체를 참조하는 것은 허용되지 않으며, “new.attribute_name” 형태로 개별 속성만 참조할 수 있습니다.</p></li>
+</ul>
+<p id="error-772"><strong>ERROR CODE: -772, ‘db_serial class not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 db_serial 카탈로그 테이블을 찾으려고 할 때, 해당 테이블이 존재하지 않는 상황임을 나타냅니다, 이는 CUBRID의 serial 객체 관리 메커니즘에서 발생하며, 주로 db_serial 테이블가 시스템에 등록되지 않았을 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-773"><strong>ERROR CODE: -773, ‘Serial “%1$s” not found.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 serial 객체를 조회하려고 할 때, 해당 이름의 serial 객체가 존재하지 않는 상황임을 나타냅니다.</p></li>
+</ul>
+<p id="error-774"><strong>ERROR CODE: -774, ‘Serial “%1$s” already exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 serial 객체를 생성하려고 할 때, 동일한 이름의 serial 객체가 이미 존재하는 상황임을 나타냅니다.</p></li>
+</ul>
+<p id="error-775"><strong>ERROR CODE: -775, ‘Next value exceeds MAX(MIN) value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 serial 객체의 다음 값(nextval)을 계산할 때, 계산된 값이 최대값 또는 최소값을 초과하는 상황임을 나타냅니다.</p></li>
+</ul>
+<p id="error-776"><strong>ERROR CODE: -776, ‘Cannot fetch serial object.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 serial 객체를 가져오려고 할 때, serial 객체를 읽을 수 없는 상황임을 나타냅니다.</p></li>
+</ul>
+<p id="error-777"><strong>ERROR CODE: -777, ‘Cannot update serial object.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 serial 객체를 업데이트하려고 할 때, serial 객체를 수정할 수 없는 상황임을 나타냅니다.</p></li>
+</ul>
+<p id="error-779"><strong>ERROR CODE: -779, ‘Result exceeds limit: year of Date MUST be in 1 and 9999.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 날짜 관련 함수를 사용할 때, 결과 날짜의 연도가 1년에서 9999년 범위를 벗어나는 경우 발생합니다, 이는 CUBRID의 날짜 처리 메커니즘에서 발생하며, 주로 날짜 연산 결과가 유효한 날짜 범위를 초과할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-781"><strong>ERROR CODE: -781, ‘Format string is too long. It must be less than 16K.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 문자열 포맷 변환 함수를 사용할 때, 포맷 문자열의 길이가 16K(16,000 바이트)를 초과하는 경우 발생합니다, 이는 CUBRID의 문자열 포맷 변환 메커니즘에서 발생하며, 주로 포맷 문자열 길이 제한을 초과할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-782"><strong>ERROR CODE: -782, ‘Empty string not allowed here.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 빈 문자열(‘’)이 허용되지 않는 문자열 연산이나 함수에서 빈 문자열이 사용될 때 발생합니다, 특정 문자열 함수나 연산에서 의미 있는 입력값이 필요한 경우 발생하는 데이터 유효성 검사 오류입니다.</p></li>
+</ul>
+<p id="error-783"><strong>ERROR CODE: -783, ‘Invalid format.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 문자열 형식이나 데이터 포맷이 예상된 형식과 일치하지 않을 때 발생합니다. 날짜/시간 형식, 숫자 형식, 또는 특정 패턴을 요구하는 문자열 함수에서 잘못된 형식이 입력될 때 발생하는 포맷 검증 오류입니다.</p></li>
+</ul>
+<p id="error-784"><strong>ERROR CODE: -784, ‘Two arguments are mismatched.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 문자열 처리 모듈에서 두 개의 인자가 서로 맞지 않을 때 발생합니다, 즉, 날짜 변환을 수행할 때, 소스 문자열과 포맷 문자열이 일치하지 않을 때 발생하는 오류 메시지입니다, 이 메시지는 주로 숫자 파싱이 실패했을 때 발생하며, 이는 소스 문자열의 형식이 예상된 포맷과 맞지 않음을 의미합니다.</p></li>
+</ul>
+<p id="error-785"><strong>ERROR CODE: -785, ‘First argument string is too long. It must be less than 16K.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 문자열 처리 모듈에서 날짜/시간 변환 함수를 호출할 때, 첫 번째 인자로 전달된 문자열의 길이가 16KB(16000바이트)를 초과할 경우 발생합니다, 즉, 원본 문자열의 길이를 검사하는 로직에서 이 제한을 초과하면 오류가 설정됩니다, 이 제한은 데이터베이스 시스템이 문자열 처리 시 발생할 수 있는 메모리 오버플로우나 성능 저하를 방지하기 위해 설정된 것입니다.</p></li>
+</ul>
+<p id="error-786"><strong>ERROR CODE: -786, ‘Format is duplicated.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 문자열 처리 모듈에서 날짜/시간 변환 함수를 호출할 때, 형식 문자열 내에 동일한 형식 지정자가 중복되어 사용된 경우 발생합니다, 즉, 날짜/시간 형식 문자열을 파싱하는 과정에서, 이미 한 번 사용된 형식 지정자(예: <cite>YYYY</cite>, <cite>MM</cite>, <cite>DD</cite> 등)가 다시 나타날 때 오류가 설정됩니다, 이는 날짜/시간 형식 문자열의 문법적 오류를 방지하기 위한 CUBRID의 내부 검증 메커니즘입니다.</p></li>
+</ul>
+<p id="error-787"><strong>ERROR CODE: -787, ‘Conversion error in time format.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 시간 처리 모듈에서 시간 형식 변환 과정에서 발생하는 오류입니다, 즉, 시간 데이터를 다른 형식으로 변환하거나, 시간대를 변환하거나, 시간 값의 유효성을 검사하는 과정에서 문제가 발생했을 때 오류가 설정됩니다, 이 메시지는 여러 모듈에서 발생할 수 있으며, 주로 시간 데이터의 무결성과 일관성을 보장하기 위한 검증 과정에서 발생합니다.</p></li>
+</ul>
+<p id="error-788"><strong>ERROR CODE: -788, ‘Conversion error in timestamp format.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 타임스탬프 처리 모듈에서 타임스탬프 형식 변환 과정에서 발생하는 오류입니다, 즉, 타임스탬프 데이터를 다른 형식으로 변환하거나, 날짜/시간 문자열을 타임스탬프로 파싱하거나, 타임스탬프 값의 유효성을 검사하는 과정에서 문제가 발생했을 때  오류가 설정됩니다, 이 메시지는 여러 모듈에서 발생할 수 있으며, 주로 타임스탬프 데이터의 무결성과 일관성을 보장하기 위한 검증 과정에서 발생합니다.</p></li>
+</ul>
+<p id="error-791"><strong>ERROR CODE: -791, ‘Invalid serial value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 serial 객체 처리 모듈에서 serial 값의 유효성 검사에 실패했을 때 발생하는 오류입니다, 즉, serial 객체의 속성 값을 검증하는 과정에서, 필수 속성 값이 NULL이거나 올바른 데이터 타입이 아닐 때 오류가 설정됩니다, serial 객체의 무결성을 보장하기 위한 검증 과정에서 발생하며, 주로 스키마 내보내기나 SERIAL 객체 관리 과정에서 나타납니다.</p></li>
+</ul>
+<p id="error-833"><strong>ERROR CODE: -833, ‘The index name “%1$s” is ambiguous. Specify the class name of the index.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 스키마 관리 모듈에서 인덱스 이름으로 테이블을 찾으려 할 때 발생합니다, 즉, 특정 인덱스 이름과 타입으로 해당 인덱스를 소유한 테이블을 찾으려 할 때, 동일한 이름과 타입의 인덱스가 여러 테이블에 존재하여 어떤 테이블을 반환해야 할지 결정할 수 없을 때 발생하는 오류 메시지입니다, 데이터베이스 설계 시 여러 테이블에서 동일한 인덱스 이름을 사용했거나, 인덱스 참조 시 테이블 이름을 명시하지 않았을 때 발생합니다. CUBRID는 인덱스 이름만으로는 어떤 테이블의 인덱스인지 구분할 수 없으므로 테이블 이름을 명시하도록 요구합니다.</p></li>
+</ul>
+<p id="error-834"><strong>ERROR CODE: -834, ‘There are some mismatches between source string “%1$s” and format string “%2$s” given in to_number().’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 쿼리 처리 모듈에서 <cite>to_number()</cite> 함수를 사용하여 문자열을 숫자로 변환하는 과정에서 발생합니다, 즉, 원본 문자열과 형식 문자열을 비교하여 숫자로 변환을 시도할 때, 두 문자열의 구조나 내용이 서로 호환되지 않아 변환 규칙을 따를 수 없을 때 발생하는 오류 메시지입니다, 주로 SQL 쿼리에서 <cite>to_number()</cite> 함수를 잘못 사용했거나, 입력 데이터의 형식이 예상과 다를 때 발생합니다. 예를 들어, 숫자 형식으로 변환해야 할 문자열에 숫자가 아닌 문자가 포함되어 있거나, 지정된 형식 문자열이 실제 데이터의 형식과 맞지 않을 때 발생합니다.</p></li>
+</ul>
+<p id="error-865"><strong>ERROR CODE: -865, ‘Cannot execute statement due to unknown type input markers.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 SQL 문장을 실행하는 과정에서 발생합니다, 이는 주로 호스트 변수의 타입을 결정할 수 없거나, 타입 변환이 불가능한 경우에 나타납니다.</p></li>
+</ul>
+<p id="error-874"><strong>ERROR CODE: -874, ‘Argument of power() is out of range.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 거듭제곱(power) 연산을 수행하는 과정에서 발생합니다, 구체적으로는 음수 밑수에 비정수 지수를 사용하는 경우에 발생합니다. 이는 수학적으로 정의되지 않은 연산이므로 CUBRID에서 오류로 처리합니다.</p></li>
+</ul>
+<p id="error-875"><strong>ERROR CODE: -875, ‘Overflow happened in power context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 거듭제곱(power) 연산을 수행하는 과정에서 발생합니다, 이런 상황은 일반적으로 매우 큰 수의 거듭제곱 연산을 수행할 때 발생하며, 수학적으로는 유효하지만 컴퓨터의 부동소수점 표현 범위를 초과하는 경우에 나타납니다.</p></li>
+</ul>
+<p id="error-886"><strong>ERROR CODE: -886, ‘”%1$s” caused unique constraint violation.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블에 정의된 유니크(Unique) 제약 조건을 위반하는 데이터를 삽입(INSERT)하거나 갱신(UPDATE)하려고 할 때 발생합니다, 이 메시지는 이미 존재하는 값과 동일한 값을 삽입하거나, 기존 값을 업데이트하여 다른 레코드와 중복되는 값을 만들려고 할 때 발생합니다.</p></li>
+</ul>
+<p id="error-887"><strong>ERROR CODE: -887, ‘Stored procedure ‘%1$s’ is already exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 저장 프로시저를 생성하려고 할 때, 동일한 이름의 저장 프로시저가 이미 존재하여 발생합니다, 즉, <cite>CREATE PROCEDURE</cite> 문 실행 시 저장 프로시저 이름이 중복되었을 때 오류가 설정됩니다, CUBRID의 저장 프로시저 관리 메커니즘에서 발생하며, 주로 저장 프로시저 이름 중복으로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-888"><strong>ERROR CODE: -888, ‘Parameter count is invalid. expected: %1$d, actual: %2$d’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 저장 프로시저를 호출할 때, 전달된 매개변수 개수가 저장 프로시저 정의에서 기대하는 매개변수 개수와 일치하지 않아 발생합니다, 즉, 저장 프로시저 호출 시 매개변수 개수가 맞지 않을 때 오류가 설정됩니다, CUBRID의 저장 프로시저 호출 메커니즘에서 발생하며, 주로 매개변수 개수 불일치로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-889"><strong>ERROR CODE: -889, ‘Stored procedure execute error: %1$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 저장 프로시저(Stored Procedure)를 실행하는 과정에서 발생하는 일반적인 실행 오류입니다, 즉, 저장 프로시저의 실행 중에 다양한 원인으로 인해 오류가 발생했음을 나타내는 오류입니다, 이런 상황은 일반적으로 저장 프로시저 내부의 SQL 문 실행 실패, 데이터 타입 불일치, 권한 부족, 메모리 부족, 또는 기타 런타임 오류 등으로 발생합니다.</p></li>
+</ul>
+<p id="error-890"><strong>ERROR CODE: -890, ‘Partition failed.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블 파티션 생성, 변경, 삭제 등 파티셔닝 관련 작업을 수행하는 도중 내부 오류, 파라미터 오류, 데이터 불일치, 리소스 부족, 제약 조건 위반 등으로 인해 작업이 실패했을 때 발생합니다, 주로 파티션 정의가 잘못되었거나, 데이터가 파티션 조건에 맞지 않거나, 시스템 리소스 부족, 내부 버그, 스키마 제약 조건 위반 등 다양한 원인으로 인해 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-891"><strong>ERROR CODE: -891, ‘Appropriate partition does not exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블 파티션 작업(예: 데이터 삽입, 조회, 이동, 파티션 변경 등의 탐색 과정)을 수행할 때, 지정된 조건이나 값에 해당하는 파티션이 정의되어 있지 않거나, 이미 삭제되었거나, 파티션 정의가 잘못되어 접근할 수 없는 경우에 발생합니다, 주로 파티션 키 값이 파티션 범위에 포함되지 않거나, 파티션 이름/ID가 잘못 지정된 경우, 파티션이 삭제/변경된 경우, 내부 메타데이터 불일치 등으로 인해 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-892"><strong>ERROR CODE: -892, ‘Primary key “%2$s” already defined for class “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블에 기본 키를 추가하거나 정의하려고 할 때, 해당 테이블에 이미 기본 키가 존재하여 발생합니다, 즉, <cite>CREATE TABLE</cite> 또는 <a href="#id3"><span class="problematic" id="id4">`</span></a>ALTER TABLE ADD PRIMARY KEY`와 같은 DDL(Data Definition Language) 문을 실행하여 기본 키를 정의하려 할 때, 기본 키 중복 검사에서 이미 존재할 경우 오류가 설정됩니다, 이 메시지는 CUBRID의 스키마 관리 메커니즘에서 발생하며, 주로 기본 키 중복 정의로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-893"><strong>ERROR CODE: -893, ‘Attribute ‘%1$s’, a member of the primary key, could not be dropped.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 기본 키의 일부인 속성을 삭제하려고 할 때 발생합니다, 즉, DDL(Data Definition Language) 문을 실행하여 속성을 삭제하려 할 때, 해당 속성이 기본 키의 멤버인 경우 오류가 설정됩니다. CUBRID의 스키마 관리 메커니즘에서 발생하며, 주로 기본 키 무결성 보호로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-894"><strong>ERROR CODE: -894, ‘Stored procedure/function ‘%1$s’ does not exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 존재하지 않는 저장 프로시저나 함수를 호출하려고 할 때 발생합니다, 즉, <cite>CALL</cite> 문이나 함수 호출을 통해 저장 프로시저나 함수를 실행하려 할 때, 지정된 이름의 저장 프로시저나 함수가 데이터베이스에 존재하지 않을 경우 오류가 설정됩니다, CUBRID의 저장 프로시저 관리 메커니즘에서 발생하며, 주로 존재하지 않는 저장 프로시저/함수 호출로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-895"><strong>ERROR CODE: -895, ‘Invalid stored procedure type: ‘%1$s’ is the ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 저장 프로시저나 함수의 타입이 일치하지 않을 때 발생합니다, 즉, DDL(예를 들어 function으로 선언하고 drop procedure 를 하는 경우) 문을 실행할 때, 실제 저장 프로시저의 타입과 요청된 타입이 다를 경우 오류가 설정됩니다.</p></li>
+</ul>
+<p id="error-899"><strong>ERROR CODE: -899, ‘Invalid partition requests.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파티션 관련 작업을 수행할 때 잘못된 요청이 발생하여 나타납니다, 즉, 파티션 테이블에 대한 부적절한 작업 요청이나 파티션 관련 제약 조건을 위반한 작업을 시도할 경우 오류가 설정됩니다, CUBRID의 파티션 관리 메커니즘에서 발생하며, 주로 파티션 관련 제약 조건 위반으로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-900"><strong>ERROR CODE: -900, ‘Java VM library is not found: %1$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 JVM(Java Virtual Machine)을 시작하기 위해 필요한 JVM 라이브러리를 찾거나 로드하는 데 실패했을 때 발생합니다, 즉, CUBRID 서버 프로세스가 자바 기반의 저장 프로시저(Stored Procedure)나 사용자 정의 함수(User Defined Function) 등을 실행하기 위해 JVM 프로세스를 생성하려고 시도했으나, 시스템 환경 변수(예: JAVA_HOME, JVM_PATH)에 JVM 라이브러리 경로가 올바르게 설정되어 있지 않거나, 라이브러리 파일 자체가 존재하지 않거나, 접근 권한 문제 등으로 인해 로드할 수 없을 때 발생합니다. (11.4 버전부터는 pl_server가 사용하는 JVM library를 찾지 못하는 경우 발생)</p></li>
+</ul>
+<p id="error-901"><strong>ERROR CODE: -901, ‘Java VM can not be started: %1$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 JVM(Java Virtual Machine) 프로세스를 시작하려고 시도했지만 실패했을 때 발생합니다, 즉, CUBRID 서버 프로세스가 자바 기반의 저장 프로시저(Stored Procedure)나 사용자 정의 함수(User Defined Function) 등을 실행하기 위해 JVM 프로세스를 생성하고 초기화하려고 했으나, JVM 라이브러리 로딩 실패, JVM 생성 실패, 필요한 자바 테이블 찾기 실패, 메모리 할당 실패, 또는 JVM 초기화 과정에서 발생하는 다양한 문제로 인해 JVM 프로세스가 정상적으로 시작되지 못했음을 의미합니다. (11.4버전부터는 sp 처리를 위한 pl_server를 구동할 수 없는 경우)</p></li>
+</ul>
+<p id="error-902"><strong>ERROR CODE: -902, ‘Java VM is not running.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 JVM(Java Virtual Machine) 프로세스가 실행되지 않은 상태에서 자바 기반 기능을 사용하려고 할 때 발생합니다., 즉, CUBRID 서버 프로세스가 자바 기반의 저장 프로시저(Stored Procedure)나 사용자 정의 함수(User Defined Function) 등을 실행하기 위해 JVM과의 연결을 시도했으나, JVM 프로세스 자체가 시작되지 않았거나, 이미 종료되었거나, CUBRID의 PL 서버 관리자가 초기화되지 않은 상태임을 의미합니다. (11.4버전부터는 sp 처리를 위한 pl_server가 구동되어 있지 않은 경우)</p></li>
+</ul>
+<p id="error-903"><strong>ERROR CODE: -903, ‘Can’t connect Java VM: %1$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 JVM(Java Virtual Machine) 연결을 시도했지만 실패했을 때 발생합니다, 즉, CUBRID 서버 프로세스가 자바 기반의 저장 프로시저(Stored Procedure)나 사용자 정의 함수(User Defined Function) 등을 실행하기 위해 JVM 프로세스와 IPC(Inter-Process Communication) 또는 소켓 통신을 시도했으나, JVM 프로세스가 시작되지 않았거나, 비정상적으로 종료되었거나, CUBRID 서버가 JVM 프로세스를 찾을 수 없거나, 통신 설정에 문제가 있어 초기 연결 단계에서 실패했음을 의미합니다. (11.4버전부터는 sp 처리를 위한 pl_server와 연결이 되지 않는 경우)</p></li>
+</ul>
+<p id="error-904"><strong>ERROR CODE: -904, ‘Invalid stored procedure name.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 저장 프로시저(Stored Procedure)나 함수(Function)의 이름이 유효하지 않다고 판단했을 때 발생합니다, 즉, CUBRID 서버가 저장 프로시저를 생성(CREATE), 수정(ALTER), 삭제(DROP), 또는 호출(CALL)하려고 할 때, 지정된 이름이 CUBRID의 명명 규칙을 만족하지 않거나, 이름 처리 과정에서 문제가 발생했음을 의미합니다, 이는 CUBRID의 저장 프로시저 관리 시스템에서 이름의 유효성을 검증하는 과정에서 발생하는 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-905"><strong>ERROR CODE: -905, ‘Networking with JVM failed: %1$d’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 JVM(Java Virtual Machine)과 통신을 시도하는 과정에서 네트워크 관련 문제가 발생하여 실패했을 때 발생합니다., 즉, CUBRID 서버 프로세스가 자바 기반의 저장 프로시저(Stored Procedure)나 사용자 정의 함수(User Defined Function) 등을 실행하기 위해 JVM 프로세스와 소켓 통신을 시도했으나, 연결 실패, 데이터 전송 오류, 타임아웃 등의 네트워크 수준의 문제로 인해 통신이 중단되었음을 의미합니다, 이런 상황은 일반적으로 CUBRID 서버와 JVM 프로세스 간의 네트워크 설정 문제, 방화벽, JVM 프로세스의 비정상 종료, 시스템 자원 부족, 또는 CUBRID 내부의 JVM 연동 모듈 오류로 인해 발생합니다.  (11.4버전부터는 sp 처리를 위한 pl_server에 오류가 발생해서 결과 등을 주지 않는 경우)</p></li>
+</ul>
+<p id="error-907"><strong>ERROR CODE: -907, ‘The owner or a member of DBA group can drop stored procedure.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 현재 로그인한 사용자가 특정 저장 프로시저(Stored Procedure)를 변경(ALTER), 제거(DROP)하려고 시도했지만, 해당 저장 프로시저를 삭제할 수 있는 충분한 권한을 가지고 있지 않을 때 발생합니다, CUBRID에서는 저장 프로시저의 소유자(Owner)이거나 DBA(Database Administrator) 그룹의 멤버인 사용자만이 해당 저장 프로시저를 삭제할 수 있도록 엄격한 권한 정책을 적용합니다.</p></li>
+</ul>
+<p id="error-908"><strong>ERROR CODE: -908, ‘Too many arguments of stored procedure ‘%1$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템에서 저장 프로시저(Stored Procedure)나 함수(Function)를 정의하거나 호출할 때, 해당 프로시저에 지정된 인자의 개수가 CUBRID가 허용하는 최대 개수를 초과했을 때 발생합니다, CUBRID 서버가 <cite>CREATE PROCEDURE</cite> 또는 <cite>CREATE FUNCTION</cite> 문을 처리하는 과정에서, 사용자가 정의한 저장 프로시저의 인자 수를 넘어섰음을 의미합니다, 이는 CUBRID의 저장 프로시저 관리 시스템에서 인자 개수의 유효성을 검증하는 과정에서 발생하는 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-911"><strong>ERROR CODE: -911, ‘Invalid call: it can not return ResultSet.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 저장 프로시저(Stored Procedure)를 호출할 때, 해당 저장 프로시저가 ResultSet(쿼리 결과 집합)을 반환할 수 없는 방식으로 정의되었거나, ResultSet을 반환할 수 없는 컨텍스트에서 호출되었을 때 발생합니다, 즉, CUBRID의 특정 저장 프로시저는 ResultSet을 직접 반환하도록 설계되지 않았거나, 현재 실행 환경(예: 다른 저장 프로시저 내에서 호출 등)이 ResultSet 반환을 지원하지 않는 경우에 이 오류가 발생합니다, 이런 상황은 일반적으로 <cite>CALL</cite> 문을 사용하여 저장 프로시저를 호출할 때, 프로시저의 정의나 호출 방식이 ResultSet 반환 규칙을 위반할 때 발생합니다, 이는 저장 프로시저의 실행 규칙과 데이터베이스 시스템의 일관성을 보호하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-912"><strong>ERROR CODE: -912, ‘ResultSet can not be used input parameter.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템에서 저장 프로시저(Stored Procedure)나 함수(Function)를 정의 시 ‘RESULTSET’ 타입을 입력 파라미터로 사용하려고 할 때 발생합니다, CUBRID의 저장 프로시저 시스템에서 <cite>RESULTSET</cite> 타입은 출력 파라미터로만 사용할 수 있도록 제한하고 있기 때문입니다. 이는 데이터의 흐름과 메모리 관리 측면에서 시스템의 안정성을 보호하기 위한 제약 조건입니다.</p></li>
+</ul>
+<p id="error-913"><strong>ERROR CODE: -913, ‘Too many nested stored procedure call.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템에서 저장 프로시저(Stored Procedure)가 다른 저장 프로시저를 호출하는 중첩(nested) 호출의 깊이가 시스템에서 허용하는 최대치를 초과했을 때 발생합니다, 이는 무한 재귀 호출이나 과도한 중첩 호출로 인해 시스템 자원이 고갈되거나 스택 오버플로우가 발생하는 것을 방지하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-914"><strong>ERROR CODE: -914, ‘A serial object already exists as an auto increment constraint.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 자동 증가(Auto Increment) 제약조건을 생성하려고 할 때, 동일한 이름의 시리얼 객체가 이미 시스템에 존재할 때 발생합니다.</p></li>
+</ul>
+<p id="error-915"><strong>ERROR CODE: -915, ‘Increase value of an auto increment constraint should be greater than 0.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 자동 증가(Auto Increment) 제약조건을 생성하거나 수정할 때, 증가 값이 0 이하로 설정되었을 때 발생합니다, 즉, 자동 증가 시퀀스의 증가 값은 반드시 양수여야 하며, 0이나 음수는 허용되지 않습니다. 이는 자동 증가의 논리적 의미와 수학적 일관성을 보장하기 위한 제약조건입니다, 이런 상황은 일반적으로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 자동 증가 컬럼을 정의할 때, <cite>INCREMENT BY</cite> 절에 0 이하의 값을 지정했을 때 발생합니다.</p></li>
+</ul>
+<p id="error-918"><strong>ERROR CODE: -918, ‘The class ‘%1$s’ referred by the foreign key does not exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건을 정의하거나 수정할 때, 외래 키가 참조하려는 부모 테이블이 데이터베이스 내에 존재하지 않을 때 발생합니다, 이런 상황은 일반적으로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 외래 키를 정의할 때, 참조하려는 부모 테이블의 이름을 잘못 지정했거나, 해당 테이블이 이미 삭제된 경우에 발생합니다, 이는 데이터베이스 설계의 논리적 일관성과 참조 무결성을 보호하기 위한 제약조건 검증 오류입니다.</p></li>
+</ul>
+<p id="error-919"><strong>ERROR CODE: -919, ‘The class ‘%1$s’ referred by the foreign key does not have the primary key.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건을 정의하거나 수정할 때, 외래 키가 참조하려는 부모 테이블에 기본 키(Primary Key) 제약조건이 정의되어 있지 않을 때 발생합니다, 이런 상황은 일반적으로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 외래 키를 정의할 때, 참조하려는 부모 테이블에 기본 키가 정의되지 않았거나, 기본 키가 삭제된 후에 발생합니다, 이는 데이터 무결성과 참조 무결성을 보호하기 위한 제약조건 검증 오류입니다.</p></li>
+</ul>
+<p id="error-920"><strong>ERROR CODE: -920, ‘The foreign key ‘%1$s’ does not include the primary key member ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건을 정의하거나 수정할 때, 외래 키를 구성하는 컬럼 목록에 참조되는 기본 키(Primary Key)의 모든 컬럼이 포함되어 있지 않을 때 발생합니다, 이런 상황은 일반적으로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 외래 키를 정의할 때, 참조하는 키의 컬럼 목록을 잘못 지정하거나, 오타 등으로 인해 일부 컬럼이 누락되었을 때 발생합니다, 이는 데이터 무결성과 참조 무결성을 보호하기 위한 제약조건 검증 오류입니다.</p></li>
+</ul>
+<p id="error-921"><strong>ERROR CODE: -921, ‘The domain of the foreign key member ‘%1$s’ is different from that of the primary key member ‘%2$s’. (%3$s: %4$s vs. %5$s)’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건을 정의하거나 수정할 때, 외래 키를 구성하는 컬럼의 도메인(데이터 타입 및 관련 속성)이 참조하는 기본 키(Primary Key)를 구성하는 컬럼의 도메인과 일치하지 않을 때 발생합니다, 이런 상황은 일반적으로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 외래 키를 정의할 때, 참조하는 키의 컬럼 도메인을 잘못 이해하거나 오타 등으로 인해 호환되지 않는 도메인을 지정했을 때 발생합니다, 이는 데이터 무결성과 참조 무결성을 보장하기 위한 제약조건 검증 오류입니다.</p></li>
+</ul>
+<p id="error-922"><strong>ERROR CODE: -922, ‘The constraint of the foreign key ‘%1$s’ is invalid, due to value ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건이 유효하지 않은 값을 참조하거나, 제약조건 자체의 논리적 오류로 인해 데이터 무결성을 위반할 때 발생합니다, 즉, 외래 키 컬럼에 삽입되거나 업데이트된 값이 참조하는 부모 테이블의 기본 키(Primary Key) 또는 유니크 키(Unique Key)에 존재하지 않거나, 외래 키 제약조건의 정의 자체가 잘못되어 유효성 검사를 통과하지 못했음을 의미합니다, 이런 상황은 일반적으로 <cite>INSERT</cite> 또는 <cite>UPDATE</cite> 문을 사용하여 자식 테이블에 데이터를 추가하거나 변경할 때, 부모 테이블에 존재하지 않는 값을 외래 키 컬럼에 지정하려 할 때 발생합니다. 또한, 외래 키를 정의하는 과정에서 참조하는 컬럼의 데이터 타입 불일치나 기타 스키마 불일치로 인해 발생할 수도 있습니다, 이는 데이터 무결성과 참조 무결성을 보호하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-923"><strong>ERROR CODE: -923, ‘The primary key ‘%1$s’ referred by a foreign key ‘%2$s’ is not supposed to be dropped.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 기본 키(Primary Key)를 삭제하려고 할 때, 해당 기본 키가 다른 테이블의 외래 키(Foreign Key)에 의해 참조되고 있기 때문에 삭제 작업이 허용되지 않을 때 발생합니다, 즉, 참조 무결성(Referential Integrity)을 유지하기 위해, 자식 테이블에서 참조하고 있는 부모 테이블의 기본 키는 직접 삭제할 수 없도록 시스템이 제한하는 것입니다. 기본 키를 삭제하려면 먼저 해당 기본 키를 참조하는 모든 외래 키 제약조건을 제거해야 합니다, 이런 상황은 일반적으로 <cite>ALTER TABLE … DROP PRIMARY KEY</cite> 또는 <cite>DROP TABLE</cite> 문을 사용하여 기본 키가 설정된 테이블을 삭제하려 할 때, 해당 기본 키를 참조하는 외래 키가 남아있을 때 발생합니다, 이는 데이터 무결성을 보호하고 데이터베이스의 논리적 일관성을 유지하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-924"><strong>ERROR CODE: -924, ‘Update/Delete operations are restricted by the foreign key ‘%1$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건이 설정된 테이블의 부모 레코드를 업데이트하거나 삭제하려고 할 때 발생합니다. 이때 외래 키의 <cite>ON UPDATE</cite> 또는 <cite>ON DELETE</cite> 액션이 <cite>RESTRICT</cite> 로 설정되어 있어, 자식 테이블에 해당 부모 레코드를 참조하는 레코드가 존재하는 경우 작업이 허용되지 않습니다, 즉, 참조 무결성(Referential Integrity)을 유지하기 위해, 자식 레코드가 존재하는 부모 레코드는 수정하거나 삭제할 수 없도록 시스템이 제한하는 것입니다, 이런 상황은 일반적으로 <cite>UPDATE</cite> 또는 <cite>DELETE</cite> 문을 사용하여 부모 테이블의 레코드를 변경하려 할 때, 해당 레코드를 참조하는 자식 테이블의 레코드가 남아있을 때 발생합니다, 이는 데이터 무결성을 보호하고 데이터베이스의 논리적 일관성을 유지하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-926"><strong>ERROR CODE: -926, ‘The instance having the foreign key ‘%1$s’ cannot be dropped.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건에 의해 다른 테이블에서 참조되고 있는 인스턴스(레코드)를 삭제하려고 할 때 발생합니다, 즉, 부모 테이블의 인스턴스를 삭제하려 하지만, 자식 테이블에 해당 부모 인스턴스를 참조하는 외래 키가 존재하여 참조 무결성이 깨질 수 있기 때문에 삭제 작업이 허용되지 않는다는 의미입니다, 이런 상황은 일반적으로 <cite>DELETE</cite> 문을 사용하여 부모 테이블의 레코드를 삭제할 때, 해당 레코드를 참조하는 자식 테이블의 레코드가 남아있을 때 발생합니다, 이는 데이터 무결성을 보호하고 데이터베이스의 논리적 일관성을 유지하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-927"><strong>ERROR CODE: -927, ‘The number of keys of the foreign key ‘%1$s’ is different from that of the primary key ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 외래 키(Foreign Key) 제약조건을 정의하거나 수정할 때, 외래 키를 구성하는 컬럼의 개수가 참조하는 기본 키(Primary Key)를 구성하는 컬럼의 개수와 일치하지 않을 때 발생합니다, 즉, 외래 키는 참조하는 부모 테이블의 기본 키 또는 유니크 키와 동일한 수의 컬럼으로 구성되어야 하며, 각 컬럼의 데이터 타입도 호환되어야 합니다. 이 메시지는 주로 컬럼 개수의 불일치로 인해 발생합니다, 이런 상황은 일반적으로 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 외래 키를 정의할 때, 참조하는 키의 구조를 잘못 이해하거나 오타 등으로 인해 컬럼 개수를 다르게 지정했을 때 발생합니다, 이는 데이터 무결성과 관계형 데이터베이스의 논리적 일관성을 보장하기 위한 제약조건 검증 오류입니다.</p></li>
+</ul>
+<p id="error-931"><strong>ERROR CODE: -931, ‘Start value of an auto increment constraint should be less then max value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 자동 증가(Auto Increment) 제약조건을 생성하거나 수정할 때, 시작 값이 최대 값보다 크거나 같을 때 발생합니다, 즉, 자동 증가 시퀀스의 시작 값이 해당 데이터 타입의 최대 허용 범위를 초과하거나, 시작 값과 최대 값이 동일한 경우에 발생하는 제약조건 위반 오류입니다, 이런 상황은 일반적으로 테이블 스키마 정의 시 잘못된 자동 증가 설정, 데이터 타입과 시작 값 간의 불일치, 또는 사용자가 명시적으로 설정한 시작 값이 데이터 타입의 한계를 초과할 때 발생합니다.</p></li>
+</ul>
+<p id="error-935"><strong>ERROR CODE: -935, ‘Argument of %1$s function is out of range.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 수학 함수나 시스템 함수의 인수가 해당 함수가 처리할 수 있는 유효한 범위를 벗어났을 때 발생합니다, 즉, 함수가 정의된 도메인(domain)이나 수학적으로 유효하지 않은 입력값을 받았을 때 발생하는 오류입니다, 이런 상황은 일반적으로 수학적으로 정의되지 않은 연산이나 시스템 함수의 범위를 벗어난 접근을 시도할 때 발생합니다.</p></li>
+</ul>
+<p id="error-936"><strong>ERROR CODE: -936, ‘Overflow occurred in exp context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 쿼리 프로세서에서 다양한 데이터 타입의 값에 대해 지수 함수를 계산하는 역할할 때 매우 큰 양수나 음수 값에 대해 지수 함수를 계산할 때 발생합니다.</p></li>
+</ul>
+<p id="error-965"><strong>ERROR CODE: -965, ‘Cannot use duplicate attribute names in index key list. Attribute name ‘%1$s’ listed more than once.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 인덱스를 생성하거나 수정할 때, 인덱스 키 목록에 동일한 속성(컬럼) 이름이 두 번 이상 지정되었을 때 발생합니다, CUBRID는 인덱스의 효율성과 일관성을 위해 동일한 컬럼을 인덱스 키에 중복으로 포함하는 것을 허용하지 않습니다. 이는 불필요한 중복을 방지하고, 인덱스의 성능을 최적화하며, 데이터베이스 스키마의 무결성을 유지하기 위한 보호성 오류입니다, 예를 들어, <a href="#id5"><span class="problematic" id="id6">`</span></a>CREATE INDEX idx_name ON table_name (col1, col2, col1)`과 같이 동일한 컬럼을 두 번 지정하면 이 오류가 발생합니다.</p></li>
+</ul>
+<p id="error-979"><strong>ERROR CODE: -979, ‘CONNECT BY loop in user data.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 connect by 구문에서 순환 참조에 의해 무한 루프가 발생한 경우 발생합니다.</p></li>
+</ul>
+<p id="error-996"><strong>ERROR CODE: -996, ‘Incorrect number of values given. %1$d values were given but %2$d values are required.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 prepare from 구문에 사용한 host 변수 개수(?) 와 execute using 구문의 값의 개수가 맞지 않는 경우 발생합니다.</p></li>
+</ul>
+<p id="error-997"><strong>ERROR CODE: -997, ‘Cannot add the foreign key constraint %1$s to the partitioned %2$s. Referential actions that update attributes are not yet supported on partitioned classes.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파티션 테이블에 외래키 제약 조건을 추가하려고 할 때 발생합니다, CUBRID는 현재 파티션된 테이블에서 참조 동작(Referential Action)이 속성을 업데이트하는 외래키 제약 조건을 지원하지 않습니다, 참조 동작은 <cite>ON UPDATE CASCADE</cite>, <cite>ON UPDATE SET NULL</cite>, <cite>ON UPDATE SET DEFAULT</cite> 등과 같이 부모 테이블의 키 값이 변경될 때 자식 테이블의 외래키 값을 자동으로 업데이트하는 기능입니다, 파티션된 테이블은 데이터가 여러 파티션에 분산되어 저장되므로, 이러한 복잡한 참조 동작을 수행할 때 성능 문제나 데이터 일관성 문제가 발생할 수 있어 CUBRID에서 제한하고 있습니다.</p></li>
+</ul>
+<p id="error-998"><strong>ERROR CODE: -998, ‘Cannot add the foreign key constraint %1$s on the attribute %2$s. The attribute cannot have a NOT NULL constraint because it has to match the SET NULL referential action.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 SET NULL을 참조 작업으로 사용하는 외래 키를 정의할 때, 해당 컬럼에 NOT NULL 제약조건인 경우 발생합니다. SET NULL 참조 작업은 참조 무결성을 위해 NULL 값을 허용해야 하므로, NOT NULL 제약조건과 논리적으로 충돌합니다.</p></li>
+</ul>
+<p id="error-999"><strong>ERROR CODE: -999, ‘Cannot create table ‘%1$s’ like table ‘%2$s’ because the existing table has features that will not be duplicated (%3$s).’</strong></p>
+<p>이 오류 코드는 CREATE TABLE LIKE 구문 사용 시, 원본 테이블이 가진 특정 기능이나 속성을 새 테이블에 복제할 수 없을 때 발생합니다.</p>
+<p id="error-1000"><strong>ERROR CODE: -1000, ‘%1$s’ is a CLASS or SHARED attribute but only normal attributes are allowed in this context.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 <cite>CREATE TABLE AS SELECT</cite> 구문에 발생하는 오류로 column 속성에 shared 또는 class 속성을 사용할 수 없다는 오류입니다, 예를들면, <cite>CREATE TABLE x (name varchar);</cite> <cite>CREATE TABLE y (name varchar shared ‘1111’) as SELECT name FROM x;</cite> 이와 같은 DDL(shared 복제) 구문 형식을 사용할 경우 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1003"><strong>ERROR CODE: -1003, ‘The constraint ‘%1$s’ exists but has a different type.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 데이터베이스 스키마 관리 중에 발생하는 제약조건 타입 불일치 오류로 primary key를 <a href="#id7"><span class="problematic" id="id8">`</span></a>alter table .. drop index`로 삭제하려고 할때 발생합니다.</p></li>
+</ul>
+<p id="error-1004"><strong>ERROR CODE: -1004, ‘Please note that when using ALTER TABLE DROP FOREIGN KEY, CUBRID drops both the constraint and its associated index.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템에서 <cite>ALTER TABLE DROP FOREIGN KEY</cite> 문을 실행할 때 사용자에게 제공하는 알림(notification)입니다, 이는 CUBRID의 외래키 관리 시스템의 특성을 설명하는 정보성 메시지이며, 오류가 아닌 사용자에게 주의사항을 알려주는 알림입니다.</p></li>
+</ul>
+<p id="error-1011"><strong>ERROR CODE: -1011, ‘Cannot add the foreign key constraint %1$s on the shared attribute %2$s.’</strong></p>
+<p>이 오류 코드는 SHARED 속성에 외래 키 제약조건을 추가할 수 없음을 나타냅니다.</p>
+<p id="error-1012"><strong>ERROR CODE: -1012, ‘Cannot create table with NULL column type.’</strong></p>
+<p>이 오류 코드는 <cite>CREATE TABLE AS SELECT</cite> 구문 실행 시 NULL 타입의 컬럼이 포함된 경우 발생하는 오류입니다, 예를들면 <cite>CREATE TABLE tbl AS SELECT NULL AS a</cite> 이와 같은 DDL 복제 구문 형식을 사용할 경우 발생할 수 있습니다.</p>
+<p id="error-1013"><strong>ERROR CODE: -1013, ‘Set DEFAULT or SHARED on %1$s typed column is not allowed.’</strong></p>
+<p>이 오류 코드는 BLOB, CLOB 데이터 타입의 컬럼에 DEFAULT 값이나 SHARED 속성을 설정할 수 없음을 나타냅니다.</p>
+<p id="error-1014"><strong>ERROR CODE: -1014, ‘Set NOT NULL on %1$s typed column is not allowed.’</strong></p>
+<p>이 오류 코드는 BLOB, CLOB 데이터 타입의 컬럼에 NOT NULL 제약조건을 설정할 수 없음을 나타냅니다.</p>
+<p id="error-1041"><strong>ERROR CODE: -1041, ‘A string was truncated in context of “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 쿼리 처리(Query Processing)나 데이터 저장/조회 과정 중에 문자열 값이 할당된 버퍼나 대상 컬럼의 크기보다 커서 뒷부분이 잘렸음을 나타냅니다, 이는 <a href="#id9"><span class="problematic" id="id10">`</span></a>ALTER TABLE`에서 컬럼의 문자열 크기를 줄이는 경우나 group_concat 함수와 같이 문자열 병합 시 발생할 수 있는 경고성 오류 메세지입니다.</p></li>
+</ul>
+<p id="error-1042"><strong>ERROR CODE: -1042, ‘Trying to create a string requiring %1$d bytes of memory, while the maximum allowed is %2$d bytes.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 쿼리 처리 중 특정 문자열 연산(주로 문자열 함수)의 결과로 생성되는 문자열의 크기가 시스템에서 허용하는 단일 문자열 객체의 최대 크기 제한을 초과했을 때 발생합니다, 이는 $CUBRID/conf/cubrid.conf 환경설정에서 string_max_size_bytes 파라미터 설정값 연관성이 매우 높습니다.</p></li>
+</ul>
+<p id="error-1044"><strong>ERROR CODE: -1044, ‘Cannot change attribute “%1$s”. CUBRID cannot change attributes that are partitioning keys.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 사용자가 <cite>ALTER TABLE … CHANGE</cite> 구문을 사용하여 테이블의 속성 정의를 변경하려고 시도했지만, 해당 속성이 테이블 파티셔닝(Partitioning)의 키(Key)로 사용되고 있기 때문에 변경이 거부되었음을 의미합니다, CUBRID는 파티션된 테이블의 데이터 분산 규칙과 무결성을 유지하기 위해, 파티셔닝 키로 사용되는 컬럼의 정의(예: 데이터 타입, 제약 조건 등)를 변경하는 것을 허용하지 않습니다. 파티셔닝 키는 데이터가 어떤 파티션에 저장될지를 결정하는 기준이므로, 이 키 컬럼의 정의가 변경되면 기존 파티션 구조 전체가 무효화되고 데이터 정합성이 깨질 수 있기 때문입니다.</p></li>
+</ul>
+<p id="error-1045"><strong>ERROR CODE: -1045, ‘Cannot change attribute “%1$s”. CUBRID cannot change attributes used in foreign keys (either referenced or referencing).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 또는 <cite>ALTER TABLE … MODIFY</cite> 문을 사용하여 특정 컬럼을 변경하려고 할 때 발생합니다. 해당 컬럼이 외래키(Foreign Key) 관계에서 사용되고 있는 경우, CUBRID는 데이터 무결성과 참조 일관성을 보장하기 위해 이러한 변경을 허용하지 않습니다, 외래키는 데이터베이스의 참조 무결성을 유지하는 중요한 제약 조건으로, 참조되는 컬럼(Parent Table의 Primary Key 또는 Unique Key)과 참조하는 컬럼(Child Table의 Foreign Key) 간의 관계를 정의합니다. 이러한 컬럼의 변경은 참조 무결성을 깨뜨릴 수 있으므로 CUBRID에서 제한하고 있습니다.</p></li>
+</ul>
+<p id="error-1046"><strong>ERROR CODE: -1046, ‘Cannot change attribute “%1$s”. CUBRID cannot change the attribute’s domain. This change of domain is not supported.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 또는 <cite>ALTER TABLE … MODIFY</cite> 문을 사용하여 특정 컬럼의 데이터 타입을 변경하려고 할 때 발생합니다. CUBRID가 현재 해당 데이터 타입 간의 변환을 지원하지 않는 경우에 발생합니다. 모든 데이터 타입 변환이 항상 가능한 것은 아니며, 특히 복잡하거나 호환되지 않는 데이터 타입 간의 변경은 데이터 무결성이나 시스템 안정성에 문제를 일으킬 수 있어 CUBRID에서 명시적으로 지원하지 않을 수 있습니다. 이는 데이터베이스의 안정성과 일관성을 유지하기 위한 CUBRID의 설계상의 제한입니다.</p></li>
+</ul>
+<p id="error-1047"><strong>ERROR CODE: -1047, ‘Cannot change attribute “%1$s”. CUBRID cannot change the attribute’s domain. The new domain may not correctly represent all the existing attribute values.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 또는 <cite>ALTER TABLE … MODIFY</cite> 문을 사용하여 특정 컬럼의 데이터 타입을 변경하려고 할 때 발생합니다. CUBRID가 기존 컬럼에 저장된 데이터를 분석한 결과, 요청된 새로운 데이터 타입으로 변환할 수 없는 값이 존재하거나, 데이터 손실이 발생할 가능성이 높다고 판단했을 때 발생합니다. 이는 데이터 무결성을 보장하고 잠재적인 데이터 손실을 방지하기 위한 CUBRID의 보호 메커니즘입니다. 예를 들어, <cite>VARCHAR</cite> 컬럼에 숫자가 아닌 문자열이 포함되어 있는데 이를 <cite>INT</cite> 타입으로 변경하려고 할 때, 또는 <cite>INT</cite> 컬럼에 <cite>BIGINT</cite> 범위를 초과하는 값이 있는데 이를 <a href="#id11"><span class="problematic" id="id12">`</span></a>INT`로 변경하려고 할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1048"><strong>ERROR CODE: -1048, ‘Cannot change attribute “%1$s”. CUBRID cannot currently change an attribute’s AUTO_INCREMENT if the attribute’s domain also changes.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE</cite> 문을 사용하여 특정 컬럼의 <cite>AUTO_INCREMENT</cite> 속성과 데이터 타입을 동시에 변경하려고 할 때 발생합니다. CUBRID는 데이터 무결성을 유지하고 스키마 변경의 복잡성을 줄이기 위해 이러한 동시 변경 작업을 허용하지 않습니다. <cite>AUTO_INCREMENT</cite> 속성은 값 생성 로직과 관련이 있고, 데이터 타입 변경은 기존 데이터의 변환 및 저장 방식과 관련이 있으므로, 이 두 가지를 한 번에 변경하는 것은 잠재적인 데이터 손실, 일관성 문제 또는 예측 불가능한 동작을 초래할 수 있습니다. 따라서 CUBRID는 이러한 변경을 별도의 단계로 나누어 수행하도록 요구합니다.</p></li>
+</ul>
+<p id="error-1049"><strong>ERROR CODE: -1049, ‘Cannot change attribute “%1$s”. CUBRID cannot currently change the attribute’s domain. The domain conversion is possible but this feature is not allowed by configuration.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 또는 <cite>ALTER TABLE … MODIFY</cite> 문을 사용하여 특정 컬럼의 데이터 타입을 변경하려고 할 때 발생합니다. CUBRID가 기술적으로는 해당 도메인 변환이 가능하다고 판단했지만, 현재 시스템 설정에서 이 기능을 허용하지 않도록 구성되어 있어 발생하는 제한적 오류입니다. 이는 데이터 타입 변환의 복잡성, 잠재적인 데이터 손실 위험, 또는 시스템 성능에 미칠 수 있는 영향을 고려하여 관리자가 의도적으로 제한한 기능일 가능성이 높습니다, 이는 $CUBRID/conf/cubrid.conf 환경설정에서 alter_table_change_type_strict 설정값이 true 인 경우 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1050"><strong>ERROR CODE: -1050, ‘Cannot change attribute “%1$s”. CUBRID cannot currently change the attribute’s domain. The attribute has an index on it.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 또는 <cite>ALTER TABLE … MODIFY</cite> 문을 사용하여 특정 컬럼의 데이터 타입을 변경하려고 할 때 발생합니다. 특히, 변경하려는 컬럼에 이미 인덱스(Index)가 생성되어 있는 경우 CUBRID는 데이터 무결성 및 인덱스 구조의 복잡성 때문에 해당 도메인 변경을 허용하지 않습니다. 인덱스는 특정 컬럼의 값에 기반하여 데이터를 빠르게 검색할 수 있도록 돕는 구조인데, 컬럼의 데이터 타입이 변경되면 인덱스 구조 자체가 유효하지 않게 되거나 재구축이 필요하게 됩니다. CUBRID는 이러한 복잡성과 잠재적인 데이터 손상을 방지하기 위해 인덱스가 있는 컬럼의 도메인 변경을 직접적으로 제한합니다.</p></li>
+</ul>
+<p id="error-1052"><strong>ERROR CODE: -1052, ‘Attribute “%1$s” was not changed. CUBRID did not detect any effective changes in the attribute representation.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 또는 <cite>ALTER TABLE … MODIFY</cite> 문을 사용하여 특정 컬럼의 속성을 변경하려고 시도했지만, CUBRID가 요청된 변경 사항이 기존 컬럼의 정의와 실질적으로 동일하다고 판단했을 때 발생하는 경고성 알림입니다. 즉, 사용자가 변경하려는 컬럼의 데이터 타입, 길이, 제약 조건(NOT NULL, DEFAULT 등) 등이 현재 컬럼의 정의와 동일하여 실제적인 변경이 발생하지 않았음을 의미합니다. 이는 오류가 아니며, 시스템이 불필요한 작업을 수행하지 않았음을 알려주는 정보성 메시지입니다.</p></li>
+</ul>
+<p id="error-1054"><strong>ERROR CODE: -1054, ‘The new value of an auto increment constraint should be greater than or equal to the current value.’</strong></p>
+<p>이 메시지 CUBRID 데이터베이스 시스템에서 <cite>ALTER TABLE</cite> 문을 사용하여 자동 증가(AUTO_INCREMENT) 제약조건의 값을 변경하려고 할 때, 변경 값이 현재 값보다 작은 경우에 발생합니다, 즉, CUBRID 서버가 <cite>ALTER TABLE … AUTO_INCREMENT = x</cite> 문을 처리하는 과정에서, 사용자가 지정한 새로운 값이 해당 컬럼의 현재 자동 증가 값보다 작을 때 발생합니다. 이는 데이터 무결성을 보호하기 위한 제약 조건으로, 자동 증가 값이 감소하면 기존 데이터와의 일관성 문제가 발생할 수 있기 때문입니다, 이는 CUBRID의 자동 증가 시스템에서 데이터 일관성을 유지하기 위한 보호성 오류입니다.</p>
+<p id="error-1055"><strong>ERROR CODE: -1055, ‘The new value of an auto increment constraint should be lower than the maximum value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE</cite> 문을 사용하여 <cite>AUTO_INCREMENT</cite> 값을 최대값보다 크게 설정하려고 할 때 발생합니다. 특히, 사용자가 지정한 새로운 <cite>AUTO_INCREMENT</cite> 시작 값(예: <cite>ALTER TABLE table_name AUTO_INCREMENT = N;</cite> 에서 N 값)이 해당 컬럼의 데이터 타입이 허용하는 최대값보다 큰 경우 발생합니다. <cite>AUTO_INCREMENT</cite> 값은 항상 증가해야 하며, 데이터 타입의 범위를 초과하거나 기존 데이터의 최대값을 침범할 수 없으므로, CUBRID는 데이터 무결성을 보장하기 위해 이러한 설정을 거부합니다.</p></li>
+</ul>
+<p id="error-1056"><strong>ERROR CODE: -1056, ‘To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블 생성 또는 변경시 auto_increment 컬럼이 두개 이상인 경우, auto_increment=seed 값을 주려고 할때, 어떤 auto_increment 컬럼을 사용할지 판단하기 힘들어서 발생하는 오류입니다. 참고로 한 테이블내에 여러개의 auto_increment 컬럼을 설정할 수 있습니다.</p></li>
+</ul>
+<p id="error-1057"><strong>ERROR CODE: -1057, ‘Cannot add a NOT NULL ‘%1$s’ typed attribute without a DEFAULT value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>CREATE TABLE</cite> 또는 <cite>ALTER TABLE</cite> 문을 사용하여 <cite>NOT NULL</cite> 제약 조건을 가진 타입 속성을 추가하려고 경우나 컬럼의 타입의 default 값을 지정할 수 없는 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1058"><strong>ERROR CODE: -1058, ‘ALTER TABLE .. CHANGE : changing to new domain : cast failed, current configuration doesn’t allow truncation or overflow.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 문을 사용하여 컬럼의 데이터 타입을 변경할 때 발생합니다. 기존 컬럼의 데이터를 새로운 데이터 타입으로 변환(캐스팅)하는 과정에서 일부 데이터가 새로운 도메인의 범위를 초과하거나 잘림이 발생할 수 있는 상황이 감지되었습니다. 현재 CUBRID의 설정에서는 데이터 손실을 방지하기 위해 이러한 변환을 허용하지 않도록 구성되어 있습니다. 이는 데이터 무결성을 보장하고 의도치 않은 데이터 손실을 방지하기 위한 CUBRID의 보호 메커니즘입니다.</p></li>
+</ul>
+<p id="error-1059"><strong>ERROR CODE: -1059, ‘ALTER TABLE .. CHANGE : changing to new domain : cast failed, default value of new domain was set.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 문을 사용하여 컬럼의 데이터 타입(숫자, 문자열이 아닌 경우)을 변경할 때 발생하는 정보성 알림입니다. 기존 컬럼의 데이터를 새로운 데이터 타입으로 변환(캐스팅)하는 과정에서 일부 데이터가 새로운 도메인의 범위에 맞지 않거나 변환할 수 없는 경우, CUBRID는 해당 데이터를 새로운 도메인의 “기본값(default value)”으로 자동 설정합니다. 이는 데이터 손실을 최소화하면서 스키마 변경을 완료하기 위한 CUBRID의 자동 데이터 변환 메커니즘입니다. 예를 들어, <cite>VARCHAR</cite> 컬럼을 <a href="#id13"><span class="problematic" id="id14">`</span></a>INT`로 변경할 때 숫자로 변환할 수 없는 문자열은 <a href="#id15"><span class="problematic" id="id16">`</span></a>INT`의 기본값인 0으로 설정될 수 있습니다. 이 메시지는 시스템이 데이터 일관성을 위해 성공적으로 수행한 자동 변환 작업에 대한 보고입니다.</p></li>
+</ul>
+<p id="error-1060"><strong>ERROR CODE: -1060, ‘ALTER TABLE .. CHANGE : changing to new domain : cast failed, minimum value of new domain was set.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 문을 사용하여 컬럼의 데이터 타입(도메인 값이 음수인 경우)을 변경할 때 발생하는 정보성 알림입니다. 기존 컬럼의 데이터를 새로운 데이터 타입으로 변환(캐스팅)하는 과정에서 일부 데이터가 새로운 도메인의 범위를 초과하거나 변환할 수 없는 경우, CUBRID는 해당 데이터를 새로운 도메인의 최소값으로 자동 설정합니다. 이는 데이터 손실을 최소화하면서 스키마 변경을 완료하기 위한 CUBRID의 자동 데이터 변환 메커니즘입니다.</p></li>
+</ul>
+<p id="error-1061"><strong>ERROR CODE: -1061, ‘ALTER TABLE .. CHANGE : changing to new domain : cast failed, maximum value of new domain was set.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 문을 사용하여 컬럼의 데이터 타입(도메인 값이 양수인 경우)을 변경할 때 발생하는 정보성 알림입니다. 기존 컬럼의 데이터를 새로운 데이터 타입으로 변환(캐스팅)하는 과정에서 일부 데이터가 새로운 도메인의 범위를 초과하거나 변환할 수 없는 경우, CUBRID는 해당 데이터를 새로운 도메인의 최대값으로 자동 설정합니다. 이는 데이터 손실을 최소화하면서 스키마 변경을 완료하기 위한 CUBRID의 자동 데이터 변환 메커니즘입니다.</p></li>
+</ul>
+<p id="error-1062"><strong>ERROR CODE: -1062, ‘Cannot change attribute “%1$s”. The change would result in multiple primary keys being defined.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE</cite> 문을 사용하여 특정 컬럼을 변경하려고 할 때 발생합니다. 요청된 변경 사항이 테이블에 여러 개의 기본키(Primary Key)가 정의되도록 할 경우, CUBRID는 데이터 무결성과 테이블 구조의 일관성을 보장하기 위해 해당 변경을 거부합니다. 관계형 데이터베이스에서는 각 테이블에 하나의 기본키만 허용되며, 여러 개의 기본키가 존재하면 데이터의 고유성과 참조 무결성에 문제가 발생할 수 있습니다. 이는 데이터베이스 설계의 기본 원칙을 위반하는 상황입니다.</p></li>
+</ul>
+<p id="error-1063"><strong>ERROR CODE: -1063, ‘Cannot add NOT NULL constraint for attribute “%1$s”: there are existing NULL values for this attribute.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE</cite> 문을 사용하여 특정 컬럼에 <cite>NOT NULL</cite> 제약 조건을 추가하려고 할 때 발생합니다. 해당 컬럼에 이미 하나 이상의 <cite>NULL</cite> 값이 존재하는 경우, CUBRID는 데이터 무결성을 보장하기 위해 <cite>NOT NULL</cite> 제약 조건 추가를 거부합니다. <cite>NOT NULL</cite> 제약 조건은 컬럼에 <cite>NULL</cite> 값이 저장되는 것을 완전히 금지하므로, 기존의 <cite>NULL</cite> 값들을 먼저 처리하거나 제거해야 합니다. 이는 데이터베이스의 일관성과 무결성을 보호하기 위한 CUBRID의 안전장치입니다.</p></li>
+</ul>
+<p id="error-1064"><strong>ERROR CODE: -1064, ‘ALTER TABLE .. CHANGE : adding NOT NULL : all existing NULL values were changed to domain’s hard default.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 <cite>ALTER TABLE … CHANGE</cite> 문을 사용하여 특정 컬럼에 <cite>NOT NULL</cite> 제약 조건을 추가할 때 발생하는 정보성 알림 입니다. 해당 컬럼에 이미 <cite>NULL</cite> 값이 존재하고, 사용자가 명시적인 <cite>DEFAULT</cite> 값을 지정하지 않은 경우, CUBRID는 데이터 무결성을 유지하기 위해 기존의 모든 <cite>NULL</cite> 값들을 해당 컬럼 데이터 타입의 “하드 기본값(hard default value)”으로 자동 변환합니다. 예를 들어, 숫자 타입은 0, 문자열 타입은 빈 문자열(‘’) 등으로 변경됩니다. 이 메시지는 오류가 아니라, 시스템이 데이터 일관성을 위해 성공적으로 수행한 자동 변환 작업에 대한 보고입니다.</p></li>
+</ul>
+<p id="error-1067"><strong>ERROR CODE: -1067, ‘Column ‘%1$s’ cannot have a NOT NULL constraint and a NULL default value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블을 생성하거나 변경할 때, 특정 컬럼에 NOT NULL 제약 조건을 부여하면서 동시에 NULL을 기본값으로 설정하려고 시도할 때 발생합니다. NOT NULL 제약 조건은 해당 컬럼에 NULL 값이 저장되는 것을 허용하지 않으므로, NULL 기본값은 이 제약 조건과 논리적으로 충돌하여 허용되지 않습니다. 이는 데이터 무결성을 보장하고 데이터 정의의 일관성을 유지하기 위한 시스템의 보호 메커니즘입니다.</p></li>
+</ul>
+<p id="error-1068"><strong>ERROR CODE: -1068, ‘Maximum trigger depth cannot exceed %1$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID가 허용하는 최대 트리거 깊이 제한을 초과할 때 발생합니다. CUBRID는 트리거의 무한 루프나 과도한 리소스 소모를 방지하기 위해 트리거 호출의 최대 깊이를 제한하며, 이 메시지는 설정 자체가 시스템의 내부적인 한계를 넘어섰음을 의미합니다. 이는 데이터베이스의 안정성과 성능을 보호하기 위한 중요한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-1080"><strong>ERROR CODE: -1080, ‘The maximum length of filter predicate string must be %1$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 function index 생성시 발생하는 오류로 function에 사용된 인자(수식)의 길이가 시스템 내부에서 정한 길이보다 큰경우 발생합니다.</p></li>
+</ul>
+<p id="error-1085"><strong>ERROR CODE: -1085, ‘Cannot compile regular expression: ‘%1$s’’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 정규 표현식(Regular Expression)을 컴파일하는 과정에서 문제가 발생하여 정상적으로 처리할 수 없을 때 나타납니다, 이는 주로 정규 표현식 자체의 문법 오류, 유효하지 않은 패턴, 또는 정규 표현식 엔진의 내부적인 문제로 인해 발생할 수 있습니다. 데이터베이스가 쿼리 내에서 정규 표현식 함수를 처리하기 전에 패턴을 컴파일할 때 이 오류가 발생하면 해당 쿼리 실행이 실패하게 됩니다.</p></li>
+</ul>
+<p id="error-1086"><strong>ERROR CODE: -1086, ‘Cannot execute regular expression: ‘%1$s’’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 정규 표현식(Regular Expression)을 실행하는 과정에서 문제가 발생하여 정상적으로 처리할 수 없을 때 나타납니다. 이는 주로 정규 표현식 자체의 문법 오류, 유효하지 않은 패턴, 또는 정규 표현식 엔진의 내부적인 문제로 인해 발생할 수 있습니다. 데이터베이스가 쿼리 내에서 정규 표현식 함수를 처리할 때 이 오류가 발생하면 해당 쿼리 실행이 실패하게 됩니다.</p></li>
+</ul>
+<p id="error-1092"><strong>ERROR CODE: -1092, ‘Cannot prepare statement of type ‘%1$s’ with host variables.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 타입의 SQL 문장을 호스트 변수와 함께 PREPARE 문으로 준비하려고 할 때 발생합니다. PREPARE 문은 SQL 문장을 미리 컴파일하여 실행 계획을 수립하는 기능으로, 호스트 변수를 사용하여 동적으로 SQL을 구성할 수 있습니다. 하지만 일부 특정 타입의 문장(예: DDL 문, 특정 시스템 명령어 등)은 호스트 변수와 함께 사용할 수 없도록 제한되어 있습니다. 이는 데이터베이스의 보안과 안정성을 보호하기 위한 제약 조건입니다.</p></li>
+</ul>
+<p id="error-1096"><strong>ERROR CODE: -1096, ‘Altering partitioning schema is not allowed when the partitioned class is referenced by a foreign key.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파티션된 테이블의 파티셔닝 스키마를 변경하려고 할 때, 해당 테이블이 다른 테이블의 외래 키 제약 조건에 의해 참조되고 있는 경우 발생합니다. 데이터 무결성을 보호하기 위해 외래 키 관계가 존재하는 파티션 테이블의 구조 변경을 제한하는 보호 메커니즘입니다.</p></li>
+</ul>
+<p id="error-1097"><strong>ERROR CODE: -1097, ‘Column ‘%1$s’ cannot have a PRIMARY KEY constraint and a NULL default value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블을 생성하거나 변경할 때, 특정 컬럼에 PRIMARY KEY 제약 조건을 부여하면서 동시에 NULL을 기본값으로 설정하려고 시도할 때 발생합니다. PRIMARY KEY는 고유성과 NOT NULL 속성을 필수적으로 요구하므로, NULL 기본값은 이 제약 조건과 충돌하여 허용되지 않습니다. 이는 데이터 무결성을 보장하기 위한 시스템의 보호 메커니즘입니다.</p></li>
+</ul>
+<p id="error-1098"><strong>ERROR CODE: -1098, ‘Locales for language ‘%1$s’ are not available with charset ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 날짜/시간 포맷팅 함수(예: DATE_FORMAT, TIME_FORMAT)를 사용할 때 발생하는 오류입니다, 즉, 특정 언어와 문자셋의 조합에 대한 로케일 데이터가 시스템에 설치되어 있지 않거나 지원되지 않을 때 발생합니다, 이는 다국어 지원과 관련된 오류로, 날짜나 시간을 특정 언어 형식으로 출력하려고 할 때 해당 언어의 로케일 정보가 현재 문자셋과 호환되지 않는 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1106"><strong>ERROR CODE: -1106, ‘Multiple rows in source table match the same row in destination table.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 group by 처리 중 결과에 2개 이상의 동일한 record가 존재할 경우와 sort 후 결과를 병합하는 과정에서 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-1107"><strong>ERROR CODE: -1107, ‘Invalid bucket number for NTILE. Should be greater than zero and no more than 2,147,483,647.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 SQL 윈도우 함수인 NTILE()을 사용할 때, 인수로 지정된 버킷(그룹)의 개수가 유효한 범위를 벗어났을 때 발생합니다, 즉, NTILE(n)에서 n 값이 0보다 작거나 같거나, 또는 CUBRID의 정수형이 표현할 수 있는 최대값(2,147,483,647)을 초과하는 경우에 이 오류가 발생합니다. <cite>NTILE</cite> 함수는 행을 균등하게 나누기 위해 양의 정수 버킷 개수를 필요로 하며, 시스템의 정수형 한계를 넘어서는 값은 처리할 수 없습니다, 이는 NTILE 함수의 올바른 사용법과 데이터 타입의 한계를 벗어나는 입력을 방지하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-1108"><strong>ERROR CODE: -1108, ‘Invalid bucket number for WIDTH_BUCKET. Should be greater than zero and less than 2,147,483,647.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 WIDTH_BUCKET 함수의 네 번째 인자(버킷 수)가 유효한 범위를 벗어났을 때 발생합니다, 즉, WIDTH_BUCKET 함수는 데이터를 지정된 개수의 균등한 너비 버킷으로 분할하는 함수인데, 버킷 수가 1보다 작거나 32비트 정수의 최대값(2,147,483,647) 이상일 때 발생합니다, 이는 함수의 정상적인 동작을 보장하기 위한 보호성 오류입니다, WIDTH_BUCKET 함수는 주로 데이터 분석이나 통계 작업에서 사용되며, 버킷 수가 너무 크거나 작으면 메모리 사용량이나 성능에 문제가 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1109"><strong>ERROR CODE: -1109, ‘Invalid value for partition definition.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파티션 테이블의 분할 키(partition key) 값이 파티션 정의와 일치하지 않을 때 발생합니다, 즉, 데이터를 특정 파티션에 삽입하거나 업데이트하려고 할 때, 해당 데이터의 분할 키 값이 어떤 파티션의 범위에도 속하지 않거나 파티션 정의에 맞지 않는 경우 발생합니다, 이는 파티션 테이블의 데이터 무결성을 보장하기 위한 보호성 오류입니다, 주로 INSERT, UPDATE 작업에서 분할 키 값이 파티션 정의의 범위를 벗어나거나, 파티션 정의가 잘못되어 데이터를 적절한 파티션에 배치할 수 없을 때 발생합니다.</p></li>
+</ul>
+<p id="error-1118"><strong>ERROR CODE: -1118, ‘The argument of “%1$s” can not be coerced to desired domain “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 함수나 연산의 인자를 목표 도메인 타입으로 변환할 수 없을 때 발생합니다, 즉, 데이터 타입 변환(타입 캐스팅) 과정에서 호환되지 않는 데이터 타입 간의 변환을 시도했음을 의미합니다, 이는 주로 집계 함수(MEDIAN, AVG, SUM 등)나 산술 연산에서 서로 다른 데이터 타입 간의 연산을 수행할 때 발생합니다, 시스템은 DOUBLE, DATETIME, TIME 등의 호환 가능한 타입으로 자동 변환을 시도하지만, 변환이 불가능한 경우 이 오류를 발생시킵니다.</p></li>
+</ul>
+<p id="error-1121"><strong>ERROR CODE: -1121, ‘NOT NULL constraints do not allow NULL value.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 data insert 후 index 생성시 NOT NULL 제약 조건에 NULL 데이터가 존재하는 경우 발생합니다, 이는 데이터베이스의 제약조건 위반으로 인한 보호성 오류입니다, 이 메시지는 주로 인덱스 생성, 데이터 삽입, 업데이트 등의 작업 중에 발생하며, 특히 B-tree 인덱스 로딩 과정에서 NOT NULL 제약조건이 있는 컬럼에 NULL 값이 포함된 데이터를 처리하려고 할 때 발생합니다.</p></li>
+</ul>
+<p id="error-1124"><strong>ERROR CODE: -1124, ‘Query execution error. ERROR_CODE = %1$d, /* SQL_ID: %2$s */ %3$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 SQL 쿼리 실행 중에 발생한 일반적인 실행 오류를 나타냅니다, 즉, 쿼리 파싱이나 컴파일은 성공했지만, 실제 실행 단계에서 문제가 발생했음을 의미합니다, 이 메시지는 쿼리 실행 엔진에서 발생하는 내부 오류, 데이터 타입 변환 오류, 메모리 부족, 시스템 리소스 문제 등 다양한 상황에서 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1137"><strong>ERROR CODE: -1137, ‘The query has been rejected due to attempt to exceed the maximum allowed nesting level(%1$d).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 SQL 쿼리의 중첩 레벨(서브쿼리, 재귀 쿼리 등)이 시스템에서 허용하는 최대 깊이(기본값: 400)를 초과했을 때 발생합니다. 시스템 자원을 보호하고 무한 재귀를 방지하기 위한 안전장치입니다.</p></li>
+</ul>
+<p id="error-1150"><strong>ERROR CODE: -1150, ‘Context requires compatible collations.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 문자열 데이터를 처리하는 과정(예: 비교, 정렬, 조인 등)에서 서로 호환되지 않는 콜레이션(Collation)이 사용되거나 요구될 때 발생합니다, 즉, 데이터베이스 시스템이 특정 연산을 수행하기 위해 필요한 문자열 데이터의 콜레이션이 현재 컨텍스트에서 기대하는 콜레이션과 일치하지 않음을 감지했을 때 발생하는 오류입니다, 이런 상황은 일반적으로 서로 다른 콜레이션 설정을 가진 테이블이나 컬럼 간의 연산, 또는 잘못된 콜레이션 지정으로 인해 발생할 수 있습니다, 이는 데이터의 일관성과 정확한 문자열 처리를 보장하기 위한 보호성 오류입니다.</p></li>
+</ul>
+<p id="error-1153"><strong>ERROR CODE: -1153, ‘Attempt to use ‘zero date’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 날짜/시간 타입의 데이터가 ‘zero date’(값이 0인 날짜)일 때 산술 연산이나 함수를 수행하려고 할 때 발생합니다, 즉, TIMESTAMP, DATE, DATETIME 등의 날짜/시간 타입에서 내부적으로 0으로 저장된 값(유효하지 않은 날짜)에 대해 연산을 시도할 때 발생하는 검증 오류입니다, 이런 상황은 일반적으로 날짜/시간 데이터가 초기화되지 않았거나, 잘못된 값이 저장되었거나, NULL 대신 0이 저장된 경우에 발생합니다.</p></li>
+</ul>
+<p id="error-1169"><strong>ERROR CODE: -1169, ‘Partition key attributes must be present in the index key.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 파티션 테이블에 유니크(unique) 인덱스를 생성하거나 수정할 때 발생합니다. CUBRID는 파티션된 테이블의 유니크 인덱스에 대해 특별한 제약 조건을 가집니다. 즉, 유니크 인덱스를 구성하는 컬럼(인덱스 키)에는 해당 테이블의 파티션 키로 사용되는 모든 컬럼이 반드시 포함되어야 합니다, 이 제약은 데이터의 유니크성을 파티션 경계를 넘어 전체 테이블에서 보장하기 위함입니다. 만약 유니크 인덱스를 정의할 때 파티션 키 컬럼이 인덱스 키에 포함되지 않으면, 데이터베이스는 이 오류를 발생시켜 인덱스 생성을 거부합니다.</p></li>
+</ul>
+<p id="error-1193"><strong>ERROR CODE: -1193, ‘The length of the processed partition expression exceeds the maximum allowed(%1$d).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블을 파티셔닝할 때 사용되는 파티션 표현식(예: <cite>RANGE</cite>, <cite>LIST</cite>, <cite>HASH</cite> 파티션 키로 사용되는 컬럼 또는 함수)의 길이가 시스템에서 허용하는 최대 길이를 초과할 때 발생합니다. 파티션 표현식은 내부적으로 처리되고 저장되어야 하므로, 너무 길면 시스템 자원 소모나 내부적인 제약으로 인해 문제가 발생할 수 있습니다. 이는 주로 <cite>CREATE TABLE … PARTITION…</cite> 문을 실행할 때 발생하며, 파티션 키로 사용된 표현식이 복잡하거나 문자열이 긴 경우에 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-1195"><strong>ERROR CODE: -1195, ‘The recursive part of a CTE should not contain aggregate functions without GROUP BY clause.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 재귀적 CTE(Common Table Expression)를 정의할 때, 재귀 멤버(recursive member) 부분에 GROUP BY 절 없이 집계 함수(예: SUM, COUNT, AVG, MAX, MIN)를 사용했을 때 발생합니다. 재귀적 CTE는 반복적으로 자신을 참조하여 결과를 생성하는데, 재귀 부분에서 집계 함수를 <cite>GROUP BY</cite> 없이 사용하면 각 반복 단계에서 예상치 못한 결과나 무한 루프를 초래할 수 있어 CUBRID가 이를 문법적으로 제한합니다. 이는 SQL 표준 또는 특정 데이터베이스 시스템의 재귀 쿼리 처리 규칙에 따른 제약 사항입니다.</p></li>
+</ul>
+<p id="error-1196"><strong>ERROR CODE: -1196, ‘Maximum recursions %1$d reached executing CTE.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 재귀적 CTE(Common Table Expression)를 실행하는 동안, 쿼리가 허용된 최대 재귀 횟수를 초과했을 때 발생합니다. 재귀적 CTE는 계층적 데이터를 처리하거나 반복적인 계산을 수행할 때 사용되는데, 무한 루프를 방지하고 시스템 자원을 보호하기 위해 데이터베이스 시스템은 기본적으로 최대 재귀 횟수를 제한합니다. 이 제한에 도달하면 쿼리 실행이 중단되고 이 오류 메시지가 반환됩니다.</p></li>
+</ul>
+<p id="error-1197"><strong>ERROR CODE: -1197, ‘Invalid json: %1$s (%2$d)’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 형식의 데이터를 파싱하거나 처리하는 과정에서, 입력된 JSON 문자열이 유효한 JSON 문법을 따르지 않을 때 발생합니다. JSON 파서가 문자열을 분석하는 중에 문법 오류를 감지하면, 오류의 종류와 발생 위치를 포함한 상세한 정보와 함께 이 오류를 반환합니다. 이는 주로 JSON 데이터를 인자로 받는 함수 호출, JSON 형식의 설정 파일 로드, 또는 JSON 데이터를 포함하는 컬럼에 값을 삽입할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1199"><strong>ERROR CODE: -1199, ‘The provided JSON has been invalidated by the JSON schema (Invalid schema path: %1$s, Keyword: %2$s, Invalid provided JSON path: %3$s)’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, JSON 형식이 맞지 않은 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1200"><strong>ERROR CODE: -1200, ‘Invalid JSON path’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, JSON 경로 표현식(JSON Path Expression)의 문법이 유효하지 않을 때 발생합니다. JSON 경로를 사용하여 JSON 문서 내의 특정 요소를 선택하거나 접근하려고 할 때, 제공된 경로 문자열이 JSON Path 표준 또는 CUBRID가 지원하는 문법 규칙을 따르지 않으면 이 오류가 반환됩니다. 이는 주로 JSON_EXTRACT, JSON_SET, JSON_INSERT, JSON_REPLACE 등 JSON 경로를 인자로 받는 함수를 사용할 때 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1201"><strong>ERROR CODE: -1201, ‘Json object name cannot be NULL.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 객체를 생성하거나 조작할 때, 객체의 멤버(속성) 이름이 NULL로 지정되었을 때 발생합니다. JSON 표준에 따르면 객체의 멤버 이름은 반드시 문자열이어야 하며 NULL이 될 수 없습니다. 이 메시지는 주로 JSON_OBJECT 함수나 JSON_OBJECTAGG 집계 함수를 사용할 때, 키(key) 인자로 NULL 값이 전달되거나 키로 사용되는 표현식의 결과가 NULL일 때 나타날 수 있습니다.</p></li>
+</ul>
+<p id="error-1202"><strong>ERROR CODE: -1202, ‘Json PATH “%1$s” does not exist in %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, JSON 함수들 사용시 존재하지 않은 json path 입력 시 발생합니다.</p></li>
+</ul>
+<p id="error-1203"><strong>ERROR CODE: -1203, ‘Invalid JSON type at path %1$s. Expected %2$s, but found %3$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, JSON_INSERT 또는 JSON_SET 함수 사용시 json object가 아닌 값을 입력시 발생합니다.</p></li>
+</ul>
+<p id="error-1204"><strong>ERROR CODE: -1204, ‘Json KEY “%1$s” is duplicate’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 객체를 생성하거나 조작할 때, 동일한 이름의 키(key)가 두 번 이상 사용되었을 때 발생합니다. JSON 표준에 따르면 JSON 객체 내의 모든 키는 고유해야 합니다. 따라서, JSON_OBJECT 함수나 JSON_OBJECTAGG와 같은 함수를 사용하여 JSON 데이터를 구성할 때, 중복된 키를 포함하려고 시도하면 시스템이 이를 감지하고 이 오류를 반환하여 데이터의 유효성을 보장합니다.</p></li>
+</ul>
+<p id="error-1205"><strong>ERROR CODE: -1205, ‘Invalid type %1$s. Expecting JSON document compatible data type (STRING or JSON).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, JSON 함수들을 사용 시 json doc로 변경할 수 없는 데이터 타입이 주어진 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1206"><strong>ERROR CODE: -1206, ‘Json PATH “%1$s” does not address a cell in an Json ARRAY.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, JSON_ARRAY_INSERT 함수 사용시 발생할 수 있는 오류입니다.</p></li>
+</ul>
+<p id="error-1207"><strong>ERROR CODE: -1207, ‘Invalid JSON path. Index is larger than allowed by system parameter json_max_array_idx.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, JSON_ARRAY_INSERT 함수 사용시 두번째 인자인 json path에 index가 숫자가 아니거나 json_max_array_idx 설정값을 초과할때 발생합니다.</p></li>
+</ul>
+<p id="error-1208"><strong>ERROR CODE: -1208, ‘Invalid one/all argument. The one/all argument may only take one of these two values: “one”, “all”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 JSON 데이터를 다룰 때, <cite>JSON_CONTAINS_PATH</cite> 함수를 사용할 때, 두 번째 인자로 전달되는 “one” 또는 “all” 값이 유효하지 않을 때 발생합니다.</p></li>
+</ul>
+<p id="error-1284"><strong>ERROR CODE: -1284, ‘Cannot truncate the table due to the primary key referred to on %1$s. Try again with CASCADE option.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 FOREIGN KEY로 참조하는 PRIMARY KRY가 존재하는 테이블에 대해 <cite>cascade option</cite> 없이 <a href="#id17"><span class="problematic" id="id18">`</span></a>truncate table`를 수행하는 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1285"><strong>ERROR CODE: -1285, ‘Cannot cascade truncate because the ON DELETE action of the foreign key (%1$s) is not set to CASCADE.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 FOREIGN KEY로 참조되는 테이블에 <cite>truncate table cascade</cite> 구문수행 시 FOREIGN KEY의 <a href="#id19"><span class="problematic" id="id20">`</span></a>delete action`이 <a href="#id21"><span class="problematic" id="id22">`</span></a>cascade`로 설정되지 않아 발생합니다.</p></li>
+</ul>
+<p id="error-1339"><strong>ERROR CODE: -1339, ‘Unsupported argument type of stored procedure: %1$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 JAVA Stored procedure에서 지원하지 않는 인자 data tpye을 사용 시 발생합니다.</p></li>
+</ul>
+<p id="error-1340"><strong>ERROR CODE: -1340, ‘Unsupported return type of stored procedure: %1$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 JAVA Stored procedure에서 지원하지 않는 return data type을 사용 시 발생합니다.</p></li>
+</ul>
+<p id="error-1343"><strong>ERROR CODE: -1343, ‘RENAME does not allow change of owner.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 RENAME 명령을 사용할 때, 단순히 객체의 이름만 변경해야 하는데, 소유자까지 함께 변경하려고 시도할 경우 발생합니다. CUBRID의 보안 및 무결성 정책상, RENAME 명령은 객체의 소유자를 변경하는 기능을 지원하지 않으며, 오직 이름만 변경할 수 있습니다. 소유자 변경은 별도의 권한 관리 또는 DDL 명령을 통해서만 가능합니다.</p></li>
+</ul>
+<p id="error-1344"><strong>ERROR CODE: -1344, ‘DBA, members of DBA group, and owner can perform CREATE SERIAL.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 시리얼(Serial, 자동 증가 시퀀스) 객체를 생성하려고 할 때, 해당 명령을 실행하는 사용자가 DBA, DBA 그룹의 멤버, 또는 시리얼을 생성하려는 대상 객체의 소유자가 아닐 경우 발생합니다. 즉, 시리얼 생성 권한이 없는 사용자가 CREATE SERIAL을 시도할 때 발생하는 권한(Privilege) 관련 오류입니다.</p></li>
+</ul>
+<p id="error-1348"><strong>ERROR CODE: -1348, ‘Synonym “%1$s” already exists.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 CREATE SYNONYM 구문을 실행할 때, 지정한 시노님 이름이 이미 데이터베이스에 존재할 경우 발생합니다. 즉, 동일한 이름의 시노님이 이미 등록되어 있어 중복 생성이 불가능할 때 발생하는 제약 조건 위반 오류입니다.</p></li>
+</ul>
+<p id="error-1349"><strong>ERROR CODE: -1349, ‘Synonym “%1$s” does not exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 DROP SYNONYM, ALTER SYNONYM, 또는 시노님을 참조하는 쿼리 등에서, 지정한 시노님 이름이 데이터베이스에 존재하지 않을 때 발생합니다. 즉, 사용자가 입력한 시노님이 현재 데이터베이스에 등록되어 있지 않거나, 이미 삭제된 경우입니다.</p></li>
+</ul>
+<p id="error-1351"><strong>ERROR CODE: -1351, ‘The maximum length of the function expression string must be %1$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 함수 기반 인덱스(Function-based Index) 생성 시  함수 인자로 사용된 expression 문자열에 최대값을 초과했을떄 발생합니다. 즉, 너무 긴 함수 식을 정의하려고 할 때 발생하는 제약 조건 위반 오류입니다.</p></li>
+</ul>
+<p id="error-1360"><strong>ERROR CODE: -1360, ‘In line %1$d, column %2$dnStored procedure compile error: %3$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID PL/CSQL 생성 시 컴파일 오류입니다.</p></li>
+</ul>
+<p id="error-1363"><strong>ERROR CODE: -1363, ‘Dropping system generated stored procedure is not allowed.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 생성한 JAVA Stored procedure/function 사용자가 삭제하려고 시도할때 발생합니다.</p></li>
+</ul>
+<p id="error-1365"><strong>ERROR CODE: -1365, ‘Only DBA and the owner can grant the %1$s privilege.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 JAVA Stored procedure/function 권한(grant) 설정 시 owner 또는 dba (dba group) 아닌 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1366"><strong>ERROR CODE: -1366, ‘String representation of a default value of a Stored procedure/function parameter may not exceed 255 characters.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID에서 JAVA Stored procedure/function 생성하면서 인자의 default값 설정 시 char type의 문자열 길이 255 이상인 경우 발생합니다.</p></li>
+</ul>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log_system.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        시스템 관리 오류
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log_admin.html">
+        데이터베이스 관리 오류
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 22, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

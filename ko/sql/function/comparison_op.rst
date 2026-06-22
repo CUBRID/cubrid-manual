@@ -101,7 +101,7 @@
 
 .. note::
 
-    11.2 버전부터 ``IS [NOT] { TRUE | FALSE | UNKNOWN }`` 의 왼쪽 피연산자가 논리식이 아니면 "operand must be logical expression." 오류가 발생한다. 예를 들어 ``1 IS FALSE`` 는 ``(1=1) IS FALSE`` 처럼 논리식을 피연산자로 사용해야 한다.
+    11.2 버전부터 **IS [NOT] { TRUE | FALSE | UNKNOWN }** 의 왼쪽 피연산자가 논리식이 아니면 "operand must be logical expression." 오류가 발생한다. 예를 들어 **1 IS FALSE** 는 **(1=1) IS FALSE** 처럼 논리식을 피연산자로 사용해야 한다.
 
 다음은 비교 연산자를 사용하는 예이다.
 

@@ -229,7 +229,7 @@
 <p>논리 연산자(logical operator)는 피연산자로 불리언(boolean) 연산식이 지정되며, 연산 결과로 <strong>TRUE</strong>, <strong>FALSE</strong>, <strong>NULL</strong> 을 반환한다. 불리언 값이 수식에 사용될 때에는 <strong>TRUE</strong> 는 1, <strong>FALSE</strong> 는 0으로 해석된다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>11.2 버전부터 논리식이 아닌 값(정수·컬럼 등)을 피연산자로 사용하면 “operand must be logical expression.” 오류가 발생한다. 비논리 값을 직접 조건절에 사용하던 구문은 명시적인 비교 연산으로 바꿔야 한다. 상수 조건 <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">1</span></code> 은 <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">1=1</span></code> 로, 컬럼 조건 <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">column_name</span></code> 은 <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">column_name</span> <span class="pre">&lt;&gt;</span> <span class="pre">0</span></code> 으로 작성한다.</p>
+<p>11.2 버전부터 논리식이 아닌 값(정수·컬럼 등)을 피연산자로 사용하면 “operand must be logical expression.” 오류가 발생한다. 비논리 값을 직접 조건절에 사용하던 구문은 명시적인 비교 연산으로 바꿔야 한다. 상수 조건 <strong>WHERE 1</strong> 은 <strong>WHERE 1=1</strong> 로, 컬럼 조건 <strong>WHERE column_name</strong> 은 <strong>WHERE column_name &lt;&gt; 0</strong> 으로 작성한다.</p>
 </div>
 <p>논리 연산자의 종류 및 진리표는 아래와 같다.</p>
 <p><strong>논리 연산자</strong></p>

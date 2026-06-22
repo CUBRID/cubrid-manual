@@ -355,7 +355,7 @@ NULL</p></td>
 </table>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>11.2 버전부터 <code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">[NOT]</span> <span class="pre">{</span> <span class="pre">TRUE</span> <span class="pre">|</span> <span class="pre">FALSE</span> <span class="pre">|</span> <span class="pre">UNKNOWN</span> <span class="pre">}</span></code> 의 왼쪽 피연산자가 논리식이 아니면 “operand must be logical expression.” 오류가 발생한다. 예를 들어 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">IS</span> <span class="pre">FALSE</span></code> 는 <code class="docutils literal notranslate"><span class="pre">(1=1)</span> <span class="pre">IS</span> <span class="pre">FALSE</span></code> 처럼 논리식을 피연산자로 사용해야 한다.</p>
+<p>11.2 버전부터 <strong>IS [NOT] { TRUE | FALSE | UNKNOWN }</strong> 의 왼쪽 피연산자가 논리식이 아니면 “operand must be logical expression.” 오류가 발생한다. 예를 들어 <strong>1 IS FALSE</strong> 는 <strong>(1=1) IS FALSE</strong> 처럼 논리식을 피연산자로 사용해야 한다.</p>
 </div>
 <p>다음은 비교 연산자를 사용하는 예이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- TRUE이므로 1을 출력한다.</span>

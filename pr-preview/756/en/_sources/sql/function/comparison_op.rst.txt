@@ -105,7 +105,7 @@ The following table shows the comparison operators supported by CUBRID and their
 
 .. note::
 
-    As of version 11.2, the left operand of ``IS [NOT] { TRUE | FALSE | UNKNOWN }`` must be a logical expression; otherwise the error "operand must be logical expression." is raised. For example, ``1 IS FALSE`` must be written as ``(1=1) IS FALSE``.
+    As of version 11.2, the left operand of **IS [NOT] { TRUE | FALSE | UNKNOWN }** must be a logical expression; otherwise the error "operand must be logical expression." is raised. For example, **1 IS FALSE** must be written as **(1=1) IS FALSE**.
 
 The following are the examples which use comparison operators.
 

@@ -227,7 +227,7 @@
 <p>For logical operators, boolean expressions are specified as operands; <strong>TRUE</strong>, <strong>FALSE</strong> or <strong>NULL</strong> is returned as a result. If a boolean value is used in an arithmetic expression, <strong>TRUE</strong> is evaluated to 1 and <strong>FALSE</strong> is evaluated to 0.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>As of version 11.2, using a non-logical value (such as an integer or column) as an operand raises the error “operand must be logical expression.” Such a condition must be rewritten with an explicit comparison: a constant condition like <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">1</span></code> as <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">1=1</span></code>, and a column condition like <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">column_name</span></code> as <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">column_name</span> <span class="pre">&lt;&gt;</span> <span class="pre">0</span></code>.</p>
+<p>As of version 11.2, using a non-logical value (such as an integer or column) as an operand raises the error “operand must be logical expression.” Such a condition must be rewritten with an explicit comparison: a constant condition like <strong>WHERE 1</strong> as <strong>WHERE 1=1</strong>, and a column condition like <strong>WHERE column_name</strong> as <strong>WHERE column_name &lt;&gt; 0</strong>.</p>
 </div>
 <p>The following table shows the logical operators.</p>
 <p><strong>Logical Operators</strong></p>

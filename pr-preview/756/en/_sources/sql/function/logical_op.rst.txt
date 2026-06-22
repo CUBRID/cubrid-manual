@@ -6,7 +6,7 @@ For logical operators, boolean expressions are specified as operands; **TRUE**, 
 
 .. note::
 
-    As of version 11.2, using a non-logical value (such as an integer or column) as an operand raises the error "operand must be logical expression." Such a condition must be rewritten with an explicit comparison: a constant condition like ``WHERE 1`` as ``WHERE 1=1``, and a column condition like ``WHERE column_name`` as ``WHERE column_name <> 0``.
+    As of version 11.2, using a non-logical value (such as an integer or column) as an operand raises the error "operand must be logical expression." Such a condition must be rewritten with an explicit comparison: a constant condition like **WHERE 1** as **WHERE 1=1**, and a column condition like **WHERE column_name** as **WHERE column_name <> 0**.
 
 The following table shows the logical operators.
 

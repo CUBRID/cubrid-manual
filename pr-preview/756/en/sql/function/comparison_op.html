@@ -359,7 +359,7 @@ The truth value may be <strong>TRUE</strong>, <strong>FALSE</strong>, or <strong
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>As of version 11.2, the left operand of <code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">[NOT]</span> <span class="pre">{</span> <span class="pre">TRUE</span> <span class="pre">|</span> <span class="pre">FALSE</span> <span class="pre">|</span> <span class="pre">UNKNOWN</span> <span class="pre">}</span></code> must be a logical expression; otherwise the error “operand must be logical expression.” is raised. For example, <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">IS</span> <span class="pre">FALSE</span></code> must be written as <code class="docutils literal notranslate"><span class="pre">(1=1)</span> <span class="pre">IS</span> <span class="pre">FALSE</span></code>.</p>
+<p>As of version 11.2, the left operand of <strong>IS [NOT] { TRUE | FALSE | UNKNOWN }</strong> must be a logical expression; otherwise the error “operand must be logical expression.” is raised. For example, <strong>1 IS FALSE</strong> must be written as <strong>(1=1) IS FALSE</strong>.</p>
 </div>
 <p>The following are the examples which use comparison operators.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- 1 is displayed because it is TRUE.</span>

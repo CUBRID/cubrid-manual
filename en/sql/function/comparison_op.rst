@@ -52,6 +52,21 @@ The comparison operators compare the operand on the left and on the right, and t
             FALSE |
             UNKNOWN
 
+        <logical_expression> ::=
+            <expression> <comparison_operator> <expression> |
+            <logical_expression> { AND | OR | XOR } <logical_expression> |
+            NOT <logical_expression>
+
+        <comparison_operator> ::=
+            = |
+            <=> |
+            <> |
+            != |
+            > |
+            < |
+            >= |
+            <=
+
 *   <*expression*>: Declares an expression to be compared.
 
     *   *bit_string*: A Boolean operation can be performed on bit strings, and all comparison operators can be used for comparison between bit strings. If you compare two expressions with different lengths, 0s are padded at the end of the shorter one.
@@ -105,7 +120,7 @@ The following table shows the comparison operators supported by CUBRID and their
 
 .. note::
 
-    As of version 11.2, the left operand of **IS [NOT] { TRUE | FALSE | UNKNOWN }** must be a logical expression; otherwise the error "operand must be logical expression." is raised. For example, **1 IS FALSE** must be written as **(1=1) IS FALSE**.
+    As of version 11.2, the left operand of **IS [NOT] { TRUE | FALSE | UNKNOWN }** must be a logical expression; otherwise the error "operand must be logical expression." is raised. For example, **1 IS FALSE** must be written as **(1=1) IS FALSE**. For a logical expression, the UNKNOWN truth value is represented as NULL, so **IS [NOT] UNKNOWN** and **IS [NOT] NULL** return the same result.
 
 The following are the examples which use comparison operators.
 
@@ -123,4 +138,9 @@ The following are the examples which use comparison operators.
     SELECT (SYSTIMESTAMP = SYSDATETIME); --0 is displayed after casting the type implicitly and then performing comparison operator. 
     SELECT (SYSTIMESTAMP <> NULL); -- NULL is returned without performing comparison operator.
     SELECT (SYSTIMESTAMP IS NOT NULL); -- 1 is returned because it is not NULL.
+    SELECT ((1 > 0) IS TRUE); -- 1 is displayed because (1 > 0) is TRUE.
+    SELECT ((1 > 0) IS FALSE); -- 0 is displayed because (1 > 0) is not FALSE.
+    SELECT ((1 > 0) IS UNKNOWN); -- 0 is displayed because (1 > 0) is not UNKNOWN.
+    SELECT ((NULL = 1) IS UNKNOWN); -- 1 is displayed because (NULL = 1) is UNKNOWN.
+    SELECT ((1 > 0) IS NOT FALSE); -- 1 is displayed because (1 > 0) is not FALSE.
     

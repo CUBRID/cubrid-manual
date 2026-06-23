@@ -48,6 +48,21 @@
             FALSE |
             UNKNOWN
 
+        <logical_expression> ::=
+            <expression> <comparison_operator> <expression> |
+            <logical_expression> { AND | OR | XOR } <logical_expression> |
+            NOT <logical_expression>
+
+        <comparison_operator> ::=
+            = |
+            <=> |
+            <> |
+            != |
+            > |
+            < |
+            >= |
+            <=
+
 *   <*expression*>: 비교할 수식을 선언한다.
 
     *   *bit_string*: 비트열에 대하여 불리언(boolean) 연산을 수행할 수 있으며, 모든 비교 연산자를 비트열을 비교하는데 사용할 수 있다. 길이가 같지 않은 두 수식을 비교할 때는 길이가 짧은 비트열의 오른쪽 끝에 0이 추가된다.
@@ -101,7 +116,7 @@
 
 .. note::
 
-    11.2 버전부터 **IS [NOT] { TRUE | FALSE | UNKNOWN }** 의 왼쪽 피연산자가 논리식이 아니면 "operand must be logical expression." 오류가 발생한다. 예를 들어 **1 IS FALSE** 는 **(1=1) IS FALSE** 처럼 논리식을 피연산자로 사용해야 한다.
+    11.2 버전부터 **IS [NOT] { TRUE | FALSE | UNKNOWN }**\의 왼쪽 피연산자가 논리식이 아니면 "operand must be logical expression." 오류가 발생한다. 예를 들어 **1 IS FALSE**\는 **(1=1) IS FALSE**\와 같이 작성해야 한다. 논리식에서 UNKNOWN 진리값은 NULL로 표현되므로, 논리식에 대해 **IS [NOT] UNKNOWN**\과 **IS [NOT] NULL**\은 동일한 결과를 반환한다.
 
 다음은 비교 연산자를 사용하는 예이다.
 
@@ -119,3 +134,8 @@
     SELECT (SYSTIMESTAMP = SYSDATETIME); -- 묵시적으로 타입을 변환하여 비교 연산을 수행한 결과, 0을 출력한다.
     SELECT (SYSTIMESTAMP <> NULL); -- NULL의 비교 연산을 수행하지 않고 NULL을 반환한다.
     SELECT (SYSTIMESTAMP IS NOT NULL); -- NULL이 아니므로 1을 반환한다.
+    SELECT ((1 > 0) IS TRUE); -- TRUE이므로 1을 출력한다.
+    SELECT ((1 > 0) IS FALSE); -- FALSE가 아니므로 0을 출력한다.
+    SELECT ((1 > 0) IS UNKNOWN); -- UNKNOWN이 아니므로 0을 출력한다.
+    SELECT ((NULL = 1) IS UNKNOWN); -- NULL 비교는 UNKNOWN이므로 1을 출력한다.
+    SELECT ((1 > 0) IS NOT FALSE); -- FALSE가 아니므로 1을 출력한다.

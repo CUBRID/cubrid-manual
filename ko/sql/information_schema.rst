@@ -7,7 +7,7 @@
 Information Schema
 ******************
 
-**Information Schema** 는 현재 데이터베이스의 객체(테이블, 칼럼, 제약 조건, 루틴, 권한 등)에 대한 메타데이터를 제공하는 읽기 전용 뷰의 집합이다. Information Schema 는 SQL 표준(ISO/IEC 9075-11)으로 정의되어 있어 이식성이 높고 안정적이다. 이는 CUBRID에 특화되어 있고 구현상의 고려 사항을 반영하여 설계된 :ref:`catalog` 와 대비된다.
+**Information Schema**\는 현재 데이터베이스의 객체(테이블, 칼럼, 제약 조건, 루틴, 권한 등)에 대한 메타데이터를 제공하는 읽기 전용 뷰의 집합이다. Information Schema는 SQL 표준(ISO/IEC 9075-11)으로 정의되어 있어 이식성이 높고 안정적이다. 이는 CUBRID에 특화되어 있고 구현상의 고려 사항을 반영하여 설계된 :ref:`catalog`\와 대비된다.
 
 .. code-block:: sql
 
@@ -507,7 +507,7 @@ routines
 
 .. note::
 
-    ``routine_definition`` 은 PL/CSQL 소스 코드를 노출하므로 DBA 또는 루틴 소유자에게만 표시된다. 그 외 사용자에게는 NULL이다.
+    ``routine_definition``\은 PL/CSQL 소스 코드를 노출하므로 DBA 또는 루틴 소유자에게만 표시된다. 그 외 사용자에게는 NULL이다.
 
 .. _information-schema-schemata:
 
@@ -837,7 +837,7 @@ triggers
 
 .. note::
 
-    이 뷰에는 INSERT, UPDATE, DELETE (DML) :ref:`트리거 <create-trigger>` 만 표시된다. CUBRID는 COMMIT, ROLLBACK 트리거도 지원하지만 여기에는 표시되지 않는다.
+    이 뷰에는 INSERT, UPDATE, DELETE (DML) :ref:`트리거 <create-trigger>`\만 표시된다. CUBRID는 COMMIT, ROLLBACK 트리거도 지원하지만 여기에는 표시되지 않는다.
 
 .. _information-schema-views:
 
@@ -871,4 +871,4 @@ views
 
 .. note::
 
-    CUBRID는 뷰의 갱신 가능 여부를 고정 값으로 저장하지 않으므로 ``is_updatable`` 은 항상 NULL이다.
+    CUBRID는 뷰의 갱신 가능 여부를 고정 값으로 저장하지 않으므로 ``is_updatable``\은 항상 NULL이다.

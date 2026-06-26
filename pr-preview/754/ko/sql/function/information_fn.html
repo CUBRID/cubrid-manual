@@ -518,7 +518,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ESTIMATED_AVG_ROW_LENGTH">
 <span class="sig-name descname"><span class="pre">ESTIMATED_AVG_ROW_LENGTH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ESTIMATED_AVG_ROW_LENGTH" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ESTIMATED_AVG_ROW_LENGTH'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>ESTIMATED_AVG_ROW_LENGTH</strong> 함수는 <em>table_name</em> 으로 식별되는 테이블의 추정 평균 행 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.</p>
+<dd><p><strong>ESTIMATED_AVG_ROW_LENGTH</strong> 함수는 <em>table_name</em>으로 식별되는 테이블의 추정 평균 행 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>table_name</strong> – 테이블 이름</p>
@@ -528,7 +528,7 @@
 </dd>
 </dl>
 </dd></dl>
-<p><em>table_name</em> 이 <strong>NULL</strong> 이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong> 을 반환한다.</p>
+<p><em>table_name</em>이 <strong>NULL</strong>이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong>을 반환한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">ESTIMATED_AVG_ROW_LENGTH</span><span class="p">(</span><span class="s1">'game'</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
@@ -543,7 +543,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ESTIMATED_DATA_FREE">
 <span class="sig-name descname"><span class="pre">ESTIMATED_DATA_FREE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ESTIMATED_DATA_FREE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ESTIMATED_DATA_FREE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>ESTIMATED_DATA_FREE</strong> 함수는 <em>table_name</em> 으로 식별되는 테이블에 할당된 힙 페이지 내의 추정 여유(미사용) 공간을 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.</p>
+<dd><p><strong>ESTIMATED_DATA_FREE</strong> 함수는 <em>table_name</em>으로 식별되는 테이블에 할당된 힙 페이지 내의 추정 여유(미사용) 공간을 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>table_name</strong> – 테이블 이름</p>
@@ -553,7 +553,7 @@
 </dd>
 </dl>
 </dd></dl>
-<p><em>table_name</em> 이 <strong>NULL</strong> 이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong> 을 반환한다.</p>
+<p><em>table_name</em>이 <strong>NULL</strong>이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong>을 반환한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">ESTIMATED_DATA_FREE</span><span class="p">(</span><span class="s1">'game'</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
@@ -568,7 +568,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ESTIMATED_DATA_LENGTH">
 <span class="sig-name descname"><span class="pre">ESTIMATED_DATA_LENGTH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ESTIMATED_DATA_LENGTH" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ESTIMATED_DATA_LENGTH'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>ESTIMATED_DATA_LENGTH</strong> 함수는 <em>table_name</em> 으로 식별되는 테이블에 할당된 힙의 추정 총 데이터 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.</p>
+<dd><p><strong>ESTIMATED_DATA_LENGTH</strong> 함수는 <em>table_name</em>으로 식별되는 테이블에 할당된 힙의 추정 총 데이터 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>table_name</strong> – 테이블 이름</p>
@@ -578,7 +578,7 @@
 </dd>
 </dl>
 </dd></dl>
-<p><em>table_name</em> 이 <strong>NULL</strong> 이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong> 을 반환한다.</p>
+<p><em>table_name</em>이 <strong>NULL</strong>이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong>을 반환한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">ESTIMATED_DATA_LENGTH</span><span class="p">(</span><span class="s1">'game'</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
@@ -593,7 +593,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ESTIMATED_TABLE_ROWS">
 <span class="sig-name descname"><span class="pre">ESTIMATED_TABLE_ROWS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ESTIMATED_TABLE_ROWS" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ESTIMATED_TABLE_ROWS'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>ESTIMATED_TABLE_ROWS</strong> 함수는 <em>table_name</em> 으로 식별되는 테이블의 추정 행 수를 반환한다. 이 값은 추정치임에 유의한다.</p>
+<dd><p><strong>ESTIMATED_TABLE_ROWS</strong> 함수는 <em>table_name</em>으로 식별되는 테이블의 추정 행 수를 반환한다. 이 값은 추정치임에 유의한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>table_name</strong> – 테이블 이름</p>
@@ -603,7 +603,7 @@
 </dd>
 </dl>
 </dd></dl>
-<p><em>table_name</em> 이 <strong>NULL</strong> 이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong> 을 반환한다.</p>
+<p><em>table_name</em>이 <strong>NULL</strong>이거나, 테이블이 존재하지 않거나 뷰인 경우 <strong>NULL</strong>을 반환한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">ESTIMATED_TABLE_ROWS</span><span class="p">(</span><span class="s1">'game'</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
@@ -624,11 +624,11 @@
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table_name</strong> – 테이블 이름</p></li>
-<li><p><strong>index</strong> – <em>table_name</em> 으로 식별되는 테이블 내에 존재하는 인덱스 이름</p></li>
-<li><p><strong>key_pos</strong> – <p>부분 키의 위치. <em>key_pos</em> 는 0부터 시작하여 키를 구성하는 칼럼 개수보다 작은 범위를 갖는다. 즉, 첫 번째 칼럼의 <em>key_pos</em> 는 0이다. 단일 칼럼 인덱스의 경우에는 0이다. 다음 타입 중 하나가 될 수 있다.</p>
+<li><p><strong>index</strong> – <em>table_name</em>으로 식별되는 테이블 내에 존재하는 인덱스 이름</p></li>
+<li><p><strong>key_pos</strong> – <p>부분 키의 위치. <em>key_pos</em>는 0부터 시작하여 키를 구성하는 칼럼 개수보다 작은 범위를 갖는다. 즉, 첫 번째 칼럼의 <em>key_pos</em>는 0이다. 단일 칼럼 인덱스의 경우에는 0이다. 다음 타입 중 하나가 될 수 있다.</p>
 <ul>
 <li><p>숫자형 타입으로 변환할 수 있는 문자열.</p></li>
-<li><p>정수형으로 변환할 수 있는 숫자형 타입. <strong>FLOAT</strong> 나 <strong>DOUBLE</strong> 타입은 <strong>ROUND</strong> 함수로 변환한 값이 된다.</p></li>
+<li><p>정수형으로 변환할 수 있는 숫자형 타입. <strong>FLOAT</strong>나 <strong>DOUBLE</strong> 타입은 <strong>ROUND</strong> 함수로 변환한 값이 된다.</p></li>
 </ul>
 </p></li>
 </ul>
@@ -638,7 +638,7 @@
 </dd>
 </dl>
 </dd></dl>
-<p>리턴 값은 0 또는 양의 정수이며, 입력 인자 중 하나라도 <strong>NULL</strong> 이면 <strong>NULL</strong> 을 반환한다. 입력 인자인 테이블이나 인덱스가 발견되지 않거나 <em>key_pos</em> 가 지정된 범위를 벗어나면 <strong>NULL</strong> 을 리턴한다.</p>
+<p>리턴 값은 0 또는 양의 정수이며, 입력 인자 중 하나라도 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다. 입력 인자인 테이블이나 인덱스가 발견되지 않거나 <em>key_pos</em>가 지정된 범위를 벗어나면 <strong>NULL</strong>을 리턴한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="w"> </span><span class="n">i1</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="p">,</span>
 </span><span id="line-2"><span class="n">i2</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
 </span><span id="line-3"><span class="n">i3</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">unique</span><span class="p">,</span>
@@ -1148,7 +1148,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 15, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 26, 2026. </p>
 </div>
 </div>
 </footer>

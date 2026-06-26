@@ -274,13 +274,13 @@ ESTIMATED_AVG_ROW_LENGTH
 
 .. function:: ESTIMATED_AVG_ROW_LENGTH(table_name)
 
-    **ESTIMATED_AVG_ROW_LENGTH** 함수는 *table_name* 으로 식별되는 테이블의 추정 평균 행 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.
+    **ESTIMATED_AVG_ROW_LENGTH** 함수는 *table_name*\으로 식별되는 테이블의 추정 평균 행 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.
 
     :param table_name: 테이블 이름
 
     :rtype: BIGINT
 
-*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+*table_name*\이 **NULL**\이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL**\을 반환한다.
 
 .. code-block:: sql
 
@@ -297,13 +297,13 @@ ESTIMATED_DATA_FREE
 
 .. function:: ESTIMATED_DATA_FREE(table_name)
 
-    **ESTIMATED_DATA_FREE** 함수는 *table_name* 으로 식별되는 테이블에 할당된 힙 페이지 내의 추정 여유(미사용) 공간을 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.
+    **ESTIMATED_DATA_FREE** 함수는 *table_name*\으로 식별되는 테이블에 할당된 힙 페이지 내의 추정 여유(미사용) 공간을 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.
 
     :param table_name: 테이블 이름
 
     :rtype: BIGINT
 
-*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+*table_name*\이 **NULL**\이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL**\을 반환한다.
 
 .. code-block:: sql
 
@@ -320,13 +320,13 @@ ESTIMATED_DATA_LENGTH
 
 .. function:: ESTIMATED_DATA_LENGTH(table_name)
 
-    **ESTIMATED_DATA_LENGTH** 함수는 *table_name* 으로 식별되는 테이블에 할당된 힙의 추정 총 데이터 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.
+    **ESTIMATED_DATA_LENGTH** 함수는 *table_name*\으로 식별되는 테이블에 할당된 힙의 추정 총 데이터 길이를 바이트 단위로 반환한다. 이 값은 추정치임에 유의한다.
 
     :param table_name: 테이블 이름
 
     :rtype: BIGINT
 
-*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+*table_name*\이 **NULL**\이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL**\을 반환한다.
 
 .. code-block:: sql
 
@@ -343,13 +343,13 @@ ESTIMATED_TABLE_ROWS
 
 .. function:: ESTIMATED_TABLE_ROWS(table_name)
 
-    **ESTIMATED_TABLE_ROWS** 함수는 *table_name* 으로 식별되는 테이블의 추정 행 수를 반환한다. 이 값은 추정치임에 유의한다.
+    **ESTIMATED_TABLE_ROWS** 함수는 *table_name*\으로 식별되는 테이블의 추정 행 수를 반환한다. 이 값은 추정치임에 유의한다.
 
     :param table_name: 테이블 이름
 
     :rtype: BIGINT
 
-*table_name* 이 **NULL** 이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL** 을 반환한다.
+*table_name*\이 **NULL**\이거나, 테이블이 존재하지 않거나 뷰인 경우 **NULL**\을 반환한다.
 
 .. code-block:: sql
 
@@ -371,15 +371,15 @@ INDEX_CARDINALITY
     갱신된 결과를 얻으려면 반드시 **UPDATE STATISTICS** 문을 먼저 수행해야 한다.
 
     :param table_name: 테이블 이름
-    :param index: *table_name* 으로 식별되는 테이블 내에 존재하는 인덱스 이름
-    :param key_pos: 부분 키의 위치. *key_pos* 는 0부터 시작하여 키를 구성하는 칼럼 개수보다 작은 범위를 갖는다. 즉, 첫 번째 칼럼의 *key_pos* 는 0이다. 단일 칼럼 인덱스의 경우에는 0이다. 다음 타입 중 하나가 될 수 있다.
+    :param index: *table_name*\으로 식별되는 테이블 내에 존재하는 인덱스 이름
+    :param key_pos: 부분 키의 위치. *key_pos*\는 0부터 시작하여 키를 구성하는 칼럼 개수보다 작은 범위를 갖는다. 즉, 첫 번째 칼럼의 *key_pos*\는 0이다. 단일 칼럼 인덱스의 경우에는 0이다. 다음 타입 중 하나가 될 수 있다.
     
         *   숫자형 타입으로 변환할 수 있는 문자열. 
-        *   정수형으로 변환할 수 있는 숫자형 타입. **FLOAT** 나 **DOUBLE** 타입은 **ROUND** 함수로 변환한 값이 된다.
+        *   정수형으로 변환할 수 있는 숫자형 타입. **FLOAT**\나 **DOUBLE** 타입은 **ROUND** 함수로 변환한 값이 된다.
 
     :rtype: INT
     
-리턴 값은 0 또는 양의 정수이며, 입력 인자 중 하나라도 **NULL** 이면 **NULL** 을 반환한다. 입력 인자인 테이블이나 인덱스가 발견되지 않거나 *key_pos* 가 지정된 범위를 벗어나면 **NULL** 을 리턴한다.
+리턴 값은 0 또는 양의 정수이며, 입력 인자 중 하나라도 **NULL**\이면 **NULL**\을 반환한다. 입력 인자인 테이블이나 인덱스가 발견되지 않거나 *key_pos*\가 지정된 범위를 벗어나면 **NULL**\을 리턴한다.
 
 .. code-block:: sql
 

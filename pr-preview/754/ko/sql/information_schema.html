@@ -226,7 +226,7 @@
 <div id="content" role="main">
 <section id="information-schema">
 <span id="id1"></span><h1>Information Schema<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#information-schema"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
-<p><strong>Information Schema</strong> 는 현재 데이터베이스의 객체(테이블, 칼럼, 제약 조건, 루틴, 권한 등)에 대한 메타데이터를 제공하는 읽기 전용 뷰의 집합이다. Information Schema 는 SQL 표준(ISO/IEC 9075-11)으로 정의되어 있어 이식성이 높고 안정적이다. 이는 CUBRID에 특화되어 있고 구현상의 고려 사항을 반영하여 설계된 <a class="reference internal" href="catalog.html#catalog"><span class="std std-ref">시스템 카탈로그</span></a> 와 대비된다.</p>
+<p><strong>Information Schema</strong>는 현재 데이터베이스의 객체(테이블, 칼럼, 제약 조건, 루틴, 권한 등)에 대한 메타데이터를 제공하는 읽기 전용 뷰의 집합이다. Information Schema는 SQL 표준(ISO/IEC 9075-11)으로 정의되어 있어 이식성이 높고 안정적이다. 이는 CUBRID에 특화되어 있고 구현상의 고려 사항을 반영하여 설계된 <a class="reference internal" href="catalog.html#catalog"><span class="std std-ref">시스템 카탈로그</span></a>와 대비된다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 사용자 'PUBLIC'이 소유한 테이블</span>
 </span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">table_type</span>
 </span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span>
@@ -1131,7 +1131,7 @@ MODIFIES SQL DATA)</p></td>
 </table>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p><code class="docutils literal notranslate"><span class="pre">routine_definition</span></code> 은 PL/CSQL 소스 코드를 노출하므로 DBA 또는 루틴 소유자에게만 표시된다. 그 외 사용자에게는 NULL이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">routine_definition</span></code>은 PL/CSQL 소스 코드를 노출하므로 DBA 또는 루틴 소유자에게만 표시된다. 그 외 사용자에게는 NULL이다.</p>
 </div>
 </section>
 <section id="schemata">
@@ -1705,7 +1705,7 @@ EXECUTE)</p></td>
 </table>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>이 뷰에는 INSERT, UPDATE, DELETE (DML) <a class="reference internal" href="trigger.html#create-trigger"><span class="std std-ref">트리거</span></a> 만 표시된다. CUBRID는 COMMIT, ROLLBACK 트리거도 지원하지만 여기에는 표시되지 않는다.</p>
+<p>이 뷰에는 INSERT, UPDATE, DELETE (DML) <a class="reference internal" href="trigger.html#create-trigger"><span class="std std-ref">트리거</span></a>만 표시된다. CUBRID는 COMMIT, ROLLBACK 트리거도 지원하지만 여기에는 표시되지 않는다.</p>
 </div>
 </section>
 <section id="views">
@@ -1760,7 +1760,7 @@ OPTION이 정의되어 있지 않으면 NONE</p></td>
 </table>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>CUBRID는 뷰의 갱신 가능 여부를 고정 값으로 저장하지 않으므로 <code class="docutils literal notranslate"><span class="pre">is_updatable</span></code> 은 항상 NULL이다.</p>
+<p>CUBRID는 뷰의 갱신 가능 여부를 고정 값으로 저장하지 않으므로 <code class="docutils literal notranslate"><span class="pre">is_updatable</span></code>은 항상 NULL이다.</p>
 </div>
 </section>
 </section>
@@ -1815,7 +1815,7 @@ OPTION이 정의되어 있지 않으면 NONE</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 15, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 26, 2026. </p>
 </div>
 </div>
 </footer>

@@ -327,13 +327,13 @@ COLLECTION_TO_STRING
 
 .. function:: COLLECTION_TO_STRING(collection)
 
-    **COLLECTION_TO_STRING** 함수는 컬렉션 값을 문자열로 직렬화한다. 결과는 모든 요소를 쉼표로 구분하고 중괄호로 묶은 형태이며, 예를 들어 ``{1, 2, 3}`` 과 같다. 문자열 요소는 작은따옴표로 묶인다.
+    **COLLECTION_TO_STRING** 함수는 컬렉션 값을 문자열로 직렬화한다. 결과는 모든 요소를 쉼표로 구분하고 중괄호로 묶은 형태이며, 예를 들어 ``{1, 2, 3}``\과 같다. 문자열 요소는 작은따옴표로 묶인다.
 
     :param collection: **SET**, **MULTISET**, **SEQUENCE** 타입의 컬렉션 값.
 
     :rtype: STRING
 
-*collection* 이 **NULL** 이면 **NULL** 을 반환한다. 빈 컬렉션은 빈 중괄호 쌍을 반환한다.
+*collection*\이 **NULL**\이면 **NULL**\을 반환한다. 빈 컬렉션은 빈 중괄호 쌍을 반환한다.
 
 .. code-block:: sql
 

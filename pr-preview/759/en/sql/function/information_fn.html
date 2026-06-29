@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Information Functions | CUBRID 11.4 User Manual</title>
+<meta content="Information Functions | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Information Functions | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/logo_only.png" rel="icon"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="encryption_fn.html" rel="next" title="Encryption Function"/>
+<link href="rownum_fn.html" rel="prev" title="ROWNUM Functions"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../.././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/function/information_fn.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../release_note/index.html">Release Note</a>
+<a href="../.././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/ddl_audit.html">DDL Audit Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">Operators and Functions</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Information Functions</span>
+</nav>
+<div id="content" role="main">
+<section id="information-functions">
+<h1><a class="toc-backref" href="#id2" role="doc-backlink">Information Functions</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#information-functions"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#information-functions" id="id2">Information Functions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#charset" id="id3">CHARSET</a></p></li>
+<li><p><a class="reference internal" href="#coercibility" id="id4">COERCIBILITY</a></p></li>
+<li><p><a class="reference internal" href="#collation" id="id5">COLLATION</a></p></li>
+<li><p><a class="reference internal" href="#current-user-user" id="id6">CURRENT_USER, USER</a></p></li>
+<li><p><a class="reference internal" href="#database-schema" id="id7">DATABASE, SCHEMA</a></p></li>
+<li><p><a class="reference internal" href="#dbtimezone" id="id8">DBTIMEZONE</a></p></li>
+<li><p><a class="reference internal" href="#default" id="id9">DEFAULT</a></p></li>
+<li><p><a class="reference internal" href="#disk-size" id="id10">DISK_SIZE</a></p></li>
+<li><p><a class="reference internal" href="#index-cardinality" id="id11">INDEX_CARDINALITY</a></p></li>
+<li><p><a class="reference internal" href="#inet-aton" id="id12">INET_ATON</a></p></li>
+<li><p><a class="reference internal" href="#inet-ntoa" id="id13">INET_NTOA</a></p></li>
+<li><p><a class="reference internal" href="#last-insert-id" id="id14">LAST_INSERT_ID</a></p></li>
+<li><p><a class="reference internal" href="#list-dbs" id="id15">LIST_DBS</a></p></li>
+<li><p><a class="reference internal" href="#row-count" id="id16">ROW_COUNT</a></p></li>
+<li><p><a class="reference internal" href="#sessiontimezone" id="id17">SESSIONTIMEZONE</a></p></li>
+<li><p><a class="reference internal" href="#user-system-user" id="id18">USER, SYSTEM_USER</a></p></li>
+<li><p><a class="reference internal" href="#version" id="id19">VERSION</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="charset">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">CHARSET</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#charset" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#charset'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="CHARSET">
+<span class="sig-name descname"><span class="pre">CHARSET</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#CHARSET" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#CHARSET'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This function returns the character set of <em>expr</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> – Target expression to get the character set.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">CHARSET</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'iso88591'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">CHARSET</span><span class="p">(</span><span class="n">_utf8</span><span class="s1">'abc'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'utf8'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">CHARSET</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'utf8'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="coercibility">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">COERCIBILITY</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#coercibility" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#coercibility'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="COERCIBILITY">
+<span class="sig-name descname"><span class="pre">COERCIBILITY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#COERCIBILITY" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#COERCIBILITY'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This function returns the collation coercibility level of <em>expr</em>. The collation coercibility level determines which collation or charset should be used when each column(expression) has different collation or charset. For more details, please see <a class="reference internal" href="../i18n.html#collation-coercibility"><span class="std std-ref">Collation Coercibility</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> – Target expression to get the collation coercibility level.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">COERCIBILITY</span><span class="p">(</span><span class="k">USER</span><span class="p">());</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">7</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">COERCIBILITY</span><span class="p">(</span><span class="n">_utf8</span><span class="s1">'abc'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">10</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="collation">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">COLLATION</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#collation" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#collation'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="COLLATION">
+<span class="sig-name descname"><span class="pre">COLLATION</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#COLLATION" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#COLLATION'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This function returns the collation of <em>expr</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> – Target expression to get the collation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">COLLATION</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'iso88591_bin'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">COLLATION</span><span class="p">(</span><span class="n">_utf8</span><span class="s1">'abc'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="s1">'utf8_bin'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="current-user-user">
+<span id="fn-current-user"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">CURRENT_USER, USER</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#current-user-user" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#current-user-user'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.CURRENT_USER">
+<span class="sig-name descname"><span class="n"><span class="pre">CURRENT_USER</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#c.CURRENT_USER" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#c.CURRENT_USER'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a><br/></dt>
+<dd></dd></dl>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.USER">
+<span class="sig-name descname"><span class="n"><span class="pre">USER</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#c.USER" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#c.USER'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a><br/></dt>
+<dd><p><strong>CURRENT_USER</strong> and <strong>USER</strong> are pseudo-columns and can be used interchangeably. They return the user name that is currently logged in to the database as a string.</p>
+<p>Please note that <a class="reference internal" href="#SYSTEM_USER" title="SYSTEM_USER"><code class="xref py py-func docutils literal notranslate"><span class="pre">SYSTEM_USER()</span></code></a> and <a class="reference internal" href="#USER" title="USER"><code class="xref py py-func docutils literal notranslate"><span class="pre">USER()</span></code></a> functions return the user name with a host name where CSQL or CAS was executed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting the current user on the session</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">USER</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">CURRENT_USER</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'PUBLIC'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="k">CURRENT_USER</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">user</span><span class="p">()</span>                <span class="n">CURRENT_USER</span>
+</span><span id="line-2"><span class="o">============================================</span>
+</span><span id="line-3">  <span class="s1">'PUBLIC@cdbs006.cub'</span>  <span class="s1">'PUBLIC'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting all users of the current database from the system table</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">name</span>                           <span class="nb">id</span>  <span class="n">password</span>
+</span><span id="line-2"><span class="o">=========================================================</span>
+</span><span id="line-3">  <span class="s1">'DBA'</span>                        <span class="n">NULL</span>  <span class="n">NULL</span>
+</span><span id="line-4">  <span class="s1">'PUBLIC'</span>                     <span class="n">NULL</span>  <span class="n">NULL</span>
+</span><span id="line-5">  <span class="s1">'SELECT_ONLY_USER'</span>           <span class="n">NULL</span>  <span class="n">db_password</span>
+</span><span id="line-6">  <span class="s1">'ALMOST_DBA_USER'</span>            <span class="n">NULL</span>  <span class="n">db_password</span>
+</span><span id="line-7">  <span class="s1">'SELECT_ONLY_USER2'</span>          <span class="n">NULL</span>  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="database-schema">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">DATABASE, SCHEMA</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#database-schema" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#database-schema'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DATABASE">
+<span class="sig-name descname"><span class="pre">DATABASE</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#DATABASE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#DATABASE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="SCHEMA">
+<span class="sig-name descname"><span class="pre">SCHEMA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#SCHEMA" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#SCHEMA'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The functions <strong>DATABASE</strong> and <strong>SCHEMA</strong> are used interchangeably. They return the name of currently-connected database as a <strong>VARCHAR</strong> type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">DATABASE</span><span class="p">(),</span><span class="w"> </span><span class="k">SCHEMA</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">database</span><span class="p">()</span>            <span class="n">schema</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">============================================</span>
+</span><span id="line-3">  <span class="s1">'demodb'</span>              <span class="s1">'demodb'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="dbtimezone">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">DBTIMEZONE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dbtimezone" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dbtimezone'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DBTIMEZONE">
+<span class="sig-name descname"><span class="pre">DBTIMEZONE</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#DBTIMEZONE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#DBTIMEZONE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Prints out a timezone of database server (offset or region name) as a string. (e.g. ‘-05:00’, or ‘Europe/Vienna’).</p>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DBTIMEZONE</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">dbtimezone</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'Asia/Seoul'</span>
+</span></code></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#SESSIONTIMEZONE" title="SESSIONTIMEZONE"><code class="xref py py-func docutils literal notranslate"><span class="pre">SESSIONTIMEZONE()</span></code></a>, <a class="reference internal" href="datetime_fn.html#FROM_TZ" title="FROM_TZ"><code class="xref py py-func docutils literal notranslate"><span class="pre">FROM_TZ()</span></code></a>, <a class="reference internal" href="datetime_fn.html#NEW_TIME" title="NEW_TIME"><code class="xref py py-func docutils literal notranslate"><span class="pre">NEW_TIME()</span></code></a>, <a class="reference internal" href="datetime_fn.html#TZ_OFFSET" title="TZ_OFFSET"><code class="xref py py-func docutils literal notranslate"><span class="pre">TZ_OFFSET()</span></code></a></p>
+</div>
+</section>
+<section id="default">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">DEFAULT</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#default" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#default'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DEFAULT">
+<span class="sig-name descname"><span class="pre">DEFAULT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#DEFAULT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#DEFAULT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd></dd></dl>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.DEFAULT">
+<span class="sig-name descname"><span class="n"><span class="pre">DEFAULT</span></span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#c.DEFAULT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#c.DEFAULT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a><br/></dt>
+<dd></dd></dl>
+<p>The <strong>DEFAULT</strong> and the <strong>DEFAULT</strong> function returns a default value defined for a column. If a default value is not specified for the column, <strong>NULL</strong> or an error is output. <strong>DEFAULT</strong> has no parameter, however, the <strong>DEFAULT</strong> function uses the column name as the input parameter. <strong>DEFAULT</strong> can be used for the input data of the <strong>INSERT</strong> statement and the <strong>SET</strong> clause of the <strong>UPDATE</strong> statement and the <strong>DEFAULT</strong> function can be used anywhere.</p>
+<p>If any of constraints is not defined or the <strong>UNIQUE</strong> constraint is defined for the column where a default value is not defined, <strong>NULL</strong> is returned. If <strong>NOT NULL</strong> or <strong>PRIMARY KEY</strong> constraint is defined, an error is returned.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">info_tbl</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">info_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">'a'</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="s1">'b'</span><span class="p">),(</span><span class="k">NULL</span><span class="p">,</span><span class="s1">'c'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">DEFAULT</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">info_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>   <span class="n">default</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">=============================</span>
+</span><span id="line-3">            <span class="mi">1</span>             <span class="mi">0</span>
+</span><span id="line-4">            <span class="mi">2</span>             <span class="mi">0</span>
+</span><span id="line-5">         <span class="n">NULL</span>             <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">UPDATE</span><span class="w"> </span><span class="n">info_tbl</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">info_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">DEFAULT</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">info_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">DEFAULT</span><span class="p">,</span><span class="s1">'d'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In version lower than CUBRID 9.0, the value at the time of CREATE TABLE has been saved when the value of the DATE, DATETIME, TIME, TIMESTAMP column has been specified as SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP while creating a table. Therefore, to enter the value at the time of data INSERT in version lower than CUBRID 9.0, the function should be entered to the VALUES clause of the INSERT syntax.</p>
+</div>
+</section>
+<section id="disk-size">
+<span id="id1"></span><h2><a class="toc-backref" href="#id10" role="doc-backlink">DISK_SIZE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#disk-size" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#disk-size'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DISK_SIZE">
+<span class="sig-name descname"><span class="pre">DISK_SIZE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#DISK_SIZE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#DISK_SIZE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>This function returns the size in bytes required to store the value of <em>expr</em> after evaluation. Main usage is to get necessary size for storing values in database heap file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> – Target expression to get the size.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>INTEGER</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">DISK_SIZE</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">),</span><span class="w"> </span><span class="n">DISK_SIZE</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">disk_size</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">)</span>   <span class="n">disk_size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==================================</span>
+</span><span id="line-3">                  <span class="mi">7</span>              <span class="mi">4</span>
+</span></code></pre></div>
+</div>
+<p>The size depends on the actual content of value, <a class="reference internal" href="../datatype.html#string-compression"><span class="std std-ref">string compression</span></a> is also taken into account:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">s1</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">300</span><span class="p">));</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="n">REPEAT</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">REPEAT</span><span class="p">(</span><span class="s1">'b'</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">),</span><span class="w"> </span><span class="n">REPEAT</span><span class="p">(</span><span class="s1">'c'</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">REPEAT</span><span class="p">(</span><span class="s1">'d'</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">));</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="w"> </span><span class="s1">'b'</span><span class="p">,</span><span class="w"> </span><span class="s1">'c'</span><span class="p">,</span><span class="w"> </span><span class="s1">'d'</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">DISK_SIZE</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span><span class="w"> </span><span class="n">DISK_SIZE</span><span class="p">(</span><span class="n">s2</span><span class="p">),</span><span class="w"> </span><span class="n">DISK_SIZE</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span><span class="w"> </span><span class="n">DISK_SIZE</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t1</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">disk_size</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>   <span class="n">disk_size</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>   <span class="n">disk_size</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>   <span class="n">disk_size</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================================================</span>
+</span><span id="line-3">              <span class="mi">12</span>              <span class="mi">24</span>              <span class="mi">10</span>             <span class="mi">300</span>
+</span><span id="line-4">               <span class="mi">4</span>               <span class="mi">4</span>              <span class="mi">10</span>             <span class="mi">300</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="index-cardinality">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">INDEX_CARDINALITY</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#index-cardinality" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#index-cardinality'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="INDEX_CARDINALITY">
+<span class="sig-name descname"><span class="pre">INDEX_CARDINALITY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_pos</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#INDEX_CARDINALITY" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#INDEX_CARDINALITY'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>INDEX_CARDINALITY</strong> function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter. Note that this value is an approximate value.</p>
+<p>If you want the updated result from this function, you should run <strong>UPDATE STATISTICS</strong> statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – Table name</p></li>
+<li><p><strong>index</strong> – Index name that exists in the <em>table</em></p></li>
+<li><p><strong>key_pos</strong> – <p>Partial key location. It <em>key_pos</em> starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the <em>key_pos</em> of the first column is 0. For the single column index, it is 0. It can be one of the following types.</p>
+<ul>
+<li><p>Character string that can be converted to a numeric type.</p></li>
+<li><p>Numeric type that can be converted to an integer type. The <strong>FLOAT</strong> or the <strong>DOUBLE</strong> types will be the value converted by the <strong>ROUND</strong> function.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<p>The return value is 0 or a positive integer and if any of the input parameters is <strong>NULL</strong>, <strong>NULL</strong> is returned. If tables or indexes that are input parameters are not found, or <em>key_pos</em> is out of range, <strong>NULL</strong> is returned.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="w"> </span><span class="n">i1</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="p">,</span>
+</span><span id="line-2"><span class="n">i2</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+</span><span id="line-3"><span class="n">i3</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">unique</span><span class="p">,</span>
+</span><span id="line-4"><span class="n">s1</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+</span><span id="line-5"><span class="n">s2</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+</span><span id="line-6"><span class="n">s3</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">);</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_t1_i1</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">i1</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span>
+</span><span id="line-9"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_t1_s1</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">s1</span><span class="p">(</span><span class="mi">7</span><span class="p">));</span>
+</span><span id="line-10"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_t1_i1_s1</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span><span class="n">s1</span><span class="p">);</span>
+</span><span id="line-11"><span class="k">CREATE</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_t1_i2_s2</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">i2</span><span class="p">,</span><span class="n">s2</span><span class="p">);</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'abc'</span><span class="p">,</span><span class="s1">'abc'</span><span class="p">,</span><span class="s1">'abc'</span><span class="p">);</span>
+</span><span id="line-14"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">'zabc'</span><span class="p">,</span><span class="s1">'zabc'</span><span class="p">,</span><span class="s1">'zabc'</span><span class="p">);</span>
+</span><span id="line-15"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">'+abc'</span><span class="p">,</span><span class="s1">'+abc'</span><span class="p">,</span><span class="s1">'+abc'</span><span class="p">);</span>
+</span><span id="line-16">
+</span><span id="line-17"><span class="k">UPDATE</span><span class="w"> </span><span class="k">STATISTICS</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t1</span><span class="p">;</span>
+</span><span id="line-18"><span class="k">SELECT</span><span class="w"> </span><span class="n">INDEX_CARDINALITY</span><span class="p">(</span><span class="s1">'t1'</span><span class="p">,</span><span class="s1">'i_t1_i1_s1'</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">index_cardinality</span><span class="p">(</span><span class="s1">'t1'</span><span class="p">,</span> <span class="s1">'i_t1_i1_s1'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================================</span>
+</span><span id="line-3">                                          <span class="mi">2</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">INDEX_CARDINALITY</span><span class="p">(</span><span class="s1">'t1'</span><span class="p">,</span><span class="s1">'i_t1_i1_s1'</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">index_cardinality</span><span class="p">(</span><span class="s1">'t1'</span><span class="p">,</span> <span class="s1">'i_t1_i1_s1'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================================</span>
+</span><span id="line-3">                                          <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">INDEX_CARDINALITY</span><span class="p">(</span><span class="s1">'t1'</span><span class="p">,</span><span class="s1">'i_t1_i1_s1'</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">index_cardinality</span><span class="p">(</span><span class="s1">'t1'</span><span class="p">,</span> <span class="s1">'i_t1_i1_s1'</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================================</span>
+</span><span id="line-3">                                       <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">INDEX_CARDINALITY</span><span class="p">(</span><span class="s1">'t123'</span><span class="p">,</span><span class="s1">'i_t1_i1_s1'</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">index_cardinality</span><span class="p">(</span><span class="s1">'t123'</span><span class="p">,</span> <span class="s1">'i_t1_i1_s1'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================================</span>
+</span><span id="line-3">                                       <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="inet-aton">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">INET_ATON</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#inet-aton" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#inet-aton'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="INET_ATON">
+<span class="sig-name descname"><span class="pre">INET_ATON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ip_string</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#INET_ATON" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#INET_ATON'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>INET_ATON</strong> function receives the string of an IPv4 address and returns a number. When an IP address string such as ‘a.b.c.d’ is entered, the function returns “a * 256 ^ 3 + b * 256 ^ 2 + c * 256 + d”. The return type is <strong>BIGINT</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ip_string</strong> – IPv4 address string</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>BIGINT</p>
+</dd>
+</dl>
+</dd></dl>
+<p>In the following example, 192.168.0.10 is calculated as “192 * 256 ^ 3 + 168 * 256 ^ 2 + 0 * 256 + 10”.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">INET_ATON</span><span class="p">(</span><span class="s1">'192.168.0.10'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">inet_aton</span><span class="p">(</span><span class="s1">'192.168.0.10'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================</span>
+</span><span id="line-3">                  <span class="mi">3232235530</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="inet-ntoa">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">INET_NTOA</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#inet-ntoa" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#inet-ntoa'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="INET_NTOA">
+<span class="sig-name descname"><span class="pre">INET_NTOA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#INET_NTOA" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#INET_NTOA'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>INET_NTOA</strong> function receives a number and returns an IPv4 address string. The return type is VARCHAR.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> – Numeric expression</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">INET_NTOA</span><span class="p">(</span><span class="mi">3232235530</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">inet_ntoa</span><span class="p">(</span><span class="mi">3232235530</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'192.168.0.10'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="last-insert-id">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">LAST_INSERT_ID</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#last-insert-id" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#last-insert-id'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="LAST_INSERT_ID">
+<span class="sig-name descname"><span class="pre">LAST_INSERT_ID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#LAST_INSERT_ID" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#LAST_INSERT_ID'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>LAST_INSERT_ID</strong> function returns the value that has been most recently inserted to the <strong>AUTO_INCREMENT</strong> column by a single <strong>INSERT</strong> statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>BIGINT</p>
+</dd>
+</dl>
+</dd></dl>
+<p>The value returned by the <strong>LAST_INSERT_ID</strong> function has the following characteristics.</p>
+<ul>
+<li><p>The latest <strong>LAST_INSERT_ID</strong> value which was INSERTed successfully will be maintained. If it fails to INSERT, there is no change for <strong>LAST_INSERT_ID</strong>() value, but <strong>AUTO_INCREMENT</strong> value is internally increased. Therefore, <strong>LAST_INSERT_ID</strong>() value after the next <strong>INSERT</strong> statement’s success reflects the internally increased <strong>AUTO_INCREMENT</strong> value.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Operation</span> <span class="n">would</span> <span class="n">have</span> <span class="n">caused</span> <span class="n">one</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">unique</span> <span class="n">constraint</span> <span class="n">violations</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Operation</span> <span class="n">would</span> <span class="n">have</span> <span class="n">caused</span> <span class="n">one</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">unique</span> <span class="n">constraint</span> <span class="n">violations</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">1</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">--</span> <span class="n">In</span> <span class="mi">2008</span> <span class="n">R4</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="n">before</span><span class="p">,</span> <span class="n">above</span> <span class="n">value</span> <span class="ow">is</span> <span class="mf">3.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">4</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>In the Multiple-rows <strong>INSERT</strong> statement(INSERT INTO tbl VALUES (), (), …, ()), <strong>LAST_INSERT_ID</strong>() returns the firstly inserted <strong>AUTO_INCREMENT</strong> value. In other words, from the second row, there is no change on <strong>LAST_INSERT_ID</strong>() value even if the next rows are inserted.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">5</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">8</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>If <strong>INSERT</strong> statement succeeds to execute, <strong>LAST_INSERT_ID</strong> () value is not recovered to its previous value even if the transaction is rolled back.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- csql&gt; ;autocommit off</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl2</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">COMMIT</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl2</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">ROLLBACK</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">3</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p><strong>LAST_INSERT_ID</strong>() value used from the inside of a trigger cannot be identified from the outside of the trigger.</p></li>
+<li><p><strong>LAST_INSERT_ID</strong>is independently kept by a session of each application.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ss</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="nb">text</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">));</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">ss</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="s1">'cubrid'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="w"> </span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">     <span class="n">last_insert_id</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=======================</span>
+</span><span id="line-3">                     <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">ss</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="s1">'database'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="s1">'manager'</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="w"> </span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">     <span class="n">last_insert_id</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=======================</span>
+</span><span id="line-3">                     <span class="mi">2</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="p">(</span><span class="mi">500</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">     <span class="n">last_insert_id</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=======================</span>
+</span><span id="line-3">                     <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">500</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="k">NULL</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">     <span class="n">last_insert_id</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=======================</span>
+</span><span id="line-3">                     <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">                    <span class="nb">id</span>
+</span><span id="line-2"><span class="o">=======================</span>
+</span><span id="line-3">                   <span class="mi">500</span>
+</span><span id="line-4">                     <span class="mi">1</span>
+</span><span id="line-5">                     <span class="mi">2</span>
+</span><span id="line-6">                   <span class="mi">500</span>
+</span><span id="line-7">                     <span class="mi">3</span>
+</span><span id="line-8">                     <span class="mi">4</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="list-dbs">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">LIST_DBS</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#list-dbs" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#list-dbs'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="LIST_DBS">
+<span class="sig-name descname"><span class="pre">LIST_DBS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#LIST_DBS" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#LIST_DBS'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>LIST_DBS</strong> function outputs the list of all databases in the directory file(<strong>$CUBRID_DATABASES/databases.txt</strong>), separated by blanks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">LIST_DBS</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">list_dbs</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'testdb demodb'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="row-count">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">ROW_COUNT</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#row-count" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#row-count'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ROW_COUNT">
+<span class="sig-name descname"><span class="pre">ROW_COUNT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ROW_COUNT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ROW_COUNT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>ROW_COUNT</strong> function returns the number of rows updated (<strong>UPDATE</strong>, <strong>INSERT</strong>, <strong>DELETE</strong>, <strong>REPLACE</strong>) by the previous statement.</p>
+<p>ROW_COUNT returns 1 for each inserted row and 2 for each updated row for <strong>INSERT ON DUPLICATE KEY UPDATE</strong> statement. It returns the sum of number of deleted and inserted rows for <strong>REPLACE</strong> statement.</p>
+<p>Statements triggered by trigger will not affect the ROW_COUNT for the statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">int</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">),(</span><span class="mi">2</span><span class="p">),(</span><span class="mi">3</span><span class="p">),(</span><span class="mi">4</span><span class="p">),(</span><span class="mi">5</span><span class="p">),(</span><span class="mi">6</span><span class="p">),(</span><span class="mi">7</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="k">ROW_COUNT</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">row_count</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">===============</span>
+</span><span id="line-3">              <span class="mi">7</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">UPDATE</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w">  </span><span class="mi">3</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">ROW_COUNT</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">row_count</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">===============</span>
+</span><span id="line-3">              <span class="mi">4</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">ROW_COUNT</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">row_count</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">===============</span>
+</span><span id="line-3">              <span class="mi">4</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="sessiontimezone">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink">SESSIONTIMEZONE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sessiontimezone" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sessiontimezone'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="SESSIONTIMEZONE">
+<span class="sig-name descname"><span class="pre">SESSIONTIMEZONE</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#SESSIONTIMEZONE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#SESSIONTIMEZONE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Prints out a timezone of session (offset or region name) as a string. (e.g. ‘-05:00’, or ‘Europe/Vienna’).</p>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">SESSIONTIMEZONE</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">sessiontimezone</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'Asia/Seoul'</span>
+</span></code></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#DBTIMEZONE" title="DBTIMEZONE"><code class="xref py py-func docutils literal notranslate"><span class="pre">DBTIMEZONE()</span></code></a>, <a class="reference internal" href="datetime_fn.html#FROM_TZ" title="FROM_TZ"><code class="xref py py-func docutils literal notranslate"><span class="pre">FROM_TZ()</span></code></a>, <a class="reference internal" href="datetime_fn.html#NEW_TIME" title="NEW_TIME"><code class="xref py py-func docutils literal notranslate"><span class="pre">NEW_TIME()</span></code></a>, <a class="reference internal" href="datetime_fn.html#TZ_OFFSET" title="TZ_OFFSET"><code class="xref py py-func docutils literal notranslate"><span class="pre">TZ_OFFSET()</span></code></a></p>
+</div>
+</section>
+<section id="user-system-user">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink">USER, SYSTEM_USER</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-system-user" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#user-system-user'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="USER">
+<span class="sig-name descname"><span class="pre">USER</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#USER" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#USER'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="SYSTEM_USER">
+<span class="sig-name descname"><span class="pre">SYSTEM_USER</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#SYSTEM_USER" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#SYSTEM_USER'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The functions <strong>USER</strong> and <strong>SYSTEM_USER</strong> are identical and they return the user name together with the host name where CSQL or CAS was executed.</p>
+<p>The <a class="reference internal" href="#c.USER" title="USER"><code class="xref c c-macro docutils literal notranslate"><span class="pre">USER</span></code></a> and <a class="reference internal" href="#c.CURRENT_USER" title="CURRENT_USER"><code class="xref c c-macro docutils literal notranslate"><span class="pre">CURRENT_USER</span></code></a> pseudo-columns return the user names who has logged on to the current database as character strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting the current user on the session</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">SYSTEM_USER</span><span class="w"> </span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">user</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'PUBLIC@cubrid_host'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="k">CURRENT_USER</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">user</span><span class="p">()</span>                <span class="n">CURRENT_USER</span>
+</span><span id="line-2"><span class="o">============================================</span>
+</span><span id="line-3">  <span class="s1">'PUBLIC@cubrid_host'</span>  <span class="s1">'PUBLIC'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--selecting all users of the current database from the system table</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">name</span>                           <span class="nb">id</span>  <span class="n">password</span>
+</span><span id="line-2"><span class="o">=========================================================</span>
+</span><span id="line-3">  <span class="s1">'DBA'</span>                        <span class="n">NULL</span>  <span class="n">NULL</span>
+</span><span id="line-4">  <span class="s1">'PUBLIC'</span>                     <span class="n">NULL</span>  <span class="n">NULL</span>
+</span><span id="line-5">  <span class="s1">'SELECT_ONLY_USER'</span>           <span class="n">NULL</span>  <span class="n">db_password</span>
+</span><span id="line-6">  <span class="s1">'ALMOST_DBA_USER'</span>            <span class="n">NULL</span>  <span class="n">db_password</span>
+</span><span id="line-7">  <span class="s1">'SELECT_ONLY_USER2'</span>          <span class="n">NULL</span>  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="version">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">VERSION</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#version" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#version'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="VERSION">
+<span class="sig-name descname"><span class="pre">VERSION</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#VERSION" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#VERSION'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>VERSION</strong> function returns the version character string representing the CUBRID server version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="k">VERSION</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   <span class="n">version</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=====================</span>
+</span><span id="line-3">  <span class="s1">'9.1.0.0203'</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="rownum_fn.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        ROWNUM Functions
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="encryption_fn.html">
+        Encryption Function
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#charset'" class="reference internal" href="#charset">CHARSET</a><ul>
+<li><a :data-current="activeSection === '#CHARSET'" class="reference internal" href="#CHARSET"><code class="docutils literal notranslate"><span class="pre">CHARSET()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#coercibility'" class="reference internal" href="#coercibility">COERCIBILITY</a><ul>
+<li><a :data-current="activeSection === '#COERCIBILITY'" class="reference internal" href="#COERCIBILITY"><code class="docutils literal notranslate"><span class="pre">COERCIBILITY()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#collation'" class="reference internal" href="#collation">COLLATION</a><ul>
+<li><a :data-current="activeSection === '#COLLATION'" class="reference internal" href="#COLLATION"><code class="docutils literal notranslate"><span class="pre">COLLATION()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#current-user-user'" class="reference internal" href="#current-user-user">CURRENT_USER, USER</a><ul>
+<li><a :data-current="activeSection === '#c.CURRENT_USER'" class="reference internal" href="#c.CURRENT_USER"><code class="docutils literal notranslate"><span class="pre">CURRENT_USER</span></code></a></li>
+<li><a :data-current="activeSection === '#c.USER'" class="reference internal" href="#c.USER"><code class="docutils literal notranslate"><span class="pre">USER</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#database-schema'" class="reference internal" href="#database-schema">DATABASE, SCHEMA</a><ul>
+<li><a :data-current="activeSection === '#DATABASE'" class="reference internal" href="#DATABASE"><code class="docutils literal notranslate"><span class="pre">DATABASE()</span></code></a></li>
+<li><a :data-current="activeSection === '#SCHEMA'" class="reference internal" href="#SCHEMA"><code class="docutils literal notranslate"><span class="pre">SCHEMA()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#dbtimezone'" class="reference internal" href="#dbtimezone">DBTIMEZONE</a><ul>
+<li><a :data-current="activeSection === '#DBTIMEZONE'" class="reference internal" href="#DBTIMEZONE"><code class="docutils literal notranslate"><span class="pre">DBTIMEZONE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#default'" class="reference internal" href="#default">DEFAULT</a><ul>
+<li><a :data-current="activeSection === '#DEFAULT'" class="reference internal" href="#DEFAULT"><code class="docutils literal notranslate"><span class="pre">DEFAULT()</span></code></a></li>
+<li><a :data-current="activeSection === '#c.DEFAULT'" class="reference internal" href="#c.DEFAULT"><code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#disk-size'" class="reference internal" href="#disk-size">DISK_SIZE</a><ul>
+<li><a :data-current="activeSection === '#DISK_SIZE'" class="reference internal" href="#DISK_SIZE"><code class="docutils literal notranslate"><span class="pre">DISK_SIZE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#index-cardinality'" class="reference internal" href="#index-cardinality">INDEX_CARDINALITY</a><ul>
+<li><a :data-current="activeSection === '#INDEX_CARDINALITY'" class="reference internal" href="#INDEX_CARDINALITY"><code class="docutils literal notranslate"><span class="pre">INDEX_CARDINALITY()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#inet-aton'" class="reference internal" href="#inet-aton">INET_ATON</a><ul>
+<li><a :data-current="activeSection === '#INET_ATON'" class="reference internal" href="#INET_ATON"><code class="docutils literal notranslate"><span class="pre">INET_ATON()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#inet-ntoa'" class="reference internal" href="#inet-ntoa">INET_NTOA</a><ul>
+<li><a :data-current="activeSection === '#INET_NTOA'" class="reference internal" href="#INET_NTOA"><code class="docutils literal notranslate"><span class="pre">INET_NTOA()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#last-insert-id'" class="reference internal" href="#last-insert-id">LAST_INSERT_ID</a><ul>
+<li><a :data-current="activeSection === '#LAST_INSERT_ID'" class="reference internal" href="#LAST_INSERT_ID"><code class="docutils literal notranslate"><span class="pre">LAST_INSERT_ID()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#list-dbs'" class="reference internal" href="#list-dbs">LIST_DBS</a><ul>
+<li><a :data-current="activeSection === '#LIST_DBS'" class="reference internal" href="#LIST_DBS"><code class="docutils literal notranslate"><span class="pre">LIST_DBS()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#row-count'" class="reference internal" href="#row-count">ROW_COUNT</a><ul>
+<li><a :data-current="activeSection === '#ROW_COUNT'" class="reference internal" href="#ROW_COUNT"><code class="docutils literal notranslate"><span class="pre">ROW_COUNT()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#sessiontimezone'" class="reference internal" href="#sessiontimezone">SESSIONTIMEZONE</a><ul>
+<li><a :data-current="activeSection === '#SESSIONTIMEZONE'" class="reference internal" href="#SESSIONTIMEZONE"><code class="docutils literal notranslate"><span class="pre">SESSIONTIMEZONE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#user-system-user'" class="reference internal" href="#user-system-user">USER, SYSTEM_USER</a><ul>
+<li><a :data-current="activeSection === '#USER'" class="reference internal" href="#USER"><code class="docutils literal notranslate"><span class="pre">USER()</span></code></a></li>
+<li><a :data-current="activeSection === '#SYSTEM_USER'" class="reference internal" href="#SYSTEM_USER"><code class="docutils literal notranslate"><span class="pre">SYSTEM_USER()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#version'" class="reference internal" href="#version">VERSION</a><ul>
+<li><a :data-current="activeSection === '#VERSION'" class="reference internal" href="#VERSION"><code class="docutils literal notranslate"><span class="pre">VERSION()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jun 29, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../../_static/theme.js?v=b0acb063"></script>
+<script src="../../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../../_static/version-switcher.js?v=993d9931"></script>
+<script src="../../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

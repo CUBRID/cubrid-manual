@@ -2,7 +2,11 @@
 Logical Operators
 *****************
 
-For logical operators, boolean expressions or expressions that evaluates to an **INTEGER** value are specified as operands; **TRUE**, **FALSE** or **NULL** is returned as a result. If the **INTEGER** value is used, 0 is evaluated to **FALSE** and the other values are evaluated to **TRUE**. If a boolean value is used, 1 is evaluated to **TRUE** and 0 is evaluated to **FALSE**.
+For logical operators, boolean expressions are specified as operands; **TRUE**, **FALSE** or **NULL** is returned as a result. If a boolean value is used in an arithmetic expression, **TRUE** is evaluated to 1 and **FALSE** is evaluated to 0.
+
+.. note::
+
+    As of version 11.2, using a non-logical value (such as an integer or column) as an operand raises the error "operand must be logical expression." Such a condition must be rewritten with an explicit comparison: a constant condition like **WHERE 1** as **WHERE 1=1**, and a column condition like **WHERE column_name** as **WHERE column_name <> 0**.
 
 The following table shows the logical operators.
 

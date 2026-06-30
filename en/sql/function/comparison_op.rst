@@ -36,7 +36,8 @@ The comparison operators compare the operand on the left and on the right, and t
 
 ::
 
-    <expression> IS [NOT] <boolean_value>
+    <expression> IS [NOT] NULL
+    <logical_expression> IS [NOT] <truth_value>
      
         <expression> ::=
             bit_string |
@@ -46,10 +47,25 @@ The comparison operators compare the operand on the left and on the right, and t
             collection_value |
             NULL
      
-    <boolean_value> ::=
-        { UNKNOWN | NULL } |
-        TRUE |
-        FALSE
+        <truth_value> ::=
+            TRUE |
+            FALSE |
+            UNKNOWN
+
+        <logical_expression> ::=
+            <expression> <comparison_operator> <expression> |
+            <logical_expression> { AND | OR | XOR } <logical_expression> |
+            NOT <logical_expression>
+
+        <comparison_operator> ::=
+            = |
+            <=> |
+            <> |
+            != |
+            > |
+            < |
+            >= |
+            <=
 
 *   <*expression*>: Declares an expression to be compared.
 
@@ -65,40 +81,46 @@ The comparison operators compare the operand on the left and on the right, and t
 
     *   **NULL**: The **NULL** value is not included in the value range of any data type. Therefore, comparison between **NULL** values is only allowed to determine if the given value is **NULL** or not. An implicit type cast does not take place when a **NULL** value is assigned to a different data type. For example, when an attribute of **INTEGER** type has a **NULL** and is compared with a floating point type, the **NULL** value is not coerced to **FLOAT** before comparison is made. A comparison operation on the **NULL** value does not return a result.
 
+*   <*logical_expression*>: An expression that evaluates to a boolean (logical) value, such as the result of a comparison (e.g., a = 1) or a logical operation (e.g., (a = 1) AND (b = 2)).
+
 The following table shows the comparison operators supported by CUBRID and their return values.
 
 **Comparison Operators**
 
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| Comparison Operator     | Description                                                                                 | Predicate      | Return Value   |
-+=========================+=============================================================================================+================+================+
-| **=**                   | A general equal sign. It compares whether the values of the left and right operands         | 1=2            | 0              |
-|                         | are the same. Returns **NULL**  if one or more operands are NULL.                           | 1=NULL         | NULL           |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **<=>**                 | A NULL-safe equal sign. It compares whether the values of the left and right operands       | 1<=>2          | 0              |
-|                         | are the same including **NULL**. Returns 1 if both operands are **NULL**.                   | 1<=> NULL      | 0              |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **<>, !=**              | The value of left operand is not equal to that of right operand.                            | 1<>2           | 1              |
-|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **>**                   | The value of left operand is greater than that of right operand.                            | 1>2            | 0              |
-|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **<**                   | The value of left operand is less than that of right operand.                               | 1<2            | 1              |
-|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **>=**                  | The value of left operand is greater than or equal to that of right operand.                | 1>=2           | 0              |
-|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                |                |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **<=**                  | The value of left operand is less than or equal to that of right operand.                   | 1<=2           | 1              |
-|                         | If any operand value is  **NULL**, **NULL** is returned.                                    |                |                |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **IS**                  | Compares whether the value of the left operand is the same as boolean value of the right.   | 1 IS FALSE     | 0              |
-| *boolean_value*         | The boolean value may be **TRUE**, **FALSE** (or **NULL**).                                 |                |                |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
-| **IS NOT**              | Compares whether the value of the left operand is the same as boolean value of the right.   | 1 IS NOT FALSE | 1              |
-| *boolean_value*         | The boolean value may be **TRUE**, **FALSE** (or **NULL**).                                 |                |                |
-+-------------------------+---------------------------------------------------------------------------------------------+----------------+----------------+
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| Comparison Operator     | Description                                                                                 | Predicate          | Return Value   |
++=========================+=============================================================================================+====================+================+
+| **=**                   | A general equal sign. It compares whether the values of the left and right operands         | 1=2                | 0              |
+|                         | are the same. Returns **NULL**  if one or more operands are NULL.                           | 1=NULL             | NULL           |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **<=>**                 | A NULL-safe equal sign. It compares whether the values of the left and right operands       | 1<=>2              | 0              |
+|                         | are the same including **NULL**. Returns 1 if both operands are **NULL**.                   | 1<=> NULL          | 0              |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **<>, !=**              | The value of left operand is not equal to that of right operand.                            | 1<>2               | 1              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                    |                |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **>**                   | The value of left operand is greater than that of right operand.                            | 1>2                | 0              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                    |                |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **<**                   | The value of left operand is less than that of right operand.                               | 1<2                | 1              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                    |                |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **>=**                  | The value of left operand is greater than or equal to that of right operand.                | 1>=2               | 0              |
+|                         | If any operand value is **NULL**, **NULL** is returned.                                     |                    |                |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **<=**                  | The value of left operand is less than or equal to that of right operand.                   | 1<=2               | 1              |
+|                         | If any operand value is  **NULL**, **NULL** is returned.                                    |                    |                |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **IS**                  | Compares whether the value of the left operand is the same as the truth value of the right. | (1=1) IS FALSE     | 0              |
+| *truth_value*           | The truth value may be **TRUE**, **FALSE**, or **UNKNOWN**.                                 |                    |                |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+| **IS NOT**              | Compares whether the value of the left operand differs from the truth value of the right.   | (1=1) IS NOT FALSE | 1              |
+| *truth_value*           | The truth value may be **TRUE**, **FALSE**, or **UNKNOWN**.                                 |                    |                |
++-------------------------+---------------------------------------------------------------------------------------------+--------------------+----------------+
+
+.. note::
+
+    As of version 11.2, the left operand of **IS [NOT] { TRUE | FALSE | UNKNOWN }** must be a logical expression; otherwise the error "operand must be logical expression." is raised. For example, **1 IS FALSE** must be written as **(1=1) IS FALSE**. For a logical expression, the UNKNOWN truth value is represented as NULL, so **IS [NOT] UNKNOWN** and **IS [NOT] NULL** return the same result.
 
 The following are the examples which use comparison operators.
 
@@ -116,4 +138,9 @@ The following are the examples which use comparison operators.
     SELECT (SYSTIMESTAMP = SYSDATETIME); --0 is displayed after casting the type implicitly and then performing comparison operator. 
     SELECT (SYSTIMESTAMP <> NULL); -- NULL is returned without performing comparison operator.
     SELECT (SYSTIMESTAMP IS NOT NULL); -- 1 is returned because it is not NULL.
+    SELECT ((1 > 0) IS TRUE); -- 1 is displayed because (1 > 0) is TRUE.
+    SELECT ((1 > 0) IS FALSE); -- 0 is displayed because (1 > 0) is not FALSE.
+    SELECT ((1 > 0) IS UNKNOWN); -- 0 is displayed because (1 > 0) is not UNKNOWN.
+    SELECT ((NULL = 1) IS UNKNOWN); -- 1 is displayed because (NULL = 1) is UNKNOWN.
+    SELECT ((1 > 0) IS NOT FALSE); -- 1 is displayed because (1 > 0) is not FALSE.
     

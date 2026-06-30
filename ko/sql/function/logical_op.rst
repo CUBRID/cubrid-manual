@@ -2,7 +2,11 @@
 논리 연산자
 ***********
 
-논리 연산자(logical operator)는 피연산자로 불리언(boolean) 연산식 또는 **INTEGER** 값으로 평가되는 표현식이 지정되며, 연산 결과로 **TRUE**, **FALSE**, **NULL** 을 반환한다. **INTEGER** 값이 논리식에 사용되는 경우 0은 **FALSE**, 0이 아닌 나머지는 **TRUE** 로 사용된다. 불리언 값이 수식에 사용될 때에는 **TRUE** 는 1, **FALSE** 는 0으로 해석된다. 
+논리 연산자(logical operator)는 피연산자로 불리언(boolean) 연산식이 지정되며, 연산 결과로 **TRUE**, **FALSE**, **NULL** 을 반환한다. 불리언 값이 수식에 사용될 때에는 **TRUE** 는 1, **FALSE** 는 0으로 해석된다. 
+
+.. note::
+
+    11.2 버전부터 논리식이 아닌 값(정수·컬럼 등)을 피연산자로 사용하면 "operand must be logical expression." 오류가 발생한다. 비논리 값을 직접 조건절에 사용하던 구문은 명시적인 비교 연산으로 바꿔야 한다. 상수 조건 **WHERE 1** 은 **WHERE 1=1** 로, 컬럼 조건 **WHERE column_name** 은 **WHERE column_name <> 0** 으로 작성한다.
 
 논리 연산자의 종류 및 진리표는 아래와 같다.
 

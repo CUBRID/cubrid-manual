@@ -263,10 +263,16 @@ You can specify default values for the arguments of stored procedures and stored
 +-------------------------------+---------------+
 | TO_CHAR(number[, format])     | STRING        |
 +-------------------------------+---------------+
+| SYS_GUID()                    | STRING        |
++-------------------------------+---------------+
 
 .. note::
 
-    If a function that is not listed in the table above is used as a **DEFAULT** value, 
+    **UUID** returns a **BIT** value, and PL does not support the **BIT** type, so it cannot be used as a default-value function. **UUID** returns a **BIT** value, so it cannot be wrapped with **TO_CHAR**.
+
+.. note::
+
+    If a function that is not listed in the table above is used as a **DEFAULT** value,
     the result evaluated at the time of procedure creation is stored as a **DEFAULT** value.
     Therefore, the default value of the column will be the result value of the function at the time of **INSERT** execution, 
     not the result value of the function at the time of procedure creation.

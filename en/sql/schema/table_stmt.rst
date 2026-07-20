@@ -236,6 +236,14 @@ The pseudocolumn allows for the **DEFAULT** value as follows.
 +-------------------------------+---------------+
 | TO_CHAR(number[, format])     | STRING        |
 +-------------------------------+---------------+
+| UUID([version])               | BIT(128)      |
++-------------------------------+---------------+
+| SYS_GUID()                    | STRING        |
++-------------------------------+---------------+
+
+.. note::
+
+    **UUID** returns a **BIT** value, so it cannot be wrapped with **TO_CHAR**.
 
 .. note::
 

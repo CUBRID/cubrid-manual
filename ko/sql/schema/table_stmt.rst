@@ -345,6 +345,16 @@ CREATE TABLE
 
 동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
+**AUTO_INCREMENT** 속성은 한 테이블 내에서 한 개의 칼럼에만 정의할 수 있다. 이미 **AUTO_INCREMENT** 칼럼이 존재하는 테이블에 **CREATE TABLE**, **ALTER TABLE ... ADD**, **ALTER TABLE ... CHANGE/MODIFY** 등으로 또 다른 **AUTO_INCREMENT** 칼럼을 정의하려고 하면 에러가 발생한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t (a INT AUTO_INCREMENT, b INT AUTO_INCREMENT);
+
+::
+
+    ERROR: A class can have only one AUTO_INCREMENT attribute.
+
 **AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 :ref:`alter-auto-increment` 을 참고한다.
 
 ::
@@ -393,7 +403,7 @@ CREATE TABLE
      
 .. code-block:: sql
 
-    CREATE TABLE t (id INT AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
+    CREATE TABLE t (id INT, id2 int) AUTO_INCREMENT = 5;
     
 ::
     
@@ -1568,7 +1578,7 @@ ALTER COLUMN ... SET DEFAULT 절
 AUTO_INCREMENT 절
 -----------------
 
-**AUTO_INCREMENT** 절은 기존에 정의한 자동 증가값의 초기값을 변경할 수 있다. 단, 테이블 내에 **AUTO_INCREMENT** 칼럼이 한 개만 정의되어 있어야 한다. ::
+**AUTO_INCREMENT** 절은 기존에 정의한 자동 증가값의 초기값을 변경할 수 있다. 단, 테이블 내에 **AUTO_INCREMENT** 칼럼이 정의되어 있어야 한다. ::
 
     ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 
@@ -1580,15 +1590,6 @@ AUTO_INCREMENT 절
 
     CREATE TABLE t (i int AUTO_INCREMENT);
     ALTER TABLE t AUTO_INCREMENT = 5;
-     
-    CREATE TABLE t (i int AUTO_INCREMENT, j int AUTO_INCREMENT);
-    
-    -- when 2 AUTO_INCREMENT constraints are defined on one table, below query returns an error.
-    ALTER TABLE t AUTO_INCREMENT = 5;
-
-::
-    
-    ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.
 
 .. warning:: **AUTO_INCREMENT**\의 초기값 변경으로 인해 **PRIMARY KEY**\나 **UNIQUE**\와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
 

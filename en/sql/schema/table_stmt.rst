@@ -353,7 +353,17 @@ You can define the **AUTO_INCREMENT** attribute for the column to automatically 
 
 **DEFAULT**, **SHARED** and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
-You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. 
+The **AUTO_INCREMENT** attribute can be defined for only one column in a table. If you try to define another **AUTO_INCREMENT** column on a table that already has one, whether by **CREATE TABLE**, **ALTER TABLE ... ADD**, or **ALTER TABLE ... CHANGE/MODIFY**, an error occurs.
+
+.. code-block:: sql
+
+    CREATE TABLE t (a INT AUTO_INCREMENT, b INT AUTO_INCREMENT);
+
+::
+
+    ERROR: A class can have only one AUTO_INCREMENT attribute.
+
+You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**.
 
 ::
 
@@ -401,7 +411,7 @@ When you use the **CREATE TABLE** *[schema_name.]table_name* (id INT **AUTO_INCR
      
 .. code-block:: sql
 
-    CREATE TABLE t (id INT AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
+    CREATE TABLE t (id INT, id2 int) AUTO_INCREMENT = 5;
     
 ::
     
@@ -1576,7 +1586,7 @@ You can specify a new default value for a column that has no default value or mo
 AUTO_INCREMENT Clause
 ---------------------
 
-The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be only one **AUTO_INCREMENT** column defined. ::
+The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be **AUTO_INCREMENT** column defined. ::
 
     ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 
@@ -1588,15 +1598,6 @@ The **AUTO_INCREMENT** clause can change the initial value of the increment valu
 
     CREATE TABLE t (i int AUTO_INCREMENT);
     ALTER TABLE t AUTO_INCREMENT = 5;
-     
-    CREATE TABLE t (i int AUTO_INCREMENT, j int AUTO_INCREMENT);
-    
-    -- when 2 AUTO_INCREMENT constraints are defined on one table, below query returns an error.
-    ALTER TABLE t AUTO_INCREMENT = 5;
-
-::
-    
-    ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.
 
 .. warning:: You must be careful not to violate constraints (such as a **PRIMARY KEY** or **UNIQUE**) due to changing the initial value of **AUTO_INCREMENT**.
 

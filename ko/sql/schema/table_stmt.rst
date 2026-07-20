@@ -28,7 +28,7 @@ CREATE TABLE
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} [schema_name.]superclass_name, ...
         
         <column_definition> ::= 
-            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
+            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint> | <visibility>}] [COMMENT 'column_comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -44,6 +44,8 @@ CREATE TABLE
                 <on_update> ::= [ON UPDATE <value_specification>]
          
             <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition> }
+
+            <visibility> ::= [{VISIBLE|INVISIBLE}]
                         
         <table_constraint> ::=             
             { 
@@ -94,6 +96,7 @@ CREATE TABLE
 *   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
+*   <*visibility*>: 칼럼을 감출지 여부를 지정하며, 기본값은 **VISIBLE** 이다. **CLASS ATTRIBUTE** 및 **SHARED ATTRIBUTE** 는 **INVISIBLE** 로 정의할 수 없다. 자세한 내용은 :ref:`invisible-column`\ 을 참고한다.
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.
 *   *column_comment_string*: 칼럼의 커멘트를 지정한다.
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
@@ -152,23 +155,25 @@ CREATE TABLE
 
 ::
 
-    <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] ... [COMMENT 'comment_string']
-    
+    <column_definition> ::=
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>] | [<visibility>]] ... [COMMENT 'comment_string']
+
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
             <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
             <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-        
+
         <default_or_shared_or_ai> ::=
-            SHARED <value_specification> | 
+            SHARED <value_specification> |
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
         <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
+
+        <visibility> ::= [{VISIBLE | INVISIBLE}]
 
 칼럼 이름
 ^^^^^^^^^
@@ -414,8 +419,86 @@ CREATE TABLE
         예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
 
         .. code-block:: sql
-          
+
             CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
+
+.. _invisible-column:
+
+INVISIBLE 칼럼
+^^^^^^^^^^^^^^
+
+칼럼을 **INVISIBLE** 로 정의하면, 질의문에 칼럼 이름을 직접 명시하지 않는 한 해당 칼럼은 존재하지 않는 것처럼 동작한다. 칼럼의 기본값은 **VISIBLE** 이며, **INVISIBLE** 로 정의한 칼럼만 감춰진다.
+
+::
+
+    column_name <data_type> ... [VISIBLE | INVISIBLE]
+
+칼럼 이름이 명시되지 않는 다음과 같은 상황에서 **INVISIBLE** 칼럼은 결과나 대상에서 제외된다.
+
+*   **SELECT** \* 와 같이 select 리스트에 칼럼 이름을 명시하지 않은 경우
+*   **NATURAL JOIN**, **JOIN ... USING** 과 같이 조인에 사용할 칼럼이 이름으로 자동 결정되는 경우(**INVISIBLE** 칼럼은 조인 대상 칼럼으로 사용되지 않는다.)
+*   **INSERT** 시 칼럼 목록을 생략한 경우
+
+질의문에 **INVISIBLE** 칼럼의 이름을 직접 명시하면 일반 칼럼과 동일하게 조회 및 입력할 수 있다.
+
+이 기능은 의도치 않은 데이터의 노출을 1차적으로 방지하거나, 기존 질의문을 변경하지 않고 새로운 칼럼을 추가하려는 경우 등에 유용하게 사용할 수 있다.
+
+.. note::
+
+    *   테이블에는 한 개 이상의 칼럼이 **VISIBLE** 로 정의되어야 한다. 모든 칼럼을 **INVISIBLE** 로 정의하면 에러가 발생한다.
+    *   **CLASS ATTRIBUTE**, **SHARED ATTRIBUTE**, 뷰(**VCLASS**)의 칼럼은 **INVISIBLE** 로 정의할 수 없다.
+    *   칼럼의 **INVISIBLE** 속성과 인덱스의 **INVISIBLE** 속성(:ref:`alter-index` 참고)은 서로 다른 개념이다.
+    *   **DBLINK** 로 원격 테이블을 조회하는 경우 **INVISIBLE** 칼럼이 정상적으로 동작하지 않으므로, **DBLINK** 대상 테이블에는 **INVISIBLE** 칼럼을 설정하지 않을 것을 권장한다.
+
+**INVISIBLE** 칼럼에 정의된 제약 조건은 정상적으로 동작한다. 예를 들어 **NOT NULL** 제약 조건이 정의된 **INVISIBLE** 칼럼에 값을 입력하지 않으면 **INSERT** 가 거부되며, **DEFAULT** 값이 정의되어 있으면 **DEFAULT** 값이 저장된다.
+
+칼럼의 **INVISIBLE** 여부는 CSQL의 **;schema** 및 **DESC** 명령어, **SHOW CREATE TABLE** 구문, 시스템 카탈로그 :ref:`db_attribute <db-attribute>` (또는 :ref:`_db_attribute <-db-attribute>`)를 통해 확인할 수 있다.
+
+다음은 **INVISIBLE** 칼럼을 포함하는 테이블을 생성하고 조회하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_tbl (
+        id     INT PRIMARY KEY,
+        name   VARCHAR(20),
+        secret VARCHAR(20) INVISIBLE,
+        note   VARCHAR(20) DEFAULT 'n/a' INVISIBLE,
+        req    VARCHAR(20) NOT NULL INVISIBLE
+    );
+    INSERT INTO inv_tbl (id, name, secret, req) VALUES (1, 'aaa', 'topsecret', 'must');
+    INSERT INTO inv_tbl (id, name, req) VALUES (2, 'bbb', 'must2');
+
+    -- SELECT * 는 INVISIBLE 칼럼(secret, note, req)을 제외한다.
+    SELECT * FROM inv_tbl;
+
+::
+
+               id  name
+    ===================================
+                1  'aaa'
+                2  'bbb'
+
+.. code-block:: sql
+
+    -- 칼럼 이름을 직접 명시하면 INVISIBLE 칼럼도 조회된다.
+    SELECT id, name, secret, note, req FROM inv_tbl;
+
+::
+
+               id  name                  secret                note                  req
+    =====================================================================================================
+                1  'aaa'                 'topsecret'           'n/a'                 'must'
+                2  'bbb'                 NULL                  'n/a'                 'must2'
+
+칼럼의 **VISIBLE**/**INVISIBLE** 상태는 **ALTER TABLE** 문의 :ref:`add-column` 또는 :ref:`change-column`\ 로 추가하거나 변경할 수 있다.
+
+.. code-block:: sql
+
+    -- INVISIBLE 칼럼 추가
+    ALTER TABLE inv_tbl ADD COLUMN extra VARCHAR(10) INVISIBLE;
+
+    -- secret 칼럼을 VISIBLE 로 변경
+    ALTER TABLE inv_tbl MODIFY secret VARCHAR(20) VISIBLE;
 
 .. _constraint-definition:
 
@@ -1169,6 +1252,8 @@ ALTER TABLE
 
     테이블의 소유자, **DBA**, **DBA** 의 멤버만이 테이블 스키마를 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 :ref:`granting-authorization` 참조)
 
+.. _add-column:
+
 ADD COLUMN 절
 -------------
 
@@ -1179,23 +1264,25 @@ ADD COLUMN 절
     ALTER [TABLE | CLASS] [schema_name.]table_name
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
-        <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] [COMMENT 'comment_string']
-        
+        <column_definition> ::=
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>] | [<visibility>]] [COMMENT 'comment_string']
+
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
                 <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
                 <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-            
+
             <default_or_shared_or_ai> ::=
-                SHARED <value_specification> | 
+                SHARED <value_specification> |
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
 
             <on_update> ::= [ON UPDATE <value_specification>]
-            
+
             <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
+
+            <visibility> ::= [{VISIBLE | INVISIBLE}]
 
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -1224,7 +1311,8 @@ ADD COLUMN 절
     INSERT INTO a_tbl(age) VALUES(20),(30),(40);
 
     ALTER TABLE a_tbl ADD COLUMN phone VARCHAR(13) DEFAULT '000-0000-0000' AFTER name;
-    ALTER TABLE a_tbl ADD COLUMN birthday VARCHAR(20) DEFAULT TO_CHAR(SYSDATE,'YYYY-MM-DD'); 
+    ALTER TABLE a_tbl ADD COLUMN birthday VARCHAR(20) DEFAULT TO_CHAR(SYSDATE,'YYYY-MM-DD');
+    ALTER TABLE a_tbl ADD COLUMN memo VARCHAR(100) INVISIBLE;
     SELECT * FROM a_tbl;
      
 ::

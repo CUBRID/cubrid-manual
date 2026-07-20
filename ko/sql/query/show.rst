@@ -133,7 +133,7 @@ Key                                 VARCHAR         칼럼에 인덱스가 걸�
                                                         * UNI 값이면 고유(unique) 인덱스이다. (고유 인덱스는 여러 개의 NULL값을 허용하지만, NOT NULL 제약 조건을 설정할 수도 있다.)
                                                         * MUL 값이면 주어진 값이 칼럼 내에서 여러 번 나타나는 것을 허용하는 비고유 인덱스의 첫번째 칼럼이다. 복합 고유 인덱스를 구성하는 칼럼이면 MUL 값이 된다. 칼럼 값들의 결합은 고유일 수 있으나 각 칼럼의 값은 여러 번 나타날 수 있기 때문이다.
 Default                             VARCHAR         칼럼에 정의된 기본값
-Extra                               VARCHAR         주어진 칼럼에 대해 가능한 추가 정보. **AUTO_INCREMENT** 속성인 칼럼은 'auto_increment'라는 값을 갖는다.
+Extra                               VARCHAR         주어진 칼럼에 대해 가능한 추가 정보. **AUTO_INCREMENT** 속성인 칼럼은 'auto_increment', **INVISIBLE** 칼럼은 'invisible'이라는 값을 갖는다(:ref:`invisible-column` 참고).
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -466,7 +466,7 @@ SHOW CREATE TABLE
     ============================================
       'public.nation'       'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30), CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) DONT_REUSE_OID, COLLATE iso88591_bin'
 
-**SHOW CREATE TABLE** 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 커멘트를 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다.
+**SHOW CREATE TABLE** 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 커멘트를 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다. **INVISIBLE** 칼럼은 칼럼 정의에 **INVISIBLE** 키워드가 함께 출력된다(:ref:`invisible-column` 참고).
     
 .. _show-create-view-statement:
 

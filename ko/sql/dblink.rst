@@ -809,6 +809,7 @@ CUBRID 제약 사항
 --------------------------
 *   SELECT 구문에서 ENUM, BLOB, CLOB, SET 타입 미지원
 *   로컬 DB와 원격 DB의 설정된 파라미터가 다른 경우 원하지 않는 결과가 발생할 수 있다.
+*   원격 테이블에 :ref:`invisible-column`\ 이 있는 경우 DBLINK를 통한 조회가 정상적으로 동작하지 않으므로, DBLINK 대상 테이블에는 INVISIBLE 칼럼을 설정하지 않을 것을 권장한다.
 
 
 .. _heterogen-restrict:

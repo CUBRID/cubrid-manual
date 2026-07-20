@@ -27,17 +27,17 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
 
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} [schema_name.]superclass_name, ...
         
-        <column_definition> ::= 
-            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
-        
+        <column_definition> ::=
+            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint> | <visibility>}] [COMMENT 'column_comment_string']
+
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
                 <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
                 <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-            
+
             <default_or_shared_or_ai> ::=
-                SHARED <value_specification> | 
+                SHARED <value_specification> |
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
 
@@ -47,14 +47,16 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
 
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
-         
+
                     <referential_triggered_action> ::=
                         ON UPDATE <referential_action> |
-                        ON DELETE <referential_action> 
+                        ON DELETE <referential_action>
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
-                        
-        <table_constraint> ::= 
+
+            <visibility> ::= [{VISIBLE|INVISIBLE}]
+
+        <table_constraint> ::=
             { 
                 {KEY|INDEX} index_name <index_col_desc> |
                 [CONSTRAINT [constraint_name]]
@@ -103,6 +105,7 @@ Use **CREATE TABLE** statement to create a table. A table with the same name as 
 *   <*column_constraint*>: specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY**.
 *   <*default_or_shared_or_ai*>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
     When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
+*   <*visibility*>: specifies whether the column is hidden; the default is **VISIBLE**. A **CLASS ATTRIBUTE** and a **SHARED ATTRIBUTE** cannot be defined as **INVISIBLE**. For details, see :ref:`invisible-column`.
 *   *table_comment_string*: specifies a table's comment
 *   *column_comment_string*: specifies a column's comment.
 *   *index_comment_string*: specifies an index's comment.
@@ -160,23 +163,25 @@ A column is a set of data values of a particular simple type, one for each row o
 
 ::
 
-    <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] ... [COMMENT 'comment_string']
-    
+    <column_definition> ::=
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>] | [<visibility>]] ... [COMMENT 'comment_string']
+
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
             <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
             <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-        
+
         <default_or_shared_or_ai> ::=
-            SHARED <value_specification> | 
+            SHARED <value_specification> |
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
         <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
+
+        <visibility> ::= [{VISIBLE | INVISIBLE}]
 
 Column Name
 ^^^^^^^^^^^
@@ -422,8 +427,86 @@ When you use the **CREATE TABLE** *[schema_name.]table_name* (id INT **AUTO_INCR
         For example, if a table is created as below, the maximum value of A is 32767. Because an error occurs if the value exceeds 32767, you must make sure that the maximum value of the column A does not exceed the maximum value of the type when creating the initial table.
 
         .. code-block:: sql
-          
+
             CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
+
+.. _invisible-column:
+
+INVISIBLE Column
+^^^^^^^^^^^^^^^^
+
+When a column is defined as **INVISIBLE**, it behaves as if it does not exist unless its name is explicitly specified in a statement. The default visibility of a column is **VISIBLE**; only columns defined as **INVISIBLE** are hidden.
+
+::
+
+    column_name <data_type> ... [VISIBLE | INVISIBLE]
+
+An **INVISIBLE** column is excluded from the result or the target in situations where the column name is not specified, such as the following:
+
+*   When column names are not listed in the select list, as in **SELECT** \*
+*   When the join columns are determined automatically by name, as in **NATURAL JOIN** or **JOIN ... USING** (an **INVISIBLE** column is not used as a join column)
+*   When the column list is omitted in an **INSERT** statement
+
+If the name of an **INVISIBLE** column is specified explicitly in a statement, it can be queried and updated just like an ordinary column.
+
+This feature is useful, for example, to provide a first line of defense against unintended data exposure, or to add a new column without modifying existing statements.
+
+.. note::
+
+    *   At least one column in a table must be defined as **VISIBLE**. An error occurs if all columns are defined as **INVISIBLE**.
+    *   A **CLASS ATTRIBUTE**, a **SHARED ATTRIBUTE**, and a column of a view (**VCLASS**) cannot be defined as **INVISIBLE**.
+    *   The **INVISIBLE** attribute of a column and the **INVISIBLE** attribute of an index (see :ref:`alter-index`) are different concepts.
+    *   When a remote table is queried through **DBLINK**, an **INVISIBLE** column does not work correctly; therefore, it is recommended not to define **INVISIBLE** columns on a table used with **DBLINK**.
+
+Constraints defined on an **INVISIBLE** column work normally. For example, if no value is given for an **INVISIBLE** column with a **NOT NULL** constraint, the **INSERT** is rejected; if a **DEFAULT** value is defined, the **DEFAULT** value is stored.
+
+Whether a column is **INVISIBLE** can be checked with the CSQL **;schema** and **DESC** commands, the **SHOW CREATE TABLE** statement, or the system catalog :ref:`db_attribute <db-attribute>` (or :ref:`_db_attribute <-db-attribute>`).
+
+The following example creates a table with **INVISIBLE** columns and queries it.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_tbl (
+        id     INT PRIMARY KEY,
+        name   VARCHAR(20),
+        secret VARCHAR(20) INVISIBLE,
+        note   VARCHAR(20) DEFAULT 'n/a' INVISIBLE,
+        req    VARCHAR(20) NOT NULL INVISIBLE
+    );
+    INSERT INTO inv_tbl (id, name, secret, req) VALUES (1, 'aaa', 'topsecret', 'must');
+    INSERT INTO inv_tbl (id, name, req) VALUES (2, 'bbb', 'must2');
+
+    -- SELECT * excludes the INVISIBLE columns (secret, note, req).
+    SELECT * FROM inv_tbl;
+
+::
+
+               id  name
+    ===================================
+                1  'aaa'
+                2  'bbb'
+
+.. code-block:: sql
+
+    -- Specifying the column names explicitly also returns the INVISIBLE columns.
+    SELECT id, name, secret, note, req FROM inv_tbl;
+
+::
+
+               id  name                  secret                note                  req
+    =====================================================================================================
+                1  'aaa'                 'topsecret'           'n/a'                 'must'
+                2  'bbb'                 NULL                  'n/a'                 'must2'
+
+The **VISIBLE**/**INVISIBLE** state of a column can be added or changed with the **ALTER TABLE** :ref:`add-column` or :ref:`change-column`.
+
+.. code-block:: sql
+
+    -- Add an INVISIBLE column
+    ALTER TABLE inv_tbl ADD COLUMN extra VARCHAR(10) INVISIBLE;
+
+    -- Change the secret column to VISIBLE
+    ALTER TABLE inv_tbl MODIFY secret VARCHAR(20) VISIBLE;
 
 .. _constraint-definition:
 
@@ -1177,6 +1260,8 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
 
     The table's name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see :ref:`granting-authorization` For details on authorization).
 
+.. _add-column:
+
 ADD COLUMN Clause
 -----------------
 
@@ -1187,23 +1272,25 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
     ALTER [TABLE | CLASS] [schema_name.]table_name
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
-        <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] [COMMENT 'comment_string']
-        
+        <column_definition> ::=
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>] | [<visibility>]] [COMMENT 'comment_string']
+
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
                 <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
                 <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-            
+
             <default_or_shared_or_ai> ::=
-                SHARED <value_specification> | 
+                SHARED <value_specification> |
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
 
             <on_update> ::= [ON UPDATE <value_specification>]
 
             <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
+
+            <visibility> ::= [{VISIBLE | INVISIBLE}]
 
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -1233,7 +1320,8 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
     ALTER TABLE a_tbl ADD COLUMN phone VARCHAR(13) DEFAULT '000-0000-0000' AFTER name;
     ALTER TABLE a_tbl ADD COLUMN birthday VARCHAR(20) DEFAULT TO_CHAR(SYSDATE,'YYYY-MM-DD');
-     
+    ALTER TABLE a_tbl ADD COLUMN memo VARCHAR(100) INVISIBLE;
+
     SELECT * FROM a_tbl;
      
 ::

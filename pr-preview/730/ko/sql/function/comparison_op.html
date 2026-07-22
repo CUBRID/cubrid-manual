@@ -59,10 +59,10 @@
 </button>
 <div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
 <a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
-<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
 <input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
 <kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
-<span class="text-xs">⌘</span>
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
     K
   </kbd>
 </form>
@@ -250,20 +250,36 @@
 </span></code></pre></div>
 </div>
 <p><strong>구문 2</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="n">IS</span> <span class="p">[</span><span class="n">NOT</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">boolean_value</span><span class="o">&gt;</span>
-</span><span id="line-2">
-</span><span id="line-3">    <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
-</span><span id="line-4">        <span class="n">bit_string</span> <span class="o">|</span>
-</span><span id="line-5">        <span class="n">character_string</span> <span class="o">|</span>
-</span><span id="line-6">        <span class="n">numeric_value</span> <span class="o">|</span>
-</span><span id="line-7">        <span class="n">date</span><span class="o">-</span><span class="n">time_value</span> <span class="o">|</span>
-</span><span id="line-8">        <span class="n">collection_value</span> <span class="o">|</span>
-</span><span id="line-9">        <span class="n">NULL</span>
-</span><span id="line-10">
-</span><span id="line-11"><span class="o">&lt;</span><span class="n">boolean_value</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
-</span><span id="line-12">    <span class="p">{</span> <span class="n">UNKNOWN</span> <span class="o">|</span> <span class="n">NULL</span> <span class="p">}</span> <span class="o">|</span>
-</span><span id="line-13">    <span class="n">TRUE</span> <span class="o">|</span>
-</span><span id="line-14">    <span class="n">FALSE</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="n">IS</span> <span class="p">[</span><span class="n">NOT</span><span class="p">]</span> <span class="n">NULL</span>
+</span><span id="line-2"><span class="o">&lt;</span><span class="n">logical_expression</span><span class="o">&gt;</span> <span class="n">IS</span> <span class="p">[</span><span class="n">NOT</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">truth_value</span><span class="o">&gt;</span>
+</span><span id="line-3">
+</span><span id="line-4">    <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-5">        <span class="n">bit_string</span> <span class="o">|</span>
+</span><span id="line-6">        <span class="n">character_string</span> <span class="o">|</span>
+</span><span id="line-7">        <span class="n">numeric_value</span> <span class="o">|</span>
+</span><span id="line-8">        <span class="n">date</span><span class="o">-</span><span class="n">time_value</span> <span class="o">|</span>
+</span><span id="line-9">        <span class="n">collection_value</span> <span class="o">|</span>
+</span><span id="line-10">        <span class="n">NULL</span>
+</span><span id="line-11">
+</span><span id="line-12">    <span class="o">&lt;</span><span class="n">truth_value</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-13">        <span class="n">TRUE</span> <span class="o">|</span>
+</span><span id="line-14">        <span class="n">FALSE</span> <span class="o">|</span>
+</span><span id="line-15">        <span class="n">UNKNOWN</span>
+</span><span id="line-16">
+</span><span id="line-17">    <span class="o">&lt;</span><span class="n">logical_expression</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-18">        <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">comparison_operator</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="o">|</span>
+</span><span id="line-19">        <span class="o">&lt;</span><span class="n">logical_expression</span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">AND</span> <span class="o">|</span> <span class="n">OR</span> <span class="o">|</span> <span class="n">XOR</span> <span class="p">}</span> <span class="o">&lt;</span><span class="n">logical_expression</span><span class="o">&gt;</span> <span class="o">|</span>
+</span><span id="line-20">        <span class="n">NOT</span> <span class="o">&lt;</span><span class="n">logical_expression</span><span class="o">&gt;</span>
+</span><span id="line-21">
+</span><span id="line-22">    <span class="o">&lt;</span><span class="n">comparison_operator</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-23">        <span class="o">=</span> <span class="o">|</span>
+</span><span id="line-24">        <span class="o">&lt;=&gt;</span> <span class="o">|</span>
+</span><span id="line-25">        <span class="o">&lt;&gt;</span> <span class="o">|</span>
+</span><span id="line-26">        <span class="o">!=</span> <span class="o">|</span>
+</span><span id="line-27">        <span class="o">&gt;</span> <span class="o">|</span>
+</span><span id="line-28">        <span class="o">&lt;</span> <span class="o">|</span>
+</span><span id="line-29">        <span class="o">&gt;=</span> <span class="o">|</span>
+</span><span id="line-30">        <span class="o">&lt;=</span>
 </span></code></pre></div>
 </div>
 <ul class="simple">
@@ -277,6 +293,7 @@
 <li><p><strong>NULL</strong>: <strong>NULL</strong> 값은 모든 데이터 타입의 값 범위 내에 포함되지 않는다. 따라서, <strong>NULL</strong> 값의 비교는 주어진 값이 <strong>NULL</strong> 값인지 아닌지에 대한 비교만 가능하다. <strong>NULL</strong> 값이 다른 데이터 타입으로 할당될 때 묵시적인 타입 변경은 일어나지 않는다. 예를 들어, <strong>INTEGER</strong> 타입의 칼럼이 <strong>NULL</strong> 값을 가지고 있고 부동 소수점 타입과 비교할 때, 비교하기 전에 <strong>NULL</strong> 값을 <strong>FLOAT</strong> 형으로 변환하지 않는다. <strong>NULL</strong> 값에 대한 비교 연산은 결과를 반환하지 않는다.</p></li>
 </ul>
 </li>
+<li><p>&lt;<em>logical_expression</em>&gt;: 불리언(논리) 값으로 평가되는 표현식이다. 비교 연산(예: a = 1)이나 논리 연산(예: (a = 1) AND (b = 2))의 결과가 해당한다.</p></li>
 </ul>
 <p>다음은 CUBRID에서 지원되는 비교 연산자의 설명 및 리턴 값을 나타낸 표이다.</p>
 <p><strong>비교 연산자</strong></p>
@@ -336,21 +353,25 @@ NULL</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>IS</strong>
-<em>boolean_value</em></p></td>
-<td><p>왼쪽 피연산자가 오른쪽 불리언 값과 같은지 비교한다.
-불리언 값은 <strong>TRUE</strong>, <strong>FALSE</strong>, <strong>NULL</strong> 이 될 수 있다.</p></td>
-<td><p>1 IS FALSE</p></td>
+<em>truth_value</em></p></td>
+<td><p>왼쪽 피연산자가 오른쪽 진리값과 같은지 비교한다.
+진리값은 <strong>TRUE</strong>, <strong>FALSE</strong>, <strong>UNKNOWN</strong> 이 될 수 있다.</p></td>
+<td><p>(1=1) IS FALSE</p></td>
 <td><p>0</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>IS NOT</strong>
-<em>boolean_value</em></p></td>
-<td><p>왼쪽 피연산자가 오른쪽 불리언 값과 다른지 비교한다.
-불리언 값은 <strong>TRUE</strong>, <strong>FALSE</strong>, <strong>NULL</strong> 이 될 수 있다.</p></td>
-<td><p>1 IS NOT FALSE</p></td>
+<em>truth_value</em></p></td>
+<td><p>왼쪽 피연산자가 오른쪽 진리값과 다른지 비교한다.
+진리값은 <strong>TRUE</strong>, <strong>FALSE</strong>, <strong>UNKNOWN</strong> 이 될 수 있다.</p></td>
+<td><p>(1=1) IS NOT FALSE</p></td>
 <td><p>1</p></td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>11.2 버전부터 <strong>IS [NOT] { TRUE | FALSE | UNKNOWN }</strong>의 왼쪽 피연산자가 논리식이 아니면 “operand must be logical expression.” 오류가 발생한다. 예를 들어 <strong>1 IS FALSE</strong>는 <strong>(1=1) IS FALSE</strong>와 같이 작성해야 한다. 논리식에서 UNKNOWN 진리값은 NULL로 표현되므로, 논리식에 대해 <strong>IS [NOT] UNKNOWN</strong>과 <strong>IS [NOT] NULL</strong>은 동일한 결과를 반환한다.</p>
+</div>
 <p>다음은 비교 연산자를 사용하는 예이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- TRUE이므로 1을 출력한다.</span>
 </span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- TRUE이므로 1을 출력한다.</span>
@@ -364,6 +385,11 @@ NULL</p></td>
 </span><span id="line-10"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="n">SYSTIMESTAMP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SYSDATETIME</span><span class="p">);</span><span class="w"> </span><span class="c1">-- 묵시적으로 타입을 변환하여 비교 연산을 수행한 결과, 0을 출력한다.</span>
 </span><span id="line-11"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="n">SYSTIMESTAMP</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="k">NULL</span><span class="p">);</span><span class="w"> </span><span class="c1">-- NULL의 비교 연산을 수행하지 않고 NULL을 반환한다.</span>
 </span><span id="line-12"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="n">SYSTIMESTAMP</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">);</span><span class="w"> </span><span class="c1">-- NULL이 아니므로 1을 반환한다.</span>
+</span><span id="line-13"><span class="k">SELECT</span><span class="w"> </span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">TRUE</span><span class="p">);</span><span class="w"> </span><span class="c1">-- TRUE이므로 1을 출력한다.</span>
+</span><span id="line-14"><span class="k">SELECT</span><span class="w"> </span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">FALSE</span><span class="p">);</span><span class="w"> </span><span class="c1">-- FALSE가 아니므로 0을 출력한다.</span>
+</span><span id="line-15"><span class="k">SELECT</span><span class="w"> </span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">UNKNOWN</span><span class="p">);</span><span class="w"> </span><span class="c1">-- UNKNOWN이 아니므로 0을 출력한다.</span>
+</span><span id="line-16"><span class="k">SELECT</span><span class="w"> </span><span class="p">((</span><span class="k">NULL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">UNKNOWN</span><span class="p">);</span><span class="w"> </span><span class="c1">-- NULL 비교는 UNKNOWN이므로 1을 출력한다.</span>
+</span><span id="line-17"><span class="k">SELECT</span><span class="w"> </span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">FALSE</span><span class="p">);</span><span class="w"> </span><span class="c1">-- FALSE가 아니므로 1을 출력한다.</span>
 </span></code></pre></div>
 </div>
 </section>
@@ -390,7 +416,7 @@ NULL</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 01, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 7월 22, 2026. </p>
 </div>
 </div>
 </footer>

@@ -1594,7 +1594,7 @@ You can specify a new default value for a column that has no default value or mo
 AUTO_INCREMENT Clause
 ---------------------
 
-The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be **AUTO_INCREMENT** column defined. ::
+The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be an **AUTO_INCREMENT** column defined. ::
 
     ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 

@@ -174,6 +174,7 @@ linkcheck_ignore = [
     r"https://dev\.mysql\.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters\.html#codbc-dsn-option-flags",
     r"https://metacpan.org/dist/DBI/",
     r"https://www\.gnu\.org/software/libc/manual/html_node/Malloc-Tunable-Parameters",
+    r"https://mariadb.com/downloads/connectors/",
 ]
 linkcheck_timeout = 30
 linkcheck_workers = 10

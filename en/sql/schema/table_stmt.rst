@@ -361,7 +361,7 @@ You can define the **AUTO_INCREMENT** attribute for the column to automatically 
 
 **DEFAULT**, **SHARED** and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
-The **AUTO_INCREMENT** attribute can be defined for only one column in a table. If you try to define another **AUTO_INCREMENT** column on a table that already has one, whether by **CREATE TABLE**, **ALTER TABLE ... ADD**, or **ALTER TABLE ... CHANGE/MODIFY**, an error occurs.
+The **AUTO_INCREMENT** attribute can be defined for only one column in a table. If you try to define another **AUTO_INCREMENT** column on a table that already has one, whether by CREATE TABLE, ALTER TABLE ... ADD, or ALTER TABLE ... CHANGE/MODIFY, an error occurs.
 
 .. code-block:: sql
 

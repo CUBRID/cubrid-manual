@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Transaction-Related Errors | CUBRID 11.4 User Manual</title>
+<meta content="Transaction-Related Errors | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Transaction-Related Errors | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="error_log_ha.html" rel="next" title="CUBRID HA Errors"/>
+<link href="error_log_volume.html" rel="prev" title="Database File Errors"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/admin/error_log_transaction.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_upgrade.html">Installing and Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sql/index.html">CUBRID SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/index.html">CUBRID Procedural Language</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_note/index.html">Release Notes</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID Management</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="error_log.html">Database Error Logs</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Transaction-Related Errors</span>
+</nav>
+<div id="content" role="main">
+<section id="transaction-related-errors">
+<h1>Transaction-Related Errors<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#transaction-related-errors"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p id="error-72"><strong>ERROR CODE: -72, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) has been unilaterally aborted by the system.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error indicating that, in the CUBRID system, a specific transaction has been unilaterally aborted by the system; here, “unilaterally aborted” means that the system automatically rolled back the transaction regardless of the intent of the user or application that was executing it; this mainly occurs due to deadlock resolution, insufficient system resources, server failures, or other system-level problems.</p></li>
+</ul>
+<p id="error-73"><strong>ERROR CODE: -73, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) timed out waiting on %5$s lock on object %6$d|%7$d|%8$d. You are waiting for user(s) %9$s to finish.’</strong></p>
+<ul class="simple">
+<li><p>This message is a lock timeout (lock timeout) error indicating that, in the CUBRID system, a specific transaction timed out while waiting to acquire a lock on a specific object (record); the current transaction is waiting for another user to release the lock on that object (record), but the lock was not released within the configured time and a timeout occurred; this mainly occurs due to record-level concurrency-control problems, deadlock situations, or long-running transactions.</p></li>
+</ul>
+<p id="error-74"><strong>ERROR CODE: -74, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) timed out waiting on %5$s lock on class %6$s. You are waiting for user(s) %7$s to finish.’</strong></p>
+<ul class="simple">
+<li><p>This message is a lock timeout (lock timeout) error indicating that, in the CUBRID system, a specific transaction timed out while waiting to acquire a lock on a table; the current transaction is waiting for another user to release the lock on that table, but the lock was not released within the configured time and a timeout occurred; this mainly occurs due to table-level concurrency-control problems, deadlock situations, or long-running transactions.</p></li>
+</ul>
+<p id="error-75"><strong>ERROR CODE: -75, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) timed out waiting on %5$s lock on instance %6$d|%7$d|%8$d of class %9$s. You are waiting for user(s) %10$s to finish.’</strong></p>
+<ul class="simple">
+<li><p>This message is a lock timeout (lock timeout) error indicating that, in the CUBRID system, a specific transaction timed out while waiting for a lock on an instance of a table; this mainly occurs due to record-level concurrency-control problems, deadlock situations, or long-running transactions.</p></li>
+</ul>
+<p id="error-76"><strong>ERROR CODE: -76, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) timed out waiting on %5$s on page %6$d|%7$d. You are waiting for user(s) %8$s to release the page lock.’</strong></p>
+<ul class="simple">
+<li><p>This message is a latch timeout (latch timeout) error indicating that, in the CUBRID system, a specific transaction timed out while waiting for a page lock in order to perform work on a page; this mainly occurs due to concurrency-control problems, deadlock situations, or long-running transactions.</p></li>
+</ul>
+<p id="error-106"><strong>ERROR CODE: -106, ‘Cannot prepare to commit the current transaction with global transaction identifier %1$d because that transaction identifier is in use by another transaction.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system tries to prepare-commit the current transaction in a 2PC (Two-Phase Commit) distributed transaction, but cannot proceed with the prepare operation because the specified global transaction identifier is already in use by another active transaction.</p></li>
+</ul>
+<p id="error-107"><strong>ERROR CODE: -107, ‘There is no global distributed transaction associated with transaction identifier %1$d.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system cannot find a global distributed transaction associated with a specific transaction identifier; that is, in a 2PC (Two-Phase Commit) distributed-transaction environment, the client attempted an operation on a distributed transaction using a specific transaction ID, but the global distributed transaction for that ID does not exist or has already completed.</p></li>
+</ul>
+<p id="error-108"><strong>ERROR CODE: -108, ‘Current transaction %1$d must be committed or aborted before attempting to join to the distributed transaction with global identifier %2$d.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when the CUBRID system tries to participate in a 2PC (Two-Phase Commit) distributed transaction but cannot participate because there is already an active transaction; it means that the current transaction must be completed (committed or aborted) before participating in the distributed transaction.</p></li>
+</ul>
+<p id="error-198"><strong>ERROR CODE: -198, ‘Receive buffer too small, data truncated.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates that, while receiving data in the CUBRID database, the allocated buffer size was smaller than the size of the data to be received, so part of the data was truncated; it mainly occurs when processing large data in network communication or file I/O, and it is an error that can affect data integrity.</p></li>
+</ul>
+<p id="error-440"><strong>ERROR CODE: -440, ‘Invalid cursor position.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when the cursor position is invalid while processing query results in the CUBRID database; it occurs during cursor-position validation in the query processor when the cursor is at an invalid position or the cursor state is not correct.</p></li>
+</ul>
+<p id="error-441"><strong>ERROR CODE: -441, ‘Invalid cursor operation.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when trying to extract a record’s OID from a result (cursor) that does not include OIDs in the CUBRID database; it can occur during cursor-operation validation in the query processor when an operation that the cursor does not support is attempted, or when the cursor state does not allow that operation.</p></li>
+</ul>
+<p id="error-442"><strong>ERROR CODE: -442, ‘Unknown cursor position.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when the cursor position is in an unexpected or undefined state in the CUBRID database; it can occur during cursor-position validation in the query processor when the cursor position has an unexpected value.</p></li>
+</ul>
+<p id="error-443"><strong>ERROR CODE: -443, ‘Tuple value index %1$d is out of range.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when, in a tuple of query results in the CUBRID database, an attempt is made to fetch a value by a specific index, but that index is out of the valid range; it occurs during tuple-value index validation in the query processor when an index larger than the number of tuple columns or a negative index is used.</p></li>
+</ul>
+<p id="error-444"><strong>ERROR CODE: -444, ‘Invalid attribute name: “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when a column name or attribute name in query results is invalid in the CUBRID database; it occurs during column-name validation in the query processor when a non-existent column name or attribute name is referenced.</p></li>
+</ul>
+<p id="error-447"><strong>ERROR CODE: -447, ‘Attempted to operate a query result structure already closed.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when trying to perform an operation on a query result structure that has already been closed in the CUBRID database; it occurs during validation of the query result structure’s state in the query processor; it can happen when an application has explicitly closed the query result, or when it tries to access a query result that has been closed internally due to transaction end, and so on.</p></li>
+</ul>
+<p id="error-449"><strong>ERROR CODE: -449, ‘Unknown query identifier: %1$d.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when a non-existent query identifier is referenced in the CUBRID database; it occurs during query-identifier validation in the query layer; that is, when an undefined query ID or an invalid query identifier is used.</p></li>
+</ul>
+<p id="error-452"><strong>ERROR CODE: -452, ‘Invalid XASL tree node content.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when the content of an XASL (eXtensible Abstract Syntax Language) tree node is invalid in the CUBRID database; it occurs during validation of XASL tree nodes in a query; that is, when the structure or contents of an XASL tree node are not correct.</p></li>
+</ul>
+<p id="error-460"><strong>ERROR CODE: -460, ‘Too few input host variables provided.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when fewer host variables are provided than the number of host variables required to execute a query in the CUBRID database.</p></li>
+</ul>
+<p id="error-550"><strong>ERROR CODE: -550, ‘Unknown savepoint name %1$s’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when referencing a savepoint name that does not exist in the CUBRID database; it mainly occurs when performing a partial rollback of a transaction and the specified savepoint does not exist.</p></li>
+</ul>
+<p id="error-609"><strong>ERROR CODE: -609, ‘Your transaction cannot be rolled back since logging was ignored. Your database may be corrupted.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when attempting a transaction rollback in the CUBRID database; when logging is ignored, it is not possible to attempt a rollback or perform transaction recovery, and there is a possibility that the database may be damaged.</p></li>
+</ul>
+<p id="error-640"><strong>ERROR CODE: -640, ‘System Error: a savepoint cannot be added when the transaction is not active (e.g., during commit or rollback).’</strong></p>
+<ul class="simple">
+<li><p>This message is a system error that occurs when trying to add a savepoint when no transaction is active in the CUBRID database; a savepoint cannot be created when a transaction is committing or rolling back, has not yet started, or has already ended; it indicates an internal system error related to transaction lifecycle management.</p></li>
+</ul>
+<p id="error-641"><strong>ERROR CODE: -641, ‘A name must be given for a savepoint.’</strong></p>
+<ul class="simple">
+<li><p>This message is displayed when creating a savepoint in the CUBRID database but no name is provided; a savepoint is a feature that marks a specific point within a transaction, and it must require a unique name; this is a validation error that occurs when the required parameter (the name) is missing when creating a savepoint.</p></li>
+</ul>
+<p id="error-642"><strong>ERROR CODE: -642, ‘ System Error: there is not an active top system operation for current transaction.’</strong></p>
+<ul class="simple">
+<li><p>This message is a system error that occurs when there is no active top-level system operation for the current transaction in the CUBRID database; it occurs when trying to end a system operation but that operation is not active; it indicates an internal system error related to system-operation state management.</p></li>
+</ul>
+<p id="error-643"><strong>ERROR CODE: -643, ‘May be a system error: Committing/Aborting transaction = %1$d (index = %2$d) which has permanent operationsn attached to it. Will attach those system operations to the transaction’</strong></p>
+<ul class="simple">
+<li><p>This message is a warning that occurs when there is a permanent system operation linked while trying to commit or abort a transaction in the CUBRID database; it occurs when attempting to commit or abort while system operations are linked to the transaction; it may indicate a system error, but CUBRID automatically attaches and processes those system operations with the transaction.</p></li>
+</ul>
+<p id="error-674"><strong>ERROR CODE: -674, ‘There is not enough active threads to continue current server execution. Current number of active threads is %1$d. You may need up to %2$d threads for clean server execution in your environment. Transaction index %3$d has been timed out to continue server execution.’</strong></p>
+<ul class="simple">
+<li><p>This message is a warning from the CUBRID database server meaning that all worker threads are tied up in a “waiting (suspend)” state and, as a result, there appear to be not enough active threads available to process work immediately.</p></li>
+</ul>
+<p id="error-735"><strong>ERROR CODE: -735, ‘Unknown transaction index %1$d.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error that appears when an invalid transaction index is used in the CUBRID database; the transaction index is an internal identifier used by CUBRID to uniquely identify each transaction; this message occurs when the system attempts to reference a non-existent or incorrect transaction index; that is, it can occur due to an internal state inconsistency in the transaction-management system or due to memory corruption.</p></li>
+</ul>
+<p id="error-830"><strong>ERROR CODE: -830, ‘Cannot allocate query entry any more. Maximum allocatable entries are %1$d.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when, in the query management module of the CUBRID database, allocating a query entry to execute a new query fails; that is, it is an error message that occurs when a new query entry cannot be allocated because the maximum number of query entries per transaction has been exceeded.</p></li>
+</ul>
+<p id="error-836"><strong>ERROR CODE: -836, ‘LATCH ON PAGE(%1$d|%2$d) TIMEDOUT’</strong></p>
+<ul class="simple">
+<li><p>This message appears when an attempt to acquire a latch (synchronization lock) on a specific page in the CUBRID database does not complete within the specified time and times out; a latch (LATCH) is a lightweight lock mechanism used internally to control concurrent access to pages, and it can occur when contention is heavy because many transactions access the same page at the same time, or when acquisition is delayed due to long holding; it mainly appears when latch contention becomes severe due to a large number of concurrent transactions, inefficient queries, system load, internal deadlocks, bugs, and so on; the impact includes cases where an I/O bottleneck prevents the desired page from being fetched from the file, or where a dead-latch occurs while performing a B-tree split or merge.</p></li>
+</ul>
+<p id="error-842"><strong>ERROR CODE: -842, ‘Cannot cache lock of object %1$d|%2$d|%3$d.’</strong></p>
+<ul class="simple">
+<li><p>This message is an error message that occurs when, while checking locks (LOCK) cached in the client module, the lock is NULL LOCK or there is a lock change error and, during the process of acquiring locks for multiple objects (records), acquiring the lock for a specific object (record) fails or a lock-cache operation fails.</p></li>
+</ul>
+<p id="error-843"><strong>ERROR CODE: -843, ‘Wrong arguments in %1$s, a %2$s was passed.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when an invalid argument is passed to lock manager functions in the CUBRID database; it mainly occurs when, while calling lock manager functions internally from application code, a parameter is NULL.</p></li>
+</ul>
+<p id="error-844"><strong>ERROR CODE: -844, ‘Unknown isolation(%1$d) is found. The transaction index is %2$d.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when, in the lock manager of the CUBRID database, the system finds an invalid isolation level value that it cannot recognize while checking a transaction’s isolation level; CUBRID supports defined isolation levels such as <cite>TRAN_READ_COMMITTED</cite>, <cite>TRAN_REPEATABLE_READ</cite>, and <cite>TRAN_SERIALIZABLE</cite>; if a value outside this range is found, this error occurs; it is an error that generally occurs due to memory corruption, concurrency-control problems, or an internal state inconsistency in the transaction manager.</p></li>
+</ul>
+<p id="error-845"><strong>ERROR CODE: -845, ‘Invalid object type(%1$d) is found. The lockable object is %2$d|%3$d|%4$d.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when, in the lock manager of the CUBRID database, deleting a lock entry from a transaction hold list; if a value outside the range supported by CUBRID is found, this error occurs; it is an error that generally occurs due to memory corruption, concurrency-control problems, or an internal state inconsistency in the lock manager.</p></li>
+</ul>
+<p id="error-846"><strong>ERROR CODE: -846, ‘%1$s of tran(%2$d) is not found in the holder list of an object(%3$d|%4$d|%5$d).’</strong></p>
+<ul class="simple">
+<li><p>This message occurs during table-lock demotion in the lock manager of the CUBRID database; that is, when trying to find a transaction’s lock entry in the holder list for a specific object (record), it occurs when an abnormal state is found where the entry does not exist in the holder list; this typically appears when there is a problem in CUBRID’s internal lock-management logic, or when memory corruption or concurrency-control problems make the state information of lock entries inconsistent; if this error repeatedly occurs at the same time, it can affect database service stability.</p></li>
+</ul>
+<p id="error-847"><strong>ERROR CODE: -847, ‘%1$s on a %2$s(%3$d|%4$d|%5$d) is not found in the transaction(%6$d) hold list(cnt=%7$d).’</strong></p>
+<ul class="simple">
+<li><p>This message occurs during hold-list management in the lock manager of the CUBRID database; that is, when trying to delete a lock entry from a specific transaction’s hold list, it occurs when an abnormal state is found where the entry does not exist in the list; this typically appears when there is a problem in CUBRID’s internal lock-management logic, or when memory corruption or concurrency-control problems make the state information of lock entries inconsistent; if this error repeatedly occurs at the same time, it can affect database service stability.</p></li>
+</ul>
+<p id="error-849"><strong>ERROR CODE: -849, ‘Trying to abort a transaction(%1$d) twice.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs during deadlock resolution in the lock manager of the CUBRID database; that is, when trying to abort a transaction because of a deadlock, it occurs when an abnormal situation is found where an abort is attempted again while the transaction is already in the process of aborting; this generally occurs due to concurrency-control problems in the deadlock detection/resolution process or inconsistencies in transaction state management.</p></li>
+</ul>
+<p id="error-850"><strong>ERROR CODE: -850, ‘Tran(%1$d) is neither lock holder nor lock waiter of an object(%2$d|%3$d|%4$d).’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when releasing a lock in the lock manager of the CUBRID database; that is, when trying to release a lock on a specific object (record), it occurs when an abnormal state is found where the transaction is neither a holder (owner) of that object’s lock nor a waiter waiting for it; this typically appears when there is a problem in CUBRID’s internal lock-management logic, or when memory corruption or concurrency-control problems make the state information of lock resources inconsistent.</p></li>
+</ul>
+<p id="error-851"><strong>ERROR CODE: -851, ‘Failed to allocate lock resource (%1$s).’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when allocating a lock entry in the lock manager of the CUBRID database; that is, it is an error message that occurs when allocation of the memory resources needed to acquire a new lock or manage lock state fails; this generally occurs due to insufficient system memory, exhaustion of the lock manager’s internal resources, or problems with the memory allocator; it is an error that prevents the database’s lock-management function from operating normally.</p></li>
+</ul>
+<p id="error-852"><strong>ERROR CODE: -852, ‘Total holders mode(%1$d) of an empty lock holder list is not NULL_LOCK.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs during deadlock detection in the lock manager of the CUBRID database; that is, while traversing lock resources to detect a deadlock, it occurs when an abnormal state is found where there is no holder but the lock is not NULL_LOCK.</p></li>
+</ul>
+<p id="error-854"><strong>ERROR CODE: -854, ‘WARNING: No lock holder, but lock waiters exist. refer to %1$s.’</strong></p>
+<ul class="simple">
+<li><p>This message is a warning that occurs during deadlock detection in the lock manager of the CUBRID database; that is, while traversing lock resources to detect a deadlock, it occurs when an abnormal state is found where there is no holder but there are waiters waiting for the lock; this typically appears when there is a problem in CUBRID’s internal lock-management logic, or when memory corruption or concurrency-control problems make the state information of lock resources inconsistent.</p></li>
+</ul>
+<p id="error-855"><strong>ERROR CODE: -855, ‘WARNING: Two or more threads are lock-waiting for one transaction(%1$d).’</strong></p>
+<ul class="simple">
+<li><p>This message occurs during the process of requesting a lock in the lock manager of the CUBRID database; this situation typically appears when a single transaction is executed concurrently across multiple threads, or when nested lock requests occur within a transaction.</p></li>
+</ul>
+<p id="error-856"><strong>ERROR CODE: -856, ‘WARNING: Strange lockwait state(%1$d|%2$d), thread(%3$d|%4$lld) and transaction(%5$d).’</strong></p>
+<ul class="simple">
+<li><p>This message is a warning that occurs when, while checking the lock-wait (lockwait) state in the lock manager of the CUBRID database, an unexpected abnormal state is detected; this typically appears when there is a problem in CUBRID’s internal lock-management logic, or when memory corruption or concurrency-control problems make lock-wait state information inconsistent.</p></li>
+</ul>
+<p id="error-859"><strong>ERROR CODE: -859, ‘LATCH ON PAGE(%1$d|%2$d) ABORTED’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when, in the CUBRID database, an attempt to acquire a latch (synchronization lock) for a specific page is aborted due to internal policies or exceptional situations (e.g., deadlock, forced abort, transaction rollback, and so on); it mainly appears when, during concurrency control, a deadlock is detected, a forced abort occurs due to long holding, an internal system error occurs, or a transaction is forcibly terminated and latch acquisition cannot be completed normally; the impact includes cases where an I/O bottleneck prevents the desired page from being fetched from the file, or where a dead-latch occurs while performing a B-tree split or merge.</p></li>
+</ul>
+<p id="error-860"><strong>ERROR CODE: -860, ‘Cannot make current transaction as a part of a global transaction because its state is ‘%1$s’.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when trying to start a global transaction using the 2PC (Two-Phase Commit) protocol in the CUBRID database; that is, it is an error that occurs when the current transaction is not active or not in an appropriate state, but an attempt is made to make it part of a global transaction; it is a protective error to ensure correct use of the 2PC protocol and to guarantee the integrity of transaction state management.</p></li>
+</ul>
+<p id="error-861"><strong>ERROR CODE: -861, ‘Cannot prepare to commit the current transaction with transaction identifier %1$d because that transaction is not made as a part of a global transaction.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when trying to prepare a transaction using the 2PC (Two-Phase Commit) protocol in the CUBRID database; that is, it is an error that occurs when the current transaction was not started as part of a global transaction, but a 2PC prepare is attempted; it is a protective error to ensure the correct sequence of using the 2PC protocol and to protect the integrity of the global transaction.</p></li>
+</ul>
+<p id="error-862"><strong>ERROR CODE: -862, ‘Cannot set the user information of the global transaction with the identifier %1$d because its state is ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when trying to set user information for a global transaction that uses the 2PC (Two-Phase Commit) protocol in the CUBRID database; that is, it is an error that occurs when the global transaction is already in an intermediate phase of the 2PC protocol and user information cannot be changed; this situation generally occurs when using the 2PC protocol to ensure transaction consistency among multiple databases in a distributed-transaction environment; it is a protective error to protect transaction state management and data consistency.</p></li>
+</ul>
+<p id="error-966"><strong>ERROR CODE: -966, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) timed out waiting on %5$s lock on object %6$d|%7$d|%8$d because of deadlock. You are waiting for user(s) %9$s to finish.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates that, in the CUBRID database, while a transaction is waiting to acquire a lock on a specific object (record), a deadlock situation occurred and a timeout happened; a deadlock means a situation where two or more transactions fall into an infinite wait state while each waits for locks on resources held by the others, and CUBRID detects and resolves this by aborting some of the transactions.</p></li>
+</ul>
+<p id="error-967"><strong>ERROR CODE: -967, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) timed out waiting on %5$s lock on class %6$s because of deadlock. You are waiting for user(s) %7$s to finish.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates that, in the CUBRID database, while a transaction is waiting to acquire a lock on a specific table, a deadlock situation occurred and a timeout happened; a deadlock means a situation where two or more transactions fall into an infinite wait state while each waits for locks on resources held by the others; CUBRID detects the deadlock and resolves it by aborting some transactions, and in this case it informs that the transaction timed out due to a deadlock.</p></li>
+</ul>
+<p id="error-968"><strong>ERROR CODE: -968, ‘Your transaction (index %1$d, %2$s@%3$s|%4$d) timed out waiting on %5$s lock on instance %6$d|%7$d|%8$d of class %9$s because of deadlock. You are waiting for user(s) %10$s to finish.’</strong></p>
+<ul class="simple">
+<li><p>This message appears when, in a deadlock situation, a lock on a specific object (record) cannot be acquired and a timeout occurs.</p></li>
+</ul>
+<p id="error-1002"><strong>ERROR CODE: -1002, ‘The current transaction could not acquire a database lock it requires to continue processing.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when a transaction could not acquire a lock on a required resource.</p></li>
+</ul>
+<p id="error-1021"><strong>ERROR CODE: -1021, ‘A deadlock cycle is detected. %1$s.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates that a deadlock (Deadlock) occurred in the database system: two or more transactions are in a circular wait state where each cannot proceed because it is waiting for locks held by others to be released; CUBRID’s lock manager (Lock Manager) detects such a deadlock and, to prevent the entire system from stopping, forcibly terminates (rolls back) one of the involved transactions and reports this error.</p></li>
+</ul>
+<p id="error-1154"><strong>ERROR CODE: -1154, ‘MVCC row %1$d|%2$d|%3$d does not satisfies reevaluation.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when, in the CUBRID database under an MVCC (Multi-Version Concurrency Control) environment, reevaluation of conditions for a specific record fails; that is, when a transaction attempts to access a specific record, the system detects that the record does not satisfy the MVCC conditions for the current transaction and raises this error; this situation generally occurs when the record’s version has changed during concurrency control, or when the visibility conditions required by the transaction isolation level are not satisfied; it is a protective error for database consistency and concurrency control. (However, “reevaluation” varies depending on the isolation level.)</p></li>
+</ul>
+<p id="error-1156"><strong>ERROR CODE: -1156, ‘MVCC can’t get snapshot’</strong></p>
+<ul class="simple">
+<li><p>This message indicates an error that occurs when, in the MVCC (Multi-Version Concurrency Control) system of the CUBRID database, a snapshot for a transaction cannot be created; an MVCC snapshot is an important mechanism that captures a consistent state of the database when a transaction starts, and through it the transaction can maintain a consistent data view.</p></li>
+</ul>
+<p id="error-1157"><strong>ERROR CODE: -1157, ‘Isolation level value in MVCC must be ‘read committed’, ‘repeatable read’ or ‘serializable’.’</strong></p>
+<ul class="simple">
+<li><p>This message occurs when, in the CUBRID database under an MVCC environment, an unsupported value is specified when setting the transaction isolation level (Isolation Level); that is, in CUBRID’s MVCC mode, only three isolation levels are supported: ‘read committed’, ‘repeatable read’, and ‘serializable’, and this validation error occurs when a value outside that range is about to be set; this situation generally occurs when an incorrect value is passed in a SET TRANSACTION ISOLATION LEVEL statement or an internal API call that changes the transaction isolation level; it is a validation error to protect the database’s concurrency-control mechanism.</p></li>
+</ul>
+<p id="error-1176"><strong>ERROR CODE: -1176, ‘Latch promotion for page %1$d of volume %2$d failed.’</strong></p>
+<ul class="simple">
+<li><p>This message indicates that, in the CUBRID database system, a latch (latch) promotion (promote) operation failed for a specific page (B-tree); a latch is a lightweight lock mechanism used internally to control concurrency for in-memory data structures (e.g., pages in the page buffer); “latch promotion” generally means upgrading a shared latch to an exclusive latch, or attempting to acquire a higher-level latch in order to perform a write on the page; this failure can occur during page buffer management, file management, or B-tree operations, and it suggests that there was a problem acquiring the latch necessary to maintain page consistency; it can occur due to concurrency issues, page-state inconsistencies, or internal errors, and it can lead to transaction failures or database instability.</p></li>
+</ul>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log_volume.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Database File Errors
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log_ha.html">
+        CUBRID HA Errors
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jul 23, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=582b20c5"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

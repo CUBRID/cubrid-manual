@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Overview | CUBRID 11.4 User Manual</title>
+<meta content="Overview | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Overview | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="plcsql_decl.html" rel="next" title="Declarations"/>
+<link href="plcsql.html" rel="prev" title="PL/CSQL"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/pl/plcsql_overview.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_package.html">System Package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID Procedural Language</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="plcsql.html">PL/CSQL</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Overview</span>
+</nav>
+<div id="content" role="main">
+<section id="overview">
+<h1>Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#overview"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="creating-stored-procedures-functions">
+<span id="stored-proc"></span><h2>Creating Stored Procedures/Functions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#creating-stored-procedures-functions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#creating-stored-procedures-functions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>PL/CSQL is used to create stored procedures and stored functions.
+The behavior of the stored procedure or function to be created is described by
+writing PL/CSQL code after the AS (or IS) keyword in the CREATE PROCEDURE or CREATE FUNCTION statement.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">&lt;</span><span class="n">create_procedure</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-2">    <span class="n">CREATE</span> <span class="p">[</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="p">]</span> <span class="n">PROCEDURE</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span> <span class="p">[</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">seq_of_parameters</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">]</span>
+</span><span id="line-3">    <span class="p">[</span> <span class="o">&lt;</span><span class="n">procedure_properties</span><span class="o">&gt;</span> <span class="p">]</span> <span class="p">{</span> <span class="n">IS</span> <span class="o">|</span> <span class="n">AS</span> <span class="p">}</span> <span class="p">[</span> <span class="n">LANGUAGE</span> <span class="n">PLCSQL</span> <span class="p">]</span> <span class="p">[</span> <span class="o">&lt;</span><span class="n">seq_of_declare_specs</span><span class="o">&gt;</span> <span class="p">]</span> <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span> <span class="p">;</span>
+</span><span id="line-4"><span class="o">&lt;</span><span class="n">create_function</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-5">    <span class="n">CREATE</span> <span class="p">[</span> <span class="n">OR</span> <span class="n">REPLACE</span> <span class="p">]</span> <span class="n">FUNCTION</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span> <span class="p">[</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">seq_of_parameters</span><span class="o">&gt;</span> <span class="p">)</span> <span class="p">]</span> <span class="n">RETURN</span> <span class="o">&lt;</span><span class="n">type_spec</span><span class="o">&gt;</span>
+</span><span id="line-6">    <span class="p">[</span> <span class="o">&lt;</span><span class="n">function_properties</span><span class="o">&gt;</span> <span class="p">]</span> <span class="p">{</span> <span class="n">IS</span> <span class="o">|</span> <span class="n">AS</span> <span class="p">}</span> <span class="p">[</span> <span class="n">LANGUAGE</span> <span class="n">PLCSQL</span> <span class="p">]</span> <span class="p">[</span> <span class="o">&lt;</span><span class="n">seq_of_declare_specs</span><span class="o">&gt;</span> <span class="p">]</span> <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span> <span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>In the above syntax, the <em>body</em> of a stored procedure/function contains PL/CSQL statements.
+The declaration section, <em>seq_of_declare_specs</em>, declares variables, constants, exceptions, etc.,
+that will be used within the execution statements.
+For more details on these syntax elements, refer to <a class="reference internal" href="../sql/schema/stored_routine_stmt.html#create-procedure"><span class="std std-ref">CREATE PROCEDURE</span></a>, <a class="reference internal" href="../sql/schema/stored_routine_stmt.html#create-function"><span class="std std-ref">CREATE FUNCTION</span></a>,
+<a class="reference internal" href="plcsql_decl.html"><span class="doc">Declarations</span></a> and <a class="reference internal" href="plcsql_stmt.html"><span class="doc">Statements</span></a>.</p>
+<p>Stored procedures/functions are always executed with auto-commit disabled.
+This applies even if the auto-commit feature is enabled in the calling session.</p>
+<p>Stored procedures/functions cannot have the same name as any
+<a class="reference internal" href="../sql/function/index.html#operators-and-functions"><span class="std std-ref">CUBRID built-in functions</span></a>.
+Declaring a procedure or function with the same name as a built-in function will result in
+a compilation error during the execution of the <strong>CREATE</strong> statement.</p>
+<p>The following are examples of stored procedures/functions written using PL/CSQL.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">insert_athlete</span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">p_gender</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">p_nation_code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">p_event</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span>
+</span><span id="line-6"><span class="k">AS</span>
+</span><span id="line-7"><span class="k">BEGIN</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">)</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">p_name</span><span class="p">,</span><span class="w"> </span><span class="n">p_gender</span><span class="p">,</span><span class="w"> </span><span class="n">p_nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">p_event</span><span class="p">);</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="w">    </span><span class="k">COMMIT</span><span class="p">;</span>
+</span><span id="line-12"><span class="k">EXCEPTION</span>
+</span><span id="line-13"><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">OTHERS</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-14"><span class="w">        </span><span class="k">ROLLBACK</span><span class="p">;</span>
+</span><span id="line-15"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">delete_athlete</span><span class="p">(</span><span class="k">c</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">n_deleted</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">;</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="w">    </span><span class="n">n_deleted</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">SQL</span><span class="o">%</span><span class="n">ROWCOUNT</span><span class="p">;</span><span class="w">   </span><span class="c1">-- number of deleted rows</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="n">n_deleted</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' rows deleted'</span><span class="p">);</span>
+</span><span id="line-10"><span class="k">EXCEPTION</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">OTHERS</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-12"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'exception occurred'</span><span class="p">);</span>
+</span><span id="line-13"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INTEGER</span>
+</span><span id="line-2"><span class="k">IS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">invalid_input</span><span class="w"> </span><span class="k">EXCEPTION</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-6"><span class="w">        </span><span class="n">RAISE</span><span class="w"> </span><span class="n">invalid_input</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-10"><span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">ELSE</span>
+</span><span id="line-12"><span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="n">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+</span><span id="line-13"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+</span><span id="line-14"><span class="k">EXCEPTION</span>
+</span><span id="line-15"><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">invalid_input</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-16"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'invalid input: '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+</span><span id="line-17"><span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-18"><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">OTHERS</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-19"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'unknown exception'</span><span class="p">);</span>
+</span><span id="line-20"><span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-21"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>In the above examples, the <cite>DBMS_OUTPUT.put_line()</cite> statement stores the given string argument in the server’s
+DBMS_OUTPUT buffer.
+If the argument is not of a string type, it is converted to a string before being stored.
+The string messages stored in the DBMS_OUTPUT buffer can be viewed in CSQL by executing
+the session command <cite>;server-output on</cite>.
+For more details, refer to <a class="reference internal" href="../csql.html#server-output"><span class="std std-ref">CSQL session command server-output</span></a>.</p>
+<p>When executing a <cite>CREATE PROCEDURE/FUNCTION</cite> statement, various rules related to the syntax and execution
+semantics of the stored procedure/function are checked.
+If any errors are found during this process, an error message is displayed indicating the location and
+cause of the error.
+The following is an example of a stored procedure containing errors and compiling it emits an error message.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">athlete_code</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="line-2"><span class="k">BEGIN</span>
+</span><span id="line-3"><span class="w">     </span><span class="c1">-- Error: Static SQL SELECT statement must have an INTO clause</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">code</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="n">a</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="p">;</span>
+</span><span id="line-7"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="n">ERROR</span><span class="p">:</span><span class="w"> </span><span class="k">In</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="k">column</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="line-10"><span class="n">Stored</span><span class="w"> </span><span class="k">procedure</span><span class="w"> </span><span class="n">compile</span><span class="w"> </span><span class="n">error</span><span class="p">:</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">statement</span><span class="w"> </span><span class="n">must</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">clause</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="mi">0</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="static-sql">
+<span id="id1"></span><h2>Static SQL<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#static-sql" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#static-sql'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Static SQL refers to SQL statements that are written directly within the code rather than being written in a string.
+It is a type of SQL where the access method is predefined, allowing syntax and semantics checks to be performed at
+compile time.</p>
+<p>Although it has the drawback of being inflexible, it has the advantage of being optimized at compile time,
+making it faster and more efficient than Dynamic SQL, where the access method is determined at runtime.</p>
+<p>The following SQL statements can be used directly as PL/CSQL statements:</p>
+<ul class="simple">
+<li><p>SELECT (including CTE, UNION, INTERSECT, MINUS)</p></li>
+<li><p>INSERT, UPDATE, DELETE, MERGE, REPLACE</p></li>
+<li><p>COMMIT, ROLLBACK</p></li>
+<li><p>TRUNCATE</p></li>
+</ul>
+<p>For detailed syntax and meanings, refer to <a class="reference internal" href="../sql/index.html#cubrid-sql"><span class="std std-ref">CUBRID SQL</span></a>.
+SQL statements not included in the above list cannot be used directly,
+but they can be executed using the Dynamic SQL statements described below.</p>
+<p>The SELECT statement can be used not only as an execution statement
+but also when <a class="reference internal" href="plcsql_decl.html#cursor-decl"><span class="std std-ref">declaring a cursor</span></a>
+or in the <a class="reference internal" href="plcsql_stmt.html#cursor-manipulation"><span class="std std-ref">OPEN-FOR</span></a> statement.
+The INTO clause of a SELECT statement can be used to store query results in program variables or OUT parameters.
+In this case, the number of retrieved values must match the number of variables or OUT parameters in the INTO clause,
+and the values must have types that can be assigned to the corresponding variables or OUT parameters.</p>
+<p>When using a SELECT statement as an execution statement, the INTO clause must be included.
+However, when using a SELECT statement in a <a class="reference internal" href="plcsql_decl.html#cursor-decl"><span class="std std-ref">cursor declaration</span></a>
+or an <a class="reference internal" href="plcsql_stmt.html#cursor-manipulation"><span class="std std-ref">OPEN-FOR</span></a> statement, the INTO clause may not be included.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_into_clause_1</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">h</span><span class="w"> </span><span class="nb">int</span><span class="p">;</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">CURSOR</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">history</span><span class="p">;</span><span class="w">     </span><span class="c1">-- Error: INTO clause</span>
+</span><span id="line-6"><span class="k">BEGIN</span>
+</span><span id="line-7"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-8"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_into_clause_2</span>
+</span><span id="line-11"><span class="k">AS</span>
+</span><span id="line-12"><span class="w">    </span><span class="n">h</span><span class="w"> </span><span class="nb">int</span><span class="p">;</span>
+</span><span id="line-13"><span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span><span id="line-14"><span class="w">    </span><span class="n">r</span><span class="w"> </span><span class="n">SYS_REFCURSOR</span><span class="p">;</span>
+</span><span id="line-15"><span class="k">BEGIN</span>
+</span><span id="line-16"><span class="w">    </span><span class="k">OPEN</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">history</span><span class="p">;</span><span class="w">      </span><span class="c1">-- Error: INTO clause</span>
+</span><span id="line-17"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-18"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-19">
+</span><span id="line-20"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_into_clause_3</span>
+</span><span id="line-21"><span class="k">AS</span>
+</span><span id="line-22"><span class="k">BEGIN</span>
+</span><span id="line-23"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">history</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">event_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20023</span><span class="p">;</span><span class="w">  </span><span class="c1">-- Error: no INTO clause</span>
+</span><span id="line-24"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-25"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The query result of a SELECT statement without an INTO clause must be a single record.
+If more than one record is returned, a <cite>TOO_MANY_ROWS</cite> exception occurs.
+If no records are found, a <cite>NO_DATA_FOUND</cite> exception occurs.</p>
+<p>In places where values are required, such as in the WHERE clause or VALUES clause of a Static SQL statement,
+variables, constants, and procedure/function parameters declared in PL/CSQL can be used.
+However, these must not have the <cite>BOOLEAN</cite> or <cite>SYS_REFCURSOR</cite> type,
+as they are not included in <a class="reference internal" href="../sql/datatype_index.html#datatype-index"><span class="std std-ref">SQL Data Types</span></a>.</p>
+<p>For Static SQL, the <a class="reference internal" href="../sql/dblink.html#dblink-introduction"><span class="std std-ref">DBLink</span></a> feature is supported for SELECT statements,
+but it is not supported for DML statements (INSERT, UPDATE, DELETE, MERGE, REPLACE).
+To use the DBLink feature inside DML statements, you have to use Dynamic SQL described below.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_dblink_in_dml</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">athlete</span><span class="o">@</span><span class="n">remote_svr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">)</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'Park Taehwan'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M'</span><span class="p">,</span><span class="w"> </span><span class="s1">'KOR'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Swimming'</span><span class="p">);</span>
+</span><span id="line-6"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="k">In</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="k">column</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="n">ERROR</span><span class="p">:</span><span class="w"> </span><span class="n">Stored</span><span class="w"> </span><span class="k">procedure</span><span class="w"> </span><span class="n">compile</span><span class="w"> </span><span class="n">error</span><span class="p">:</span><span class="w"> </span><span class="n">Semantic</span><span class="p">:</span><span class="w"> </span><span class="k">before</span><span class="w"> </span><span class="s1">'</span>
+</span><span id="line-11"><span class="s1">       VALUES ('</span><span class="n">Park</span><span class="w"> </span><span class="n">Taehwan</span><span class="s1">', '</span><span class="n">M</span><span class="s1">', '</span><span class="n">KOR</span><span class="s1">', '</span><span class="n">Swimming</span><span class="s1">')'</span>
+</span><span id="line-12"><span class="n">DBLink</span><span class="w"> </span><span class="n">DML</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">yet</span><span class="w"> </span><span class="n">supported</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">PL</span><span class="o">/</span><span class="n">CSQL</span><span class="w"> </span><span class="k">Static</span><span class="w"> </span><span class="k">SQL</span><span class="p">.</span>
+</span></code></pre></div>
+</div>
+<p>The following is an example of using Static SQL.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">get_medal_count</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w"> </span><span class="n">p_medal</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INTEGER</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="c1">-- SELECT statement as a regular execution statement</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">medal</span><span class="p">)</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">INTO</span><span class="w"> </span><span class="n">n</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="n">r</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">athlete_code</span><span class="w">   </span><span class="cm">/* Join condition */</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">medal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_medal</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Filter condition */</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+</span><span id="line-13"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">athlete_history</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="c1">-- SELECT statement inside a FOR loop</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">history</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="p">)</span><span class="w"> </span><span class="n">LOOP</span>
+</span><span id="line-6"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'host_year: '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">host_year</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' score: '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">score</span><span class="p">);</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+</span><span id="line-8"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">athlete_history</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="c1">-- SELECT statement in cursor definition</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">CURSOR</span><span class="w"> </span><span class="n">my_cursor</span><span class="w"> </span><span class="k">IS</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">score</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">history</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="p">;</span>
+</span><span id="line-8"><span class="k">BEGIN</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">my_cursor</span><span class="w"> </span><span class="n">LOOP</span>
+</span><span id="line-10"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'host_year: '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">host_year</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' score: '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">score</span><span class="p">);</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+</span><span id="line-12"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>If an error occurs during the execution of Static SQL, an <cite>SQL_ERROR</cite> exception is raised.</p>
+</section>
+<section id="dynamic-sql">
+<span id="dyn-sql"></span><h2>Dynamic SQL<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dynamic-sql" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#dynamic-sql'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Dynamic SQL refers to SQL statements that are stored in strings and executed
+by constructing the corresponding SQL string at runtime and executing it using
+the <a class="reference internal" href="plcsql_stmt.html#exec-imme"><span class="std std-ref">EXECUTE IMMEDIATE</span></a> statement.</p>
+<p>Dynamic SQL is mainly required in the following two cases:</p>
+<ul class="simple">
+<li><p>When it is difficult or impossible to determine the SQL statement at the time of program development</p></li>
+<li><p>When executing statements that are not supported by Static SQL, such as DDL statements</p></li>
+</ul>
+<p>In the example below, the new table name includes a procedure parameter,
+which means it cannot be determined at the time of program development
+and is only decided at runtime.
+Additionally, the <cite>DROP TABLE</cite> and <cite>CREATE TABLE</cite> statements are DDL statements,
+which are not supported by Static SQL.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">collect_athlete_history</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">new_table</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">'_history'</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">IMMEDIATE</span><span class="w"> </span><span class="s1">'drop table if exists '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">new_table</span><span class="p">;</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">IMMEDIATE</span><span class="w"> </span><span class="s1">'create table '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">new_table</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' like history'</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">IMMEDIATE</span><span class="w"> </span><span class="s1">'insert into '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">new_table</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' select * from history where athlete = ?'</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">USING</span><span class="w"> </span><span class="n">p_name</span><span class="p">;</span>
+</span><span id="line-9"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="writing-rules">
+<h2>Writing Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#writing-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#writing-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>When writing identifiers, reserved words, comments, and literals, follow the rules of
+<a class="reference internal" href="../sql/syntax.html#lexical-rules"><span class="std std-ref">SQL writing rules</span></a> within <a class="reference internal" href="#static-sql"><span class="std std-ref">Static</span></a>/<a class="reference internal" href="#dyn-sql"><span class="std std-ref">Dynamic</span></a> SQL.</p>
+<p>The rules for writing Non-static/dynamic SQL statements in PL/SQL mostly follow the same rules,
+but there are some exceptions:</p>
+<ul class="simple">
+<li><p>Unlike SQL, the <cite>#</cite> symbol cannot be used in identifiers. That is, identifiers must consist only of English letters (uppercase and lowercase), Korean letters, digits, and the underscore (<cite>_</cite>).</p></li>
+<li><p>Even if enclosed in double quotes, square brackets, or backticks, special characters cannot be used in identifiers.
+Only English letters (uppercase and lowercase), Korean letters, digits, and underscores (<cite>_</cite>) are allowed.</p></li>
+<li><p>Bit string literals cannot be used.</p></li>
+</ul>
+<p class="rubric">Examples of Allowed Identifiers</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">a</span>
+</span><span id="line-2"><span class="n">a_b</span>
+</span><span id="line-3"><span class="n">athleteName2</span>
+</span><span id="line-4"><span class="s2">"select"</span>        <span class="o">--</span> <span class="n">Reserved</span> <span class="n">word</span> <span class="n">enclosed</span> <span class="ow">in</span> <span class="n">double</span> <span class="n">quotes</span>
+</span></code></pre></div>
+</div>
+<p class="rubric">Examples of Disallowed Identifiers</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">1</span><span class="n">a</span>              <span class="o">--</span> <span class="n">Starts</span> <span class="k">with</span> <span class="n">a</span> <span class="n">digit</span>
+</span><span id="line-2"><span class="n">a</span><span class="nd">@b</span>             <span class="o">--</span> <span class="n">Contains</span> <span class="n">special</span> <span class="n">character</span>
+</span><span id="line-3"><span class="n">athlete</span><span class="o">-</span><span class="n">name</span><span class="o">-</span><span class="mi">2</span>  <span class="o">--</span> <span class="n">Contains</span> <span class="n">special</span> <span class="n">character</span>
+</span><span id="line-4"><span class="p">[</span><span class="n">a</span><span class="nd">@b</span><span class="p">]</span>           <span class="o">--</span> <span class="n">Special</span> <span class="n">characters</span> <span class="ow">not</span> <span class="n">allowed</span> <span class="n">even</span> <span class="n">within</span> <span class="p">[</span> <span class="p">]</span>
+</span><span id="line-5"><span class="n">select</span>          <span class="o">--</span> <span class="n">Reserved</span> <span class="n">word</span>
+</span></code></pre></div>
+</div>
+<p>PL/CSQL reserved words are listed in the table below.
+In Non-static/dynamic SQL statements, the words in the table below cannot be used as identifiers
+representing variables, constants, exceptions, internal procedures/functions, etc.
+However, as in SQL statements, they can be used as identifiers if enclosed in double quotes (” “),
+square brackets ([ ]), or backticks (` `).
+Inside Static/Dynamic SQL, the list below does not apply; instead, the
+<a class="reference internal" href="../sql/keyword.html#reserved-words"><span class="std std-ref">CUBRID reserved word list</span></a> applies, which is used for general SQL statements.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>ADDDATE</p></td>
+<td><p>AND</p></td>
+<td><p>AS</p></td>
+<td><p>AUTHID</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>AUTONOMOUS_TRANSACTION</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>BEGIN</p></td>
+<td><p>BETWEEN</p></td>
+<td><p>BIGINT</p></td>
+<td><p>BOOLEAN</p></td>
+</tr>
+<tr class="row-even"><td><p>BOTH</p></td>
+<td><p>BY</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>CALLER</p></td>
+<td><p>CASE</p></td>
+<td><p>CAST</p></td>
+<td><p>CHAR</p></td>
+</tr>
+<tr class="row-even"><td><p>CHARACTER</p></td>
+<td><p>CHR</p></td>
+<td><p>CLOSE</p></td>
+<td><p>COMMENT</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMMIT</p></td>
+<td><p>CONSTANT</p></td>
+<td><p>CONTINUE</p></td>
+<td><p>CREATE</p></td>
+</tr>
+<tr class="row-even"><td><p>CURRENT_USER</p></td>
+<td><p>CURSOR</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>DATE</p></td>
+<td><p>DATETIME</p></td>
+<td><p>DATETIMELTZ</p></td>
+<td><p>DATETIMETZ</p></td>
+</tr>
+<tr class="row-even"><td><p>DATE_ADD</p></td>
+<td><p>DATE_SUB</p></td>
+<td><p>DAY</p></td>
+<td><p>DAY_HOUR</p></td>
+</tr>
+<tr class="row-odd"><td><p>DAY_MILLISECOND</p></td>
+<td><p>DAY_MINUTE</p></td>
+<td><p>DAY_SECOND</p></td>
+<td><p>DBMS_OUTPUT</p></td>
+</tr>
+<tr class="row-even"><td><p>DEC</p></td>
+<td><p>DECIMAL</p></td>
+<td><p>DECLARE</p></td>
+<td><p>DEFAULT</p></td>
+</tr>
+<tr class="row-odd"><td><p>DEFINER</p></td>
+<td><p>DELETE</p></td>
+<td><p>DETERMINISTIC</p></td>
+<td><p>DIV</p></td>
+</tr>
+<tr class="row-even"><td><p>DOUBLE</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ELSE</p></td>
+<td><p>ELSIF</p></td>
+<td><p>END</p></td>
+<td><p>ESCAPE</p></td>
+</tr>
+<tr class="row-even"><td><p>EXCEPTION</p></td>
+<td><p>EXECUTE</p></td>
+<td><p>EXIT</p></td>
+<td><p>EXTRACT</p></td>
+</tr>
+<tr class="row-odd"><td><p>FALSE</p></td>
+<td><p>FETCH</p></td>
+<td><p>FLOAT</p></td>
+<td><p>FOR</p></td>
+</tr>
+<tr class="row-even"><td><p>FROM</p></td>
+<td><p>FUNCTION</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>HOUR</p></td>
+<td><p>HOUR_MILLISECOND</p></td>
+<td><p>HOUR_MINUTE</p></td>
+<td><p>HOUR_SECOND</p></td>
+</tr>
+<tr class="row-even"><td><p>IF</p></td>
+<td><p>IMMEDIATE</p></td>
+<td><p>IN</p></td>
+<td><p>INOUT</p></td>
+</tr>
+<tr class="row-odd"><td><p>INSERT</p></td>
+<td><p>INT</p></td>
+<td><p>INTEGER</p></td>
+<td><p>INTERNAL</p></td>
+</tr>
+<tr class="row-even"><td><p>INTO</p></td>
+<td><p>IS</p></td>
+<td><p>ISO88591</p></td>
+<td><p>LANGUAGE</p></td>
+</tr>
+<tr class="row-odd"><td><p>LEADING</p></td>
+<td><p>LIKE</p></td>
+<td><p>LIST</p></td>
+<td><p>LOOP</p></td>
+</tr>
+<tr class="row-even"><td><p>MERGE</p></td>
+<td><p>MILLISECOND</p></td>
+<td><p>MINUTE</p></td>
+<td><p>MINUTE_MILLISECOND</p></td>
+</tr>
+<tr class="row-odd"><td><p>MINUTE_SECOND</p></td>
+<td><p>MOD</p></td>
+<td><p>MONTH</p></td>
+<td><p>MULTISET</p></td>
+</tr>
+<tr class="row-even"><td><p>NOT</p></td>
+<td><p>NULL</p></td>
+<td><p>NUMERIC</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>OF</p></td>
+<td><p>OPEN</p></td>
+<td><p>OR</p></td>
+<td><p>OUT</p></td>
+</tr>
+<tr class="row-even"><td><p>OWNER</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PLCSQL</p></td>
+<td><p>POSITION</p></td>
+<td><p>PRAGMA</p></td>
+<td><p>PRECISION</p></td>
+</tr>
+<tr class="row-even"><td><p>PROCEDURE</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>QUARTER</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>RAISE</p></td>
+<td><p>REAL</p></td>
+<td><p>REPLACE</p></td>
+<td><p>RETURN</p></td>
+</tr>
+<tr class="row-odd"><td><p>REVERSE</p></td>
+<td><p>ROLLBACK</p></td>
+<td colspan="2"><p>RAISE_APPLICATION_ERROR</p></td>
+</tr>
+<tr class="row-even"><td><p>SECOND</p></td>
+<td><p>SECOND_MILLISECOND</p></td>
+<td><p>SEQUENCE</p></td>
+<td><p>SELECT</p></td>
+</tr>
+<tr class="row-odd"><td><p>SECOND_MILLISECOND</p></td>
+<td><p>SEQUENCE</p></td>
+<td><p>SELECT</p></td>
+<td><p>SET</p></td>
+</tr>
+<tr class="row-even"><td><p>SETEQ</p></td>
+<td><p>SETNEQ</p></td>
+<td><p>SHORT</p></td>
+<td><p>SMALLINT</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQL</p></td>
+<td><p>SQLCODE</p></td>
+<td><p>SQLERRM</p></td>
+<td><p>STRING</p></td>
+</tr>
+<tr class="row-even"><td><p>SUBDATE</p></td>
+<td><p>SUBSET</p></td>
+<td><p>SUBSETEQ</p></td>
+<td><p>SUPERSET</p></td>
+</tr>
+<tr class="row-odd"><td><p>SUPERSETEQ</p></td>
+<td><p>SYS_REFCURSOR</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>THEN</p></td>
+<td><p>TIME</p></td>
+<td><p>TIMESTAMP</p></td>
+<td><p>TIMESTAMPLTZ</p></td>
+</tr>
+<tr class="row-odd"><td><p>TIMESTAMPTZ</p></td>
+<td><p>TRAILING</p></td>
+<td><p>TRIM</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-even"><td><p>TRUNCATE</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>UPDATE</p></td>
+<td><p>USING</p></td>
+<td><p>UTF8</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The CREATE PROCEDURE/FUNCTION statement for creating PL/CSQL stored procedures/functions goes through
+a separate PL/CSQL syntax check, not the general SQL syntax check,
+and a different set of reserved words is applied.
+However, up to the AS/IS keywords, the general SQL syntax check also applies, so the
+<a class="reference internal" href="../sql/keyword.html#reserved-words"><span class="std std-ref">CUBRID reserved word list</span></a> is also in effect there.</p>
+<p>In the following example, the parameter name <cite>add</cite> is not a PL/CSQL reserved word,
+but since it is a CUBRID reserved word, it causes a syntax error.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_cubrid_reserved_word</span><span class="p">(</span><span class="k">add</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="line-2"><span class="k">BEGIN</span>
+</span><span id="line-3"><span class="w">   </span><span class="k">NULL</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="n">ERROR</span><span class="p">:</span><span class="w"> </span><span class="n">invalid</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">procedure</span>
+</span><span id="line-7"><span class="w">  </span><span class="p">...</span><span class="w"> </span><span class="p">...</span>
+</span></code></pre></div>
+</div>
+<p>Among the list above, <cite>AUTONOMOUS_TRANSACTION</cite> is a reserved word that is pre-included for functionality
+to be added in the future.</p>
+</section>
+<section id="data-types">
+<span id="types"></span><h2>Data Types<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#data-types" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#data-types'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>In Static/Dynamic SQL, all <a class="reference internal" href="../sql/datatype_index.html#datatype-index"><span class="std std-ref">data types</span></a> provided by SQL can be used.</p>
+<p>On the other hand, in Non-static/dynamic SQL,
+only <cite>BOOLEAN</cite>, <cite>SYS_REFCURSOR</cite>, and a subset of SQL-provided data types can be used.</p>
+<ul class="simple">
+<li><p><cite>BOOLEAN</cite>: Can have values TRUE, FALSE, or NULL.
+Since the <cite>BOOLEAN</cite> type is not supported in SQL, it cannot be used as a parameter or return type
+in the <cite>CREATE PROCEDURE/FUNCTION</cite> statement.
+However, it <em>can</em> be used as a parameter or return type when declaring
+<a class="reference internal" href="plcsql_decl.html#local-routine-decl"><span class="std std-ref">local procedures/functions</span></a>.</p></li>
+<li><p><cite>SYS_REFCURSOR</cite>: Used when declaring cursor variables.
+For usage of cursor variables, see the <a class="reference internal" href="plcsql_stmt.html#cursor-manipulation"><span class="std std-ref">OPEN-FOR</span></a> statement.
+Similar to <cite>BOOLEAN</cite>, <cite>SYS_REFCURSOR</cite> cannot be used as a parameter or return type
+in the <cite>CREATE PROCEDURE/FUNCTION</cite> statement, but it <em>can</em> be used in
+<a class="reference internal" href="plcsql_decl.html#local-routine-decl"><span class="std std-ref">local procedures/functions</span></a>.</p></li>
+</ul>
+<p>Among the data types provided by SQL, some are supported and others are not in PL/CSQL.
+(As noted above, all SQL-provided data types <em>can</em> be used in Static/Dynamic SQL.)</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Supported Types</p></th>
+<th class="head"><p>Unsupported Types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="6"><p>Numeric</p></td>
+<td><p>SHORT, SMALLINT,</p></td>
+<td rowspan="6"></td>
+</tr>
+<tr class="row-odd"><td><p>INTEGER, INT,</p></td>
+</tr>
+<tr class="row-even"><td><p>BIGINT,</p></td>
+</tr>
+<tr class="row-odd"><td><p>NUMERIC, DECIMAL,</p></td>
+</tr>
+<tr class="row-even"><td><p>FLOAT, REAL,</p></td>
+</tr>
+<tr class="row-odd"><td><p>DOUBLE, DOUBLE PRECISION,</p></td>
+</tr>
+<tr class="row-even"><td><p>Date/Time</p></td>
+<td><p>DATE, TIME, TIMESTAMP, DATETIME,</p></td>
+<td><div class="line-block">
+<div class="line">TIMESTAMPLTZ, TIMESTAMPTZ,</div>
+<div class="line">DATETIMELTZ, DATETIMETZ</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>String</p></td>
+<td><p>CHAR, VARCHAR, STRING, CHAR VARYING</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Collection</p></td>
+<td></td>
+<td><p>SET, MULTISET, LIST, SEQUENCE</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>Others</p></td>
+<td rowspan="4"></td>
+<td><p>BIT, BIT VARYING,</p></td>
+</tr>
+<tr class="row-even"><td><p>ENUM,</p></td>
+</tr>
+<tr class="row-odd"><td><p>BLOB/CLOB,</p></td>
+</tr>
+<tr class="row-even"><td><p>JSON</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="type">
+<span id="percent-type"></span><h2>%TYPE<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#type" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#type'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Appending <cite>%TYPE</cite> after a table column name allows you to reference the data type of that column.
+Below is an example using <cite>%TYPE</cite>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">get_athlete_name</span><span class="p">(</span><span class="n">p_code</span><span class="w"> </span><span class="n">athlete</span><span class="p">.</span><span class="n">code</span><span class="o">%</span><span class="k">TYPE</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="n">athlete</span><span class="p">.</span><span class="n">name</span><span class="o">%</span><span class="k">TYPE</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="n">athlete</span><span class="p">.</span><span class="n">name</span><span class="o">%</span><span class="k">TYPE</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">INTO</span><span class="w"> </span><span class="n">name</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="n">a</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_code</span><span class="p">;</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>&lt;table&gt;.&lt;column&gt;%TYPE represents the data type of the specified table column at the time
+the <cite>CREATE PROCEDURE/FUNCTION</cite> statement is executed.
+However, if the column’s data type is later changed, it will <em>not</em> be automatically reflected
+in the behavior of stored procedures/functions that use <cite>&lt;table&gt;.&lt;column&gt;%TYPE</cite>.
+Therefore, when the data type of a column using <cite>%TYPE</cite> is changed,
+you must recompile all stored procedures/functions that use that <cite>%TYPE</cite> by executing
+<cite>ALTER PROCEDURE/FUNCTION &lt;name&gt; COMPILE</cite>.</p>
+<p>In addition to table columns, <cite>%TYPE</cite> can also be appended to procedure/function parameter or variable names
+to represent their data types.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">...</span>
+</span><span id="line-2"><span class="n">a</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span><span id="line-3"><span class="n">a_like</span><span class="w"> </span><span class="n">a</span><span class="o">%</span><span class="k">TYPE</span><span class="p">;</span><span class="w">   </span><span class="c1">-- Declares variable a_like with the same type as variable a</span>
+</span><span id="line-4"><span class="p">...</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="rowtype">
+<span id="percent-rowtype"></span><h2>%ROWTYPE<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#rowtype" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#rowtype'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Appending <cite>%ROWTYPE</cite> after a table name represents a record type composed of fields that have the same
+names and types as the columns of that table.
+For example, for a table <cite>tbl</cite> declared as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>Declaring a variable <cite>r</cite> with the type <cite>tbl%ROWTYPE</cite>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">r</span><span class="w"> </span><span class="n">tbl</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The value of <cite>r</cite> becomes a record with fields <cite>a</cite>, <cite>b</cite>, and <cite>c</cite>, and <cite>r.a</cite>, <cite>r.b</cite>, and <cite>r.c</cite> will be of types <cite>INT</cite>, <cite>CHAR</cite>, and <cite>VARCHAR</cite>, respectively.</p>
+<p>You can also append <cite>%ROWTYPE</cite> to a cursor name.
+In this case, it represents a record type corresponding to the result of the <cite>SELECT</cite> statement defined in the cursor.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CURSOR</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="p">;</span>
+</span><span id="line-2"><span class="n">p</span><span class="w"> </span><span class="k">c</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span><span class="w">     </span><span class="c1">-- p.a and p.b are of types INT and CHAR, respectively</span>
+</span></code></pre></div>
+</div>
+<p>If no initial value is provided in the declaration of a record variable, it is initialized as an “empty record” in which all fields are <cite>NULL</cite>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">r</span><span class="w"> </span><span class="n">tbl</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span><span class="w">   </span><span class="c1">-- r.a, r.b, r.c are all NULL, but r itself is not NULL</span>
+</span></code></pre></div>
+</div>
+<p>Assigning <cite>NULL</cite> to a record variable initializes each field to <cite>NULL</cite>, but the record variable itself does not become <cite>NULL</cite>.
+In other words, a record variable never holds a <cite>NULL</cite> value after being declared.</p>
+<p>Records of the same type can be compared using <cite>=</cite> and <cite>!=</cite> operators.
+Here, “same type” means not only records derived from the same table, but also records from different tables whose corresponding field names and types match exactly.
+The result of a <cite>=</cite> operation between two records is <cite>TRUE</cite> only if the <cite>&lt;=&gt;</cite> operation between all corresponding fields returns <cite>TRUE</cite>; otherwise, it returns <cite>FALSE</cite>.
+The result of the <cite>!=</cite> operation is the logical opposite of the <cite>=</cite> operation.
+Using <cite>=</cite> or <cite>!=</cite> between records of different types will result in a compile-time error.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tblA</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tblB</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">);</span><span class="w">        </span><span class="c1">-- tblA%ROWTYPE and tblB%ROWTYPE are of the same type</span>
+</span><span id="line-3"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tblC</span><span class="p">(</span><span class="n">aa</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">bb</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">,</span><span class="w"> </span><span class="n">cc</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">);</span><span class="w">     </span><span class="c1">-- tblA%ROWTYPE and tblC%ROWTYPE are not of the same type</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_record_equality</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">r1</span><span class="w"> </span><span class="n">tblA</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">r2</span><span class="w"> </span><span class="n">tblB</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">r3</span><span class="w"> </span><span class="n">tblC</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-9"><span class="k">BEGIN</span>
+</span><span id="line-10"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r2</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w">       </span><span class="c1">-- OK</span>
+</span><span id="line-12"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-13"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r3</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w">       </span><span class="c1">-- Error</span>
+</span><span id="line-14"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-15"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Comparison operators other than <cite>=</cite> and <cite>!=</cite>, such as <cite>&lt;=&gt;</cite>, <cite>&lt;</cite>, <cite>&gt;</cite>, <cite>&lt;=</cite>, and <cite>&gt;=</cite>,
+cannot be used for record comparisons.</p>
+<p>Assignment from one record variable <cite>s</cite> to another record variable <cite>t</cite> is allowed when the following conditions are met:</p>
+<ul class="simple">
+<li><p>The number of fields in <cite>s</cite> and <cite>t</cite> are the same.</p></li>
+<li><p>For each field position <cite>i</cite>, let the types of the <cite>i</cite>-th fields in <cite>s</cite> and <cite>t</cite> be <cite>S</cite><sub>i</sub> and <cite>T</cite><sub>i</sub>,
+respectively. It must be possible to assign a value from <cite>S</cite><sub>i</sub> to <cite>T</cite><sub>i</sub>.</p></li>
+</ul>
+<p>The names of corresponding fields do <em>not</em> need to match in order for assignment between record variables to be valid.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tblAA</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="n">DATETIME</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tblBB</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tblCC</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">TIME</span><span class="p">);</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_record_assign</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">r1</span><span class="w"> </span><span class="n">tblAA</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">r2</span><span class="w"> </span><span class="n">tblBB</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">r3</span><span class="w"> </span><span class="n">tblCC</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-9"><span class="k">BEGIN</span>
+</span><span id="line-10"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-11"><span class="w">    </span><span class="n">r1</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">r2</span><span class="p">;</span><span class="w">   </span><span class="c1">-- OK</span>
+</span><span id="line-12"><span class="w">    </span><span class="n">r1</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">r3</span><span class="p">;</span><span class="w">   </span><span class="c1">-- Error: Cannot assign TIME to DATETIME (incompatible types)</span>
+</span><span id="line-13"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><cite>%ROWTYPE</cite> can be used as parameter types and return types for local procedures/functions.
+However, since record types are not supported in SQL statements, <cite>%ROWTYPE</cite> cannot be used as parameter or return types in stored procedures/functions.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">sp</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="n">tbl</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w">    </span><span class="c1">-- Error</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="w">    </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="k">inner</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="n">tbl</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w">               </span><span class="c1">-- OK</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">        </span><span class="p">...</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">END</span><span class="p">;</span>
+</span><span id="line-7"><span class="k">BEGIN</span>
+</span><span id="line-8"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-9"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Record variables can be used in the <cite>INTO</cite> clause of Static/Dynamic SQL <cite>SELECT</cite> statements and <cite>FETCH</cite> statements.
+When using a record variable in an <cite>INTO</cite> clause, other variables cannot be used together.
+Also, the column names of the query result do not need to match the field names of the record variable,
+but the number of columns retrieved and the number of fields in the record variable must be the same.
+Additionally, the column types and record field types must be compatible.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CURSOR</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="p">;</span>
+</span><span id="line-2"><span class="n">whole</span><span class="w"> </span><span class="n">tbl</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-3"><span class="n">part</span><span class="w"> </span><span class="k">c</span><span class="o">%</span><span class="n">ROWTYPE</span><span class="p">;</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="c1">-- Static SQL</span>
+</span><span id="line-6"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">whole</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="p">;</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="c1">-- Dynamic SQL</span>
+</span><span id="line-9"><span class="k">EXECUTE</span><span class="w"> </span><span class="k">IMMEDIATE</span><span class="w"> </span><span class="s1">'SELECT * FROM tbl'</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">whole</span><span class="p">;</span>
+</span><span id="line-10"><span class="k">EXECUTE</span><span class="w"> </span><span class="k">IMMEDIATE</span><span class="w"> </span><span class="s1">'SELECT a, b FROM tbl'</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+</span><span id="line-11">
+</span><span id="line-12"><span class="c1">-- Fetch</span>
+</span><span id="line-13"><span class="k">FETCH</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>In the <cite>VALUES</cite> clause of a Static SQL <cite>INSERT</cite>/<cite>REPLACE</cite> statement, a record variable can be used.
+When a record variable is used, it cannot be combined with other variables in the same <cite>VALUES</cite> clause.
+Also, the names of the target columns and the record fields do not need to match,
+but the number of columns and fields must be the same,
+and the column types must be compatible with the record field types.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="n">whole</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The following forms are also allowed:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">whole</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>In a Static SQL <cite>UPDATE</cite> statement, a record variable can also be used with the
+<cite>SET ROW = &lt;record&gt;</cite> syntax as shown below.
+This is allowed only for single-table updates, and the field types of the record must be
+compatible with the corresponding column types in the same order.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">UPDATE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">whole</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="precision-and-scale-specification-exceptions">
+<h2>Precision and Scale Specification Exceptions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#precision-and-scale-specification-exceptions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#precision-and-scale-specification-exceptions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Among the <a class="reference internal" href="../sql/datatype_index.html#datatype-index"><span class="std std-ref">data types supported in PL/CSQL</span></a>,
+<cite>NUMERIC</cite> allows specification of precision and scale,
+while <cite>CHAR</cite> and <cite>VARCHAR</cite> allow specification of length.
+However, specifying precision and scale is <em>not allowed</em> for parameter types and return types of
+stored procedures/functions.
+This restriction also applies to local procedures/functions.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sf</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">...</span><span class="w">    </span><span class="c1">-- Error</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sf</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">...</span><span class="w">              </span><span class="c1">-- OK</span>
+</span></code></pre></div>
+</div>
+<p>Generally, <cite>NUMERIC</cite> without precision and scale amounts to <cite>NUMERIC(15, 0)</cite>.
+However, in the <em>parameter type</em> position, it exceptionally means that any precision and scale are allowed
+with precision from 1 to 38 and scale from 0 to the precision,
+while in the <em>return type</em> position, it is treated as <cite>NUMERIC(p, s)</cite>,
+where <cite>p</cite> and <cite>s</cite> are determined by the system configuration parameter
+<a class="reference internal" href="../admin/config.html#system-config"><span class="std std-ref">STORED_PROCEDURE_RETURN_NUMERIC_SIZE</span></a>.
+The default values for <cite>p</cite> and <cite>s</cite> are 38 and 15, respectively.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_any_precision_scale</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">NUMERIC</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_any_precision_scale</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">23</span><span class="p">);</span><span class="w">      </span><span class="c1">-- Result: 1.230000000000000</span>
+</span><span id="line-8"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_any_precision_scale</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">234</span><span class="p">);</span><span class="w">     </span><span class="c1">-- Result: 1.234000000000000</span>
+</span><span id="line-9"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_any_precision_scale</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">2345</span><span class="p">);</span><span class="w">    </span><span class="c1">-- Result: 1.234500000000000</span>
+</span></code></pre></div>
+</div>
+<p>In addition, when <cite>CHAR</cite> and <cite>VARCHAR</cite> are used as parameter or return types,
+they do not behave as <cite>CHAR(1)</cite> or <cite>VARCHAR(1073741823)</cite> as in other contexts.
+Instead, they indicate that any string length is allowed
+with length ≤ 2048 for <cite>CHAR</cite> and length ≤ 1073741823 for <cite>VARCHAR</cite>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_any_length</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">CHAR</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_any_length</span><span class="p">(</span><span class="s1">'ab'</span><span class="p">);</span><span class="w">       </span><span class="c1">-- Result: 'ab'</span>
+</span><span id="line-8"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_any_length</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">);</span><span class="w">      </span><span class="c1">-- Result: 'abc'</span>
+</span><span id="line-9"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_any_length</span><span class="p">(</span><span class="s1">'abcd'</span><span class="p">);</span><span class="w">     </span><span class="c1">-- Result: 'abcd'</span>
+</span></code></pre></div>
+</div>
+<p>Even when parameter and return types are declared using <a class="reference internal" href="#percent-type"><span class="std std-ref">%TYPE</span></a>,
+the precision, scale, and length of the referenced original types are ignored,
+and the behavior follows the rules described above.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_ptype_precision_scale</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="n">tbl</span><span class="p">.</span><span class="n">p</span><span class="o">%</span><span class="k">TYPE</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="n">tbl</span><span class="p">.</span><span class="n">p</span><span class="o">%</span><span class="k">TYPE</span>
+</span><span id="line-4"><span class="k">AS</span>
+</span><span id="line-5"><span class="k">BEGIN</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-7"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_ptype_precision_scale</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">23</span><span class="p">);</span><span class="w">      </span><span class="c1">-- Result: 1.230000000000000</span>
+</span><span id="line-10"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_ptype_precision_scale</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">234</span><span class="p">);</span><span class="w">     </span><span class="c1">-- Result: 1.234000000000000</span>
+</span><span id="line-11"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_ptype_precision_scale</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">2345</span><span class="p">);</span><span class="w">    </span><span class="c1">-- Result: 1.234500000000000</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_ptype_length</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="n">tbl</span><span class="p">.</span><span class="n">q</span><span class="o">%</span><span class="k">TYPE</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="n">tbl</span><span class="p">.</span><span class="n">q</span><span class="o">%</span><span class="k">TYPE</span>
+</span><span id="line-14"><span class="k">AS</span>
+</span><span id="line-15"><span class="k">BEGIN</span>
+</span><span id="line-16"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-17"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-18">
+</span><span id="line-19"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_ptype_length</span><span class="p">(</span><span class="s1">'ab'</span><span class="p">);</span><span class="w">       </span><span class="c1">-- Result: 'ab'</span>
+</span><span id="line-20"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_ptype_length</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">);</span><span class="w">      </span><span class="c1">-- Result: 'abc'</span>
+</span><span id="line-21"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_ptype_length</span><span class="p">(</span><span class="s1">'abcd'</span><span class="p">);</span><span class="w">     </span><span class="c1">-- Result: 'abcd'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="operators-and-functions">
+<h2>Operators and Functions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#operators-and-functions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#operators-and-functions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>In Static/Dynamic SQL, all operators and functions provided by SQL can be used.
+On the other hand, in Non-static/dynamic SQL statements,
+most SQL-provided operators and functions can also be used in the same way,
+but there are a few exceptions:</p>
+<ul class="simple">
+<li><p>Operators and functions that take or return unsupported types (<cite>BIT</cite>, <cite>ENUM</cite>, <cite>BLOB/CLOB</cite>, <cite>JSON</cite>, etc.)
+cannot be used.</p></li>
+<li><p>The modulo operator <cite>%</cite> is not allowed. However, the <cite>MOD</cite> function with the same meaning can be used instead.</p></li>
+<li><p>Logical operators <cite>&amp;&amp;</cite>, <cite>||</cite>, and <cite>!</cite> are not allowed. Instead, use their equivalents: <cite>AND</cite>, <cite>OR</cite>, and <cite>NOT</cite>,
+respectively.</p></li>
+</ul>
+<p>The following example shows that string functions <cite>locate</cite> and <cite>substr</cite>,
+as well as the string concatenation operator <cite>||</cite>, can be used in Non-static/dynamic SQL statements.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">family_name_to_last</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">delim</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">family_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">;</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">given_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">;</span>
+</span><span id="line-6"><span class="k">BEGIN</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="n">LOOP</span>
+</span><span id="line-8"><span class="w">        </span><span class="n">delim</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">locate</span><span class="p">(</span><span class="s1">' '</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">name</span><span class="p">);</span><span class="w">                   </span><span class="c1">-- locate function</span>
+</span><span id="line-9"><span class="w">        </span><span class="n">family_name</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">substr</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">delim</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">    </span><span class="c1">-- substr function</span>
+</span><span id="line-10"><span class="w">        </span><span class="n">given_name</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">substr</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">delim</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">        </span><span class="c1">-- substr function</span>
+</span><span id="line-11"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="n">given_name</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">family_name</span><span class="p">);</span><span class="w">     </span><span class="c1">-- string concatenation operator ||</span>
+</span><span id="line-12"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+</span><span id="line-13"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="exception">
+<span id="id2"></span><h2>Exception<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#exception" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#exception'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>PL/CSQL, like many other programming languages, supports error handling through exception handlers
+(see: <a class="reference internal" href="plcsql_stmt.html#block-stmt"><span class="std std-ref">Block Statements</span></a>).
+Users can define their own exceptions in the declarative section and use them in the execution section
+(see: <a class="reference internal" href="plcsql_decl.html#exception-decl"><span class="std std-ref">Exception Declarations</span></a>).
+Additionally, for major error situations, the following system-defined exceptions are available:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>SQLCODE</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CASE_NOT_FOUND</p></td>
+<td><p>0</p></td>
+<td><p>No matching WHEN clause and no ELSE clause in a CASE statement</p></td>
+</tr>
+<tr class="row-odd"><td><p>CURSOR_ALREADY_OPEN</p></td>
+<td><p>1</p></td>
+<td><p>Attempt to open a cursor that is already open</p></td>
+</tr>
+<tr class="row-even"><td><p>INVALID_CURSOR</p></td>
+<td><p>2</p></td>
+<td><p>Invalid cursor operation (e.g., trying to close an unopened one)</p></td>
+</tr>
+<tr class="row-odd"><td><p>NO_DATA_FOUND</p></td>
+<td><p>3</p></td>
+<td><p><cite>SELECT INTO</cite> returned zero rows</p></td>
+</tr>
+<tr class="row-even"><td><p>PROGRAM_ERROR</p></td>
+<td><p>4</p></td>
+<td><p>Internal system error</p></td>
+</tr>
+<tr class="row-odd"><td><p>STORAGE_ERROR</p></td>
+<td><p>5</p></td>
+<td><p>Memory allocation failed due to insufficient memory</p></td>
+</tr>
+<tr class="row-even"><td><p>SQL_ERROR</p></td>
+<td><p>6</p></td>
+<td><p>Static/Dynamic SQL execution failed</p></td>
+</tr>
+<tr class="row-odd"><td><p>TOO_MANY_ROWS</p></td>
+<td><p>7</p></td>
+<td><p><cite>SELECT INTO</cite> returned more than one row</p></td>
+</tr>
+<tr class="row-even"><td><p>VALUE_ERROR</p></td>
+<td><p>8</p></td>
+<td><p>Error caused by an invalid value</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZERO_DIVIDE</p></td>
+<td><p>9</p></td>
+<td><p>Attempted division by zero</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <cite>SQLCODE</cite> of each exception above can be used inside an
+<a class="reference internal" href="plcsql_stmt.html#block-stmt"><span class="std std-ref">OTHERS exception handler block</span></a> to identify the type of exception.</p>
+<ul class="simple">
+<li><p><cite>SQLCODE</cite> values up to 999 are reserved for system exceptions.</p></li>
+<li><p><a class="reference internal" href="plcsql_decl.html#exception-decl"><span class="std std-ref">User-declared exceptions</span></a> have a <cite>SQLCODE</cite> of 1000.</p></li>
+<li><p>The first argument to <a class="reference internal" href="plcsql_stmt.html#raise-application-error"><span class="std std-ref">RAISE_APPLICATION_ERROR</span></a> must be greater than 1000.</p></li>
+</ul>
+<p>The following is a simple example that handles the system exceptions <cite>NO_DATA_FOUND</cite> and <cite>TOO_MANY_ROWS</cite>
+that can occur when executing a Static SQL <cite>SELECT</cite> statement.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">athlete_code</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">integer</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="k">c</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="c1">-- The SELECT INTO statement must return exactly one row</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">code</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">INTO</span><span class="w"> </span><span class="k">c</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="n">a</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">c</span><span class="p">;</span>
+</span><span id="line-12"><span class="k">EXCEPTION</span>
+</span><span id="line-13"><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">NO_DATA_FOUND</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-14"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'error: no rows found for athlete name '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">p_name</span><span class="p">);</span>
+</span><span id="line-15"><span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-16"><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">TOO_MANY_ROWS</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-17"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'error: more than one rows found for athlete name '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">p_name</span><span class="p">);</span>
+</span><span id="line-18"><span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-19"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>If an exception is not explicitly handled using a <cite>WHEN … THEN …</cite> clause,
+the location in the code where the exception occurred and the corresponding error message will be displayed.</p>
+<p>For example, if the exception handler clauses are removed from the above <cite>athlete_code()</cite> function:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">athlete_code</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">integer</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="k">c</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="c1">-- The SELECT INTO statement must return exactly one row</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">code</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">INTO</span><span class="w"> </span><span class="k">c</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="n">a</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">c</span><span class="p">;</span>
+</span><span id="line-12"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Then, if a name that does not exist in the <cite>athlete</cite> table is passed as an argument in CSQL,
+a <cite>NO_DATA_FOUND</cite> exception will be raised as the result.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">athlete_code</span><span class="p">(</span><span class="s1">'x'</span><span class="p">);</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">In</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">column</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">ERROR</span><span class="p">:</span><span class="w"> </span><span class="n">Stored</span><span class="w"> </span><span class="k">procedure</span><span class="w"> </span><span class="k">execute</span><span class="w"> </span><span class="n">error</span><span class="p">:</span>
+</span><span id="line-6"><span class="w">  </span><span class="p">(</span><span class="n">line</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="k">column</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="k">found</span>
+</span><span id="line-7">
+</span><span id="line-8">
+</span><span id="line-9"><span class="mi">0</span><span class="w"> </span><span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">processed</span><span class="p">.</span>
+</span></code></pre></div>
+</div>
+<p>In the example above, position <cite>(1, 22)</cite> indicates the location within the <cite>SELECT</cite> statement,
+and <cite>(6, 5)</cite> indicates the location within the <cite>CREATE</cite> statement that declares <cite>athlete_code()</cite>.</p>
+</section>
+<section id="system-configuration-parameters-application">
+<h2>System Configuration Parameters Application<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#system-configuration-parameters-application" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#system-configuration-parameters-application'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The behavior of Static/Dynamic SQL statements is uniformly affected by all
+<a class="reference internal" href="../admin/config.html#system-config"><span class="std std-ref">system configuration parameters</span></a>.</p>
+<p>In contrast, in Non-static/dynamic SQL statements,
+only the following four system configuration parameters are effective:</p>
+<ul class="simple">
+<li><p><cite>compat_numeric_division_scale</cite></p></li>
+<li><p><cite>oracle_compat_number_behavior</cite></p></li>
+<li><p><cite>oracle_style_empty_string</cite></p></li>
+<li><p><cite>timezone</cite></p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_system_config</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="c1">-- When compat_numeric_division_scale is 'no': 0.125000000, when 'yes': 0.1</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">dbms_output</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="w">    </span><span class="c1">-- When oracle_compat_number_behavior is 'no': 1, when 'yes': 2</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">dbms_output</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="w">    </span><span class="c1">-- When oracle_style_empty_string is 'no': 'false', when 'yes': 'true'</span>
+</span><span id="line-11"><span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="s1">''</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-12"><span class="w">        </span><span class="n">dbms_output</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'true'</span><span class="p">);</span>
+</span><span id="line-13"><span class="w">    </span><span class="k">ELSE</span>
+</span><span id="line-14"><span class="w">        </span><span class="n">dbms_output</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'false'</span><span class="p">);</span>
+</span><span id="line-15"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+</span><span id="line-16"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>For details about these parameters, see
+<a class="reference internal" href="../admin/config.html#system-config"><span class="std std-ref">system configuration parameters</span></a>.</p>
+<p>Other than the four listed above, system settings do not apply to Non-static/dynamic SQL statements.
+In particular:</p>
+<ul class="simple">
+<li><p>Regardless of the <cite>no_backslash_escapes</cite> setting, the backslash character is <em>not</em> treated as an escape character.</p></li>
+<li><p>Regardless of the <cite>pipes_as_concat</cite> setting, <cite>||</cite> is <em>not</em> used as a logical OR operator.</p></li>
+<li><p>Regardless of the <cite>plus_as_concat</cite> setting, <cite>+</cite> is treated as a string concatenation operator when applied to strings.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_system_config_2</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="c1">-- Regardless of no_backslash_escapes, prints: 'Hello\nworld'</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">dbms_output</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'Hello\\nworld'</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="w">    </span><span class="c1">-- Regardless of pipes_as_concat, prints: 'ab'</span>
+</span><span id="line-8"><span class="w">    </span><span class="n">dbms_output</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'a'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">'b'</span><span class="p">);</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="w">    </span><span class="c1">-- Regardless of plus_as_concat, prints: '12'</span>
+</span><span id="line-11"><span class="w">    </span><span class="n">dbms_output</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'1'</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'2'</span><span class="p">);</span>
+</span><span id="line-12"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="plcsql.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        PL/CSQL
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="plcsql_decl.html">
+        Declarations
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#creating-stored-procedures-functions'" class="reference internal" href="#creating-stored-procedures-functions">Creating Stored Procedures/Functions</a></li>
+<li><a :data-current="activeSection === '#static-sql'" class="reference internal" href="#static-sql">Static SQL</a></li>
+<li><a :data-current="activeSection === '#dynamic-sql'" class="reference internal" href="#dynamic-sql">Dynamic SQL</a></li>
+<li><a :data-current="activeSection === '#writing-rules'" class="reference internal" href="#writing-rules">Writing Rules</a></li>
+<li><a :data-current="activeSection === '#data-types'" class="reference internal" href="#data-types">Data Types</a></li>
+<li><a :data-current="activeSection === '#type'" class="reference internal" href="#type">%TYPE</a></li>
+<li><a :data-current="activeSection === '#rowtype'" class="reference internal" href="#rowtype">%ROWTYPE</a></li>
+<li><a :data-current="activeSection === '#precision-and-scale-specification-exceptions'" class="reference internal" href="#precision-and-scale-specification-exceptions">Precision and Scale Specification Exceptions</a></li>
+<li><a :data-current="activeSection === '#operators-and-functions'" class="reference internal" href="#operators-and-functions">Operators and Functions</a></li>
+<li><a :data-current="activeSection === '#exception'" class="reference internal" href="#exception">Exception</a></li>
+<li><a :data-current="activeSection === '#system-configuration-parameters-application'" class="reference internal" href="#system-configuration-parameters-application">System Configuration Parameters Application</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jul 23, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CUBRID HA 오류 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="CUBRID HA 오류 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="CUBRID HA 오류 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="../ha.html" rel="next" title="CUBRID HA"/>
+<link href="error_log_transaction.html" rel="prev" title="트랜잭션 관련 오류"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/admin/error_log_ha.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID 운영</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="error_log.html">데이터베이스 오류 로그</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">CUBRID HA 오류</span>
+</nav>
+<div id="content" role="main">
+<section id="cubrid-ha">
+<h1>CUBRID HA 오류<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-ha"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p id="error-898"><strong>ERROR CODE: -898, ‘Replication error: “%1$s”’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 HA(High Availability) 복제 환경에서 복제 작업 중에 다양한 문제가 발생할 때 나타납니다, 즉, 데이터베이스 복제 과정에서 메모리 할당, 클래스 정보 처리, 복제 로그 생성 시 발생합니다.</p></li>
+</ul>
+<p id="error-970"><strong>ERROR CODE: -970, ‘Server HA mode is changed from ‘%1$s’ to ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 복제 환경에서 모드가 변경될 때 발생하는 시스템 알림입니다. 서버의 상태가 active, standby, maintenance 등의 상태 간에 전환될 때 발생하며, 이는 시스템의 정상적인 HA 운영 과정의 일부입니다.</p></li>
+</ul>
+<p id="error-975"><strong>ERROR CODE: -975, ‘Current version of replication does not allow changing multiple rows with a single UPDATE statement which can violate the UNIQUE constraint.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 복제 환경에서 발생하는 특별한 제한사항과 관련이 있습니다. 일반적으로 단일 UPDATE 문으로 여러 행을 변경하는 것은 허용되지만, HA 복제가 활성화된 환경에서는 UNIQUE 제약 조건을 위반할 수 있는 다중 행 UPDATE 작업이 제한됩니다, 이는 복제 환경에서 데이터 일관성을 보장하고, 마스터와 슬레이브 간의 동기화 문제를 방지하기 위한 보호성 오류입니다. HA 모드가 활성화된 경우(<a href="#id1"><span class="problematic" id="id2">`</span></a>ha_mode`가 <a href="#id3"><span class="problematic" id="id4">`</span></a>off`가 아닌 경우), 시스템은 UNIQUE 제약 조건 위반 가능성이 있는 다중 행 UPDATE 작업을 거부합니다.</p></li>
+</ul>
+<p id="error-986"><strong>ERROR CODE: -986, ‘CUBRID heartbeat feature started.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 복제 환경에서 heartbeat 서브시스템이 성공적으로 시작 되었음을 알리는 정보성 알림입니다. 하트비트 기능은 CUBRID 클러스터 환경에서 각 노드의 상태를 주기적으로 확인하고, 장애 발생 시 이를 감지하여 자동 전환(Failover)을 수행하는 데 필수적인 역할을 합니다. 이 메시지는 일반적으로 CUBRID 마스터 프로세스 시작 시, cubrid heartbeat start 명령 실행 시, 또는 HA 모드가 활성화될 때 발생하며, 시스템이 고가용성 모드로 정상 작동하기 시작했음을 의미합니다.</p></li>
+</ul>
+<p id="error-987"><strong>ERROR CODE: -987, ‘CUBRID heartbeat feature stopped.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 복제 환경에서 HA heartbeat 서브시스템이 비활성화 되었음을 알리는 알림성 이벤트입니다. 관리자 중지 명령, 마스터 종료/재시작, HA 모드 OFF 전환, 또는 비활성화 요청 처리 흐름에서 발생하며, 이후 장애 감지와 자동 전환 기능이 중단됩니다.</p></li>
+</ul>
+<p id="error-988"><strong>ERROR CODE: -988, ‘Node event: %1$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 시스템에서 노드의 상태 변경이나 이벤트 발생을 알리는 정보성 메시지입니다. 노드의 상태 모니터링과 관련된 다양한 이벤트(연결, 연결 해제, 상태 변경 등)를 기록합니다.</p></li>
+</ul>
+<p id="error-989"><strong>ERROR CODE: -989, ‘Process event: %1$s. %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 시스템에서 프로세스 이벤트 발생을 알리는 시스템 메시지입니다. 서버의 상태 변화나 중요 이벤트를 추적하고 기록하는 데 사용되는 핵심 모니터링 메시지입니다.</p></li>
+</ul>
+<p id="error-990"><strong>ERROR CODE: -990, ‘Command execution: %1$s. %2$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 시스템 내부에서 특정 명령을 실행하는 과정에서 문제가 발생 했음을 나타냅니다. 특히, 이 에러는 CUBRID 마스터 프로세스의 핵심 기능인 heartbeat 관리 또는 요청 처리 중에 명령 실행 실패가 발생 했음을 시사합니다, 실제 오류 발생 시 구체적인 명령 내용이나 실패 원인에 대한 추가 정보를 제공되며, 이는 시스템 내부의 중요한 프로세스가 정상적으로 작동하지 못했음을 의미하고, 데이터베이스의 안정성과 가용성에 직접적인 영향을 미칠 가능성이 있습니다.</p></li>
+</ul>
+<p id="error-1023"><strong>ERROR CODE: -1023, ‘log applier filter: %1$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 복제 환경에서, 액티브(Active) 서버(마스터)의 변경 로그를 스탠바이(Standby) 서버(슬레이브/리플리카)에 적용하는 로그 적용기(Log Applier)가 사용자가 정의한 복제 필터 규칙을 처리하던 중 일반적인(Generic) 오류를 만났을 때 발생합니다, 복제 필터는 특정 테이블이나 데이터 변경 연산(INSERT, UPDATE, DELETE)을 복제 대상에서 제외하거나 포함시키는 규칙을 정의하는데, 이 규칙의 처리 과정에서 문제가 생겼음을 의미합니다.</p></li>
+</ul>
+<p id="error-1024"><strong>ERROR CODE: -1024, ‘log writer: failed to get log page(s) starting from page id %1$lld.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 copylogdb 프로세스가 복제 대상 server로 부터 복제 로그를 요청시 발생합니다.</p></li>
+</ul>
+<p id="error-1025"><strong>ERROR CODE: -1025, ‘HA delay info: The replication delay (%1$d secs) has exceeded the limit (%2$d secs).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 마스터 서버와 스탠바이 서버 간의 복제 지연 시간이 사용자가 설정한 임계값(ha_delay_limit, ha_delay_limit_delta)을 초과했음을 나타냅니다. 즉, 스탠바이 서버가 마스터 서버의 최신 변경 사항을 따라잡는 데 설정된 시간보다 오래 걸리고 있다는 의미입니다. 이는 마스터와 스탠바이 간의 데이터 동기화 상태가 양호하지 않음을 알리는 경고성 또는 정보성 메시지일 수 있으며, 설정에 따라 특정 동작(예: 마스터의 추가 트랜잭션 지연)을 유발할 수도 있습니다.</p></li>
+</ul>
+<p id="error-1026"><strong>ERROR CODE: -1026, ‘HA delay info: The replication delay (%1$d secs) is decreased below the acceptable level (%2$d secs).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 이전에 발생했던 CUBRID HA(High Availability) 환경에서 복제 지연 상태가 해소되었음을 알리는 정보성 로그입니다. 즉, 액티브(마스터) 서버와 스탠바이 서버 간의 복제 지연 시간이 다시 사용자가 설정한 임계값(ha_delay_limit, ha_delay_limit_delta) 이하로 줄어들어, 데이터 동기화 상태가 정상 범위로 복귀했음을 의미합니다.</p></li>
+</ul>
+<p id="error-1027"><strong>ERROR CODE: -1027, ‘log applier: failed to change apply state from ‘%1$s’ to ‘%2$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 내부 시스템로 부터 applylogdb의 동작 상태 변경 요청시 변경할 수 없는 경우 발생하는 오류 입니다.</p></li>
+</ul>
+<p id="error-1028"><strong>ERROR CODE: -1028, ‘log applier: unexpected EOF record in archive log. LSA: %1$lld|%2$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 복제된 archive log에서 예상치 않은 로그(END of LOG)을 만나는 경우 발생하는 오류 메세지로 applylogdb 프로세스는 해당 로그 레코드를 적용하지 않고 진행됩니다.</p></li>
+</ul>
+<p id="error-1029"><strong>ERROR CODE: -1029, ‘log applier: invalid replication log page/offset. page HDR: %1$1lld|%2$d, final: %3$lld|%4$d, append LSA: %5$lld|%6$d, EOF LSA: %7$lld|%8$d, ha file status: %9$d, is end-of-log: %10$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 applylogdb 프로세스가 복제 로그를 처리하는 과정에서 유효하지 않은 페이지 ID나 오프셋을 발견했을 때 발생합니다. 로그 레코드의 위치 정보가 올바르지 않아 복제 작업을 진행할 수 없는 상태를 나타냅니다.</p></li>
+</ul>
+<p id="error-1030"><strong>ERROR CODE: -1030, ‘log applier: invalid replication record. LSA: %1$lld|%2$d, forw LSA: %3$lld|%4$d, backw LSA: %5$lld|%6$d, Trid: %7$d, prev tran LSA: %8$lld|%9$d, type: %10$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 applylogdb 프로세스가 복제 로그 레코드를 검증하는 과정에서 발생합니다, 검증 중 로그 레코드의 LSA 체인(순방향·역방향 연결)이나 트랜잭션 정보가 올바르지 않은 것으로 판단될 경우 해당 오류가 발생됩니다.</p></li>
+</ul>
+<p id="error-1031"><strong>ERROR CODE: -1031, ‘log applier: failed to apply the following statement. class: “%1$s”, statement: “%2$s”, server error: %3$d, %4$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경의 스탠바이 서버에서 applylogdb 프로세스가 마스터 서버로부터 받은 변경 로그(SQL 문장 형태)를 스탠바이 데이터베이스에 실제로 적용(실행)하는 과정에서 실패했을 때 발생합니다. 즉, 로그 자체는 정상적으로 수신하고 해석했지만, 스탠바이 서버의 현재 데이터베이스 상태에서 해당 SQL(주로 DDL ) 구문을 실행할 수 없었음을 의미합니다. 실패 원인은 스키마 불일치, 데이터 충돌(예: 고유 키 위반), 제약 조건 위반, 리소스 부족 등 다양하며, 메시지에 포함된 ‘서버 오류’ 상세 오류 정보가 구체적인 실패 사유를 알려줍니다.</p></li>
+</ul>
+<p id="error-1032"><strong>ERROR CODE: -1032, ‘log applier: failed to apply insert replication log. class: “%1$s”, key: “%2$s”, server error: %3$d, %4$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경의 스탠바이 서버에서 applylogdb 프로세스가 마스터 서버로부터 복제된 <cite>INSERT</cite> 로그를 스탠바이 데이터베이스에 적용(실행)하려다 실패했을 때 발생합니다. 가장 흔한 원인은 스탠바이 서버에 해당 키를 가진 레코드가 이미 존재하여 기본 키 또는 고유 키 제약 조건 위반(Duplicate Key)이 발생하는 경우입니다. 그 외에도 스키마 불일치, 다른 제약 조건 위반 등 INSERT 문 실행을 막는 다양한 원인이 있을 수 있으며, 포함된 ‘서버 오류’ 정보가 실패의 직접적인 이유를 알려줍니다.</p></li>
+</ul>
+<p id="error-1033"><strong>ERROR CODE: -1033, ‘log applier: failed to apply update replication log. class: “%1$s”, key: “%2$s”, server error: %3$d, %4$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경의 스탠바이 서버에서 applylogdb 프로세스가 마스터 서버로부터 복제된 <cite>UPDATE</cite> 로그를 스탠바이 데이터베이스에 적용(실행)하려다 실패했을 때 발생합니다. 이는 특정 사례로, UPDATE 작업이 스탠바이 서버에서 거부되었음을 의미합니다. 주요 원인으로는 업데이트 대상 레코드가 스탠바이 서버에 존재하지 않거나, 업데이트 결과가 고유 키/기본 키 제약 조건 또는 다른 제약 조건(NOT NULL, FK 등)을 위반하거나, 스키마 불일치 등이 있고, 메시지에 포함된 ‘서버 오류’ 정보가 실패의 구체적인 이유입니다.</p></li>
+</ul>
+<p id="error-1034"><strong>ERROR CODE: -1034, ‘log applier: failed to apply delete replication log. class: “%1$s”, key: “%2$s”, server error: %3$d, %4$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경의 스탠바이 서버에서 applylogdb 프로세스가 마스터 서버로부터 복제된 <cite>DELETE</cite> 로그를 스탠바이 데이터베이스에 적용(실행)하려다 실패했을 때 발생합니다. 이는 특정 사례로, DELETE 작업이 스탠바이 서버에서 거부되었음을 의미합니다. 주요 원인으로는 업데이트 대상 레코드가 스탠바이 서버에 존재하지 않거나, 업데이트 결과가 고유 키/기본 키 제약 조건 또는 다른 제약 조건(NOT NULL, FK 등)을 위반하거나, 스키마 불일치 등이 있고, 메시지에 포함된 ‘서버 오류’ 정보가 실패의 구체적인 이유입니다.</p></li>
+</ul>
+<p id="error-1035"><strong>ERROR CODE: -1035, ‘log applier: mem size(%1$d MB) of log applier is greater than max mem size (%2$d MB) or has been grow more than 2 times (%3$d MB). required LSA: %4$lld|%5$d. last committed LSA: %6$lld|%7$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경의 스탠바이 서버에서 applylogdb 프로세스가 사용하는 메모리 양이 설정된 최대 허용치(<cite>ha_log_applier_max_mem_size</cite>)를 초과하거나, 비정상적으로 빠르게 (단기간에 2배 이상) 증가했을 때 발생합니다, 이는 스탠바이 서버의 자원 고갈을 방지하고 시스템 안정성을 유지하기 위한 보호 메커니즘으로 주로 마스터 서버에서 매우 큰 트랜잭션(많은 로그를 생성하는)이 발생했거나, 스탠바이 서버의 처리 성능 부족 또는 네트워크 지연 등으로 인해 로그 적용이 지연되어 처리해야 할 로그가 메모리에 과도하게 쌓일 때 발생할 수 있습니다. ‘required LSA’와 ‘last committed LSA’의 차이가 크다면, 로그 적용이 상당히 지연되고 있음을 나타냅니다.</p></li>
+</ul>
+<p id="error-1036"><strong>ERROR CODE: -1036, ‘log applier: log applier shut itself down by signal.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID의 HA(High Availability) 시스템에서 발생하는 applylogdb 프로세스의 정상적인 종료 상황을 나타냅니다, 시스템 시그널을 받아 로그 복제 프로세스가 정상적인 종료 절차를 수행했음을 의미합니다. 이는 일반적으로 계획된 시스템 종료나 관리자의 의도적인 종료 요청에 의해 발생합니다.</p></li>
+</ul>
+<p id="error-1037"><strong>ERROR CODE: -1037, ‘log writer: log writer shut itself down by signal.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID의 HA(High Availability) 시스템에서 발생하는 copylogdb 로그 복제 프로세스의 정상적인 종료 상황을 나타냅니다, 시스템 시그널을 받아 로그 복제 프로세스가 정상적인 종료 절차를 수행했음을 의미합니다, 이는 일반적으로 계획된 시스템 종료나 관리자의 의도적인 종료 요청에 의해 발생합니다.</p></li>
+</ul>
+<p id="error-1038"><strong>ERROR CODE: -1038, ‘log applier: log applier started. required LSA: %1$lld|%2$d. last committed LSA: %3$lld|%4$d. last committed repl LSA: %5$lld|%6$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 applylogdb 프로세스가 시작될 때 출력되는 정보성 메시지입니다. 시작 시점의 LSA 정보를 포함하여 로그 복제의 시작 위치와 마지막 커밋 상태를 나타냅니다. LSA는 로그의 위치를 식별하는 주소값으로, 데이터 동기화의 기준점이 됩니다</p></li>
+</ul>
+<p id="error-1039"><strong>ERROR CODE: -1039, ‘log writer: log writer started. mode: %1$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 copylogdb 프로세스가 시작될 때 출력되는 정보성 메시지입니다. 시작 시점의 LSA 정보를 포함하여 로그 복제의 시작 위치와 마지막 커밋 상태를 나타냅니다. LSA는 로그의 위치를 식별하는 주소값으로, 데이터 동기화의 기준점이 됩니다, 이는 copylogdb 프로세스의 정상 구동을 알리는 메시지입니다.</p></li>
+</ul>
+<p id="error-1040"><strong>ERROR CODE: -1040, ‘HA generic: %1$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 시스템 내에서 발생한 문제 중, 특정 오류 코드로 분류되지 않은 예외적이거나 일반적인 오류 상황을 나타냅니다. 즉, HA 관련 기능(heartbeat, copylogdb, applylogdb 등)을 수행하는 도중 예상치 못한 내부 상태나 외부 요인으로 인해 더 이상 진행할 수 없을 때 사용되는 포괄적인 오류 코드입니다. 따라서 에러 메시지에 포함된 여러 상세한 오류 메시지들의 내용이 실제 오류의 원인을 진단하는데 결정적인 단서가 됩니다.</p></li>
+</ul>
+<p id="error-1105"><strong>ERROR CODE: -1105, ‘Internal error: partially failed to flush dirty object.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 메모리에 있는 변경된 데이터(dirty object)를 디스크로 저장하는 과정에서 일부만 성공하고 일부가 실패했을 때 발생합니다, 즉, 트랜잭션의 일부 변경사항은 성공적으로 디스크에 저장되었지만, 나머지 일부는 저장에 실패했음을 의미합니다, 이는 데이터 무결성과 시스템 안정성을 보장하기 위한 내부 오류로, 주로 applylogdb에서 데이터 반영시 발생할 수 있는 오류로 복제(replication) 과정에서 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1122"><strong>ERROR CODE: -1122, ‘Time out in receiving data.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 시스템 내에서 발생한 문제 중 copylogdb 프로세스에서 발생하는 실행 오류로 cub_server 프로세스로 부터 log page를 요청 후 timeout 까지 요청한 log page를 받지 못한 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1133"><strong>ERROR CODE: -1133, ‘Copylogdb for %1$s already exists.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 copylogdb 가 cub_master와 연결 요청시 이미 copylogdb가 구동 중일때 발생합니다.</p></li>
+</ul>
+<p id="error-1134"><strong>ERROR CODE: -1134, ‘Applylogdb for %1$s already exists.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 applylogdb가 cub_master와 연결 요청시 이미 applylogdb가 구동 중일때 발생합니다.</p></li>
+</ul>
+<p id="error-1139"><strong>ERROR CODE: -1139, ‘Handshake error (peer host %1$s): incompatible read/write mode. (client: %2$s, server: %3$s)’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 데이터베이스 클라이언트와 서버 간의 핸드쉐이크 과정에서 읽기/쓰기 모드의 호환성 문제가 발생할 때 나타납니다, 즉, 데이터베이스 클라이언트와 데이터베이스 서버간 핸드쉐이크 과정에서 클라이언트와 서버의 모드(RW/RO)가 다른 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1140"><strong>ERROR CODE: -1140, ‘Handshake error (peer host %1$s): HA replication delayed.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 데이터베이스 서버 간 복제 과정에서 지연이 발생할 때 나타납니다. 마스터-슬레이브 간의 데이터 동기화가 설정된 임계값을 초과하여 지연되는 상황을 나타내는 오류입니다.</p></li>
+</ul>
+<p id="error-1141"><strong>ERROR CODE: -1141, ‘Handshake error (peer host %1$s): replica-only client to non-replica server.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 리플리카 전용으로 설정된 서버에 클라이언트가 직접 접근을 시도할 때 발생합니다, 즉,  데이터베이스 클라이언트와 데이터베이스 서버간 핸드쉐이크 과정에서 리플리카 전용 클라이언트(replica broker)가 리플리카 서버가 아닌 마스터, 슬레이브 서버로 연결 요청 시 발생합니다.</p></li>
+</ul>
+<p id="error-1142"><strong>ERROR CODE: -1142, ‘Handshake error (peer host %1$s): unidentified server version.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 클라이언트가 데이터베이스 서버에 연결을 시도할 때 서버의 버전 정보를 확인할 수 없는 경우 발생합니다. 클라이언트-서버 간의 핸드쉐이크 과정에서 서버 버전 정보가 올바르게 전달되지 않거나 호환되지 않는 상황을 나타냅니다.</p></li>
+</ul>
+<p id="error-1143"><strong>ERROR CODE: -1143, ‘Handshake error (peer host %1$s): remote access to server not allowed.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 데이터베이스 클라이언트가(csql, cas, copylogdb, applylogdb등..) 서버 간의 버전 정보를 식별할 수 없을 때 발생하는 오류입니다.</p></li>
+</ul>
+<p id="error-1144"><strong>ERROR CODE: -1144, ‘Timed out attempting to connect to %1$s. (timeout: %2$d sec(s))’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 클라이언트 또는 구성 요소(예: CSQL, JDBC 드라이버 등)가 지정된 서버에 연결을 시도했으나 타임아웃 설정된 시간 이내에 응답을 받지 못해 연결이 실패했을 때 발생하는 오류입니다, 일반적으로 네트워크 장애, 서버 비정상 상태, 방화벽 차단, 포트 오픈 실패 등의 원인으로 발생할 수 있습니다.</p></li>
+<li><p>참조: 이 메시지는 큐브리드 매뉴얼 CUBRID HA 복제 불일치 감지 부분에 “장비 down”으로 정리되어 있습니다.</p></li>
+</ul>
+<p id="error-1170"><strong>ERROR CODE: -1170, ‘Failed to flush replication items (error code : %1$d).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 데이터베이스의 복제(replication) 과정에서 복제 항목, 즉 마스터 데이터베이스에서 발생한 변경 사항들을 슬레이브(replica) 데이터베이스에 적용하기 위해 버퍼에서 디스크로 쓰거나 다음 단계로 전달하는 작업이 실패했음을 나타냅니다. 이는 네트워크 문제, 디스크 I/O 문제, 슬레이브 데이터베이스의 내부 상태 문제, 또는 복제 항목 자체의 문제 등 다양한 원인으로 발생할 수 있습니다.</p></li>
+</ul>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log_transaction.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        트랜잭션 관련 오류
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="../ha.html">
+        CUBRID HA
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 7월 23, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

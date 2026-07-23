@@ -268,7 +268,7 @@ You can specify default values for the arguments of stored procedures and stored
 
 .. note::
 
-    **UUID** returns a **BIT** value, and PL does not support the **BIT** type, so it cannot be used as a default-value function. **UUID** returns a **BIT** value, so it cannot be wrapped with **TO_CHAR**.
+    **UUID** returns a **BIT** value, and PL does not support the **BIT** type, so it cannot be used as a default-value function. Therefore, it also cannot be wrapped with **TO_CHAR**.
 
 .. note::
 

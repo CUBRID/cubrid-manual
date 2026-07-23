@@ -361,7 +361,7 @@ You can define the **AUTO_INCREMENT** attribute for the column to automatically 
 
 **DEFAULT**, **SHARED** and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
-The **AUTO_INCREMENT** attribute can be defined for only one column in a table. If you try to define another **AUTO_INCREMENT** column on a table that already has one, whether by **CREATE TABLE**, **ALTER TABLE ... ADD**, or **ALTER TABLE ... CHANGE/MODIFY**, an error occurs.
+The **AUTO_INCREMENT** attribute can be defined for only one column in a table. If you try to define another **AUTO_INCREMENT** column on a table that already has one, whether by CREATE TABLE, ALTER TABLE ... ADD, or ALTER TABLE ... CHANGE/MODIFY, an error occurs.
 
 .. code-block:: sql
 
@@ -1636,7 +1636,7 @@ You can specify a new default value for a column that has no default value or mo
 AUTO_INCREMENT Clause
 ---------------------
 
-The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be **AUTO_INCREMENT** column defined. ::
+The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be an **AUTO_INCREMENT** column defined. ::
 
     ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 

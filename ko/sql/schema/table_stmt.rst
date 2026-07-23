@@ -353,7 +353,7 @@ CREATE TABLE
 
 동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
-**AUTO_INCREMENT** 속성은 한 테이블 내에서 한 개의 칼럼에만 정의할 수 있다. 이미 **AUTO_INCREMENT** 칼럼이 존재하는 테이블에 **CREATE TABLE**, **ALTER TABLE ... ADD**, **ALTER TABLE ... CHANGE/MODIFY** 등으로 또 다른 **AUTO_INCREMENT** 칼럼을 정의하려고 하면 에러가 발생한다.
+**AUTO_INCREMENT** 속성은 한 테이블 내에서 하나의 칼럼에만 정의할 수 있다. CREATE TABLE, ALTER TABLE ... ADD, ALTER TABLE ... CHANGE/MODIFY 등으로 한 테이블에 둘 이상의 **AUTO_INCREMENT** 칼럼을 정의하려고 하면 오류가 발생한다.
 
 .. code-block:: sql
 

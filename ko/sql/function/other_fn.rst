@@ -55,7 +55,7 @@ UUID
     :param version: 생성할 UUID의 버전으로 **0**, **4**, **7** 중 하나를 지정할 수 있으며, 생략하면 **4** 이다.
     :rtype: BIT(128)
 
-    *   **UUID()**, **UUID(0)**, **UUID(4)** 는 모두 무작위(random) 기반의 버전 4 UUID를 생성한다. :func:`SYS_GUID` 함수도 동일하게 버전 4 UUID를 생성하며, **UUID(4)** 와는 반환 타입만 다르다. 즉, **SYS_GUID** 는 32자리 16진수 **문자열(STRING)** 을 반환하고, **UUID(4)** 는 **BIT(128)** 값을 반환한다.
+    *   **UUID()**, **UUID(0)**, **UUID(4)** 는 모두 무작위(random) 기반의 버전 4 UUID를 생성한다. **UUID(0)**는 ORACLE 호환 목적으로 지원하며 DEFAULT 버전을 의미한다. :func:`SYS_GUID` 함수도 동일하게 버전 4 UUID를 생성하며, **UUID(4)** 와는 반환 타입만 다르다. 즉, **SYS_GUID** 는 32자리 16진수 **문자열(STRING)** 을 반환하고, **UUID(4)** 는 **BIT(128)** 값을 반환한다.
     *   **UUID(7)** 은 시간순으로 정렬 가능한(time-ordered) 버전 7 UUID를 생성한다. `RFC 9562 <https://www.rfc-editor.org/rfc/rfc9562>`_ 표준 형식을 따르되, 한 개의 실행기(스레드) 내에서 생성 순서에 따른 단조 증가(monotonicity)를 보장하기 위해 ``rand_a`` 영역의 앞 8비트를 카운터(counter)로 사용한다.
 
     .. code-block:: sql

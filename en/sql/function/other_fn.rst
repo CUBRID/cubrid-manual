@@ -55,7 +55,7 @@ UUID
     :param version: The version of the UUID to generate, one of **0**, **4**, or **7**. If omitted, it defaults to **4**.
     :rtype: BIT(128)
 
-    *   **UUID()**, **UUID(0)**, and **UUID(4)** all generate a random-based version 4 UUID. The :func:`SYS_GUID` function also generates a version 4 UUID and differs from **UUID(4)** only in its return type: **SYS_GUID** returns a 32-digit hexadecimal **string (STRING)**, while **UUID(4)** returns a **BIT(128)** value.
+    *   **UUID()**, **UUID(0)**, and **UUID(4)** all generate a random-based version 4 UUID. **UUID(0)** is provided  for Oracle compatibility (where 0 means "default version"). The :func:`SYS_GUID` function also generates a version 4 UUID and differs from **UUID(4)** only in its return type: **SYS_GUID** returns a 32-digit hexadecimal **string (STRING)**, while **UUID(4)** returns a **BIT(128)** value.
     *   **UUID(7)** generates a time-ordered version 7 UUID. It follows the `RFC 9562 <https://www.rfc-editor.org/rfc/rfc9562>`_ standard format, except that the leading 8 bits of the ``rand_a`` field are used as a counter to guarantee monotonicity in generation order within a single executor (thread).
 
     .. code-block:: sql

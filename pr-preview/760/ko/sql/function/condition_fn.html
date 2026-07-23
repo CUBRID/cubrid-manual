@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>비교 함수 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="비교 함수 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="비교 함수 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../../_static/pygments.css?v=9288a784" rel="stylesheet" type="text/css"/>
+<link href="../../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../../_static/style.css?v=5ce96981" rel="stylesheet" type="text/css"/>
+<link href="../../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/logo_only.png" rel="icon"/>
+<link href="../../search.html" rel="search" title="검색"/>
+<link href="../../genindex.html" rel="index" title="색인"/>
+<link href="other_fn.html" rel="next" title="기타 함수"/>
+<link href="condition_op.html" rel="prev" title="비교 연산식"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../.././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/sql/function/condition_fn.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../release_note/index.html">Release Note</a>
+<a href="../.././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install_upgrade.html">설치 및 업그레이드</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">시작하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../pl/index.html">CUBRID 절차적 언어</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">CUBRID 운영</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../security.html">CUBRID 보안</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API 레퍼런스</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release_note/index.html">릴리스 노트</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">연산자와 함수</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">비교 함수</span>
+</nav>
+<div id="content" role="main">
+<section id="id1">
+<h1><a class="toc-backref" href="#id3" role="doc-backlink">비교 함수</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<nav class="contents" id="id2">
+<p class="topic-title">목차</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#id1" id="id3">비교 함수</a></p>
+<ul>
+<li><p><a class="reference internal" href="#coalesce" id="id4">COALESCE</a></p></li>
+<li><p><a class="reference internal" href="#decode" id="id5">DECODE</a></p></li>
+<li><p><a class="reference internal" href="#greatest" id="id6">GREATEST</a></p></li>
+<li><p><a class="reference internal" href="#if" id="id7">IF</a></p></li>
+<li><p><a class="reference internal" href="#ifnull-nvl" id="id8">IFNULL, NVL</a></p></li>
+<li><p><a class="reference internal" href="#isnull" id="id9">ISNULL</a></p></li>
+<li><p><a class="reference internal" href="#least" id="id10">LEAST</a></p></li>
+<li><p><a class="reference internal" href="#nullif" id="id11">NULLIF</a></p></li>
+<li><p><a class="reference internal" href="#nvl2" id="id12">NVL2</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="coalesce">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">COALESCE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#coalesce" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#coalesce'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="COALESCE">
+<span class="sig-name descname"><span class="pre">COALESCE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">expression</span> <span class="pre">[,</span> <span class="pre">expression</span> <span class="pre">]</span> <span class="pre">...</span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#COALESCE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#COALESCE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>COALESCE</strong> 함수는 하나 이상의 연산식 리스트가 인자로 지정되며, 첫 번째 인자가 <strong>NULL</strong> 이 아닌 값이면 해당 값을 결과로 반환하고, <strong>NULL</strong> 이면 두 번째 인자를 반환한다. 만약 인자로 지정된 모든 연산식이 <strong>NULL</strong> 이면 <strong>NULL</strong> 을 결과로 반환한다. 이러한 <strong>COALESCE</strong> 함수는 주로 <strong>NULL</strong> 값을 다른 기본값으로 대체할 때 사용한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expression</strong> – 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다.</p>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>expression</em>의 타입</p>
+</dd>
+</dl>
+</dd></dl>
+<p><strong>COALESCE</strong> 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 <strong>VARCHAR</strong> 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.</p>
+<ul class="simple">
+<li><p><strong>CHAR</strong> &lt; <strong>VARCHAR</strong></p></li>
+<li><p><strong>BIT</strong> &lt; <strong>VARBIT</strong></p></li>
+<li><p><strong>SHORT</strong> &lt; <strong>INT</strong> &lt; <strong>BIGINT</strong> &lt; <strong>NUMERIC</strong> &lt; <strong>FLOAT</strong> &lt; <strong>DOUBLE</strong></p></li>
+<li><p><strong>DATE</strong> &lt; <strong>TIMESTAMP</strong> &lt; <strong>DATETIME</strong></p></li>
+</ul>
+<p>예를 들어 a의 타입이 <strong>INT</strong>, b의 타입이 <strong>BIGINT</strong>, c의 타입이 <strong>SHORT</strong>, d의 타입이 <strong>FLOAT</strong> 이면 <strong>COALESCE</strong> (a, b, c, d)는 <strong>FLOAT</strong> 타입을 반환한다. 만약 a의 타입이 <strong>INTEGER</strong>, b의 타입이 <strong>DOUBLE</strong>, c의 타입이 <strong>FLOAT</strong>, d의 타입이 <strong>TIMESTAMP</strong> 이면 <strong>COALESCE</strong> (a, b, c, d)는 <strong>VARCHAR</strong> 타입을 반환한다.</p>
+<p><strong>COALESCE</strong> (<em>a, b</em>)는 다음의 <strong>CASE</strong> 조건식과 같은 의미를 가진다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CASE</span> <span class="n">WHEN</span> <span class="n">a</span> <span class="n">IS</span> <span class="n">NOT</span> <span class="n">NULL</span>
+</span><span id="line-2"><span class="n">THEN</span> <span class="n">a</span>
+</span><span id="line-3"><span class="n">ELSE</span> <span class="n">b</span>
+</span><span id="line-4"><span class="n">END</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span><span id="line-4">            <span class="mi">2</span>
+</span><span id="line-5">            <span class="mi">3</span>
+</span><span id="line-6">         <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--substituting a default value 10.0000 for a NULL value</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">.</span><span class="mi">0000</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">coalesce</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mf">10.0000</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="mf">1.0000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="mf">2.0000</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="mf">3.0000</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="mf">10.0000</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="decode">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">DECODE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#decode" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#decode'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DECODE">
+<span class="sig-name descname"><span class="pre">DECODE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">expression,</span> <span class="pre">search,</span> <span class="pre">result</span> <span class="pre">[,</span> <span class="pre">search,</span> <span class="pre">result]*</span> <span class="pre">[,</span> <span class="pre">default]</span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#DECODE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#DECODE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>DECODE</strong> 함수는 <strong>CASE</strong> 연산식과 마찬가지로 <strong>IF</strong> … <strong>THEN</strong> … <strong>ELSE</strong> 문과 동일한 기능을 수행한다. 인자로 지정된 <em>expression</em> 과 <em>search</em> 를 비교하여, 같은 값을 가지는 <em>search</em> 에 대응하는 <em>result</em> 를 결과로 반환한다. 만약, 같은 값을 가지는 <em>search</em> 가 없다면 <em>default</em> 값을 반환하고, <em>default</em> 값이 생략된 경우에는 <strong>NULL</strong> 을 반환한다. 비교 연산의 대상이 되는 <em>expression</em> 과 <em>search</em> 는 데이터 타입이 동일하거나 서로 변환 가능해야 하고, 지정된 모든 <em>result</em> 값의 유효 숫자를 포함하여 표현할 수 있도록 결과 값의 소수점 아래 자릿수가 결정된다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expression</strong><strong>,</strong><strong>search</strong> – 비교 가능한 타입의 연산식</p></li>
+<li><p><strong>result</strong> – 매칭되었을 때 반환할 값</p></li>
+<li><p><strong>default</strong> – 매치가 발견되지 않았을 때 반환할 값</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>result</em>와 <em>default</em>의 타입에 따라 결정됨</p>
+</dd>
+</dl>
+</dd></dl>
+<p><strong>DECODE</strong>(<em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, <em>e</em>, <em>f</em>)는 다음의 <strong>CASE</strong> 조건식과 같은 의미를 가진다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CASE</span> <span class="n">WHEN</span> <span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="n">THEN</span> <span class="n">c</span>
+</span><span id="line-2"><span class="n">WHEN</span> <span class="n">a</span> <span class="o">=</span> <span class="n">d</span> <span class="n">THEN</span> <span class="n">e</span>
+</span><span id="line-3"><span class="n">ELSE</span> <span class="n">f</span>
+</span><span id="line-4"><span class="n">END</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span><span id="line-4">            <span class="mi">2</span>
+</span><span id="line-5">            <span class="mi">3</span>
+</span><span id="line-6">         <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--Using DECODE function to compare expression and search values one by one</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">DECODE</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'one'</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'two'</span><span class="p">,</span><span class="w"> </span><span class="s1">'other'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">decode</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'one'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'two'</span><span class="p">,</span> <span class="s1">'other'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'one'</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'two'</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'other'</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="s1">'other'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--result types are converted to a single type containing all of significant figures</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">DECODE</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">2345</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">234567890</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">decode</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">1.2345</span><span class="p">,</span> <span class="mf">1.234567890</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="mf">1.000000000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="mf">1.234500000</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="mf">1.234567890</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="mf">1.234567890</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--an error occurs when result types are not convertible</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">DECODE</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'one'</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'two'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">2345</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">coerce</span> <span class="s1">'one'</span> <span class="n">to</span> <span class="nb">type</span> <span class="n">double</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="greatest">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">GREATEST</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#greatest" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#greatest'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="GREATEST">
+<span class="sig-name descname"><span class="pre">GREATEST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">expression</span> <span class="pre">[,</span> <span class="pre">expression]</span> <span class="pre">...</span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#GREATEST" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#GREATEST'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>GREATEST</strong> 함수는 인자로 지정된 하나 이상의 연산식을 서로 비교하여 가장 큰 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다.</p>
+<p>따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다.</p>
+<p>즉, <strong>GREATEST</strong> 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최대 값을 반환하며, <a class="reference internal" href="analysis_fn.html#MAX" title="MAX"><code class="xref py py-func docutils literal notranslate"><span class="pre">MAX()</span></code></a> 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최대 값을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expression</strong> – 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 <strong>NULL</strong> 값이면 <strong>NULL</strong> 을 반환한다.</p>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>expression</em>의 타입</p>
+</dd>
+</dl>
+</dd></dl>
+<p>다음은 <em>demodb</em> 에서 한국이 획득한 각 메달의 수와 최대 메달의 수를 반환하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">gold</span><span class="p">,</span><span class="w"> </span><span class="n">silver</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">bronze</span><span class="p">,</span><span class="w"> </span><span class="n">GREATEST</span><span class="w"> </span><span class="p">(</span><span class="n">gold</span><span class="p">,</span><span class="w"> </span><span class="n">silver</span><span class="p">,</span><span class="w"> </span><span class="n">bronze</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">FROM</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-3"><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'KOR'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">         <span class="n">gold</span>       <span class="n">silver</span>       <span class="n">bronze</span>  <span class="n">greatest</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">silver</span><span class="p">,</span> <span class="n">bronze</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">=======================================================================</span>
+</span><span id="line-3">            <span class="mi">9</span>           <span class="mi">12</span>            <span class="mi">9</span>                              <span class="mi">12</span>
+</span><span id="line-4">            <span class="mi">8</span>           <span class="mi">10</span>           <span class="mi">10</span>                              <span class="mi">10</span>
+</span><span id="line-5">            <span class="mi">7</span>           <span class="mi">15</span>            <span class="mi">5</span>                              <span class="mi">15</span>
+</span><span id="line-6">           <span class="mi">12</span>            <span class="mi">5</span>           <span class="mi">12</span>                              <span class="mi">12</span>
+</span><span id="line-7">           <span class="mi">12</span>           <span class="mi">10</span>           <span class="mi">11</span>                              <span class="mi">12</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="if">
+<span id="func-if"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">IF</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#if" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#if'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="IF">
+<span class="sig-name descname"><span class="pre">IF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression3</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#IF" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#IF'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>IF</strong> 함수는 첫 번째 인자로 지정된 연산식의 값이 <strong>TRUE</strong> 이면 <em>expression2</em> 를 반환하고, <strong>FALSE</strong> 이거나 <strong>NULL</strong> 이면 <em>expression3</em> 를 반환한다. 결과로 반환되는 <em>expression2</em> 와 <em>expression3</em> 은 데이터 타입이 동일하거나 공통의 타입으로 변환 가능해야 한다. 둘 중 하나가 명확하게 <strong>NULL</strong> 이면, 함수의 결과 타입은 <strong>NULL</strong> 이 아닌 인자의 타입을 따른다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expression1</strong> – 비교 조건식</p></li>
+<li><p><strong>expression2</strong> – <em>expression1</em>이 참일 때 반환할 값</p></li>
+<li><p><strong>expression3</strong> – <em>expression1</em>이 참이 아닐 때 반환할 값</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>expression2</em> 또는 <em>expression3</em>의 타입</p>
+</dd>
+</dl>
+</dd></dl>
+<p><strong>IF</strong>(<em>a</em>, <em>b</em>, <em>c</em>)는 다음의 <strong>CASE</strong> 연산식과 같은 의미를 가진다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CASE</span> <span class="n">WHEN</span> <span class="n">a</span> <span class="n">IS</span> <span class="n">TRUE</span> <span class="n">THEN</span> <span class="n">b</span>
+</span><span id="line-2"><span class="n">ELSE</span> <span class="n">c</span>
+</span><span id="line-3"><span class="n">END</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span><span id="line-4">            <span class="mi">2</span>
+</span><span id="line-5">            <span class="mi">3</span>
+</span><span id="line-6">         <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--IF function returns the second expression when the first is TRUE</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">IF</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'one'</span><span class="p">,</span><span class="w"> </span><span class="s1">'other'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>   <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'one'</span><span class="p">,</span> <span class="s1">'other'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'one'</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'other'</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'other'</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="s1">'other'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--If function in WHERE clause</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">IF</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="ifnull-nvl">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">IFNULL, NVL</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ifnull-nvl" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ifnull-nvl'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="IFNULL">
+<span class="sig-name descname"><span class="pre">IFNULL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr2</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#IFNULL" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#IFNULL'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="NVL">
+<span class="sig-name descname"><span class="pre">NVL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr2</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#NVL" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NVL'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>IFNULL</strong> 함수와 <strong>NVL</strong> 함수는 유사하게 동작하며, <strong>NVL</strong> 함수는 컬렉션 타입을 추가로 지원한다. 두 개의 인자가 지정되며, 첫 번째 인자 <em>expr1</em> 이 <strong>NULL</strong> 이 아니면 <em>expr1</em> 을 반환하고, <strong>NULL</strong> 이면 두 번째 인자인 <em>expr2</em> 를 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr1</strong> – 조건식</p></li>
+<li><p><strong>expr2</strong> – <em>expr1</em>이 <strong>NULL</strong>일 때 반환할 값</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>expr1</em>과 <em>expr2</em>의 타입에 따라 결정됨</p>
+</dd>
+</dl>
+</dd></dl>
+<p><strong>IFNULL</strong> 함수와 <strong>NVL</strong> 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 <strong>VARCHAR</strong> 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.</p>
+<ul class="simple">
+<li><p><strong>CHAR</strong> &lt; <strong>VARCHAR</strong></p></li>
+<li><p><strong>BIT</strong> &lt; <strong>VARBIT</strong></p></li>
+<li><p><strong>SHORT</strong> &lt; <strong>INT</strong> &lt; <strong>BIGINT</strong> &lt; <strong>NUMERIC</strong> &lt; <strong>FLOAT</strong> &lt; <strong>DOUBLE</strong></p></li>
+<li><p><strong>DATE</strong> &lt; <strong>TIMESTAMP</strong> &lt; <strong>DATETIME</strong></p></li>
+</ul>
+<p>예를 들어 a의 타입이 <strong>INT</strong>, b의 타입이 <strong>BIGINT</strong> 이면 <strong>IFNULL</strong> (a, b)은 <strong>BIGINT</strong> 타입을 반환한다. 만약 a의 타입이 <strong>INTEGER</strong>, b의 타입이 <strong>TIMESTAMP</strong> 이면 <strong>IFNULL</strong> (a, b)은 <strong>VARCHAR</strong> 타입을 반환한다.</p>
+<p><strong>IFNULL</strong>(<em>a</em>, <em>b</em>) 또는 <strong>NVL</strong>(<em>a</em>, <em>b</em>)는 다음의 <strong>CASE</strong> 조건식과 같은 의미를 가진다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CASE</span> <span class="n">WHEN</span> <span class="n">a</span> <span class="n">IS</span> <span class="n">NULL</span> <span class="n">THEN</span> <span class="n">b</span>
+</span><span id="line-2"><span class="n">ELSE</span> <span class="n">a</span>
+</span><span id="line-3"><span class="n">END</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span><span id="line-4">            <span class="mi">2</span>
+</span><span id="line-5">            <span class="mi">3</span>
+</span><span id="line-6">         <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--returning a specific value when a is NULL</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">NVL</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">.</span><span class="mi">0000</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">nvl</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mf">10.0000</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="mf">1.0000</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="mf">2.0000</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="mf">3.0000</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="mf">10.0000</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--IFNULL can be used instead of NVL and return values are converted to the string type</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">IFNULL</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="s1">'UNKNOWN'</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>   <span class="n">ifnull</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">'UNKNOWN'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===================================</span>
+</span><span id="line-3">            <span class="mi">1</span>  <span class="s1">'1'</span>
+</span><span id="line-4">            <span class="mi">2</span>  <span class="s1">'2'</span>
+</span><span id="line-5">            <span class="mi">3</span>  <span class="s1">'3'</span>
+</span><span id="line-6">         <span class="n">NULL</span>  <span class="s1">'UNKNOWN'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="isnull">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">ISNULL</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#isnull" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#isnull'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ISNULL">
+<span class="sig-name descname"><span class="pre">ISNULL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ISNULL" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ISNULL'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>ISNULL</strong> 함수는 조건절 내에서 사용할 수 있으며, 인자로 지정된 표현식의 결과가 <strong>NULL</strong> 인지 비교하여 <strong>NULL</strong> 이면 1을 반환하고, 아니면 0을 반환한다. 이 함수를 이용하여 어떤 값이 <strong>NULL</strong> 인지 아닌지를 테스트할 수 있으며, <strong>IS NULL</strong> 조건식과 유사하게 동작한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expression</strong> – 단일 값을 가지는 칼럼, 경로 표현식(예: <em>tbl_name.col_name</em>), 상수 값 또는 단일 값을 생성하는 산술 함수를 입력한다.</p>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--Using ISNULL function to select rows with NULL value</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">condition_tbl</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">ISNULL</span><span class="p">(</span><span class="n">salary</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">           <span class="nb">id</span>  <span class="n">name</span>                  <span class="n">dept_name</span>                  <span class="n">salary</span>
+</span><span id="line-2"><span class="o">======================================================================</span>
+</span><span id="line-3">            <span class="mi">7</span>  <span class="s1">'Brown     '</span>          <span class="s1">'account'</span>                    <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="least">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">LEAST</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#least" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#least'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="LEAST">
+<span class="sig-name descname"><span class="pre">LEAST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">expression</span> <span class="pre">[,</span> <span class="pre">expression]</span> <span class="pre">...</span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#LEAST" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#LEAST'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>LEAST</strong> 함수는 인자로 지정된 하나 이상의 연산식을 비교하여 가장 작은 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다.</p>
+<p>따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 만약, 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다.</p>
+<p>즉, <strong>LEAST</strong> 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최소 값을 반환하며, <a class="reference internal" href="analysis_fn.html#MIN" title="MIN"><code class="xref py py-func docutils literal notranslate"><span class="pre">MIN()</span></code></a> 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최소 값을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expression</strong> – 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 <strong>NULL</strong> 값이면 <strong>NULL</strong> 을 반환한다.</p>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>expression</em>의 타입</p>
+</dd>
+</dl>
+</dd></dl>
+<p>다음은 <em>demodb</em> 에서 한국이 획득한 각 메달의 수와 최소 메달의 수를 반환하는 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">gold</span><span class="p">,</span><span class="w"> </span><span class="n">silver</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">bronze</span><span class="p">,</span><span class="w"> </span><span class="n">LEAST</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span><span class="w"> </span><span class="n">silver</span><span class="p">,</span><span class="w"> </span><span class="n">bronze</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">participant</span>
+</span><span id="line-2"><span class="k">WHERE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'KOR'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">         <span class="n">gold</span>       <span class="n">silver</span>       <span class="n">bronze</span>  <span class="n">least</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">silver</span><span class="p">,</span> <span class="n">bronze</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">====================================================================</span>
+</span><span id="line-3">            <span class="mi">9</span>           <span class="mi">12</span>            <span class="mi">9</span>                            <span class="mi">9</span>
+</span><span id="line-4">            <span class="mi">8</span>           <span class="mi">10</span>           <span class="mi">10</span>                            <span class="mi">8</span>
+</span><span id="line-5">            <span class="mi">7</span>           <span class="mi">15</span>            <span class="mi">5</span>                            <span class="mi">5</span>
+</span><span id="line-6">           <span class="mi">12</span>            <span class="mi">5</span>           <span class="mi">12</span>                            <span class="mi">5</span>
+</span><span id="line-7">           <span class="mi">12</span>           <span class="mi">10</span>           <span class="mi">11</span>                           <span class="mi">10</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="nullif">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">NULLIF</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nullif" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#nullif'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="NULLIF">
+<span class="sig-name descname"><span class="pre">NULLIF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr2</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#NULLIF" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NULLIF'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>NULLIF</strong> 함수는 인자로 지정된 두 개의 연산식이 동일하면 <strong>NULL</strong> 을 반환하고, 다르면 첫 번째 인자 값을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr1</strong> – 비교할 연산식</p></li>
+<li><p><strong>expr2</strong> – 비교할 연산식</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>expr1</em>의 타입</p>
+</dd>
+</dl>
+</dd></dl>
+<p><strong>NULLIF</strong> (<em>a, b</em>)는 다음의 <strong>CASE</strong> 조건식과 같은 의미를 가진다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CASE</span>
+</span><span id="line-2"><span class="n">WHEN</span> <span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="n">THEN</span> <span class="n">NULL</span>
+</span><span id="line-3"><span class="n">ELSE</span> <span class="n">a</span>
+</span><span id="line-4"><span class="n">END</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span><span id="line-4">            <span class="mi">2</span>
+</span><span id="line-5">            <span class="mi">3</span>
+</span><span id="line-6">         <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--returning NULL value when a is 1</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">NULLIF</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">nullif</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================</span>
+</span><span id="line-3">            <span class="mi">1</span>          <span class="n">NULL</span>
+</span><span id="line-4">            <span class="mi">2</span>             <span class="mi">2</span>
+</span><span id="line-5">            <span class="mi">3</span>             <span class="mi">3</span>
+</span><span id="line-6">         <span class="n">NULL</span>          <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--returning NULL value when arguments are same</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">NULLIF</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">000</span><span class="p">)</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">nullif</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.000</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--returning the first value when arguments are not same</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">NULLIF</span><span class="w"> </span><span class="p">(</span><span class="s1">'A'</span><span class="p">,</span><span class="w"> </span><span class="s1">'a'</span><span class="p">)</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_root</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">nullif</span><span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'A'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="nvl2">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">NVL2</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nvl2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#nvl2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="NVL2">
+<span class="sig-name descname"><span class="pre">NVL2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr3</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#NVL2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NVL2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>NVL2</strong> 함수는 세 개의 인자가 지정되며, 첫 번째 연산식(<em>expr1</em>)이 <strong>NULL</strong> 이 아니면 두 번째 연산식(<em>expr2</em>)을 반환하고, <strong>NULL</strong> 이면 세 번째 연산식(<em>expr3</em>)을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr1</strong> – 조건식</p></li>
+<li><p><strong>expr2</strong> – <em>expr1</em>이 <strong>NULL</strong>이 아닐 때 반환할 값</p></li>
+<li><p><strong>expr3</strong> – <em>expr1</em>이 <strong>NULL</strong>일 때 반환할 값</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>expr1</em>, <em>expr2</em>, <em>expr3</em>의 타입에 따라서 결정됨</p>
+</dd>
+</dl>
+</dd></dl>
+<p><strong>NVL2</strong> 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 <strong>VARCHAR</strong> 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.</p>
+<ul class="simple">
+<li><p><strong>CHAR</strong> &lt; <strong>VARCHAR</strong></p></li>
+<li><p><strong>BIT</strong> &lt; <strong>VARBIT</strong></p></li>
+<li><p><strong>SHORT</strong> &lt; <strong>INT</strong> &lt; <strong>BIGINT</strong> &lt; <strong>NUMERIC</strong> &lt; <strong>FLOAT</strong> &lt; <strong>DOUBLE</strong></p></li>
+<li><p><strong>DATE</strong> &lt; <strong>TIMESTAMP</strong> &lt; <strong>DATETIME</strong></p></li>
+</ul>
+<p>예를 들어 a의 타입이 <strong>INT</strong>, b의 타입이 <strong>BIGINT</strong>, c의 타입이 <strong>SHORT</strong> 이면 <strong>NVL2</strong> (a, b, c)는 <strong>BIGINT</strong> 타입을 반환한다. 만약 a의 타입이 <strong>INTEGER</strong>, b의 타입이 <strong>DOUBLE</strong>, c의 타입이 <strong>TIMESTAMP</strong> 이면 <strong>NVL2</strong> (a, b, c)는 <strong>VARCHAR</strong> 타입을 반환한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span><span id="line-4">            <span class="mi">2</span>
+</span><span id="line-5">            <span class="mi">3</span>
+</span><span id="line-6">         <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--returning a specific value of INT type</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">NVL2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">.</span><span class="mi">5678</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">case_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">            <span class="n">a</span>  <span class="n">nvl2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mf">10.5678</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">====================================</span>
+</span><span id="line-3">            <span class="mi">1</span>                      <span class="mi">2</span>
+</span><span id="line-4">            <span class="mi">2</span>                      <span class="mi">3</span>
+</span><span id="line-5">            <span class="mi">3</span>                      <span class="mi">4</span>
+</span><span id="line-6">         <span class="n">NULL</span>                     <span class="mi">11</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="condition_op.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        비교 연산식
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="other_fn.html">
+        기타 함수
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#coalesce'" class="reference internal" href="#coalesce">COALESCE</a><ul>
+<li><a :data-current="activeSection === '#COALESCE'" class="reference internal" href="#COALESCE"><code class="docutils literal notranslate"><span class="pre">COALESCE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#decode'" class="reference internal" href="#decode">DECODE</a><ul>
+<li><a :data-current="activeSection === '#DECODE'" class="reference internal" href="#DECODE"><code class="docutils literal notranslate"><span class="pre">DECODE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#greatest'" class="reference internal" href="#greatest">GREATEST</a><ul>
+<li><a :data-current="activeSection === '#GREATEST'" class="reference internal" href="#GREATEST"><code class="docutils literal notranslate"><span class="pre">GREATEST()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#if'" class="reference internal" href="#if">IF</a><ul>
+<li><a :data-current="activeSection === '#IF'" class="reference internal" href="#IF"><code class="docutils literal notranslate"><span class="pre">IF()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#ifnull-nvl'" class="reference internal" href="#ifnull-nvl">IFNULL, NVL</a><ul>
+<li><a :data-current="activeSection === '#IFNULL'" class="reference internal" href="#IFNULL"><code class="docutils literal notranslate"><span class="pre">IFNULL()</span></code></a></li>
+<li><a :data-current="activeSection === '#NVL'" class="reference internal" href="#NVL"><code class="docutils literal notranslate"><span class="pre">NVL()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#isnull'" class="reference internal" href="#isnull">ISNULL</a><ul>
+<li><a :data-current="activeSection === '#ISNULL'" class="reference internal" href="#ISNULL"><code class="docutils literal notranslate"><span class="pre">ISNULL()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#least'" class="reference internal" href="#least">LEAST</a><ul>
+<li><a :data-current="activeSection === '#LEAST'" class="reference internal" href="#LEAST"><code class="docutils literal notranslate"><span class="pre">LEAST()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#nullif'" class="reference internal" href="#nullif">NULLIF</a><ul>
+<li><a :data-current="activeSection === '#NULLIF'" class="reference internal" href="#NULLIF"><code class="docutils literal notranslate"><span class="pre">NULLIF()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#nvl2'" class="reference internal" href="#nvl2">NVL2</a><ul>
+<li><a :data-current="activeSection === '#NVL2'" class="reference internal" href="#NVL2"><code class="docutils literal notranslate"><span class="pre">NVL2()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 7월 23, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../../_static/theme.js?v=582b20c5"></script>
+<script src="../../_static/translations.js?v=afa94a99"></script>
+<script src="../../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../../_static/version-switcher.js?v=993d9931"></script>
+<script src="../../_static/theme-toggle.js?v=b003cf0e"></script>
+</body>
+</html>

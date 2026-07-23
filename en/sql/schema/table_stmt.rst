@@ -476,7 +476,49 @@ This feature is useful, for example, to provide a first line of defense against 
     *   The **INVISIBLE** attribute of a column and the **INVISIBLE** attribute of an index (see :ref:`alter-index`) are different concepts.
     *   When a remote table is queried through **DBLINK**, an **INVISIBLE** column does not work correctly; therefore, it is recommended not to define **INVISIBLE** columns on a table used with **DBLINK**.
 
-Constraints defined on an **INVISIBLE** column work normally. For example, if no value is given for an **INVISIBLE** column with a **NOT NULL** constraint, the **INSERT** is rejected; if a **DEFAULT** value is defined, the **DEFAULT** value is stored.
+Constraints defined on an **INVISIBLE** column, such as **PRIMARY KEY**, **FOREIGN KEY**, **UNIQUE**, and **NOT NULL**, work normally, just as they do on an ordinary column. For example, if no value is given for an **INVISIBLE** column with a **NOT NULL** constraint, the **INSERT** is rejected; if a **DEFAULT** value is defined, the **DEFAULT** value is stored.
+
+The following example defines a **PRIMARY KEY** and a **FOREIGN KEY** on **INVISIBLE** columns. Violating a constraint raises an error, just as it does on an ordinary column.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_pk_tbl (
+        id   INT PRIMARY KEY INVISIBLE,
+        name VARCHAR(20)
+    );
+    INSERT INTO inv_pk_tbl (id, name) VALUES (1, 'aaa');
+
+    -- an error occurs because of the duplicate primary key value.
+    INSERT INTO inv_pk_tbl (id, name) VALUES (1, 'bbb');
+
+::
+
+    ERROR: Operation would have caused one or more unique constraint violations.
+
+.. code-block:: sql
+
+    -- omitting the INVISIBLE primary key column raises an error due to the NOT NULL constraint.
+    INSERT INTO inv_pk_tbl (name) VALUES ('ccc');
+
+::
+
+    ERROR: Missing value for attribute "id" with the NOT NULL constraint.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_fk_tbl (
+        ref_id INT INVISIBLE,
+        memo   VARCHAR(20),
+        CONSTRAINT fk_ref_id FOREIGN KEY (ref_id) REFERENCES inv_pk_tbl (id)
+    );
+    INSERT INTO inv_fk_tbl (ref_id, memo) VALUES (1, 'ok');
+
+    -- an error occurs because the referenced primary key value does not exist.
+    INSERT INTO inv_fk_tbl (ref_id, memo) VALUES (99, 'no parent');
+
+::
+
+    ERROR: The constraint of the foreign key 'fk_ref_id' is invalid, due to value '99'.
 
 Whether a column is **INVISIBLE** can be checked with the CSQL **;schema** and **DESC** commands, the **SHOW CREATE TABLE** statement, or the system catalog :ref:`db_attribute <db-attribute>` (or :ref:`_db_attribute <-db-attribute>`).
 
@@ -1621,6 +1663,24 @@ The **CHANGE** clause changes column name, type, size, and attribute. If the exi
 The **MODIFY** clause can modify type, size, and attribute of a column but cannot change its name.
 
 If you set the type, size, and attribute to apply to a new column with the **CHANGE** clause or the **MODIFY** clause, the attribute that is currently defined will not be passed to the attribute of the new column.
+
+In the <*column_definition*> of the **CHANGE** or **MODIFY** clause, you can specify column constraints such as **NOT NULL** and **UNIQUE**, as well as **VISIBLE**/**INVISIBLE** (see :ref:`invisible-column`), together with the type and size. The specified constraints are applied to an **INVISIBLE** column in the same way as to an ordinary column.
+
+The following example specifies a **UNIQUE** constraint and **INVISIBLE** together on a column with the **MODIFY** clause. After the change, violating the constraint raises an error.
+
+.. code-block:: sql
+
+    CREATE TABLE t_mod (id INT PRIMARY KEY, code VARCHAR(20));
+
+    -- specify the UNIQUE constraint and INVISIBLE together on the code column.
+    ALTER TABLE t_mod MODIFY code VARCHAR(20) UNIQUE INVISIBLE;
+
+    INSERT INTO t_mod (id, code) VALUES (1, 'A');
+    INSERT INTO t_mod (id, code) VALUES (2, 'A');
+
+::
+
+    ERROR: Operation would have caused one or more unique constraint violations.
 
 When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated if the value of configuration parameter alter_table_change_type_strict is set to **no**. But if the parameter value is set to **yes**, the change or modify is not allowed and it returns an error.
 the configuration parameter allow_truncated_string also affect the similar as alter_table_change_type_strict.

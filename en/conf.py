@@ -36,7 +36,7 @@ source_suffix = {
 master_doc = 'index'
 
 project = u'CUBRID'
-copyright = u'2016, CUBRID Corparation'
+copyright = u'2016, CUBRID Corporation'
 
 version = '11.4'
 release = '11.4'
@@ -149,20 +149,20 @@ latex_elements = {
     '''
 }
 latex_documents = [
-    ('index', 'cubrid.tex', u'CUBRID Manual', u'CUBRID Corparation', 'manual'),
+    ('index', 'cubrid.tex', u'CUBRID Manual', u'CUBRID Corporation', 'manual'),
 
 ]
 latex_domain_indices = True
 
 # -- Options for manual page output --------------------------------------------
 man_pages = [
-    ('index', 'cubrid', u'CUBRID Documentation', [u'CUBRID Corparation'], 1)
+    ('index', 'cubrid', u'CUBRID Documentation', [u'CUBRID Corporation'], 1)
 ]
 
 # -- Options for Texinfo output ------------------------------------------------
 texinfo_documents = [
     ('index', 'cubrid', u'CUBRID Documentation',
-     u'CUBRID Corparation', 'cubrid', 'One line description of project.',
+     u'CUBRID Corporation', 'cubrid', 'One line description of project.',
      'Miscellaneous'),
 ]
 texinfo_domain_indices = True

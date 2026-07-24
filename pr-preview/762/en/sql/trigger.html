@@ -836,7 +836,7 @@ AFTER INSERT</p></td>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A <strong>DEFERRED</strong> trigger action is executed at commit time and, until then, accumulates in a queue. If triggers repeatedly fire each other or a single transaction piles up a large number of <strong>DEFERRED</strong> triggers in the queue, the trigger actions waiting to run can accumulate excessively and exhaust memory. Since <strong>MAXIMUM DEPTH</strong> cannot prevent this accumulation, design triggers so that the number of <strong>DEFERRED</strong> trigger actions accumulated in the queue does not become excessive.</p>
+<p>A <strong>DEFERRED</strong> trigger action accumulates as a deferred action until commit, so if triggers repeatedly fire each other or a single transaction defers a large number of <strong>DEFERRED</strong> triggers, the deferred actions can accumulate excessively and rapidly increase the CAS memory usage. If the memory usage reaches <a class="reference internal" href="../admin/config.html#appl-server-max-size-hard-limit"><span class="std std-ref">APPL_SERVER_MAX_SIZE_HARD_LIMIT</span></a>, the CAS is restarted. Because <strong>MAXIMUM DEPTH</strong> cannot prevent this accumulation, design triggers so that the number of accumulated deferred actions does not become excessive.</p>
 </div>
 </section>
 </section>

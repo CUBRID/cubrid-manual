@@ -4583,7 +4583,7 @@ The default is <strong>SEQ</strong>; a CAS tries to connect to a host in the ord
 <p>Be careful not to make the value too small because application servers may restart frequently and unexpectedly. In general, the value of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> is greater than that of <strong>APPL_SERVER_MAX_SIZE</strong>. For details, see description of <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong>.</p>
 </div>
 </div></blockquote>
-<p><strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong></p>
+<p id="appl-server-max-size-hard-limit"><strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong></p>
 <blockquote>
 <div><p><strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> is a parameter to configure the maximum size of process memory usage handled by CAS. You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB), megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, M will be applied. The default value is <strong>1,024</strong> (MB), and the maximum value is 2,097,151 (MB).</p>
 <p>Specifying this parameter makes transactions being processed forcibly terminate (rollback) and restart CAS. In contrast to this, specifying <strong>APPL_SERVER_MAX_SIZE</strong> makes transactions terminate only when it is executed by a user.</p>

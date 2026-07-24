@@ -4593,7 +4593,7 @@ Linux: 0 (최대값: 2,097,151)</p></td>
 <p>이 값을 너무 작게 설정하면 CAS가 빈번하게 재구동될 수 있으므로 주의한다. 일반적으로 <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> 의 값을 <strong>APPL_SERVER_MAX_SIZE</strong> 의 값보다 크게 설정한다. 자세한 내용은 <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> 의 설명을 참고한다.</p>
 </div>
 </div></blockquote>
-<p><strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong></p>
+<p id="appl-server-max-size-hard-limit"><strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong></p>
 <blockquote>
 <div><p><strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> 는 CAS가 처리하는 프로세스 메모리 사용량의 최대 크기를 지정하는 파라미터이다. 값 뒤에 B, K, M, G로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes를 의미한다. 단위 생략 시 M으로 지정된다. 기본값은 <strong>1,024</strong> (MB)이며, 최대값은 2,097,151 (MB)이다.</p>
 <p>이 파라미터는 진행 중인 트랜잭션이 있어도 이를 강제 종료(롤백)하고 CAS를 재구동하는 동작에 영향을 준다. <strong>APPL_SERVER_MAX_SIZE</strong> 는 <strong>APPL_SERVER_MAX_SIZE_HARD_LIMIT</strong> 와 비슷하지만, 진행 중인 트랜잭션이 있을 경우 사용자에 의해 정상 종료(커밋 혹은 롤백)되기를 기다렸다가 CAS를 재구동하는 동작에 영향을 준다는 점이 다르다.</p>

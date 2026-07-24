@@ -591,7 +591,42 @@ AUTO_INCREMENT이 지정될 때 “(seed, increment)”와 “AUTO_INCREMENT = i
 <li><p><strong>DBLINK</strong> 로 원격 테이블을 조회하는 경우 <strong>INVISIBLE</strong> 칼럼이 정상적으로 동작하지 않으므로, <strong>DBLINK</strong> 대상 테이블에는 <strong>INVISIBLE</strong> 칼럼을 설정하지 않을 것을 권장한다.</p></li>
 </ul>
 </div>
-<p><strong>INVISIBLE</strong> 칼럼에 정의된 제약 조건은 정상적으로 동작한다. 예를 들어 <strong>NOT NULL</strong> 제약 조건이 정의된 <strong>INVISIBLE</strong> 칼럼에 값을 입력하지 않으면 <strong>INSERT</strong> 가 거부되며, <strong>DEFAULT</strong> 값이 정의되어 있으면 <strong>DEFAULT</strong> 값이 저장된다.</p>
+<p><strong>PRIMARY KEY</strong>, <strong>FOREIGN KEY</strong>, <strong>UNIQUE</strong>, <strong>NOT NULL</strong> 등 <strong>INVISIBLE</strong> 칼럼에 정의된 제약 조건은 일반 칼럼과 동일하게 정상적으로 동작한다. 예를 들어 <strong>NOT NULL</strong> 제약 조건이 정의된 <strong>INVISIBLE</strong> 칼럼에 값을 입력하지 않으면 <strong>INSERT</strong> 가 거부되며, <strong>DEFAULT</strong> 값이 정의되어 있으면 <strong>DEFAULT</strong> 값이 저장된다.</p>
+<p>다음은 <strong>INVISIBLE</strong> 칼럼에 <strong>PRIMARY KEY</strong> 와 <strong>FOREIGN KEY</strong> 를 정의하는 예제이다. 제약 조건을 위반하면 일반 칼럼과 동일하게 에러가 발생한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">inv_pk_tbl</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">id</span><span class="w">   </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">INVISIBLE</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</span><span id="line-4"><span class="p">);</span>
+</span><span id="line-5"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">inv_pk_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'aaa'</span><span class="p">);</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="c1">-- 기본키 중복으로 에러가 발생한다.</span>
+</span><span id="line-8"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">inv_pk_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'bbb'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Operation</span> <span class="n">would</span> <span class="n">have</span> <span class="n">caused</span> <span class="n">one</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">unique</span> <span class="n">constraint</span> <span class="n">violations</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 기본키인 INVISIBLE 칼럼을 생략하면 NOT NULL 제약 조건으로 에러가 발생한다.</span>
+</span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">inv_pk_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'ccc'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Missing</span> <span class="n">value</span> <span class="k">for</span> <span class="n">attribute</span> <span class="s2">"id"</span> <span class="k">with</span> <span class="n">the</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">constraint</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">inv_fk_tbl</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">ref_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">INVISIBLE</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">memo</span><span class="w">   </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_ref_id</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">ref_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">inv_pk_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</span><span id="line-5"><span class="p">);</span>
+</span><span id="line-6"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">inv_fk_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">ref_id</span><span class="p">,</span><span class="w"> </span><span class="n">memo</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'ok'</span><span class="p">);</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="c1">-- 참조하는 기본키 값이 존재하지 않으므로 에러가 발생한다.</span>
+</span><span id="line-9"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">inv_fk_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">ref_id</span><span class="p">,</span><span class="w"> </span><span class="n">memo</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">99</span><span class="p">,</span><span class="w"> </span><span class="s1">'no parent'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">The</span> <span class="n">constraint</span> <span class="n">of</span> <span class="n">the</span> <span class="n">foreign</span> <span class="n">key</span> <span class="s1">'fk_ref_id'</span> <span class="ow">is</span> <span class="n">invalid</span><span class="p">,</span> <span class="n">due</span> <span class="n">to</span> <span class="n">value</span> <span class="s1">'99'</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
 <p>칼럼의 <strong>INVISIBLE</strong> 여부는 CSQL의 <strong>;schema</strong> 및 <strong>DESC</strong> 명령어, <strong>SHOW CREATE TABLE</strong> 구문, 시스템 카탈로그 <a class="reference internal" href="../catalog.html#id34"><span class="std std-ref">db_attribute</span></a> (또는 <a class="reference internal" href="../catalog.html#db-attribute"><span class="std std-ref">_db_attribute</span></a>)를 통해 확인할 수 있다.</p>
 <p>다음은 <strong>INVISIBLE</strong> 칼럼을 포함하는 테이블을 생성하고 조회하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">inv_tbl</span><span class="w"> </span><span class="p">(</span>
@@ -1625,6 +1660,20 @@ AUTO_INCREMENT이 지정될 때 “(seed, increment)”와 “AUTO_INCREMENT = i
 <p><strong>CHANGE</strong> 절은 칼럼의 이름, 타입, 크기 및 속성을 변경한다. 기존 칼럼의 이름과 새 칼럼의 이름이 같으면 타입, 크기 및 속성만 변경한다.</p>
 <p><strong>MODIFY</strong> 절은 칼럼의 타입, 크기 및 속성을 변경할 수 있으며, 칼럼의 이름은 변경할 수 없다.</p>
 <p><strong>CHANGE</strong> 절이나 <strong>MODIFY</strong> 절로 새 칼럼에 적용할 타입, 크기 및 속성을 설정할 때 기존에 정의된 속성은 새 칼럼의 속성에 전달되지 않는다.</p>
+<p><strong>CHANGE</strong> 절이나 <strong>MODIFY</strong> 절의 &lt;<em>column_definition</em>&gt;에는 타입과 크기 외에 <strong>NOT NULL</strong>, <strong>UNIQUE</strong> 등의 칼럼 제약 조건과 <strong>VISIBLE</strong>/<strong>INVISIBLE</strong>(<a class="reference internal" href="#invisible-column"><span class="std std-ref">INVISIBLE 칼럼</span></a> 참고)을 함께 지정할 수 있다. 지정한 제약 조건은 <strong>INVISIBLE</strong> 칼럼에도 일반 칼럼과 동일하게 적용된다.</p>
+<p>다음은 <strong>MODIFY</strong> 절로 칼럼에 <strong>UNIQUE</strong> 제약 조건과 <strong>INVISIBLE</strong> 을 함께 지정하는 예제이다. 변경 이후 제약 조건을 위반하면 에러가 발생한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t_mod</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">-- code 칼럼에 UNIQUE 제약 조건과 INVISIBLE 을 함께 지정한다.</span>
+</span><span id="line-4"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t_mod</span><span class="w"> </span><span class="k">MODIFY</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="n">INVISIBLE</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t_mod</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'A'</span><span class="p">);</span>
+</span><span id="line-7"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t_mod</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'A'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Operation</span> <span class="n">would</span> <span class="n">have</span> <span class="n">caused</span> <span class="n">one</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">unique</span> <span class="n">constraint</span> <span class="n">violations</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
 <p><strong>CHANGE</strong> 절이나 <strong>MODIFY</strong> 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다. 단, <strong>alter_table_change_type_strict</strong> 설정 값이 <strong>yes</strong> 인 경우 에러가 발생한다. 마찬가지로 <strong>allow_truncated_string</strong> 설정 값이 <strong>no</strong> 인 경우에도 에러가 발생한다.</p>
 <p>AUTO_INCREMENT 속성의 컬럼 타입을 변경할 경우, AUTO_INCREMENT 속성으로 사용할 수 없는 타입으로 변경할 수 없다. 예를 들면 아래와 같이 ALTER 구문으로 AUTO_INCREMENT 속성 컬럼인 a를 int에서 varchar 타입으로 변경시 에러가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="n">a_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">);</span>
@@ -1668,7 +1717,7 @@ AUTO_INCREMENT이 지정될 때 “(seed, increment)”와 “AUTO_INCREMENT = i
 <li><p><em>tbl_name</em>: 변경할 칼럼이 속한 테이블의 이름을 지정한다.</p></li>
 <li><p><em>old_col_name</em>: 기존 칼럼의 이름을 지정한다.</p></li>
 <li><p><em>new_col_name</em>: 변경할 칼럼의 이름을 지정한다.</p></li>
-<li><p>&lt;<em>column_definition</em>&gt;: 변경할 칼럼의 타입, 크기 및 속성, 커멘트를 지정한다.</p></li>
+<li><p>&lt;<em>column_definition</em>&gt;: 변경할 칼럼의 타입, 크기, 속성, 제약 조건 및 커멘트를 지정한다.</p></li>
 <li><p><em>col_name</em>: 변경할 칼럼이 어느 칼럼 뒤에 위치할지를 지정한다.</p></li>
 <li><p><strong>SKIP_UPDATE_NULL</strong>: 이 힌트가 추가되면 NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. <a class="reference internal" href="#skip-update-null"><span class="std std-ref">SKIP_UPDATE_NULL</span></a> 을 참고한다.</p></li>
 </ul>
@@ -2267,7 +2316,7 @@ AUTO_INCREMENT이 지정될 때 “(seed, increment)”와 “AUTO_INCREMENT = i
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 7월 23, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corporation Last updated: 7월 24, 2026. </p>
 </div>
 </div>
 </footer>

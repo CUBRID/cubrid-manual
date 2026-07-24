@@ -468,7 +468,49 @@ INVISIBLE 칼럼
     *   칼럼의 **INVISIBLE** 속성과 인덱스의 **INVISIBLE** 속성(:ref:`alter-index` 참고)은 서로 다른 개념이다.
     *   **DBLINK** 로 원격 테이블을 조회하는 경우 **INVISIBLE** 칼럼이 정상적으로 동작하지 않으므로, **DBLINK** 대상 테이블에는 **INVISIBLE** 칼럼을 설정하지 않을 것을 권장한다.
 
-**INVISIBLE** 칼럼에 정의된 제약 조건은 정상적으로 동작한다. 예를 들어 **NOT NULL** 제약 조건이 정의된 **INVISIBLE** 칼럼에 값을 입력하지 않으면 **INSERT** 가 거부되며, **DEFAULT** 값이 정의되어 있으면 **DEFAULT** 값이 저장된다.
+**PRIMARY KEY**, **FOREIGN KEY**, **UNIQUE**, **NOT NULL** 등 **INVISIBLE** 칼럼에 정의된 제약 조건은 일반 칼럼과 동일하게 정상적으로 동작한다. 예를 들어 **NOT NULL** 제약 조건이 정의된 **INVISIBLE** 칼럼에 값을 입력하지 않으면 **INSERT** 가 거부되며, **DEFAULT** 값이 정의되어 있으면 **DEFAULT** 값이 저장된다.
+
+다음은 **INVISIBLE** 칼럼에 **PRIMARY KEY** 와 **FOREIGN KEY** 를 정의하는 예제이다. 제약 조건을 위반하면 일반 칼럼과 동일하게 에러가 발생한다.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_pk_tbl (
+        id   INT PRIMARY KEY INVISIBLE,
+        name VARCHAR(20)
+    );
+    INSERT INTO inv_pk_tbl (id, name) VALUES (1, 'aaa');
+
+    -- 기본키 중복으로 에러가 발생한다.
+    INSERT INTO inv_pk_tbl (id, name) VALUES (1, 'bbb');
+
+::
+
+    ERROR: Operation would have caused one or more unique constraint violations.
+
+.. code-block:: sql
+
+    -- 기본키인 INVISIBLE 칼럼을 생략하면 NOT NULL 제약 조건으로 에러가 발생한다.
+    INSERT INTO inv_pk_tbl (name) VALUES ('ccc');
+
+::
+
+    ERROR: Missing value for attribute "id" with the NOT NULL constraint.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_fk_tbl (
+        ref_id INT INVISIBLE,
+        memo   VARCHAR(20),
+        CONSTRAINT fk_ref_id FOREIGN KEY (ref_id) REFERENCES inv_pk_tbl (id)
+    );
+    INSERT INTO inv_fk_tbl (ref_id, memo) VALUES (1, 'ok');
+
+    -- 참조하는 기본키 값이 존재하지 않으므로 에러가 발생한다.
+    INSERT INTO inv_fk_tbl (ref_id, memo) VALUES (99, 'no parent');
+
+::
+
+    ERROR: The constraint of the foreign key 'fk_ref_id' is invalid, due to value '99'.
 
 칼럼의 **INVISIBLE** 여부는 CSQL의 **;schema** 및 **DESC** 명령어, **SHOW CREATE TABLE** 구문, 시스템 카탈로그 :ref:`db_attribute <db-attribute>` (또는 :ref:`_db_attribute <-db-attribute>`)를 통해 확인할 수 있다.
 
@@ -1614,6 +1656,24 @@ CHANGE/MODIFY 절
 
 **CHANGE** 절이나 **MODIFY** 절로 새 칼럼에 적용할 타입, 크기 및 속성을 설정할 때 기존에 정의된 속성은 새 칼럼의 속성에 전달되지 않는다.
 
+**CHANGE** 절이나 **MODIFY** 절의 <*column_definition*>\에는 타입과 크기 외에 **NOT NULL**, **UNIQUE** 등의 칼럼 제약 조건과 **VISIBLE**/**INVISIBLE**\ (:ref:`invisible-column` 참고)을 함께 지정할 수 있다. 지정한 제약 조건은 **INVISIBLE** 칼럼에도 일반 칼럼과 동일하게 적용된다.
+
+다음은 **MODIFY** 절로 칼럼에 **UNIQUE** 제약 조건과 **INVISIBLE** 을 함께 지정하는 예제이다. 변경 이후 제약 조건을 위반하면 에러가 발생한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_mod (id INT PRIMARY KEY, code VARCHAR(20));
+
+    -- code 칼럼에 UNIQUE 제약 조건과 INVISIBLE 을 함께 지정한다.
+    ALTER TABLE t_mod MODIFY code VARCHAR(20) UNIQUE INVISIBLE;
+
+    INSERT INTO t_mod (id, code) VALUES (1, 'A');
+    INSERT INTO t_mod (id, code) VALUES (2, 'A');
+
+::
+
+    ERROR: Operation would have caused one or more unique constraint violations.
+
 **CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다. 단, **alter_table_change_type_strict** 설정 값이 **yes** 인 경우 에러가 발생한다. 마찬가지로 **allow_truncated_string** 설정 값이 **no** 인 경우에도 에러가 발생한다.
 
 AUTO_INCREMENT 속성의 컬럼 타입을 변경할 경우, AUTO_INCREMENT 속성으로 사용할 수 없는 타입으로 변경할 수 없다. 예를 들면 아래와 같이 ALTER 구문으로 AUTO_INCREMENT 속성 컬럼인 a를 int에서 varchar 타입으로 변경시 에러가 발생한다.
@@ -1662,7 +1722,7 @@ default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값�
 *   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name*: 기존 칼럼의 이름을 지정한다.
 *   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
-*   <*column_definition*>: 변경할 칼럼의 타입, 크기 및 속성, 커멘트를 지정한다.
+*   <*column_definition*>: 변경할 칼럼의 타입, 크기, 속성, 제약 조건 및 커멘트를 지정한다.
 *   *col_name*: 변경할 칼럼이 어느 칼럼 뒤에 위치할지를 지정한다.
 *   **SKIP_UPDATE_NULL**: 이 힌트가 추가되면 NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. :ref:`SKIP_UPDATE_NULL <skip-update-null>` 을 참고한다.
 

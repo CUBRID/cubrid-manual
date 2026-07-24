@@ -835,7 +835,7 @@ AFTER INSERT</p></td>
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p><strong>DEFERRED</strong> 트리거는 실행 영역이 커밋 시점까지 지연된 활동으로 누적되므로, 트리거가 서로를 반복해서 발동시키거나 한 트랜잭션에서 많은 수의 <strong>DEFERRED</strong> 트리거가 지연되면 지연된 활동이 과도하게 누적되어 CAS의 메모리 사용량이 급격히 증가할 수 있다. 이 경우 메모리 사용량이 <a class="reference internal" href="../admin/config.html#appl-server-max-size-hard-limit"><span class="std std-ref">APPL_SERVER_MAX_SIZE_HARD_LIMIT</span></a> 에 도달하면 CAS가 재구동된다. <strong>MAXIMUM DEPTH</strong> 로는 이러한 누적을 막을 수 없으므로, 누적되는 지연된 활동의 수가 과도해지지 않도록 트리거를 설계해야 한다.</p>
+<p><strong>DEFERRED</strong> 트리거의 동작은 커밋 시점까지 지연된 활동으로 누적되므로, 트리거가 서로를 반복해서 발동시키거나 한 트랜잭션에서 많은 수의 <strong>DEFERRED</strong> 트리거가 지연되면 지연된 활동이 과도하게 누적되어 CAS의 메모리 사용량이 급격히 증가할 수 있다. 이 경우 메모리 사용량이 <a class="reference internal" href="../admin/config.html#appl-server-max-size-hard-limit"><span class="std std-ref">APPL_SERVER_MAX_SIZE_HARD_LIMIT</span></a> 에 도달하면 CAS가 재구동된다. <strong>MAXIMUM DEPTH</strong> 로는 이러한 누적을 막을 수 없으므로, 누적되는 지연된 활동의 수가 과도해지지 않도록 트리거를 설계해야 한다.</p>
 </div>
 </section>
 </section>

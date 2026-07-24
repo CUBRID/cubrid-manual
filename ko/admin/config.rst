@@ -2885,6 +2885,8 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
     
            이 값을 너무 작게 설정하면 CAS가 빈번하게 재구동될 수 있으므로 주의한다. 일반적으로 **APPL_SERVER_MAX_SIZE_HARD_LIMIT** 의 값을 **APPL_SERVER_MAX_SIZE** 의 값보다 크게 설정한다. 자세한 내용은 **APPL_SERVER_MAX_SIZE_HARD_LIMIT** 의 설명을 참고한다.
 
+.. _appl_server_max_size_hard_limit:
+
 **APPL_SERVER_MAX_SIZE_HARD_LIMIT**
  
     **APPL_SERVER_MAX_SIZE_HARD_LIMIT** 는 CAS가 처리하는 프로세스 메모리 사용량의 최대 크기를 지정하는 파라미터이다. 값 뒤에 B, K, M, G로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes를 의미한다. 단위 생략 시 M으로 지정된다. 기본값은 **1,024** (MB)이며, 최대값은 2,097,151 (MB)이다. 

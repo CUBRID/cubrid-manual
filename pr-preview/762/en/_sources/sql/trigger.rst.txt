@@ -622,7 +622,7 @@ The following example shows how to configure the maximum number of times of recu
 
 .. note::
 
-    A **DEFERRED** trigger action accumulates as a deferred action until commit, so if triggers repeatedly fire each other or a single transaction defers a large number of **DEFERRED** triggers, the deferred actions can accumulate excessively and rapidly increase the CAS memory usage. If the memory usage reaches :ref:`APPL_SERVER_MAX_SIZE_HARD_LIMIT <appl_server_max_size_hard_limit>`, the CAS is restarted. Because **MAXIMUM DEPTH** cannot prevent this accumulation, design triggers so that the number of accumulated deferred actions does not become excessive.
+    A **DEFERRED** trigger action accumulates as a deferred action until the end of the transaction, so if triggers repeatedly fire each other or a single transaction defers a large number of **DEFERRED** triggers, the deferred actions can accumulate excessively and rapidly increase the CAS memory usage. If the memory usage reaches :ref:`APPL_SERVER_MAX_SIZE_HARD_LIMIT <appl_server_max_size_hard_limit>`, the CAS is restarted. Because **MAXIMUM DEPTH** cannot prevent this accumulation, design triggers so that the number of accumulated deferred actions does not become excessive.
 
 Trigger Example
 ===============

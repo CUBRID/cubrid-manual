@@ -836,7 +836,7 @@ AFTER INSERT</p></td>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A <strong>DEFERRED</strong> trigger action accumulates as a deferred action until commit, so if triggers repeatedly fire each other or a single transaction defers a large number of <strong>DEFERRED</strong> triggers, the deferred actions can accumulate excessively and rapidly increase the CAS memory usage. If the memory usage reaches <a class="reference internal" href="../admin/config.html#appl-server-max-size-hard-limit"><span class="std std-ref">APPL_SERVER_MAX_SIZE_HARD_LIMIT</span></a>, the CAS is restarted. Because <strong>MAXIMUM DEPTH</strong> cannot prevent this accumulation, design triggers so that the number of accumulated deferred actions does not become excessive.</p>
+<p>A <strong>DEFERRED</strong> trigger action accumulates as a deferred action until the end of the transaction, so if triggers repeatedly fire each other or a single transaction defers a large number of <strong>DEFERRED</strong> triggers, the deferred actions can accumulate excessively and rapidly increase the CAS memory usage. If the memory usage reaches <a class="reference internal" href="../admin/config.html#appl-server-max-size-hard-limit"><span class="std std-ref">APPL_SERVER_MAX_SIZE_HARD_LIMIT</span></a>, the CAS is restarted. Because <strong>MAXIMUM DEPTH</strong> cannot prevent this accumulation, design triggers so that the number of accumulated deferred actions does not become excessive.</p>
 </div>
 </section>
 </section>
@@ -960,7 +960,7 @@ AFTER INSERT</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jul 24, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Jul 27, 2026. </p>
 </div>
 </div>
 </footer>

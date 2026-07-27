@@ -92,7 +92,7 @@ UUID_FORMAT
 
         uuid_format(sys_guid())
         ========================================
-        '93821004-3a7b-4455-927a-8697fb2571ff'
+        '93821004-3A7B-4455-927A-8697FB2571FF'
 
     Because the :func:`UUID` function returns a **BIT** value, you can wrap it with **UUID_FORMAT** to convert it into a hyphenated string, as shown below.
 
@@ -104,4 +104,4 @@ UUID_FORMAT
 
         uuid_format(uuid())
         ========================================
-        '8f2a1c4b-5d6e-47f8-a9b0-c1d2e3f4a5b6'
+        '8F2A1C4B-5D6E-47F8-A9B0-C1D2E3F4A5B6'

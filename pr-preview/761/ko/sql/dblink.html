@@ -768,9 +768,10 @@ TNS_ADMIN설정 방법은 <a class="reference internal" href="#tns-admin-info"><
 <h3>공통 제약 사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id18" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id18'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <ul>
 <li><p>원격 DB의 문자셋(charset)은 유니코드(utf-8) 문자셋만 지원한다.</p></li>
-<li><p>원격 DB 문자열 컬럼의 콜레이션(collation)은 바이너리(binary) 콜레이션으로 가정한다.
+<li><p>원격 DB 문자열 컬럼의 콜레이션(collation)은 바이너리(binary) 콜레이션(예: utf8_bin)으로 가정한다.
 대소문자/액센트 비구분(case/accent-insensitive) 등 비-바이너리 콜레이션을 사용하는
-원격 문자열 컬럼은 질의에 따라 결과가 달라질 수 있으므로 지원하지 않는다.</p></li>
+원격 DB 문자열 컬럼에 대해서는 질의에 따라 결과가 달라질 수 있으므로 올바른 동작을
+보장하지 않는다(미지원).</p></li>
 <li><dl>
 <dt>테이블 확장 형식 (<a class="reference external" href="mailto:object%40server">object<span>@</span>server</a>) 지원</dt><dd><ul>
 <li><p>테이블, 뷰, 동의어만 지원</p></li>
@@ -1115,7 +1116,7 @@ TNS_ADMIN설정 방법은 <a class="reference internal" href="#tns-admin-info"><
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 7월 23, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 7월 28, 2026. </p>
 </div>
 </div>
 </footer>

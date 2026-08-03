@@ -1910,9 +1910,9 @@ SHOW PAGE BUFFER STATUS
 =========================== =============== ===============================================================
 칼럼 이름                   타입            설명
 =========================== =============== ===============================================================
-Hit_rate                    NUMERIC(13,10)  데이터 버퍼의 페이지 적중률 (이전 출력 이후)
-Num_hit                     BIGINT          데이터 버퍼의 페이지 적중 수 (이전 출력 이후)
-Num_page_request            BIGINT          데이터 버퍼에 페이지 요청 수 (이전 출력 이후)
+Hit_rate                    NUMERIC(13,10)  데이터 버퍼의 페이지 적중률 (deprecated, 항상 0)
+Num_hit                     BIGINT          데이터 버퍼의 페이지 적중 수 (deprecated, 항상 0)
+Num_page_request            BIGINT          데이터 버퍼에 페이지 요청 수 (deprecated, 항상 0)
 Pool_size                   INT             데이터 버퍼의 전체 페이지 수
 Page_size                   INT             데이터 버퍼의 단일 페이지 크기
 Free_pages                  INT             데이터 버퍼의 여유 페이지 수
@@ -1923,13 +1923,26 @@ Num_index_pages             INT             데이터 버퍼의 인덱스 페이
 Num_data_pages              INT             데이터 버퍼의 데이터 페이지 수
 Num_system_pages            INT             데이터 버퍼의 시스템 페이지 수
 Num_temp_pages              INT             데이터 버퍼의 임시 페이지 수
-Num_pages_created           BIGINT          데이터 버퍼에서 새롭게 생성된 페이지 수 (이전 출력 이후)
-Num_pages_written           BIGINT          데이터 버퍼에서 디스크로 쓰여진 페이지 수 (이전 출력 이후)
-Pages_written_rate          NUMERIC(20,10)  데이터 버퍼에서 디스크로 초당 쓰여진 페이지 수 (이전 출력 이후)
-Num_pages_read              BIGINT          데이터 버퍼로 디스크에서 읽은 페이지 수 (이전 출력 이후)
-Pages_read_rate             NUMERIC(20,10)  데이터 버퍼로 디스크에서 초당 읽은 페이지 수 (이전 출력 이후)
-Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당을 대기하는 쓰레드 수
+Num_pages_created           BIGINT          데이터 버퍼에서 새롭게 생성된 페이지 수 (deprecated, 항상 0)
+Num_pages_written           BIGINT          데이터 버퍼에서 디스크로 쓰여진 페이지 수 (deprecated, 항상 0)
+Pages_written_rate          NUMERIC(20,10)  데이터 버퍼에서 디스크로 초당 쓰여진 페이지 수 (deprecated, 항상 0)
+Num_pages_read              BIGINT          데이터 버퍼로 디스크에서 읽은 페이지 수 (deprecated, 항상 0)
+Pages_read_rate             NUMERIC(20,10)  데이터 버퍼로 디스크에서 초당 읽은 페이지 수 (deprecated, 항상 0)
+Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당을 대기하는 쓰레드 수 (deprecated, 항상 0)
 =========================== =============== ===============================================================
+
+.. note::
+
+    **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate**, **Num_flusher_waiting_threads** 칼럼은 11.5 버전부터 deprecated 되어 항상 0을 반환한다. 이 칼럼들을 계산하기 위한 카운터가 데이터 페이지 버퍼의 성능에 영향을 주어 제거되었다.
+
+    동등한 통계 정보는 **cubrid statdump** 로 확인한다. 각 항목에 대한 자세한 설명은 :ref:`statdump`\ 을 참고한다.
+
+    *   **Hit_rate**: **Data_page_buffer_hit_ratio**
+    *   **Num_page_request**: **Num_data_page_fetches**
+    *   **Num_pages_read**: **Num_data_page_ioreads**
+    *   **Num_pages_written**: **Num_data_page_iowrites**
+
+    나머지 칼럼(**Pool_size**, **Page_size**, **Free_pages**, **Victim_candidate_pages**, **Clean_pages**, **Dirty_pages**, **Num_index_pages**, **Num_data_pages**, **Num_system_pages**, **Num_temp_pages**)은 데이터 버퍼의 페이지 구성 정보로, 계속 정상 값을 출력한다.
 
 다음은 이 구문을 수행한 예이다.
 

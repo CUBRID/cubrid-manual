@@ -1892,9 +1892,9 @@ This query has the following columns:
 =========================== =============== ================================================================================
 Column name                 Type            Description
 =========================== =============== ================================================================================
-Hit_rate                    NUMERIC(13,10)  The buffer pool hit rate (since the last printout)
-Num_hit                     BIGINT          The number of buffer hits (since the last printout)
-Num_page_request            BIGINT          The number of page requests (since the last printout)
+Hit_rate                    NUMERIC(13,10)  The buffer pool hit rate (deprecated, always 0)
+Num_hit                     BIGINT          The number of buffer hits (deprecated, always 0)
+Num_page_request            BIGINT          The number of page requests (deprecated, always 0)
 Pool_size                   INT             Buffer pool size in pages
 Page_size                   INT             Data page size
 Free_pages                  INT             The number of free pages in the buffer pool
@@ -1905,13 +1905,26 @@ Num_index_pages             INT             The number of index pages in the buf
 Num_data_pages              INT             The number of data pages in the buffer pool
 Num_system_pages            INT             The number of system pages in the buffer pool
 Num_temp_pages              INT             The number of temp pages in the buffer pool
-Num_pages_created           BIGINT          The number of pages created in the buffer pool (since the last printout)
-Num_pages_written           BIGINT          The number of pages written to disk in the buffer pool (since the last printout)
-Pages_written_rate          NUMERIC(20,10)  The number of pages written per second (since the last printout)
-Num_pages_read              BIGINT          The number of pages read from disk in the buffer pool (since the last printout)
-Pages_read_rate             NUMERIC(20,10)  The number of pages read per second (since the last printout)
-Num_flusher_waiting_threads INT             The number of waiting threads for flusher
+Num_pages_created           BIGINT          The number of pages created in the buffer pool (deprecated, always 0)
+Num_pages_written           BIGINT          The number of pages written to disk in the buffer pool (deprecated, always 0)
+Pages_written_rate          NUMERIC(20,10)  The number of pages written per second (deprecated, always 0)
+Num_pages_read              BIGINT          The number of pages read from disk in the buffer pool (deprecated, always 0)
+Pages_read_rate             NUMERIC(20,10)  The number of pages read per second (deprecated, always 0)
+Num_flusher_waiting_threads INT             The number of waiting threads for flusher (deprecated, always 0)
 =========================== =============== ================================================================================
+
+.. note::
+
+    The **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate** and **Num_flusher_waiting_threads** columns are deprecated as of version 11.5 and always return 0. The counters that these columns were computed from affected the performance of the data page buffer, so they have been removed.
+
+    Use **cubrid statdump** to get the equivalent statistics. For details on each item, see :ref:`statdump`.
+
+    *   **Hit_rate**: **Data_page_buffer_hit_ratio**
+    *   **Num_page_request**: **Num_data_page_fetches**
+    *   **Num_pages_read**: **Num_data_page_ioreads**
+    *   **Num_pages_written**: **Num_data_page_iowrites**
+
+    The remaining columns (**Pool_size**, **Page_size**, **Free_pages**, **Victim_candidate_pages**, **Clean_pages**, **Dirty_pages**, **Num_index_pages**, **Num_data_pages**, **Num_system_pages**, **Num_temp_pages**) describe the page composition of the buffer pool and still report their real values.
 
 The following shows the examples of this syntax.
 

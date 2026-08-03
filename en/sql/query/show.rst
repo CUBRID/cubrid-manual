@@ -1915,16 +1915,18 @@ Num_flusher_waiting_threads INT             The number of waiting threads for fl
 
 .. note::
 
-    The **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate** and **Num_flusher_waiting_threads** columns are deprecated as of version 11.5 and always return 0. The counters that these columns were computed from affected the performance of the data page buffer, so they have been removed.
+    The **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate** and **Num_flusher_waiting_threads** columns are deprecated as of version 11.5 and always return 0.
 
-    Use **cubrid statdump** to get the equivalent statistics. For details on each item, see :ref:`statdump`.
+    Four of them can be replaced with a statistic of **cubrid statdump**. For details on each item, see :ref:`statdump`.
 
     *   **Hit_rate**: **Data_page_buffer_hit_ratio**
     *   **Num_page_request**: **Num_data_page_fetches**
     *   **Num_pages_read**: **Num_data_page_ioreads**
     *   **Num_pages_written**: **Num_data_page_iowrites**
 
-    The remaining columns (**Pool_size**, **Page_size**, **Free_pages**, **Victim_candidate_pages**, **Clean_pages**, **Dirty_pages**, **Num_index_pages**, **Num_data_pages**, **Num_system_pages**, **Num_temp_pages**) describe the page composition of the buffer pool and still report their real values.
+    The other five columns have no counterpart in **cubrid statdump**. **Num_hit** can be obtained indirectly by subtracting **Num_data_page_ioreads** from **Num_data_page_fetches**, and **Pages_written_rate** and **Pages_read_rate** by dividing the values printed by **cubrid statdump -i** *SECOND* by that interval. **Num_pages_created** and **Num_flusher_waiting_threads** have no replacement statistic.
+
+    The columns that are not deprecated (**Pool_size**, **Page_size**, **Free_pages**, **Victim_candidate_pages**, **Clean_pages**, **Dirty_pages**, **Num_index_pages**, **Num_data_pages**, **Num_system_pages**, **Num_temp_pages**) describe the page composition of the buffer pool and still report their real values.
 
 The following shows the examples of this syntax.
 

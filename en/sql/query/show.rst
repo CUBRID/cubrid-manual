@@ -1915,16 +1915,18 @@ Num_flusher_waiting_threads INT             The number of waiting threads for fl
 
 .. note::
 
-    The **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate** and **Num_flusher_waiting_threads** columns are deprecated as of version 11.5 and always return 0.
+    The **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate** and **Num_flusher_waiting_threads** columns are deprecated as of version 11.5 and always return 0. The columns themselves are not removed, so the number of columns, their names, types and order stay the same as in the earlier versions.
 
     Four of them can be replaced with a statistic of **cubrid statdump**. For details on each item, see :ref:`statdump`.
 
-    *   **Hit_rate**: **Data_page_buffer_hit_ratio**
+    *   **Hit_rate**: **Data_page_buffer_hit_ratio** (printed with two decimal places)
     *   **Num_page_request**: **Num_data_page_fetches**
     *   **Num_pages_read**: **Num_data_page_ioreads**
     *   **Num_pages_written**: **Num_data_page_iowrites**
 
-    The other five columns have no counterpart in **cubrid statdump**. **Num_hit** can be obtained indirectly by subtracting **Num_data_page_ioreads** from **Num_data_page_fetches**, and **Pages_written_rate** and **Pages_read_rate** by dividing the values printed by **cubrid statdump -i** *SECOND* by that interval. **Num_pages_created** and **Num_flusher_waiting_threads** have no replacement statistic.
+    Note that before they were deprecated, these columns reported the increment since the previous **SHOW PAGE BUFFER STATUS**, while the **cubrid statdump** statistics are cumulative. To get the value of the same interval, run **cubrid statdump -i** *SECOND* and read its periodic output, or take the difference between two cumulative values.
+
+    The other five columns have no counterpart in **cubrid statdump**. **Num_hit** can be obtained indirectly by subtracting **Num_data_page_ioreads** from **Num_data_page_fetches**, and **Pages_written_rate** and **Pages_read_rate** from each periodic value above divided by the interval. **Num_pages_created** and **Num_flusher_waiting_threads** have no replacement statistic.
 
     The columns that are not deprecated (**Pool_size**, **Page_size**, **Free_pages**, **Victim_candidate_pages**, **Clean_pages**, **Dirty_pages**, **Num_index_pages**, **Num_data_pages**, **Num_system_pages**, **Num_temp_pages**) describe the page composition of the buffer pool and still report their real values.
 

@@ -22,7 +22,7 @@ Perl 설치 및 설정
 
 **기본 환경**
 
-*   Perl: 시스템에 적합한 버전의 Perl을 사용하는 것을 권장한다. 모든 Linux와 FreeBSD에는 Perl이 포함되어 있으며, Windows에서는 ActivePerl을 권장한다. Active Perl에 대한 자세한 내용은 https://www.activestate.com/platform/supported-languages/perl/\을 참고한다.
+*   Perl: 시스템에 적합한 버전의 Perl을 사용하는 것을 권장한다. 모든 Linux와 FreeBSD에는 Perl이 포함되어 있으며, Windows에서는 ActivePerl을 권장한다. Active Perl에 대한 자세한 내용은 https://www.activestate.com/platform/supported-languages/legacy-languages\을 참고한다.
 
 *   CUBRID: Perl 드라이버를 빌드하기 위해 CCI 드라이버가 필요하며, 이를 위해 CUBRID Engin을 설치해야 한다. https://www.cubrid.org/downloads\ 에서 필요한 버전의 CUBRID Engine을 다운로드 하여 설치하면 된다. CUBRID Engine의 설치후 CCI 드라이버는 CUBRID 기본 경로 $CUBRID/cci에서 확인할 수 있다.
 

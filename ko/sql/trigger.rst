@@ -620,6 +620,12 @@ CUBRID에서는 **REPLACE** 문과 **INSERT ... ON DUPLICATE KEY UPDATE** 문 �
 
     ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
 
+.. note::
+
+    **DEFERRED** 트리거는 호출되어도 동작이 즉시 실행되지 않고 트랜잭션이 종료될 때까지 지연된 활동으로 누적되므로, 한 트랜잭션에 누적되는 지연된 활동이 많아질수록 CAS의 메모리 사용량도 함께 증가한다. 특히 트리거가 서로를 반복해서 호출하거나 한 트랜잭션에서 많은 수의 **DEFERRED** 트리거가 호출되면 지연된 활동이 과도하게 누적될 수 있으며, 이때 CAS의 메모리 사용량이 :ref:`APPL_SERVER_MAX_SIZE_HARD_LIMIT <appl_server_max_size_hard_limit>` 에 도달하면 해당 CAS는 재구동된다.
+
+    **MAXIMUM DEPTH** 는 트리거가 중첩 호출되는 깊이만 제한하며 누적되는 지연된 활동의 총 개수는 제한하지 않으므로, 이러한 누적은 **MAXIMUM DEPTH** 로 방지할 수 없다. 따라서 트리거가 서로를 순환 호출하지 않도록 하고, 한 트랜잭션에서 대량의 행을 변경하는 작업에는 **DEFERRED** 트리거를 사용하지 않는 등 누적되는 지연된 활동의 수가 과도해지지 않도록 트리거를 설계해야 한다.
+
 트리거를 이용한 응용
 ====================
 

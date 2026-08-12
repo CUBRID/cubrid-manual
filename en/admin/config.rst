@@ -2910,6 +2910,8 @@ Broker App. Server(CAS)
 
         Be careful not to make the value too small because application servers may restart frequently and unexpectedly. In general, the value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is greater than that of **APPL_SERVER_MAX_SIZE**. For details, see description of **APPL_SERVER_MAX_SIZE_HARD_LIMIT**.
 
+.. _appl_server_max_size_hard_limit:
+
 **APPL_SERVER_MAX_SIZE_HARD_LIMIT**
 
     **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is a parameter to configure the maximum size of process memory usage handled by CAS. You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB), megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, M will be applied. The default value is **1,024** (MB), and the maximum value is 2,097,151 (MB).

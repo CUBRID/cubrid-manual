@@ -137,6 +137,19 @@ The ``columns`` view contains information about all columns of the tables and vi
 +--------------------------+---------------+------------------------------------------------------------------+
 | udt_name                 | VARCHAR(255)  | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
+| column_type              | STRING        | Data type of the column. Whereas data_type is the type name only,|
+|                          |               | column_type also contains information such as the precision or   |
+|                          |               | length                                                           |
++--------------------------+---------------+------------------------------------------------------------------+
+| column_key               | VARCHAR(3)    | How the column is indexed. 'PRI' means the column is a PRIMARY   |
+|                          |               | KEY or one of the columns in a multiple-column PRIMARY KEY, 'UNI'|
+|                          |               | means it is the first column of a UNIQUE index, and 'MUL' means  |
+|                          |               | it is the first column of an index in which duplicate values are |
+|                          |               | permitted. It is empty if the column is not indexed or is indexed|
+|                          |               | only as a secondary column in a multiple-column, nonunique index.|
+|                          |               | If more than one value applies, the order of priority is 'PRI',  |
+|                          |               | 'UNI', 'MUL'                                                     |
++--------------------------+---------------+------------------------------------------------------------------+
 | extra                    | VARCHAR(255)  | Space-separated flags (auto_increment, partition_key)            |
 +--------------------------+---------------+------------------------------------------------------------------+
 | privileges               | VARCHAR(512)  | Not supported (always NULL)                                      |
@@ -286,6 +299,15 @@ The ``key_column_usage`` view identifies all columns in the current database tha
 | position_in_unique_constraint | INTEGER      | For a foreign-key constraint, the ordinal position of the        |
 |                               |              | referenced column within its unique constraint (count starts at  |
 |                               |              | 1); otherwise NULL                                               |
++-------------------------------+--------------+------------------------------------------------------------------+
+| referenced_table_schema       | VARCHAR(32)  | Name of the schema referenced by the constraint (NULL if not a   |
+|                               |              | foreign key)                                                     |
++-------------------------------+--------------+------------------------------------------------------------------+
+| referenced_table_name         | VARCHAR(255) | Name of the table referenced by the constraint (NULL if not a    |
+|                               |              | foreign key)                                                     |
++-------------------------------+--------------+------------------------------------------------------------------+
+| referenced_column_name        | VARCHAR(255) | Name of the column referenced by the constraint (NULL if not a   |
+|                               |              | foreign key)                                                     |
 +-------------------------------+--------------+------------------------------------------------------------------+
 
 .. _information-schema-parameters:
@@ -481,6 +503,11 @@ The ``routines`` view contains all procedures and functions in the current datab
 +--------------------------+---------------+------------------------------------------------------------------+
 | Column Name              | Data Type     | Description                                                      |
 +==========================+===============+==================================================================+
+| specific_catalog         | VARCHAR(255)  | Name of the database that contains the routine (always the       |
+|                          |               | current database)                                                |
++--------------------------+---------------+------------------------------------------------------------------+
+| specific_schema          | VARCHAR(32)   | Name of the schema that contains the routine                     |
++--------------------------+---------------+------------------------------------------------------------------+
 | specific_name            | VARCHAR(255)  | Unique routine name                                              |
 +--------------------------+---------------+------------------------------------------------------------------+
 | routine_catalog          | VARCHAR(255)  | Name of the database that contains the routine (always the       |
@@ -538,6 +565,8 @@ The ``routines`` view contains all procedures and functions in the current datab
 | created                  | DATETIME      | Routine creation time                                            |
 +--------------------------+---------------+------------------------------------------------------------------+
 | last_altered             | DATETIME      | Routine modification time                                        |
++--------------------------+---------------+------------------------------------------------------------------+
+| definer                  | VARCHAR(32)   | Owner of the routine                                             |
 +--------------------------+---------------+------------------------------------------------------------------+
 
 .. note::
@@ -645,7 +674,7 @@ The ``statistics`` view contains information about the indexes on the tables in 
 +-------------------+---------------+------------------------------------------------------------------+
 | table_name        | VARCHAR(255)  | Name of the table                                                |
 +-------------------+---------------+------------------------------------------------------------------+
-| is_unique         | INTEGER       | 1 if the index is unique, otherwise 0                            |
+| non_unique        | INTEGER       | 0 if the index cannot contain duplicates, 1 if it can            |
 +-------------------+---------------+------------------------------------------------------------------+
 | index_schema      | VARCHAR(32)   | Name of the schema that contains the index                       |
 +-------------------+---------------+------------------------------------------------------------------+
@@ -676,6 +705,8 @@ The ``statistics`` view contains information about the indexes on the tables in 
 | is_visible        | VARCHAR(3)    | 'YES' if the index is visible to the optimizer, otherwise 'NO'   |
 +-------------------+---------------+------------------------------------------------------------------+
 | expression        | VARCHAR(1023) | Expression of a function-based index (NULL for a regular column) |
++-------------------+---------------+------------------------------------------------------------------+
+| filter_condition  | STRING        | Condition of the filtered index (NULL if not a filtered index)   |
 +-------------------+---------------+------------------------------------------------------------------+
 | deduplicate_level | INTEGER       | Deduplication option level of the index                          |
 +-------------------+---------------+------------------------------------------------------------------+
@@ -881,6 +912,8 @@ The ``triggers`` view contains all triggers defined in the current database on t
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_reference_new_row   | VARCHAR(3)    | Alias used to reference the new row (always NEW)                 |
 +----------------------------+---------------+------------------------------------------------------------------+
+| definer                    | VARCHAR(32)   | Owner of the trigger                                             |
++----------------------------+---------------+------------------------------------------------------------------+
 | trigger_comment            | VARCHAR(1024) | Comment to describe the trigger                                  |
 +----------------------------+---------------+------------------------------------------------------------------+
 | create_time                | DATETIME      | Trigger creation time                                            |
@@ -915,6 +948,8 @@ The ``views`` view contains all views defined in the current database. Only thos
 |                 |               | NONE if not                                                      |
 +-----------------+---------------+------------------------------------------------------------------+
 | is_updatable    | VARCHAR(3)    | Whether the view is updatable (always NULL)                      |
++-----------------+---------------+------------------------------------------------------------------+
+| definer         | VARCHAR(32)   | Owner of the view                                                |
 +-----------------+---------------+------------------------------------------------------------------+
 | view_comment    | VARCHAR(2048) | Comment to describe the view                                     |
 +-----------------+---------------+------------------------------------------------------------------+

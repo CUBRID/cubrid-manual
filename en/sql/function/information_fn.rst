@@ -156,7 +156,9 @@ DATABASE, SCHEMA
 .. function:: DATABASE()
 .. function:: SCHEMA()
 
-    The functions **DATABASE** and **SCHEMA** are used interchangeably. They return the name of currently-connected database as a **VARCHAR** type.
+    The **DATABASE** function returns the name of the currently-connected database as a **VARCHAR** type.
+
+    The **SCHEMA** function returns the name of the current schema as a **VARCHAR** type. Since version 11.2, which supports user schema, the schema name is the same as the name of the current user.
 
     :rtype: STRING
     
@@ -168,7 +170,7 @@ DATABASE, SCHEMA
 
        database()            schema()
     ============================================
-      'demodb'              'demodb'
+      'demodb'              'DBA'
 
 DBTIMEZONE
 ==========

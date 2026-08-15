@@ -157,7 +157,9 @@ DATABASE, SCHEMA
 .. function:: DATABASE()
 .. function:: SCHEMA()
 
-    **DATABASE** 함수와 **SCHEMA** 함수는 동일하며, 현재 연결된 데이터베이스 이름을 **VARCHAR** 타입의 문자열로 반환한다.
+    **DATABASE** 함수는 현재 연결된 데이터베이스 이름을 **VARCHAR** 타입의 문자열로 반환한다.
+
+    **SCHEMA** 함수는 현재 스키마 이름을 **VARCHAR** 타입의 문자열로 반환한다. 사용자 스키마를 지원하는 11.2 버전부터 스키마 이름은 현재 사용자 이름과 같다.
 
     :rtype: STRING
     
@@ -169,7 +171,7 @@ DATABASE, SCHEMA
 
        database()            schema()
     ============================================
-      'demodb'              'demodb'
+      'demodb'              'DBA'
 
 DBTIMEZONE
 ==========

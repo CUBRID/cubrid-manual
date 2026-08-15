@@ -125,27 +125,27 @@ The ``columns`` view contains information about all columns of the tables and vi
 | collation_name           | VARCHAR(32)   | Name of the collation of the column for character types (NULL    |
 |                          |               | for other data types)                                            |
 +--------------------------+---------------+------------------------------------------------------------------+
-| domain_catalog           | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| domain_catalog           | VARCHAR(255)  | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| domain_schema            | VARCHAR(32)   | Applies to a feature not available in CUBRID                     |
+| domain_schema            | VARCHAR(32)   | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| domain_name              | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| domain_name              | VARCHAR(255)  | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| udt_catalog              | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| udt_catalog              | VARCHAR(255)  | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| udt_schema               | VARCHAR(32)   | Applies to a feature not available in CUBRID                     |
+| udt_schema               | VARCHAR(32)   | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| udt_name                 | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| udt_name                 | VARCHAR(255)  | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
 | extra                    | VARCHAR(255)  | Space-separated flags (auto_increment, partition_key)            |
 +--------------------------+---------------+------------------------------------------------------------------+
-| privileges               | VARCHAR(512)  | Applies to a feature not available in CUBRID                     |
+| privileges               | VARCHAR(512)  | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
 | column_comment           | VARCHAR(2048) | Comment to describe the column                                   |
 +--------------------------+---------------+------------------------------------------------------------------+
 | is_generated             | VARCHAR(6)    | Whether the column is a generated column (always 'NEVER')        |
 +--------------------------+---------------+------------------------------------------------------------------+
-| generation_expression    | STRING        | Applies to a feature not available in CUBRID                     |
+| generation_expression    | STRING        | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
 | is_updatable             | VARCHAR(3)    | Whether the column is updatable (always 'YES')                   |
 +--------------------------+---------------+------------------------------------------------------------------+
@@ -224,13 +224,13 @@ The ``foreign_servers`` view contains all foreign servers defined in the current
 +------------------------------+---------------+------------------------------------------------------------------+
 | foreign_server_name          | VARCHAR(255)  | Name of the foreign server                                       |
 +------------------------------+---------------+------------------------------------------------------------------+
-| foreign_data_wrapper_catalog | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| foreign_data_wrapper_catalog | VARCHAR(255)  | Not supported (always NULL)                                      |
 +------------------------------+---------------+------------------------------------------------------------------+
-| foreign_data_wrapper_name    | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| foreign_data_wrapper_name    | VARCHAR(255)  | Not supported (always NULL)                                      |
 +------------------------------+---------------+------------------------------------------------------------------+
-| foreign_server_type          | STRING        | Applies to a feature not available in CUBRID                     |
+| foreign_server_type          | STRING        | Not supported (always NULL)                                      |
 +------------------------------+---------------+------------------------------------------------------------------+
-| foreign_server_version       | STRING        | Applies to a feature not available in CUBRID                     |
+| foreign_server_version       | STRING        | Not supported (always NULL)                                      |
 +------------------------------+---------------+------------------------------------------------------------------+
 | authorization_identifier     | VARCHAR(32)   | Name of the owner of the foreign server                          |
 +------------------------------+---------------+------------------------------------------------------------------+
@@ -334,7 +334,7 @@ The ``parameters`` view contains information about the parameters of all procedu
 | datetime_precision       | INTEGER       | Fractional-seconds precision of date/time types (NULL for other  |
 |                          |               | data types)                                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| dtd_identifier           | VARCHAR(1024) | Applies to a feature not available in CUBRID                     |
+| dtd_identifier           | VARCHAR(1024) | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
 | routine_type             | VARCHAR(9)    | Type of the routine (PROCEDURE, FUNCTION)                        |
 +--------------------------+---------------+------------------------------------------------------------------+
@@ -371,13 +371,13 @@ The ``partitions`` view contains all partitions of the partitioned tables in the
 | partition_description         | STRING        | For RANGE/LIST partitions, the boundary values; NULL for HASH    |
 |                               |               | partitions                                                       |
 +-------------------------------+---------------+------------------------------------------------------------------+
-| subpartition_name             | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| subpartition_name             | VARCHAR(255)  | Not supported (always NULL)                                      |
 +-------------------------------+---------------+------------------------------------------------------------------+
-| subpartition_ordinal_position | INTEGER       | Applies to a feature not available in CUBRID                     |
+| subpartition_ordinal_position | INTEGER       | Not supported (always NULL)                                      |
 +-------------------------------+---------------+------------------------------------------------------------------+
-| subpartition_method           | VARCHAR(5)    | Applies to a feature not available in CUBRID                     |
+| subpartition_method           | VARCHAR(5)    | Not supported (always NULL)                                      |
 +-------------------------------+---------------+------------------------------------------------------------------+
-| subpartition_expression       | VARCHAR(2048) | Applies to a feature not available in CUBRID                     |
+| subpartition_expression       | VARCHAR(2048) | Not supported (always NULL)                                      |
 +-------------------------------+---------------+------------------------------------------------------------------+
 | table_rows                    | BIGINT        | Estimated number of rows in the partition                        |
 +-------------------------------+---------------+------------------------------------------------------------------+
@@ -387,7 +387,7 @@ The ``partitions`` view contains all partitions of the partitioned tables in the
 +-------------------------------+---------------+------------------------------------------------------------------+
 | data_free                     | BIGINT        | Estimated free space in bytes                                    |
 +-------------------------------+---------------+------------------------------------------------------------------+
-| tablespace_name               | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| tablespace_name               | VARCHAR(255)  | Not supported (always NULL)                                      |
 +-------------------------------+---------------+------------------------------------------------------------------+
 | partition_comment             | VARCHAR(1024) | Comment to describe the partition                                |
 +-------------------------------+---------------+------------------------------------------------------------------+
@@ -511,7 +511,7 @@ The ``routines`` view contains all procedures and functions in the current datab
 | datetime_precision       | INTEGER       | Fractional-seconds precision of date/time types (NULL for other  |
 |                          |               | data types)                                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
-| dtd_identifier           | VARCHAR(255)  | Applies to a feature not available in CUBRID                     |
+| dtd_identifier           | VARCHAR(255)  | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
 | routine_body             | VARCHAR(8)    | Type of the routine body (always EXTERNAL)                       |
 +--------------------------+---------------+------------------------------------------------------------------+
@@ -528,7 +528,7 @@ The ``routines`` view contains all procedures and functions in the current datab
 | sql_data_access          | VARCHAR(17)   | SQL data access level (NO SQL, CONTAINS SQL, READS SQL DATA,     |
 |                          |               | MODIFIES SQL DATA)                                               |
 +--------------------------+---------------+------------------------------------------------------------------+
-| sql_path                 | STRING        | Applies to a feature not available in CUBRID                     |
+| sql_path                 | STRING        | Not supported (always NULL)                                      |
 +--------------------------+---------------+------------------------------------------------------------------+
 | security_type            | VARCHAR(7)    | Security context under which the routine executes (INVOKER,      |
 |                          |               | DEFINER)                                                         |
@@ -569,7 +569,7 @@ The ``schemata`` view contains all schemas in the current database. Only those s
 +-------------------------------+---------------+------------------------------------------------------------------+
 | default_character_set_name    | VARCHAR(32)   | Default character set of the database                            |
 +-------------------------------+---------------+------------------------------------------------------------------+
-| sql_path                      | STRING        | Applies to a feature not available in CUBRID                     |
+| sql_path                      | STRING        | Not supported (always NULL)                                      |
 +-------------------------------+---------------+------------------------------------------------------------------+
 | schema_comment                | VARCHAR(1024) | Comment to describe the schema                                   |
 +-------------------------------+---------------+------------------------------------------------------------------+
@@ -683,7 +683,7 @@ The ``statistics`` view contains information about the indexes on the tables in 
 +-------------------+---------------+------------------------------------------------------------------+
 | update_time       | DATETIME      | Index modification time                                          |
 +-------------------+---------------+------------------------------------------------------------------+
-| access_time       | DATETIME      | Applies to a feature not available in CUBRID                     |
+| access_time       | DATETIME      | Not supported (always NULL)                                      |
 +-------------------+---------------+------------------------------------------------------------------+
 
 .. _information-schema-synonyms:
@@ -862,7 +862,7 @@ The ``triggers`` view contains all triggers defined in the current database on t
 +----------------------------+---------------+------------------------------------------------------------------+
 | event_object_column        | VARCHAR(255)  | Target column of an UPDATE OF clause (NULL otherwise)            |
 +----------------------------+---------------+------------------------------------------------------------------+
-| action_order               | INTEGER       | Applies to a feature not available in CUBRID                     |
+| action_order               | INTEGER       | Not supported (always NULL)                                      |
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_condition           | STRING        | WHEN/IF condition of the trigger (NULL if none)                  |
 +----------------------------+---------------+------------------------------------------------------------------+
@@ -873,9 +873,9 @@ The ``triggers`` view contains all triggers defined in the current database on t
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_timing              | VARCHAR(8)    | Time at which the trigger fires (BEFORE, AFTER, DEFERRED)        |
 +----------------------------+---------------+------------------------------------------------------------------+
-| action_reference_old_table | VARCHAR(3)    | Applies to a feature not available in CUBRID                     |
+| action_reference_old_table | VARCHAR(3)    | Not supported (always NULL)                                      |
 +----------------------------+---------------+------------------------------------------------------------------+
-| action_reference_new_table | VARCHAR(3)    | Applies to a feature not available in CUBRID                     |
+| action_reference_new_table | VARCHAR(3)    | Not supported (always NULL)                                      |
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_reference_old_row   | VARCHAR(3)    | Alias used to reference the old row (always OLD)                 |
 +----------------------------+---------------+------------------------------------------------------------------+

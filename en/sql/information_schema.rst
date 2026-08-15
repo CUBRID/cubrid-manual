@@ -59,7 +59,7 @@ column_privileges
 The ``column_privileges`` view identifies all privileges granted on columns to or by the current user. CUBRID does not support column-level privileges, so this view is always empty.
 
 +----------------+--------------+------------------------------------------------------------------+
-| Attribute Name | Data Type    | Description                                                      |
+| Column Name    | Data Type    | Description                                                      |
 +================+==============+==================================================================+
 | grantor        | VARCHAR(32)  |                                                                  |
 +----------------+--------------+------------------------------------------------------------------+
@@ -86,7 +86,7 @@ columns
 The ``columns`` view contains information about all columns of the tables and views in the current database. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
 
 +--------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name           | Data Type     | Description                                                      |
+| Column Name              | Data Type     | Description                                                      |
 +==========================+===============+==================================================================+
 | table_catalog            | VARCHAR(255)  | Name of the database that contains the table (always the current |
 |                          |               | database)                                                        |
@@ -160,7 +160,7 @@ domains
 The ``domains`` view contains all domains defined in the current database. CUBRID does not support user-defined domains, so this view is always empty.
 
 +--------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name           | Data Type     | Description                                                      |
+| Column Name              | Data Type     | Description                                                      |
 +==========================+===============+==================================================================+
 | domain_catalog           | VARCHAR(255)  |                                                                  |
 +--------------------------+---------------+------------------------------------------------------------------+
@@ -217,7 +217,7 @@ foreign_servers
 The ``foreign_servers`` view contains all foreign servers defined in the current database. Only those foreign servers are shown that the current user has access to (by way of being the owner or having some privilege).
 
 +------------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name               | Data Type     | Description                                                      |
+| Column Name                  | Data Type     | Description                                                      |
 +==============================+===============+==================================================================+
 | foreign_server_catalog       | VARCHAR(255)  | Name of the database that contains the foreign server (always    |
 |                              |               | the current database)                                            |
@@ -259,7 +259,7 @@ key_column_usage
 The ``key_column_usage`` view identifies all columns in the current database that are restricted by some PRIMARY KEY, UNIQUE, or FOREIGN KEY constraint. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
 
 +-------------------------------+--------------+------------------------------------------------------------------+
-| Attribute Name                | Data Type    | Description                                                      |
+| Column Name                   | Data Type    | Description                                                      |
 +===============================+==============+==================================================================+
 | constraint_catalog            | VARCHAR(255) | Name of the database that contains the constraint (always the    |
 |                               |              | current database)                                                |
@@ -296,7 +296,7 @@ parameters
 The ``parameters`` view contains information about the parameters of all procedures and functions in the current database. Only the parameters of routines that the current user has access to are shown (by way of being the owner or having some privilege).
 
 +--------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name           | Data Type     | Description                                                      |
+| Column Name              | Data Type     | Description                                                      |
 +==========================+===============+==================================================================+
 | specific_catalog         | VARCHAR(255)  | Name of the database that contains the routine (always the       |
 |                          |               | current database)                                                |
@@ -351,7 +351,7 @@ partitions
 The ``partitions`` view contains all partitions of the partitioned tables in the current database. Only those partitions are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
 
 +-------------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name                | Data Type     | Description                                                      |
+| Column Name                   | Data Type     | Description                                                      |
 +===============================+===============+==================================================================+
 | table_catalog                 | VARCHAR(255)  | Name of the database that contains the table (always the current |
 |                               |               | database)                                                        |
@@ -404,7 +404,7 @@ referential_constraints
 The ``referential_constraints`` view contains all referential (foreign key) constraints in the current database. Only those constraints are shown for which the current user has write access to the referencing table (by way of being the owner or having some privilege other than SELECT).
 
 +---------------------------+--------------+------------------------------------------------------------------+
-| Attribute Name            | Data Type    | Description                                                      |
+| Column Name               | Data Type    | Description                                                      |
 +===========================+==============+==================================================================+
 | constraint_catalog        | VARCHAR(255) | Name of the database that contains the constraint (always the    |
 |                           |              | current database)                                                |
@@ -444,7 +444,7 @@ routine_privileges
 The ``routine_privileges`` view identifies all privileges granted on procedures and functions to or by the current user. There is one row for each combination of routine, grantor, and grantee.
 
 +------------------+--------------+------------------------------------------------------------------+
-| Attribute Name   | Data Type    | Description                                                      |
+| Column Name      | Data Type    | Description                                                      |
 +==================+==============+==================================================================+
 | grantor          | VARCHAR(32)  | User who granted the privilege                                   |
 +------------------+--------------+------------------------------------------------------------------+
@@ -479,7 +479,7 @@ routines
 The ``routines`` view contains all procedures and functions in the current database. Only those routines are shown that the current user has access to (by way of being the owner or having some privilege).
 
 +--------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name           | Data Type     | Description                                                      |
+| Column Name              | Data Type     | Description                                                      |
 +==========================+===============+==================================================================+
 | specific_name            | VARCHAR(255)  | Unique routine name                                              |
 +--------------------------+---------------+------------------------------------------------------------------+
@@ -552,7 +552,7 @@ schemata
 The ``schemata`` view contains all schemas in the current database. Only those schemas are shown that the current user has access to (by way of being the owner or having some privilege).
 
 +-------------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name                | Data Type     | Description                                                      |
+| Column Name                   | Data Type     | Description                                                      |
 +===============================+===============+==================================================================+
 | catalog_name                  | VARCHAR(255)  | Name of the database that contains the schema (always the        |
 |                               |               | current database)                                                |
@@ -588,7 +588,7 @@ sequences
 The ``sequences`` view contains all sequences defined in the current database. Only those sequences are shown that the current user has access to (by way of being the owner or having some privilege).
 
 +-------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name          | Data Type     | Description                                                      |
+| Column Name             | Data Type     | Description                                                      |
 +=========================+===============+==================================================================+
 | sequence_catalog        | VARCHAR(255)  | Name of the database that contains the sequence (always the      |
 |                         |               | current database)                                                |
@@ -636,7 +636,7 @@ statistics
 The ``statistics`` view contains information about the indexes on the tables in the current database. There is one row for each column of each index. Only those indexes are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
 
 +-------------------+---------------+------------------------------------------------------------------+
-| Attribute Name    | Data Type     | Description                                                      |
+| Column Name       | Data Type     | Description                                                      |
 +===================+===============+==================================================================+
 | table_catalog     | VARCHAR(255)  | Name of the database that contains the table (always the current |
 |                   |               | database)                                                        |
@@ -694,7 +694,7 @@ synonyms
 The ``synonyms`` view contains all synonyms defined in the current database. Only those synonyms are shown that the current user has access to (by way of being the owner or for a public synonym).
 
 +-------------------+---------------+------------------------------------------------------------------+
-| Attribute Name    | Data Type     | Description                                                      |
+| Column Name       | Data Type     | Description                                                      |
 +===================+===============+==================================================================+
 | synonym_catalog   | VARCHAR(255)  | Name of the database that contains the synonym (always the       |
 |                   |               | current database)                                                |
@@ -727,7 +727,7 @@ table_constraints
 The ``table_constraints`` view contains all PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints belonging to tables that the current user owns or has some privilege other than SELECT on.
 
 +--------------------+--------------+------------------------------------------------------------------+
-| Attribute Name     | Data Type    | Description                                                      |
+| Column Name        | Data Type    | Description                                                      |
 +====================+==============+==================================================================+
 | constraint_catalog | VARCHAR(255) | Name of the database that contains the constraint (always the    |
 |                    |              | current database)                                                |
@@ -765,7 +765,7 @@ table_privileges
 The ``table_privileges`` view identifies all privileges granted on tables or views to or by the current user. There is one row for each combination of table, grantor, and grantee.
 
 +----------------+--------------+------------------------------------------------------------------+
-| Attribute Name | Data Type    | Description                                                      |
+| Column Name    | Data Type    | Description                                                      |
 +================+==============+==================================================================+
 | grantor        | VARCHAR(32)  | User who granted the privilege                                   |
 +----------------+--------------+------------------------------------------------------------------+
@@ -793,7 +793,7 @@ tables
 The ``tables`` view contains all tables and views defined in the current database. Only those tables and views are shown that the current user has access to (by way of being the owner or having some privilege).
 
 +---------------------+---------------+------------------------------------------------------------------+
-| Attribute Name      | Data Type     | Description                                                      |
+| Column Name         | Data Type     | Description                                                      |
 +=====================+===============+==================================================================+
 | table_catalog       | VARCHAR(255)  | Name of the database that contains the table (always the current |
 |                     |               | database)                                                        |
@@ -841,7 +841,7 @@ triggers
 The ``triggers`` view contains all triggers defined in the current database on tables that the current user owns or has some privilege other than SELECT on.
 
 +----------------------------+---------------+------------------------------------------------------------------+
-| Attribute Name             | Data Type     | Description                                                      |
+| Column Name                | Data Type     | Description                                                      |
 +============================+===============+==================================================================+
 | trigger_catalog            | VARCHAR(255)  | Name of the database that contains the trigger (always the       |
 |                            |               | current database)                                                |
@@ -900,7 +900,7 @@ views
 The ``views`` view contains all views defined in the current database. Only those views are shown that the current user has access to (by way of being the owner or having some privilege).
 
 +-----------------+---------------+------------------------------------------------------------------+
-| Attribute Name  | Data Type     | Description                                                      |
+| Column Name     | Data Type     | Description                                                      |
 +=================+===============+==================================================================+
 | table_catalog   | VARCHAR(255)  | Name of the database that contains the view (always the current  |
 |                 |               | database)                                                        |

@@ -150,27 +150,28 @@ CURRENT_USER, USER
       'ALMOST_DBA_USER'            NULL  db_password
       'SELECT_ONLY_USER2'          NULL  NULL
 
-DATABASE, SCHEMA
-================
+DATABASE, SCHEMA, CURRENT_SCHEMA
+================================
 
 .. function:: DATABASE()
 .. function:: SCHEMA()
+.. function:: CURRENT_SCHEMA()
 
     The **DATABASE** function returns the name of the currently-connected database as a **VARCHAR** type.
 
-    The **SCHEMA** function returns the name of the current schema as a **VARCHAR** type. Since version 11.2, which supports user schema, the schema name is the same as the name of the current user.
+    The functions **SCHEMA** and **CURRENT_SCHEMA** are used interchangeably. They return the name of the current schema as a **VARCHAR** type. Since version 11.2, which supports user schema, the schema name is the same as the name of the current user.
 
     :rtype: STRING
     
 .. code-block:: sql
 
-    SELECT DATABASE(), SCHEMA();
+    SELECT DATABASE(), SCHEMA(), CURRENT_SCHEMA();
     
 ::
 
-       database()            schema()
-    ============================================
-      'demodb'              'DBA'
+       database()            schema()              current_schema()
+    ==================================================================
+      'demodb'              'DBA'                 'DBA'
 
 DBTIMEZONE
 ==========

@@ -310,10 +310,10 @@
 </table>
 <section id="column-privileges">
 <span id="information-schema-column-privileges"></span><h3>column_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#column-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#column-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">column_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 칼럼 권한을 나타낸다. CUBRID는 칼럼 단위 권한을 지원하지 않으므로 이 뷰는 항상 비어 있다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">column_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 칼럼 권한을 제공한다. CUBRID는 칼럼 단위 권한을 지원하지 않으므로 이 뷰는 항상 비어 있다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -356,10 +356,10 @@
 </section>
 <section id="columns">
 <span id="information-schema-columns"></span><h3>columns<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#columns" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#columns'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">columns</span></code> 뷰는 현재 데이터베이스의 모든 테이블과 뷰의 칼럼 정보를 담는다. 현재 사용자가 접근할 수 있는 칼럼만 표시되며, 이는 테이블의 소유자이거나 해당 테이블에 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">columns</span></code> 뷰는 현재 데이터베이스의 모든 테이블과 뷰의 칼럼 정보를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 테이블의 칼럼만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -427,27 +427,40 @@
 </tr>
 <tr class="row-odd"><td><p>domain_catalog</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>domain_schema</p></td>
 <td><p>VARCHAR(32)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>domain_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>udt_catalog</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>udt_schema</p></td>
 <td><p>VARCHAR(32)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>udt_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>column_type</p></td>
+<td><p>STRING</p></td>
+<td><p>칼럼의 데이터 타입. data_type 은 타입 이름만 나타내지만
+column_type 은 정밀도나 길이 등의 정보를 함께 나타낸다</p></td>
+</tr>
+<tr class="row-even"><td><p>column_key</p></td>
+<td><p>VARCHAR(3)</p></td>
+<td><p>칼럼이 인덱싱된 방식. ‘PRI’ 는 기본 키 또는 다중 칼럼 기본 키의
+구성 칼럼, ‘UNI’ 는 고유 인덱스의 선두 칼럼, ‘MUL’ 은 중복 값을
+허용하는 인덱스의 선두 칼럼을 나타낸다. 인덱싱되지 않았거나 다중
+칼럼 비고유 인덱스의 보조 칼럼이면 빈 문자열이다. 둘 이상
+해당하면 ‘PRI’, ‘UNI’, ‘MUL’ 순으로 우선한다</p></td>
 </tr>
 <tr class="row-odd"><td><p>extra</p></td>
 <td><p>VARCHAR(255)</p></td>
@@ -455,7 +468,7 @@
 </tr>
 <tr class="row-even"><td><p>privileges</p></td>
 <td><p>VARCHAR(512)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>column_comment</p></td>
 <td><p>VARCHAR(2048)</p></td>
@@ -467,7 +480,7 @@
 </tr>
 <tr class="row-odd"><td><p>generation_expression</p></td>
 <td><p>STRING</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>is_updatable</p></td>
 <td><p>VARCHAR(3)</p></td>
@@ -482,10 +495,10 @@
 </section>
 <section id="domains">
 <span id="information-schema-domains"></span><h3>domains<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#domains" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#domains'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">domains</span></code> 뷰는 현재 데이터베이스에 정의된 모든 도메인을 담는다. CUBRID는 사용자 정의 도메인을 지원하지 않으므로 이 뷰는 항상 비어 있다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">domains</span></code> 뷰는 현재 데이터베이스에 정의된 모든 도메인을 제공한다. CUBRID는 사용자 정의 도메인을 지원하지 않으므로 이 뷰는 항상 비어 있다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -588,10 +601,10 @@
 </section>
 <section id="foreign-servers">
 <span id="information-schema-foreign-servers"></span><h3>foreign_servers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#foreign-servers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#foreign-servers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">foreign_servers</span></code> 뷰는 현재 데이터베이스에 정의된 모든 외부 서버를 담는다. 현재 사용자가 접근할 수 있는 서버만 표시되며, 이는 소유자이거나 해당 서버에 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">foreign_servers</span></code> 뷰는 현재 데이터베이스에 정의된 모든 외부 서버를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 서버만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -607,19 +620,19 @@
 </tr>
 <tr class="row-even"><td><p>foreign_data_wrapper_catalog</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>foreign_data_wrapper_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>foreign_server_type</p></td>
 <td><p>STRING</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>foreign_server_version</p></td>
 <td><p>STRING</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>authorization_identifier</p></td>
 <td><p>VARCHAR(32)</p></td>
@@ -662,10 +675,10 @@
 </section>
 <section id="key-column-usage">
 <span id="information-schema-key-column-usage"></span><h3>key_column_usage<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#key-column-usage" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#key-column-usage'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">key_column_usage</span></code> 뷰는 현재 데이터베이스에서 PRIMARY KEY, UNIQUE, FOREIGN KEY 제약 조건으로 제약된 모든 칼럼을 나타낸다. 현재 사용자가 접근할 수 있는 칼럼만 표시되며, 이는 테이블의 소유자이거나 해당 테이블에 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">key_column_usage</span></code> 뷰는 현재 데이터베이스에서 PRIMARY KEY, UNIQUE, FOREIGN KEY 제약 조건으로 제약된 모든 칼럼을 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 테이블의 칼럼만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -709,15 +722,27 @@
 <td><p>외래 키 제약 조건인 경우 참조되는 고유 제약 조건 내 칼럼의 순서
 위치(1부터 시작), 그 외에는 NULL</p></td>
 </tr>
+<tr class="row-odd"><td><p>referenced_table_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>제약 조건이 참조하는 스키마 이름(외래 키가 아니면 NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>referenced_table_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>제약 조건이 참조하는 테이블 이름(외래 키가 아니면 NULL)</p></td>
+</tr>
+<tr class="row-odd"><td><p>referenced_column_name</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>제약 조건이 참조하는 칼럼 이름(외래 키가 아니면 NULL)</p></td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="parameters">
 <span id="information-schema-parameters"></span><h3>parameters<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parameters" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parameters'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> 뷰는 현재 데이터베이스의 모든 프로시저와 함수의 매개변수 정보를 담는다. 현재 사용자가 접근할 수 있는 루틴의 매개변수만 표시되며, 이는 소유자이거나 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> 뷰는 현재 데이터베이스의 모든 프로시저와 함수의 매개변수 정보를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 루틴의 매개변수만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -785,7 +810,7 @@
 </tr>
 <tr class="row-odd"><td><p>dtd_identifier</p></td>
 <td><p>VARCHAR(1024)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>routine_type</p></td>
 <td><p>VARCHAR(9)</p></td>
@@ -804,10 +829,10 @@
 </section>
 <section id="partitions">
 <span id="information-schema-partitions"></span><h3>partitions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#partitions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#partitions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">partitions</span></code> 뷰는 현재 데이터베이스의 파티션된 테이블의 모든 파티션을 담는다. 현재 사용자가 접근할 수 있는 파티션만 표시되며, 이는 테이블의 소유자이거나 해당 테이블에 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">partitions</span></code> 뷰는 현재 데이터베이스의 파티션된 테이블의 모든 파티션을 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 테이블의 파티션만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -847,19 +872,19 @@
 </tr>
 <tr class="row-even"><td><p>subpartition_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>subpartition_ordinal_position</p></td>
 <td><p>INTEGER</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>subpartition_method</p></td>
 <td><p>VARCHAR(5)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>subpartition_expression</p></td>
 <td><p>VARCHAR(2048)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>table_rows</p></td>
 <td><p>BIGINT</p></td>
@@ -879,7 +904,7 @@
 </tr>
 <tr class="row-even"><td><p>tablespace_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>partition_comment</p></td>
 <td><p>VARCHAR(1024)</p></td>
@@ -898,10 +923,10 @@
 </section>
 <section id="referential-constraints">
 <span id="information-schema-referential-constraints"></span><h3>referential_constraints<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#referential-constraints" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#referential-constraints'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">referential_constraints</span></code> 뷰는 현재 데이터베이스의 모든 참조(외래 키) 제약 조건을 담는다. 현재 사용자가 참조하는 테이블에 쓰기 권한을 가진 제약 조건만 표시되며, 이는 소유자이거나 SELECT 외의 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">referential_constraints</span></code> 뷰는 현재 데이터베이스의 모든 참조(외래 키) 제약 조건을 제공한다. 단, 현재 사용자가 참조하는 테이블을 소유하거나 그에 대해 SELECT 외의 권한을 가진 제약 조건만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -958,10 +983,10 @@
 </section>
 <section id="routine-privileges">
 <span id="information-schema-routine-privileges"></span><h3>routine_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#routine-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#routine-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">routine_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 프로시저와 함수에 대한 권한을 나타낸다. 루틴, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">routine_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 프로시저와 함수에 대한 권한을 제공한다. 루틴, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1013,15 +1038,23 @@
 </section>
 <section id="routines">
 <span id="information-schema-routines"></span><h3>routines<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#routines" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#routines'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">routines</span></code> 뷰는 현재 데이터베이스의 모든 프로시저와 함수를 담는다. 현재 사용자가 접근할 수 있는 루틴만 표시되며, 이는 소유자이거나 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">routines</span></code> 뷰는 현재 데이터베이스의 모든 프로시저와 함수를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 루틴만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>specific_catalog</p></td>
+<td><p>VARCHAR(255)</p></td>
+<td><p>루틴이 속한 데이터베이스 이름(항상 현재 데이터베이스)</p></td>
+</tr>
+<tr class="row-odd"><td><p>specific_schema</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>루틴이 속한 스키마 이름</p></td>
+</tr>
 <tr class="row-even"><td><p>specific_name</p></td>
 <td><p>VARCHAR(255)</p></td>
 <td><p>루틴의 고유 이름</p></td>
@@ -1076,7 +1109,7 @@
 </tr>
 <tr class="row-odd"><td><p>dtd_identifier</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>routine_body</p></td>
 <td><p>VARCHAR(8)</p></td>
@@ -1109,7 +1142,7 @@ MODIFIES SQL DATA)</p></td>
 </tr>
 <tr class="row-odd"><td><p>sql_path</p></td>
 <td><p>STRING</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>security_type</p></td>
 <td><p>VARCHAR(7)</p></td>
@@ -1127,6 +1160,10 @@ MODIFIES SQL DATA)</p></td>
 <td><p>DATETIME</p></td>
 <td><p>루틴 수정 시각</p></td>
 </tr>
+<tr class="row-even"><td><p>definer</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>루틴의 소유자</p></td>
+</tr>
 </tbody>
 </table>
 <div class="admonition note">
@@ -1136,10 +1173,10 @@ MODIFIES SQL DATA)</p></td>
 </section>
 <section id="schemata">
 <span id="information-schema-schemata"></span><h3>schemata<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#schemata" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#schemata'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">schemata</span></code> 뷰는 현재 데이터베이스의 모든 스키마를 담는다. 현재 사용자가 접근할 수 있는 스키마만 표시되며, 이는 소유자이거나 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">schemata</span></code> 뷰는 현재 데이터베이스의 모든 스키마를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 스키마만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1171,7 +1208,7 @@ MODIFIES SQL DATA)</p></td>
 </tr>
 <tr class="row-even"><td><p>sql_path</p></td>
 <td><p>STRING</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>schema_comment</p></td>
 <td><p>VARCHAR(1024)</p></td>
@@ -1190,10 +1227,10 @@ MODIFIES SQL DATA)</p></td>
 </section>
 <section id="sequences">
 <span id="information-schema-sequences"></span><h3>sequences<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sequences" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sequences'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">sequences</span></code> 뷰는 현재 데이터베이스에 정의된 모든 시퀀스를 담는다. 현재 사용자가 접근할 수 있는 시퀀스만 표시되며, 이는 소유자이거나 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sequences</span></code> 뷰는 현재 데이터베이스에 정의된 모든 시퀀스를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 시퀀스만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1272,10 +1309,10 @@ MODIFIES SQL DATA)</p></td>
 </section>
 <section id="statistics">
 <span id="information-schema-statistics"></span><h3>statistics<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#statistics" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#statistics'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">statistics</span></code> 뷰는 현재 데이터베이스의 테이블 인덱스 정보를 담는다. 각 인덱스의 칼럼마다 한 행이 있다. 현재 사용자가 접근할 수 있는 인덱스만 표시되며, 이는 테이블의 소유자이거나 해당 테이블에 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">statistics</span></code> 뷰는 현재 데이터베이스의 테이블 인덱스 정보를 제공한다. 각 인덱스의 칼럼마다 한 행이 있다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 테이블의 인덱스만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1293,9 +1330,9 @@ MODIFIES SQL DATA)</p></td>
 <td><p>VARCHAR(255)</p></td>
 <td><p>테이블 이름</p></td>
 </tr>
-<tr class="row-odd"><td><p>is_unique</p></td>
+<tr class="row-odd"><td><p>non_unique</p></td>
 <td><p>INTEGER</p></td>
-<td><p>인덱스가 고유하면 1, 아니면 0</p></td>
+<td><p>인덱스가 중복을 허용하지 않으면 0, 허용하면 1</p></td>
 </tr>
 <tr class="row-even"><td><p>index_schema</p></td>
 <td><p>VARCHAR(32)</p></td>
@@ -1350,31 +1387,35 @@ MODIFIES SQL DATA)</p></td>
 <td><p>VARCHAR(1023)</p></td>
 <td><p>함수 기반 인덱스의 표현식(일반 칼럼은 NULL)</p></td>
 </tr>
-<tr class="row-odd"><td><p>deduplicate_level</p></td>
+<tr class="row-odd"><td><p>filter_condition</p></td>
+<td><p>STRING</p></td>
+<td><p>필터 인덱스의 조건식(필터 인덱스가 아니면 NULL)</p></td>
+</tr>
+<tr class="row-even"><td><p>deduplicate_level</p></td>
 <td><p>INTEGER</p></td>
 <td><p>인덱스의 중복 제거(deduplicate) 옵션 레벨</p></td>
 </tr>
-<tr class="row-even"><td><p>create_time</p></td>
+<tr class="row-odd"><td><p>create_time</p></td>
 <td><p>DATETIME</p></td>
 <td><p>인덱스 생성 시각</p></td>
 </tr>
-<tr class="row-odd"><td><p>update_time</p></td>
+<tr class="row-even"><td><p>update_time</p></td>
 <td><p>DATETIME</p></td>
 <td><p>인덱스 수정 시각</p></td>
 </tr>
-<tr class="row-even"><td><p>access_time</p></td>
+<tr class="row-odd"><td><p>access_time</p></td>
 <td><p>DATETIME</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="synonyms">
 <span id="information-schema-synonyms"></span><h3>synonyms<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#synonyms" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#synonyms'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">synonyms</span></code> 뷰는 현재 데이터베이스에 정의된 모든 동의어를 담는다. 현재 사용자가 접근할 수 있는 동의어만 표시되며, 이는 소유자이거나 공용(public) 동의어인 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">synonyms</span></code> 뷰는 현재 데이터베이스에 정의된 모든 동의어를 제공한다. 단, 현재 사용자가 소유하거나 공용(public)인 동의어만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1425,10 +1466,10 @@ MODIFIES SQL DATA)</p></td>
 </section>
 <section id="table-constraints">
 <span id="information-schema-table-constraints"></span><h3>table_constraints<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#table-constraints" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#table-constraints'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">table_constraints</span></code> 뷰는 현재 사용자가 소유하거나 SELECT 외의 권한을 가진 테이블에 속한 모든 PRIMARY KEY, UNIQUE, FOREIGN KEY 제약 조건을 담는다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">table_constraints</span></code> 뷰는 현재 사용자가 소유하거나 SELECT 외의 권한을 가진 테이블에 속한 모든 PRIMARY KEY, UNIQUE, FOREIGN KEY 제약 조건을 제공한다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1483,10 +1524,10 @@ MODIFIES SQL DATA)</p></td>
 </section>
 <section id="table-privileges">
 <span id="information-schema-table-privileges"></span><h3>table_privileges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#table-privileges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#table-privileges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">table_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 테이블 또는 뷰 권한을 나타낸다. 테이블, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">table_privileges</span></code> 뷰는 현재 사용자가 부여하거나 부여받은 테이블 또는 뷰 권한을 제공한다. 테이블, 부여자(grantor), 피부여자(grantee)의 조합마다 한 행이 있다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1527,10 +1568,10 @@ EXECUTE)</p></td>
 </section>
 <section id="tables">
 <span id="information-schema-tables"></span><h3>tables<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#tables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#tables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">tables</span></code> 뷰는 현재 데이터베이스에 정의된 모든 테이블과 뷰를 담는다. 현재 사용자가 접근할 수 있는 테이블과 뷰만 표시되며, 이는 소유자이거나 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tables</span></code> 뷰는 현재 데이터베이스에 정의된 모든 테이블과 뷰를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 테이블과 뷰만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1611,10 +1652,10 @@ EXECUTE)</p></td>
 </section>
 <section id="triggers">
 <span id="information-schema-triggers"></span><h3>triggers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#triggers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#triggers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">triggers</span></code> 뷰는 현재 사용자가 소유하거나 SELECT 외의 권한을 가진 테이블에 정의된 모든 트리거를 담는다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">triggers</span></code> 뷰는 현재 사용자가 소유하거나 SELECT 외의 권한을 가진 테이블에 정의된 모든 트리거를 제공한다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1655,7 +1696,7 @@ EXECUTE)</p></td>
 </tr>
 <tr class="row-even"><td><p>action_order</p></td>
 <td><p>INTEGER</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>action_condition</p></td>
 <td><p>STRING</p></td>
@@ -1675,11 +1716,11 @@ EXECUTE)</p></td>
 </tr>
 <tr class="row-odd"><td><p>action_reference_old_table</p></td>
 <td><p>VARCHAR(3)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>action_reference_new_table</p></td>
 <td><p>VARCHAR(3)</p></td>
-<td><p>CUBRID에서 지원하지 않는 기능</p></td>
+<td><p>미지원(항상 NULL)</p></td>
 </tr>
 <tr class="row-odd"><td><p>action_reference_old_row</p></td>
 <td><p>VARCHAR(3)</p></td>
@@ -1689,15 +1730,19 @@ EXECUTE)</p></td>
 <td><p>VARCHAR(3)</p></td>
 <td><p>새 행을 참조하는 데 사용되는 별칭(항상 NEW)</p></td>
 </tr>
-<tr class="row-odd"><td><p>trigger_comment</p></td>
+<tr class="row-odd"><td><p>definer</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>트리거의 소유자</p></td>
+</tr>
+<tr class="row-even"><td><p>trigger_comment</p></td>
 <td><p>VARCHAR(1024)</p></td>
 <td><p>트리거 설명</p></td>
 </tr>
-<tr class="row-even"><td><p>create_time</p></td>
+<tr class="row-odd"><td><p>create_time</p></td>
 <td><p>DATETIME</p></td>
 <td><p>트리거 생성 시각</p></td>
 </tr>
-<tr class="row-odd"><td><p>update_time</p></td>
+<tr class="row-even"><td><p>update_time</p></td>
 <td><p>DATETIME</p></td>
 <td><p>트리거 수정 시각</p></td>
 </tr>
@@ -1710,10 +1755,10 @@ EXECUTE)</p></td>
 </section>
 <section id="views">
 <span id="information-schema-views"></span><h3>views<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#views" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#views'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">views</span></code> 뷰는 현재 데이터베이스에 정의된 모든 뷰를 담는다. 현재 사용자가 접근할 수 있는 뷰만 표시되며, 이는 소유자이거나 어떤 권한을 가진 경우이다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">views</span></code> 뷰는 현재 데이터베이스에 정의된 모든 뷰를 제공한다. 단, 현재 사용자가 소유하거나 접근 권한을 가진 뷰만 표시된다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>속성명</p></th>
+<tr class="row-odd"><th class="head"><p>칼럼명</p></th>
 <th class="head"><p>데이터 타입</p></th>
 <th class="head"><p>설명</p></th>
 </tr>
@@ -1744,15 +1789,19 @@ OPTION이 정의되어 있지 않으면 NONE</p></td>
 <td><p>VARCHAR(3)</p></td>
 <td><p>뷰가 갱신 가능한지 여부(항상 NULL)</p></td>
 </tr>
-<tr class="row-even"><td><p>view_comment</p></td>
+<tr class="row-even"><td><p>definer</p></td>
+<td><p>VARCHAR(32)</p></td>
+<td><p>뷰의 소유자</p></td>
+</tr>
+<tr class="row-odd"><td><p>view_comment</p></td>
 <td><p>VARCHAR(2048)</p></td>
 <td><p>뷰 설명</p></td>
 </tr>
-<tr class="row-odd"><td><p>create_time</p></td>
+<tr class="row-even"><td><p>create_time</p></td>
 <td><p>DATETIME</p></td>
 <td><p>뷰 생성 시각</p></td>
 </tr>
-<tr class="row-even"><td><p>update_time</p></td>
+<tr class="row-odd"><td><p>update_time</p></td>
 <td><p>DATETIME</p></td>
 <td><p>뷰 수정 시각</p></td>
 </tr>
@@ -1815,7 +1864,7 @@ OPTION이 정의되어 있지 않으면 NONE</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 6월 26, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 15, 2026. </p>
 </div>
 </div>
 </footer>

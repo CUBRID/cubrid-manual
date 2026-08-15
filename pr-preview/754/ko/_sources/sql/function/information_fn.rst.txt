@@ -151,25 +151,28 @@ CURRENT_USER, USER
       'ALMOST_DBA_USER'            NULL  db_password
       'SELECT_ONLY_USER2'          NULL  NULL
 
-DATABASE, SCHEMA
-================
+DATABASE, SCHEMA, CURRENT_SCHEMA
+================================
 
 .. function:: DATABASE()
 .. function:: SCHEMA()
+.. function:: CURRENT_SCHEMA()
 
-    **DATABASE** 함수와 **SCHEMA** 함수는 동일하며, 현재 연결된 데이터베이스 이름을 **VARCHAR** 타입의 문자열로 반환한다.
+    **DATABASE** 함수는 현재 연결된 데이터베이스 이름을 **VARCHAR** 타입의 문자열로 반환한다.
+
+    **SCHEMA** 함수와 **CURRENT_SCHEMA** 함수는 동일하며, 현재 스키마 이름을 **VARCHAR** 타입의 문자열로 반환한다. 사용자 스키마를 지원하는 11.2 버전부터 스키마 이름은 현재 사용자 이름과 같다.
 
     :rtype: STRING
     
 .. code-block:: sql
 
-    SELECT DATABASE(), SCHEMA();
+    SELECT DATABASE(), SCHEMA(), CURRENT_SCHEMA();
     
 ::
 
-       database()            schema()
-    ============================================
-      'demodb'              'demodb'
+       database()            schema()              current_schema()
+    ==================================================================
+      'demodb'              'DBA'                 'DBA'
 
 DBTIMEZONE
 ==========

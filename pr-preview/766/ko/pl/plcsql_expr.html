@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>표현식 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="표현식 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="표현식 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="jsp.html" rel="next" title="자바 저장 프로시저"/>
+<link href="plcsql_stmt.html" rel="prev" title="실행문"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/pl/plcsql_expr.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID 절차적 언어</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="plcsql.html">PL/CSQL</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">표현식</span>
+</nav>
+<div id="content" role="main">
+<section id="id1">
+<h1>표현식<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>PL/CSQL의 표현식의 종류는 다음 문법으로 요약할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-2">      <span class="o">&lt;</span><span class="n">literal</span><span class="o">&gt;</span>                                 <span class="c1"># 상수</span>
+</span><span id="line-3">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span>                              <span class="c1"># 식별자</span>
+</span><span id="line-4">    <span class="o">|</span> <span class="n">SQL</span><span class="o">%</span><span class="n">ROWCOUNT</span>                              <span class="c1"># Static SQL 결과 크기</span>
+</span><span id="line-5">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">cursor_expression</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">cursor_attribute</span><span class="o">&gt;</span>    <span class="c1"># 커서 속성</span>
+</span><span id="line-6">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">binary_op</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span>     <span class="c1"># 이항 연산</span>
+</span><span id="line-7">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">unary_op</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span>                   <span class="c1"># 단항 연산</span>
+</span><span id="line-8">    <span class="o">|</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">)</span>                          <span class="c1"># 괄호</span>
+</span><span id="line-9">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;.&lt;</span><span class="n">identifier</span><span class="o">&gt;</span>                 <span class="c1"># 레코드 필드 참조</span>
+</span><span id="line-10">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">function_argument</span><span class="o">&gt;</span>          <span class="c1"># 함수 호출</span>
+</span><span id="line-11">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">case_expression</span><span class="o">&gt;</span>                         <span class="c1"># CASE 표현식</span>
+</span><span id="line-12">    <span class="o">|</span> <span class="n">SQLCODE</span>                                   <span class="c1"># Exception 코드</span>
+</span><span id="line-13">    <span class="o">|</span> <span class="n">SQLERRM</span>                                   <span class="c1"># Exception 메시지</span>
+</span><span id="line-14">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="n">IS</span> <span class="p">[</span> <span class="n">NOT</span> <span class="p">]</span> <span class="n">NULL</span>              <span class="c1"># IS NULL 표현식</span>
+</span><span id="line-15">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">NOT</span> <span class="p">]</span> <span class="n">BETWEEN</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="n">AND</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span>        <span class="c1"># BETWEEN 표현식</span>
+</span><span id="line-16">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">NOT</span> <span class="p">]</span> <span class="n">IN</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">[</span> <span class="p">,</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span> <span class="p">]</span> <span class="p">)</span>  <span class="c1"># IN 표현식</span>
+</span><span id="line-17">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">NOT</span> <span class="p">]</span> <span class="n">LIKE</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">ESCAPE</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">]</span>    <span class="c1"># LIKE 표현식</span>
+</span><span id="line-18">
+</span><span id="line-19"><span class="o">&lt;</span><span class="n">literal</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-20">      <span class="n">DATE</span> <span class="o">&lt;</span><span class="n">quoted_string</span><span class="o">&gt;</span>
+</span><span id="line-21">    <span class="o">|</span> <span class="n">TIME</span> <span class="o">&lt;</span><span class="n">quoted_string</span><span class="o">&gt;</span>
+</span><span id="line-22">    <span class="o">|</span> <span class="n">DATETIME</span> <span class="o">&lt;</span><span class="n">quoted_string</span><span class="o">&gt;</span>
+</span><span id="line-23">    <span class="o">|</span> <span class="n">TIMESTAMP</span> <span class="o">&lt;</span><span class="n">quoted_string</span><span class="o">&gt;</span>
+</span><span id="line-24">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">numeric</span><span class="o">&gt;</span>
+</span><span id="line-25">    <span class="o">|</span> <span class="o">&lt;</span><span class="n">quoted_string</span><span class="o">&gt;</span>
+</span><span id="line-26">    <span class="o">|</span> <span class="n">NULL</span>
+</span><span id="line-27">    <span class="o">|</span> <span class="n">TRUE</span>
+</span><span id="line-28">    <span class="o">|</span> <span class="n">FALSE</span>
+</span><span id="line-29">
+</span><span id="line-30"><span class="o">&lt;</span><span class="n">numeric</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="n">UNSIGNED_INTEGER</span> <span class="o">|</span> <span class="n">FLOATING_POINT_NUM</span>
+</span><span id="line-31">
+</span><span id="line-32"><span class="o">&lt;</span><span class="n">cursor_attribute</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="p">{</span> <span class="o">%</span><span class="n">ISOPEN</span> <span class="o">|</span> <span class="o">%</span><span class="n">FOUND</span> <span class="o">|</span> <span class="o">%</span><span class="n">NOTFOUND</span> <span class="o">|</span> <span class="o">%</span><span class="n">ROWCOUNT</span> <span class="p">}</span>
+</span><span id="line-33">
+</span><span id="line-34"><span class="o">&lt;</span><span class="n">binary_op</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-35">      <span class="n">AND</span> <span class="o">|</span> <span class="n">XOR</span> <span class="o">|</span> <span class="n">OR</span>
+</span><span id="line-36">    <span class="o">|</span> <span class="o">=</span> <span class="o">|</span> <span class="o">&lt;=&gt;</span> <span class="o">|</span> <span class="o">!=</span> <span class="o">|</span> <span class="o">&lt;&gt;</span> <span class="o">|</span> <span class="o">&lt;=</span> <span class="o">|</span> <span class="o">&gt;=</span> <span class="o">|</span> <span class="o">&lt;</span> <span class="o">|</span> <span class="o">&gt;</span>
+</span><span id="line-37">    <span class="o">|</span> <span class="o">*</span> <span class="o">|</span> <span class="o">/</span> <span class="o">|</span> <span class="o">+</span> <span class="o">|</span> <span class="o">-</span>
+</span><span id="line-38">    <span class="o">|</span> <span class="o">&gt;&gt;</span> <span class="o">|</span> <span class="o">&lt;&lt;</span> <span class="o">|</span> <span class="o">&amp;</span> <span class="o">|</span> <span class="o">^</span> <span class="o">|</span> <span class="s1">'|'</span>
+</span><span id="line-39">    <span class="o">|</span> <span class="o">||</span>
+</span><span id="line-40">
+</span><span id="line-41"><span class="o">&lt;</span><span class="n">unary_op</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="o">+</span> <span class="o">|</span> <span class="o">-</span> <span class="o">|</span> <span class="n">NOT</span> <span class="o">|</span> <span class="o">~</span>
+</span><span id="line-42">
+</span><span id="line-43"><span class="o">&lt;</span><span class="n">case_expression</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span>
+</span><span id="line-44">      <span class="n">CASE</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">case_expression_when_part</span><span class="o">&gt;...</span> <span class="p">[</span> <span class="n">ELSE</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">]</span> <span class="n">END</span>
+</span><span id="line-45">    <span class="o">|</span> <span class="n">CASE</span> <span class="o">&lt;</span><span class="n">case_expression_when_part</span><span class="o">&gt;...</span> <span class="p">[</span> <span class="n">ELSE</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="p">]</span> <span class="n">END</span>
+</span><span id="line-46">
+</span><span id="line-47"><span class="o">&lt;</span><span class="n">case_expression_when_part</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">:=</span> <span class="n">WHEN</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="n">THEN</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span>
+</span></code></pre></div>
+</div>
+<section id="id2">
+<h2>리터럴<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>리터럴에는 날짜/시간, 숫자, 문자열, NULL, TRUE, FALSE 값이 있다.
+비트열과 컬렉션을 사용할 수 없다는 점을 제외하고 리터럴 관련 규칙은 <a class="reference internal" href="../sql/literal.html#sql-literal"><span class="std std-ref">SQL 리터럴</span></a>과 동일하다.</p>
+</section>
+<section id="id3">
+<h2>식별자<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Static/Dynamic SQL 밖의 PL/CSQL 문에서 사용할 수 있는 식별자에는 다음 세 가지 종류가 있다.</p>
+<ul class="simple">
+<li><p>선언부에서 선언된 변수, 상수, 커서, Exception, 내부 프로시저/함수</p></li>
+<li><p>프로시저/함수의 인자</p></li>
+<li><p>묵시적으로 선언된 <a class="reference internal" href="plcsql_stmt.html#loop"><span class="std std-ref">For 루프</span></a>의 iterator. integer 타입이거나 record 타입</p></li>
+</ul>
+<p>명시적 혹은 묵시적 선언 없이 식별자를 사용하면 컴파일 에러가 발생한다.</p>
+</section>
+<section id="static-sql">
+<h2>Static SQL 결과 크기<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#static-sql" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#static-sql'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 표현식이다.</p>
+<ul class="simple">
+<li><p>커서와 연관되지 않은 SELECT 문의 경우 반드시 INTO 절을 사용해야 하며 조회 결과는 1개이어야 한다. 따라서, 이 SELECT 문이 정상적으로 수행되었을 때 SQL%ROWCOUNT의 값은 1이다. 조회 결과 크기가 0이거나 1을 초과해서 실행시 에러가 발생했을 때는 SQL%ROWCOUNT의 값은 정의되지 않는다.</p></li>
+<li><p>INSERT, UPDATE, DELETE, MERGE, REPLACE, TRUNCATE 문의 경우 영향 받은 레코드 개수가 된다.</p></li>
+<li><p>COMMIT, ROLLBACK 문에 대해서는 0이 된다.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>커서 속성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>커서나 SYS_REFCURSOR 변수를 계산 결과로 갖는 표현식 <em>cursor_expression</em>에
+%ISOPEN, %FOUND, %NOTFOUND, %ROWCOUNT 기호를 덧붙여 그 커서의 네 가지 속성을 조회할 수 있다.</p>
+<ul class="simple">
+<li><p>%ISOPEN: 커서가 열려 있는지 여부 (BOOLEAN)</p></li>
+<li><p>%FOUND: 첫 번째 FETCH 이전이면 NULL. 아니면 마지막 FETCH가 1개의 ROW를 결과로 갖는지 여부 (BOOLEAN). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.</p></li>
+<li><p>%NOTFOUND: 첫 번째 FETCH 이전이면 NULL. 아니면 마지막 FETCH가 0개의 ROW를 결과로 갖는지 여부 (BOOLEAN). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.</p></li>
+<li><p>%ROWCOUNT: 첫 번째 FETCH 이전이면 0. 아니면 현재까지 FETCH된 ROW의 개수 (BIGINT). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.</p></li>
+</ul>
+<p>아래 예제에서 내부 함수 iterate_cursor()는 커서 속성을 사용하여 레코드들을 순회하고 전체 레코드 개수를 리턴한다.
+인자로 넘겨 받은 커서가 열려 있지 않을 때는 (커서의 %ISOPEN 속성이 False일 때는) -1을 리턴한다.
+더 이상 조회할 레코드가 없는지는 FETCH 후 커서의 %NOTFOUND 속성을 검사해서 알아낸다.
+커서의 %ROWCOUNT 속성은 FETCH 문으로 조회된 레코드 각각마다 1씩 증가하다가
+FETCH 반복문이 종료된 후에는 조회된 전체 레코드 개수를 나타내게 된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">cursor_attributes</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="line-2"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="w">    </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">iterate_cursor</span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="n">SYS_REFCURSOR</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">AS</span>
+</span><span id="line-6"><span class="w">        </span><span class="n">v</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">BEGIN</span>
+</span><span id="line-8"><span class="w">        </span><span class="k">IF</span><span class="w"> </span><span class="n">rc</span><span class="o">%</span><span class="n">ISOPEN</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-9"><span class="w">            </span><span class="n">LOOP</span>
+</span><span id="line-10"><span class="w">                </span><span class="k">FETCH</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
+</span><span id="line-11"><span class="w">                </span><span class="n">EXIT</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">rc</span><span class="o">%</span><span class="n">NOTFOUND</span><span class="p">;</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="w">                </span><span class="c1">-- do something with v</span>
+</span><span id="line-14"><span class="w">                </span><span class="p">...</span>
+</span><span id="line-15">
+</span><span id="line-16"><span class="w">            </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+</span><span id="line-17">
+</span><span id="line-18"><span class="w">            </span><span class="k">RETURN</span><span class="w"> </span><span class="n">rc</span><span class="o">%</span><span class="n">ROWCOUNT</span><span class="p">;</span><span class="w">     </span><span class="c1">-- number of records</span>
+</span><span id="line-19"><span class="w">        </span><span class="k">ELSE</span>
+</span><span id="line-20"><span class="w">            </span><span class="k">RETURN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="w">              </span><span class="c1">-- error</span>
+</span><span id="line-21"><span class="w">        </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+</span><span id="line-22"><span class="w">    </span><span class="k">END</span><span class="p">;</span>
+</span><span id="line-23"><span class="k">begin</span>
+</span><span id="line-24"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-25">
+</span><span id="line-26"><span class="k">end</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p><em>cursor_expression</em>의 계산 결과가 NULL이면 INVALID_CURSOR Exception이 발생한다.</p>
+</section>
+<section id="id5">
+<h2>이항 연산, 단항 연산, 괄호<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>PL/CSQL은 다음과 같이 연산자 우선 순위를 갖는다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>연산자</p></th>
+<th class="head"><p>연산</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>+, -, ~</p></td>
+<td><p>부호, 비트역 (단항)</p></td>
+</tr>
+<tr class="row-odd"><td><p>*, /, DIV, MOD</p></td>
+<td><p>곱하기, 나누기, 정수 나누기, 나머지</p></td>
+</tr>
+<tr class="row-even"><td><p>+, -</p></td>
+<td><p>더하기, 빼기</p></td>
+</tr>
+<tr class="row-odd"><td><p>||</p></td>
+<td><p>문자열 병합</p></td>
+</tr>
+<tr class="row-even"><td><p>&lt;&lt;, &gt;&gt;</p></td>
+<td><p>비트 이동</p></td>
+</tr>
+<tr class="row-odd"><td><p>&amp;</p></td>
+<td><p>비트곱</p></td>
+</tr>
+<tr class="row-even"><td><p>^</p></td>
+<td><p>배타적 비트합</p></td>
+</tr>
+<tr class="row-odd"><td><p>|</p></td>
+<td><p>비트합</p></td>
+</tr>
+<tr class="row-even"><td><p>IS NULL</p></td>
+<td><p>NULL 테스트</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIKE</p></td>
+<td><p>문자열 패턴 테스트</p></td>
+</tr>
+<tr class="row-even"><td><p>BETWEEN</p></td>
+<td><p>값 범위 테스트</p></td>
+</tr>
+<tr class="row-odd"><td><p>IN</p></td>
+<td><p>값 포함 테스트</p></td>
+</tr>
+<tr class="row-even"><td><p>=, &lt;=&gt;, &lt;, &gt;, &lt;=, &gt;=, &lt;&gt;, !=,</p></td>
+<td><p>비교</p></td>
+</tr>
+<tr class="row-odd"><td><p>NOT</p></td>
+<td><p>논리역</p></td>
+</tr>
+<tr class="row-even"><td><p>AND</p></td>
+<td><p>논리곱</p></td>
+</tr>
+<tr class="row-odd"><td><p>XOR</p></td>
+<td><p>배타적 논리합</p></td>
+</tr>
+<tr class="row-even"><td><p>OR</p></td>
+<td><p>논리합</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>%는 Static/Dynamic SQL 밖에서는 MOD와 동일한 의미의 나머지 연산자로 사용할 수 없다.</p></li>
+<li><p>&amp;&amp;, ||, !은 Static/Dynamic SQL 밖에서는 AND, OR, NOT과 동일한 의미의 논리 연산자로 사용할 수 없다.</p></li>
+<li><p>Static/Dynamic SQL 밖에서의 문자열은 DB 설정과 상관없이 UTF8 encoding을 따르며
+이들 문자열들 사이의 비교는 해당 Unicode 배열들 사이의 사전식 비교법을 따른다.
+Static/Dynamic SQL 안에서의 문자열의 encoding과 비교는 DB와 테이블 설정을 따른다.</p></li>
+</ul>
+<p>명시적으로 연산 순서를 지정하기 위해 괄호를 사용할 수 있다.</p>
+</section>
+<section id="id6">
+<h2>레코드 필드 참조<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>PL/CSQL에서는 다음 두 가지 경우에 레코드 변수를 사용할 수 있다.</p>
+<ul class="simple">
+<li><p>FOR 문에서 SELECT 결과를 순회하기 위해 묵시적으로 선언되는 레코드 변수</p></li>
+<li><p>%ROWTYPE으로 선언된 레코드 변수</p></li>
+</ul>
+<p>레코드 변수 뒤에 .(dot)과  필드 이름을 덧붙여 레코드 필드를 참조할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">athlete_history</span><span class="p">(</span><span class="n">p_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="k">CURSOR</span><span class="w"> </span><span class="n">my_cursor</span><span class="w"> </span><span class="k">IS</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">host_year</span><span class="p">,</span><span class="w"> </span><span class="n">score</span>
+</span><span id="line-5"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">history</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_name</span><span class="p">;</span>
+</span><span id="line-7"><span class="k">BEGIN</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">my_cursor</span><span class="w"> </span><span class="n">LOOP</span><span class="w">     </span><span class="c1">-- r: 묵시적으로 선언됨</span>
+</span><span id="line-9"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'host_year: '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">host_year</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">' score: '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">score</span><span class="p">);</span><span class="w">    </span><span class="c1">-- r.&lt;column-name&gt;</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id7">
+<h2>함수 호출<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>함수 호출 표현식에서 인자 개수와 각각의 타입은 해당 함수의 선언과 일치해야 한다.
+호출되는 함수의 OUT 인자에 주어질 인자들은 호출 결과 변경이 일어나게 되므로
+대입이 가능한 변수나 다른 OUT 인자이어야 한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">callee</span><span class="p">(</span><span class="n">o</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-5"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">proc</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span>
+</span><span id="line-8"><span class="k">AS</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">c</span><span class="w"> </span><span class="n">CONSTANT</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">BEGIN</span>
+</span><span id="line-12"><span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="n">callee</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">...</span><span class="w">   </span><span class="c1">-- Error: IN 인자</span>
+</span><span id="line-13"><span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="n">callee</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="p">...</span><span class="w">   </span><span class="c1">-- OK: OUT 인자</span>
+</span><span id="line-14"><span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="n">callee</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">...</span><span class="w">   </span><span class="c1">-- OK: 변수</span>
+</span><span id="line-15"><span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="n">callee</span><span class="p">(</span><span class="k">c</span><span class="p">)</span><span class="w"> </span><span class="p">...</span><span class="w">   </span><span class="c1">-- Error: 상수</span>
+</span><span id="line-16"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>호출되는 함수는 저장 함수, 내부 함수, 빌트인 함수 이렇게 세 가지 종류이다.
+이 중에서 빌트인 함수는 <a class="reference internal" href="../sql/function/index.html#operators-and-functions"><span class="std std-ref">연산자와 함수</span></a> 장에 나열된 큐브리드 내장 함수들을 말한다.
+단, 빌트인 함수들 중에서 <a class="reference internal" href="../sql/function/condition_fn.html#func-if"><span class="std std-ref">IF</span></a>는 PL/CSQL 문법과 충돌을 일으키므로 사용할 수 없다.</p>
+<p>다른 저장 함수나 빌트인 함수 호출문 실행 중에 에러가 나면 SQL_ERROR Exception이 발생한다.</p>
+</section>
+<section id="case">
+<h2>CASE 표현식<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#case" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#case'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CASE 표현식은 여러 개의 조건을 순차적으로 검사해서 가장 처음 만족하는 조건에 연관되어 있는 값을 갖는다.</p>
+<p>CASE 표현식은 <a class="reference internal" href="plcsql_stmt.html#case-stmt"><span class="std std-ref">CASE 실행문</span></a>(Statement)과 마찬가지로 CASE 키워드 직후에 표현식을 갖는 형태와 갖지 않는 형태가 있다.</p>
+<ul class="simple">
+<li><p>CASE 키워드 직후에 표현식을 갖는 형태에서는 우선 이 최초 표현식을 계산한 다음, WHEN 절들의 표현식을 하나씩 차례로 계산해서 최초 표현식과 일치하는 값을 찾고, 해당 THEN 절의 표현식을 계산해서 CASE문의 최종값으로 한다. 최초 표현식은 단 한번 계산된다.</p></li>
+<li><p>CASE 키워드 직후에 표현식을 갖지 않는 형태에서는 CASE 키워드 이후 여러 개의 WHEN 절의 표현식은 BOOLEAN 타입을 가져야 한다. 이들 표현식을 하나씩 차례로 계산하다가 처음으로 TRUE 값이 되는 표현식이 발견되면 해당 THEN 절의 표현식을 계산해서 CASE문의 최종값으로 한다.</p></li>
+</ul>
+<p>두 형태 모두 선택적으로 ELSE 절을 가질 수 있다. 이는 조건을 만족하는 WHEN 이후 표현식을 찾지 못했을 경우에 값으로 가질 표현식을  지정한다. 조건을 만족하는 WHEN 절이 없고 ELSE 절도 없을 때 전체 CASE 표현식은 NULL 값을 갖는다.</p>
+<p>다음은 첫 번째 형태의 CASE 표현식 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">print_even_odd</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">MOD</span><span class="w"> </span><span class="mi">2</span>
+</span><span id="line-6"><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Even'</span>
+</span><span id="line-7"><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Odd'</span>
+</span><span id="line-8"><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'NULL'</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">END</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="w">    </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span><span id="line-12"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>다음은 유사한 동작을 하는 두 번째 형태의 CASE 표현식 예제이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">print_even_odd</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">BEGIN</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">CASE</span>
+</span><span id="line-6"><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">MOD</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Even'</span>
+</span><span id="line-7"><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">MOD</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Odd'</span>
+</span><span id="line-8"><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'NULL'</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">END</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="w">    </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span><span id="line-12"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="sqlcode-sqlerrm">
+<span id="sqlcode"></span><h2>SQLCODE, SQLERRM<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sqlcode-sqlerrm" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sqlcode-sqlerrm'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Exception 처리 block 안에서 SQLCODE와 SQLERRM은 각각 현재 처리 중인 Exception의 코드(INTEGER 타입)와
+에러메시지(STRING 타입)를 나타낸다.
+Exception 처리 block 밖에서 SQLCODE와 SQLERRM은 각각 0과 ‘no error’ 값을 갖는다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_sql_code_errm</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="p">...</span>
+</span><span id="line-5"><span class="k">EXCEPTION</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="n">OTHERS</span><span class="w"> </span><span class="k">THEN</span>
+</span><span id="line-7"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'code='</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">SQLCODE</span><span class="p">);</span>
+</span><span id="line-8"><span class="w">        </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="p">(</span><span class="s1">'error message'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">SQLERRM</span><span class="p">);</span>
+</span><span id="line-9"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="plcsql_stmt.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        실행문
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="jsp.html">
+        자바 저장 프로시저
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">리터럴</a></li>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">식별자</a></li>
+<li><a :data-current="activeSection === '#static-sql'" class="reference internal" href="#static-sql">Static SQL 결과 크기</a></li>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">커서 속성</a></li>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">이항 연산, 단항 연산, 괄호</a></li>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">레코드 필드 참조</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">함수 호출</a></li>
+<li><a :data-current="activeSection === '#case'" class="reference internal" href="#case">CASE 표현식</a></li>
+<li><a :data-current="activeSection === '#sqlcode-sqlerrm'" class="reference internal" href="#sqlcode-sqlerrm">SQLCODE, SQLERRM</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 19, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

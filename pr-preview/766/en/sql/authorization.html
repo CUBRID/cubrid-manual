@@ -371,6 +371,7 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>If <strong>PUBLIC</strong> is changed to <strong>NOLOGIN</strong>, connections as <strong>PUBLIC</strong> are rejected. A connection that does not specify a user name is made as <strong>PUBLIC</strong>, so it is rejected as well.</p>
+<p>The login capability controls only logging in. Authorization and ownership are not affected, so even while <strong>PUBLIC</strong> is <strong>NOLOGIN</strong>, authorization granted with the <strong>GRANT</strong> statement and inheritance through the group still work.</p>
 </div>
 </section>
 <section id="user-s-comment-change">

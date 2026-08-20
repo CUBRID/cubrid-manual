@@ -37,7 +37,8 @@ You can create a user using the CREATE USER statement. The default DBA, PUBLIC u
 
 *   *user_name*: specifies the user name to create.
 *   *password*: specifies the user password to create.
-*   **LOGIN** | **NOLOGIN**: specifies whether the user to create can log in. If omitted, the user can log in. For details, see :ref:`user-login-capability`.
+*   **LOGIN**: specifies that the user to create can log in. The default is **LOGIN**.
+*   **NOLOGIN**: specifies that the user to create cannot log in. For details, see :ref:`user-login-capability`.
 *   *comment_string*: specifies the user comment to create.
 
 .. note::
@@ -107,14 +108,15 @@ You can use the ALTER USER statement to change the password, members, login capa
 
 *   *user_name*: specifies the user name to change.
 *   *password*: specifies the user password to change.
-*   **LOGIN** | **NOLOGIN**: specifies whether the user to change can log in. If omitted, the current value is kept. For details, see :ref:`user-login-capability`.
+*   **LOGIN**: specifies that the user to change can log in.
+*   **NOLOGIN**: specifies that the user to change cannot log in.
 *   *comment_string*: specifies the user comment to change.
 
 .. note::
 
     **DBA** and **DBA** members can use the ALTER USER statement to change the password, members, login capability and comment of **all users**.
 
-    **General users** can change **their own** password, member and comment using the ALTER USER statement. They cannot change the login capability.
+    **General users** can change **their own** password, member and comment using the ALTER USER statement.
 
 The following example creates a user test_user1 and changes the password.
 
@@ -152,11 +154,11 @@ The following example deletes the members of a created user group. The *marketin
 User's Login Capability
 -----------------------
 
-A user who cannot log in cannot connect to the database. An attempt to connect fails with the following error. ::
+Connecting to the database as a user who cannot log in raises the following error. ::
 
     ERROR: Login is disabled for user "test_user1".
 
-The login capability is checked only when a connection is made. Therefore, a session that is already connected keeps working after the user is changed to **NOLOGIN**, and only new connections are rejected.
+The login capability is checked only on connection, so a session that is already connected is kept even after the user is changed to **NOLOGIN**.
 
 The following example creates a user who cannot log in, and then allows the user to log in again.
 

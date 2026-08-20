@@ -255,7 +255,8 @@
 <ul class="simple">
 <li><p><em>user_name</em>: 생성할 사용자 이름을 지정한다.</p></li>
 <li><p><em>password</em>: 생성할 사용자의 비밀번호를 지정한다.</p></li>
-<li><p><strong>LOGIN</strong> | <strong>NOLOGIN</strong>: 생성할 사용자의 로그인 가능 여부를 지정한다. 생략하면 로그인이 가능하다. 자세한 내용은 <a class="reference internal" href="#user-login-capability"><span class="std std-ref">사용자의 로그인 가능 여부</span></a> 를 참고한다.</p></li>
+<li><p><strong>LOGIN</strong>: 생성할 사용자가 로그인할 수 있도록 지정한다. 기본값은 <strong>LOGIN</strong> 이다.</p></li>
+<li><p><strong>NOLOGIN</strong>: 생성할 사용자가 로그인할 수 없도록 지정한다. 자세한 내용은 <a class="reference internal" href="#user-login-capability"><span class="std std-ref">사용자의 로그인 가능 여부</span></a> 를 참고한다.</p></li>
 <li><p><em>comment_string</em>: 생성할 사용자에 대한 커멘트를 지정한다.</p></li>
 </ul>
 <div class="admonition note">
@@ -313,13 +314,14 @@
 <ul class="simple">
 <li><p><em>user_name</em>: 변경할 사용자 이름을 지정한다.</p></li>
 <li><p><em>password</em>: 변경할 사용자의 비밀번호를 지정한다.</p></li>
-<li><p><strong>LOGIN</strong> | <strong>NOLOGIN</strong>: 변경할 사용자의 로그인 가능 여부를 지정한다. 생략하면 기존 값을 유지한다. 자세한 내용은 <a class="reference internal" href="#user-login-capability"><span class="std std-ref">사용자의 로그인 가능 여부</span></a> 를 참고한다.</p></li>
+<li><p><strong>LOGIN</strong>: 변경할 사용자가 로그인할 수 있도록 지정한다.</p></li>
+<li><p><strong>NOLOGIN</strong>: 변경할 사용자가 로그인할 수 없도록 지정한다.</p></li>
 <li><p><em>comment_string</em>: 변경할 사용자에 대한 커멘트를 지정한다.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p><strong>DBA</strong> 와 <strong>DBA</strong> 의 멤버는 ALTER USER 문을 사용하여 <strong>모든 사용자</strong> 의 비밀번호, 멤버, 로그인 가능 여부 및 커멘트를 변경할 수 있다.</p>
-<p><strong>일반 사용자</strong> 는 ALTER USER 문을 사용하여 <strong>본인</strong> 의 비밀번호, 멤버 및 커멘트를 변경할 수 있다. 로그인 가능 여부는 변경할 수 없다.</p>
+<p><strong>일반 사용자</strong> 는 ALTER USER 문을 사용하여 <strong>본인</strong> 의 비밀번호, 멤버 및 커멘트를 변경할 수 있다.</p>
 </div>
 <p>다음은 test_user1 사용자를 생성하고 비밀번호를 변경하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="p">;</span>
@@ -348,12 +350,12 @@
 </div>
 <section id="user-login-capability">
 <span id="id6"></span><h3>사용자의 로그인 가능 여부<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-login-capability" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#user-login-capability'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>로그인이 불가한 사용자는 데이터베이스에 접속할 수 없다. 접속을 시도하면 다음과 같은 에러가 발생한다.</p>
+<p>로그인이 불가한 사용자로 데이터베이스에 접속하면 다음과 같은 에러가 발생한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Login</span> <span class="ow">is</span> <span class="n">disabled</span> <span class="k">for</span> <span class="n">user</span> <span class="s2">"test_user1"</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>로그인 가능 여부는 접속 시점에만 검사한다. 따라서 이미 접속되어 있는 세션은 <strong>NOLOGIN</strong>으로 변경되어도 그대로 동작하며, 이후의 신규 접속부터 거부된다.</p>
-<p>다음은 로그인이 불가한 사용자를 생성한 후, 다시 로그인이 가능하도록 변경하는 예제이다.</p>
+<p>로그인 가능 여부는 접속할 때만 검사하므로, 이미 접속한 세션은 <strong>NOLOGIN</strong>으로 변경해도 그대로 유지된다.</p>
+<p>다음은 로그인이 불가한 사용자를 생성한 후 다시 로그인이 가능하도록 변경하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'password'</span><span class="w"> </span><span class="n">NOLOGIN</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">LOGIN</span><span class="p">;</span>
 </span></code></pre></div>
@@ -737,7 +739,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 19, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 20, 2026. </p>
 </div>
 </div>
 </footer>

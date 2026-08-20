@@ -179,6 +179,12 @@ test_user1 사용자로 데이터베이스에 접속하면 다음과 같은 에�
 
     SELECT name, is_loginable FROM db_user;
 
+다음은 비밀번호와 로그인 허용 여부, 커멘트를 한 문장으로 함께 변경하는 예제이다. **ADD MEMBERS**, **DROP MEMBERS** 와는 함께 사용할 수 없다.
+
+.. code-block:: sql
+
+    ALTER USER test_user1 PASSWORD '1234' NOLOGIN COMMENT 'blocked temporarily';
+
 .. note::
 
     로그인 허용 여부는 로그인할 때 확인한다. 따라서 사용자를 **NOLOGIN**\으로 변경해도 그 사용자의 기존 연결은 끊어지지 않으며, 이후의 신규 접속과 :ref:`login () 메서드 <login-method>`\를 통한 사용자 전환만 거부된다.

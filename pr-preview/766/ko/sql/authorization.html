@@ -363,6 +363,10 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">is_loginable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
+<p>다음은 비밀번호와 로그인 허용 여부, 커멘트를 한 문장으로 함께 변경하는 예제이다. <strong>ADD MEMBERS</strong>, <strong>DROP MEMBERS</strong> 와는 함께 사용할 수 없다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'1234'</span><span class="w"> </span><span class="n">NOLOGIN</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'blocked temporarily'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>로그인 허용 여부는 로그인할 때 확인한다. 따라서 사용자를 <strong>NOLOGIN</strong>으로 변경해도 그 사용자의 기존 연결은 끊어지지 않으며, 이후의 신규 접속과 <a class="reference internal" href="#login-method"><span class="std std-ref">login () 메서드</span></a>를 통한 사용자 전환만 거부된다.</p>

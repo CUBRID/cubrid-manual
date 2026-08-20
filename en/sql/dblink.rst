@@ -690,6 +690,9 @@ Common Constraints
 ------------------
 
 *   The charset of the remote database must be unicode (utf-8).
+*   The collation of remote string columns is assumed to be a binary collation (e.g., utf8_bin).
+    For remote string columns using a non-binary collation (e.g., case/accent-insensitive),
+    correct behavior is not guaranteed (unsupported), as the results may vary depending on the query.
 *   Table extension style (object@server)
         -   Supports only tables, views, and synonyms
         -   Serial, built-in functions, and stored functions are not supported.

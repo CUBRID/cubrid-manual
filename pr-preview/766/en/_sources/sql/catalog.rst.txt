@@ -2100,7 +2100,7 @@ The following example show how to retrieve authorization information for objects
 DB_USER
 -------
 
-Represents information of users for which the current user has access authorization to a database. To change the is_loginable value, see :ref:`user-login-capability`.
+Represents information of users for which the current user has access authorization to a database.
 
 +--------------------+---------------------+----------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type         |   Description                                                                    |

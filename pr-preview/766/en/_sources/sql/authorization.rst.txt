@@ -37,8 +37,7 @@ You can create a user using the CREATE USER statement. The default DBA, PUBLIC u
 
 *   *user_name*: specifies the user name to create.
 *   *password*: specifies the user password to create.
-*   **LOGIN**: specifies that the user to create can log in. The default is **LOGIN**.
-*   **NOLOGIN**: specifies that the user to create cannot log in. For details, see :ref:`user-login-capability`.
+*   [**LOGIN** | **NOLOGIN**]: specifies whether the user to create can log in. If not specified, the default value is **LOGIN**. For details, see :ref:`user-login-capability`.
 *   *comment_string*: specifies the user comment to create.
 
 .. note::
@@ -100,21 +99,19 @@ ALTER USER
 You can use the ALTER USER statement to change the password, members, login capability and comment of a created user. ::
 
     ALTER USER user_name 
-    [PASSWORD password] |
+    [PASSWORD password] [LOGIN | NOLOGIN] |
     [ADD MEMBERS user_name [{, user_name } ... ]] |
     [DROP MEMBERS user_name [{, user_name } ... ]]
-    [LOGIN | NOLOGIN]
     [COMMENT 'comment_string'];
 
 *   *user_name*: specifies the user name to change.
 *   *password*: specifies the user password to change.
-*   **LOGIN**: specifies that the user to change can log in.
-*   **NOLOGIN**: specifies that the user to change cannot log in.
+*   [**LOGIN** | **NOLOGIN**]: specifies whether the user to change can log in. For details, see :ref:`user-login-capability`.
 *   *comment_string*: specifies the user comment to change.
 
 .. note::
 
-    **DBA** and **DBA** members can use the ALTER USER statement to change the password, members, login capability and comment of **all users**.
+    **DBA** and **DBA** members can use the ALTER USER statement to change the password, members and comment of **all users**.
 
     **General users** can change **their own** password, member and comment using the ALTER USER statement.
 
@@ -154,17 +151,24 @@ The following example deletes the members of a created user group. The *marketin
 User's Login Capability
 -----------------------
 
-Connecting to the database as a user who cannot log in raises the following error. ::
-
-    ERROR: Login is disabled for user "test_user1".
-
-The login capability is checked only on connection, so a session that is already connected is kept even after the user is changed to **NOLOGIN**.
-
-The following example creates a user who cannot log in, and then allows the user to log in again.
+The following example creates a user who is not allowed to log in.
 
 .. code-block:: sql
 
     CREATE USER test_user1 PASSWORD 'password' NOLOGIN;
+
+Connecting to the database as test_user1 raises the following error.
+
+::
+
+    ERROR: Login is disabled for user "test_user1".
+
+A session that is already connected is kept even after the user is changed to **NOLOGIN**.
+
+The following example allows test_user1 to log in again.
+
+.. code-block:: sql
+
     ALTER USER test_user1 LOGIN;
 
 You can see the login capability of a user with this syntax.
@@ -177,11 +181,11 @@ You can see the login capability of a user with this syntax.
 
     Only **DBA** and **DBA** members can change the login capability of a user.
 
-    However, the login capability of **DBA**, **INFORMATION_SCHEMA**, and the logged-in user itself cannot be changed.
+    However, the login capability of **DBA**, **INFORMATION_SCHEMA**, and the currently logged-in user themselves cannot be changed.
 
 .. warning::
 
-    If **PUBLIC** is changed to **NOLOGIN**, a connection that does not specify a user name is rejected.
+    If **PUBLIC** is changed to **NOLOGIN**, connections as **PUBLIC** are rejected. A connection that does not specify a user name is made as **PUBLIC**, so it is rejected as well.
 
 User's COMMENT Change
 ---------------------

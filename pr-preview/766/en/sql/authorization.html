@@ -251,8 +251,7 @@
 <ul class="simple">
 <li><p><em>user_name</em>: specifies the user name to create.</p></li>
 <li><p><em>password</em>: specifies the user password to create.</p></li>
-<li><p><strong>LOGIN</strong>: specifies that the user to create can log in. The default is <strong>LOGIN</strong>.</p></li>
-<li><p><strong>NOLOGIN</strong>: specifies that the user to create cannot log in. For details, see <a class="reference internal" href="#user-login-capability"><span class="std std-ref">User’s Login Capability</span></a>.</p></li>
+<li><p>[<strong>LOGIN</strong> | <strong>NOLOGIN</strong>]: specifies whether the user to create can log in. If not specified, the default value is <strong>LOGIN</strong>. For details, see <a class="reference internal" href="#user-login-capability"><span class="std std-ref">User’s Login Capability</span></a>.</p></li>
 <li><p><em>comment_string</em>: specifies the user comment to create.</p></li>
 </ul>
 <div class="admonition note">
@@ -300,23 +299,21 @@
 <span id="id2"></span><h2>ALTER USER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alter-user" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#alter-user'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>You can use the ALTER USER statement to change the password, members, login capability and comment of a created user.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="n">USER</span> <span class="n">user_name</span>
-</span><span id="line-2"><span class="p">[</span><span class="n">PASSWORD</span> <span class="n">password</span><span class="p">]</span> <span class="o">|</span>
+</span><span id="line-2"><span class="p">[</span><span class="n">PASSWORD</span> <span class="n">password</span><span class="p">]</span> <span class="p">[</span><span class="n">LOGIN</span> <span class="o">|</span> <span class="n">NOLOGIN</span><span class="p">]</span> <span class="o">|</span>
 </span><span id="line-3"><span class="p">[</span><span class="n">ADD</span> <span class="n">MEMBERS</span> <span class="n">user_name</span> <span class="p">[{,</span> <span class="n">user_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]]</span> <span class="o">|</span>
 </span><span id="line-4"><span class="p">[</span><span class="n">DROP</span> <span class="n">MEMBERS</span> <span class="n">user_name</span> <span class="p">[{,</span> <span class="n">user_name</span> <span class="p">}</span> <span class="o">...</span> <span class="p">]]</span>
-</span><span id="line-5"><span class="p">[</span><span class="n">LOGIN</span> <span class="o">|</span> <span class="n">NOLOGIN</span><span class="p">]</span>
-</span><span id="line-6"><span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">];</span>
+</span><span id="line-5"><span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">];</span>
 </span></code></pre></div>
 </div>
 <ul class="simple">
 <li><p><em>user_name</em>: specifies the user name to change.</p></li>
 <li><p><em>password</em>: specifies the user password to change.</p></li>
-<li><p><strong>LOGIN</strong>: specifies that the user to change can log in.</p></li>
-<li><p><strong>NOLOGIN</strong>: specifies that the user to change cannot log in.</p></li>
+<li><p>[<strong>LOGIN</strong> | <strong>NOLOGIN</strong>]: specifies whether the user to change can log in. For details, see <a class="reference internal" href="#user-login-capability"><span class="std std-ref">User’s Login Capability</span></a>.</p></li>
 <li><p><em>comment_string</em>: specifies the user comment to change.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>DBA</strong> and <strong>DBA</strong> members can use the ALTER USER statement to change the password, members, login capability and comment of <strong>all users</strong>.</p>
+<p><strong>DBA</strong> and <strong>DBA</strong> members can use the ALTER USER statement to change the password, members and comment of <strong>all users</strong>.</p>
 <p><strong>General users</strong> can change <strong>their own</strong> password, member and comment using the ALTER USER statement.</p>
 </div>
 <p>The following example creates a user test_user1 and changes the password.</p>
@@ -346,14 +343,17 @@
 </div>
 <section id="user-s-login-capability">
 <span id="user-login-capability"></span><h3>User’s Login Capability<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#user-s-login-capability" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#user-s-login-capability'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>Connecting to the database as a user who cannot log in raises the following error.</p>
+<p>The following example creates a user who is not allowed to log in.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'password'</span><span class="w"> </span><span class="n">NOLOGIN</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>Connecting to the database as test_user1 raises the following error.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Login</span> <span class="ow">is</span> <span class="n">disabled</span> <span class="k">for</span> <span class="n">user</span> <span class="s2">"test_user1"</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>The login capability is checked only on connection, so a session that is already connected is kept even after the user is changed to <strong>NOLOGIN</strong>.</p>
-<p>The following example creates a user who cannot log in, and then allows the user to log in again.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'password'</span><span class="w"> </span><span class="n">NOLOGIN</span><span class="p">;</span>
-</span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">LOGIN</span><span class="p">;</span>
+<p>A session that is already connected is kept even after the user is changed to <strong>NOLOGIN</strong>.</p>
+<p>The following example allows test_user1 to log in again.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">LOGIN</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
 <p>You can see the login capability of a user with this syntax.</p>
@@ -363,11 +363,11 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Only <strong>DBA</strong> and <strong>DBA</strong> members can change the login capability of a user.</p>
-<p>However, the login capability of <strong>DBA</strong>, <strong>INFORMATION_SCHEMA</strong>, and the logged-in user itself cannot be changed.</p>
+<p>However, the login capability of <strong>DBA</strong>, <strong>INFORMATION_SCHEMA</strong>, and the currently logged-in user themselves cannot be changed.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If <strong>PUBLIC</strong> is changed to <strong>NOLOGIN</strong>, a connection that does not specify a user name is rejected.</p>
+<p>If <strong>PUBLIC</strong> is changed to <strong>NOLOGIN</strong>, connections as <strong>PUBLIC</strong> are rejected. A connection that does not specify a user name is made as <strong>PUBLIC</strong>, so it is rejected as well.</p>
 </div>
 </section>
 <section id="user-s-comment-change">

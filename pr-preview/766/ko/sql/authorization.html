@@ -351,12 +351,12 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'password'</span><span class="w"> </span><span class="n">NOLOGIN</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>test_user1 로 데이터베이스에 접속하면 다음과 같은 에러가 발생한다.</p>
+<p>test_user1 사용자로 데이터베이스에 접속하면 다음과 같은 에러가 발생한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Login</span> <span class="ow">is</span> <span class="n">disabled</span> <span class="k">for</span> <span class="n">user</span> <span class="s2">"test_user1"</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>이미 접속한 세션은 <strong>NOLOGIN</strong>으로 변경해도 그대로 유지된다.</p>
-<p>다음은 test_user1 의 로그인을 다시 허용하는 예제이다.</p>
+<p>사용자가 <strong>NOLOGIN</strong>으로 변경되어도 이미 접속한 세션은 그대로 유지된다.</p>
+<p>다음은 test_user1 사용자의 로그인을 다시 허용하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">LOGIN</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -367,7 +367,7 @@
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p><strong>DBA</strong> 와 <strong>DBA</strong> 의 멤버만 사용자의 로그인 허용 여부를 변경할 수 있다.</p>
-<p>단, <strong>DBA</strong>, <strong>INFORMATION_SCHEMA</strong>, 로그인한 사용자 본인의 로그인 허용 여부는 변경할 수 없다.</p>
+<p>단, <strong>DBA</strong>, <strong>INFORMATION_SCHEMA</strong>, 로그인한 사용자 본인은 변경 대상이 될 수 없다.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>

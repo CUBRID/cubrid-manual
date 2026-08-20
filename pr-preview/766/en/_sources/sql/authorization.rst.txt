@@ -175,6 +175,12 @@ You can see the login capability of a user with this syntax.
 
     SELECT name, is_loginable FROM db_user;
 
+The following example changes the password, the login capability, and the comment in a single statement. It cannot be combined with **ADD MEMBERS** or **DROP MEMBERS**.
+
+.. code-block:: sql
+
+    ALTER USER test_user1 PASSWORD '1234' NOLOGIN COMMENT 'blocked temporarily';
+
 .. note::
 
     The login capability is checked when a user logs in. Therefore, changing a user to **NOLOGIN** does not disconnect existing connections of that user; only new connections and switching to that user with the :ref:`login( ) method <login-method>` are rejected.

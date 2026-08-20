@@ -359,6 +359,10 @@
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">is_loginable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
+<p>The following example changes the password, the login capability, and the comment in a single statement. It cannot be combined with <strong>ADD MEMBERS</strong> or <strong>DROP MEMBERS</strong>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'1234'</span><span class="w"> </span><span class="n">NOLOGIN</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'blocked temporarily'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The login capability is checked when a user logs in. Therefore, changing a user to <strong>NOLOGIN</strong> does not disconnect existing connections of that user; only new connections and switching to that user with the <a class="reference internal" href="#login-method"><span class="std std-ref">login( ) method</span></a> are rejected.</p>

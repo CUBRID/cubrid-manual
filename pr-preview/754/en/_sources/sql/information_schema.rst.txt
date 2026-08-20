@@ -32,7 +32,7 @@ View Name                                         Description
 ================================================= ==================================
 :ref:`information-schema-column-privileges`       Privileges defined on columns     
 :ref:`information-schema-columns`                 Columns in each table             
-:ref:`information-schema-domains`                 Domain information                
+:ref:`information-schema-domains`                 User-defined domains              
 :ref:`information-schema-foreign-servers`         Foreign server information        
 :ref:`information-schema-key-column-usage`        Which key columns have constraints
 :ref:`information-schema-parameters`              Routine parameters                
@@ -170,7 +170,7 @@ The ``columns`` view contains information about all columns of the tables and vi
 domains
 -------
 
-The ``domains`` view contains all domains defined in the current database. CUBRID does not support user-defined domains, so this view is always empty.
+The ``domains`` view contains all user-defined domains in the current database. CUBRID does not support user-defined domains, so this view is always empty.
 
 +--------------------------+---------------+------------------------------------------------------------------+
 | Column Name              | Data Type     | Description                                                      |

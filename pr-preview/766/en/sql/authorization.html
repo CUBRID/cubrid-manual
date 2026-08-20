@@ -361,7 +361,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A user who is not allowed to log in cannot be switched to with the <a class="reference internal" href="#login-method"><span class="std std-ref">login( ) method</span></a>, either. However, existing connections of that user are not disconnected.</p>
+<p>The login capability is checked when a user logs in. Therefore, changing a user to <strong>NOLOGIN</strong> does not disconnect existing connections of that user; only new connections and switching to that user with the <a class="reference internal" href="#login-method"><span class="std std-ref">login( ) method</span></a> are rejected.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

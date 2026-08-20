@@ -177,7 +177,7 @@ You can see the login capability of a user with this syntax.
 
 .. note::
 
-    A user who is not allowed to log in cannot be switched to with the :ref:`login( ) method <login-method>`, either. However, existing connections of that user are not disconnected.
+    The login capability is checked when a user logs in. Therefore, changing a user to **NOLOGIN** does not disconnect existing connections of that user; only new connections and switching to that user with the :ref:`login( ) method <login-method>` are rejected.
 
 .. note::
 

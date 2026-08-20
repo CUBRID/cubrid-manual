@@ -167,8 +167,6 @@ test_user1 사용자로 데이터베이스에 접속하면 다음과 같은 에�
 
     ERROR: Login is disabled for user "test_user1".
 
-사용자가 **NOLOGIN**\으로 변경되어도 이미 접속한 세션은 그대로 유지된다.
-
 다음은 test_user1 사용자의 로그인을 다시 허용하는 예제이다.
 
 .. code-block:: sql
@@ -180,6 +178,10 @@ test_user1 사용자로 데이터베이스에 접속하면 다음과 같은 에�
 .. code-block:: sql
 
     SELECT name, is_loginable FROM db_user;
+
+.. note::
+
+    로그인이 허용되지 않은 사용자로는 :ref:`login () 메서드 <login-method>`\로도 전환할 수 없다. 단, 그 사용자의 기존 연결은 끊어지지 않는다.
 
 .. note::
 
@@ -467,6 +469,8 @@ ALTER ... OWNER
 
     CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
     CALL method_definition ON variable [ ; ]
+
+.. _login-method:
 
 **login() 메서드**
 

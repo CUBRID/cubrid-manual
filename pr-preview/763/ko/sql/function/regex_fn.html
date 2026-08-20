@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>정규 표현식 함수와 연산자 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="정규 표현식 함수와 연산자 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="정규 표현식 함수와 연산자 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/logo_only.png" rel="icon"/>
+<link href="../../search.html" rel="search" title="검색"/>
+<link href="../../genindex.html" rel="index" title="색인"/>
+<link href="numeric_fn.html" rel="next" title="수치 연산 함수"/>
+<link href="string_fn.html" rel="prev" title="문자열 함수와 연산자"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../.././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/sql/function/regex_fn.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../release_note/index.html">Release Note</a>
+<a href="../.././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">연산자와 함수</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">정규 표현식 함수와 연산자</span>
+</nav>
+<div id="content" role="main">
+<section id="id1">
+<h1><a class="toc-backref" href="#id13" role="doc-backlink">정규 표현식 함수와 연산자</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>정규 표현식은 복잡한 검색 패턴을 표현하는 강력한 방법이다.
+이 섹션에서는 정규 표현식을 이용한 패턴을 매칭하는 함수 및 연산자를 설명한다.</p>
+<nav class="contents" id="id2">
+<p class="topic-title">목차</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#id1" id="id13">정규 표현식 함수와 연산자</a></p>
+<ul>
+<li><p><a class="reference internal" href="#regex-syntax" id="id14">정규 표현식 문법</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id15">특수 패턴 문자</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id16">수량자</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id17">그룹</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id18">어서션</a></p></li>
+<li><p><a class="reference internal" href="#id8" id="id19">구분자</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id20">문자 클래스</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id10" id="id21">개별 문자</a></p></li>
+<li><p><a class="reference internal" href="#id11" id="id22">범위</a></p></li>
+<li><p><a class="reference internal" href="#posix" id="id23">POSIX 기반 문자 클래스</a></p></li>
+<li><p><a class="reference internal" href="#regex-unicode-character-class" id="id24">유니코드 문자 클래스</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#regexp-rlike" id="id25">REGEXP, RLIKE</a></p></li>
+<li><p><a class="reference internal" href="#regexp-count" id="id26">REGEXP_COUNT</a></p></li>
+<li><p><a class="reference internal" href="#regexp-instr" id="id27">REGEXP_INSTR</a></p></li>
+<li><p><a class="reference internal" href="#regexp-like" id="id28">REGEXP_LIKE</a></p></li>
+<li><p><a class="reference internal" href="#regexp-replace" id="id29">REGEXP_REPLACE</a></p></li>
+<li><p><a class="reference internal" href="#regexp-substr" id="id30">REGEXP_SUBSTR</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="regex-syntax">
+<span id="id3"></span><h2><a class="toc-backref" href="#id14" role="doc-backlink">정규 표현식 문법</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regex-syntax" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regex-syntax'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>정규 표현식을 구현하기 위해 CUBRID는 Google RE2 라이브러리와 C++ &lt;regex&gt; 표준 라이브러리를 사용한다.
+<strong>regexp_engine</strong> 시스템 파라미터를 설정하여 정규 표현식 라이브러리를 선택할 수 있고 Google RE2 라이브러리를 기본으로 사용한다.</p>
+<p>다음 하위 섹션에서 지원되는 정규식 문법을 예시와 함께 설명한다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p><strong>호환성 고려사항</strong></p>
+<ul class="simple">
+<li><p>CUBRID 11 이전 버전에서 CUBRID는 Henry Spencer의 정규식 구현을 사용하였다.</p></li>
+<li><p>CUBRID 11.0 부터 CUBRID는 Henry Spencer 라이브러리를 제거하고 C++ &lt;regex&gt; 표준 라이브러리를 사용하여 정규식 함수와 연산자를 지원한다.</p></li>
+<li><p>CUBRID 11.2 부터 CUBRID는 Google RE2 라이브러리를 추가로 지원한다. 시스템 파라미터를 설정하여 C++ &lt;regex&gt; 또는 Google RE2를 선택하여 사용할 수 있다.</p></li>
+</ul>
+<p>1. Henry Spencer의 정규식 구현은 바이트 방식으로 작동한다. 따라서 REGEXP 및 RLIKE는 멀티바이트를 지원하지 않았다.
+따라서 인자의 콜레이션을 고려하지 않고 ASCII 인코딩으로만 작동했다.</p>
+<p>2. Henry Spencer 라이브러리는 POSIX의 <em>collating sequence</em> (<em>[.character.]</em>) 표현식을 지원했지만 더 이상 지원하지 않는다.
+또한 <em>character equivalents</em> (<em>[=word=]</em>) 문법도 지원하지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 에러를 반환한다.</p>
+<p>3. Henry Spencer 라이브러리는 점 연산자 (.)로 행 종결자를 매치한다. 그러나 C++ &lt;regex&gt;는 매치되지 않는다.</p>
+<p>4. 단어-시작 경계 와 단어-끝 경계 (각각 [[:&lt;:]] 와 [[:&gt;:]]) 문법을 지원하지 않는다. 대신, 단어 경계 표기 (\b) 를 사용할 수 있다.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p><strong>C++ &lt;regex&gt; 라이브러리 주의사항</strong></p>
+<p>입력 문자열이 길거나 정규 표현식 패턴이 복잡한 경우 C++ &lt;regex&gt; 라이브러리에서 과도한 재귀 호출이 발생할 수 있는 문제가 있다.
+따라서 C++ &lt;regex&gt; 대신 Google RE2를 사용하는 것을 권장한다.
+C++ &lt;regex&gt;는 하위 호환성을 지원하기 위해 남겨두었으며 이후 버전에서 제거될 예정이다. (deprecated)</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p><strong>멀티바이트 문자열 비교 고려사항</strong></p>
+<p>C++ &lt;regex&gt;는 시스템 로케일에 따라 C++ &lt;locale&gt;에 의해 멀티바이트 비교를 수행한다. 따라서 로케일에 민감한 기능을 사용하려면 해당 시스템 로케일이 설치되어 있어야 합니다.</p>
+</div>
+<section id="id4">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">특수 패턴 문자</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>특수 패턴 문자는 문자열로 표현하기 어려운 문자를 나타내거나 문자 범위 (예: [a-z] 범위) 를 나타내기 위해 정규식 패턴에 나타날 때 특별한 의미를 갖는 문자(또는 문자 시퀀스) 이다.
+이러한 각 특수 패턴 문자는 단일 문자에 대해 매칭을 수행한다 (수량자 기호 제외).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>문자</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>.</p></td>
+<td><p>행 종결자를 제외한 모든 문자 (LF, CR, LS, PS).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\t</p></td>
+<td><p>수평 탭 문자 (\u0009 와 동일).</p></td>
+</tr>
+<tr class="row-even"><td><p>\n</p></td>
+<td><p>개행(줄 바꿈) 문자 (\u000A 와 동일).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\v</p></td>
+<td><p>세로 탭 문자 (\u000B 와 동일).</p></td>
+</tr>
+<tr class="row-even"><td><p>\f</p></td>
+<td><p>폼 피드 문자 (\u000C 와 동일).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\r</p></td>
+<td><p>캐리지 리턴 문자 (\u000D 와 동일)</p></td>
+</tr>
+<tr class="row-even"><td><p>\c<em>letter</em></p></td>
+<td><p>코드 단위 값이 <em>letter</em>의 코드 단위 값을
+32로 나눈 나머지와 같은 제어 코드 문자.</p></td>
+</tr>
+<tr class="row-odd"><td><p>\x<em>hh</em></p></td>
+<td><p>코드 단위 값이 2개의 16진수 <em>hh</em>에 해당하는 16진수 값을 갖는 문자</p></td>
+</tr>
+<tr class="row-even"><td><p>\u<em>hhhh</em></p></td>
+<td><p>코드 단위 값이 4자리 16진수 <em>hhhh</em>에 해당하는 16진수 값을 갖는 문자 <em>C++ &lt;regex&gt;만 지원</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>\x{<em>digits</em>}</p></td>
+<td><p><em>digits</em> 값에 해당하는 16진수 값을 갖는 문자 <em>Google RE2만 지원</em></p></td>
+</tr>
+<tr class="row-even"><td><p>\0</p></td>
+<td><p>널 문자 (\u0000와 동일). <em>C++ &lt;regex&gt;만 지원</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>\<em>num</em></p></td>
+<td><p>여는 괄호가 <em>num</em>번째인 부분 일치의 결과. 자세한 내용은 아래 그룹을 참조.</p></td>
+</tr>
+<tr class="row-even"><td><p>\d</p></td>
+<td><p>10진수 문자 ([[:digit:]] 와 동일).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\D</p></td>
+<td><p>10진수 문자가 아닌 모든 문자 ([^[:digit:]] 와 동일).</p></td>
+</tr>
+<tr class="row-even"><td><p>\s</p></td>
+<td><p>공백 문자 ([[:space:]] 와 동일).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\S</p></td>
+<td><p>공백 문자가 아닌 모든 문자 ([^[:space:]] 와 동일).</p></td>
+</tr>
+<tr class="row-even"><td><p>\w</p></td>
+<td><p>영숫자 또는 밑줄 문자 ([_[:alnum:]] 와 동일).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\W</p></td>
+<td><p>영숫자 또는 밑줄 문자가 아닌 모든 문자 ([^_[:alnum:]] 와 동일).</p></td>
+</tr>
+<tr class="row-even"><td><p>\<em>character</em></p></td>
+<td><div class="line-block">
+<div class="line">정규 표현식 내에서 특별한 의미를 해석하지 않고 있는 그대로 <em>character</em> 문자</div>
+<div class="line">위의 특수 문자 시퀀스를 형성하는 문자를 제외한 모든 문자를 이스케이프 한다.</div>
+<div class="line">필요한 대상: ^ $ \ . * + ? ( ) [ ] { } |</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>[<em>class</em>]</p></td>
+<td><p><em>class</em>의 일부인 문자열. 아래의 <a class="reference internal" href="#regex-posix-character-class"><span class="std std-ref">POSIX 기반 문자 클래스</span></a>를 참조.</p></td>
+</tr>
+<tr class="row-even"><td><p>[^<em>class</em>]</p></td>
+<td><p><em>class</em>의 일부가 아닌 문자열. 아래의 <a class="reference internal" href="#regex-posix-character-class"><span class="std std-ref">POSIX 기반 문자 클래스</span></a>를 참조.</p></td>
+</tr>
+<tr class="row-odd"><td><p>\p{<em>class</em>}</p></td>
+<td><p><em>class</em>의 유니코드 범위를 가지는 문자열. 아래의 <a class="reference internal" href="#regex-unicode-character-class"><span class="std std-ref">유니코드 문자 클래스</span></a>를 참조.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- .: 모든 문자와 일치</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^c.*$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'cubrid dbms'</span> <span class="n">regexp</span> <span class="s1">'^c.*$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<p>“\n”, “\t”, “\r” 및 “\\”와 같은 특수 문자를 매칭하려면 일부는 <strong>no_backslash_escapes</strong>(기본값: yes) 값을 <strong>no</strong>로 지정하여 백슬래시(\)로 이스케이프해야 한다.
+<strong>no_backslash_escapes</strong>에 대한 자세한 내용은 <a class="reference internal" href="../datatype.html#escape-characters"><span class="std std-ref">특수 문자 이스케이프</span></a>를 참조한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- \n : no_backslash_escapes=yes(기본값)인 경우 \n 특수 문자와 일치</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'new\nline'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'new\\nline'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'new</span><span class="se">\n</span><span class="s1">line'</span> <span class="n">REGEXP</span> <span class="s1">'new</span><span class="se">\\</span><span class="s1">nline'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">=====================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- \n : no_backslash_escapes=no일 때 \n 특수 문자와 일치</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'new\nline'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'new</span>
+</span><span id="line-3"><span class="s1">line'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'new</span>
+</span><span id="line-2"><span class="n">line</span><span class="s1">' regexp '</span><span class="n">new</span>
+</span><span id="line-3"><span class="n">line</span><span class="s1">')</span>
+</span><span id="line-4"><span class="o">=====================================</span>
+</span><span id="line-5">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id5">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">수량자</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>수량자 문자 또는 특수 패턴 문자 뒤에 지정합니다. 정규표현식 매칭에서 캐릭터가 반복되는 횟수를 지정할 수 있다:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Characters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>*</p></td>
+<td><p>선행하는 문자 또는 패턴이 0회 이상 일치</p></td>
+</tr>
+<tr class="row-odd"><td><p>+</p></td>
+<td><p>선행하는 문자 또는 패턴이 1회 이상 일치</p></td>
+</tr>
+<tr class="row-even"><td><p>?</p></td>
+<td><p>선행하는 문자 또는 패턴이 선택사항 (0회 또는 1회 일치)</p></td>
+</tr>
+<tr class="row-odd"><td><p>{<em>num</em>}</p></td>
+<td><p>선행하는 문자 또는 패턴이 정확히 <em>num</em>회 일치</p></td>
+</tr>
+<tr class="row-even"><td><p>{<em>num,</em>}</p></td>
+<td><p>선행하는 문자 또는 패턴이 정확히 <em>num</em>회 또는 그 이상 일치</p></td>
+</tr>
+<tr class="row-odd"><td><p>{<em>min,max</em>}</p></td>
+<td><p>선행하는 문자 또는 패턴이 최소 <em>min</em>회 일치하지만 <em>max</em>를 넘지 않음</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a+ : 하나 이상의 a 문자 시퀀스와 일치. 대소문자 구분하지 않음.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Aaaapricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^A+pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Aaaapricot'</span> <span class="n">regexp</span> <span class="s1">'^A+pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a? : 0 또는 1개의 문자와 일치</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Apricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^Aa?pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Apricot'</span> <span class="n">regexp</span> <span class="s1">'^Aa?pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==========================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Aapricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^Aa?pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Aapricot'</span> <span class="n">regexp</span> <span class="s1">'^Aa?pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Aaapricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^Aa?pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Aaapricot'</span> <span class="n">regexp</span> <span class="s1">'^Aa?pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- (cub)* : 시퀀스 abc의 0개 이상의 인스턴스와 일치</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubcub'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^(cub)*$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'cubcub'</span> <span class="n">regexp</span> <span class="s1">'^(cub)*$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==========================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<p>기본적으로 이러한 모든 수량자는 가능한 한 조건을 충족하는 많은 문자를 사용하는 <em>greedy</em> 방식으로 수행된다.
+그리고 이 동작은 한정자 뒤에 물음표(?)를 추가하여 <em>non-greedy</em>로 재정의할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- (a+), (a+?) : greedy 또는 non-greedy로 수량자를 사용해 각각 매칭 수행.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span><span class="w"> </span><span class="s1">'(a+)'</span><span class="p">),</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span><span class="w"> </span><span class="s1">'(a+?)'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span> <span class="s1">'(a+)'</span><span class="p">)</span>  <span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span> <span class="s1">'(a+?)'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================================</span>
+</span><span id="line-3">  <span class="s1">'aa'</span>                  <span class="s1">'a'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id6">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">그룹</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>그룹을 사용하면 단일 문자 대신 일련의 문자에 레이블 (예 $1)을 적용할 수 있다. 두 종류의 그룹이 있다.</p>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p>$int를 사용한 역참조 문법은 C++ &lt;regex&gt; 에서만 지원한다.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>문자</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>(<em>subpattern</em>)</p></td>
+<td><p>역참조를 생성하는 그룹</p></td>
+</tr>
+<tr class="row-odd"><td><p>(?:<em>subpattern</em>)</p></td>
+<td><p>역참조를 생성하지 않는 패시브 그룹</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 캡쳐된 그룹은 $int로 참조할 수 있다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'hello cubrid'</span><span class="p">,</span><span class="s1">'([[:alnum:]]+)'</span><span class="p">,</span><span class="s1">'$1!'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'hello cubrid'</span><span class="p">,</span><span class="s1">'([[:alnum:]]+)'</span><span class="p">,</span><span class="s1">'$1!'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==========================</span>
+</span><span id="line-3">  <span class="s1">'hello! cubrid!'</span>
+</span></code></pre></div>
+</div>
+<p>그룹이 역참조를 생성하면, 문자열에서 하위 패턴을 나타내는 문자가 하위 일치로 저장된다. 각 하위 일치 항목은 여는 괄호가 나타나는 순서에 따라 번호가 매겨진다 (첫 번째 하위 일치 항목은 1번, 두 번째 하위 일치 항목은 2번 등…).
+이러한 하위 일치는 전체 하위 패턴이 다른 곳에 다시 나타나도록 지정하기 위해 정규식 자체에서 사용할 수 있는데 (특수 문자 목록의 int 참조), REGEXP_REPLACE 함수의 대체 문자열에서 사용할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 그룹 없이 regexp_substr을 수행한다. 다음은 완전히 일치하는 경우이다.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span><span class="w"> </span><span class="s1">'[a-c]{3}k[a-c]{3}j[a-c]{3}'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- ([a-c]{3}) 는 \1 역참조를 생성한다</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span><span class="w"> </span><span class="s1">'([a-c]{3})k\1j\1'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span> <span class="s1">'[a-c]</span><span class="si">{3}</span><span class="s1">k[a-c]</span><span class="si">{3}</span><span class="s1">j[a-c]</span><span class="si">{3}</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'abckabcjabc'</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span> <span class="s1">'([a-c]</span><span class="si">{3}</span><span class="s1">)k</span><span class="se">\1</span><span class="s1">j</span><span class="se">\1</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">======================</span>
+</span><span id="line-7">  <span class="s1">'abckabcjabc'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id7">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">어서션</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>어서션은 문자열의 문자를 사용하지 않는 조건이다. 즉, 문자를 나타내지는 않지만 문자의 앞이나 뒤에 충족되어야 하는 조건이다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>문자</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>^</p></td>
+<td><p>문자열의 시작이나 행 종결자 다음</p></td>
+</tr>
+<tr class="row-odd"><td><p>$</p></td>
+<td><p>문자열의 끝이나 행 종결자 이전</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>다음의 문법은 C++ &lt;regex&gt; 에서만 제공한다.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>문자</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>\b</p></td>
+<td><p>이전 문자는 단어 문자이고 다음 문자는 단어가 아닌 문자(또는 그 반대)</p></td>
+</tr>
+<tr class="row-odd"><td><p>\B</p></td>
+<td><p>이전 및 다음 문자는 모두 단어 문자이거나 둘 다 단어가 아닌 문자</p></td>
+</tr>
+<tr class="row-even"><td><p>(?=subpattern)</p></td>
+<td><p>Positive lookahead. 이 문자 다음의 문자열은 하위 패턴과 일치해야 하지만 어떤 문자도 소비되지 않음</p></td>
+</tr>
+<tr class="row-odd"><td><p>(?!subpattern)</p></td>
+<td><p>Negative lookahead. 어서션 다음의 문자열은 하위 패턴과 일치하지 않아야 하지만 어떤 문자도 소비되지 않음</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- ^ : 문자열의 시작과 매칭</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^cub'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'cubrid dbms'</span> <span class="n">regexp</span> <span class="s1">'^cub'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- $ : 문자열의 끝과 매칭</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'this is cubrid dbms'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'dbms$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'this is cubrid dbms'</span> <span class="n">regexp</span> <span class="s1">'dbms$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">========================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- (?=subpattern): positive lookahead</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span><span class="w"> </span><span class="s1">'cubrid(?= sql)'</span><span class="p">,</span><span class="w"> </span><span class="s1">'CUBRID'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- (?!subpattern): nagative lookahead</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span><span class="w"> </span><span class="s1">'cubrid(?! sql)'</span><span class="p">,</span><span class="w"> </span><span class="s1">'CUBRID'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span> <span class="s1">'cubrid(?= sql)'</span><span class="p">,</span> <span class="s1">'CUBRID'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'cubrid dbms CUBRID sql cubrid rdbms'</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span> <span class="s1">'cubrid(?! sql)'</span><span class="p">,</span> <span class="s1">'CUBRID'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">======================</span>
+</span><span id="line-7">  <span class="s1">'CUBRID dbms cubrid sql CUBRID rdbms'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id8">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">구분자</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id8'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>패턴에 여러 구분자를 포함할 수 있다:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>문자</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>|</p></td>
+<td><p>두 개의 대체 패턴 또는 하위 패턴을 분리</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a|b : a 또는 b인 모든 문자열 매칭</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'a'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'d'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'a'</span> <span class="n">regexp</span> <span class="s1">'a|b'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'d'</span> <span class="n">regexp</span> <span class="s1">'a|b'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">==============================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<p>정규식은 구분자 연산자(alternatvies, |)로 간단히 구분하여 여러 대체 패턴을 포함할 수 있다. 정규식은 대체 패턴이 일치하는 경우 일치하는 즉시 매칭한다.
+하위 패턴(그룹 또는 어서션)은 구분자 연산자를 사용하여 여러 다른 패턴을 구분할 수도 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a|b|c : matches any character that is either a, b or c.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'a'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b|c'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'d'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b|c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'a'</span> <span class="n">regexp</span> <span class="s1">'a|b|c'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'d'</span> <span class="n">regexp</span> <span class="s1">'a|b|c'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">==============================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id9">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">문자 클래스</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id9" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id9'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>문자 클래스 문법은 문자 하나 또는 대괄호 내의 문자 범주와 매칭한다.</p>
+<section id="id10">
+<h4><a class="toc-backref" href="#id21" role="doc-backlink">개별 문자</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id10"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>지정된 모든 문자는 클래스의 일부로 간주된다 (\, [, ] 제외).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- [abc] : a, b 또는 c인 모든 문자와 일치.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'a'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[abc]'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'d'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[abc]'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'a'</span> <span class="n">regexp</span> <span class="s1">'[abc]'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'d'</span> <span class="n">regexp</span> <span class="s1">'[abc]'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">==============================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="id11">
+<h4><a class="toc-backref" href="#id22" role="doc-backlink">범위</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id11"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>문자 범위를 나타내기 위해 유효한 두 문자 사이에 대시 문자(-)를 사용한다.
+예를 들어 “[a-z]”는 모든 알파벳 문자와 일치하지만 “[0-9]”는 단일 숫자와 일치한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'adf'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[a-f]'</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'adf'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[g-z]'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'adf'</span> <span class="n">regexp</span> <span class="s1">'[a-f]'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'adf'</span> <span class="n">regexp</span> <span class="s1">'[g-z]'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">================================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- [0-9]+: 문자열의 숫자 시퀀스와 일치</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'aas200gjb'</span><span class="p">,</span><span class="w"> </span><span class="s1">'[0-9]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'aas200gjb'</span><span class="p">,</span> <span class="s1">'[0-9]+'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'200'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'strike'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^[^a-dXYZ]+$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'strike'</span> <span class="n">regexp</span> <span class="s1">'^[^a-dXYZ]+$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="posix">
+<span id="regex-posix-character-class"></span><h4><a class="toc-backref" href="#id23" role="doc-backlink">POSIX 기반 문자 클래스</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#posix"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>POSIX 기반 문자 클래스(<em>[:classname:]</em>)는 아래와 같이 문자의 범주를 정의한다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>C++ &lt;regex&gt; 에서는 유니코드 영역까지 매칭하지만 Google RE2 에서는 ASCII 영역만 매칭한다.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>클래스</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[:alnum:]</p></td>
+<td><p>영숫자 문자</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:alpha:]</p></td>
+<td><p>알파벳 문자</p></td>
+</tr>
+<tr class="row-even"><td><p>[:blank:]</p></td>
+<td><p>빈 문자</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:cntrl:]</p></td>
+<td><p>제어 문자</p></td>
+</tr>
+<tr class="row-even"><td><p>[:digit:]</p></td>
+<td><p>십진수 문자</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:graph:]</p></td>
+<td><p>표시할 수 있는 문자</p></td>
+</tr>
+<tr class="row-even"><td><p>[:lower:]</p></td>
+<td><p>소문자</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:print:]</p></td>
+<td><p>인쇄 가능한 문자</p></td>
+</tr>
+<tr class="row-even"><td><p>[:punct:]</p></td>
+<td><p>구두점 문자</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:space:]</p></td>
+<td><p>공백 문자</p></td>
+</tr>
+<tr class="row-even"><td><p>[:upper:]</p></td>
+<td><p>대문자</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:xdigit:]</p></td>
+<td><p>16진수 문자</p></td>
+</tr>
+</tbody>
+</table>
+<p>[:d:], [:w:] 및 [:s:]는 ECMAScript 문법의 확장이다. C++ &lt;regex&gt; 에서만 사용할 수 있다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>클래스</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[:d:]</p></td>
+<td><p>숫자 (0-9)</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:w:]</p></td>
+<td><p>단어</p></td>
+</tr>
+<tr class="row-even"><td><p>[:s:]</p></td>
+<td><p>공백</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'Samseong-ro 86-gil, Gangnam-gu, Seoul 06178'</span><span class="p">,</span><span class="w"> </span><span class="s1">'[[:digit:]]{5}'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'Samseong-ro 86-gil, Gangnam-gu, Seoul 06178'</span><span class="p">,</span> <span class="s1">'[[:digit:]]</span><span class="si">{5}</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="s1">'06178'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- ;set regexp_engine=cppstd</span>
+</span><span id="line-2"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'가나다 가나 가나다라'</span><span class="p">,</span><span class="w"> </span><span class="s1">'\b([[:alpha:]]{2})\b'</span><span class="p">,</span><span class="w"> </span><span class="s1">'#'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'가나123abc가다abc가가'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'[가-나]+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">=================================================================================================</span>
+</span><span id="line-3">                                                                                                <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regex-unicode-character-class">
+<span id="id12"></span><h4><a class="toc-backref" href="#id24" role="doc-backlink">유니코드 문자 클래스</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regex-unicode-character-class"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>유니코드 문자 클래스(<em>\p{classname}</em>)는 Google RE2 에서만 제공한다. 아래의 표와 같이 클래스 이름을 지정할 수 있다.
+예를 들어 한글 문자를 매칭하기 위해서는 <strong>\p{Hangul}</strong>을 사용한다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>유니코드 문자 클래스</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Adlam</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ahom</p></td>
+</tr>
+<tr class="row-even"><td><p>Anatolian_Hieroglyphs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Arabic</p></td>
+</tr>
+<tr class="row-even"><td><p>Armenian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Avestan</p></td>
+</tr>
+<tr class="row-even"><td><p>Balinese</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bamum</p></td>
+</tr>
+<tr class="row-even"><td><p>Bassa_Vah</p></td>
+</tr>
+<tr class="row-odd"><td><p>Batak</p></td>
+</tr>
+<tr class="row-even"><td><p>Bengali</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bhaiksuki</p></td>
+</tr>
+<tr class="row-even"><td><p>Bopomofo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Brahmi</p></td>
+</tr>
+<tr class="row-even"><td><p>Braille</p></td>
+</tr>
+<tr class="row-odd"><td><p>Buginese</p></td>
+</tr>
+<tr class="row-even"><td><p>Buhid</p></td>
+</tr>
+<tr class="row-odd"><td><p>Canadian_Aboriginal</p></td>
+</tr>
+<tr class="row-even"><td><p>Carian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Caucasian_Albanian</p></td>
+</tr>
+<tr class="row-even"><td><p>Chakma</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cham</p></td>
+</tr>
+<tr class="row-even"><td><p>Cherokee</p></td>
+</tr>
+<tr class="row-odd"><td><p>Chorasmian</p></td>
+</tr>
+<tr class="row-even"><td><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td><p>Coptic</p></td>
+</tr>
+<tr class="row-even"><td><p>Cuneiform</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cypriot</p></td>
+</tr>
+<tr class="row-even"><td><p>Cypro_Minoan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cyrillic</p></td>
+</tr>
+<tr class="row-even"><td><p>Deseret</p></td>
+</tr>
+<tr class="row-odd"><td><p>Devanagari</p></td>
+</tr>
+<tr class="row-even"><td><p>Dives_Akuru</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dogra</p></td>
+</tr>
+<tr class="row-even"><td><p>Duployan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Egyptian_Hieroglyphs</p></td>
+</tr>
+<tr class="row-even"><td><p>Elbasan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Elymaic</p></td>
+</tr>
+<tr class="row-even"><td><p>Ethiopic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Georgian</p></td>
+</tr>
+<tr class="row-even"><td><p>Glagolitic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gothic</p></td>
+</tr>
+<tr class="row-even"><td><p>Grantha</p></td>
+</tr>
+<tr class="row-odd"><td><p>Greek</p></td>
+</tr>
+<tr class="row-even"><td><p>Gujarati</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gunjala_Gondi</p></td>
+</tr>
+<tr class="row-even"><td><p>Gurmukhi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Han</p></td>
+</tr>
+<tr class="row-even"><td><p>Hangul</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hanifi_Rohingya</p></td>
+</tr>
+<tr class="row-even"><td><p>Hanunoo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hatran</p></td>
+</tr>
+<tr class="row-even"><td><p>Hebrew</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hiragana</p></td>
+</tr>
+<tr class="row-even"><td><p>Imperial_Aramaic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Inherited</p></td>
+</tr>
+<tr class="row-even"><td><p>Inscriptional_Pahlavi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Inscriptional_Parthian</p></td>
+</tr>
+<tr class="row-even"><td><p>Javanese</p></td>
+</tr>
+<tr class="row-odd"><td><p>Kaithi</p></td>
+</tr>
+<tr class="row-even"><td><p>Kannada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Katakana</p></td>
+</tr>
+<tr class="row-even"><td><p>Kawi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Kayah_Li</p></td>
+</tr>
+<tr class="row-even"><td><p>Kharoshthi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Khitan_Small_Script</p></td>
+</tr>
+<tr class="row-even"><td><p>Khmer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Khojki</p></td>
+</tr>
+<tr class="row-even"><td><p>Khudawadi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lao</p></td>
+</tr>
+<tr class="row-even"><td><p>Latin</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lepcha</p></td>
+</tr>
+<tr class="row-even"><td><p>Limbu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linear_A</p></td>
+</tr>
+<tr class="row-even"><td><p>Linear_B</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lisu</p></td>
+</tr>
+<tr class="row-even"><td><p>Lycian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lydian</p></td>
+</tr>
+<tr class="row-even"><td><p>Mahajani</p></td>
+</tr>
+<tr class="row-odd"><td><p>Makasar</p></td>
+</tr>
+<tr class="row-even"><td><p>Malayalam</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mandaic</p></td>
+</tr>
+<tr class="row-even"><td><p>Manichaean</p></td>
+</tr>
+<tr class="row-odd"><td><p>Marchen</p></td>
+</tr>
+<tr class="row-even"><td><p>Masaram_Gondi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Medefaidrin</p></td>
+</tr>
+<tr class="row-even"><td><p>Meetei_Mayek</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mende_Kikakui</p></td>
+</tr>
+<tr class="row-even"><td><p>Meroitic_Cursive</p></td>
+</tr>
+<tr class="row-odd"><td><p>Meroitic_Hieroglyphs</p></td>
+</tr>
+<tr class="row-even"><td><p>Miao</p></td>
+</tr>
+<tr class="row-odd"><td><p>Modi</p></td>
+</tr>
+<tr class="row-even"><td><p>Mongolian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mro</p></td>
+</tr>
+<tr class="row-even"><td><p>Multani</p></td>
+</tr>
+<tr class="row-odd"><td><p>Myanmar</p></td>
+</tr>
+<tr class="row-even"><td><p>Nabataean</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nag_Mundari</p></td>
+</tr>
+<tr class="row-even"><td><p>Nandinagari</p></td>
+</tr>
+<tr class="row-odd"><td><p>New_Tai_Lue</p></td>
+</tr>
+<tr class="row-even"><td><p>Newa</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nko</p></td>
+</tr>
+<tr class="row-even"><td><p>Nushu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nyiakeng_Puachue_Hmong</p></td>
+</tr>
+<tr class="row-even"><td><p>Ogham</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ol_Chiki</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_Hungarian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Italic</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_North_Arabian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Permic</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_Persian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Sogdian</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_South_Arabian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Turkic</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_Uyghur</p></td>
+</tr>
+<tr class="row-odd"><td><p>Oriya</p></td>
+</tr>
+<tr class="row-even"><td><p>Osage</p></td>
+</tr>
+<tr class="row-odd"><td><p>Osmanya</p></td>
+</tr>
+<tr class="row-even"><td><p>Pahawh_Hmong</p></td>
+</tr>
+<tr class="row-odd"><td><p>Palmyrene</p></td>
+</tr>
+<tr class="row-even"><td><p>Pau_Cin_Hau</p></td>
+</tr>
+<tr class="row-odd"><td><p>Phags_Pa</p></td>
+</tr>
+<tr class="row-even"><td><p>Phoenician</p></td>
+</tr>
+<tr class="row-odd"><td><p>Psalter_Pahlavi</p></td>
+</tr>
+<tr class="row-even"><td><p>Rejang</p></td>
+</tr>
+<tr class="row-odd"><td><p>Runic</p></td>
+</tr>
+<tr class="row-even"><td><p>Samaritan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Saurashtra</p></td>
+</tr>
+<tr class="row-even"><td><p>Sharada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Shavian</p></td>
+</tr>
+<tr class="row-even"><td><p>Siddham</p></td>
+</tr>
+<tr class="row-odd"><td><p>SignWriting</p></td>
+</tr>
+<tr class="row-even"><td><p>Sinhala</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sogdian</p></td>
+</tr>
+<tr class="row-even"><td><p>Sora_Sompeng</p></td>
+</tr>
+<tr class="row-odd"><td><p>Soyombo</p></td>
+</tr>
+<tr class="row-even"><td><p>Sundanese</p></td>
+</tr>
+<tr class="row-odd"><td><p>Syloti_Nagri</p></td>
+</tr>
+<tr class="row-even"><td><p>Syriac</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tagalog</p></td>
+</tr>
+<tr class="row-even"><td><p>Tagbanwa</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tai_Le</p></td>
+</tr>
+<tr class="row-even"><td><p>Tai_Tham</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tai_Viet</p></td>
+</tr>
+<tr class="row-even"><td><p>Takri</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tamil</p></td>
+</tr>
+<tr class="row-even"><td><p>Tangsa</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tangut</p></td>
+</tr>
+<tr class="row-even"><td><p>Telugu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Thaana</p></td>
+</tr>
+<tr class="row-even"><td><p>Thai</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tibetan</p></td>
+</tr>
+<tr class="row-even"><td><p>Tifinagh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tirhuta</p></td>
+</tr>
+<tr class="row-even"><td><p>Toto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ugaritic</p></td>
+</tr>
+<tr class="row-even"><td><p>Vai</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vithkuqi</p></td>
+</tr>
+<tr class="row-even"><td><p>Wancho</p></td>
+</tr>
+<tr class="row-odd"><td><p>Warang_Citi</p></td>
+</tr>
+<tr class="row-even"><td><p>Yezidi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Yi</p></td>
+</tr>
+<tr class="row-even"><td><p>Zanabazar_Square</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- ;set regexp_engine=re2</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'가나 가나다라 마바사아 자차카타 파하'</span><span class="p">,</span><span class="w"> </span><span class="s1">'\p{Hangul}+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="n">_utf8</span><span class="s1">'가나 가나다라 마바사아 자차카타 파하'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="n">_utf8</span><span class="s1">'\p</span><span class="si">{Hangul}</span><span class="s1">+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3"><span class="mi">5</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="regexp-rlike">
+<span id="regex-rlike"></span><h2><a class="toc-backref" href="#id25" role="doc-backlink">REGEXP, RLIKE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-rlike" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-rlike'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>REGEXP</strong>, <strong>RLIKE</strong>는 동일한 의미로 사용되며, 정규 표현식을 이용한 패턴을 매칭한다. 아래의 문법에서, <em>expression</em>이 <em>pattern</em>과 일치하면 1을 반환한다. 그렇지 않으면 0을 반환한다.
+<em>expression</em> 또는 <em>pattern</em>이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다. 두 번째 구문은 두 구문 모두 <strong>NOT</strong>을 사용하는 세 번째 구문과 동일한 의미를 갖는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">expression</span> <span class="n">REGEXP</span> <span class="o">|</span> <span class="n">RLIKE</span> <span class="p">[</span><span class="n">BINARY</span><span class="p">]</span> <span class="n">pattern</span>
+</span><span id="line-2"><span class="n">expression</span> <span class="n">NOT</span> <span class="n">REGEXP</span> <span class="o">|</span> <span class="n">RLIKE</span> <span class="n">pattern</span>
+</span><span id="line-3"><span class="n">NOT</span> <span class="p">(</span><span class="n">expression</span> <span class="n">REGEXP</span> <span class="o">|</span> <span class="n">RLIKE</span> <span class="n">pattern</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>expression</em> : 칼럼 또는 입력 표현식</p></li>
+<li><p><em>pattern</em> : 정규 표현식에 사용될 패턴. 대소문자 구분 없음</p></li>
+</ul>
+<p><strong>REGEXP</strong>와 <strong>LIKE</strong>의 차이는 다음과 같다.</p>
+<ul class="simple">
+<li><p><strong>LIKE</strong> 절은 입력값 전체가 패턴과 매칭되어야 성공한다.</p></li>
+<li><p><strong>REGEXP</strong>는 입력값의 일부가 패턴과 매칭되면 성공한다. <strong>REGEXP</strong>에서 전체 값에 대한 패턴 매칭을 하려면, 패턴의 시작에는 “^”을, 끝에는 “$”을 사용해야 한다.</p></li>
+<li><p><strong>LIKE</strong> 절의 패턴은 대소문자를 구분하지만 <strong>REGEXP</strong>에서 정규 표현식의 패턴은 대소문자를 구분하지 않는다. 대소문자를 구분하려면 <strong>REGEXP BINARY</strong> 구문을 사용해야 한다.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- [a-dX], [^a-dX] : a, b, c, d 또는 X인 모든 문자와 매칭됨.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'aXbc'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[a-dX]'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'aXbc'</span> <span class="n">regexp</span> <span class="s1">'[a-dX]'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3"><span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- SELECT 리스트에서 REGEXP를 사용하는 경우 괄호로 묶어야 한다.</span>
+</span><span id="line-2"><span class="c1">-- 단, WHERE 절에서는 괄호가 필요하지 않다.</span>
+</span><span id="line-3"><span class="c1">-- BINARY와 함께 사용하는 경우를 제외하고 대소문자를 구분하지 않는다.</span>
+</span><span id="line-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">athlete</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^[a-d]'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">name</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'Dziouba Irina'</span>
+</span><span id="line-4"><span class="s1">'Dzieciol Iwona'</span>
+</span><span id="line-5"><span class="s1">'Dzamalutdinov Kamil'</span>
+</span><span id="line-6"><span class="s1">'Crucq Maurits'</span>
+</span><span id="line-7"><span class="s1">'Crosta Daniele'</span>
+</span><span id="line-8"><span class="s1">'Bukovec Brigita'</span>
+</span><span id="line-9"><span class="s1">'Bukic Perica'</span>
+</span><span id="line-10"><span class="s1">'Abdullayev Namik'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-count">
+<span id="regex-count"></span><h2><a class="toc-backref" href="#id26" role="doc-backlink">REGEXP_COUNT</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-count" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-count'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_COUNT">
+<span class="sig-name descname"><span class="pre">REGEXP_COUNT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_COUNT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_COUNT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>REGEXP_COUNT</strong> 함수는 주어진 문자열 <em>string</em> 내에서 정규식 패턴 <em>pattern_string</em>의 매칭 횟수를 반환한다. <strong>NULL</strong>이 인수로 지정된 경우 <strong>NULL</strong>을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 인수가 NULL 값으로 지정되면 NULL을 반환한다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">'[a-d]+'</span><span class="p">,</span><span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">'[a-d]+'</span><span class="p">,</span><span class="n">NULL</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 빈 문자열 패턴은 어떤 문자열과도 일치하지 않는다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">''</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================================</span>
+</span><span id="line-3">                                        <span class="mi">5</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 대소문자 구분 안함 옵션('i')이 기본값이다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'i'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- 대소문자 구분 옵션('c')이 match_type으로 지정된 경우 A는 매칭되지 않는다.</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'i'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================================</span>
+</span><span id="line-3">                                             <span class="mi">5</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">================================================</span>
+</span><span id="line-7">                                             <span class="mi">2</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'가나123abc가다abc가가'</span><span class="p">,</span><span class="s1">'[가-나]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'가나123abc가다abc가가'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'[가-나]+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">=================================================================================================</span>
+</span><span id="line-3">                                                                                                <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-instr">
+<span id="regex-instr"></span><h2><a class="toc-backref" href="#id27" role="doc-backlink">REGEXP_INSTR</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-instr" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-instr'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_INSTR">
+<span class="sig-name descname"><span class="pre">REGEXP_INSTR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">occurrence</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">return_option</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_INSTR" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_INSTR'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>REGEXP_INSTR</strong> 함수는 주어진 문자열 <em>string</em> 내에서 정규식 패턴 <em>pattern_string</em>을 검색하여 시작 위치 또는 끝 위치를 반환한다. <strong>NULL</strong>이 인수로 지정된 경우 <strong>NULL</strong>을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>return_option</strong> – 일치하는 문자열의 시작 또는 끝 지점 중 어떤 위치를 반환할지 여부를 지정한다. 만약 값이 0이면 일치하는 문자의 시작 위치를 반환한다. 값이 1이면 일치하는 문자의 끝 위치를 반환한다. 값을 생략하면 기본값 0이 적용된다. 값이 0 또는 1이 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 인수가 NULL 값으로 지정되면 NULL을 반환한다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[abc]'</span><span class="p">,</span><span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">'[abc]'</span><span class="p">,</span> <span class="n">null</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 빈 문자열 패턴은 어떤 문자열과도 일치하지 않는다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 매칭되는 첫 번째 문자의 위치를 반환한다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">6</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 매칭 후 일치하는 문자열의 위치를 반환한다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">7</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12345가나다라마가나다라마바'</span><span class="p">,</span><span class="s1">'[가-다]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12345가나다라마가나다라마바'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'[가-다]+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================================================================================================</span>
+</span><span id="line-3">                                                                                                        <span class="mi">6</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-like">
+<span id="regex-like"></span><h2><a class="toc-backref" href="#id28" role="doc-backlink">REGEXP_LIKE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-like" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-like'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_LIKE">
+<span class="sig-name descname"><span class="pre">REGEXP_LIKE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_LIKE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_LIKE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>REGEXP_LIKE</strong> 함수는 주어진 문자열 <em>string</em> 내에서 정규식 패턴 <em>pattern_string</em>을 검색한다. 정규식 패턴이 <em>pattern_string</em>의 어느 곳에서나 일치하면 1이 반환된다. 그렇지 않으면 0이 반환된다. <strong>NULL</strong>이 인수로 지정된 경우 <strong>NULL</strong>을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span><span class="s1">'ab+c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span> <span class="s1">'ab+c'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 빈 문자열 패턴은 어떤 문자열과도 일치하지 않는다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span> <span class="s1">''</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span><span class="s1">'AB+C'</span><span class="p">,</span><span class="w"> </span><span class="s1">'c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span> <span class="s1">'AB+C'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'가나다'</span><span class="p">,</span><span class="s1">'가나?다'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'가나라다'</span><span class="p">,</span><span class="s1">'가나?다'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'가나다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'가나?다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================================================================</span>
+</span><span id="line-3">                                                                            <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'가나라다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'가나?다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">=================================================================================</span>
+</span><span id="line-7">                                                                                <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-replace">
+<span id="regex-replace"></span><h2><a class="toc-backref" href="#id29" role="doc-backlink">REGEXP_REPLACE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-replace" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-replace'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_REPLACE">
+<span class="sig-name descname"><span class="pre">REGEXP_REPLACE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">occurrence</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_REPLACE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_REPLACE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>REGEXP_REPLACE</strong> 함수는 주어진 문자열 <em>string</em> 내에서 정규식 패턴 <em>pattern_string</em>을 검색하여 문자열 <em>replacement_string</em>으로 바꾼다. <strong>NULL</strong>이 인수로 지정된 경우 <strong>NULL</strong>을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>replacement_string</strong> – <em>pattern_string*과 일치하는 문자열을 대체할 문자열을 지정한다. 값이 **NULL*</em>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 만약 값을 생략하면 기본값 0이 적용된다. 값이 음수이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 인수가 NULL 값으로 지정되면 NULL을 반환한다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="n">null</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 빈 문자열 패턴은 어떤 문자열과도 일치하지 않는다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="s1">'#'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'12345abcdeabcde'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'12345###EK###e'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 대소문자 구분 안함 옵션('i')이 기본값이다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">'i'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- 대소문자 구분 옵션('c')이 match_type으로 지정된 경우 'B' 와 'D'는 매칭되지 않는다.</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">'c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'i'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'12345###EK###e'</span>
+</span><span id="line-4">
+</span><span id="line-5">
+</span><span id="line-6"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">)</span>
+</span><span id="line-7"><span class="o">======================</span>
+</span><span id="line-8">  <span class="s1">'12345##DEKB##e'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'a1가b2나다라'</span><span class="p">,</span><span class="s1">'[가-다]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">,</span><span class="mi">6</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'a1가b2나다라'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'[가-다]'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'#'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'a1가b2##라'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-substr">
+<span id="regex-substr"></span><h2><a class="toc-backref" href="#id30" role="doc-backlink">REGEXP_SUBSTR</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-substr" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-substr'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_SUBSTR">
+<span class="sig-name descname"><span class="pre">REGEXP_SUBSTR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">occurrence</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_SUBSTR" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_SUBSTR'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>REGEXP_SUBSTR</strong> 함수는 주어진 문자열 <em>string</em> 내에서 정규식 패턴 <em>pattern_string</em>에 일치하는 문자열을 추출한다. <strong>NULL</strong>이 인수로 지정된 경우 <strong>NULL</strong>을 반환한다.</p>
+<dl class="field-list simple">
+<dt class="field-odd">매개변수<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 0을 적용한다. 이 의미는 발생하는 모든 매칭을 사용한다는 의미이다. 값이 음수이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다. 값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+</ul>
+</dd>
+<dt class="field-even">반환 형식<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 만약 패턴이 매칭되지 않으면, NULL을 반환한다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[k-z]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[k-z]+'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 빈 문자열 패턴은 어떤 문자열과도 일치하지 않는다</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'Samseong-ro, Gangnam-gu, Seoul'</span><span class="p">,</span><span class="s1">',[^,]+,'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'Samseong-ro, Gangnam-gu, Seoul'</span><span class="p">,</span> <span class="s1">',[^,]+,'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">', Gangnam-gu,'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'삼성로, 강남구, 서울특별시'</span><span class="p">,</span><span class="s1">'\p{Hangul}+'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'삼성로, 강남구, 서울특별시'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'\p</span><span class="si">{Hangul}</span><span class="s1">+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'강남구'</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="string_fn.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        문자열 함수와 연산자
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="numeric_fn.html">
+        수치 연산 함수
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#regex-syntax'" class="reference internal" href="#regex-syntax">정규 표현식 문법</a><ul>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">특수 패턴 문자</a></li>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">수량자</a></li>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">그룹</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">어서션</a></li>
+<li><a :data-current="activeSection === '#id8'" class="reference internal" href="#id8">구분자</a></li>
+<li><a :data-current="activeSection === '#id9'" class="reference internal" href="#id9">문자 클래스</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-rlike'" class="reference internal" href="#regexp-rlike">REGEXP, RLIKE</a></li>
+<li><a :data-current="activeSection === '#regexp-count'" class="reference internal" href="#regexp-count">REGEXP_COUNT</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_COUNT'" class="reference internal" href="#REGEXP_COUNT"><code class="docutils literal notranslate"><span class="pre">REGEXP_COUNT()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-instr'" class="reference internal" href="#regexp-instr">REGEXP_INSTR</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_INSTR'" class="reference internal" href="#REGEXP_INSTR"><code class="docutils literal notranslate"><span class="pre">REGEXP_INSTR()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-like'" class="reference internal" href="#regexp-like">REGEXP_LIKE</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_LIKE'" class="reference internal" href="#REGEXP_LIKE"><code class="docutils literal notranslate"><span class="pre">REGEXP_LIKE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-replace'" class="reference internal" href="#regexp-replace">REGEXP_REPLACE</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_REPLACE'" class="reference internal" href="#REGEXP_REPLACE"><code class="docutils literal notranslate"><span class="pre">REGEXP_REPLACE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-substr'" class="reference internal" href="#regexp-substr">REGEXP_SUBSTR</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_SUBSTR'" class="reference internal" href="#REGEXP_SUBSTR"><code class="docutils literal notranslate"><span class="pre">REGEXP_SUBSTR()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 20, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../../_static/theme.js?v=b0acb063"></script>
+<script src="../../_static/translations.js?v=afa94a99"></script>
+<script src="../../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../../_static/version-switcher.js?v=993d9931"></script>
+<script src="../../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

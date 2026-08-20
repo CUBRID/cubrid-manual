@@ -157,7 +157,7 @@ The following example creates a user who is not allowed to log in.
 
     CREATE USER test_user1 PASSWORD 'password' NOLOGIN;
 
-Connecting to the database as test_user1 raises the following error.
+Connecting to the database as the user test_user1 raises the following error.
 
 ::
 

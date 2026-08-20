@@ -183,7 +183,7 @@ You can see the login capability of a user with this syntax.
 
     Only **DBA** and **DBA** members can change the login capability of a user.
 
-    However, the login capability of **DBA**, **INFORMATION_SCHEMA**, and the currently logged-in user themselves cannot be changed.
+    However, **DBA**, **INFORMATION_SCHEMA**, and the current user cannot be the target of the change.
 
 .. warning::
 

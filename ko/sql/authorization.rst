@@ -34,12 +34,14 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 
     CREATE USER user_name
     [PASSWORD password]
+    [LOGIN | NOLOGIN]
     [GROUPS user_name [{, user_name } ... ]]
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
 
 *   *user_name*: 생성할 사용자 이름을 지정한다.
 *   *password*: 생성할 사용자의 비밀번호를 지정한다.
+*   [**LOGIN** | **NOLOGIN**]: 생성할 사용자의 로그인 허용 여부를 지정한다. 지정하지 않으면 기본값은 **LOGIN** 이 된다. 자세한 내용은 :ref:`user-login-capability` 를 참고한다.
 *   *comment_string*: 생성할 사용자에 대한 커멘트를 지정한다.
 
 .. note::
@@ -98,16 +100,17 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 ALTER USER
 ==========
 
-ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버 및 커멘트를 변경할 수 있다. ::
+ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 로그인 허용 여부 및 커멘트를 변경할 수 있다. ::
 
     ALTER USER user_name 
-    [PASSWORD password] |
+    [PASSWORD password] [LOGIN | NOLOGIN] |
     [ADD MEMBERS user_name [{, user_name } ... ]] |
     [DROP MEMBERS user_name [{, user_name } ... ]]
     [COMMENT 'comment_string'];
 
 *   *user_name*: 변경할 사용자 이름을 지정한다.
 *   *password*: 변경할 사용자의 비밀번호를 지정한다.
+*   [**LOGIN** | **NOLOGIN**]: 변경할 사용자의 로그인 허용 여부를 지정한다. 자세한 내용은 :ref:`user-login-capability` 를 참고한다.
 *   *comment_string*: 변경할 사용자에 대한 커멘트를 지정한다.
 
 .. note::
@@ -146,6 +149,47 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버 및 커멘트�
 
     ALTER USER company DROP MEMBERS marketing;
     ALTER USER marketing DROP MEMBERS smith, jones;
+
+.. _user-login-capability:
+
+사용자의 로그인 허용 여부
+-------------------------
+
+다음은 로그인을 허용하지 않는 사용자를 생성하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE USER test_user1 PASSWORD 'password' NOLOGIN;
+
+test_user1 로 데이터베이스에 접속하면 다음과 같은 에러가 발생한다.
+
+::
+
+    ERROR: Login is disabled for user "test_user1".
+
+이미 접속한 세션은 **NOLOGIN**\으로 변경해도 그대로 유지된다.
+
+다음은 test_user1 의 로그인을 다시 허용하는 예제이다.
+
+.. code-block:: sql
+
+    ALTER USER test_user1 LOGIN;
+
+사용자의 로그인 허용 여부를 확인하려면 다음의 구문을 실행한다.
+
+.. code-block:: sql
+
+    SELECT name, is_loginable FROM db_user;
+
+.. note::
+
+    **DBA** 와 **DBA** 의 멤버만 사용자의 로그인 허용 여부를 변경할 수 있다.
+
+    단, **DBA**, **INFORMATION_SCHEMA**, 로그인한 사용자 본인의 로그인 허용 여부는 변경할 수 없다.
+
+.. warning::
+
+    **PUBLIC**\을 **NOLOGIN**\으로 변경하면 **PUBLIC** 사용자의 접속이 거부된다. 사용자 이름을 지정하지 않은 접속도 **PUBLIC**\으로 처리되므로 함께 거부된다.
 
 사용자의 커멘트 변경
 --------------------

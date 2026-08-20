@@ -189,6 +189,8 @@ You can see the login capability of a user with this syntax.
 
     If **PUBLIC** is changed to **NOLOGIN**, connections as **PUBLIC** are rejected. A connection that does not specify a user name is made as **PUBLIC**, so it is rejected as well.
 
+    The login capability controls only logging in. Authorization and ownership are not affected, so even while **PUBLIC** is **NOLOGIN**, authorization granted with the **GRANT** statement and inheritance through the group still work.
+
 User's COMMENT Change
 ---------------------
 

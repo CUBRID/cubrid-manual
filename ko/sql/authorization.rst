@@ -161,7 +161,7 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 로그인 허�
 
     CREATE USER test_user1 PASSWORD 'password' NOLOGIN;
 
-test_user1 로 데이터베이스에 접속하면 다음과 같은 에러가 발생한다.
+test_user1 사용자로 데이터베이스에 접속하면 다음과 같은 에러가 발생한다.
 
 ::
 
@@ -169,7 +169,7 @@ test_user1 로 데이터베이스에 접속하면 다음과 같은 에러가 발
 
 이미 접속한 세션은 **NOLOGIN**\으로 변경해도 그대로 유지된다.
 
-다음은 test_user1 의 로그인을 다시 허용하는 예제이다.
+다음은 test_user1 사용자의 로그인을 다시 허용하는 예제이다.
 
 .. code-block:: sql
 

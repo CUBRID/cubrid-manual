@@ -351,7 +351,6 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Login</span> <span class="ow">is</span> <span class="n">disabled</span> <span class="k">for</span> <span class="n">user</span> <span class="s2">"test_user1"</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>A session that is already connected is kept even after the user is changed to <strong>NOLOGIN</strong>.</p>
 <p>The following example allows test_user1 to log in again.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">test_user1</span><span class="w"> </span><span class="n">LOGIN</span><span class="p">;</span>
 </span></code></pre></div>
@@ -359,6 +358,10 @@
 <p>You can see the login capability of a user with this syntax.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">is_loginable</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A user who is not allowed to log in cannot be switched to with the <a class="reference internal" href="#login-method"><span class="std std-ref">login( ) method</span></a>, either. However, existing connections of that user are not disconnected.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -576,7 +579,7 @@
 </span><span id="line-2"><span class="n">CALL</span> <span class="n">method_definition</span> <span class="n">ON</span> <span class="n">variable</span> <span class="p">[</span> <span class="p">;</span> <span class="p">]</span>
 </span></code></pre></div>
 </div>
-<p><strong>login( ) method</strong></p>
+<p id="login-method"><strong>login( ) method</strong></p>
 <p>As a class method of <strong>db_user</strong> class, this method is used to change the users who are currently connected to the database. The name and password of a new user to connect are given as arguments, and they must be string type. If there is no password, a blank character (‘’) can be used as the argument. <strong>DBA</strong> and <strong>DBA</strong> members can call the <strong>login( )</strong> method without a password.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Connect as DBA user who has no password</span>
 </span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'dba'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>

@@ -163,8 +163,6 @@ Connecting to the database as the user test_user1 raises the following error.
 
     ERROR: Login is disabled for user "test_user1".
 
-A session that is already connected is kept even after the user is changed to **NOLOGIN**.
-
 The following example allows test_user1 to log in again.
 
 .. code-block:: sql
@@ -176,6 +174,10 @@ You can see the login capability of a user with this syntax.
 .. code-block:: sql
 
     SELECT name, is_loginable FROM db_user;
+
+.. note::
+
+    A user who is not allowed to log in cannot be switched to with the :ref:`login( ) method <login-method>`, either. However, existing connections of that user are not disconnected.
 
 .. note::
 
@@ -401,6 +403,8 @@ The database administrator (**DBA**) can check and modify user authorization by 
 
     CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
     CALL method_definition ON variable [ ; ]
+
+.. _login-method:
 
 **login( ) method**
 

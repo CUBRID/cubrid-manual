@@ -1910,9 +1910,9 @@ SHOW PAGE BUFFER STATUS
 =========================== =============== ===============================================================
 칼럼 이름                   타입            설명
 =========================== =============== ===============================================================
-Hit_rate                    NUMERIC(13,10)  데이터 버퍼의 페이지 적중률 (사용 중단(deprecated), 항상 0)
-Num_hit                     BIGINT          데이터 버퍼의 페이지 적중 수 (사용 중단(deprecated), 항상 0)
-Num_page_request            BIGINT          데이터 버퍼에 페이지 요청 수 (사용 중단(deprecated), 항상 0)
+Hit_rate                    NUMERIC(13,10)  데이터 버퍼의 페이지 적중률 (사용 중단(deprecated), 항상 NULL)
+Num_hit                     BIGINT          데이터 버퍼의 페이지 적중 수 (사용 중단(deprecated), 항상 NULL)
+Num_page_request            BIGINT          데이터 버퍼에 페이지 요청 수 (사용 중단(deprecated), 항상 NULL)
 Pool_size                   INT             데이터 버퍼의 전체 페이지 수
 Page_size                   INT             데이터 버퍼의 단일 페이지 크기
 Free_pages                  INT             데이터 버퍼의 여유 페이지 수
@@ -1923,17 +1923,17 @@ Num_index_pages             INT             데이터 버퍼의 인덱스 페이
 Num_data_pages              INT             데이터 버퍼의 데이터 페이지 수
 Num_system_pages            INT             데이터 버퍼의 시스템 페이지 수
 Num_temp_pages              INT             데이터 버퍼의 임시 페이지 수
-Num_pages_created           BIGINT          데이터 버퍼에서 새롭게 생성된 페이지 수 (사용 중단(deprecated), 항상 0)
-Num_pages_written           BIGINT          데이터 버퍼에서 디스크로 쓰여진 페이지 수 (사용 중단(deprecated), 항상 0)
-Pages_written_rate          NUMERIC(20,10)  데이터 버퍼에서 디스크로 초당 쓰여진 페이지 수 (사용 중단(deprecated), 항상 0)
-Num_pages_read              BIGINT          데이터 버퍼로 디스크에서 읽은 페이지 수 (사용 중단(deprecated), 항상 0)
-Pages_read_rate             NUMERIC(20,10)  데이터 버퍼로 디스크에서 초당 읽은 페이지 수 (사용 중단(deprecated), 항상 0)
-Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당을 대기하는 쓰레드 수 (사용 중단(deprecated), 항상 0)
+Num_pages_created           BIGINT          데이터 버퍼에서 새롭게 생성된 페이지 수 (사용 중단(deprecated), 항상 NULL)
+Num_pages_written           BIGINT          데이터 버퍼에서 디스크로 쓰여진 페이지 수 (사용 중단(deprecated), 항상 NULL)
+Pages_written_rate          NUMERIC(20,10)  데이터 버퍼에서 디스크로 초당 쓰여진 페이지 수 (사용 중단(deprecated), 항상 NULL)
+Num_pages_read              BIGINT          데이터 버퍼로 디스크에서 읽은 페이지 수 (사용 중단(deprecated), 항상 NULL)
+Pages_read_rate             NUMERIC(20,10)  데이터 버퍼로 디스크에서 초당 읽은 페이지 수 (사용 중단(deprecated), 항상 NULL)
+Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당을 대기하는 쓰레드 수 (사용 중단(deprecated), 항상 NULL)
 =========================== =============== ===============================================================
 
 .. note::
 
-    **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate**, **Num_flusher_waiting_threads** 칼럼은 11.5 버전부터 사용이 중단(deprecated)되어 항상 0을 반환한다. 칼럼 자체는 제거되지 않으므로 결과셋의 칼럼 개수, 이름, 타입, 순서는 이전 버전과 동일하다.
+    **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate**, **Num_flusher_waiting_threads** 칼럼은 11.5 버전부터 사용이 중단(deprecated)되어 항상 NULL을 반환한다. 칼럼 자체는 제거되지 않으므로 결과셋의 칼럼 개수, 이름, 타입, 순서는 이전 버전과 동일하다.
 
     이 중 다음 4개 칼럼은 **cubrid statdump** 의 통계 항목으로 대체할 수 있다. 각 항목에 대한 자세한 설명은 :ref:`statdump`\ 을 참고한다.
 
@@ -1957,9 +1957,9 @@ Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당
 
 ::
 
-    <00001> Hit_rate                   : 0.0000000000
-            Num_hit                    : 0
-            Num_page_request           : 0
+    <00001> Hit_rate                   : NULL
+            Num_hit                    : NULL
+            Num_page_request           : NULL
             Pool_size                  : 32768
             Page_size                  : 16392
             Free_pages                 : 32739
@@ -1970,10 +1970,10 @@ Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당
             Num_data_pages             : 15
             Num_system_pages           : 12
             Num_temp_pages             : 0
-            Num_pages_created          : 0
-            Num_pages_written          : 0
-            Pages_written_rate         : 0.0000000000
-            Num_pages_read             : 0
-            Pages_read_rate            : 0.0000000000
-            Num_flusher_waiting_threads: 0
+            Num_pages_created          : NULL
+            Num_pages_written          : NULL
+            Pages_written_rate         : NULL
+            Num_pages_read             : NULL
+            Pages_read_rate            : NULL
+            Num_flusher_waiting_threads: NULL
 

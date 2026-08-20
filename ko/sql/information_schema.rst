@@ -32,7 +32,7 @@ Information Schema 뷰
 ================================================= ========================
 :ref:`information-schema-column-privileges`       칼럼에 정의된 권한      
 :ref:`information-schema-columns`                 각 테이블의 칼럼        
-:ref:`information-schema-domains`                 도메인 정보             
+:ref:`information-schema-domains`                 사용자 정의 도메인      
 :ref:`information-schema-foreign-servers`         외부 서버 정보          
 :ref:`information-schema-key-column-usage`        제약 조건이 있는 키 칼럼
 :ref:`information-schema-parameters`              루틴의 매개변수         
@@ -159,7 +159,7 @@ columns
 domains
 -------
 
-``domains`` 뷰는 현재 데이터베이스에 정의된 모든 도메인을 제공한다. CUBRID는 사용자 정의 도메인을 지원하지 않으므로 이 뷰는 항상 비어 있다.
+``domains`` 뷰는 현재 데이터베이스에 정의된 모든 사용자 정의 도메인을 제공한다. CUBRID는 사용자 정의 도메인을 지원하지 않으므로 이 뷰는 항상 비어 있다.
 
 +--------------------------+---------------+------------------------------------------------------------------+
 | 칼럼명                   | 데이터 타입   | 설명                                                             |

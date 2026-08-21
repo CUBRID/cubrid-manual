@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>시스템 관리 오류 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="시스템 관리 오류 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="시스템 관리 오류 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="error_log_sql.html" rel="next" title="질의(SQL) 관련 오류"/>
+<link href="error_log.html" rel="prev" title="데이터베이스 오류 로그"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/admin/error_log_system.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID 운영</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="error_log.html">데이터베이스 오류 로그</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">시스템 관리 오류</span>
+</nav>
+<div id="content" role="main">
+<section id="id1">
+<h1>시스템 관리 오류<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p id="error-3"><strong>ERROR CODE: -3, ‘Out of virtual memory: unable to allocate %1$zu memory bytes.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 운영체제로부터 특정 크기의 가상 메모리를 할당하려고 시도했지만, 시스템에 사용 가능한 가상 메모리가 부족하여 할당에 실패했음을 나타내는 오류입니다, 가상 메모리는 물리적 RAM과 디스크의 스왑 공간을 포함하며, CUBRID는 데이터베이스 작업(예: 쿼리 실행, 버퍼 캐시, 트랜잭션 관리, 내부 데이터 구조)을 위해 많은 메모리를 사용합니다, 이 메시지는 주로 시스템의 물리적 RAM이 부족하거나, 스왑 공간이 고갈되었거나, CUBRID 프로세스에 할당된 메모리 제한을 초과했을 때 발생하며, 이 영향으로 데이터베이스의 정상적인 서비스를 방해할 수 있습니다.</p></li>
+</ul>
+<p id="error-7"><strong>ERROR CODE: -7, ‘Trying to format disk volume “%1$s” with an incorrect value %2$d for number of pages.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 디스크 볼륨을 포맷하려고 시도했지만, 지정된 페이지 수가 유효하지 않거나 허용되지 않는 값이어서 포맷 작업에 실패했음을 나타내는 오류입니다, 주로 file open 단계에서 잘못된 설정, 시스템 제한 초과, 또는 내부 로직 오류로 인해 발생하며, 데이터베이스 생성이나 볼륨 확장 작업을 방해할 수 있습니다.</p></li>
+</ul>
+<p id="error-8"><strong>ERROR CODE: -8, ‘Unable to format disk volume “%1$s” with %2$d pages (%3$lld bytes).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 디스크 볼륨을 지정된 크기로 포맷하려고 시도했지만, 파일 시스템 수준의 문제로 인해 포맷 작업에 실패했음을 나타내는 오류입니다, 주로 file open 단계에서 파일 시스템 오류, 권한 문제, 하드웨어 문제, 또는 볼륨 파일 경로 문제로 인해 발생하며, 데이터베이스 생성이나 볼륨 확장 작업을 방해할 수 있습니다.</p></li>
+</ul>
+<p id="error-9"><strong>ERROR CODE: -9, ‘Unable to format disk volume “%1$s” with %2$d pages (%3$lld Kbytes) due to insufficient space. Current space available is %4$d pages (%5$lld Kbytes).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 디스크 볼륨을 포맷하려고 시도했지만, 요청된 크기보다 사용 가능한 디스크 공간이 부족하여 포맷 작업에 실패했음을 나타내는 오류입니다, 주로 디스크 공간 부족, 볼륨 크기 설정 오류, 또는 파일 시스템 제한으로 인해 발생하며, 데이터베이스 생성이나 볼륨 확장 작업을 방해할 수 있습니다.</p></li>
+</ul>
+<p id="error-10"><strong>ERROR CODE: -10, ‘Unable to mount disk volume “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 디스크 볼륨을 마운트(mount)하려고 시도했지만, 운영체제 또는 파일 시스템 수준의 문제로 인해 해당 작업에 실패했음을 나타내는 오류입니다, 주로 파일 시스템 손상, 볼륨 파일 부재, 권한 부족, 또는 하드웨어 문제로 인해 발생하며, 데이터베이스의 정상적인 시작이나 복구 작업을 방해할 수 있습니다.</p></li>
+</ul>
+<p id="error-11"><strong>ERROR CODE: -11, ‘Unable to mount disk volume “%1$s”. The database “%2$s”, to which the disk volume belongs, is in use by user %3$s on process %4$d of host %5$s since %6$s.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 디스크 볼륨을 마운트(mount)하려고 시도했지만, 해당 볼륨이 속한 데이터베이스가 이미 다른 CUBRID 프로세스에 의해 사용 중이어서 마운트 작업에 실패했음을 나타내는 오류입니다, 주로 lock file를 생성 시 발생하는 오류로 이미 다른 프로세스에 의해 lock file이 생성되었거나 lock file를 생성하지 못하는 경우 발생합니다, 이 메시지는 주로 동일한 데이터베이스에 대해 두 개 이상의 CUBRID 서버 인스턴스가 동시에 접근하려고 할 때 발생하며, 데이터베이스의 일관성을 보호하기 위한 중요한 메커니즘입니다.</p></li>
+</ul>
+<p id="error-12"><strong>ERROR CODE: -12, ‘Problems dismounting volume “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 볼륨을 마운트 해제(dismount)하려고 시도했지만, 운영체제 또는 파일 시스템 수준의 문제로 인해 해당 작업에 실패했음을 나타내는 오류입니다, 주로 file close 단계에서 볼륨이 여전히 사용 중이거나, 파일 시스템에 문제가 있거나, CUBRID 프로세스에 볼륨을 마운트 해제할 권한이 없는 경우에 발생하며, 데이터베이스의 정상적인 종료나 기타 작업을 방해할 수 있습니다.</p></li>
+</ul>
+<p id="error-13"><strong>ERROR CODE: -13, ‘An I/O error occurred while reading page %1$d of volume “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 볼륨의 특정 페이지를 디스크에서 읽으려고 시도했지만, I/O 작업 중 오류가 발생하여 읽기 작업에 실패했음을 나타내는 오류입니다, 주로 디스크 오류, 파일 시스템 문제, 권한 문제, 또는 하드웨어 문제로 인해 발생하며, 데이터베이스의 안정성과 데이터 무결성에 영향을 미칠 수 있습니다.</p></li>
+</ul>
+<p id="error-14"><strong>ERROR CODE: -14, ‘An I/O error occurred while writing page %1$d of volume “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 볼륨의 특정 페이지를 디스크에 쓰려고 시도했지만, I/O 작업 중 오류가 발생하여 쓰기 작업에 실패했음을 나타내는 오류입니다, 주로 디스크 오류, 파일 시스템 문제, 권한 문제, 또는 하드웨어 문제로 인해 발생하며, 데이터베이스의 안정성과 데이터 무결성에 영향을 미칠 수 있습니다.</p></li>
+</ul>
+<p id="error-15"><strong>ERROR CODE: -15, ‘Unable to write page %1$d of volume “%2$s” due to insufficient space in operating system device.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 볼륨의 특정 페이지를 디스크에 쓰려고 시도했지만, 운영체제 수준에서 디스크 공간이 부족하여 쓰기 작업에 실패했음을 나타내는 오류입니다, 주로 디스크 공간 부족, 파일 시스템 제한, 또는 볼륨 크기 제한으로 인해 발생하며, 데이터베이스의 안정성과 데이터 무결성에 영향을 미칠 수 있습니다.</p></li>
+</ul>
+<p id="error-16"><strong>ERROR CODE: -16, ‘Unable to rename disk volume “%1$s” to “%2$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 디스크 볼륨의 이름을 변경하려고 시도했지만, 파일 시스템 수준의 문제로 인해 해당 작업에 실패했음을 나타내는 오류입니다, 주로 권한 부족, 대상 파일/디렉토리 충돌, 원본 파일 부재, 또는 다른 프로세스에 의해 파일이 사용 중인 경우에 발생하며, 데이터베이스 관리 작업(예: 볼륨 재구성)에 실패할 수 있습니다.</p></li>
+</ul>
+<p id="error-78"><strong>ERROR CODE: -78, ‘Internal error: an I/O error occurred while reading logical log page %1$lld (physical page %2$lld) of “%3$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 논리적 로그 페이지를 물리적 페이지에서 읽으려고 할 때, 지정된 운영체제 장치에서 I/O(입출력) 오류가 발생하여 읽기 작업이 실패했음을 나타내는 내부 오류입니다, 이는 주로 하드웨어 문제(디스크 고장), 파일 시스템 손상, 운영체제 수준의 I/O 문제, 또는 드라이버 오류 등으로 인해 발생합니다.</p></li>
+</ul>
+<p id="error-79"><strong>ERROR CODE: -79, ‘Internal error: an I/O error occurred while writing logical log page %1$lld (physical page %2$lld) of “%3$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 논리적 로그 페이지를 물리적 페이지에 쓰려고 할 때, 지정된 운영체제 장치에서 I/O(입출력) 오류가 발생하여 쓰기 작업이 실패했음을 나타내는 내부 오류입니다, 이는 주로 하드웨어 문제(디스크 고장), 파일 시스템 손상, 운영체제 수준의 I/O 문제, 또는 드라이버 오류 등으로 인해 발생합니다.</p></li>
+</ul>
+<p id="error-82"><strong>ERROR CODE: -82, ‘Unable to mount log disk volume/file “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 지정된 로그 디스크 볼륨 또는 파일을 “마운트”하거나 접근하는 데 실패했음을 나타내는 오류입니다, 이는 주로 파일 시스템 권한 문제, 파일의 부재 또는 손상, 디스크 공간 부족, 또는 I/O 오류와 같은 하위 수준의 문제로 인해 발생합니다.</p></li>
+</ul>
+<p id="error-101"><strong>ERROR CODE: -101, ‘Unknown user file “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 특정 사용자 파일에 접근하거나 처리하려고 할 때, 해당 파일이 존재하지 않거나, 경로가 잘못되었거나, 시스템에서 인식할 수 없는 파일일 때 발생하는 오류입니다, 주로 <cite>createdb</cite> 명령어 사용 시 –more-volume-file 옵션에 기입한 파일을 못 찾는 경우나 볼륨 정보 파일(DBname_vinf)을 못찾는 경우 발생합니다.</p></li>
+</ul>
+<p id="error-102"><strong>ERROR CODE: -102, ‘File “%1$s” does not have enough entries: %2$d entries expected.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 볼륨정보(DBname_vinf) 파일을 읽으면서 발생하는 오류입니다, 주로 파일이 불완전하거나 손상되었거나, 데이터베이스 볼륨정보와 다르게 기록/입력되어 있을 때 발생합니다.</p></li>
+</ul>
+<p id="error-103"><strong>ERROR CODE: -103, ‘File “%1$s” seems to have unordered entries. Entry %2$d with values: %3$d %4$s %5$s, was found when entry with values %6$d %7$s was expected.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 데이터베이스 볼륨정보(DBname_vinf) 파일에 첫번째 볼륨을 찾는 과정에서 발생하는 오류입니다, 볼륨정보 파일의 항목들이 순차적으로 정렬되어 있어야 하는데, 순서가 바뀌거나 누락된 항목이 있음을 의미합니다.</p></li>
+</ul>
+<p id="error-104"><strong>ERROR CODE: -104, ‘File “%1$s” seems to have an incorrect entry for database name (main volume). Entry %2$d with values: %3$d %4$s %5$s, was found when entry with values %6$d %7$s %8$s was expected.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 데이터베이스 볼륨정보(DBname_vinf) 파일에 첫번째 볼륨을 찾는 과정에서 발생하는 오류입니다, 이는 데이터베이스의 무결성 문제, 파일 손상, 또는 수동으로 파일이 변경되었을 가능성이 있습니다.</p></li>
+</ul>
+<p id="error-105"><strong>ERROR CODE: -105, ‘Cannot access backup file “%1$s”. Restore or Backup is cancelled.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 백업 파일에 접근하려고 할 때, 파일 시스템 권한 문제, 파일 손상, 또는 파일이 존재하지 않아 접근할 수 없을 때 발생하는 오류입니다, 백업 또는 복원 작업이 이 파일 접근 실패로 인해 취소되었음을 의미합니다.</p></li>
+</ul>
+<p id="error-111"><strong>ERROR CODE: -111, ‘Your transaction has been aborted by the system due to server failure or mode change.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 서버 장애나 모드 변경으로 인해 활성 트랜잭션을 일방적으로 중단했을 때 발생하는 오류입니다, 클라이언트의 요청이나 동의 없이 시스템이 트랜잭션을 강제로 종료했음을 의미하며, 주로 서버 장애나 시스템 모드 변경 상황에서 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-113"><strong>ERROR CODE: -113, ‘Unable to restart/initialize the database server. %1$s’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 데이터베이스 서버를 재시작하거나 초기화하려고 할 때 실패했을 때 발생하는 오류입니다, 서버 재시작이나 초기화 과정에서 시스템 리소스 부족, 권한 문제, 포트 충돌, 또는 기타 시스템 오류로 인해 실패했음을 의미합니다.</p></li>
+</ul>
+<p id="error-114"><strong>ERROR CODE: -114, ‘Unable to interpret “%1$s” as a database. The database volumes/files may have been renamed/copied outside the database domain.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 지정된 경로나 이름을 데이터베이스로 인식할 수 없을 때 발생하는 오류입니다, 데이터베이스 볼륨이나 파일이 데이터베이스 도메인 외부에서 이름이 변경되거나 복사되어, CUBRID가 올바른 데이터베이스 구조를 찾을 수 없음을 의미합니다.</p></li>
+</ul>
+<p id="error-118"><strong>ERROR CODE: -118, ‘Failed to locate current working directory.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 현재 작업 디렉터리를 확인하는 과정에서 실패했을 때 발생하는 오류입니다, 주로 작업 디렉터리 확인 실패는 파일 시스템 권한 문제, 디렉터리 삭제, 또는 프로세스 권한 문제로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-123"><strong>ERROR CODE: -123, ‘Unable to create %1$s for database “%2$s”. Please refer “%3$s” for additional information.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템이 데이터베이스에 필요한 볼륨이나 파일을 생성하려고 할 때, 파일 시스템 권한, 디스크 공간 부족, 경로 문제 등으로 인해 생성에 실패했을 때 발생하는 오류입니다, 데이터베이스 볼륨 생성 실패로 인해 데이터베이스 초기화나 확장 작업이 중단되었음을 의미합니다.</p></li>
+</ul>
+<p id="error-130"><strong>ERROR CODE: -130, ‘Out of virtual memory.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스 시스템이 필요한 메모리를 할당할 수 없을 때 발생하는 오류입니다, 시스템의 가상 메모리가 부족하거나, 메모리 할당 요청이 실패했을 때 출력되며, 이는 시스템의 메모리 자원이 고갈되었음을 의미로 해당 오류는 주로 xasl 관련 루틴에서 발생합니다.</p></li>
+</ul>
+<p id="error-313"><strong>ERROR CODE: -313, ‘Object buffer underflow while reading.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 데이터베이스 객체 데이터를 읽어 오는 과정에서 발생합니다, 주로 객체 로딩이나 언로딩 과정에서 발생하는 중요한 메모리 관련 오류입니다.</p></li>
+</ul>
+<p id="error-320"><strong>ERROR CODE: -320, ‘Encountered corrupted disk representation of object.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 디스크에 저장된 객체의 표현이 손상되었을 때 나타나는 오류입니다, B-tree 로딩 과정에서 객체 데이터를 읽어올 때 발생합니다, 이 메시지는 디스크 I/O 오류, 메모리 손상, 또는 데이터베이스 파일 손상으로 인해 발생할 수 있습니다</p></li>
+</ul>
+<p id="error-542"><strong>ERROR CODE: -542, ‘Number of free sectors for volume “%1$s” is inconsistent. %2$d and %3$d were found according to volume header and bitmap, respectively.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 특정 볼륨(디스크 파일)에서,  볼륨 헤더(메타데이터)에 기록된 남은 섹터(Free Sector) 개수와  실제 비트맵(섹터 할당 상태를 나타내는 내부 테이블)에서 계산한 남은 섹터 개수가 서로 다를 때 발생합니다, 이런 불일치는 디스크 공간 관리의 일관성 오류를 의미하며,  데이터베이스의 저장 공간 할당/해제 과정에서 문제가 발생했거나,  물리적 손상, 비정상 종료, 버그 등으로 인해 메타데이터와 실제 상태가 어긋난 경우에 나타납니다.</p></li>
+</ul>
+<p id="error-543"><strong>ERROR CODE: -543, ‘Disk header for volume “%1$s” is inconsistent.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 특정 볼륨(디스크 파일)에서,  디스크 헤더(메타데이터, 볼륨의 구조와 상태를 나타내는 정보)가 손상되었거나  내부적으로 기대하는 값과 실제 값이 다를 때 발생합니다, 디스크 헤더는 볼륨의 크기, 할당 정보, 버전, 체크섬 등 중요한 메타데이터를 포함하고 있어, 이 정보가 일치하지 않으면 데이터베이스의 저장 구조 전체에 영향을 줄 수 있습니다, 주로 비정상 종료, 디스크 오류, 파일 시스템 손상, 버그 등으로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-599"><strong>ERROR CODE: -599, ‘An I/O error occurred while synchronizing state of volume “%1$s”.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스가 볼륨의 상태를 디스크와 동기화하는 과정에서 I/O 오류가 발생했을 때 나타납니다, 볼륨은 CUBRID 데이터베이스의 물리적 저장 단위로, 데이터 파일을 의미합니다, 동기화는 메모리에 있는 데이터를 디스크에 강제로 쓰는 과정으로, 데이터 일관성과 내구성을 보장하기 위해 수행됩니다.</p></li>
+</ul>
+<p id="error-705"><strong>ERROR CODE: -705, ‘Inconsistent %1$d permanent volumes were found when %2$d were expected.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스가 부팅되거나 복구되는 과정에서, 부트 페이지(boot page)에 기록된 영구 볼륨의 개수와 실제로 시스템에서 발견된 영구 볼륨의 개수가 일치하지 않을 때 나타나는 오류입니다, 이는 데이터베이스의 볼륨 구성에 문제가 있음을 의미하며, 데이터베이스의 일관성 및 무결성에 영향을 미칠 수 있습니다, 이 메시지는 CUBRID 데이터베이스 서버가 시작되거나 크래시 후 복구될 때 발생합니다</p></li>
+</ul>
+<p id="error-708"><strong>ERROR CODE: -708, ‘Unable to expand temporary disk volume “%1$s” with %2$d pages (%3$lld Kbytes) due to insufficient space. Current space available is %4$d pages (%5$lld Kbytes).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스가 임시 디스크 볼륨을 확장하려고 시도했지만, 디스크 공간이 부족하여 실패했을 때 나타나는 오류입니다, CUBRID는 대용량 쿼리 처리나 임시 테이블 생성 시 임시 볼륨을 확장하는 과정에서 발생될 수 있습니다.</p></li>
+</ul>
+<p id="error-780"><strong>ERROR CODE: -780, ‘Internal system failure: unable to get system time.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 시스템 시간을 가져오려고 할 때, 시스템 시간을 얻을 수 없는 상황임을 나타냅니다, 이는 CUBRID의 시스템 시간 메커니즘에서 발생하며, 주로 운영체제 수준의 시간 관련 함수 호출 실패로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-792"><strong>ERROR CODE: -792, ‘Cannot allocate memory for css.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 시스템의 connection entry 관련 메모리 할당에 실패했을 때 발생하는 내부 오류입니다, 메모리 할당 실패는 모듈이 정상적으로 작동할 수 없게 되며, 이는 클라이언트 연결 관리와 서버 통신에 치명적인 영향을 미칩니다, 이는 주로 시스템 메모리 부족, 메모리 단편화, 또는 운영체제의 메모리 할당 제한으로 인해 발생합니다.</p></li>
+</ul>
+<p id="error-864"><strong>ERROR CODE: -864, ‘Cannot open backupdb/restoredb verbose file ‘%1$s’.’</strong></p>
+<p>이 오류는 데이터베이스 백업 또는 복원 작업 중 상세 로그 파일을 생성하거나 열지 못할 때 발생합니다, 파일 시스템 권한, 디스크 공간 부족, 경로 문제 등으로 인해 발생할 수 있는 I/O 관련 오류입니다.</p>
+<p id="error-879"><strong>ERROR CODE: -879, ‘Cannot get permission: ‘%1$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 파일 또는 디렉터리의 파일 시스템 권한 정보를 조회하려고 할 때 발생합니다, 이런 상황은 일반적으로 데이터베이스 파일이나 로그 파일의 접근 권한을 확인해야 할 때 발생하며, CUBRID 프로세스를 실행하는 사용자 계정에 해당 파일에 대한 정보 조회 권한이 없을 때 주로 나타납니다.</p></li>
+</ul>
+<p id="error-880"><strong>ERROR CODE: -880, ‘Cannot change permission ‘%1$s’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 파일 또는 디렉터리의 파일 시스템 권한을 변경하려고 할 때 발생합니다, 이런 상황은 일반적으로 데이터베이스 파일이나 로그 파일의 접근 권한을 조정해야 할 때 발생하며, CUBRID 프로세스를 실행하는 사용자 계정에 해당 파일에 대한 변경 권한이 없을 때 주로 나타납니다.</p></li>
+</ul>
+<p id="error-881"><strong>ERROR CODE: -881, ‘Cannot get lock file ‘%1$s(FILE ID:%2$d)’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 파일에 대한 락(lock)을 획득하려고 할 때 발생합니다, 이런 상황은 일반적으로 데이터베이스 볼륨을 열거나 마운트할 때 발생하며, 파일 시스템의 락 관리 메커니즘과 관련이 있습니다, 이는 파일 시스템 접근 문제, 권한 문제, 다른 프로세스에 의한 락 점유, 또는 시스템 리소스 부족 등으로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-882"><strong>ERROR CODE: -882, ‘Cannot release lock file ‘FILE ID:%1$d’.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 특정 파일에 설정된 락(lock)을 해제하려고 할 때 발생합니다, 이런 상황은 일반적으로 데이터베이스 볼륨을 닫거나 언마운트할 때 발생하며, 파일 시스템의 락 관리 메커니즘과 관련이 있습니다, 이는 파일 시스템 접근 문제, 권한 문제, 또는 시스템 리소스 부족 등으로 인해 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-980"><strong>ERROR CODE: -980, ‘A thread is waiting in %1$s more than %2$d msec(%3$d msec).’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 스레드가 특정 작업(임계 영역 진입, 잠금 획득, 파일 I/O 등)을 수행하는 동안 설정된 임계값보다 오래 대기할 때 발생하는 경고 메시지입니다, 이는 성능 모니터링 기능의 일부로, 스레드가 예상보다 오래 대기하는 상황을 감지하여 시스템 관리자에게 알려주는 역할을 합니다. 이 메시지는 오류가 아니라 성능 문제를 조기에 발견하고 대응할 수 있도록 도와주는 정보성 메시지입니다, 주로 임계 영역(critical section), 잠금 관리, 파일 I/O 작업 등에서 발생하며, 시스템의 병목 현상이나 리소스 경합 상황을 파악하는 데 도움이 됩니다.</p></li>
+</ul>
+<p id="error-1015"><strong>ERROR CODE: -1015, ‘Specified directory ‘%1$s’ does not exist.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 데이터베이스 서버가 사용하는 볼륨파일들의 경로가 맞지 않거나 생성할 수 없는 경우 발생합니다.</p></li>
+</ul>
+<p id="error-1113"><strong>ERROR CODE: -1113, ‘Element index out of range.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스에서 이진 힙(Binary Heap) 데이터 구조에 요소를 추가하려고 할 때, 힙의 최대 용량을 초과했을 때 발생합니다, 즉, 이진 힙이 이미 가득 찬 상태에서 새로운 요소를 삽입하려고 시도했음을 의미합니다, 이는 메모리 관리와 시스템 안정성을 보장하기 위한 보호성 오류입니다, 이진 힙은 정렬, 우선순위 큐, 힙 정렬 등에서 사용되는 중요한 데이터 구조로, 용량 제한을 초과하면 메모리 오버플로우나 예상치 못한 동작이 발생할 수 있습니다.</p></li>
+</ul>
+<p id="error-1185"><strong>ERROR CODE: -1185, ‘Unexpected page refix on page %1$d,%2$d, while trying to fix page %3$d,%4$d.’</strong></p>
+<ul class="simple">
+<li><p>이 메시지는 CUBRID 데이터베이스의 페이지 버퍼 관리 시스템에서 발생합니다. 특정 페이지를 메모리에 고정(fix)하여 접근하려 할 때, 이미 다른 페이지가 예상치 못한 방식으로 재고정(refix)되는 상황이 발생했음을 나타냅니다. 이는 페이지 버퍼의 내부적인 일관성 또는 상태 관리에 문제가 생겼음을 의미하며, 일반적으로는 발생해서는 안 되는 비정상적인 상황입니다. 페이지 버퍼는 데이터베이스의 핵심 구성 요소이므로, 이러한 오류는 데이터 무결성 문제나 시스템 불안정으로 이어질 수 있습니다.</p></li>
+</ul>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        데이터베이스 오류 로그
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="error_log_sql.html">
+        질의(SQL) 관련 오류
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 21, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

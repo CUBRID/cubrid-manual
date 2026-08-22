@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="./" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CUBRID 소개 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="CUBRID 소개 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="CUBRID 소개 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="_static/logo_only.png" rel="icon"/>
+<link href="search.html" rel="search" title="검색"/>
+<link href="genindex.html" rel="index" title="색인"/>
+<link href="install_upgrade.html" rel="next" title="설치 및 업그레이드"/>
+<link href="toc.html" rel="prev" title="매뉴얼 소개"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="./genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/intro.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="release_note/index.html">Release Note</a>
+<a href="./genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">CUBRID 소개</span>
+</nav>
+<div id="content" role="main">
+<section id="cubrid">
+<h1>CUBRID 소개<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>CUBRID의 구조 및 특징을 설명한다.
+CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다.
+CUBRID는 인터넷 데이터 서비스에 최적화된 데이터베이스 시스템이며, 사용자가 편리하게 사용할 수 있는 다양한 기능을 제공한다.</p>
+<p>이 장에서 설명하는 주요 내용은 다음과 같다.</p>
+<ul class="simple">
+<li><p>시스템 구조: 데이터베이스 볼륨 구조, 서버 프로세스, 브로커 프로세스, 인터페이스 모듈에 대해 설명한다.</p></li>
+<li><p>CUBRID의 특징: CUBRID의 트랜잭션, 백업 및 복구, 파티션, 인덱스 기능, HA 기능, Java 저장 프로시저, 클릭 카운터, 관계형 데이터 모델 확장에 대해 간단히 설명한다.</p></li>
+</ul>
+<section id="id1">
+<h2>시스템 구조<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id1'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id2">
+<h3>프로세스 구조<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다.</p>
+<ul class="simple">
+<li><p>데이터베이스 서버는 CUBRID 데이터베이스 관리 시스템의 핵심 구성 요소로 데이터 저장 및 관리 기능을 수행하며, 멀티스레드 기반 클라이언트/서버 방식으로 동작한다. 데이터베이스 서버는 사용자가 입력한 질의를 처리하고, 데이터베이스 내의 객체를 관리한다. CUBRID 데이터베이스 서버는 잠금 기법과 로깅 기법을 이용해 다수 사용자가 동시에 사용하는 환경에서도 완벽한 트랜잭션을 지원하며, 운영에 필요한 데이터베이스 백업과 복구 기능을 지원한다.</p></li>
+<li><p>브로커는 서버와 외부 응용 프로그램 간의 통신을 중계하는 CUBRID 전용 미들웨어로서, 커넥션 풀링, 모니터링, 로그 추적 및 분석 기능을 제공한다.</p></li>
+<li><p>CUBRID Manager는 사용자가 데이터베이스와 브로커를 원격으로 관리할 수 있게 해주는 GUI 도구이다. 사용자가 데이터베이스 서버에 SQL 질의를 수행할 수 있게 해주는 편리한 도구인 질의 편집기를 제공한다.</p></li>
+<li><p>CUBRID 프로시저 언어(PL) 서버는 데이터베이스 서버에서 요청한 저장 프로시저와 함수를 컴파일하고 실행하는 서버이다.</p></li>
+</ul>
+<img alt="_images/process_structure.png" src="_images/process_structure.png"/>
+</section>
+<section id="database-volume-structure">
+<span id="id3"></span><h3>데이터베이스 볼륨 구조<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#database-volume-structure" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#database-volume-structure'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>아래 그림은 CUBRID 데이터베이스 볼륨의 구조를 도식화한 구성도이다. 데이터베이스 볼륨을 크게 영구적 볼륨, 일시적 볼륨, 백업 볼륨으로 분류하고, 아래 구성도를 참고하여 각각에 속하는 볼륨 및 특징을 살펴보기로 한다.</p>
+<img alt="_images/database_volume_structure.png" src="_images/database_volume_structure.png"/>
+<p>데이터베이스 볼륨을 생성, 추가, 삭제하는 명령에 관해서는 <a class="reference internal" href="admin/admin_utils.html#creating-database"><span class="std std-ref">createdb</span></a>, <a class="reference internal" href="admin/admin_utils.html#adding-database-volume"><span class="std std-ref">addvoldb</span></a> 그리고 <a class="reference internal" href="admin/admin_utils.html#deleting-database"><span class="std std-ref">deletedb</span></a>를 참고한다.</p>
+<section id="permanent-volume">
+<h4>영구적 볼륨(Permanent Volume)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#permanent-volume"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p><strong>Data Volumes</strong></p>
+<p>영구적 볼륨은 한번 생성되면 영구적으로 유지되는 데이터베이스 볼륨이다.</p>
+<p>일반적으로 데이터베이스 재시작이나 비정상 종료 후에도 보존해야 하는 데이터를 저장한다. 영구적 데이터의 타입은 다음과 같다.</p>
+<ul class="simple">
+<li><p>테이블(행 및 멀티미디어 데이터) 은 내부적으로 힙 파일 및 힙 오버플로우 파일에 저장되며, 테이블당 하나의 힙 파일 또는 힙 오버플로우 파일을 사용한다.</p></li>
+<li><p>인덱스(키 및 멀티미디어 데이터) 는 내부적으로 b-tree 파일 및 b-tree 오버플로우 파일에 저장되며, 인덱스당 하나의 b-tree 또는 b-tree 오버플로우 파일을 사용한다.</p></li>
+<li><p>시스템 데이터는 내부적으로 여러 유형의 파일에 저장되며, 시스템 데이터의 종류로는 파일 추적기(tracker), vacuum 데이터, 삭제된 파일 추적기(tracker) 및 클래스명 해시에 해당한다</p></li>
+</ul>
+<p>사용자는 일시적 데이터를 저장할 일부 영구적 볼륨을 명시적으로 할당할 수 있다. 이러한 볼륨은 절대 제거되지 않는다는 점에서는 영구적이지만 <a class="reference internal" href="#temporary-volumes"><span class="std std-ref">일시적 볼륨(Temporary Volume)</span></a> 와 비슷하게 동작한다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>기존 CUBRID 버전에서는 영구적 볼륨을 <strong>generic</strong>, <strong>data</strong> 및 <strong>index</strong> 와 같이 여러 타입으로 분류해 왔으나, 더 이상 이러한 분류를 사용하지 않는다. 이러한 옵션이 여전히 <strong>cubrid createdb</strong> 및 <strong>cubrid addvoldb</strong> 명령에서 허용되긴 하지만 생성되는 볼륨은 동일하며 모든 타입의 영구적 데이터를 저장한다. 볼륨의 용도는 영구적 데이터와 일시적 데이터로만 분류된다.</p>
+</div>
+<p><strong>제어 파일(Control File)</strong></p>
+<p>제어 파일은 데이터베이스 내 존재하는 볼륨의 정보, 백업 정보 및 로그의 정보를 저장하는 파일이다.</p>
+<ul class="simple">
+<li><p><strong>볼륨 정보</strong> : 데이터베이스 내 모든 볼륨의 이름과 위치, 그리고 내부 볼륨 식별자를 포함하는 정보로서, 데이터베이스가 재시작될 때 CUBRID는 볼륨 정보 제어 파일을 판독하며, 새로운 데이터베이스 볼륨이 추가될 때에 새로운 엔트리를 볼륨 정보 제어 파일에 기록한다.</p></li>
+<li><p><strong>백업 정보</strong> : 정보 볼륨에 대한 모든 백업의 위치는 백업 정보 제어 파일에 기록된다. 이 제어 파일은 로그 파일이 관리되는 곳에 유지된다.</p></li>
+<li><p><strong>로그 정보</strong> : 모든 활성 로그와 보관 로그의 이름을 포함하며, 사용자는 로그 정보 제어 파일을 통해 보관 로그의 정보를 확인할 수 있다. 이러한 로그 정보 제어 파일은 로그 파일과 동일한 위치에서 생성 및 관리된다.</p></li>
+</ul>
+<p>이와 같이 각각의 제어 파일은 데이터베이스 볼륨의 위치, 백업 정보, 로그 정보를 포함하며, 데이터베이스가 재시작하면서 읽는 파일이므로 사용자 임의로 변경해서는 안 된다.</p>
+<p><strong>활성 로그(Active Log)</strong></p>
+<p>활성 로그(active log)는 데이터베이스의 최근 변경 사항을 포함하는 로그이며, 데이터베이스에 문제가 발생하는 경우 활성 로그 및 보관 로그를 이용하여 고장 발생 전의 커밋된 시점으로 완전하게 데이터베이스를 복구할 수 있다.</p>
+<p><strong>이중 쓰기 버퍼 (Double Write Buffer, DWB) 파일</strong></p>
+<p>이중 쓰기 버퍼 파일은 I/O 에러를 방지하기 위하여 디스크에 쓰여지는 데이터 페이지들의 복사본을 저장한다. 이에 대한 자세한 설명은 <a class="reference internal" href="admin/db_manage.html#database-volume"><span class="std std-ref">데이터베이스 볼륨</span></a> 을 참고한다.</p>
+<p><strong>TDE 키 파일 (TDE Key File)</strong></p>
+<p>TDE (Transparent Data Encryption) 키 파일은 데이터베이스 암호화를 위한 키들을 담고 있다. 파일 내의 키들은 TDE 유틸리티를 사용하여 관리된다. 이에 대한 자세한 설명은 <a class="reference internal" href="security.html#tde-file-based-key"><span class="std std-ref">파일 기반의 마스터 키 관리</span></a> 와 <a class="reference internal" href="admin/admin_utils.html#tde-utility"><span class="std std-ref">TDE 유틸리티</span></a> 를 참고한다.</p>
+</section>
+<section id="temporary-volume">
+<span id="temporary-volumes"></span><h4>일시적 볼륨(Temporary Volume)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#temporary-volume"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>일시적 볼륨은 영구적 볼륨과 상반되는 개념이다. 즉, 일시적 볼륨은 서버 프로세스가 종료될 때 삭제되는 일시적으로 생성되는 저장소 파일이며, 질의 처리 및 정렬을 수행할 때 중간 결과와 최종 결과를 저장하는 데 사용된다.</p>
+<p>이러한 파일은 질의의 중간 결과와 최종 결과를 저장할 공간을 제공한다. 요구되는 일시적 데이터 크기데 따라, 우선적으로 메모리에 저장된다.(공간 크기는 <strong>cubrid.conf</strong> 에 지정된 시스템 파라미터 <strong>temp_file_memory_size_in_pages</strong> 에 의해 결정됨). 이를 초과하는 데이터는 디스크에 저장한다.</p>
+<p>데이터베이스에서는 일시적 데이터를 위한 디스크 공간 할당을 위해 일시적 볼륨을 생성해 사용한다. 그러나 사용자는 <strong>cubrid addvoldb -p temp</strong> 명령을 통해 일시적 데이터를 저장하기 위한 용도로 영구적 볼륨을 할당할 수도 있다. 이러한 영구적 볼륨이 있는 경우 임시 데이터를 디스크 공간에 저장할 때 일시적 볼륨보다 우선 사용한다.</p>
+<p>일시적 데이터를 사용할 수 있는 질의의 예는 다음과 같다.:</p>
+<ul class="simple">
+<li><p><strong>SELECT</strong> 문 등 결과가 생성되는 질의</p></li>
+<li><p><strong>GROUP BY</strong> 나 <strong>ORDER BY</strong> 가 포함된 질의</p></li>
+<li><p>부질의(subquery)가 포함된 질의</p></li>
+<li><p>정렬 병합(sort-merge) 조인이 수행되는 질의</p></li>
+<li><p><strong>CREATE INDEX</strong> 문이 포함된 질의</p></li>
+</ul>
+<p>일시적 데이터에 의해 시스템의 디스크 공간이 모두 사용되는 것을 방지하려면 다음과 같이 조치할 것을 권장한다.</p>
+<ul class="simple">
+<li><p>영구적 볼륨을 미리 생성해 일시적 데이터에 필요한 공간을 확보한다.</p></li>
+<li><p><strong>cubrid.conf</strong>에서 <strong>temp_file_max_size_in_pages</strong> 파라미터를 설정해 질의를 수행할 때 일시적 볼륨에 사용되는 공간의 크기를 제한한다(기본적으로는 제한 없음).</p></li>
+</ul>
+<p>일시적 볼륨(temporary temp volume)이 한번 생성되면 데이터베이스가 재시작될 때까지 유지되며 크기를 줄일 수 없다. 크기가 너무 큰 경우 데이터베이스를 재시작해 일시적 볼륨이 자동으로 삭제되도록 해야한다.</p>
+<ul class="simple">
+<li><p><strong>일시적 볼륨의 파일명</strong>: 일시적 볼륨의 파일명 형식은 <em>db_name</em><strong>_t</strong><em>num</em> 이며, 여기서 <em>db_name</em> 은 데이터베이스명을, <em>num</em> 은 볼륨 식별자를 나타낸다. 볼륨 식별자는 32766부터 1씩 감소한다.</p></li>
+<li><p><strong>일시적 볼륨의 크기 설정</strong>: 생성될 일시적 볼륨의 수는 트랜잭션 처리에 필요한 공간 크기에 따라 시스템에서 결정한다. 그러나 사용자가 시스템 파라미터 설정 파일(<strong>cubrid.conf</strong>)에서 <strong>temp_file_max_size_in_pages</strong> 파라미터 값을 설정해서 총 일시적 볼륨 크기를 제한할 수도 있다. 기본값은 여유 공간이 있는 한 일시적 볼륨을 무제한으로 생성할 수 있음을 나타내는 -1이다. <strong>temp_file_max_size_in_pages</strong> 파라미터 값이 0으로 설정된 경우 일시적 볼륨이 생성되지 않고, 시스템은 일시적 데이터에 할당된 영구적 볼륨만 사용한다.</p></li>
+<li><p><strong>일시적 볼륨의 저장 위치 설정</strong>: 기본적으로 일시적 볼륨은 최초 데이터베이스 볼륨이 생성된 위치에 생성되나 사용자가 <strong>temp_volume_path</strong> 파라미터 값을 설정해 일시적 볼륨을 저장할 다른 디렉터리를 지정할 수도 있다.</p></li>
+<li><p><strong>일시적 볼륨 삭제</strong>: 일시적 볼륨은 데이터베이스가 실행 중에만 존재하므로 서버가 실행 중일 때 일시적 볼륨을 삭제해서는 안 된다. 일시적 볼륨은 데이터베이스 서버가 정상적으로 종료될 때 삭제되며, 데이터베이스 서버가 비정상적으로 종료될 경우 서버가 재시작될 때 삭제된다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>일반적으로 영구적 볼륨은 영구적 데이터를 저장하는 데 사용되고, 일시적 볼륨은 일시적 데이터를 저장하는 데 사용된다. 일시적 데이터 저장을 위해 영구적 볼륨을 할당할 수는 있으나 일시적 볼륨에는 절대 영구적 데이터가 저장되지 않는다.</p>
+</div>
+<p><strong>보관 로그(Archive Log)</strong></p>
+<p>보관 로그는 최근의 변경 사항을 포함하고 있는 활성 로그(active log) 공간이 모두 사용된 후에 지속적으로 생성되는 로그를 보관하기 위한 볼륨이다. 시스템 파라미터 <strong>log_max_archives</strong> 의 값이 0보다 크게 설정된 경우 활성 로그 볼륨의 공간이 소진된 후에 보관 로그 볼륨이 추가된다. 제품 설치 시에는 0으로 설정되어 있다. 보관 로그 볼륨은 <strong>log_max_archives</strong> 의 설정 값만큼 볼륨 파일이 유지된다. 디스크 공간 확보를 위해 불필요한 보관 로그는 시스템의 설정에 의해 삭제되어야 하지만, 데이터베이스 복구에 사용하려면 이 값을 적절하게 설정해야 한다.</p>
+<p>이에 대한 자세한 내용은 <a class="reference internal" href="admin/backup.html#managing-archive-logs"><span class="std std-ref">보관 로그 관리</span></a> 를 참고한다.</p>
+<p><strong>백그라운드 보관 로그(Background Archive Log)</strong></p>
+<p>백그라운드 보관 로그(background archive log)는 백그라운드에서 로그 보관 작업(log archiving)을 수행할 때 사용하는 볼륨이다.</p>
+</section>
+<section id="id4">
+<h4>백업 볼륨<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>백업 볼륨은 데이터베이스에 대한 스냅샷으로서, 이러한 백업 볼륨과 로그 볼륨을 기반으로 특정 시점까지 발생한 트랜잭션을 복구할 수 있다.</p>
+<p>사용자는 <strong>cubrid backupdb</strong> 유틸리티를 통해 데이터베이스 복구를 위해 필요한 모든 데이터를 복사할 수 있으며, 데이터베이스 환경 설정 파일(<strong>cubrid.conf</strong>)의 <strong>backup_volume_max_size_bytes</strong> 파라미터 값을 설정하여 백업 볼륨의 분할 크기를 조정할 수 있다.</p>
+</section>
+</section>
+<section id="id5">
+<h3>데이터베이스 서버<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>DB 서버 프로세스</strong></p>
+<p>각 데이터베이스에는 한 개의 서버 프로세스가 존재한다. 서버 프로세스는 CUBRID 데이터베이스 서버를 구성하는 핵심 프로세스로 데이터베이스 파일 및 로그 파일 등에 직접 접근하여, 사용자의 요청을 처리한다. 클라이언트 프로세스는 서버 프로세스와 TCP/IP 통신을 통해 접속하며, 하나의 서버 프로세스는 스레드를 생성해서 다수의 클라이언트 프로세스의 요청 작업을 처리한다. 데이터베이스별, 즉 서버 프로세스별로 시스템 파라미터 설정을 지정할 수 있으며 서버 프로세스는 <strong>max_clients</strong> 파라미터 값으로 지정된 수만큼 클라이언트 프로세스의 접속이 가능하다.</p>
+<p><strong>마스터 프로세스</strong></p>
+<p>마스터 프로세스는 클라이언트 프로세스가 서버 프로세스에 접속하여 통신할 수 있게 하는 중개 프로세스로서, 호스트별로 한 개씩 동작한다. (정확히는 시스템 파라미터 파일인 <strong>cubrid.conf</strong> 에 지정되는 접속 포트 번호별로 하나씩의 마스터 프로세스가 존재한다.) 마스터 프로세스는 지정된 TCP/IP 포트에 대기하고 있고, 클라이언트 프로세스는 해당 TCP/IP 포트로 마스터 프로세스에 접속한 후 마스터 프로세스가 지정된 데이터베이스 이름에 따라 해당 서버 프로세스로 소켓 포트를 변경하여 접속을 처리한다.</p>
+<p><strong>실행 모드</strong></p>
+<p>서버 프로세스를 제외한 CUBRID의 프로그램들은 종류에 따라 두 가지 실행 모드가 있다. 실행 모드는 클라이언트/서버 모드(client/server mode)와 독립 모드(standalone mode)로 나뉜다.</p>
+<ul class="simple">
+<li><p>클라이언트/서버 모드는 해당 프로그램이 클라이언트 프로세스로서 동작하여 서버 프로세스에 접속하는 방식이다.</p></li>
+<li><p>독립 모드는 해당 프로그램이 서버 프로세스의 기능을 포함하고 있어 직접 데이터베이스 파일에 접근하여 수행하는 방식이다.</p></li>
+</ul>
+<p>예를 들어, 데이터베이스 생성 유틸리티나 복구 유틸리티 등은 다수 사용자가 데이터베이스에 접근하는 것을 막고 해당 프로그램만이 온전히 점유해서 작업할 수 있도록 독립 모드로 실행된다. 또 다른 예로, CSQL 인터프리터는 클라이언트/서버 모드로 동작하여 서버 프로세스에 접속할 수도 있고, 독립 모드로 동작하여 데이터베이스에 접근하여 SQL 문을 실행할 수도 있다. 참고로, 하나의 데이터베이스에 서버 프로세스와 독립 모드로 실행되는 프로그램이 동시에 접근할 수는 없다.</p>
+</section>
+<section id="id6">
+<h3>브로커<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>브로커는 다양한 응용 클라이언트가 데이터베이스 서버에 연결할 수 있도록 중계하는 미들웨어이다. 브로커를 포함하는 큐브리드 시스템은 아래 그림과 같이, 응용 클라이언트(application), cub_broker, cub_cas, 데이터베이스 서버(cub_server)를 포함한 다중 계층 구조를 가진다.</p>
+<img alt="_images/image3.png" src="_images/image3.png"/>
+<p><strong>응용 클라이언트</strong></p>
+<p>응용 클라이언트에서 사용할 수 있는 인터페이스는 C-API(CCI, CUBRID Call Interface), ODBC, JDBC, PHP, Python, Ruby, OLEDB, ADO.NET, Node.js 등이 있다.</p>
+<p><strong>cub_cas</strong></p>
+<p>cub_cas(CUBRID Common Application Server, 브로커 응용 서버, 또는 줄여서 응용 서버, CAS라고도 함)는 연결을 요청하는 모든 종류의 응용 클라이언트가 사용하는 공용 응용 서버 역할을 한다. 또한, cub_cas는 데이터베이스 서버의 클라이언트로 동작하여 클라이언트의 요청에 의해 데이터베이스 서버와 연결을 제공한다. 서비스 풀(service pool) 내에서 구동되는 cub_cas의 개수는 <strong>cubrid_broker.conf</strong> 설정 파일에 지정할 수 있으며, cub_broker에 의해 동적으로 조정된다.</p>
+<p>cub_cas는 CUBRID 데이터베이스 서버의 클라이언트 라이브러리와 링크되는 프로그램으로 데이터베이스 서버 프로세스(cub_server)에는 클라이언트 모듈로 동작하며, 쿼리 파싱이나 최적화, 실행 계획 생성 등의 작업이 클라이언트 모듈에서 수행된다.</p>
+<p><strong>cub_broker</strong></p>
+<p>cub_broker는 응용 클라이언트와 cub_cas 사이의 연결을 중계하는 기능을 수행한다. 즉, 응용 클라이언트가 접근을 요청하면, cub_broker는 공유 메모리(shared memory)를 통해 cub_cas의 상태를 파악하여 접근 가능한 cub_cas에게 요청을 전달하고, 해당 cub_cas로부터 전달 받은 요청에 대한 처리 결과를 응용 클라이언트에게 반환한다.</p>
+<p>또한, cub_broker는 서비스 풀 내의 cub_cas 개수를 조정하여 서버 부하를 관리하고, cub_cas의 구동 상태를 모니터링 및 관리한다. 만약, 응용 클라이언트의 요청을 cub_cas 1에게 전달하였는데, 비정상적인 종료로 인해 cub_cas 1과의 연결이 실패하면, cub_broker는 응용 클라이언트에게 연결 실패에 관한 에러 메시지를 전송하고 cub_cas 1을 재구동한다. 새롭게 구동된 cub_cas 1은 정상적인 대기 상태가 되어, 새로운 응용 클라이언트의 요청에 의해 재연결된다.</p>
+<p><strong>공유 메모리</strong></p>
+<p>공유 메모리에는 cub_cas의 상태 정보가 저장되며, cub_broker는 공유 메모리에 저장된 cub_cas의 상태 정보를 참조하여 응용 클라이언트와의 연결을 중계한다. 공유 메모리에 저장된 cub_cas의 상태 정보를 통해 시스템 관리자는 어떤 cub_cas가 현재 작업을 수행중인지, 어떤 응용 클라이언트의 요청이 처리 중인지를 확인할 수 있다.</p>
+</section>
+<section id="id7">
+<h3>인터페이스 모듈<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID는 다양한 응용 프로그래밍 인터페이스(API: Application Programming Interface)를 제공한다. 지원되는 API는 다음과 같다.</p>
+<ul class="simple">
+<li><p>JDBC: Java 환경에서 데이터베이스 응용 프로그램을 작성하는 표준 API</p></li>
+<li><p>ODBC: Windows 환경에서 데이터베이스 응용 프로그램을 작성하는 표준 API. ODBC 드라이버는 CCI 라이브러리를 기반으로 작성되었다.</p></li>
+<li><p>OLE DB: Windows 환경에서 COM 방식으로 데이터베이스 응용 프로그램을 작성하는 API. OLE DB 프로바이더는 CCI 라이브러리를 기반으로 작성되었다.</p></li>
+<li><p>PHP: PHP 환경에서 데이터베이스 응용 프로그램을 작성하는 API. PHP 드라이버는 CCI 라이브러리를 기반으로 작성되었다.</p></li>
+<li><p>CCI: CUBRID에서 제공하는 C 언어 인터페이스. C 라이브러리 형태로 제공된다.</p></li>
+</ul>
+<p>각 인터페이스 모듈들은 모두 브로커를 통해서 데이터베이스 서버에 접근하게 된다. 브로커는 다양한 응용 클라이언트가 데이터베이스 서버에 연결할 수 있도록 중계하는 미들웨어로, 각 인터페이스 모듈의 요청을 받아서 데이터베이스 서버의 클라이언트 라이브러리에서 제공하는 native-C API를 호출하게 된다.</p>
+</section>
+</section>
+<section id="id8">
+<h2>CUBRID의 특징<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id8'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>완벽한 트랜잭션 지원</strong></p>
+<p>트랜잭션의 원자성(atomicity), 일관성(consistency), 격리성(isolation), 지속성(durability)을 완벽하게 보장하기 위해 CUBRID는 다음의 기능을 충실하게 지원한다.</p>
+<ul class="simple">
+<li><p>트랜잭션 단위의 commit, rollback, savepoint 지원</p></li>
+<li><p>시스템이나 데이터베이스의 장애 시 트랜잭션 일관성 보장</p></li>
+<li><p>복제 간 트랜잭션 일관성 보장</p></li>
+<li><p>데이터베이스, 테이블, 레코드 등 다중 단위 잠금(multiple granularity locking) 지원</p></li>
+<li><p>교착 상태(deadlock) 자동 해결</p></li>
+</ul>
+<p><strong>데이터베이스 백업 및 복구</strong></p>
+<p>데이터베이스 백업은 CUBRID 데이터베이스 볼륨, 제어 파일, 로그 파일을 저장하는 작업이고, 데이터베이스 복구는 백업 작업에 의해 생성된 백업 파일, 활성 로그, 보관 로그를 이용하여 특정 시점의 데이터베이스로 복구하는 작업이다. 이 때, 복구 환경은 백업 환경과 동일한 운영체제 및 동일 버전의 CUBRID가 설치되어야 한다.
+CUBRID가 지원하는 백업 방식으로는 온라인 백업, 오프라인 백업, 증분 백업이 있고, 복구 방식으로는 증분 백업에 의한 복구, 부분 복구, 전체 복구가 있다.</p>
+<p><strong>테이블 분할 - 파티션</strong></p>
+<p>분할 기법(partitioning)은 하나의 테이블을 여러 개의 독립적인 논리적 단위로 분할하는 기법을 가리킨다. 각 논리적 단위를 분할(partition)이라 부르며, 각 분할을 서로 다른 물리적 공간에 나누어 저장하도록 하여 레코드를 검색할 때 해당 분할만 접근할 수 있도록 하여 성능 향상을 기대할 수 있다. CUBRID가 제공하는 분할 기법은 다음과 같다.</p>
+<ul class="simple">
+<li><p>레인지 분할 기법 : 칼럼 값의 범위를 기준으로 테이블을 분할하는 기법</p></li>
+<li><p>해시 분할 기법 : 칼럼의 해시값을 기준으로 분할하는 기법</p></li>
+<li><p>리스트 분할 기법 : 칼럼 값의 목록을 기준으로 분할하는 기법</p></li>
+</ul>
+<p><strong>다양한 인덱스 기능 지원</strong></p>
+<p>CUBRID는 다양한 조건 질의를 수행할 때 가급적 인덱스를 활용할 수 있도록 다음과 같은 인덱스 기능을 지원한다.</p>
+<ul class="simple">
+<li><p>내림차순 인덱스 스캔(Descending Index Scan): 별도의 내림차순 인덱스를 생성하지 않아도 오름차순 인덱스만으로 내림차순 인덱스 스캔 가능</p></li>
+<li><p>커버링 인덱스(Covering Index): <strong>SELECT</strong> 리스트의 칼럼이 인덱스에 포함된 경우 인덱스 스캔만으로 요구하는 데이터를 가져올 수 있음</p></li>
+<li><p><strong>ORDER BY</strong> 절 최적화: 요구하는 레코드의 정렬 순서가 인덱스의 순서와 같다면 별도의 정렬 작업이 필요 없음(Skip ORDER BY)</p></li>
+<li><p><strong>GROUP BY</strong> 절 최적화: <strong>GROUP BY</strong> 절에 있는 모든 칼럼이 인덱스에 포함된다면 질의 수행 시 인덱스를 사용할 수 있어 별도의 정렬 작업이 필요 없음(Skip GROUP BY)</p></li>
+</ul>
+<p><strong>HA 기능</strong></p>
+<p>CUBRID는 하드웨어, 소프트웨어, 네트워크 등에 장애가 발생해도 지속적인 서비스가 가능하게 하는 HA(High Availability) 기능을 제공한다. CUBRID의 HA 기능은 shared-nothing 구조이며, CUBRID Heartbeat을 이용하여 시스템과 CUBRID의 상태를 실시간으로 감시하고 장애 발생 시 절체(failover)를 수행한다. CUBRID HA 환경에서 마스터 데이터베이스 서버로부터 슬레이브 데이터베이스 서버로의 데이터 동기화를 위해 다음 두 단계를 수행한다.</p>
+<ul class="simple">
+<li><p>마스터 데이터베이스 서버에서 생성되는 트랜잭션 로그를 실시간으로 다른 노드에 복제하는 트랜잭션 로그 다중화 단계</p></li>
+<li><p>실시간으로 복제되는 트랜잭션 로그를 분석하여 슬레이브 데이터베이스 서버로 데이터를 반영하는 트랜잭션 로그 반영 단계</p></li>
+</ul>
+<p><strong>저장 프로시저</strong></p>
+<p>저장 프로시저는 미들웨어에서 실행되는 로직과 데이터베이스에서 실행되는 로직을 분리하여 응용 프로그램의 복잡성을 줄이고, 재사용성, 보안성, 성능을 향상시킬 수 있는 기법이다.
+CUBRID는 SQL 확장 언어인 PL/CSQL을 지원하고 범용 언어인 Java로도 작성할 수 있다.
+저장 프로시저 기능을 사용하기 위해 프로시저 언어 서버가 구동된다. (<a class="reference internal" href="admin/control.html#cubrid-pl-server"><span class="std std-ref">CUBRID 프로시저 언어 서버</span></a>를 참고)
+저장 프로시저에 대한 자세한 내용은 <a class="reference internal" href="pl/index.html"><span class="doc">CUBRID 절차적 언어</span></a> 를 참고한다.</p>
+<p><strong>클릭 카운터</strong></p>
+<p>인터넷 환경에서 데이터 검색 시 보통 검색 이력을 남기기 위해 조회수와 같은 카운터를 데이터베이스에 유지한다.</p>
+<p>일반적으로 위의 시나리오는 <strong>SELECT</strong> 문을 이용하여 데이터를 검색하고, 검색한 질의에 대한 조회수를 증가 시키기 위해 다시 <strong>UPDATE</strong> 문을 통해 구현하는 것이 일반적인 방식이었다.</p>
+<p>이 방식은 한 데이터에 <strong>SELECT</strong> 가 집중될 때 <strong>UPDATE</strong> 에 대한 잠금(Lock) 경쟁이 가중되어 급격한 성능 저하가 발생하는 단점이 존재한다.</p>
+<p>이에 CUBRID는 인터넷 환경에서 사용자 편의성 및 성능 측면에서 최적화된 기능을 제공하기 위해 클릭 카운터(Click Counter) 라는 새로운 개념을 도입하고, 이를 위해 <a class="reference internal" href="sql/function/clickcounter_fn.html#INCR" title="INCR"><code class="xref py py-func docutils literal notranslate"><span class="pre">INCR()</span></code></a> 함수 및 <strong>WITH INCREMENT FOR</strong> 구문을 제공한다.</p>
+<p><strong>관계형 데이터 모델 확장</strong></p>
+<ul class="simple">
+<li><p><strong>컬렉션</strong></p></li>
+</ul>
+<blockquote>
+<div><p>관계형 데이터베이스에서는 한 칼럼이 여러 개의 값을 가지는 것을 허용하지 않지만, CUBRID는 한 칼럼이 여러 개의 값을 가지도록 정의할 수 있다. 이를 위해 CUBRID에서는 컬렉션(collection)이라는 데이터 타입을 제공하는데, 컬렉션 타입은 컬렉션 원소의 중복 허용 여부와 순서 유지 여부에 따라 크게 <strong>SET</strong>, <strong>MULTISET</strong>, <strong>LIST</strong> 의 세 종류로 구분할 수 있다.</p>
+<ul class="simple">
+<li><p><strong>SET</strong>: 각 원소의 중복을 허용하지 않는 집합으로서, 원소의 나열 순서와 무관하게 중복 없이 정렬되어 저장된다.</p></li>
+<li><p><strong>MULTISET</strong>: 각 원소의 중복을 허용하는 집합으로서, 원소의 나열 순서와 무관하다.</p></li>
+<li><p><strong>LIST</strong>: 각 원소의 중복을 허용하는 집합으로서, <strong>SET</strong>, <strong>MULTISET</strong> 과 달리 원소의 순서를 유지한다.</p></li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p><strong>JSON</strong></p>
+<p>JavaScript Object Notation (JSON) 은 데이터 교환을 위한 사실상의 표준이 되었다. 관계형 데이터 모델에서는 반 정형 데이터 중 하나인 JSON을 가지는 것을 허용하지 않는다. 그러나 큐브리드에서는 <a class="reference internal" href="sql/function/json_fn.html#json-fn"><span class="std std-ref">SQL JSON 함수</span></a>를 사용하여 JSON 문서를 생성하고 질의 할 수 있다. 또한 <a class="reference internal" href="sql/datatype.html#json-data-type"><span class="std std-ref">JSON 데이터 타입</span></a> 컬럼을 정의하고 JSON 문서를 JSON 타입 컬럼에 저장할 수 있다.</p>
+</li>
+<li><p><strong>상속</strong></p></li>
+</ul>
+<blockquote>
+<div><p>상속은 상위 클래스(테이블)에서 생성된 칼럼과 메서드들을 하위 클래스에서 재사용할 수 있게 하는 개념으로, CUBRID는 상속을 지원함으로써 재사용성을 제공한다. CUBRID에서 제공하는 상속 기능을 이용하여 공통의 칼럼을 가지는 상위 클래스를 생성하고, 상위 클래스를 상속받아 고유한 칼럼을 추가한 하위 클래스를 생성함으로써, 필요한 칼럼 수를 최소화한 데이터베이스 모델링이 가능해진다.</p>
+</div></blockquote>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="toc.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        매뉴얼 소개
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="install_upgrade.html">
+        설치 및 업그레이드
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#id1'" class="reference internal" href="#id1">시스템 구조</a><ul>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">프로세스 구조</a></li>
+<li><a :data-current="activeSection === '#database-volume-structure'" class="reference internal" href="#database-volume-structure">데이터베이스 볼륨 구조</a><ul>
+<li><a :data-current="activeSection === '#permanent-volume'" class="reference internal" href="#permanent-volume">영구적 볼륨(Permanent Volume)</a></li>
+<li><a :data-current="activeSection === '#temporary-volume'" class="reference internal" href="#temporary-volume">일시적 볼륨(Temporary Volume)</a></li>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">백업 볼륨</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">데이터베이스 서버</a></li>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">브로커</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">인터페이스 모듈</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id8'" class="reference internal" href="#id8">CUBRID의 특징</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 22, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="_static/documentation_options.js?v=dcb1e111"></script>
+<script src="_static/doctools.js?v=fd6eb6e6"></script>
+<script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="_static/theme.js?v=b0acb063"></script>
+<script src="_static/translations.js?v=afa94a99"></script>
+<script src="_static/design-tabs.js?v=f930bc37"></script>
+<script src="_static/version-switcher.js?v=993d9931"></script>
+<script src="_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

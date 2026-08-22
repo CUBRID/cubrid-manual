@@ -134,7 +134,6 @@ JDBC 프로그래밍
                  | queryTimeout=<second>
                  | charSet=<character_set>
                  | zeroDateTimeBehavior=<behavior_type>
-                 | logFile=<file_name>
                  | logOnException=<bool_type>
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
@@ -189,11 +188,12 @@ JDBC 프로그래밍
         *   **round**: 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
         *   **convertToNull**: **NULL** 로 변환한다.
 
-    *   **logFile**: 디버깅용 로그 파일 이름(기본값: cubrid_jdbc.log). 별도의 경로 설정이 없으면 응용 프로그램을 실행하는 위치에 저장된다.
-    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: false)
-    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false)
+    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
+    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
 
         *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
+
+    .. note:: **logFile** 속성은 더 이상 사용되지 않는다. 연결 URL에 이 속성이 남아 있어도 오류 없이 무시되며, 드라이버 로그의 출력 위치는 응용 프로그램의 **java.util.logging** 설정이 결정한다(:ref:`jdbc-logging-conf` 참고).
 
     *   **useLazyConnection**: 이 값이 true이면 사용자의 연결 요청 시 브로커 연결 없이 성공을 반환(기본값: false)하고, prepare나 execute 등의 함수를 호출할 때 브로커에 연결한다. 이 값을 true로 설정하면 많은 응용 클라이언트가 동시에 재시작되면서 연결 풀(connection pool)을 생성할 때 접속이 지연되거나 실패하는 현상을 피할 수 있다. 
 
@@ -287,6 +287,46 @@ JDBC 프로그래밍
        *   useSSL=false, 브로커 '암호화 모드' 일때 연결 불가 (**cubrid_broker.conf**: SSL = ON)
 
     * **clientCacheSize** 는 브로커 파라미터인 **JDBC_CACHE** 혹은 **JDBC_CACHE_ONLY_HINT** 가 **ON** 으로 설정되어 있어야 유효하다.
+
+.. _jdbc-logging-conf:
+
+드라이버 로그 설정
+------------------
+
+**logOnException** 과 **logSlowQueries** 로 기록되는 드라이버 로그는 **java.util.logging** 을 통해 출력된다. 로그를 어디에 남길지는 응용 프로그램의 **java.util.logging** 설정이 결정하며, 드라이버는 로그 파일을 직접 만들지 않는다.
+
+로거 이름은 **cubrid.jdbc** 이고, 로그 종류에 따라 레벨이 다르다.
+
+============ ========== ==============================================================
+로그         레벨       내용
+============ ========== ==============================================================
+예외 덤프    FINE       예외 클래스와 스택 트레이스
+슬로우 쿼리  FINEST     CAS 정보, 수행 시간, SQL 문장, 바인딩된 값
+============ ========== ==============================================================
+
+두 레벨은 모두 JDK의 기본 임계값인 **INFO** 보다 낮다. 따라서 연결 URL에 **logOnException** 이나 **logSlowQueries** 만 설정하면 로그가 출력되지 않으며, **cubrid.jdbc** 의 레벨을 함께 설정해야 한다.
+
+::
+
+    handlers = java.util.logging.FileHandler
+    cubrid.jdbc.level = FINEST
+    java.util.logging.FileHandler.pattern = /var/log/myapp/cubrid_jdbc%g.log
+    java.util.logging.FileHandler.append = true
+    java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+
+위와 같이 작성한 설정 파일은 다음과 같이 지정한다.
+
+::
+
+    java -Djava.util.logging.config.file=logging.properties -jar app.jar
+
+**cubrid.jdbc.level** 을 **FINE** 으로 설정하면 예외 덤프만 출력되고, **FINEST** 로 설정하면 슬로우 쿼리까지 출력된다.
+
+.. note::
+
+    *   **FileHandler** 의 기본 포매터는 **XMLFormatter** 이다. 위 예제처럼 **formatter** 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.
+    *   슬로우 쿼리 로그에는 SQL 문장과 바인딩된 값이 그대로 포함된다. **cubrid.jdbc.level** 을 **FINEST** 로 설정할 때에는 로그 파일의 접근 권한을 확인해야 한다.
+    *   드라이버 로그를 응용 프로그램의 로그와 분리하려면 **cubrid.jdbc.handlers** 를 지정하고 **cubrid.jdbc.useParentHandlers** 를 **false** 로 설정한다.
 
 .. _jdbc-conn-datasource:
 

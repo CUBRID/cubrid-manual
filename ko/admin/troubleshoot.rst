@@ -39,7 +39,7 @@ CAS 정보 출력 함수
   
 :: 
  
-    Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logFile=driver_1.log&logSlowQueries=true&slowQueryThresholdMillis=5]. 
+    Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&slowQueryThresholdMillis=5]. 
 
 **CCI 응용 프로그램 로그**
 
@@ -69,7 +69,8 @@ CUBRID는 응용 프로그램-브로커-DB 서버의 3 계층 구조로 되어 �
  
 :: 
  
-    2013-05-09 16:25:08.831|INFO|SLOW QUERY 
+    May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logSlowQuery
+    FINEST: SLOW QUERY
     [CAS INFO] 
     localhost:33000, 1, 12916 
     [TIME] 
@@ -85,7 +86,9 @@ CUBRID는 응용 프로그램-브로커-DB 서버의 3 계층 구조로 되어 �
 
 응용 프로그램과 브로커의 슬로우 쿼리 정보는 각각 다른 파일로 다음과 같은 경우에 저장된다. 
      
-*   응용 프로그램의 슬로우 쿼리 정보는 연결 URL의 **logSlowQueries** 속성을 **yes**\ 로 설정하고 **slowQueryThresholdMillis** 값을 설정하면 logFile 속성으로 지정한 응용 프로그램 로그 파일에 저장된다(:func:`cci_connect_with_url`, :ref:`jdbc-connection-conf` 참고). 
+*   CCI 응용 프로그램의 슬로우 쿼리 정보는 연결 URL의 **logSlowQueries** 속성을 **yes**\ 로 설정하고 **slowQueryThresholdMillis** 값을 설정하면 **logFile** 속성으로 지정한 응용 프로그램 로그 파일에 저장된다(:func:`cci_connect_with_url` 참고).
+
+*   JDBC 응용 프로그램의 슬로우 쿼리 정보는 연결 URL의 **logSlowQueries** 속성을 **true**\ 로 설정하고 **slowQueryThresholdMillis** 값을 설정한 후, **java.util.logging** 에서 **cubrid.jdbc** 의 레벨을 **FINEST** 로 설정하면 출력된다(:ref:`jdbc-logging-conf` 참고).
  
 *   브로커의 슬로우 쿼리 정보는 :ref:`broker-configuration`\ 의 SLOW_LOG 값을 ON으로 설정하고 **LONG_QUERY_TIME** 값을 설정하면 $CUBRID/log/broker/sql_log 디렉터리에 저장된다. 
 

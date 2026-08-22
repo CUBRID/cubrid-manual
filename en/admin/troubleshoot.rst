@@ -39,7 +39,7 @@ If you specify the connection URL for printing out the log in the application, y
   
 :: 
  
-    Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logFile=driver_1.log&logSlowQueries=true&slowQueryThresholdMillis=5]. 
+    Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&slowQueryThresholdMillis=5]. 
 
 **CCI application log**
 
@@ -70,7 +70,8 @@ There are examples of each application log when a slow query occurs.
  
 :: 
  
-    2013-05-09 16:25:08.831|INFO|SLOW QUERY 
+    May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logSlowQuery
+    FINEST: SLOW QUERY
     [CAS INFO] 
     localhost:33000, 1, 12916 
     [TIME] 
@@ -86,7 +87,9 @@ There are examples of each application log when a slow query occurs.
 
 Slow query information in an application and in a broker is stored in each file when the setting is as following.
      
-*   The slow query information in application is stored in application log file when the value of **logSlowQueries** property in the connection URL is set to **yes** and the value of **slowQueryThresholdMillis** is set; it is stored to the application logfile specified with the **logFile** property (see :func:`cci_connect_with_url` and :ref:`jdbc-connection-conf`).
+*   The slow query information in a CCI application is stored in the application log file specified with the **logFile** property when the value of the **logSlowQueries** property in the connection URL is set to **yes** and the value of **slowQueryThresholdMillis** is set (see :func:`cci_connect_with_url`).
+
+*   The slow query information in a JDBC application is printed when the value of the **logSlowQueries** property in the connection URL is set to **true**, the value of **slowQueryThresholdMillis** is set, and the level of **cubrid.jdbc** is set to **FINEST** in **java.util.logging** (see :ref:`jdbc-logging-conf`).
 
 *   The slow query information in broker is stored in the $CUBRID/log/broker/sql_log directory when **SLOW_LOG** of :ref:`broker-configuration` is set to ON and **LONG_QUERY_TIME** is set.
 

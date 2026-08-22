@@ -134,7 +134,6 @@ The **getConnection** method returns the **Connection** object and it is used to
                  | queryTimeout=<second>
                  | charSet=<character_set>
                  | zeroDateTimeBehavior=<behavior_type>
-                 | logFile=<file_name>
                  | logOnException=<bool_type>
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
                  | useLazyConnection=<bool_type>
@@ -189,11 +188,12 @@ The **getConnection** method returns the **Connection** object and it is used to
         *   **round**: Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
         *   **convertToNull**: Converts to **NULL**.
 
-    *   **logFile**: The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
-    *   **logOnException**: Whether to log exception handling for debugging (default value: false)
-    *   **logSlowQueries**: Whether to log slow queries for debugging (default value: false)
+    *   **logOnException**: Whether to log exception handling for debugging (default value: false). For the output destination and the level, see :ref:`jdbc-logging-conf`.
+    *   **logSlowQueries**: Whether to log slow queries for debugging (default value: false). For the output destination and the level, see :ref:`jdbc-logging-conf`.
 
         *   **slowQueryThresholdMillis**: Timeout value (in milliseconds) of slow queries (default value: 60,000).
+
+    .. note:: The **logFile** property is no longer used. Even if it remains in a connection URL it is ignored without an error, and the output destination of driver logs is determined by the **java.util.logging** configuration of the application (see :ref:`jdbc-logging-conf`).
 
     *   **useLazyConnection**: If this is true, it returns success without connecting to the broker when user requests the connection, and it connects to the broker after calling prepare or execute function(default: false). If this value is true, it can prevent from access delay or failure as many application clients restart simultaniously and create connection pools.
 
@@ -286,6 +286,46 @@ The **getConnection** method returns the **Connection** object and it is used to
        *   useSSL=false, connection request will be rejected when the broker is in 'encryption mode' (**cubrid_broker.conf**: SSL = ON)
 
     * The **clientCacheSize** works only when **JDBC_CACHE** or **JDBC_CACHE_ONLY_HINT** of broker configure is **ON**.
+
+.. _jdbc-logging-conf:
+
+Configuring Driver Logs
+-----------------------
+
+Driver logs written by **logOnException** and **logSlowQueries** are emitted through **java.util.logging**. Where the logs are stored is determined by the **java.util.logging** configuration of the application; the driver does not create a log file by itself.
+
+The logger name is **cubrid.jdbc**, and the level differs by the kind of log.
+
+================= ========== ==============================================================
+Log               Level      Content
+================= ========== ==============================================================
+Exception dump    FINE       Exception class and stack trace
+Slow query        FINEST     CAS information, elapsed time, SQL statement, bound values
+================= ========== ==============================================================
+
+Both levels are lower than **INFO**, the default threshold of the JDK. Therefore, setting only **logOnException** or **logSlowQueries** in the connection URL does not produce any log; the level of **cubrid.jdbc** must be set as well.
+
+::
+
+    handlers = java.util.logging.FileHandler
+    cubrid.jdbc.level = FINEST
+    java.util.logging.FileHandler.pattern = /var/log/myapp/cubrid_jdbc%g.log
+    java.util.logging.FileHandler.append = true
+    java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+
+The configuration file written as above is specified as follows.
+
+::
+
+    java -Djava.util.logging.config.file=logging.properties -jar app.jar
+
+Setting **cubrid.jdbc.level** to **FINE** prints exception dumps only; setting it to **FINEST** prints slow queries as well.
+
+.. note::
+
+    *   The default formatter of **FileHandler** is **XMLFormatter**. If **formatter** is not specified as in the example above, logs are written in XML format instead of line-oriented text.
+    *   A slow query log contains the SQL statement and the bound values as they are. Check the access permission of the log file when setting **cubrid.jdbc.level** to **FINEST**.
+    *   To separate driver logs from the logs of the application, specify **cubrid.jdbc.handlers** and set **cubrid.jdbc.useParentHandlers** to **false**.
 
 .. _jdbc-conn-datasource:
 

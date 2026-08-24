@@ -188,7 +188,7 @@ JDBC 프로그래밍
         *   **round**: 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
         *   **convertToNull**: **NULL** 로 변환한다.
 
-    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
+    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
     *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
 
         *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
@@ -304,7 +304,9 @@ JDBC 프로그래밍
 슬로우 쿼리  FINEST     CAS 정보, 수행 시간, SQL 문장, 바인딩된 값
 ============ ========== ==============================================================
 
-두 레벨은 모두 JDK의 기본 임계값인 **INFO** 보다 낮다. 따라서 연결 URL에 **logOnException** 이나 **logSlowQueries** 만 설정하면 로그가 출력되지 않으며, **cubrid.jdbc** 의 레벨을 함께 설정해야 한다.
+두 레벨은 모두 JDK의 기본 임계값인 **INFO** 보다 낮으므로, **cubrid.jdbc** 의 레벨을 설정하지 않으면 아무것도 출력되지 않는다.
+
+예외 덤프는 **logOnException** 의 기본값이 **true** 이므로 레벨만 설정하면 출력된다. 출력하지 않으려면 연결 URL에 **logOnException=false** 를 지정한다. 반면 슬로우 쿼리는 드라이버가 매 질의의 수행 시간을 측정해야 하므로, **logSlowQueries** 를 **true** 로 설정해야 출력된다.
 
 ::
 

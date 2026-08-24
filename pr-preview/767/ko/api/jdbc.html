@@ -382,7 +382,7 @@
 <li><p><strong>convertToNull</strong>: <strong>NULL</strong> 로 변환한다.</p></li>
 </ul>
 </li>
-<li><p><strong>logOnException</strong>: 디버깅용 예외 처리 로깅 여부(기본값: false). 출력 위치와 레벨은 <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">드라이버 로그 설정</span></a>를 참고한다.</p></li>
+<li><p><strong>logOnException</strong>: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">드라이버 로그 설정</span></a>를 참고한다.</p></li>
 <li><p><strong>logSlowQueries</strong>: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">드라이버 로그 설정</span></a>를 참고한다.</p>
 <ul class="simple">
 <li><p><strong>slowQueryThresholdMillis</strong>: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.</p></li>
@@ -515,7 +515,8 @@
 </tr>
 </tbody>
 </table>
-<p>두 레벨은 모두 JDK의 기본 임계값인 <strong>INFO</strong> 보다 낮다. 따라서 연결 URL에 <strong>logOnException</strong> 이나 <strong>logSlowQueries</strong> 만 설정하면 로그가 출력되지 않으며, <strong>cubrid.jdbc</strong> 의 레벨을 함께 설정해야 한다.</p>
+<p>두 레벨은 모두 JDK의 기본 임계값인 <strong>INFO</strong> 보다 낮으므로, <strong>cubrid.jdbc</strong> 의 레벨을 설정하지 않으면 아무것도 출력되지 않는다.</p>
+<p>예외 덤프는 <strong>logOnException</strong> 의 기본값이 <strong>true</strong> 이므로 레벨만 설정하면 출력된다. 출력하지 않으려면 연결 URL에 <strong>logOnException=false</strong> 를 지정한다. 반면 슬로우 쿼리는 드라이버가 매 질의의 수행 시간을 측정해야 하므로, <strong>logSlowQueries</strong> 를 <strong>true</strong> 로 설정해야 출력된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">handlers</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span>
 </span><span id="line-2"><span class="n">cubrid</span><span class="o">.</span><span class="n">jdbc</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">FINEST</span>
 </span><span id="line-3"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">myapp</span><span class="o">/</span><span class="n">cubrid_jdbc</span><span class="o">%</span><span class="n">g</span><span class="o">.</span><span class="n">log</span>
@@ -1995,7 +1996,7 @@ Cascade=0, Restrict=2, No action=3, Set null=4</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 22, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 24, 2026. </p>
 </div>
 </div>
 </footer>

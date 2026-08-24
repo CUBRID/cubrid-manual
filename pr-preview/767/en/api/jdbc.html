@@ -380,7 +380,7 @@
 <li><p><strong>convertToNull</strong>: Converts to <strong>NULL</strong>.</p></li>
 </ul>
 </li>
-<li><p><strong>logOnException</strong>: Whether to log exception handling for debugging (default value: false). For the output destination and the level, see <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">Configuring Driver Logs</span></a>.</p></li>
+<li><p><strong>logOnException</strong>: Whether to log exception handling for debugging (default value: true). For the output destination and the level, see <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">Configuring Driver Logs</span></a>.</p></li>
 <li><p><strong>logSlowQueries</strong>: Whether to log slow queries for debugging (default value: false). For the output destination and the level, see <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">Configuring Driver Logs</span></a>.</p>
 <ul class="simple">
 <li><p><strong>slowQueryThresholdMillis</strong>: Timeout value (in milliseconds) of slow queries (default value: 60,000).</p></li>
@@ -513,7 +513,8 @@
 </tr>
 </tbody>
 </table>
-<p>Both levels are lower than <strong>INFO</strong>, the default threshold of the JDK. Therefore, setting only <strong>logOnException</strong> or <strong>logSlowQueries</strong> in the connection URL does not produce any log; the level of <strong>cubrid.jdbc</strong> must be set as well.</p>
+<p>Both levels are lower than <strong>INFO</strong>, the default threshold of the JDK, so nothing is printed unless the level of <strong>cubrid.jdbc</strong> is set.</p>
+<p>Exception dumps are printed as soon as the level is set, because <strong>logOnException</strong> defaults to <strong>true</strong>. To stop them, specify <strong>logOnException=false</strong> in the connection URL. Slow queries are different: the driver has to measure the elapsed time of every statement, so <strong>logSlowQueries</strong> must be set to <strong>true</strong>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">handlers</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span>
 </span><span id="line-2"><span class="n">cubrid</span><span class="o">.</span><span class="n">jdbc</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">FINEST</span>
 </span><span id="line-3"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">myapp</span><span class="o">/</span><span class="n">cubrid_jdbc</span><span class="o">%</span><span class="n">g</span><span class="o">.</span><span class="n">log</span>
@@ -1990,7 +1991,7 @@ You can use the <strong>next</strong> () method to process the next row from the
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Aug 22, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Aug 24, 2026. </p>
 </div>
 </div>
 </footer>

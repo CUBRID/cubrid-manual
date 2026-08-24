@@ -188,7 +188,7 @@ The **getConnection** method returns the **Connection** object and it is used to
         *   **round**: Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
         *   **convertToNull**: Converts to **NULL**.
 
-    *   **logOnException**: Whether to log exception handling for debugging (default value: false). For the output destination and the level, see :ref:`jdbc-logging-conf`.
+    *   **logOnException**: Whether to log exception handling for debugging (default value: true). For the output destination and the level, see :ref:`jdbc-logging-conf`.
     *   **logSlowQueries**: Whether to log slow queries for debugging (default value: false). For the output destination and the level, see :ref:`jdbc-logging-conf`.
 
         *   **slowQueryThresholdMillis**: Timeout value (in milliseconds) of slow queries (default value: 60,000).
@@ -303,7 +303,9 @@ Exception dump    FINE       Exception class and stack trace
 Slow query        FINEST     CAS information, elapsed time, SQL statement, bound values
 ================= ========== ==============================================================
 
-Both levels are lower than **INFO**, the default threshold of the JDK. Therefore, setting only **logOnException** or **logSlowQueries** in the connection URL does not produce any log; the level of **cubrid.jdbc** must be set as well.
+Both levels are lower than **INFO**, the default threshold of the JDK, so nothing is printed unless the level of **cubrid.jdbc** is set.
+
+Exception dumps are printed as soon as the level is set, because **logOnException** defaults to **true**. To stop them, specify **logOnException=false** in the connection URL. Slow queries are different: the driver has to measure the elapsed time of every statement, so **logSlowQueries** must be set to **true**.
 
 ::
 

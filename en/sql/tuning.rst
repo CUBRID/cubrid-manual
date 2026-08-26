@@ -4933,3 +4933,116 @@ The following example shows that subquery cache optimization is disabled when th
                 SUBQUERY (correlated)
                     SELECT (time: 4, fetch: 1000, fetch_time: 0, ioread: 0)
                     SCAN (table: dba.t2), (heap time: 3, fetch: 1000, ioread: 0, readrows: 10000, rows: 1000)
+
+.. _memoize:
+
+MEMOIZE
+------------------------------------
+
+The **MEMOIZE** optimization caches the inner table's scan results per join key value in a nested loop join, enhancing the performance of joins in which the same join key values repeat.
+If the join key value read from the outer table is already in the cache, the inner table scan and predicate evaluation are skipped and the cached results are used; otherwise, the inner table is scanned and the results are stored in the cache.
+
+The MEMOIZE optimization is applied automatically at query execution time; there is no dedicated syntax or hint.
+To disable this optimization, set the :ref:`memoize_memory_limit <memoize_memory_limit>` parameter to **0**.
+
+The MEMOIZE optimization is applied to a scan that satisfies all of the following conditions.
+
+*   The scan is the inner table scan of a nested loop join. It is not applied to the outer table, nor to hash joins or sort merge joins.
+*   Join key values — column values of the outer table — can be found in the join conditions. It is not applied to cross joins, which have no join condition.
+*   The scan is a read that requires no row locks. It is not applied to the target search of an **UPDATE** or **DELETE** statement, or to a **SELECT ... FOR UPDATE** query.
+
+In addition, it is not applied in some cases where reusing cached results is unsafe, such as when the inner table has a collection type (**SET**, **MULTISET**, **LIST**) column or when a system class is queried.
+
+If the memory used by the cache exceeds the value set in :ref:`memoize_memory_limit <memoize_memory_limit>`, or if the **hit** ratio is below 50% once join key lookups exceed 1,000, the cache is judged to cost more than it saves and is released immediately; query execution then continues by scanning the inner table without the cache.
+The query does not fail, and no error or warning is raised.
+
+.. note::
+
+    The **hit** ratio is calculated as follows.
+
+    :math:`\text{hit ratio} = \frac{\text{hit}}{\text{hit} + \text{miss}}`
+
+When executing a query using :ref:`query profiling <query-profiling>`, the profiling information for the MEMOIZE cache is displayed as part of the profile for the scan to which the MEMOIZE optimization is applied.
+
+The following queries prepare the data used by the example queries. Only 100 values appear repeatedly in the *customer_id* column of the *orders* table.
+
+.. code-block:: sql
+
+    CREATE TABLE customers (id INT PRIMARY KEY, grade INT);
+
+    INSERT INTO customers
+    SELECT ROWNUM, MOD(ROWNUM, 5)
+    FROM db_class a, db_class b
+    LIMIT 100;
+
+    CREATE TABLE orders (id INT PRIMARY KEY, customer_id INT, amount INT);
+
+    INSERT INTO orders
+    SELECT ROWNUM, MOD(ROWNUM, 100) + 1, MOD(ROWNUM, 1000)
+    FROM db_class a, db_class b, db_class c, db_class d
+    LIMIT 1000000;
+
+    UPDATE STATISTICS ON customers, orders WITH FULLSCAN;
+
+The following example displays MEMOIZE profiling information, when performing a nested loop join.
+The example query uses the **ORDERED** and **USE_NL** hints to induce a nested loop join, and the **NO_PARALLEL_SCAN** hint to exclude the effects of parallel scans.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ RECOMPILE ORDERED USE_NL NO_PARALLEL_SCAN */ SUM(o.amount)
+    FROM orders o INNER JOIN customers c ON c.id = o.customer_id
+    WHERE c.grade = 1;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 491, fetch: 5132, fetch_time: 1, ioread: 0)
+        SCAN (table: dba.orders), (heap time: 198, fetch: 4931, ioread: 0, readrows: 1000000, rows: 1000000)
+          SCAN (index: dba.customers.pk_customers_id), (btree time: 0, fetch: 200, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100) (lookup time: 0, rows: 20)
+          MEMOIZE (time: 184, hit: 999900, miss: 100, size: 18KB, enabled: true)
+
+The index scan on the *customers* table was performed only for the first lookup of each of the 100 join key values (**miss**: 100), and the remaining 999,900 lookups were served from the cache (**hit**: 999900).
+
+The description of the profiling items for the MEMOIZE cache is as follows.
+
+*   **time**: The cumulative time spent on cache lookups and stores, in milliseconds.
+*   **hit**: The number of join key lookups that used cached results instead of scanning the inner table.
+*   **miss**: The number of join key lookups that scanned the inner table because the join key was not found in the cache.
+*   **size**: The amount of memory used by the cache.
+*   **enabled**: Whether the cache is still enabled when the query ends.
+
+.. note::
+
+    The **MEMOIZE** item is displayed only when **hit** is 1 or greater. The absence of a **MEMOIZE** item in the profiling results does not mean that the MEMOIZE optimization was not attempted.
+
+.. note::
+
+    **hit** and **miss** count join key lookups, not result rows.
+
+When combined with :ref:`parallel execution <parallel-query>`, a separate cache is created for each worker thread, and the profiling information displays the sum of the workers' statistics.
+In this case, **enabled** is displayed as false if the cache has been released in any worker.
+
+Query #1 was executed using the MEMOIZE optimization, and Query #2 was executed with the MEMOIZE optimization disabled by setting **memoize_memory_limit** to 0.
+Comparing the results of the two queries shows that using the MEMOIZE optimization improves the response time.
+
++-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| **Query #1**                                                                      | **Query #2**                                                                      |
++===================================================================================+===================================================================================+
+| ::                                                                                | ::                                                                                |
+|                                                                                   |                                                                                   |
+|     csql> SELECT /*+ RECOMPILE ORDERED USE_NL NO_PARALLEL_SCAN */ SUM(o.amount)   |     csql> SET SYSTEM PARAMETERS 'memoize_memory_limit=0';                         |
+|             FROM orders o INNER JOIN customers c ON c.id = o.customer_id          |                                                                                   |
+|            WHERE c.grade = 1;                                                     |     csql> SELECT /*+ RECOMPILE ORDERED USE_NL NO_PARALLEL_SCAN */ SUM(o.amount)   |
+|                                                                                   |             FROM orders o INNER JOIN customers c ON c.id = o.customer_id          |
+|     === <Result of SELECT Command in Line 2> ===                                  |            WHERE c.grade = 1;                                                     |
+|                                                                                   |                                                                                   |
+|       sum(o.amount)                                                               |     === <Result of SELECT Command in Line 3> ===                                  |
+|     ===============                                                               |                                                                                   |
+|            99500000                                                               |       sum(o.amount)                                                               |
+|                                                                                   |     ===============                                                               |
+|     1 row selected. (0.407000 sec) Committed. (0.000000 sec)                      |            99500000                                                               |
+|                                                                                   |                                                                                   |
+|                                                                                   |     1 row selected. (1.407000 sec) Committed. (0.000000 sec)                      |
++-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+

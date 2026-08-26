@@ -750,7 +750,9 @@ The following are parameters related to the memory used by the database server o
 
     The server manages parallel query execution through a **global worker pool**. Even when multiple sessions simultaneously request parallel queries or complex parallel operations are performed within a single session, the total number of active parallel workers across the entire server cannot exceed the **max_parallel_workers** value.
 
-    Each server thread reserves the required number of workers through the **parallel query worker manager** before query execution, and releases them immediately upon task completion. If reservation fails due to insufficient available workers, the query is executed in the normal single-threaded manner.
+    Each server thread reserves the required number of workers through the **parallel query worker manager** before query execution, and releases them immediately upon task completion. If the full request cannot be reserved due to insufficient available workers, the operation runs in parallel with only the workers actually reserved; if no worker is reserved, the query is executed in the normal single-threaded manner.
+
+    This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the **SET SYSTEM PARAMETERS** statement.
 
     For more details on parallel query execution, see :ref:`parallel-query`.
 
@@ -785,6 +787,8 @@ The following are parameters related to the memory used by the database server o
     Without hints, the number of workers allocated to individual parallel operations cannot exceed this parameter value. However, if a single query has a structure that performs multiple parallel operations simultaneously, the total number of parallel workers used by that query may exceed this parameter value. The total number of parallel workers across the entire server cannot exceed the :ref:`max_parallel_workers <max_parallel_workers>` value.
 
     You can redefine the degree of parallelism for each query using the **PARALLEL** ( *degree* ) hint. For more details, see :ref:`parallel-query`.
+
+    This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the **SET SYSTEM PARAMETERS** statement. At server startup, if this parameter is larger than the :ref:`max_parallel_workers <max_parallel_workers>` value, it is lowered to that value.
 
     The following example sets the default degree of parallelism to 8. ::
 

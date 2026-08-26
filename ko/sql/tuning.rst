@@ -943,6 +943,7 @@ SQL 힌트
     NO_LOGGING |
     PARALLEL (<degree>) |
     NO_PARALLEL_SCAN |
+    NO_PARALLEL_HASH_JOIN |
     NO_PARALLEL_SUBQUERY |
     RECOMPILE
 
@@ -1015,7 +1016,7 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 .. _parallel-hint:
 
-*   **PARALLEL** ( *degree* ): 병렬 질의 실행(병렬 스캔(힙/리스트/인덱스), 병렬 부질의 실행, 병렬 해시 조인, 병렬 정렬)을 활성화하고 병렬 처리 정도를 지정하는 힌트이다. *degree* 는 0 이상의 정수 값이어야 하며, 병렬로 처리할 워커 스레드의 수를 의미한다. 0이나 1로 지정할 경우 병렬 처리 기능이 비활성화된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+*   **PARALLEL** ( *degree* ): 병렬 질의 실행(병렬 스캔(힙/리스트/인덱스), 병렬 부질의 실행, 병렬 해시 조인, 병렬 정렬)을 활성화하고 병렬 처리 정도를 지정하는 힌트이다. *degree* 는 0 이상의 정수 값이어야 하며, 병렬로 처리할 워커 스레드의 수를 의미한다. 0이나 1로 지정할 경우 병렬 처리 기능이 비활성화되며, 시스템의 CPU 코어 수를 초과하는 값은 코어 수로 낮추어 적용된다. 힌트를 지정해도 대상의 페이지 수가 활성화 조건에 미달하면 병렬 실행이 적용되지 않는다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
 
     .. code-block:: sql
 
@@ -1023,11 +1024,20 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 .. _no-parallel-scan:
 
-*   **NO_PARALLEL_SCAN**: 해당 쿼리 블록의 모든 병렬 스캔(힙/리스트/인덱스)을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+*   **NO_PARALLEL_SCAN**: 해당 질의 블록의 모든 병렬 스캔(힙/리스트/인덱스)을 사용하지 않도록 하는 힌트이다. **PARALLEL** 힌트와 같이 사용하는 경우에는 **NO_PARALLEL_SCAN** 이 우선 적용된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
 
     .. code-block:: sql
 
         SELECT /*+ NO_PARALLEL_SCAN */ * FROM large_table WHERE condition;
+
+.. _no-parallel-hash-join:
+
+*   **NO_PARALLEL_HASH_JOIN**: 해당 질의 블록에서 병렬 해시 조인을 사용하지 않도록 하는 힌트이다. 해시 조인 자체는 유지되고 병렬화만 비활성화된다. **PARALLEL** 힌트와 같이 사용하는 경우에는 **NO_PARALLEL_HASH_JOIN** 이 우선 적용된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+
+    .. code-block:: sql
+
+        SELECT /*+ NO_PARALLEL_HASH_JOIN */ o.order_id, t.category
+        FROM orders o JOIN large_table t ON o.order_id = t.id;
 
 .. _no-parallel-subquery:
 

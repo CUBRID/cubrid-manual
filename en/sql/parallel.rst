@@ -27,13 +27,18 @@ Configuration
 Parallel query execution can be controlled through system parameters and SQL hints.
 
 *   Setting the :ref:`parallelism <parallelism>` parameter to 2 or higher enables the optimizer to determine parallel query execution during query processing.
-*   Use the **PARALLEL** ( *degree* ) hint to explicitly specify the degree of parallelism for each query. *degree* is the number of workers to use and must be an integer value of 2 or higher. Hint-specified values take precedence over the parallelism parameter setting.
+*   Use the **PARALLEL** ( *degree* ) hint to explicitly specify the degree of parallelism for each query. *degree* is the number of workers to use and must be an integer value of 0 or higher. A value of **0** or **1** disables parallel execution; a value of **2 or higher** takes precedence over the parallelism parameter setting. A value larger than the number of system CPU cores is lowered to the core count.
 *   The :ref:`max_parallel_workers <max_parallel_workers>` parameter sets the maximum number of parallel worker threads that can be executed simultaneously across the entire server (default: 100).
 *   The **NO_PARALLEL_SCAN** hint disables every parallel scan flavor (heap, list, and index) within the query block. When used together with the **PARALLEL** hint, **NO_PARALLEL_SCAN** takes precedence.
+*   Parallel hash join and parallel subquery execution can be disabled with the **NO_PARALLEL_HASH_JOIN** and **NO_PARALLEL_SUBQUERY** hints, respectively. See the corresponding sections for details.
 
 .. note::
 
-    The max_parallel_workers and parallelism parameters are set to default values of 100 and 4 respectively, so you can use parallel queries without additional configuration.
+    The max_parallel_workers and parallelism parameters are set to default values of 100 and 4 respectively, so you can use parallel queries without additional configuration. However, parallel query execution is disabled entirely when the system has 2 or fewer CPU cores.
+
+.. note::
+
+    Under parallel execution, the order of result rows can change from run to run depending on the order in which workers finish. Specify an ORDER BY clause whenever the result order matters.
 
 .. _parallel-scan:
 
@@ -71,7 +76,7 @@ Regardless of the scan flavor, parallel scan is not applied and falls back to si
     *    update, delete, merge statements
 
 *   The scan is not the first (driving) table in a JOIN
-*   Correlated subqueries
+*   Scans inside a correlated subquery. Scans inside an uncorrelated subquery can still be parallelized.
 *   The scan is the direct outer/inner input of a sort-merge join (applies to every scan flavor)
 *   The **NO_PARALLEL_SCAN** hint is specified
 
@@ -88,17 +93,19 @@ Each scan flavor has additional, flavor-specific constraints. See the correspond
     -- SELECT FOR UPDATE
     SELECT /*+ PARALLEL(4) */ *
     FROM large_table
+    WHERE id <= 10
     FOR UPDATE;
 
     -- Using session variables
     SET @user_id = 123;
     SELECT /*+ PARALLEL(4) */ *
     FROM orders
-    WHERE customer_id = @user_id;
+    WHERE cust_id = @user_id;
 
     -- Using SERIAL
-    SELECT /*+ PARALLEL(4) */ *, order_seq.NEXT_VALUE
-    FROM orders;
+    SELECT /*+ PARALLEL(4) */ id, order_seq.NEXT_VALUE
+    FROM large_table
+    WHERE id <= 3;
 
 .. _parallel-heap-scan:
 
@@ -112,20 +119,24 @@ Heap scan has no additional flavor-specific restrictions beyond the :ref:`common
 .. code-block:: sql
 
     -- Parallel heap scan
-    SELECT /*+ PARALLEL(8) */ *
+    SELECT /*+ PARALLEL(4) */ id, category
     FROM large_table
     WHERE status = 'active';
 
     -- Parallel heap scan over a partitioned table
-    SELECT /*+ PARALLEL(8) */ *
+    SELECT /*+ PARALLEL(4) */ *
     FROM sales_partitioned
     WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
 
     -- INSERT SELECT (bulk copy)
     INSERT INTO archive_orders
-    SELECT /*+ PARALLEL(8) */ *
+    SELECT /*+ PARALLEL(4) */ *
     FROM orders
-    WHERE order_date < '2023-01-01';
+    WHERE amount < 100;
+
+.. note::
+
+    For a partitioned table, parallelization is decided per partition, and the activation condition (:ref:`parallel-query-throughput-rules`) is also evaluated against each partition's own page count. A partition below the activation condition is scanned single-threaded.
 
 .. _parallel-list-scan:
 
@@ -138,22 +149,22 @@ Parallel List Scan statically partitions a temporary on-disk result list (list f
 
 Parallel list scan is not applied — and falls back to a single-threaded list scan — if any of the following hold:
 
-*   The temporary list resides only in the in-memory buffer and has not spilled to a disk temp file (no sectors to partition — small lists fall back automatically).
-*   The upper XASL consumes results in row-by-row mode (a query shape that admits neither mergeable list nor BUILDVALUE; see :ref:`result-collection-modes`).
+*   The temporary list resides only in the in-memory buffer and has not spilled to a disk temp file (no sectors to partition — small lists fall back to single-threaded execution automatically).
+*   The upper operator consumes results in row-by-row mode (a query shape that admits neither mergeable list nor BUILDVALUE; see :ref:`result-collection-modes`).
+*   A ROWNUM or LIMIT predicate is attached to the list scan.
 *   The list scan sits inside the auxiliary input subtree (subquery, CTE, etc.) of a sort-merge join.
 
 .. code-block:: sql
 
     -- Typical pattern that benefits from parallel list scan:
-    -- the inner subquery materialises a list, which the outer
-    -- query then re-aggregates.
-    SELECT /*+ PARALLEL(8) */ region, COUNT(*)
-    FROM (
-        SELECT region, customer_id
-        FROM orders o, customers c
-        WHERE o.customer_id = c.id
-    ) t
-    GROUP BY region;
+    -- a derived-table result materialized by DISTINCT is
+    -- re-aggregated by the outer query.
+    SELECT /*+ PARALLEL(4) */ COUNT(*)
+    FROM (SELECT DISTINCT id, pad FROM large_table) t;
+
+.. note::
+
+    A derived table that is a simple projection is flattened into the outer query by the optimizer, so no temporary list is created in the first place. List scans appear for intermediate results whose materialization is forced by DISTINCT, GROUP BY, UNION, and the like. Rescanning a hash join's input list from an upper operator is another typical target of parallel list scan.
 
 .. _parallel-index-scan:
 
@@ -166,39 +177,46 @@ Parallel Index Scan lets multiple workers cooperatively walk the leaf pages of a
 
 Parallel index scan is not applied — and falls back to a single-threaded index scan — if any of the following hold:
 
-*   The scan uses an index-driven traversal optimisation that changes how the tree is entered or walked:
+*   The scan uses an index-driven traversal optimization that changes how the tree is entered or walked:
 
     *   ISS (Index Skip Scan)
     *   ILS (Index Loose Scan)
     *   KEYLIMIT clause
-    *   ORDERBY_SKIP / GROUPBY_SKIP / ORDERBY_DESC / GROUPBY_DESC
-    *   USE_DESC_INDEX hint
-    *   **filtered index** (a *function index*, however, is unaffected)
+    *   ORDERBY_SKIP / GROUPBY_SKIP family optimizations (replacing ORDER BY / GROUP BY with the index order)
     *   MIN/MAX single-key scan (min_max scan)
 
-*   The upper XASL imposes row-by-row semantics on the index scan through ROWNUM, ANALYTIC SKIP SORT, or ANALYTIC LIMIT OPT.
-*   The upper XASL consumes results in row-by-row mode (a query shape that admits neither mergeable list nor BUILDVALUE; see :ref:`result-collection-modes`).
+*   ROWNUM is used in a form that cannot be recomputed per worker, or an analytic-function SKIP SORT / LIMIT optimization is applied.
+*   The upper operator consumes results in row-by-row mode (a query shape that admits neither mergeable list nor BUILDVALUE; see :ref:`result-collection-modes`).
 *   The index scan sits inside the auxiliary input subtree (subquery, CTE, etc.) of a sort-merge join.
 
 .. code-block:: sql
 
     -- Typical case where parallel index scan applies
-    -- (covering / simple range over a large index)
-    CREATE INDEX idx_orders_status ON orders(status, order_date);
+    -- (covering index scan over a wide range)
+    CREATE INDEX idx_large_id_pad ON large_table(id, pad);
 
-    SELECT /*+ PARALLEL(8) */ order_id, order_date
-    FROM orders
-    WHERE status = 'completed' USING INDEX idx_orders_status;
+    SELECT /*+ PARALLEL(4) */ COUNT(pad)
+    FROM large_table
+    WHERE id BETWEEN 1 AND 900000 USING INDEX idx_large_id_pad;
 
     -- Parallel index scan is NOT applied
-    -- (USE_DESC_INDEX hint forces single-threaded index scan)
-    SELECT /*+ PARALLEL(8) USE_DESC_INDEX */ *
-    FROM orders
-    WHERE status = 'completed';
+    -- (KEYLIMIT clause forces single-threaded index scan)
+    SELECT /*+ PARALLEL(4) */ id, category
+    FROM large_table
+    WHERE id BETWEEN 1 AND 900000 USING INDEX idx_large_id_pad KEYLIMIT 100;
 
 .. note::
 
-    Because the tree descent is serial on the main thread and the leaf traversal is cooperative, parallel index scan pays off when the index has enough leaf pages. On small indexes the synchronisation cost can outweigh the speedup; the throughput rules (:ref:`parallel-query-throughput-rules`) guard against this.
+    Because the tree descent is serial on the main thread and the leaf traversal is cooperative, parallel index scan pays off when the index has enough leaf pages. On small indexes the synchronization cost can outweigh the speedup; the throughput rules (:ref:`parallel-query-throughput-rules`) guard against this.
+
+.. note::
+
+    For an index scan to be parallelized automatically without the **PARALLEL** hint, the optimizer additionally requires both of the following.
+
+    *   The selectivity of every key range predicate must be derivable from **histogram statistics**. If the target table has no histogram statistics, the optimizer never chooses parallel index scan. Statistics can be refreshed with the **UPDATE STATISTICS** statement.
+    *   The product of the selectivity and the number of index pages must reach a threshold (32 pages by default).
+
+    The **PARALLEL** hint bypasses these optimizer conditions, but the scan still runs single-threaded if the measured number of index pages does not meet the activation condition (:ref:`parallel-query-throughput-rules`).
 
 Performance Considerations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -231,44 +249,49 @@ Once parallel scan is enabled, the way the main thread collects worker results d
 
 .. note::
 
-    The row-by-row mode is observed **only with parallel heap scan**. Parallel list scan and parallel index scan fall back to single-threaded execution for query shapes that would require row-by-row (see the additional constraints in their respective sections), so ``gather: row-by-row`` only appears in heap-scan traces.
+    The row-by-row mode is observed **only with parallel heap scan**. Parallel list scan and parallel index scan fall back to single-threaded execution for query shapes that would require row-by-row (see the additional constraints in their respective sections), so ``gather: row by row`` only appears in heap-scan traces.
 
 **When mergeable list is not chosen**
 
-Mergeable list is replaced by another mode if any of the following hold:
+Mergeable list is replaced by another mode (buildvalue or row-by-row) if any of the following hold:
 
 *   The scan carries predicates that cannot be evaluated while scanning (deferred to an upper operator).
-*   Hash group-by is performed.
 *   The select-list contains a stored procedure (JavaSP or PL/CSQL).
-*   ROWNUM is used.
-*   topn_sort (sort to extract the top N) is performed.
-*   There is a LIMIT clause.
+*   ROWNUM or LIMIT is used in a form that cannot be recomputed per worker.
+*   The scan does not output any table column directly (e.g., a query selecting only constants).
 *   result_cache is enabled.
+
+.. note::
+
+    A top-N query combining ORDER BY with LIMIT can also run in parallel with mergeable list. In that case each worker keeps its own top N while scanning, and **topnsort: true** appears in the parallel processing details of the trace. When GROUP BY is combined, the workers perform partial hash aggregation and the **GROUPBY** entry of the trace shows **hash: partial**.
 
 .. _buildvalue-optimization:
 
 BUILDVALUE Optimization
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-When the SELECT list consists solely of supported aggregate functions and there are no per-row semantics such as ROWNUM, parallel scan applies the **BUILDVALUE optimization**. In this mode, each worker computes a partial aggregate over its scanned region and ships it to the main thread, which then combines the partials into the final result. Because workers exchange the smallest possible amount of data, this is the fastest mode for simple aggregate queries.
+When a query computes aggregate functions without GROUP BY and every aggregate it uses is on the supported list, parallel scan applies the **BUILDVALUE optimization**. In this mode, each worker computes a partial aggregate over its scanned region and ships it to the main thread, which then combines the partials into the final result. Because workers exchange the smallest possible amount of data, this is the fastest mode for aggregate queries.
 
 **Supported aggregate functions**
 
-The BUILDVALUE optimization applies when the SELECT list uses only the following aggregate functions:
+The BUILDVALUE optimization applies to queries using the following aggregate functions. The SELECT list may also combine the aggregates in expressions such as arithmetic.
 
 *   **COUNT(\*)**, **COUNT(column)**, **COUNT(DISTINCT column)**
-*   **MIN(column)**, **MAX(column)**
-*   **SUM(column)**, **AVG(column)**
-*   **STDDEV(column)**, **STDDEV_POP(column)**, **STDDEV_SAMP(column)**
-*   **VARIANCE(column)**, **VAR_POP(column)**, **VAR_SAMP(column)**
+*   **MIN**, **MAX**
+*   **SUM**, **AVG**
+*   **STDDEV**, **STDDEV_POP**, **STDDEV_SAMP**
+*   **VARIANCE**, **VAR_POP**, **VAR_SAMP**
+*   **BIT_AND**, **BIT_OR**, **BIT_XOR**
+*   **GROUP_CONCAT**, **JSON_ARRAYAGG**, **JSON_OBJECTAGG**
+*   **MEDIAN**, **PERCENTILE_CONT**, **PERCENTILE_DISC**
+*   **CUME_DIST**, **PERCENT_RANK**
 
 **Conditions**
 
 In addition to using only the supported aggregates, all of the following must hold:
 
-*   The SELECT list contains only the supported aggregate functions (no non-aggregate output columns).
-*   The query has no ROWNUM and no stored procedures in its predicates.
-*   The query is simple — no joins or subqueries combined with the aggregate.
+*   The query has no GROUP BY clause.
+*   The query does not use ROWNUM.
 
 **Scope**
 
@@ -304,7 +327,7 @@ The BUILDVALUE optimization is independent of the scan flavor and can be applied
 
 .. note::
 
-    If the SELECT list mixes the supported aggregates with other expressions (e.g., plain columns, unsupported aggregate functions) or is combined with GROUP BY, the BUILDVALUE optimization is not applied and the query is processed in the mergeable list or row-by-row mode instead.
+    If any unsupported aggregate function is included or GROUP BY is combined, the BUILDVALUE optimization is not applied and the query is processed in the mergeable list or row-by-row mode instead.
 
 Scan SQL Trace
 ^^^^^^^^^^^^^^
@@ -315,29 +338,28 @@ When parallel scan is performed, parallel processing details are added to the :r
 
     csql> ;trace on
 
-    SELECT /*+ PARALLEL(4) RECOMPILE */ count(*)
+    SELECT /*+ PARALLEL(4) RECOMPILE */ id, category
     FROM large_table
     WHERE status = 'active';
 
 ::
 
     Trace Statistics:
-        SELECT (time: 2405, fetch: 143277, fetch_time: 1287, ioread: 123467)
-            SCAN (table: dba.large_table), (heap time: 2395, fetch: 143277, ioread: 123467, readrows: 0, rows: 0)
-                 (parallel workers: 8, heap time: 2390..2395, readrows: 1249989..1250011,
-                  rows: 1249989..1250011, gather: mergeable list)
+      SELECT (time: 110, fetch: 19717, fetch_time: 15, ioread: 2101)
+        SCAN (table: dba.large_table), (heap time: 110, fetch: 19714, ioread: 2100, readrows: 1000000, rows: 1000000)
+             (parallel workers: 4, heap time: 108..110, readrows: 248704..252416, rows: 248704..252416, gather: mergeable list)
 
 The parallel scan trace fields are:
 
 *   **parallel workers**: number of worker threads used.
-*   **heap time / list time / index time**: per-worker scan time range (min..max, milliseconds). The label changes with the scan flavor.
+*   **heap time / temp time / index time**: per-worker scan time range (min..max, milliseconds). The label changes with the scan flavor (heap/list/index).
 *   **readrows**: per-worker range of rows read (min..max).
 *   **rows**: per-worker range of rows produced (min..max).
 *   **gather**: how worker results were collected.
 
     *   **mergeable list**: per-worker lists are used directly without merging.
     *   **buildvalue**: per-worker partial aggregates are combined (replaces the legacy ``count`` label).
-    *   **row-by-row**: rows are collected one at a time (heap scan only).
+    *   **row by row**: rows are collected one at a time (heap scan only).
 
 When **gather** shows **mergeable list** or **buildvalue**, the query took the lowest-synchronisation path.
 
@@ -347,41 +369,58 @@ When **gather** shows **mergeable list** or **buildvalue**, the query took the l
 
 **BUILDVALUE optimization trace example**
 
-When BUILDVALUE optimization is applied, **gather: buildvalue** is shown. Because only one aggregate row is produced overall, per-worker ``rows`` is reported as 0.
+When BUILDVALUE optimization is applied, **gather: buildvalue** is shown.
 
 .. code-block:: sql
 
     csql> ;trace on
 
-    SELECT /*+ PARALLEL(8) RECOMPILE */ COUNT(*)
-    FROM large_table;
+    SELECT /*+ PARALLEL(4) RECOMPILE */ COUNT(*)
+    FROM large_table
+    WHERE status = 'active';
 
 ::
 
     Trace Statistics:
-        SELECT (time: 1500, fetch: 1, fetch_time: 10, ioread: 100000)
-            SCAN (table: dba.large_table), (heap time: 1490, fetch: 100000, ioread: 100000, readrows: 0, rows: 0)
-                 (parallel workers: 8, heap time: 1485..1490, readrows: 1250000..1250000,
-                  rows: 0..0, gather: buildvalue)
+      SELECT (time: 86, fetch: 17249, fetch_time: 93, ioread: 13377)
+        SCAN (table: dba.large_table), (heap time: 86, fetch: 17246, ioread: 13377, readrows: 1000000, rows: 1000000)
+             (parallel workers: 4, heap time: 81..86, readrows: 248704..252416, rows: 248704..252416, gather: buildvalue)
 
 **Parallel index scan trace example**
 
+The parallel processing details of a parallel index scan report **index time** along with the per-worker ranges of **readkeys** (keys read) and **filteredkeys** (keys passing the key filter). A covering index scan additionally shows **covered: true**.
+
 .. code-block:: sql
 
     csql> ;trace on
 
-    SELECT /*+ PARALLEL(4) RECOMPILE */ order_id, order_date
-    FROM orders
-    WHERE status = 'completed' USING INDEX idx_orders_status;
+    SELECT /*+ PARALLEL(4) RECOMPILE */ COUNT(pad)
+    FROM large_table
+    WHERE id BETWEEN 1 AND 900000 USING INDEX idx_large_id_pad;
 
 ::
 
     Trace Statistics:
-        SELECT (time: 980, fetch: 51200, fetch_time: 410, ioread: 0)
-            SCAN (table: dba.orders, index: idx_orders_status),
-                 (key time: 970, fetch: 51200, ioread: 0, readkeys: 1, filteredkeys: 0,
-                  rows: 0, parallel workers: 4, key time: 965..970, rows: 312500..312500,
-                  gather: mergeable list)
+      SELECT (time: 136, fetch: 13247, fetch_time: 77, ioread: 13239)
+        SCAN (index: dba.large_table.idx_large_id_pad), (btree time: 136, fetch: 13244, ioread: 13239, readkeys: 900003, filteredkeys: 900000, rows: 900000, covered: true)
+             (parallel workers: 4, index time: 136..136, readkeys: 224557..225285, filteredkeys: 224556..225284, rows: 224556..225284, covered: true, gather: buildvalue)
+
+For a non-covering index scan, the parallel processing details are followed by data-page lookup statistics of the form **(lookup time: min..max, rows: min..max)**.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ PARALLEL(4) RECOMPILE */ category
+    FROM large_table
+    WHERE id BETWEEN 1 AND 900000 USING INDEX idx_large_id_pad;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 330, fetch: 915916, fetch_time: 244, ioread: 129)
+        SCAN (index: dba.large_table.idx_large_id_pad), (btree time: 330, fetch: 915913, ioread: 129, readkeys: 900002, filteredkeys: 900000, rows: 900000) (lookup time: 0, rows: 900000)
+             (parallel workers: 4, index time: 330..330, readkeys: 223469..227732, filteredkeys: 223468..227732, rows: 223468..227732, gather: mergeable list) (lookup time: 0..0, rows: 223468..227732)
 
 .. _parallel-subquery-execution:
 
@@ -564,6 +603,210 @@ The description of subquery parallel execution SQL trace output items is as foll
 
 In the above example, 2 subqueries (customers table query, products table query) were executed in parallel using 2 worker threads.
 
+.. _parallel-hash-join:
+
+Parallel Hash Join
+------------------
+
+Parallel Hash Join improves join response time by parallelizing the build and probe phases of a hash join across multiple worker threads. A hash join first loads both inputs into temporary result lists, builds a hash table from one input (build), and searches it with the other input (probe). Parallel hash join takes one of the following two forms depending on the input sizes.
+
+*   **Partitioned parallel**: both inputs are split into multiple partitions by the join key (SPLIT), and workers run the per-partition build and probe concurrently. Used when the build input is large enough to require partitioning.
+*   **Parallel probe**: when the build input is small enough to build the hash table in memory at once, the build runs single-threaded and only the probe input is divided among workers.
+
+**Activation conditions**
+
+*   The larger of the two input lists must satisfy the activation condition (:ref:`parallel-query-throughput-rules`) in page count. Below it, the hash join runs single-threaded even with the **PARALLEL** hint.
+*   When the **NO_PARALLEL_HASH_JOIN** hint is specified, the hash join is not parallelized. The hash join itself is kept; only its parallelization is disabled. See :ref:`NO_PARALLEL_HASH_JOIN <no-parallel-hash-join>` for details.
+
+Hash Join Trace
+^^^^^^^^^^^^^^^
+
+When a hash join is performed, a **HASHJOIN** tree is printed in the :ref:`SQL trace <query-profiling>` output. The tree shows per-phase statistics for partitioning (**SPLIT**), build (**BUILD**), and probe (**PROBE**), and this tree structure is always printed for a hash join regardless of parallelism. When parallel hash join is applied, a **parallel workers** field is added to the **HASHJOIN** entry, and the per-partition parallel phase is shown as a **PARALLEL** entry.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ RECOMPILE PARALLEL(4) USE_HASH */ COUNT(*)
+    FROM orders o JOIN large_table t ON o.order_id = t.id;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 915, fetch: 76794, fetch_time: 134, ioread: 497)
+        SCAN (temp time: 28, fetch: 2465, ioread: 142, readrows: 1000000, rows: 1000000)
+             (parallel workers: 4, temp time: 24..28, readrows: 181482..327609, rows: 181482..327609, gather: buildvalue)
+          HASHJOIN (time: 886, fetch: 74305, fetch_time: 133, ioread: 349, parallel workers: 4)
+            SPLIT (time: 198, fetch: 16086, ioread: 338, partitions: 8)
+            PARALLEL (time: 326, fetch: 21073, ioread: 2)
+              BUILD (time: 83..96, fetch: 2437, ioread: 0, rows: 1000000, method: hybrid)
+              PROBE (time: 180..226, fetch: 18604, ioread: 1, readrows: 1000000, readkeys: 1000000, rows: 1000000)
+            SUBQUERY (uncorrelated)
+                     (parallel workers: 2, time: 357, fetch: 37116, fetch_time: 86, ioread: 2)
+              SELECT (time: 351, fetch: 14869, fetch_time: 40, ioread: 2)
+                SCAN (table: dba.orders), (heap time: 348, fetch: 14866, ioread: 2, readrows: 1000000, rows: 1000000)
+                     (parallel workers: 4, heap time: 237..348, readrows: 245632..252096, rows: 245632..252096, gather: mergeable list)
+              SELECT (time: 356, fetch: 22247, fetch_time: 46, ioread: 0)
+                SCAN (table: dba.large_table), (heap time: 356, fetch: 22244, ioread: 0, readrows: 1000000, rows: 1000000)
+                     (parallel workers: 4, heap time: 300..354, readrows: 248704..252416, rows: 248704..252416, gather: mergeable list)
+
+The parallelism-related fields of the hash join trace are:
+
+*   **parallel workers** on **HASHJOIN**: number of worker threads used by the hash join. If absent, the hash join ran single-threaded.
+*   **SPLIT**: the phase that splits both inputs into partitions by the join key. **partitions** is the number of partitions created.
+*   **PARALLEL**: the phase in which workers run per-partition build and probe concurrently. The **time** of the **BUILD** and **PROBE** entries below it is reported as a per-worker range (min..max).
+*   **SUBQUERY (uncorrelated)**: the phase that loads the two join inputs into temporary result lists. Loading the inputs is itself subject to parallel subquery execution and parallel scan.
+
+The following example disables parallelization with the **NO_PARALLEL_HASH_JOIN** hint. The **HASHJOIN** entry has no **parallel workers** field and **BUILD**/**PROBE** run single-threaded without a **PARALLEL** entry, while the scans loading the join inputs can still run in parallel independently.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ RECOMPILE PARALLEL(4) USE_HASH NO_PARALLEL_HASH_JOIN */ COUNT(*)
+    FROM orders o JOIN large_table t ON o.order_id = t.id;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 1716, fetch: 74720, fetch_time: 398, ioread: 16587)
+        SCAN (temp time: 52, fetch: 2465, ioread: 1346, readrows: 1000000, rows: 1000000)
+             (parallel workers: 4, temp time: 46..52, readrows: 223584..302385, rows: 223584..302385, gather: buildvalue)
+          HASHJOIN (time: 1663, fetch: 72231, fetch_time: 355, ioread: 15237)
+            SPLIT (time: 390, fetch: 15843, ioread: 1029, partitions: 8)
+            BUILD (time: 237, fetch: 2431, ioread: 2323, rows: 1000000, method: hybrid)
+            PROBE (time: 562, fetch: 16847, ioread: 2136, readrows: 1000000, readkeys: 1000000, rows: 1000000)
+            SUBQUERY (uncorrelated)
+                     (parallel workers: 2, time: 439, fetch: 37048, fetch_time: 222, ioread: 9733)
+              SELECT (time: 360, fetch: 14873, fetch_time: 62, ioread: 2989)
+                SCAN (table: dba.orders), (heap time: 360, fetch: 14870, ioread: 2987, readrows: 1000000, rows: 1000000)
+                     (parallel workers: 4, heap time: 165..354, readrows: 245632..252096, rows: 245632..252096, gather: mergeable list)
+              SELECT (time: 433, fetch: 22175, fetch_time: 160, ioread: 6744)
+                SCAN (table: dba.large_table), (heap time: 433, fetch: 22172, ioread: 6742, readrows: 1000000, rows: 1000000)
+                     (parallel workers: 4, heap time: 215..433, readrows: 248704..252416, rows: 248704..252416, gather: mergeable list)
+
+The following example runs in the **parallel probe** form because the build input is small. **BUILD** runs single-threaded (**method: memory**), and parallel processing details with per-worker ranges are printed under the **PROBE** entry.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ RECOMPILE PARALLEL(4) USE_HASH */ COUNT(*)
+    FROM large_table t JOIN small_table s ON t.category = s.id;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 482, fetch: 32028, fetch_time: 76, ioread: 2290)
+        SCAN (temp time: 23, fetch: 2441, ioread: 64, readrows: 990000, rows: 990000)
+             (parallel workers: 4, temp time: 15..19, readrows: 197807..352823, rows: 197807..352823, gather: buildvalue)
+          HASHJOIN (time: 458, fetch: 29575, fetch_time: 72, ioread: 2226)
+            BUILD (time: 0, fetch: 0, ioread: 0, rows: 100, method: memory)
+            PROBE (time: 123, fetch: 14720, ioread: 0, readrows: 1000000, readkeys: 990000, rows: 990000)
+                  (parallel workers: 4, time: 113..119, readrows: 197015..312576, readkeys: 195044..309450, rows: 195044..309450)
+            SUBQUERY (uncorrelated)
+                     (parallel workers: 2, time: 334, fetch: 22199, fetch_time: 64, ioread: 2226)
+              SELECT (time: 334, fetch: 22195, fetch_time: 64, ioread: 2223)
+                SCAN (table: dba.large_table), (heap time: 333, fetch: 22192, ioread: 2221, readrows: 1000000, rows: 1000000)
+                     (parallel workers: 4, heap time: 288..332, readrows: 248704..252416, rows: 248704..252416, gather: mergeable list)
+              SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 3)
+                SCAN (table: dba.small_table), (heap time: 0, fetch: 2, ioread: 1, readrows: 100, rows: 100)
+
+.. _parallel-sort:
+
+Parallel Sort
+-------------
+
+Parallel Sort improves sort response time by distributing the sort input among multiple worker threads, letting each sort its share, and merging the results. The following sort operations are targets of parallel sort.
+
+*   File sort (filesort) of an ORDER BY clause
+*   Partitioning/sorting for analytic functions
+*   The sort of a GROUP BY to which hash aggregation cannot be applied (e.g., when a DISTINCT aggregate function is included)
+*   The internal sort for DISTINCT deduplication
+
+**Activation conditions**
+
+*   The page count of the sort input must satisfy the activation condition (:ref:`parallel-query-throughput-rules`).
+*   If the input has no more rows than the degree of parallelism, the sort runs single-threaded.
+
+.. note::
+
+    A top-N query combining ORDER BY with LIMIT does not go through a separate parallel sort phase; it is parallelized by the parallel scan workers each keeping their own top N while scanning. In the trace, **topnsort: true** appears in the scan's parallel processing details and the **ORDERBY** phase performs only the final merge.
+
+.. note::
+
+    When a GROUP BY query is eligible for hash aggregation, the workers perform partial hash aggregation instead of parallelizing the sort, and the **GROUPBY** entry of the trace shows **hash: partial**. When hash aggregation is disabled with the **NO_HASH_AGGREGATE** hint, the GROUP BY sort is not parallelized.
+
+.. note::
+
+    Parallel sort uses per-worker temporary sort space, so temporary volume usage can be higher than with a single-threaded sort.
+
+Sort Trace
+^^^^^^^^^^
+
+When a parallel sort is performed, parallel processing details showing the per-worker ranges of elapsed time, page count, and I/O reads are additionally printed under the corresponding sort entry (**ORDERBY**, **GROUPBY**, or **ANALYTIC**).
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ PARALLEL(4) RECOMPILE */ id, category, pad
+    FROM large_table
+    ORDER BY category;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 3563, fetch: 49462, fetch_time: 235, ioread: 14)
+        SCAN (table: dba.large_table), (heap time: 628, fetch: 49418, ioread: 10, readrows: 1000000, rows: 1000000)
+             (parallel workers: 4, heap time: 497..628, readrows: 248704..252416, rows: 248704..252416, gather: mergeable list)
+        ORDERBY (time: 2934, sort: true, page: 0, ioread: 4)
+                (parallel workers: 4, time: 2732..2916, page: 6440..11364, ioread: 46952..58793)
+
+The trace fields of parallel sort are:
+
+*   **parallel workers**: number of worker threads used for the sort
+*   **time**: per-worker sort time range (min..max, milliseconds)
+*   **page**, **ioread**: per-worker ranges (min..max) of pages used and I/O reads issued during the sort
+
+The following example shows an analytic function whose sort was parallelized.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ PARALLEL(4) RECOMPILE */ order_id, amount,
+           SUM(amount) OVER (PARTITION BY cust_id ORDER BY order_id)
+    FROM orders;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 1458, fetch: 1059149, fetch_time: 353, ioread: 50971)
+        SCAN (table: dba.orders), (heap time: 139, fetch: 19880, ioread: 9910, readrows: 1000000, rows: 1000000)
+             (parallel workers: 4, heap time: 135..139, readrows: 245632..252096, rows: 245632..252096, gather: mergeable list)
+        ANALYTIC #1 (time: 1317, sort: true, page: 10561, ioread: 33612, rows: 1000000)
+                (parallel workers: 4, time: 64..70, page: 3656..4066, ioread: 4..5)
+
+The following example shows a GROUP BY whose sort was parallelized because a DISTINCT aggregate function makes hash aggregation inapplicable.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ PARALLEL(4) RECOMPILE */ cust_id, COUNT(DISTINCT amount)
+    FROM orders
+    GROUP BY cust_id;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 848, fetch: 984969, fetch_time: 114, ioread: 1742)
+        SCAN (table: dba.orders), (heap time: 99, fetch: 14846, ioread: 34, readrows: 1000000, rows: 1000000)
+             (parallel workers: 4, heap time: 96..99, readrows: 245632..252096, rows: 245632..252096, gather: mergeable list)
+        GROUPBY (time: 749, hash: false, sort: true, page: 129, ioread: 3, readrows: 1000000, rows: 50000)
+                (parallel workers: 4, time: 49..57, page: 2470..2759, ioread: 4..90)
+
 .. _parallel-query-throughput-rules:
 
 Parallel Query Throughput Rules
@@ -586,7 +829,7 @@ The degree of parallelism calculated by throughput rules cannot exceed the :ref:
 Scan Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^
 
-The degree of parallelism for parallel scan (heap, list, or index) is determined by the same rule based on the page count of the scan input. Heap scan uses the table's heap page count, list scan uses the temporary list page count, and index scan uses the index leaf page count.
+The degree of parallelism for parallel heap scan and parallel list scan is determined by the same rule based on the page count of the scan input (the table's heap page count for heap scan, the temporary list page count for list scan). Index scan follows a separate rule (see below).
 
 **Activation Condition**
 
@@ -631,51 +874,52 @@ For example, when parallelism=4 (default):
 
     Even when the degree of parallelism is explicitly specified using the **PARALLEL** hint, the activation condition (2,048 or more pages) still applies. After activation, the hint value takes precedence in determining the degree of parallelism.
 
+**Index scan throughput rule**
+
+The automatic degree of parallelism for parallel index scan is computed by the optimizer from **selectivity × index page count**. The scan becomes a candidate when this value is 32 or more; the degree starts at 2 and increases by 1 each time the value doubles from 32, and it cannot exceed the :ref:`parallelism <parallelism>` parameter value. The **PARALLEL** hint bypasses this optimizer computation, but the activation condition that the measured index page count must be 2,048 or more still applies.
+
 **Example**
 
 .. code-block:: sql
 
     -- Create table and insert data
-    CREATE TABLE large_table (c1 INT);
+    CREATE TABLE large_table (id INT PRIMARY KEY, category INT, status VARCHAR(10), pad VARCHAR(200));
 
     INSERT INTO large_table
-    WITH RECURSIVE cte (n) AS (
-        SELECT 1
-        UNION ALL
-        SELECT n + 1 FROM cte WHERE n < 2000
-    )
-    SELECT ROWNUM FROM cte a, cte b, cte c LIMIT 2200000;
+    SELECT ROWNUM, MOD(ROWNUM, 100),
+           CASE WHEN MOD(ROWNUM, 2) = 0 THEN 'active' ELSE 'closed' END,
+           LPAD('x', 200, 'x')
+    FROM db_class a, db_class b, db_class c, db_class d
+    LIMIT 1000000;
 
     UPDATE STATISTICS ON large_table WITH FULLSCAN;
 
-    -- Check table statistics
-    -- Total pages in class heap: 4215 (approximately 66MB when db_page_size is 16K)
-    -- Total objects: 2200000
+    -- Check table statistics (SHOW HEAP CAPACITY OF large_table)
+    -- Num_pages: 17245 (approximately 269MB when db_page_size is 16K)
+    -- Num_recs: 1000000
 
-    -- When parallelism parameter is set to 4
-    -- Page count 4215 is at least 2,048, so degree of parallelism 3 is automatically applied
-    SELECT COUNT(*) FROM large_table;
+    -- When the parallelism parameter is set to 4
+    -- Page count 17245 -> throughput rule calculates 5 -> MIN(5, 4) = 4 applied
+    SELECT COUNT(*) FROM large_table WHERE status = 'active';
 
-    -- Explicit specification with hint
-    SELECT /*+ PARALLEL(8) */ COUNT(*) FROM large_table;
+    -- Explicit specification with hint (the hint value wins once the activation condition is met)
+    SELECT /*+ PARALLEL(8) */ COUNT(*) FROM large_table WHERE status = 'active';
 
 Hash Join Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The degree of parallelism for parallel hash join is determined according to throughput rules, and the determined degree of parallelism should be less than or equal to the number of partitions.
+The degree of parallelism for parallel hash join is computed from the page count of the **larger** of the two input lists, by the same rule as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by :ref:`parallelism <parallelism>`).
 
-.. note::
-
-    Detailed throughput rules for parallel hash join will be added in future versions.
+*   The computed degree of parallelism cannot exceed the number of partitions.
+*   Below the activation condition, the hash join runs single-threaded even with the **PARALLEL** hint.
 
 Sort Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^
 
-The degree of parallelism for parallel sort is determined according to throughput rules, and the determined degree of parallelism should be less than or equal to the number of input pages.
+The degree of parallelism for parallel sort is computed from the page count of the sort input list, by the same rule as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by :ref:`parallelism <parallelism>`).
 
-.. note::
-
-    Detailed throughput rules for parallel sort will be added in future versions.
+*   If the input has no more rows than the computed degree of parallelism, the sort runs single-threaded.
+*   Below the activation condition, the sort runs single-threaded even with the **PARALLEL** hint.
 
 Subquery Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -705,8 +949,8 @@ Worker Thread Pool Management
 If the parallel thread pool is insufficient, only some operations may be performed in parallel, or parallel execution may not be performed at all.
 
 *   Set the maximum thread count for the global parallel processing worker pool with the :ref:`max_parallel_workers <max_parallel_workers>` parameter
-*   Each worker thread reserves the required number of parallel workers from the parallel worker pool before parallel query execution, and returns them after task completion
-*   If the reservation fails, the query is executed in the normal single-threaded manner
+*   Each parallel operation reserves the required number of parallel workers from the parallel worker pool before execution, and returns them after task completion
+*   If the pool cannot grant the full request due to contention, the operation runs in parallel with only the workers actually reserved; if no worker is reserved, it runs single-threaded
 *   The sum of the degrees of parallelism used in the entire query can exceed the :ref:`parallelism <parallelism>` parameter value, but cannot exceed the :ref:`max_parallel_workers <max_parallel_workers>` value
 
 .. code-block:: sql

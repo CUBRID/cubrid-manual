@@ -937,7 +937,7 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
     PARALLEL (<degree>) |
-    NO_PARALLEL_HEAP_SCAN |
+    NO_PARALLEL_SCAN |
     NO_PARALLEL_SUBQUERY |
     RECOMPILE |
     QUERY_CACHE
@@ -1009,19 +1009,19 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 .. _parallel-hint:
 
-*   **PARALLEL** ( *degree* ): This is a hint to enable parallel query execution (parallel heap scan, parallel subquery execution, parallel hash join, parallel sort) and specify the degree of parallelism. *degree* must be an integer value of 0 or higher, indicating the number of worker threads to use for parallel processing. When set to 0 or 1, parallel processing is disabled. For more details, see :ref:`parallel-query`.
+*   **PARALLEL** ( *degree* ): This is a hint to enable parallel query execution (parallel scan over heap/list/index inputs, parallel subquery execution, parallel hash join, parallel sort) and specify the degree of parallelism. *degree* must be an integer value of 0 or higher, indicating the number of worker threads to use for parallel processing. When set to 0 or 1, parallel processing is disabled. For more details, see :ref:`parallel-query`.
 
     .. code-block:: sql
 
         SELECT /*+ PARALLEL(4) */ * FROM large_table WHERE condition;
 
-.. _no-parallel-heap-scan:
+.. _no-parallel-scan:
 
-*   **NO_PARALLEL_HEAP_SCAN**: This is a hint to disable parallel heap scan. For more details, see :ref:`parallel-query`.
+*   **NO_PARALLEL_SCAN**: This is a hint to disable every parallel scan flavor (heap, list, and index) within the query block. For more details, see :ref:`parallel-query`.
 
     .. code-block:: sql
 
-        SELECT /*+ NO_PARALLEL_HEAP_SCAN */ * FROM large_table WHERE condition;
+        SELECT /*+ NO_PARALLEL_SCAN */ * FROM large_table WHERE condition;
 
 .. _no-parallel-subquery:
 

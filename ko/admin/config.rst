@@ -745,7 +745,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **max_parallel_workers**\ 는 서버 전체에서 동시에 실행할 수 있는 병렬 질의 워커(parallel query worker) 스레드의 최대 개수를 설정하는 파라미터이다. 기본값은 **100**\ 이며, 최소값은 **0**, 최대값은 **1000**\ 이다.
 
-    이 파라미터가 **0**\ 으로 설정되면 병렬 질의 기능이 비활성화된다. **2 이상**\ 으로 설정하면 병렬 힙 스캔(Parallel Heap Scan), 병렬 부질의 실행(Parallel Subquery Execution), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort) 등 다양한 병렬 처리 기능을 사용할 수 있다.
+    이 파라미터가 **0**\ 으로 설정되면 병렬 질의 기능이 비활성화된다. **2 이상**\ 으로 설정하면 병렬 스캔(Parallel Scan; 힙/리스트/인덱스), 병렬 부질의 실행(Parallel Subquery Execution), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort) 등 다양한 병렬 처리 기능을 사용할 수 있다.
 
     서버는 **전역 워커 풀(worker pool)**\ 을 통해 병렬 질의 실행 작업을 관리한다. 다수의 세션이 동시에 병렬 질의를 요청하거나 단일 세션 내에서 복합적인 병렬 연산이 수행되더라도 서버 전체에서 활성화된 병렬 워커의 총합은 **max_parallel_workers** 값을 초과할 수 없다.
 

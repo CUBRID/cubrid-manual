@@ -157,13 +157,13 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 질�
 .. code-block:: sql
 
     -- 병렬 리스트 스캔이 적용되는 전형적인 패턴
-    -- 병합되지 않는 derived table의 임시 결과 리스트를 외부에서 다시 집계
+    -- View Merging이 수행되지 않는 derived table의 임시 결과 리스트를 외부에서 다시 집계
     SELECT /*+ PARALLEL(4) */ COUNT(*)
     FROM (SELECT DISTINCT id, pad FROM large_table) t;
 
 .. note::
 
-    단순 프로젝션만 있는 derived table은 View Merging 최적화에 의해 상위 질의로 병합되므로 임시 결과 리스트 자체가 만들어지지 않는다. 임시 결과 리스트는 DISTINCT, GROUP BY, UNION 등이 포함되어 병합할 수 없는 derived table에서 생성되며, **NO_MERGE** 힌트로 병합을 막아 강제로 생성할 수도 있다. 해시 조인의 입력 리스트를 상위에서 다시 스캔하는 경우도 대표적인 병렬 리스트 스캔 대상이다.
+    단순 프로젝션만 있는 derived table은 **View Merging** 최적화에 의해 상위 질의로 머지(merge)되므로 임시 결과 리스트 자체가 만들어지지 않는다. 임시 결과 리스트는 DISTINCT, GROUP BY, UNION 등이 포함되어 **View Merging**\ 을 수행할 수 없는 derived table에서 생성되며, **NO_MERGE** 힌트로 **View Merging**\ 을 막아 강제로 생성할 수도 있다. 해시 조인의 입력 리스트를 상위에서 다시 스캔하는 경우도 대표적인 병렬 리스트 스캔 대상이다. **View Merging**\ 에 대한 자세한 내용은 :ref:`view_merge`\ 를 참고한다.
 
 .. _parallel-index-scan:
 

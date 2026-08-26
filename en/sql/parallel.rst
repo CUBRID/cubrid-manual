@@ -157,14 +157,15 @@ Parallel list scan is not applied — and falls back to a single-threaded list s
 .. code-block:: sql
 
     -- Typical pattern that benefits from parallel list scan:
-    -- the temporary result list of a non-merged derived table is
+    -- the temporary result list of a derived table on which
+    -- View Merging is not performed is
     -- re-aggregated by the outer query.
     SELECT /*+ PARALLEL(4) */ COUNT(*)
     FROM (SELECT DISTINCT id, pad FROM large_table) t;
 
 .. note::
 
-    A derived table that is a simple projection is merged into the outer query by the View Merging optimization, so no temporary result list is created in the first place. A temporary result list is created for a derived table that cannot be merged because it contains DISTINCT, GROUP BY, UNION, and the like; the **NO_MERGE** hint can also be used to prevent merging and force the list to be created. Rescanning a hash join's input list from an upper operator is another typical target of parallel list scan.
+    A derived table that is a simple projection is merged into the outer query by the **View Merging** optimization, so no temporary result list is created in the first place. A temporary result list is created for a derived table on which **View Merging** cannot be performed because it contains DISTINCT, GROUP BY, UNION, and the like; the **NO_MERGE** hint can also be used to block **View Merging** and force the list to be created. Rescanning a hash join's input list from an upper operator is another typical target of parallel list scan. For more details on **View Merging**, see :ref:`view_merge`.
 
 .. _parallel-index-scan:
 

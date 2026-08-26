@@ -157,21 +157,21 @@ Parallel list scan is not applied — and falls back to a single-threaded list s
 .. code-block:: sql
 
     -- Typical pattern that benefits from parallel list scan:
-    -- a derived-table result materialized by DISTINCT is
+    -- the temporary result list of a non-merged derived table is
     -- re-aggregated by the outer query.
     SELECT /*+ PARALLEL(4) */ COUNT(*)
     FROM (SELECT DISTINCT id, pad FROM large_table) t;
 
 .. note::
 
-    A derived table that is a simple projection is flattened into the outer query by the optimizer, so no temporary list is created in the first place. List scans appear for intermediate results whose materialization is forced by DISTINCT, GROUP BY, UNION, and the like. Rescanning a hash join's input list from an upper operator is another typical target of parallel list scan.
+    A derived table that is a simple projection is merged into the outer query by the View Merging optimization, so no temporary result list is created in the first place. A temporary result list is created for a derived table that cannot be merged because it contains DISTINCT, GROUP BY, UNION, and the like; the **NO_MERGE** hint can also be used to prevent merging and force the list to be created. Rescanning a hash join's input list from an upper operator is another typical target of parallel list scan.
 
 .. _parallel-index-scan:
 
 Parallel Index Scan
 ^^^^^^^^^^^^^^^^^^^
 
-Parallel Index Scan lets multiple workers cooperatively walk the leaf pages of a B+tree index through a shared cursor. The vertical descent (root → leaf entry) is performed serially by the main thread; the subsequent leaf traversal, OID fetching, and predicate evaluation are parallelised across workers. Each worker grabs one leaf page, processes its keys independently, and only briefly synchronises to obtain the next leaf.
+Parallel Index Scan lets multiple workers cooperatively walk the leaf pages of a B+tree index through a shared cursor. The vertical descent (root → leaf entry) is performed serially by the main thread; the subsequent leaf traversal, OID fetching, and predicate evaluation are parallelized across workers. Each worker grabs one leaf page, processes its keys independently, and only briefly synchronizes to obtain the next leaf.
 
 **Additional index-scan constraints**
 
@@ -243,9 +243,9 @@ Result Collection Modes
 
 Once parallel scan is enabled, the way the main thread collects worker results depends on the query shape and is one of the three modes below. The mode appears as the **gather** field in the SQL trace.
 
-*   **mergeable list**: each worker builds its own temporary result list and the main thread uses those lists directly without merging. This has the lowest synchronisation cost and is usually the fastest mode.
+*   **mergeable list**: each worker builds its own temporary result list and the main thread uses those lists directly without merging. This has the lowest synchronization cost and is usually the fastest mode.
 *   **buildvalue**: each worker computes a partial aggregate and the main thread combines the partials into the final aggregate. Used for simple aggregate queries (see :ref:`buildvalue-optimization`).
-*   **row-by-row**: the main thread receives one row at a time. Applies when neither of the other two modes can be used. It has the broadest applicability but the highest synchronisation cost.
+*   **row-by-row**: the main thread receives one row at a time. Applies when neither of the other two modes can be used. It has the broadest applicability but the highest synchronization cost.
 
 .. note::
 
@@ -361,7 +361,7 @@ The parallel scan trace fields are:
     *   **buildvalue**: per-worker partial aggregates are combined (replaces the legacy ``count`` label).
     *   **row by row**: rows are collected one at a time (heap scan only).
 
-When **gather** shows **mergeable list** or **buildvalue**, the query took the lowest-synchronisation path.
+When **gather** shows **mergeable list** or **buildvalue**, the query took the lowest-synchronization path.
 
 .. note::
 

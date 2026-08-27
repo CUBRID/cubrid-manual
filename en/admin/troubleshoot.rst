@@ -33,7 +33,7 @@ Function getting CAS information
 Application log
 ---------------
 
-If you specify the connection URL for printing out the log in the application, you can check the CAS ID which brought an error when an error occurs in the specific query. The following are examples that an application log is written when an error occurs.
+If you configure the application to print out the log, you can check the CAS ID which brought an error when an error occurs in the specific query. For JDBC, the level of **cubrid.jdbc** must be set to **FINE** or lower in **java.util.logging**, and the format of the log is also determined by the **java.util.logging** configuration of the application. The following are examples that an application log is written when an error occurs; the JDBC example is the output with the configuration in :ref:`jdbc-logging-conf` (**SimpleFormatter**).
 
 **JDBC application log**
   
@@ -67,7 +67,7 @@ Some examples are as below.
 
 If application log and CAS SQL log show the slow query log together and there is almost no gab between the slow query times of application log and the CAS SQL log, the cause which the query was slow will exist between the broker and DB server. For example, the query execution in the DB server was slow.
 
-There are examples of each application log when a slow query occurs.
+There are examples of each application log when a slow query occurs. The JDBC example is the output with the configuration in :ref:`jdbc-logging-conf` (**SimpleFormatter**).
 
 **JDBC application log** 
  

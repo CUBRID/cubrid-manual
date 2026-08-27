@@ -14,7 +14,7 @@ Parallel queries provide the following key features:
 *   **Parallel Scan**: Multiple worker threads divide and scan the input data (heap, temporary list, or index), improving large input scanning performance. Three scan flavors are supported:
 
     *   **Parallel Heap Scan**: Heap pages of a table are partitioned by **sector** and scanned in parallel.
-    *   **Parallel List Scan**: A temporary result list (list file) that has spilled to disk is partitioned by **sector** and scanned in parallel.
+    *   **Parallel List Scan**: A temporary result list (list file) produced by a subquery or other intermediate operation is partitioned by **sector** and scanned in parallel.
     *   **Parallel Index Scan**: Workers cooperate through a shared cursor to walk the leaf pages of a B+tree index from left to right (or right to left).
 
 *   **Parallel Subquery Execution**: Independent subqueries (uncorrelated subqueries) are processed simultaneously by individual workers, improving query response time.
@@ -48,7 +48,7 @@ Parallel Scan
 Parallel Scan splits a single scan input across multiple worker threads that process it concurrently. CUBRID supports parallel scan over three input kinds, all sharing the same parallel execution framework:
 
 *   **Heap**: heap pages of a table — pre-partitioned across workers by **sector**
-*   **List**: pages of a temporary (on-disk) result list file — pre-partitioned across workers by **sector**
+*   **List**: pages of a temporary result list file — pre-partitioned across workers by **sector**
 *   **Index**: leaf pages of a B+tree index — workers cooperate through a shared **cursor**, walking left to right (or right to left)
 
 Each worker thread independently scans its assigned region while evaluating filter predicates, and the processed results are passed to the main thread through a result queue and integrated into the final result.

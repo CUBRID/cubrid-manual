@@ -329,7 +329,7 @@ Setting **cubrid.jdbc.level** to **FINE** prints exception dumps only; setting i
 
 .. note::
 
-    *   The default formatter of **FileHandler** is **XMLFormatter**. If **formatter** is not specified as in the example above, logs are written in XML format instead of line-oriented text.
+    *   The default formatter of **FileHandler** is **XMLFormatter**. Unless **formatter** is specified as in the example above, logs are written in XML format instead of line-oriented text.
     *   A slow query log contains the SQL statement and the bound values as they are. Check the access permission of the log file when setting **cubrid.jdbc.level** to **FINEST**.
     *   To separate driver logs from the logs of the application, specify **cubrid.jdbc.handlers** and set **cubrid.jdbc.useParentHandlers** to **false**.
 

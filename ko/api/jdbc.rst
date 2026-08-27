@@ -330,7 +330,7 @@ JDBC 프로그래밍
 
 .. note::
 
-    *   **FileHandler** 의 기본 포매터는 **XMLFormatter** 이다. 위 예제처럼 **formatter** 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.
+    *   **FileHandler** 의 기본 포매터는 **XMLFormatter** 이다. 위 예제와 달리 **formatter** 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.
     *   슬로우 쿼리 로그에는 SQL 문장과 바인딩된 값이 그대로 포함된다. **cubrid.jdbc.level** 을 **FINEST** 로 설정할 때에는 로그 파일의 접근 권한을 확인해야 한다.
     *   드라이버 로그를 응용 프로그램의 로그와 분리하려면 **cubrid.jdbc.handlers** 를 지정하고 **cubrid.jdbc.useParentHandlers** 를 **false** 로 설정한다.
 

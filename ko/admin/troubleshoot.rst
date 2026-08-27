@@ -39,7 +39,10 @@ CAS 정보 출력 함수
   
 :: 
  
-    Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&slowQueryThresholdMillis=5]. 
+    May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logException
+    FINE: DUMP EXCEPTION
+    [cubrid.jdbc.driver.CUBRIDException]
+    cubrid.jdbc.driver.CUBRIDException: Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&slowQueryThresholdMillis=5].
 
 **CCI 응용 프로그램 로그**
 

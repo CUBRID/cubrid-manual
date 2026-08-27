@@ -396,7 +396,7 @@ Especially, use a setURL() method to set the property through a URL string. Rega
     ... 
     CUBRIDDataSource ds = null;
     ds = new CUBRIDDataSource(); 
-    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000"); 
 
 Call getConnection method to get a connection object from DataSource.
 
@@ -1292,7 +1292,7 @@ To connect to a database, it is possible to use a DataSource object, too. If you
     ... 
      
     ds = new CUBRIDDataSource(); 
-    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000"); 
 
 For details about CUBRIDDataSource, see :ref:`jdbc-conn-datasource`.
 
@@ -1319,7 +1319,7 @@ Codes are separated with DataSourceMT.java and DataSourceExample.java.
             thrCPDSMT thread[];
  
             ds = new CUBRIDDataSource();
-            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000");
  
             try {
                 thread = new thrCPDSMT[num_thread];

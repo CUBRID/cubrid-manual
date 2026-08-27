@@ -397,7 +397,7 @@ DataSource 객체를 생성하려면 다음과 같이 호출한다.
     ... 
     CUBRIDDataSource ds = null;
     ds = new CUBRIDDataSource(); 
-    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000"); 
 
 DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드를 호출한다.
 
@@ -1297,7 +1297,7 @@ DataSource 객체를 사용하여 데이터베이스에 연결할 수도 있다.
     ... 
      
     ds = new CUBRIDDataSource(); 
-    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000"); 
 
 CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 참고한다.
 
@@ -1324,7 +1324,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
             thrCPDSMT thread[];
  
             ds = new CUBRIDDataSource();
-            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000");
  
             try {
                 thread = new thrCPDSMT[num_thread];

@@ -83,6 +83,7 @@ Regardless of the scan flavor, parallel scan is not applied and falls back to si
     forcing a hash join (the **USE_HASH** hint).
 *   Scans inside a correlated subquery. Scans inside an uncorrelated subquery can still be parallelized.
 *   The scan is the direct outer/inner input of a sort-merge join (applies to every scan flavor)
+*   The scan is over a system catalog class (**db_class**, **db_serial**, **db_partition**, etc.) or a class not subject to MVCC (such as the root class)
 *   The **NO_PARALLEL_SCAN** hint is specified
 
 Each scan flavor has additional, flavor-specific constraints. See the corresponding subsections below.
@@ -734,6 +735,7 @@ Parallel Sort improves sort response time by distributing the sort input among m
 
 *   The page count of the sort input must satisfy the activation condition (:ref:`parallel-query-throughput-rules`).
 *   If the input has no more rows than the degree of parallelism, the sort runs single-threaded.
+*   A sort that combines ORDER BY with LIMIT runs single-threaded when the input has fewer than 500 rows.
 
 .. note::
 
@@ -914,7 +916,7 @@ The automatic degree of parallelism for parallel index scan is computed by the o
 Hash Join Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The degree of parallelism for parallel hash join is computed from the page count of the **larger** of the two input lists, by the same rule as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by :ref:`parallelism <parallelism>`).
+The degree of parallelism for parallel hash join is computed from the page count of the **larger** of the two input lists, by a rule of the same shape as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by :ref:`parallelism <parallelism>`).
 
 *   The computed degree of parallelism cannot exceed the number of partitions.
 *   Below the activation condition, the hash join runs single-threaded even with the **PARALLEL** hint.
@@ -922,9 +924,10 @@ The degree of parallelism for parallel hash join is computed from the page count
 Sort Throughput Rules
 ^^^^^^^^^^^^^^^^^^^^^
 
-The degree of parallelism for parallel sort is computed from the page count of the sort input list, by the same rule as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by :ref:`parallelism <parallelism>`).
+The degree of parallelism for parallel sort is computed from the page count of the sort input list, by a rule of the same shape as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by :ref:`parallelism <parallelism>`).
 
 *   If the input has no more rows than the computed degree of parallelism, the sort runs single-threaded.
+*   A sort that combines ORDER BY with LIMIT runs single-threaded when the input has fewer than 500 rows.
 *   Below the activation condition, the sort runs single-threaded even with the **PARALLEL** hint.
 
 Subquery Throughput Rules

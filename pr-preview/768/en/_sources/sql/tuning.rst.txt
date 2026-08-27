@@ -4951,7 +4951,15 @@ The MEMOIZE optimization is applied to a scan that satisfies all of the followin
 *   Join key values — column values of the outer table — can be found in the join conditions. It is not applied to cross joins, which have no join condition.
 *   The scan is a read that requires no row locks. It is not applied to the target search of an **UPDATE** or **DELETE** statement, or to a **SELECT ... FOR UPDATE** query.
 
-In addition, it is not applied in some cases where reusing cached results is unsafe, such as when the inner table has a collection type (**SET**, **MULTISET**, **LIST**) column or when a system class is queried.
+It is also applied when the inner input is not a table but a subquery's temporary result list.
+
+It is not applied in the following cases, where reusing cached results is unsafe or a cache key cannot be built:
+
+*   The inner table has a collection type (**SET**, **MULTISET**, **LIST**) column
+*   A system catalog class or a class not subject to MVCC (such as **db_serial**) is queried
+*   The inner side is a DBLink remote table, **JSON_TABLE**, a **SHOW** statement, or a set/method expression
+*   The inner scan is neither a sequential scan nor an index scan (schema queries, etc.)
+*   The inner side has more than one scan target
 
 If the memory used by the cache exceeds the value set in :ref:`memoize_memory_limit <memoize_memory_limit>`, or if the **hit** ratio is below 50% once join key lookups exceed 1,000, the cache is judged to cost more than it saves and is released immediately; query execution then continues by scanning the inner table without the cache.
 The query does not fail, and no error or warning is raised.
@@ -5022,7 +5030,7 @@ The description of the profiling items for the MEMOIZE cache is as follows.
     **hit** and **miss** count join key lookups, not result rows.
 
 When combined with :ref:`parallel execution <parallel-query>`, a separate cache is created for each worker thread, and the profiling information displays the sum of the workers' statistics.
-In this case, **enabled** is displayed as false if the cache has been released in any worker.
+In this case, if the cache has been released in any worker, the **MEMOIZE** entry is not printed at all.
 
 Query #1 was executed using the MEMOIZE optimization, and Query #2 was executed with the MEMOIZE optimization disabled by setting **memoize_memory_limit** to 0.
 Comparing the results of the two queries shows that using the MEMOIZE optimization improves the response time.

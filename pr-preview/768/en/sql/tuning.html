@@ -5608,7 +5608,15 @@ To disable this optimization, set the <a class="reference internal" href="../adm
 <li><p>Join key values — column values of the outer table — can be found in the join conditions. It is not applied to cross joins, which have no join condition.</p></li>
 <li><p>The scan is a read that requires no row locks. It is not applied to the target search of an <strong>UPDATE</strong> or <strong>DELETE</strong> statement, or to a <strong>SELECT … FOR UPDATE</strong> query.</p></li>
 </ul>
-<p>In addition, it is not applied in some cases where reusing cached results is unsafe, such as when the inner table has a collection type (<strong>SET</strong>, <strong>MULTISET</strong>, <strong>LIST</strong>) column or when a system class is queried.</p>
+<p>It is also applied when the inner input is not a table but a subquery’s temporary result list.</p>
+<p>It is not applied in the following cases, where reusing cached results is unsafe or a cache key cannot be built:</p>
+<ul class="simple">
+<li><p>The inner table has a collection type (<strong>SET</strong>, <strong>MULTISET</strong>, <strong>LIST</strong>) column</p></li>
+<li><p>A system catalog class or a class not subject to MVCC (such as <strong>db_serial</strong>) is queried</p></li>
+<li><p>The inner side is a DBLink remote table, <strong>JSON_TABLE</strong>, a <strong>SHOW</strong> statement, or a set/method expression</p></li>
+<li><p>The inner scan is neither a sequential scan nor an index scan (schema queries, etc.)</p></li>
+<li><p>The inner side has more than one scan target</p></li>
+</ul>
 <p>If the memory used by the cache exceeds the value set in <a class="reference internal" href="../admin/config.html#memoize-memory-limit"><span class="std std-ref">memoize_memory_limit</span></a>, or if the <strong>hit</strong> ratio is below 50% once join key lookups exceed 1,000, the cache is judged to cost more than it saves and is released immediately; query execution then continues by scanning the inner table without the cache.
 The query does not fail, and no error or warning is raised.</p>
 <div class="admonition note">
@@ -5669,7 +5677,7 @@ The example query uses the <strong>ORDERED</strong> and <strong>USE_NL</strong> 
 <p><strong>hit</strong> and <strong>miss</strong> count join key lookups, not result rows.</p>
 </div>
 <p>When combined with <a class="reference internal" href="parallel.html#parallel-query"><span class="std std-ref">parallel execution</span></a>, a separate cache is created for each worker thread, and the profiling information displays the sum of the workers’ statistics.
-In this case, <strong>enabled</strong> is displayed as false if the cache has been released in any worker.</p>
+In this case, if the cache has been released in any worker, the <strong>MEMOIZE</strong> entry is not printed at all.</p>
 <p>Query #1 was executed using the MEMOIZE optimization, and Query #2 was executed with the MEMOIZE optimization disabled by setting <strong>memoize_memory_limit</strong> to 0.
 Comparing the results of the two queries shows that using the MEMOIZE optimization improves the response time.</p>
 <table class="docutils align-default">

@@ -1685,7 +1685,7 @@ INT_MAX *
 <td><p>byte</p></td>
 <td><p>2,097,152(2M)</p></td>
 <td><p>0</p></td>
-<td></td>
+<td><p>none</p></td>
 </tr>
 <tr class="row-even"><td><p>sort_buffer_size</p></td>
 <td><p>byte</p></td>
@@ -1768,7 +1768,11 @@ INT_MAX *
 <p>When the <strong>PARALLEL(N)</strong> hint is used, it ignores this parameter value and attempts to allocate N workers. However, it cannot exceed the maximum allowed value (the smaller of 32 or the number of system cores).</p>
 <p>Without hints, the number of workers allocated to individual parallel operations cannot exceed this parameter value. However, if a single query has a structure that performs multiple parallel operations simultaneously, the total number of parallel workers used by that query may exceed this parameter value. The total number of parallel workers across the entire server cannot exceed the <a class="reference internal" href="#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> value.</p>
 <p>You can redefine the degree of parallelism for each query using the <strong>PARALLEL</strong> ( <em>degree</em> ) hint. For more details, see <a class="reference internal" href="../sql/parallel.html#parallel-query"><span class="std std-ref">Parallel Execution</span></a>.</p>
-<p>This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the <strong>SET SYSTEM PARAMETERS</strong> statement. At server startup, if this parameter is larger than the <a class="reference internal" href="#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> value, it is lowered to that value.</p>
+<p>This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the <strong>SET SYSTEM PARAMETERS</strong> statement. At server startup, the value is adjusted in the following order.</p>
+<ul class="simple">
+<li><p>If it is larger than the number of system CPU cores, it is lowered to the core count.</p></li>
+<li><p>If the result is larger than the <a class="reference internal" href="#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> value, it is lowered again to that value.</p></li>
+</ul>
 <p>The following example sets the default degree of parallelism to 8.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">parallelism</span><span class="o">=</span><span class="mi">8</span>
 </span></code></pre></div>

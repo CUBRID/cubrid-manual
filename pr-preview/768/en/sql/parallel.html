@@ -300,6 +300,7 @@ adjusting the join order so that a large table drives the join (the <strong>ORDE
 forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 <li><p>Scans inside a correlated subquery. Scans inside an uncorrelated subquery can still be parallelized.</p></li>
 <li><p>The scan is the direct outer/inner input of a sort-merge join (applies to every scan flavor)</p></li>
+<li><p>The scan is over a system catalog class (<strong>db_class</strong>, <strong>db_serial</strong>, <strong>db_partition</strong>, etc.) or a class not subject to MVCC (such as the root class)</p></li>
 <li><p>The <strong>NO_PARALLEL_SCAN</strong> hint is specified</p></li>
 </ul>
 <p>Each scan flavor has additional, flavor-specific constraints. See the corresponding subsections below.</p>
@@ -885,6 +886,7 @@ forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 <ul class="simple">
 <li><p>The page count of the sort input must satisfy the activation condition (<a class="reference internal" href="#parallel-query-throughput-rules"><span class="std std-ref">Parallel Query Throughput Rules</span></a>).</p></li>
 <li><p>If the input has no more rows than the degree of parallelism, the sort runs single-threaded.</p></li>
+<li><p>A sort that combines ORDER BY with LIMIT runs single-threaded when the input has fewer than 500 rows.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1091,7 +1093,7 @@ forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 </section>
 <section id="hash-join-throughput-rules">
 <h3>Hash Join Throughput Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#hash-join-throughput-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#hash-join-throughput-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The degree of parallelism for parallel hash join is computed from the page count of the <strong>larger</strong> of the two input lists, by the same rule as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a>).</p>
+<p>The degree of parallelism for parallel hash join is computed from the page count of the <strong>larger</strong> of the two input lists, by a rule of the same shape as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a>).</p>
 <ul class="simple">
 <li><p>The computed degree of parallelism cannot exceed the number of partitions.</p></li>
 <li><p>Below the activation condition, the hash join runs single-threaded even with the <strong>PARALLEL</strong> hint.</p></li>
@@ -1099,9 +1101,10 @@ forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 </section>
 <section id="sort-throughput-rules">
 <h3>Sort Throughput Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sort-throughput-rules" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sort-throughput-rules'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The degree of parallelism for parallel sort is computed from the page count of the sort input list, by the same rule as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a>).</p>
+<p>The degree of parallelism for parallel sort is computed from the page count of the sort input list, by a rule of the same shape as for scans (activation at 2,048 pages, degree +1 per doubling of the page count, capped by <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a>).</p>
 <ul class="simple">
 <li><p>If the input has no more rows than the computed degree of parallelism, the sort runs single-threaded.</p></li>
+<li><p>A sort that combines ORDER BY with LIMIT runs single-threaded when the input has fewer than 500 rows.</p></li>
 <li><p>Below the activation condition, the sort runs single-threaded even with the <strong>PARALLEL</strong> hint.</p></li>
 </ul>
 </section>

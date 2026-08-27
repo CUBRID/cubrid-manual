@@ -702,7 +702,7 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_subquery_cache_size        | byte   | 2,097,152(2M)             | 0                         | 16,777,216(16M)           |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
-| memoize_memory_limit           | byte   | 2,097,152(2M)             | 0                         |                           |
+| memoize_memory_limit           | byte   | 2,097,152(2M)             | 0                         | none                      |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
@@ -792,7 +792,10 @@ The following are parameters related to the memory used by the database server o
 
     You can redefine the degree of parallelism for each query using the **PARALLEL** ( *degree* ) hint. For more details, see :ref:`parallel-query`.
 
-    This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the **SET SYSTEM PARAMETERS** statement. At server startup, if this parameter is larger than the :ref:`max_parallel_workers <max_parallel_workers>` value, it is lowered to that value.
+    This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the **SET SYSTEM PARAMETERS** statement. At server startup, the value is adjusted in the following order.
+
+    *   If it is larger than the number of system CPU cores, it is lowered to the core count.
+    *   If the result is larger than the :ref:`max_parallel_workers <max_parallel_workers>` value, it is lowered again to that value.
 
     The following example sets the default degree of parallelism to 8. ::
 

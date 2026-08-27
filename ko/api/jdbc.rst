@@ -188,8 +188,8 @@ JDBC 프로그래밍
         *   **round**: 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
         *   **convertToNull**: **NULL** 로 변환한다.
 
-    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
-    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
+    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 을 참고한다.
+    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 을 참고한다.
 
         *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
 

@@ -1010,7 +1010,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 .. _parallel-hint:
 
-*   **PARALLEL** ( *degree* ): This is a hint to enable parallel query execution (parallel scan over heap/list/index inputs, parallel subquery execution, parallel hash join, parallel sort) and specify the degree of parallelism. *degree* must be an integer value of 0 or higher, indicating the number of worker threads to use for parallel processing. When set to 0 or 1, parallel processing is disabled, and a value larger than the number of system CPU cores is lowered to the core count. Even with the hint, parallel execution is not applied if the input does not meet the activation conditions. For more details, see :ref:`parallel-query`.
+*   **PARALLEL** ( *degree* ): This is a hint to enable parallel query execution (parallel scan over heap/list/index inputs, parallel subquery execution, parallel hash join, parallel sort) and specify the degree of parallelism. *degree* must be an integer value of 0 or higher, indicating the number of worker threads to use for parallel processing. When set to 0 or 1, parallel processing is disabled, and a value larger than the number of system CPU cores is lowered to the core count. Even with the hint, parallel execution is not applied if the target's page count does not meet the activation conditions. For more details, see :ref:`parallel-query`.
 
     .. code-block:: sql
 
@@ -4984,7 +4984,7 @@ The following queries prepare the data used by the example queries. Only 100 val
 
     UPDATE STATISTICS ON customers, orders WITH FULLSCAN;
 
-The following example displays MEMOIZE profiling information, when performing a nested loop join.
+The following example displays MEMOIZE profiling information when performing a nested loop join.
 The example query uses the **ORDERED** and **USE_NL** hints to induce a nested loop join, and the **NO_PARALLEL_SCAN** hint to exclude the effects of parallel scans.
 
 .. code-block:: sql

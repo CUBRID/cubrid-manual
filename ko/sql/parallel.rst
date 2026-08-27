@@ -150,7 +150,7 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 질�
 다음 조건 중 하나라도 해당되면 병렬 리스트 스캔이 적용되지 않으며, 단일 스레드 리스트 스캔으로 실행된다.
 
 *   임시 리스트가 메모리 버퍼에만 존재하고 디스크 임시 파일로 떨어지지 않은 경우 (분할할 섹터가 없어 작은 리스트는 자동으로 단일 스레드로 실행)
-*   상위 연산이 결과를 한 행씩 받아가는 row-by-row 모드로 동작하는 경우 (mergeable list 와 BUILDVALUE 모두 적용 불가한 형태의 질의)
+*   상위 연산이 결과를 한 행씩 받아가는 row-by-row 모드로 동작하는 경우 (mergeable list 와 BUILDVALUE 모두 적용 불가한 형태의 질의 — :ref:`result-collection-modes` 참고)
 *   ROWNUM 또는 LIMIT 조건절이 리스트 스캔에 걸려 있는 경우
 *   소트 머지 조인의 보조 입력 트리(부질의/CTE 등) 안에 위치한 리스트 스캔
 
@@ -185,7 +185,7 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 질�
     *   MIN/MAX 단일 키 조회 (min_max scan)
 
 *   ROWNUM 조건을 워커별로 다시 계산할 수 없는 형태로 사용한 경우, 또는 분석 함수(analytic function)의 SKIP SORT/LIMIT 최적화가 적용된 경우
-*   상위 연산이 결과를 한 행씩 받아가는 row-by-row 모드로 동작하는 경우 (mergeable list 와 BUILDVALUE 모두 적용 불가한 형태의 질의)
+*   상위 연산이 결과를 한 행씩 받아가는 row-by-row 모드로 동작하는 경우 (mergeable list 와 BUILDVALUE 모두 적용 불가한 형태의 질의 — :ref:`result-collection-modes` 참고)
 *   소트 머지 조인의 보조 입력 트리(부질의/CTE 등) 안에 위치한 인덱스 스캔
 
 .. code-block:: sql
@@ -351,7 +351,7 @@ BUILDVALUE 최적화는 스캔 종류와 무관하게 적용 가능하다.
 병렬 스캔의 트레이스 출력 항목은 다음과 같다.
 
 *   **parallel workers**: 사용된 워커 스레드의 수
-*   **heap time / temp time / index time**: 각 워커의 스캔 소요 시간 범위 (최소..최대, 밀리초). 항목 이름이 스캔 종류(힙/리스트/인덱스)에 따라 달라진다.
+*   **heap time / temp time / index time**: 각 워커의 스캔 소요 시간 범위 (최소..최대, 밀리초). 항목 이름은 힙 스캔이면 **heap time**, 리스트 스캔이면 **temp time**\ (입력이 임시 리스트 파일), 인덱스 스캔이면 **index time**\ 이다.
 *   **readrows**: 각 워커가 읽은 행 수 범위 (최소..최대)
 *   **rows**: 각 워커가 반환한 행 수 범위 (최소..최대)
 *   **gather**: 결과 수집 방식

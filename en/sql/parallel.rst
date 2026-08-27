@@ -143,7 +143,7 @@ Heap scan has no additional flavor-specific restrictions beyond the :ref:`common
 Parallel List Scan
 ^^^^^^^^^^^^^^^^^^
 
-Parallel List Scan statically partitions a temporary on-disk result list (list file) — produced by a subquery, derived table, or other intermediate operator — across workers by **sector**, and they read it concurrently. The partitioning mechanism itself is identical to parallel heap scan; the only difference is that the input is a temporary file rather than a table heap. It is effective when an upper operator must rescan a large intermediate result.
+Parallel List Scan statically partitions a temporary on-disk result list (list file) — produced by a subquery, derived table, or other intermediate operator — across workers by **sector**, and each worker reads its share concurrently. The partitioning mechanism itself is identical to parallel heap scan; the only difference is that the input is a temporary file rather than a table heap. It is effective when an upper operator must rescan a large intermediate result.
 
 **Additional list-scan constraints**
 
@@ -271,11 +271,11 @@ Mergeable list is replaced by another mode (buildvalue or row-by-row) if any of 
 BUILDVALUE Optimization
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-When a query computes aggregate functions without GROUP BY and every aggregate it uses is on the supported list, parallel scan applies the **BUILDVALUE optimization**. In this mode, each worker computes a partial aggregate over its scanned region and ships it to the main thread, which then combines the partials into the final result. Because workers exchange the smallest possible amount of data, this is the fastest mode for aggregate queries.
+When a query computes aggregate functions without GROUP BY and every aggregate function it uses is on the supported list, parallel scan applies the **BUILDVALUE optimization**. In this mode, each worker computes a partial aggregate over its scanned region and ships it to the main thread, which then combines the partials into the final result. Because workers exchange the smallest possible amount of data, this is the fastest mode for aggregate queries.
 
 **Supported aggregate functions**
 
-The BUILDVALUE optimization applies to queries using the following aggregate functions. The SELECT list may also combine the aggregates in expressions such as arithmetic.
+The BUILDVALUE optimization applies to queries using the following aggregate functions. The SELECT list may also combine these aggregate functions in arithmetic expressions.
 
 *   **COUNT(\*)**, **COUNT(column)**, **COUNT(DISTINCT column)**
 *   **MIN**, **MAX**
@@ -289,7 +289,7 @@ The BUILDVALUE optimization applies to queries using the following aggregate fun
 
 **Conditions**
 
-In addition to using only the supported aggregates, all of the following must hold:
+In addition to using only the supported aggregate functions, all of the following must hold:
 
 *   The query has no GROUP BY clause.
 *   The query does not use ROWNUM.
@@ -353,7 +353,7 @@ When parallel scan is performed, parallel processing details are added to the :r
 The parallel scan trace fields are:
 
 *   **parallel workers**: number of worker threads used.
-*   **heap time / temp time / index time**: per-worker scan time range (min..max, milliseconds). The label changes with the scan flavor (heap/list/index).
+*   **heap time / temp time / index time**: per-worker scan time range (min..max, milliseconds). The label is **heap time** for heap scan, **temp time** for list scan (the input is a temporary list file), and **index time** for index scan.
 *   **readrows**: per-worker range of rows read (min..max).
 *   **rows**: per-worker range of rows produced (min..max).
 *   **gather**: how worker results were collected.
@@ -718,7 +718,7 @@ The following example runs in the **parallel probe** form because the build inpu
 Parallel Sort
 -------------
 
-Parallel Sort improves sort response time by distributing the sort input among multiple worker threads, letting each sort its share, and merging the results. The following sort operations are targets of parallel sort.
+Parallel Sort improves sort response time by distributing the sort input among multiple worker threads, letting each sort its share, and merging the results. Parallel sort can be applied to the following sort operations.
 
 *   File sort (filesort) of an ORDER BY clause
 *   Partitioning/sorting for analytic functions

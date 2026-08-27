@@ -313,8 +313,12 @@ JDBC 프로그래밍
     handlers = java.util.logging.FileHandler
     cubrid.jdbc.level = FINEST
     java.util.logging.FileHandler.pattern = /var/log/myapp/cubrid_jdbc%g.log
+    java.util.logging.FileHandler.limit = 10485760
+    java.util.logging.FileHandler.count = 10
     java.util.logging.FileHandler.append = true
     java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+
+**%g** 는 로그 파일의 세대 번호이다. 위 설정에서는 파일이 cubrid_jdbc0.log부터 cubrid_jdbc9.log까지 생성되며, 가장 최근 로그는 항상 **cubrid_jdbc0.log** 이다. **limit** 를 지정하지 않으면 로그 파일의 크기가 제한되지 않는다.
 
 위와 같이 작성한 설정 파일은 다음과 같이 지정한다.
 

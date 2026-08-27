@@ -312,8 +312,12 @@ Exception dumps are printed as soon as the level is set, because **logOnExceptio
     handlers = java.util.logging.FileHandler
     cubrid.jdbc.level = FINEST
     java.util.logging.FileHandler.pattern = /var/log/myapp/cubrid_jdbc%g.log
+    java.util.logging.FileHandler.limit = 10485760
+    java.util.logging.FileHandler.count = 10
     java.util.logging.FileHandler.append = true
     java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+
+**%g** is the generation number of a log file. With the configuration above, files are created from cubrid_jdbc0.log to cubrid_jdbc9.log, and the most recent log is always **cubrid_jdbc0.log**. If **limit** is not specified, the size of a log file is not limited.
 
 The configuration file written as above is specified as follows.
 

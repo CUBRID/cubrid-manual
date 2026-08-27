@@ -75,7 +75,12 @@ Regardless of the scan flavor, parallel scan is not applied and falls back to si
     *    Use of the incr() function
     *    update, delete, merge statements
 
-*   The scan is not the first (driving) table in a JOIN
+*   The scan is over a table other than the driving (first) table of a nested loop join.
+    Parallel processing of a nested loop join enters through the parallel scan of the driving table,
+    so if the driving table does not qualify for parallel scan, the entire join runs single-threaded
+    even when the subsequent tables are large. In that case, you can induce parallel execution by
+    adjusting the join order so that a large table drives the join (the **ORDERED** hint) or by
+    forcing a hash join (the **USE_HASH** hint).
 *   Scans inside a correlated subquery. Scans inside an uncorrelated subquery can still be parallelized.
 *   The scan is the direct outer/inner input of a sort-merge join (applies to every scan flavor)
 *   The **NO_PARALLEL_SCAN** hint is specified

@@ -294,7 +294,7 @@ Configuring Driver Logs
 
 Driver logs written by **logOnException** and **logSlowQueries** are emitted through **java.util.logging**. Where the logs are stored is determined by the **java.util.logging** configuration of the application; the driver does not create a log file by itself.
 
-The logger name is **cubrid.jdbc**, and the level differs by the kind of log.
+Logs are emitted by the **cubrid.jdbc.jci.UConnection** logger, and the configuration is done on its parent logger, **cubrid.jdbc**. The level differs by the kind of log.
 
 ================= ========== ==============================================================
 Log               Level      Content

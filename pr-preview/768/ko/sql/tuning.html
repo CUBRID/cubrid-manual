@@ -5610,7 +5610,15 @@ outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이�
 <li><p>조인 조건에서 outer 테이블의 컬럼 값(조인 키)을 찾을 수 있다. 조인 조건이 없는 크로스 조인에는 적용되지 않는다.</p></li>
 <li><p>행 잠금이 필요 없는 읽기이다. <strong>UPDATE</strong> 문이나 <strong>DELETE</strong> 문의 대상 검색, <strong>SELECT … FOR UPDATE</strong> 질의에는 적용되지 않는다.</p></li>
 </ul>
-<p>이 외에도 inner 테이블에 컬렉션 타입(<strong>SET</strong>, <strong>MULTISET</strong>, <strong>LIST</strong>) 컬럼이 있는 경우나 시스템 클래스를 조회하는 경우와 같이 캐시된 결과의 재사용이 안전하지 않은 일부 경우에는 적용되지 않는다.</p>
+<p>inner 쪽 입력이 테이블이 아니라 부질의의 임시 결과 리스트인 경우에도 적용된다.</p>
+<p>다음과 같이 캐시된 결과의 재사용이 안전하지 않거나 캐시 키를 만들 수 없는 경우에는 적용되지 않는다.</p>
+<ul class="simple">
+<li><p>inner 테이블에 컬렉션 타입(<strong>SET</strong>, <strong>MULTISET</strong>, <strong>LIST</strong>) 컬럼이 있는 경우</p></li>
+<li><p>시스템 카탈로그 클래스나 MVCC 대상이 아닌 클래스(<strong>db_serial</strong> 등)를 조회하는 경우</p></li>
+<li><p>inner 쪽이 DBLink 원격 테이블, <strong>JSON_TABLE</strong>, <strong>SHOW</strong> 문, 집합·메서드 표현식인 경우</p></li>
+<li><p>inner 쪽 스캔이 순차 스캔이나 인덱스 스캔이 아닌 경우(스키마 조회 등)</p></li>
+<li><p>inner 쪽에 스캔 대상이 둘 이상 있는 경우</p></li>
+</ul>
 <p>캐시가 사용하는 메모리가 <a class="reference internal" href="../admin/config.html#memoize-memory-limit"><span class="std std-ref">memoize_memory_limit</span></a>에 설정한 값을 초과하거나, 조인 키 조회가 1,000회를 넘어선 시점에 <strong>hit</strong> 비율이 50% 미만이면 캐시 유지 비용이 더 크다고 판단하여 캐시를 즉시 해제하고, 이후에는 캐시 없이 inner 테이블을 스캔하는 방식으로 질의 실행을 계속한다.
 이때 질의는 실패하지 않으며, 에러나 경고도 발생하지 않는다.</p>
 <div class="admonition note">
@@ -5671,7 +5679,7 @@ outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이�
 <p><strong>hit</strong>와 <strong>miss</strong>는 결과 행 수가 아니라 조인 키 조회 수를 기준으로 집계된다.</p>
 </div>
 <p><a class="reference internal" href="parallel.html#parallel-query"><span class="std std-ref">병렬 실행</span></a>과 결합되면 워커 스레드마다 캐시가 별도로 생성되며, 프로파일링 정보에는 워커들의 통계를 합산한 값이 출력된다.
-이 경우 <strong>enabled</strong>는 하나의 워커에서라도 캐시가 해제되었으면 false로 출력된다.</p>
+이 경우 하나의 워커에서라도 캐시가 해제되면 <strong>MEMOIZE</strong> 항목 전체가 출력되지 않는다.</p>
 <p>질의 #1은 MEMOIZE 최적화를 사용하여 질의를 수행했고, 질의 #2는 <strong>memoize_memory_limit</strong>를 0으로 설정하여 MEMOIZE 최적화를 비활성화하고 질의를 수행했다.
 두 질의의 결과를 비교해보면 MEMOIZE 최적화를 사용한 것이 응답 시간이 개선된 것을 확인할 수 있다.</p>
 <table class="docutils align-default">

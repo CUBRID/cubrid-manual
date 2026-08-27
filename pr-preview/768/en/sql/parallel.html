@@ -232,7 +232,7 @@
 <li><p><strong>Parallel Scan</strong>: Multiple worker threads divide and scan the input data (heap, temporary list, or index), improving large input scanning performance. Three scan flavors are supported:</p>
 <ul>
 <li><p><strong>Parallel Heap Scan</strong>: Heap pages of a table are partitioned by <strong>sector</strong> and scanned in parallel.</p></li>
-<li><p><strong>Parallel List Scan</strong>: A temporary result list (list file) that has spilled to disk is partitioned by <strong>sector</strong> and scanned in parallel.</p></li>
+<li><p><strong>Parallel List Scan</strong>: A temporary result list (list file) produced by a subquery or other intermediate operation is partitioned by <strong>sector</strong> and scanned in parallel.</p></li>
 <li><p><strong>Parallel Index Scan</strong>: Workers cooperate through a shared cursor to walk the leaf pages of a B+tree index from left to right (or right to left).</p></li>
 </ul>
 </li>
@@ -265,7 +265,7 @@
 <p>Parallel Scan splits a single scan input across multiple worker threads that process it concurrently. CUBRID supports parallel scan over three input kinds, all sharing the same parallel execution framework:</p>
 <ul class="simple">
 <li><p><strong>Heap</strong>: heap pages of a table — pre-partitioned across workers by <strong>sector</strong></p></li>
-<li><p><strong>List</strong>: pages of a temporary (on-disk) result list file — pre-partitioned across workers by <strong>sector</strong></p></li>
+<li><p><strong>List</strong>: pages of a temporary result list file — pre-partitioned across workers by <strong>sector</strong></p></li>
 <li><p><strong>Index</strong>: leaf pages of a B+tree index — workers cooperate through a shared <strong>cursor</strong>, walking left to right (or right to left)</p></li>
 </ul>
 <p>Each worker thread independently scans its assigned region while evaluating filter predicates, and the processed results are passed to the main thread through a result queue and integrated into the final result.</p>
@@ -292,7 +292,12 @@
 <li><p>update, delete, merge statements</p></li>
 </ul>
 </li>
-<li><p>The scan is not the first (driving) table in a JOIN</p></li>
+<li><p>The scan is over a table other than the driving (first) table of a nested loop join.
+Parallel processing of a nested loop join enters through the parallel scan of the driving table,
+so if the driving table does not qualify for parallel scan, the entire join runs single-threaded
+even when the subsequent tables are large. In that case, you can induce parallel execution by
+adjusting the join order so that a large table drives the join (the <strong>ORDERED</strong> hint) or by
+forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 <li><p>Scans inside a correlated subquery. Scans inside an uncorrelated subquery can still be parallelized.</p></li>
 <li><p>The scan is the direct outer/inner input of a sort-merge join (applies to every scan flavor)</p></li>
 <li><p>The <strong>NO_PARALLEL_SCAN</strong> hint is specified</p></li>

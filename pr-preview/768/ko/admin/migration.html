@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>unloaddb | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="unloaddb | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="unloaddb | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/admin/migration.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">unloaddb</span>
+</nav>
+<div id="content" role="main">
+<section id="unloaddb">
+<span id="id1"></span><h1>unloaddb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#unloaddb"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>데이터베이스를 언로드/로드하는 목적은 다음과 같다.</p>
+<ul class="simple">
+<li><p>데이터베이스 볼륨을 재구성하여 데이터베이스 재구축</p></li>
+<li><p>시스템이 다른 환경에서 마이그레이션 수행</p></li>
+<li><p>버전이 다른 DBMS에서 마이그레이션 수행</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
+</span></code></pre></div>
+</div>
+<p><strong>cubrid unloaddb</strong>가 생성하는 파일은 다음과 같다.</p>
+<ul class="simple">
+<li><p>스키마 파일(<em>database-name</em><strong>_schema</strong>): 해당 데이터베이스에 정의된 스키마 정보를 포함하는 파일이다.</p></li>
+<li><p>객체 파일(<em>database-name</em><strong>_objects</strong>): 해당 데이터베이스에 포함된 인스턴스 정보를 포함하는 파일이다.</p></li>
+<li><p>인덱스 파일(<em>database-name</em><strong>_indexes</strong>): 해당 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.</p></li>
+<li><p>트리거 파일(<em>database-name</em><strong>_trigger</strong>): 해당 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다. 만약 데이터를 로딩하는 동안 트리거가 구동되는 것을 원치 않는다면, 데이터 로딩을 완료한 후에 트리거 정의를 로딩하면 된다.</p></li>
+<li><p>분할된 스키마 파일(<em>database-name</em><strong>_schema</strong><strong>_objecttype</strong>): <strong>--split-schema-files</strong> 옵션을 사용할 경우 해당 데이터베이스에 정의된 스키마 정보를 오브젝트 단위로 분할하여 해당 오브젝트 정보만 가지고 있는 파일들이다. 분할된 파일 목록은 <strong>--split-schema-files</strong> 옵션을 참고 한다.</p></li>
+<li><p>스키마 목록 파일(<em>database-name</em><strong>_schema</strong><strong>_info</strong>): <strong>--split-schema-files</strong> 옵션을 사용할 경우 분할된 스키마 정보 파일들의 목록을 가지고 있는 파일이다.</p></li>
+</ul>
+<p>이러한 스키마, 객체, 인덱스, 트리거 파일은 같은 디렉터리에 생성된다.</p>
+<p>다음은 <strong>cubrid unloaddb</strong> 에서 사용하는 [options]이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">-</span><span class="n">u</span><span class="p">,</span> <span class="o">--</span><span class="n">user</span><span class="o">=</span><span class="n">ID</span>               <span class="n">데이터베이스</span> <span class="n">접근에</span> <span class="n">관한</span> <span class="n">사용자</span> <span class="n">이름</span>
+</span><span id="line-2"><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span><span class="o">=</span><span class="n">PASS</span>         <span class="n">사용자</span> <span class="n">패스워드</span>
+</span><span id="line-3"><span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span> <span class="n">테이블</span> <span class="n">이름이</span> <span class="n">기입된</span> <span class="n">파일</span>
+</span><span id="line-4">    <span class="o">--</span><span class="n">include</span><span class="o">-</span><span class="n">reference</span>     <span class="n">참조되는</span> <span class="n">테이블</span> <span class="n">포함</span>
+</span><span id="line-5">    <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">only</span>      <span class="n">명세한</span> <span class="n">클래스만</span> <span class="n">처리</span>
+</span><span id="line-6">    <span class="o">--</span><span class="n">estimated</span><span class="o">-</span><span class="n">size</span><span class="o">=</span><span class="n">NUMBER</span> <span class="n">인스턴스의</span> <span class="n">대략적인</span> <span class="n">개수</span>
+</span><span id="line-7">    <span class="o">--</span><span class="n">cached</span><span class="o">-</span><span class="n">pages</span><span class="o">=</span><span class="n">NUMBER</span>   <span class="n">cached</span> <span class="n">페이지</span> <span class="n">개수</span>
+</span><span id="line-8"><span class="o">-</span><span class="n">O</span><span class="p">,</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">PATH</span>      <span class="n">출력</span> <span class="n">디렉터리</span> <span class="n">경로</span>
+</span><span id="line-9"><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="o">--</span><span class="n">schema</span><span class="o">-</span><span class="n">only</span>           <span class="n">스키마만</span> <span class="n">처리</span>
+</span><span id="line-10"><span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">only</span>             <span class="n">오브젝트만</span> <span class="n">처리</span>
+</span><span id="line-11">    <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">prefix</span><span class="o">=</span><span class="n">PREFIX</span>  <span class="n">출력</span> <span class="n">파일의</span> <span class="n">prefix</span>
+</span><span id="line-12">    <span class="o">--</span><span class="nb">hash</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>        <span class="n">해쉬</span> <span class="n">파일이름</span>
+</span><span id="line-13">    <span class="o">--</span><span class="n">latest</span><span class="o">-</span><span class="n">image</span>          <span class="n">오브젝트</span> <span class="p">(</span><span class="n">객체</span><span class="p">)</span><span class="n">를</span> <span class="n">언로드할</span> <span class="n">때</span><span class="p">,</span> <span class="n">데이터</span> <span class="n">볼륨의</span> <span class="n">최신</span> <span class="n">이미지를</span> <span class="n">언로드합니다</span><span class="o">.</span>
+</span><span id="line-14">                            <span class="n">커밋되지않은</span> <span class="n">데이터와</span> <span class="n">제거되었지만</span> <span class="n">배큠되지</span> <span class="n">않은</span> <span class="n">데이터가</span> <span class="n">포함될</span> <span class="n">수</span> <span class="n">있습니다</span>
+</span><span id="line-15"><span class="o">-</span><span class="n">t</span><span class="p">,</span> <span class="o">--</span><span class="n">thread</span><span class="o">-</span><span class="n">count</span><span class="o">=</span><span class="n">COUNT</span>    <span class="n">사용할</span> <span class="n">쓰레드</span> <span class="n">개수를</span> <span class="n">지정</span><span class="p">;</span> <span class="n">기본값</span><span class="p">:</span> <span class="mi">1</span> <span class="n">최대값</span><span class="p">:</span> <span class="mi">127</span>
+</span><span id="line-16">    <span class="o">--</span><span class="n">enhanced</span><span class="o">-</span><span class="n">estimates</span>    <span class="n">언로드할</span> <span class="n">테이블의</span> <span class="n">정확한</span> <span class="n">레코드</span> <span class="n">건수</span> <span class="n">수집</span><span class="p">;</span> <span class="n">기본값</span> <span class="p">:</span> <span class="n">미적용</span>
+</span><span id="line-17"><span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>               <span class="n">많은</span> <span class="n">상태</span> <span class="n">메시지를</span> <span class="n">출력</span>
+</span><span id="line-18">    <span class="o">--</span><span class="n">use</span><span class="o">-</span><span class="n">delimiter</span>         <span class="n">식별자</span> <span class="n">처음과</span> <span class="n">끝에</span> <span class="s1">'"'</span> <span class="n">사용</span>
+</span><span id="line-19"><span class="o">-</span><span class="n">S</span><span class="p">,</span> <span class="o">--</span><span class="n">SA</span><span class="o">-</span><span class="n">mode</span>               <span class="n">독립</span> <span class="n">모드</span> <span class="n">실행</span>
+</span><span id="line-20"><span class="o">-</span><span class="n">C</span><span class="p">,</span> <span class="o">--</span><span class="n">CS</span><span class="o">-</span><span class="n">mode</span>               <span class="n">클라이언트</span> <span class="n">서버</span> <span class="n">모드</span> <span class="n">실행</span>
+</span><span id="line-21">    <span class="o">--</span><span class="n">datafile</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="k">class</span><span class="w">    </span><span class="nc">각</span> <span class="n">클래스별</span> <span class="n">오브젝트</span> <span class="n">파일</span> <span class="n">생성</span>
+</span><span id="line-22">    <span class="o">--</span><span class="n">split</span><span class="o">-</span><span class="n">schema</span><span class="o">-</span><span class="n">files</span>    <span class="n">스키마</span> <span class="n">정보를</span> <span class="n">오브젝트별로</span> <span class="n">분리하여</span> <span class="n">각각의</span> <span class="n">파일로</span> <span class="n">생성</span>
+</span><span id="line-23">    <span class="o">--</span><span class="n">skip</span><span class="o">-</span><span class="n">index</span><span class="o">-</span><span class="n">detail</span>     <span class="n">인덱스를</span> <span class="n">생성할</span> <span class="n">때</span> <span class="n">지정된</span> <span class="n">WITH</span> <span class="n">절</span> <span class="n">옵션을</span> <span class="n">인쇄하지</span> <span class="n">않음</span>
+</span><span id="line-24">    <span class="o">--</span><span class="k">as</span><span class="o">-</span><span class="n">dba</span>                <span class="n">로그인</span> <span class="n">사용자가</span> <span class="n">DBA</span> <span class="n">그룹의</span> <span class="n">구성원인</span> <span class="n">경우</span> <span class="n">DBA와</span> <span class="n">동일한</span> <span class="n">스키마</span> <span class="n">파일을</span> <span class="n">추출합니다</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-u">
+<span id="cmdoption-unloaddb-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"><span class="pre">=ID</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-u" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-u'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로딩할 데이터베이스의 사용자 계정을 지정한다. 옵션을 지정하지 않으면 기본값은 <strong>DBA</strong>가 된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-p">
+<span id="cmdoption-unloaddb-password"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--password</span></span><span class="sig-prename descclassname"><span class="pre">=PASS</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-p" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-p'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로딩할 데이터베이스의 사용자 암호를 지정한다. 옵션을 지정하지 않으면 빈 문자열을 입력한 것으로 간주한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">p</span> <span class="n">dba_pwd</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-i">
+<span id="cmdoption-unloaddb-input-class-file"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input-class-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-i" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-i'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>모든 테이블의 스키마와 인덱스를 언로드하되, 파일에 명시된 테이블의 데이터만 언로드한다. 언로딩할 사용자의 스키마와(-u 옵션 참고) 테이블의 스키마가 다른 경우 테이블 이름은 스키마 이름을 접두어로 사용해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>다음은 입력 파일 table_list.txt의 예이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">table_1</span>
+</span><span id="line-2"><span class="n">table_2</span>
+</span><span id="line-3"><span class="o">..</span>
+</span><span id="line-4"><span class="n">table_n</span>
+</span></code></pre></div>
+</div>
+<p><strong>-i</strong> 옵션이 <strong>--input-class-only</strong> 와 결합되면, <strong>-i</strong> 옵션의 입력 파일에서 지정된 테이블의 스키마, 인덱스, 데이터 파일만 언로드한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">only</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p><strong>-i</strong> 옵션이 <strong>--include-reference</strong> 와 결합되면, 참조되는 테이블도 함께 언로드된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">include</span><span class="o">-</span><span class="n">reference</span> <span class="o">-</span><span class="n">i</span> <span class="n">table_list</span><span class="o">.</span><span class="n">txt</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-include-reference">
+<span class="sig-name descname"><span class="pre">--include-reference</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-include-reference" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-include-reference'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-i</strong> 옵션과 함께 사용되며, 참조되는 테이블도 함께 언로드된다.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-input-class-only">
+<span class="sig-name descname"><span class="pre">--input-class-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-input-class-only" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-input-class-only'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-i</strong> 옵션과 함께 사용되며, <strong>-i</strong> 옵션의 입력 파일에서 지정된 테이블의 스키마 파일만 생성한다.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-estimated-size">
+<span class="sig-name descname"><span class="pre">--estimated-size</span></span><span class="sig-prename descclassname"><span class="pre">=NUMBER</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-estimated-size" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-estimated-size'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드할 데이터베이스의 레코드 저장을 위한 해시 메모리를 사용자 임의로 할당하기 위한 옵션이다. 만약 <strong>--estimated-size</strong> 옵션이 지정되지 않으면 최근의 통계 정보를 기반으로 데이터베이스의 레코드 수를 결정하게 되는데, 만약 최근 통계 정보가 갱신되지 않았거나 해시 메모리를 크게 할당하고 싶은 경우 이 옵션을 이용할 수 있다. 따라서, 옵션의 인수로 너무 적은 레코드 개수를 정의한다면 해시 충돌로 인해 언로드 성능이 저하된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">estimated</span><span class="o">-</span><span class="n">size</span><span class="o">=</span><span class="mi">1000</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-cached-pages">
+<span class="sig-name descname"><span class="pre">--cached-pages</span></span><span class="sig-prename descclassname"><span class="pre">=NUMBER</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-cached-pages" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-cached-pages'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>CUBRID는 특정 클래스(테이블)를 다른 클래스의 데이터 타입으로 정의할 수 있는 객체지향성 특성을 지원한다. 이런한 구조에서는 데이터 간의 연결을 위해 특정 레코드가 다른 레코드를 직접 가리키는 OID(Object Identifier) 참조가 발생한다. –cached-pages 옵션은 데이터 추출 과정에서 발생하는 객체 간 참조(OID reference)를 효율적으로 처리하기 위해 해시 테이블에 할당할 페이지 수를 지정할 수 있다. 각 페이지의 크기는 4,096바이트이며, 관리자는 시스템 메모리 용량과 처리 성능을 고려하여 이 값을 조정할 수 있다. 이 옵션을 지정하지 않으면 기본값은 100페이지이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">cached</span><span class="o">-</span><span class="n">pages</span> <span class="mi">500</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-O">
+<span id="cmdoption-unloaddb-output-path"></span><span class="sig-name descname"><span class="pre">-O</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output-path</span></span><span class="sig-prename descclassname"><span class="pre">=PATH</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-O" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-O'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>스키마와 객체 파일이 생성될 디렉터리를 지정한다. 옵션이 지정되지 않으면 현재 디렉터리에 생성된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">O</span> <span class="o">./</span><span class="n">CUBRID</span><span class="o">/</span><span class="n">Databases</span><span class="o">/</span><span class="n">demodb</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>지정된 디렉터리가 존재하지 않는 경우 다음과 같은 에러 메시지가 출력된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">unloaddb</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-s">
+<span id="cmdoption-unloaddb-schema-only"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--schema-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-s" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-s'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드 작업을 통해 생성되는 출력 파일 중 스키마 파일만 생성되도록 지정하는 옵션이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-d">
+<span id="cmdoption-unloaddb-data-only"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--data-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-d" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-d'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드 작업을 통해 생성되는 출력 파일 중 데이터 파일만 생성되도록 지정하는 옵션이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-output-prefix">
+<span class="sig-name descname"><span class="pre">--output-prefix</span></span><span class="sig-prename descclassname"><span class="pre">=PREFIX</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-output-prefix" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-output-prefix'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 <em>abcd_schema</em> 가 되고, 객체 파일명은 <em>abcd_objects</em> 가 된다. 만약, <strong>--output-prefix</strong> 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">prefix</span> <span class="n">abcd</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-hash-file">
+<span class="sig-name descname"><span class="pre">--hash-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-hash-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-hash-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>해시 파일의 이름을 지정한다.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-latest-image">
+<span class="sig-name descname"><span class="pre">--latest-image</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-latest-image" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-latest-image'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>인스턴스들을 언로드할 때 현재 데이터 볼륨의 가장 마지막 이미지에서 언로드한다. 커밋되지 않은 데이터나 삭제되었지만 배큠되지 않은 데이터가 포함될 수 있다. 이 옵션을 지정하면 MVCC 버전은 무시되며 로그 볼륨을 참조하지 않는다.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-t">
+<span id="cmdoption-unloaddb-thread-count"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--thread-count</span></span><span class="sig-prename descclassname"><span class="pre">=COUNT</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-t" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-t'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>사용할 쓰레드 개수를 지정하는 옵션으로, COUNT 개수 만큼의 쓰레드를 이용해서 병렬로 수행하도록 하며 COUNT는 0 이상, 127 이하의 범위여야 한다.
+설정을 생략하면 1로 지정한 것과 같고, 만약 0으로 지정되면 쓰레드 방식으로 동작하지 않는다.
+쓰레드 방식을 지정하더라도 테이블에 Object 타입 또는, Object 타입을 내재하는 Set, MultiSet, Sequence(List) 타입이 있는 경우에는 해당 테이블에 대해서는 쓰레드 방식으로 동작하지 않는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-enhanced-estimates">
+<span class="sig-name descname"><span class="pre">--enhanced-estimates</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-enhanced-estimates" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-enhanced-estimates'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드할 테이블의 정확한 레코드 개수를 수집하는 옵션으로, -v 옵션을 함께 지정해서 사용해야 하며, -v 옵션을 사용하지 않는 경우 무시된다.
+작업 대상 테이블의 레코드 수를 파악 할 때 통계 정보 대신 실제 값을 구한다. 이 옵션이 지정되면 레코드 수를 파악하기 위한 수행 시간이 추가되므로 언로드 수행시간이 길어질 수 있으므로 유의해서 사용해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">enhanced</span><span class="o">-</span><span class="n">estimates</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-v">
+<span id="cmdoption-unloaddb-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-v" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-v'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드 작업이 진행되는 동안 언로드되는 데이터베이스의 테이블 및 인스턴스에 관한 상세 정보를 화면에 출력하는 옵션이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">v</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-use-delimiter">
+<span class="sig-name descname"><span class="pre">--use-delimiter</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-use-delimiter" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-use-delimiter'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>식별자의 시작과 끝에 겹따옴표(“)를 기록한다. 기본 설정은 식별자의 시작과 끝에 겹따옴표를 기록하지 않는다.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-S">
+<span id="cmdoption-unloaddb-SA-mode"></span><span class="sig-name descname"><span class="pre">-S</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--SA-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-S" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-S'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>독립 모드에서 데이터베이스를 언로드한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">S</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-C">
+<span id="cmdoption-unloaddb-CS-mode"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--CS-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-C" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-C'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>클라이언트/서버 모드에서 데이터베이스를 언로드한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">C</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-datafile-per-class">
+<span class="sig-name descname"><span class="pre">--datafile-per-class</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-datafile-per-class" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-datafile-per-class'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 <em>&lt;데이터베이스 이름&gt;_&lt;테이블 이름&gt;</em><strong>_objects</strong> 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 <strong>NULL</strong> 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 <a class="reference internal" href="#howtowrite-loadfile"><span class="std std-ref">가져오기용 파일 작성 방법</span></a> 을 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">datafile</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="k">class</span><span class="w"> </span><span class="nc">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-split-schema-files">
+<span class="sig-name descname"><span class="pre">--split-schema-files</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-split-schema-files" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-split-schema-files'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>스키마 정보를 오브젝트 단위로 분할 생성하고, 분할된 파일 목록을 기록한 파일도 생성한다. 자세한 사용방법은 <a class="reference internal" href="#loaddb"><span class="std std-ref">loaddb</span></a> 의 –schema-file-list=FILE 를 참조한다.
+이 옵션을 지정하지 않으면 모든 오브젝트가 포함된 하나의 스키마 파일이 생성된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">split</span><span class="o">-</span><span class="n">schema</span><span class="o">-</span><span class="n">files</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>스키마 정보를 오브젝트 단위로 분할하여 생성한 파일 목록</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_schema_user</span>
+</span><span id="line-2"><span class="n">demodb_schema_class</span>
+</span><span id="line-3"><span class="n">demodb_schema_vclass</span>
+</span><span id="line-4"><span class="n">demodb_schema_synonym</span>
+</span><span id="line-5"><span class="n">demodb_schema_serial</span>
+</span><span id="line-6"><span class="n">demodb_schema_procedure</span>
+</span><span id="line-7"><span class="n">demodb_schema_server</span>
+</span><span id="line-8"><span class="n">demodb_schema_pk</span>
+</span><span id="line-9"><span class="n">demodb_schema_fk</span>
+</span><span id="line-10"><span class="n">demodb_schema_uk</span>
+</span><span id="line-11"><span class="n">demodb_schema_grant</span>
+</span><span id="line-12"><span class="n">demodb_schema_vclass_query_spec</span>
+</span></code></pre></div>
+</div>
+<p>분할된 스키마 파일들의 목록을 가지고 있는 파일명</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_schema_info</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-as-dba">
+<span class="sig-name descname"><span class="pre">--as-dba</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-as-dba" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-as-dba'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><blockquote>
+<div><p>사용자가 DBA 그룹의 구성원인 경우, DBA 사용자인 경우와 동일한 내용으로 스키마 파일을 생성한다.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">u1_dba_group</span> <span class="o">--</span><span class="k">as</span><span class="o">-</span><span class="n">dba</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-unloaddb-skip-index-detail">
+<span class="sig-name descname"><span class="pre">--skip-index-detail</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-skip-index-detail" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-skip-index-detail'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><blockquote>
+<div><p>이 옵션은 인덱스 생성시 지정된 WITH 절 옵션들을 출력하지 않는다. unloaddb는 <strong>print_index_detail</strong> 설정값에 상관없이 항상 WITH 절의 옵션들을 출력하는 것이 기본적인 동작이다.
+이 옵션이 지정되면 WITH 절의 옵션들은 생략하고 출력하게 된다. 영향을 받는 출력 파일은 스키마파일(<em>database-name</em>_schema)과 인덱스파일(<em>database-name</em>_indexes)이다.
+이 옵션이 생략되면 <em>deduplicate level</em>이 <strong>0</strong>이더라도 반드시 명시적으로 출력된다.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">skip</span><span class="o">-</span><span class="n">index</span><span class="o">-</span><span class="n">detail</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>아래 예시에서 이 옵션의 지정 여부에 따른 차이를 확인해 볼 수 있다.</p>
+<p>스키마파일</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>-–skip-index-detail 미지정</p></td>
+<td><p>ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) WITH DEDUPLICATE=0 REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;</p></td>
+</tr>
+<tr class="row-even"><td><p>-–skip-index-detail 지정</p></td>
+<td><p>ALTER CLASS [dba].[ts] ADD CONSTRAINT [fk_ts_fid] FOREIGN KEY([fid]) REFERENCES [dba].[tm] ON DELETE RESTRICT ON UPDATE RESTRICT ;</p></td>
+</tr>
+</tbody>
+</table>
+<p>인덱스파일</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>-–skip-index-detail 미지정</p></td>
+<td><p>CREATE INDEX [idx_val] ON [dba].[ts] ([val]) WITH DEDUPLICATE=0;</p></td>
+</tr>
+<tr class="row-even"><td><p>-–skip-index-detail 지정</p></td>
+<td><p>CREATE INDEX [idx_val] ON [dba].[ts] ([val]);</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>언로드 시간을 단축하기 위해서 서로 다른 테이블에 대한 언로드는 동시에 실행 가능하며 <strong>unloaddb.sh</strong> 스크립트를 이용하면 이러한 과정을 쉽게 할 수 있다 (<a class="reference internal" href="scripts.html#cubrid-scripts-unloaddb-sh"><span class="std std-ref">unloaddb.sh 스크립트</span></a> 참고).</p>
+</div>
+</section>
+<section id="loaddb">
+<span id="id2"></span><h1>loaddb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#loaddb"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>데이터베이스 로드는 다음과 같은 경우에 <strong>cubrid loaddb</strong> 유틸리티를 이용하여 수행된다.</p>
+<ul class="simple">
+<li><p>예전 버전의 CUBRID 데이터베이스를 새로운 버전의 데이터베이스로 마이그레이션하는 경우</p></li>
+<li><p>타 DBMS의 데이터베이스를 CUBRID 데이터베이스로 마이그레이션하는 경우</p></li>
+<li><p><strong>INSERT</strong> 구문 실행보다 빠른 성능으로 대용량 데이터를 입력하는 경우</p></li>
+</ul>
+<p>일반적으로 <strong>cubrid loaddb</strong> 유틸리티는 <strong>cubrid unloaddb</strong> 유틸리티가 생성한 파일(스키마 정의 파일, 객체 입력 파일, 인덱스 정의 파일)을 사용한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
+</span></code></pre></div>
+</div>
+<p><strong>입력 파일</strong></p>
+<ul class="simple">
+<li><p>스키마 파일(<em>database-name</em><strong>_schema</strong>): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 스키마 정보를 포함하는 파일이다.</p></li>
+<li><p>객체 파일(<em>database-name</em><strong>_objects</strong>): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 포함된 레코드 정보를 포함하는 파일이다.</p></li>
+<li><p>인덱스 파일(<em>database-name</em><strong>_indexes</strong>): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 인덱스 정보를 포함하는 파일이다.</p></li>
+<li><p>트리거 파일(<em>database-name</em><strong>_trigger</strong>): 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 트리거 정보를 포함하는 파일이다.</p></li>
+<li><p>사용자 정의 객체 파일(<em>user_defined_object_file</em>) : 대용량 데이터 입력을 위해 사용자가 테이블 형식으로 작성한 입력 파일이다(<a class="reference internal" href="#howtowrite-loadfile"><span class="std std-ref">가져오기용 파일 작성 방법</span></a> 참고).</p></li>
+<li><p>스키마 목록 파일(<em>database-name</em><strong>_schema_info</strong>): <strong>--split-schema-files</strong> 옵션과 함께 언로드 작업에 의해 생성된 파일로서, 데이터베이스에 정의된 스키마 정보를 오브젝트 단위로 분할된 오브젝트 파일들의 목록을 가지고 있는 파일이다.(<a class="reference internal" href="admin_utils.html#cmdoption-unloaddb-split-schema-files"><code class="xref std std-option docutils literal notranslate"><span class="pre">unloaddb</span> <span class="pre">--split-schema-files</span></code></a> 참고)</p></li>
+</ul>
+<p><strong>입력 파일 처리 순서</strong></p>
+<p><strong>cubrid loaddb</strong> 유틸리티는 아래와 같이 특정 순서대로 파싱을 하며 입력 파일을 처리한다. 이것은 loaddb의 정확성과 일관성을 보장한다.</p>
+<ol class="arabic simple">
+<li><p>스키마 파일 로드 (기본키 포함)</p></li>
+<li><p>오브젝트 파일 로드</p></li>
+<li><p>인덱스 파일 로드 (보조키와 외래키)</p></li>
+<li><p>트리거 파일 로드</p></li>
+</ol>
+<p><strong>로딩 모드</strong></p>
+<p><strong>cubrid loaddb</strong> 유틸리티는 데이터를 데이터베이스에 로드하기 위해서 두가지 모드를 제공한다.</p>
+<ul class="simple">
+<li><p><strong>Stand-alone</strong> 모드에서는 단일 스레드 환경에서 오프라인으로 데이터를 로드한다. CUBRID 10.1과 그 이하 버전에서는 이 모드만 제공된다.</p></li>
+<li><p><strong>Client-server</strong> 모드에서는 데이터베이스 서버에 접속하여 온라인으로 데이터를 로드하며 병렬로 처리된다. <strong>Client-server</strong> 모드는 <strong>stand-alone</strong> 모드보다 훨씬 빠르지만 오브젝트의 참조와 클래스/공유 속성은 지원하지 않는다.</p></li>
+</ul>
+<p>다음은 <strong>cubrid loaddb</strong> 에서 사용하는 [options]이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">-</span><span class="n">u</span><span class="p">,</span> <span class="o">--</span><span class="n">user</span><span class="o">=</span><span class="n">ID</span>                  <span class="n">데이터베이스</span> <span class="n">접근에</span> <span class="n">관한</span> <span class="n">사용자</span> <span class="n">이름</span>
+</span><span id="line-2"><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span><span class="o">=</span><span class="n">PASS</span>            <span class="n">사용자</span> <span class="n">패스워드</span>
+</span><span id="line-3"><span class="o">-</span><span class="n">S</span><span class="p">,</span> <span class="o">--</span><span class="n">SA</span><span class="o">-</span><span class="n">mode</span>                  <span class="n">독립</span> <span class="n">모드</span> <span class="n">실행</span>
+</span><span id="line-4"><span class="o">-</span><span class="n">C</span><span class="p">,</span> <span class="o">--</span><span class="n">CS</span><span class="o">-</span><span class="n">mode</span>                  <span class="n">클라이언트</span> <span class="n">서버</span> <span class="n">모드</span> <span class="n">실행</span>
+</span><span id="line-5">    <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">check</span><span class="o">-</span><span class="n">only</span>     <span class="n">데이터</span> <span class="n">파일을</span> <span class="n">로딩하지</span> <span class="n">않고</span> <span class="n">신택스만</span> <span class="n">검사</span>
+</span><span id="line-6"><span class="o">-</span><span class="n">l</span><span class="p">,</span> <span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">only</span>                <span class="n">신택스</span> <span class="n">체크없이</span> <span class="n">데이터</span> <span class="n">파일</span> <span class="n">로딩</span>
+</span><span id="line-7">    <span class="o">--</span><span class="n">estimated</span><span class="o">-</span><span class="n">size</span><span class="o">=</span><span class="n">NUMBER</span>    <span class="n">인스턴스의</span> <span class="n">대략적인</span> <span class="n">개수</span>
+</span><span id="line-8"><span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>                  <span class="n">많은</span> <span class="n">상태</span> <span class="n">정보를</span> <span class="n">출력</span>
+</span><span id="line-9"><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="o">--</span><span class="n">periodic</span><span class="o">-</span><span class="n">commit</span><span class="o">=</span><span class="n">COUNT</span>    <span class="n">주기적인</span> <span class="n">커밋에</span> <span class="n">대한</span> <span class="n">카운트</span>
+</span><span id="line-10">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">oid</span>                   <span class="n">OID</span> <span class="n">사용</span> <span class="n">안</span> <span class="n">함</span>
+</span><span id="line-11">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">statistics</span>            <span class="n">로딩</span> <span class="n">후에</span> <span class="n">통계</span> <span class="n">정보</span> <span class="n">갱신하지</span> <span class="n">않음</span>
+</span><span id="line-12"><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="o">--</span><span class="n">schema</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">[:</span><span class="n">LINE</span><span class="p">]</span>  <span class="n">파일</span><span class="p">[:</span><span class="n">라인</span><span class="p">]</span> <span class="n">정보로</span> <span class="n">스키마</span> <span class="n">생성</span>
+</span><span id="line-13"><span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="o">--</span><span class="n">index</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">[:</span><span class="n">LINE</span><span class="p">]</span>   <span class="n">파일</span><span class="p">[:</span><span class="n">라인</span><span class="p">]</span> <span class="n">정보로</span> <span class="n">인덱스</span> <span class="n">생성</span>
+</span><span id="line-14"><span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>           <span class="n">적재할</span> <span class="n">데이터</span> <span class="n">파일</span>
+</span><span id="line-15"><span class="o">-</span><span class="n">t</span><span class="p">,</span> <span class="o">--</span><span class="n">table</span><span class="o">=</span><span class="n">TABLE</span>              <span class="n">데이터를</span> <span class="n">적재할</span> <span class="n">테이블</span> <span class="n">이름</span>
+</span><span id="line-16">    <span class="o">--</span><span class="n">error</span><span class="o">-</span><span class="n">control</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>  <span class="n">적재</span> <span class="n">시</span> <span class="n">발생하는</span> <span class="n">에러에</span> <span class="n">대한</span> <span class="n">제어</span> <span class="n">파일</span>
+</span><span id="line-17">    <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>   <span class="n">적재하지</span> <span class="n">않을</span> <span class="n">클래스</span> <span class="n">이름이</span> <span class="n">있는</span> <span class="n">파일</span>
+</span><span id="line-18">    <span class="o">--</span><span class="n">trigger</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">[:</span><span class="n">LINE</span><span class="p">]</span> <span class="n">파일</span><span class="p">[:</span><span class="n">라인</span><span class="p">]</span> <span class="n">정보로</span> <span class="n">트리거</span> <span class="n">생성</span>
+</span><span id="line-19">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">specified</span><span class="o">-</span><span class="n">name</span>   <span class="n">소유자</span> <span class="n">이름</span> <span class="n">없이</span> <span class="n">객체</span> <span class="n">이름으로</span> <span class="n">CLASS</span><span class="p">,</span> <span class="n">SERIAL</span> <span class="n">및</span> <span class="n">TRIGGER를</span> <span class="n">찾음</span><span class="o">.</span>
+</span><span id="line-20">    <span class="o">--</span><span class="n">schema</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="nb">list</span><span class="o">=</span><span class="n">FILE</span>    <span class="n">이</span> <span class="n">파일의</span> <span class="n">내용은</span> <span class="n">loaddb에서</span> <span class="n">사용할</span> <span class="n">스키마</span> <span class="n">파일</span> <span class="n">이름</span> <span class="n">목록이다</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-u">
+<span id="cmdoption-loaddb-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"><span class="pre">=ID</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-u" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-u'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>레코드를 로딩할 데이터베이스의 사용자 계정을 지정한다. 옵션을 지정하지 않으면 기본값은 <strong>PUBLIC</strong> 이 된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">admin</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-p">
+<span id="cmdoption-loaddb-password"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--password</span></span><span class="sig-prename descclassname"><span class="pre">=PASS</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-p" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-p'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>레코드를 로딩할 데이터베이스의 사용자 암호를 지정한다. 옵션을 지정하지 않으면 암호 입력을 요청하는 프롬프트가 출력된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">p</span> <span class="k">pass</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-S">
+<span id="cmdoption-loaddb-SA-MODE"></span><span class="sig-name descname"><span class="pre">-S</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--SA-MODE</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-S" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-S'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>데이터를 <strong>stand-alone</strong> 모드로 데이터베이스에 로드한다. 이것은 <strong>loaddb</strong> 의 기본 로드 모드이며 CUBRID 10.1 이하의 버전과 완벽히 호환된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">S</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-C">
+<span id="cmdoption-loaddb-CS-MODE"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--CS-MODE</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-C" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-C'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>이 옵션에서는 <strong>loaddb</strong> 가 가동중인 데이터베이스 서버 프로세스에 접속한다. <strong>stand-alone</strong> 모드와 다르게 <strong>client-server</strong> 모드에서는 여러 개의 스레드를 사용하여 데이터를 로드할 수있다. 이 모드에서는 동시에 여러 개의 <strong>loaddb</strong> 세션을 연결하며, 대용량의 데이터를 로드할 때 특히 우수한 성능을 발휘한다. 이 모드에서는 오브젝트 참조나 클래스/공유 속성은 제공하지 않는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p><strong>HA</strong> (High Availability)환경의 <strong>client-server</strong> 모드(-C, --CS-MODE)에서는 -d 옵션(data loading)만 사용 가능하다.</p>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-data-file-check-only">
+<span class="sig-name descname"><span class="pre">--data-file-check-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-data-file-check-only" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-data-file-check-only'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>demodb_objects에 포함된 데이터의 구문이 정상인지 확인만 하며 데이터를 데이터베이스에 로딩하지 않는다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">check</span><span class="o">-</span><span class="n">only</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-l">
+<span id="cmdoption-loaddb-load-only"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--load-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-l" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-l'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>Stand-alone</strong> 모드는 기본적으로 데이터베이스에 로드하기 전에 전체 데이터에 대해 사전 구문 검사가 실행된다. 오류가 발생하면 데이터의 로드는 실행되지 않고 오류가 보고된다.</p>
+<p><strong>-l</strong> 옵션을 이용하면 로드 전에 전체 데이타에 대해 사전 구문 검사 실행이 생략되어 속도가 빠르다. 그러나, 각 레코드를 데이터베이스에 로드하기 전에 구문 검사가 진행된다. 이 과정에서 구문 오류가 발생하는 경우 로드는 중지되며, 결과적으로 데이터의 일부분만 로드되는 경우가 발생할 수도 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">l</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-estimated-size">
+<span class="sig-name descname"><span class="pre">--estimated-size</span></span><span class="sig-prename descclassname"><span class="pre">=NUMBER</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-estimated-size" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-estimated-size'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>언로드할 레코드의 수가 기본값인 5,000개보다 많은 경우 로딩 성능 향상을 위해 사용할 수 있다. 이 옵션을 통해 레코드 저장을 위한 해시 메모리를 크게 할당함으로써 로드 성능을 향상시킬 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">estimated</span><span class="o">-</span><span class="n">size</span> <span class="mi">8000</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-v">
+<span id="cmdoption-loaddb-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-v" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-v'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>데이터베이스 로딩 작업이 진행되는 동안, 로딩되는 데이터베이스의 테이블 및 레코드에 관한 상세 정보를 화면에 출력한다. 진행 단계, 로딩되는 클래스, 입력된 레코드의 개수와 같은 상세 정보를 확인할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">v</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-c">
+<span id="cmdoption-loaddb-periodic-commit"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--periodic-commit</span></span><span class="sig-prename descclassname"><span class="pre">=COUNT</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-c" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-c'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>지정된 개수의 레코드가 데이터베이스에 입력될 때마다 주기적으로 커밋을 실행한다. <strong>-c</strong> 옵션이 지정되지 않은 경우, 데이터 파일에 포함된 모든 레코드가 데이터베이스로 로드된 후에 트랜잭션이 커밋된다. 또한, <strong>-c</strong> 옵션이 <strong>-s</strong> 옵션이나 <strong>-i</strong> 옵션과 함께 사용하는 경우에는 100개의 DDL문이 로드될 때마다 주기적으로 커밋을 실행한다.</p>
+<p>권장되는 커밋 주기는 로딩되는 데이터에 따라 다른데, 스키마 로딩의 경우에는 <strong>-c</strong>의 인수를 50으로, 인덱스 로딩의 경우는 인수를 1로 설정하는 것이 권고된다. 레코드 로딩의 경우는 10,240이 권고되며 기본값이다.</p>
+<p>CUBRID 10.1 또는 그 이하의 버전에서 <strong>--periodic-commit</strong> 의 기본값은 없으며 따라서 전체 데이터를 로드한 후에 트랜잭션 커밋을 수행할 것이다. 현재 상태에서, 이전과 같이 동작하기를 원한다면 <strong>--periodic-commit</strong> 을 매우 큰 값으로 설정하라. 그러면 모든 데이터가 로드된 후에 커밋이 실행될 것이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">c</span> <span class="mi">100</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-no-oid">
+<span class="sig-name descname"><span class="pre">--no-oid</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-no-oid" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-no-oid'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>demodb_objects에 포함된 OID를 무시하고 레코드를 newdb로 로딩하는 명령이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">oid</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-no-statistics">
+<span class="sig-name descname"><span class="pre">--no-statistics</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-no-statistics" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-no-statistics'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>demodb_objects를 로딩한 후 newdb의 통계 정보를 갱신하지 않는 명령이다. 특히, 대상 데이터베이스의 데이터 용량에 비해 매우 적은 데이터만 로딩할 경우 이 옵션을 이용하여 로드 성능을 향상시킬 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">statistics</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-s">
+<span id="cmdoption-loaddb-schema-file"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--schema-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE[:LINE]</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-s" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-s'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>스키마 파일의 LINE번째부터 정의된 스키마 정보를 새로 생성한 newdb에 로딩하는 구문이다. <strong>-s</strong> 옵션을 이용하여 스키마 정보를 먼저 로딩한 후, 실제 레코드를 로딩할 수 있다.</p>
+<p>다음 예제에서 demodb_schema 파일은 언로드 작업에 의해 생성된 파일이며 언로드된 데이터베이스의 스키마 정보를 포함한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb_schema</span> <span class="n">newdb</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">Start</span> <span class="n">schema</span> <span class="n">loading</span><span class="o">.</span>
+</span><span id="line-4"><span class="n">Total</span>       <span class="mi">86</span> <span class="n">statements</span> <span class="n">executed</span><span class="o">.</span>
+</span><span id="line-5"><span class="n">Schema</span> <span class="n">loading</span> <span class="kn">from</span><span class="w"> </span><span class="nn">demodb_schema</span> <span class="n">finished</span><span class="o">.</span>
+</span><span id="line-6"><span class="n">Statistics</span> <span class="k">for</span> <span class="n">Catalog</span> <span class="n">classes</span> <span class="n">have</span> <span class="n">been</span> <span class="n">updated</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>다음은 demodb에 정의된 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다. demodb_trigger 파일은 언로드 작업에 의해 생성된 파일이며, 언로드된 데이터베이스의 트리거 정보를 포함한다. 레코드를 모두 로딩한 후, -s 옵션을 이용하여 트리거를 생성할 것을 권장한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb_trigger</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-i">
+<span id="cmdoption-loaddb-index-file"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--index-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE[:LINE]</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-i" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-i'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>인덱스 파일의 LINE번째부터 정의된 인덱스 정보를 데이터베이스에 로딩하는 명령이다. 다음 예제에서, demodb_indexes 파일은 언로드 작업에 의해 생성된 파일이며 언로드된 데이터베이스의 인덱스 정보를 포함한다. <strong>-d</strong> 옵션을 이용하여 레코드를 로딩한 후, <strong>-i</strong> 옵션을 이용하여 인덱스를 생성할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">c</span> <span class="mi">100</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span><span id="line-2"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">i</span> <span class="n">demodb_indexes</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-d">
+<span id="cmdoption-loaddb-data-file"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--data-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-d" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-d'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-d</strong> 옵션을 이용하여 데이터 파일 또는 사용자 정의 객체 파일을 지정함으로써 레코드 정보를 newdb로 로딩하는 명령이다. demodb_objects 파일은 언로드 작업에 의해 생성된 객체 파일이거나, 사용자가 대량의 데이터 로딩을 위하여 작성한 사용자 정의 객체 파일 중 하나이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-t">
+<span id="cmdoption-loaddb-table"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--table</span></span><span class="sig-prename descclassname"><span class="pre">=TABLE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-t" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-t'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>로딩할 데이터 파일에 테이블 이름 헤더가 생략되어 있는 경우, 이 옵션 뒤에 테이블 이름을 지정한다. 테이블 이름은 스키마 이름을 접두사로 사용해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="o">-</span><span class="n">t</span> <span class="n">tbl_name</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-error-control-file">
+<span class="sig-name descname"><span class="pre">--error-control-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-error-control-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-error-control-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>데이터베이스 로드 작업 중에 발생하는 에러 중 특정 에러를 처리하는 방식에 관해 명세한 파일을 지정하는 옵션이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">error</span><span class="o">-</span><span class="n">control</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">error_test</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+<p>서버 에러 코드 이름은 <strong>$CUBRID/include/dbi.h</strong> 파일을 참고하도록 한다.</p>
+<p>에러 코드(에러 번호) 별 에러 메시지는 <strong>$CUBRID/msg/</strong><em>&lt;문자셋 이름&gt;</em><strong>/cubrid.msg</strong> 파일의 $set 5 MSGCAT_SET_ERROR 이하에 있는 번호들을 참고하도록 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">vi $CUBRID/msg/en_US/cubrid.msg
+</span><span id="line-2">
+</span><span id="line-3">$set 5 MSGCAT_SET_ERROR
+</span><span id="line-4">1 Missing message for error code %1$d.
+</span><span id="line-5">2 Internal system failure: no more specific information is available.
+</span><span id="line-6">3 Out of virtual memory: unable to allocate %1$ld memory bytes.
+</span><span id="line-7">4 Has been interrupted.
+</span><span id="line-8">...
+</span><span id="line-9">670 Operation would have caused one or more unique constraint violations.
+</span><span id="line-10">...
+</span></code></pre></div>
+</div>
+<p>특정 에러 명세 파일의 형식은 다음과 같다.</p>
+<ul class="simple">
+<li><p>-&lt;에러 코드&gt; : &lt;에러 코드&gt;에 해당하는 에러를 무시하도록 설정 (<strong>loaddb</strong> 수행 중 해당 에러가 발생해도 계속 수행)</p></li>
+<li><p>+&lt;에러 코드&gt; : &lt;에러 코드&gt;에 해당하는 에러를 무시하지 않도록 설정 (<strong>loaddb</strong> 수행 중 해당 에러가 발생하면 작업을 종료함)</p></li>
+<li><p>+DEFAULT : 24번부터 33번까지의 에러를 무시하지 않도록 설정</p></li>
+</ul>
+<p><strong>--error-control-file</strong> 옵션으로 에러 명세 파일을 설정하지 않을 경우, <strong>loaddb</strong> 유틸리티는 기본적으로 24번부터 33번까지의 에러를 무시하도록 설정되어 있다. 이들은 데이터베이스 볼륨의 여유 공간이 얼마 남지 않았다는 경고성 에러로서, 이후 할당된 데이터베이스 볼륨의 여유 공간이 없어지면 자동으로 범용 볼륨(generic volume)을 생성하게 된다.</p>
+<p>다음은 에러 명세 파일을 작성한 예이다.</p>
+<ul>
+<li><p>+DEFAULT를 설정하여, 24번부터 33번까지의 DB 볼륨 여유 공간 경고성 에러는 무시되지 않는다.</p></li>
+<li><p>앞에서 -2를 설정했으나, 뒤에서 +2를 설정했기 때문에 2번 에러 코드는 무시되지 않는다.</p></li>
+<li><p>-670을 설정하여, 670번 에러인 고유성 위반 에러(unique violation error)는 무시된다.</p></li>
+<li><p>#-115는 앞에 #이 있어 커멘트 처리되었다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">vi</span> <span class="n">error_file</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="o">+</span><span class="n">DEFAULT</span>
+</span><span id="line-4"><span class="o">-</span><span class="mi">2</span>
+</span><span id="line-5"><span class="o">-</span><span class="mi">670</span>
+</span><span id="line-6"><span class="c1">#-115 --&gt; comment</span>
+</span><span id="line-7"><span class="o">+</span><span class="mi">2</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-ignore-class-file">
+<span class="sig-name descname"><span class="pre">--ignore-class-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-ignore-class-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-ignore-class-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>로딩 작업 중 무시할 클래스 목록을 명세한 파일을 지정한다. 지정된 파일에 포함된 클래스를 제외한 나머지 클래스의 레코드만 로딩된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">skip_class_list</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-trigger-file">
+<span class="sig-name descname"><span class="pre">--trigger-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE[:LINE]</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-trigger-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-trigger-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>트리거 파일의 LINE번째부터 정의된 트리거 정보를 새로 생성한 newdb에 로딩하는 구문이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">trigger</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">demodb_triggers</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-no-user-specified-name">
+<span class="sig-name descname"><span class="pre">--no-user-specified-name</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-no-user-specified-name" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-no-user-specified-name'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>11.2 이전 버전에서 언로드된 파일은 <strong>--no-user-specified-name</strong> 옵션을 사용하는 경우에만 11.2 버전에서 로드할 수 있다.</p>
+<p>이 옵션은 -u 옵션과 함께 데이터베이스의 사용자 계정이 <strong>DBA</strong>로 지정된 경우에만 동작한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">-</span><span class="n">s</span> <span class="n">demodb_schema</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">specified</span><span class="o">-</span><span class="n">name</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p><strong>--no-user-specified-name</strong> 옵션은 11.2버전 또는 11.2 이후 버전에서 언로드된 파일을 로드할 때 사용하면 안 된다.</p>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-loaddb-schema-file-list">
+<span class="sig-name descname"><span class="pre">--schema-file-list</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-schema-file-list" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-schema-file-list'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>목록에 포함된 모든 스키마 파일들을 한번에 로딩하는 옵션이다. 스키마 파일 목록이 있어야 하며, 이 목록 파일의 맨 위 스키마 파일부터 아래로 순차적으로 로딩된다. 이 옵션과 -s 옵션은 함께 사용할 수 없다.</p>
+<p>이 목록 파일은 unloaddb에서 <strong>--split-schema-files</strong> 옵션을 사용할 때 자동으로 생성된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="o">--</span><span class="n">schema</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="nb">list</span><span class="o">=</span><span class="n">demodb_schema_info</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p>이 파일에 작성된 스키마 파일의 순서를 변경할 수 있으나 순서가 잘못된 경우 로딩 오류가 발생할 수 있다. 예를 들어, CLASS 정보가 있는 파일이 로드되지 않은 상태에서 PK 파일을 먼저 로드하면 오류가 발생할 수 있다. 따라서 목록에서 CLASS 정보를 로드하기 위한 파일명이 PK를 로드하기 위한 파일보다 위에 있어야 한다.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p><strong>--no-logging</strong> 옵션을 사용하면 <strong>loaddb</strong> 를 수행하면서 트랜잭션 로그를 저장하지 않으므로 데이터 파일을 빠르게 로드할 수 있다. 그러나 로드 도중 파일 형식이 잘못되거나 시스템이 다운되는 등의 문제가 발생했을 때 데이터를 복구할 수 없으므로 데이터베이스를 새로 구축해야 한다. 즉, 데이터를 복구할 필요가 없는 새로운 데이터베이스를 구축하는 경우를 제외하고는 사용하지 않도록 주의한다. 이 옵션을 사용하면 고유 위반 등의 오류를 검사하지 않아 기본 키에 값이 중복되는 경우 등이 발생할 수 있으므로, 사용 시 이러한 문제를 반드시 감안해야 한다.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p><strong>loaddb</strong> 실행 시 대량의 데이터 로딩에 대한 성능 보장과 로딩 데이터 간의 의존성을 최소화하기 위해 외래키 제약 조건에 대한 검사를 수행하지 않는다. 그러므로, HA 환경에서 <strong>-C</strong> 옵션을 이용하여 데이터를 로딩할 경우 슬레이브 또는 레플리카 노드 복제 과정에서 외래키 제약 조건 검사가 수행되어 마스터 노드와 데이터 불일치가 발생할 수 있다.</p>
+</div>
+<section id="howtowrite-loadfile">
+<span id="id3"></span><h2>가져오기용 파일 작성 방법<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#howtowrite-loadfile" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#howtowrite-loadfile'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>cubrid loaddb</strong> 유틸리티에서 사용되는 객체 입력 파일을 직접 작성하여 사용하면 데이터베이스에 대량의 데이터를 보다 신속하게 추가할 수 있다. 객체 입력 파일은 간단한 테이블 모양의 형식으로 구성되며 주석, 명령 라인, 데이터 라인으로 이루어진 텍스트 파일이다.</p>
+<section id="id4">
+<h3>주석<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID에서는 주석은 두 개의 연속된 하이픈(--)을 이용하여 처리한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">-- This is a comment!
+</span></code></pre></div>
+</div>
+</section>
+<section id="howtowrite-loadfile-command-line">
+<span id="id5"></span><h3>명령 라인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#howtowrite-loadfile-command-line" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#howtowrite-loadfile-command-line'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>명령 라인은 퍼센트(%) 문자로 시작하며, 명령어로는 클래스를 정의하는 <strong>%class</strong> 명령어와, 클래스 식별을 위해 사용하는 별칭(alias)이나 식별자(identifier)를 정의하는 <strong>%id</strong> 명령어가 있다.</p>
+<ul id="assign-id-to-class">
+<li><p>클래스에 식별자 부여</p>
+<p><strong>%id</strong> 를 이용하여 참조 관계에 있는 클래스에 식별자를 부여할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">class_name</span> <span class="n">class_id</span>
+</span><span id="line-2"><span class="n">schema_name</span><span class="p">:</span>
+</span><span id="line-3">    <span class="n">identifier</span>
+</span><span id="line-4"><span class="n">class_name</span><span class="p">:</span>
+</span><span id="line-5">    <span class="n">identifier</span>
+</span><span id="line-6"><span class="n">class_id</span><span class="p">:</span>
+</span><span id="line-7">    <span class="n">integer</span>
+</span></code></pre></div>
+</div>
+<p><strong>%id</strong> 명령어에 의해 명시된 <em>class_name</em>은 해당 데이터베이스에 정의된 클래스 이름이다. <em>class_name</em>은 <em>schema_name</em>을 접두사로 사용하며, <em>schema_name</em>은 클래스가 정의된 스키마 이름이다.
+<em>schema_name</em>은 생략할 수 있으며, <em>schema_name</em>을 생략하면 -u 옵션과 함께 지정된 데이터베이스의 사용자 이름이 스키마 이름으로 사용된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">employee</span><span class="p">]</span> <span class="mi">21</span>
+</span><span id="line-2"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">office</span><span class="p">]</span> <span class="mi">22</span>
+</span><span id="line-3"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">project</span><span class="p">]</span> <span class="mi">23</span>
+</span><span id="line-4"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">phone</span><span class="p">]</span> <span class="mi">24</span>
+</span></code></pre></div>
+</div>
+<p><em>schema_name</em>과 <em>class_name</em>은 대괄호([ ])로 묶어야 한다. <em>schema_name</em>과 <em>class_name</em>의 각각을 대괄호로 묶거나, 함께 대괄호로 묶을 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">employee</span><span class="p">]</span> <span class="mi">21</span>
+</span><span id="line-2"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">office</span><span class="p">]</span> <span class="mi">22</span>
+</span><span id="line-3"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">project</span><span class="p">]</span> <span class="mi">23</span>
+</span><span id="line-4"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">phone</span><span class="p">]</span> <span class="mi">24</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">employee</span><span class="p">]</span> <span class="mi">21</span>
+</span><span id="line-2"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">office</span><span class="p">]</span> <span class="mi">22</span>
+</span><span id="line-3"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">project</span><span class="p">]</span> <span class="mi">23</span>
+</span><span id="line-4"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">public</span><span class="o">.</span><span class="n">phone</span><span class="p">]</span> <span class="mi">24</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>클래스 및 속성 명시</p>
+<p><strong>%class</strong> 명령어를 이용하여 데이터가 로딩될 클래스(테이블) 및 속성(칼럼)을 명시하며, 명시된 속성의 순서에 따라 데이터 라인이 작성되어야 한다. <strong>cubrid loaddb</strong> 유틸리티를 실행할 때 <strong>-t</strong> 옵션으로 클래스 이름을 제공하는 경우에는 데이터 파일에 클래스 및 속성을 명시하지 않아도 된다. 단, 데이터가 작성되는 순서는 클래스 생성 시의 속성 순서를 따라야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [schema_name.]class_name (attr_name [attr_name...])
+</span><span id="line-2">schema_name:
+</span><span id="line-3">    identifier
+</span><span id="line-4">class_name:
+</span><span id="line-5">    identifier
+</span><span id="line-6">attr_name:
+</span><span id="line-7">    identifier
+</span></code></pre></div>
+</div>
+<p>데이터를 로딩하고자 하는 데이터베이스에는 클래스가 이미 정의되어 있어야 한다.</p>
+<p><strong>%class</strong> 명령어에 의해 명시된 <em>class_name</em>은 해당 데이터베이스에 정의된 클래스 이름이며, <em>schema_name</em>은 클래스가 정의된 스키마 이름이다. <em>attr_name</em>는 정의된 속성 이름을 의미한다. <em>schema_name</em>과 <em>class_name</em>의 작성 방법은 위와 동일하다.</p>
+<p>다음은 <em>employee</em>라는 클래스에 데이터를 입력하기 위하여 <strong>%class</strong> 명령으로 클래스 및 3개의 속성을 명시한 예제이다. <strong>%class</strong> 명령 다음에 나오는 데이터 라인에서는 3개의 데이터가 입력되어야 하며, 이는 <a class="reference internal" href="#conf-reference-relation"><span class="std std-ref">참조 관계 설정</span></a>을 참조한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[employee] (name age department)
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h3>데이터 라인<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>데이터 라인은 <strong>%class</strong> 명령 라인 다음에 위치하며, 입력되는 데이터는 <strong>%class</strong> 명령에 의해 명시된 클래스 속성과 타입이 일치해야 한다. 만약, 명시된 속성과 타입이 일치하지 않으면 데이터 로드 작업은 중지된다.</p>
+<p>또한, 각각의 속성에 대응되는 데이터는 적어도 하나의 공백에 의해 분리되어야 하며, 한 라인에 작성되는 것이 원칙이다. 다만, 입력되는 데이터가 많은 경우에는 첫 번째 데이터 라인의 맨 마지막 데이터 다음에 플러스 기호(+)를 명시하여 다음 라인에 데이터를 연속적으로 입력할 수 있다. 이 때, 맨 마지막 데이터와 플러스 기호 사이에는 공백이 허용되지 않음을 유의한다.</p>
+<ul>
+<li><p>인스턴스 입력</p>
+<p>다음과 같이 명시된 클래스 속성과 타입이 일치하는 인스턴스를 입력할 수 있다. 각각의 데이터는 적어도 하나의 공백에 의해 구분된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[employee] (name)
+</span><span id="line-2">'jordan'
+</span><span id="line-3">'james'
+</span><span id="line-4">'garnett'
+</span><span id="line-5">'malone'
+</span></code></pre></div>
+</div>
+</li>
+<li><p>인스턴스 번호 부여</p>
+<p>데이터 라인의 처음에 ‘번호:’의 형식으로 해당 인스턴스에 대한 번호를 부여할 수 있다. 인스턴스 번호는 명시된 클래스 내에서 유일한 양수이며, 번호와 콜론(:) 사이에는 공백이 허용되지 않는다. 이와 같이 인스턴스 번호를 부여하는 이유는 추후 객체 참조 관계를 설정하기 위함이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[employee] (name)
+</span><span id="line-2">1: 'jordan'
+</span><span id="line-3">2: 'james'
+</span><span id="line-4">3: 'garnett'
+</span><span id="line-5">4: 'malone'
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+<ul id="conf-reference-relation">
+<li><p>참조 관계 설정</p>
+<p><strong>@</strong> 다음에 참조하는 클래스를 명시하고, 수직바(|) 다음에 참조하는 인스턴스의 번호를 명시하여 객체 참조 관계를 설정할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nd">@class_ref</span> <span class="o">|</span> <span class="n">instance_no</span>
+</span><span id="line-2"><span class="n">class_ref</span><span class="p">:</span>
+</span><span id="line-3">     <span class="n">class_name</span>
+</span><span id="line-4">     <span class="n">class_id</span>
+</span></code></pre></div>
+</div>
+<p><strong>@</strong> 다음에는 클래스명 또는 클래스 id를 명시하고, 수직바(|) 다음에는 인스턴스 번호를 명시한다. 수직바(|)의 양쪽에는 공백을 허용하지 않는다. <em>class_ref</em>의 작성 방법은 <a class="reference internal" href="#howtowrite-loadfile-command-line"><span class="std std-ref">명령 라인</span></a>의 <em>schema_name</em>과 <em>class_name</em>의 작성 방법과 동일하다. 하지만 <em>schema_name</em>과 <em>class_name</em> 각각을 대괄호([ ])로 묶는 것은 허용하지 않는다.</p>
+<p>다음은 <em>paycheck</em> 클래스에 인스턴스를 입력하는 예제이며, <em>name</em> 속성은 <em>employee</em> 클래스의 인스턴스를 참조한다. 마지막 라인과 같이 앞에서 정의되지 아니한 인스턴스 번호를 이용하여 참조 관계를 설정하는 경우 해당 데이터는 <strong>NULL</strong>로 입력된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[paycheck] (name department salary)
+</span><span id="line-2">@[public.employee]|1   'planning'   8000000
+</span><span id="line-3">@[public.employee]|2   'planning'   6000000
+</span><span id="line-4">@[public.employee]|3   'sales'   5000000
+</span><span id="line-5">@[public.employee]|4   'development'   4000000
+</span><span id="line-6">@[public.employee]|5   'development'   5000000
+</span></code></pre></div>
+</div>
+<p><a class="reference internal" href="#assign-id-to-class"><span class="std std-ref">클래스에 식별자 부여</span></a>에서 <strong>%id</strong> 명령어로 <em>employee</em> 클래스에 21이라는 식별자를 부여했으므로, 위의 예를 다음과 같이 작성할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">%class [public].[paycheck] (name department salary)
+</span><span id="line-2">@21|1   'planning'   8000000
+</span><span id="line-3">@21|2   'planning'   6000000
+</span><span id="line-4">@21|3   'sales'   5000000
+</span><span id="line-5">@21|4   'development'   4000000
+</span><span id="line-6">@21|5   'development'   5000000
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h2>데이터베이스 마이그레이션<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>신규 버전의 CUBRID 데이터베이스를 사용하기 위해서는 기존 버전의 CUBRID 데이터베이스를 신규 버전의 CUBRID 데이터베이스로 이전하는 작업을 진행해야 할 경우가 있다. 이때 CUBRID에서 제공하는 텍스트 파일로 내보내기와 텍스트 파일에서 가져오기 기능을 활용할 수 있다.</p>
+<p><strong>cubrid unloaddb</strong> 및 <strong>cubrid loaddb</strong> 유틸리티를 이용하는 마이그레이션 절차를 설명한다.</p>
+<p><strong>권장 시나리오 및 절차</strong></p>
+<p>기존 버전의 CUBRID가 운영 중인 상태에서 적용할 수 있는 마이그레이션 시나리오를 설명한다. 데이터베이스 마이그레이션을 위해서는 <strong>cubrid unloaddb</strong>와 <strong>cubrid loaddb</strong> 유틸리티를 사용한다. 자세한 내용은 <a class="reference internal" href="#unloaddb"><span class="std std-ref">unloaddb</span></a> 및 <a class="reference internal" href="#loaddb"><span class="std std-ref">loaddb</span></a> 를 참조한다.</p>
+<ol class="arabic">
+<li><p>기존 CUBRID 서비스 종료</p>
+<p><strong>cubrid service stop</strong> 을 실행하여 기존 CUBRID로 운영되는 모든 서비스 프로세스를 종료한 후, CUBRID 관련 프로세스들이 모두 정상 종료되었는지 확인한다.</p>
+<p>CUBRID 관련 프로세스들이 모두 정상 종료되었는지 확인하려면, Linux에서는 <strong>ps -ef|grep cub_</strong>를 실행한다. cub_로 시작하는 프로세스가 없으면 정상적으로 종료된 것이다. Windows에서는 &lt;Ctrl + Alt + Delete&gt; 키를 누른 후 [작업 관리자 시작]을 선택한다. [프로세스] 탭에 cub_로 시작하는 프로세스가 없으면 정상적으로 종료된 것이다. CUBRID 서비스 종료 후에도 관련 프로세스가 존재하면 Linux에서는 <strong>kill</strong> 명령으로 강제 종료한 후 <strong>ipcs -m</strong> 명령으로 CUBRID 브로커가 사용 중이던 공유 메모리를 확인하고 삭제한다. Windows에서는 작업 관리자의 [프로세스] 탭에서 해당 이미지 이름을 마우스 오른쪽 버튼으로 클릭하고 [프로세스 끝내기]를 선택하여 강제 종료한다.</p>
+</li>
+<li><p>기존 데이터베이스 백업</p>
+<p><strong>cubrid backupdb</strong> 유틸리티를 이용하여 기존 버전의 데이터베이스 백업을 수행한다. 그 이유는 데이터베이스 언로드/로드 작업 중 발생 가능한 장애에 대비하기 위함이다. 데이터베이스 백업에 관한 자세한 내용은 <a class="reference internal" href="backup.html#backupdb"><span class="std std-ref">backupdb</span></a>를 참조한다.</p>
+</li>
+<li><p>기존 데이터베이스 언로드</p>
+<p><strong>cubrid unloaddb</strong> 유틸리티를 이용하여 기존 버전의 CUBRID에서 생성된 데이터베이스를 언로드한다. 데이터베이스 언로드에 관한 자세한 내용은 <a class="reference internal" href="#unloaddb"><span class="std std-ref">unloaddb</span></a> 를 참조한다.</p>
+</li>
+<li><p>기존 CUBRID의 환경 설정 파일 보관</p>
+<p><strong>CUBRID/conf</strong> 디렉터리 아래의    <strong>cubrid.conf</strong>, <strong>cubrid_broker.conf</strong>, <strong>cm.conf</strong> 등의 환경 설정 파일을 보관한다. 이는 기존 CUBRID 데이터베이스 환경에 적용된 파라미터 설정값을 신규 CUBRID 데이터베이스 환경에서 편리하게 적용할 수 있기 때문이다.</p>
+</li>
+<li><p>신규 버전의 CUBRID 설치</p>
+<p>기존 버전의 CUBRID에서 생성된 데이터의 백업 및 언로드 작업이 완료되었으므로, 기존 버전의 CUBRID 및 데이터베이스를 삭제하고 신규 버전의 CUBRID를 설치한다. CUBRID 설치에 대한 자세한 내용은 <a class="reference internal" href="../start.html"><span class="doc">시작하기</span></a>을 참조한다.</p>
+</li>
+<li><p>신규 CUBRID의 환경 설정</p>
+<p><strong>기존 CUBRID의 환경 설정 파일 보관하기</strong> 에서 보관한 기존 데이터베이스의 환경 설정 파일을 참고하여 신규 버전의 CUBRID 환경을 설정할 수 있다. 환경 설정에 대한 자세한 내용은 “CUBRID 시작”의 <a class="reference internal" href="../install.html"><span class="doc">설치와 실행</span></a>을 참조한다.</p>
+</li>
+<li><p>신규 데이터베이스 로드</p>
+<p><strong>cubrid createdb</strong> 유틸리티를 이용하여 데이터베이스를 생성하고, <strong>cubrid loaddb</strong> 유틸리티를 이용하여 언로드한 데이터를 해당 데이터베이스에 로드한다. 데이터베이스 생성에 대한 자세한 내용은 “관리자 안내서”의 <a class="reference internal" href="admin_utils.html#creating-database"><span class="std std-ref">createdb</span></a> 을 참조하고, 데이터베이스 로드에 대한 자세한 내용은 <a class="reference internal" href="#loaddb"><span class="std std-ref">loaddb</span></a>를 참조한다.</p>
+</li>
+<li><p>신규 데이터베이스 백업</p>
+<p>신규 데이터베이스에 데이터 로딩이 완료되면, <strong>cubrid backupdb</strong>    유틸리티를 이용하여 신규 버전의 CUBRID 환경에서 생성된 데이터베이스를 백업한다. 그 이유는 기존 버전의 CUBRID 환경에서 백업한 데이터를 신규 버전의 CUBRID 환경에서 복구할 수 없기 때문이다. 데이터베이스 백업에 대한 자세한 내용은 <a class="reference internal" href="backup.html#backupdb"><span class="std std-ref">backupdb</span></a>를 참고한다.</p>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p>같은 버전이라 하더라도 백업 및 복구 시 32비트 데이터베이스 볼륨과 64비트 데이터베이스 볼륨 간에는 상호 호환을 보장하지 않는다. 따라서 32비트 CUBRID에서 백업한 데이터베이스를 64비트 CUBRID에서 복구하거나, 이와 반대로 작업하는 것을 권장하지 않는다.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">경고</p>
+<p>CUBRID 11버전에서 TDE 기능을 사용할 경우 하위호환성을 제공하지 않아, 언로드된 파일로 더 낮은 버전에서 로드할 수 없다.</p>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li></li>
+<li><a :data-current="activeSection === '#loaddb'" class="reference internal" href="#loaddb">loaddb</a><ul>
+<li><a :data-current="activeSection === '#howtowrite-loadfile'" class="reference internal" href="#howtowrite-loadfile">가져오기용 파일 작성 방법</a><ul>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">주석</a></li>
+<li><a :data-current="activeSection === '#howtowrite-loadfile-command-line'" class="reference internal" href="#howtowrite-loadfile-command-line">명령 라인</a></li>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">데이터 라인</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">데이터베이스 마이그레이션</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 27, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

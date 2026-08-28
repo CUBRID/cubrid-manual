@@ -188,8 +188,8 @@ JDBC 프로그래밍
         *   **round**: 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
         *   **convertToNull**: **NULL** 로 변환한다.
 
-    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
-    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 를 참고한다.
+    *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 을 참고한다.
+    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 을 참고한다.
 
         *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
 
@@ -295,7 +295,7 @@ JDBC 프로그래밍
 
 **logOnException** 과 **logSlowQueries** 로 기록되는 드라이버 로그는 **java.util.logging** 을 통해 출력된다. 로그를 어디에 남길지는 응용 프로그램의 **java.util.logging** 설정이 결정하며, 드라이버는 로그 파일을 직접 만들지 않는다.
 
-로거 이름은 **cubrid.jdbc** 이고, 로그 종류에 따라 레벨이 다르다.
+로그는 **cubrid.jdbc.jci.UConnection** 로거로 출력되며, 설정은 상위 로거인 **cubrid.jdbc** 에 한다. 로그 종류에 따라 레벨이 다르다.
 
 ============ ========== ==============================================================
 로그         레벨       내용
@@ -313,8 +313,12 @@ JDBC 프로그래밍
     handlers = java.util.logging.FileHandler
     cubrid.jdbc.level = FINEST
     java.util.logging.FileHandler.pattern = /var/log/myapp/cubrid_jdbc%g.log
+    java.util.logging.FileHandler.limit = 10485760
+    java.util.logging.FileHandler.count = 10
     java.util.logging.FileHandler.append = true
     java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+
+**%g** 는 로그 파일의 세대 번호이다. 위 설정에서는 파일이 cubrid_jdbc0.log부터 cubrid_jdbc9.log까지 생성되며, 가장 최근 로그는 항상 **cubrid_jdbc0.log** 이다. **limit** 를 지정하지 않으면 로그 파일의 크기가 제한되지 않는다.
 
 위와 같이 작성한 설정 파일은 다음과 같이 지정한다.
 
@@ -326,7 +330,7 @@ JDBC 프로그래밍
 
 .. note::
 
-    *   **FileHandler** 의 기본 포매터는 **XMLFormatter** 이다. 위 예제처럼 **formatter** 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.
+    *   **FileHandler** 의 기본 포매터는 **XMLFormatter** 이다. 위 예제와 달리 **formatter** 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.
     *   슬로우 쿼리 로그에는 SQL 문장과 바인딩된 값이 그대로 포함된다. **cubrid.jdbc.level** 을 **FINEST** 로 설정할 때에는 로그 파일의 접근 권한을 확인해야 한다.
     *   드라이버 로그를 응용 프로그램의 로그와 분리하려면 **cubrid.jdbc.handlers** 를 지정하고 **cubrid.jdbc.useParentHandlers** 를 **false** 로 설정한다.
 
@@ -393,7 +397,7 @@ DataSource 객체를 생성하려면 다음과 같이 호출한다.
     ... 
     CUBRIDDataSource ds = null;
     ds = new CUBRIDDataSource(); 
-    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setUrl("jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000"); 
 
 DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드를 호출한다.
 
@@ -1293,7 +1297,7 @@ DataSource 객체를 사용하여 데이터베이스에 연결할 수도 있다.
     ... 
      
     ds = new CUBRIDDataSource(); 
-    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000"); 
 
 CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 참고한다.
 
@@ -1320,7 +1324,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
             thrCPDSMT thread[];
  
             ds = new CUBRIDDataSource();
-            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000");
  
             try {
                 thread = new thrCPDSMT[num_thread];

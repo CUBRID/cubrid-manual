@@ -382,8 +382,8 @@
 <li><p><strong>convertToNull</strong>: <strong>NULL</strong> 로 변환한다.</p></li>
 </ul>
 </li>
-<li><p><strong>logOnException</strong>: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">드라이버 로그 설정</span></a>를 참고한다.</p></li>
-<li><p><strong>logSlowQueries</strong>: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">드라이버 로그 설정</span></a>를 참고한다.</p>
+<li><p><strong>logOnException</strong>: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">드라이버 로그 설정</span></a>을 참고한다.</p></li>
+<li><p><strong>logSlowQueries</strong>: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 <a class="reference internal" href="#jdbc-logging-conf"><span class="std std-ref">드라이버 로그 설정</span></a>을 참고한다.</p>
 <ul class="simple">
 <li><p><strong>slowQueryThresholdMillis</strong>: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.</p></li>
 </ul>
@@ -496,7 +496,7 @@
 <section id="jdbc-logging-conf">
 <span id="id5"></span><h3>드라이버 로그 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#jdbc-logging-conf" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#jdbc-logging-conf'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>logOnException</strong> 과 <strong>logSlowQueries</strong> 로 기록되는 드라이버 로그는 <strong>java.util.logging</strong> 을 통해 출력된다. 로그를 어디에 남길지는 응용 프로그램의 <strong>java.util.logging</strong> 설정이 결정하며, 드라이버는 로그 파일을 직접 만들지 않는다.</p>
-<p>로거 이름은 <strong>cubrid.jdbc</strong> 이고, 로그 종류에 따라 레벨이 다르다.</p>
+<p>로그는 <strong>cubrid.jdbc.jci.UConnection</strong> 로거로 출력되며, 설정은 상위 로거인 <strong>cubrid.jdbc</strong> 에 한다. 로그 종류에 따라 레벨이 다르다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>로그</p></th>
@@ -520,10 +520,13 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">handlers</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span>
 </span><span id="line-2"><span class="n">cubrid</span><span class="o">.</span><span class="n">jdbc</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">FINEST</span>
 </span><span id="line-3"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">myapp</span><span class="o">/</span><span class="n">cubrid_jdbc</span><span class="o">%</span><span class="n">g</span><span class="o">.</span><span class="n">log</span>
-</span><span id="line-4"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">append</span> <span class="o">=</span> <span class="n">true</span>
-</span><span id="line-5"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">formatter</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">SimpleFormatter</span>
+</span><span id="line-4"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="mi">10485760</span>
+</span><span id="line-5"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span id="line-6"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">append</span> <span class="o">=</span> <span class="n">true</span>
+</span><span id="line-7"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">formatter</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">SimpleFormatter</span>
 </span></code></pre></div>
 </div>
+<p><strong>%g</strong> 는 로그 파일의 세대 번호이다. 위 설정에서는 파일이 cubrid_jdbc0.log부터 cubrid_jdbc9.log까지 생성되며, 가장 최근 로그는 항상 <strong>cubrid_jdbc0.log</strong> 이다. <strong>limit</strong> 를 지정하지 않으면 로그 파일의 크기가 제한되지 않는다.</p>
 <p>위와 같이 작성한 설정 파일은 다음과 같이 지정한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">java</span> <span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">properties</span> <span class="o">-</span><span class="n">jar</span> <span class="n">app</span><span class="o">.</span><span class="n">jar</span>
 </span></code></pre></div>
@@ -532,7 +535,7 @@
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <ul class="simple">
-<li><p><strong>FileHandler</strong> 의 기본 포매터는 <strong>XMLFormatter</strong> 이다. 위 예제처럼 <strong>formatter</strong> 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.</p></li>
+<li><p><strong>FileHandler</strong> 의 기본 포매터는 <strong>XMLFormatter</strong> 이다. 위 예제와 달리 <strong>formatter</strong> 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.</p></li>
 <li><p>슬로우 쿼리 로그에는 SQL 문장과 바인딩된 값이 그대로 포함된다. <strong>cubrid.jdbc.level</strong> 을 <strong>FINEST</strong> 로 설정할 때에는 로그 파일의 접근 권한을 확인해야 한다.</p></li>
 <li><p>드라이버 로그를 응용 프로그램의 로그와 분리하려면 <strong>cubrid.jdbc.handlers</strong> 를 지정하고 <strong>cubrid.jdbc.useParentHandlers</strong> 를 <strong>false</strong> 로 설정한다.</p></li>
 </ul>
@@ -586,7 +589,7 @@
 </span><span id="line-2"><span class="p">...</span>
 </span><span id="line-3"><span class="n">CUBRIDDataSource</span><span class="w"> </span><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
 </span><span id="line-4"><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CUBRIDDataSource</span><span class="p">();</span>
-</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setUrl</span><span class="p">(</span><span class="s">"jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000&amp;logTraceApi=true&amp;logTraceNetwork=true"</span><span class="p">);</span>
+</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setUrl</span><span class="p">(</span><span class="s">"jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000"</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
 <p>DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드를 호출한다.</p>
@@ -1546,7 +1549,7 @@ Cascade=0, Restrict=2, No action=3, Set null=4</p></td>
 </span><span id="line-2"><span class="p">...</span>
 </span><span id="line-3">
 </span><span id="line-4"><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CUBRIDDataSource</span><span class="p">();</span>
-</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000&amp;logTraceApi=true&amp;logTraceNetwork=true"</span><span class="p">);</span>
+</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000"</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
 <p>CUBRIDDataSource에 대한 자세한 설명은 <a class="reference internal" href="#jdbc-conn-datasource"><span class="std std-ref">DataSource 객체로 연결</span></a>을 참고한다.</p>
@@ -1568,7 +1571,7 @@ Cascade=0, Restrict=2, No action=3, Set null=4</p></td>
 </span><span id="line-8"><span class="w">        </span><span class="n">thrCPDSMT</span><span class="w"> </span><span class="n">thread</span><span class="o">[]</span><span class="p">;</span>
 </span><span id="line-9">
 </span><span id="line-10"><span class="w">        </span><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CUBRIDDataSource</span><span class="p">();</span>
-</span><span id="line-11"><span class="w">        </span><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000&amp;logTraceApi=true&amp;logTraceNetwork=true"</span><span class="p">);</span>
+</span><span id="line-11"><span class="w">        </span><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000"</span><span class="p">);</span>
 </span><span id="line-12">
 </span><span id="line-13"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 </span><span id="line-14"><span class="w">            </span><span class="n">thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">thrCPDSMT</span><span class="o">[</span><span class="n">num_thread</span><span class="o">]</span><span class="p">;</span>
@@ -1996,7 +1999,7 @@ Cascade=0, Restrict=2, No action=3, Set null=4</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 24, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 8월 28, 2026. </p>
 </div>
 </div>
 </footer>

@@ -244,9 +244,12 @@
 </section>
 <section id="application-log">
 <h3>Application log<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#application-log" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#application-log'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>If you specify the connection URL for printing out the log in the application, you can check the CAS ID which brought an error when an error occurs in the specific query. The following are examples that an application log is written when an error occurs.</p>
+<p>If you configure the application to print out the log, you can check the CAS ID which brought an error when an error occurs in the specific query. For JDBC, the level of <strong>cubrid.jdbc</strong> must be set to <strong>FINE</strong> or lower in <strong>java.util.logging</strong>, and the format of the log is also determined by the <strong>java.util.logging</strong> configuration of the application. The following are examples that an application log is written when an error occurs; the JDBC example is the output with the configuration in <a class="reference internal" href="../api/jdbc.html#jdbc-logging-conf"><span class="std std-ref">Configuring Driver Logs</span></a> (<strong>SimpleFormatter</strong>).</p>
 <p><strong>JDBC application log</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&amp;slowQueryThresholdMillis=5].
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logException
+</span><span id="line-2">FINE: DUMP EXCEPTION
+</span><span id="line-3">[cubrid.jdbc.driver.CUBRIDException]
+</span><span id="line-4">cubrid.jdbc.driver.CUBRIDException: Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&amp;slowQueryThresholdMillis=5].
 </span></code></pre></div>
 </div>
 <p><strong>CCI application log</strong></p>
@@ -265,7 +268,7 @@
 <li><p>Check if there is a case where CAS was restarted by checking the broker log (located in the <strong>$CUBRID/log/broker</strong> directory). If it is revealed that the number of CASes is insufficient (please tune for any slow queries first), you should increase the number of CASes. To do so, the value of <a class="reference internal" href="config.html#max-num-appl-server"><span class="std std-ref">MAX_NUM_APPL_SERVER</span></a> should be increased appropriately. Also, increase the value of <a class="reference internal" href="config.html#max-clients"><span class="std std-ref">max_clients</span></a> if needed.</p></li>
 </ul>
 <p>If application log and CAS SQL log show the slow query log together and there is almost no gab between the slow query times of application log and the CAS SQL log, the cause which the query was slow will exist between the broker and DB server. For example, the query execution in the DB server was slow.</p>
-<p>There are examples of each application log when a slow query occurs.</p>
+<p>There are examples of each application log when a slow query occurs. The JDBC example is the output with the configuration in <a class="reference internal" href="../api/jdbc.html#jdbc-logging-conf"><span class="std std-ref">Configuring Driver Logs</span></a> (<strong>SimpleFormatter</strong>).</p>
 <p><strong>JDBC application log</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">May</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2013</span> <span class="mi">4</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">08</span> <span class="n">PM</span> <span class="n">cubrid</span><span class="o">.</span><span class="n">jdbc</span><span class="o">.</span><span class="n">jci</span><span class="o">.</span><span class="n">UConnection</span> <span class="n">logSlowQuery</span>
 </span><span id="line-2"><span class="n">FINEST</span><span class="p">:</span> <span class="n">SLOW</span> <span class="n">QUERY</span>
@@ -529,7 +532,7 @@ is not valid (iso88591), expecting utf8.</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Aug 24, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Aug 28, 2026. </p>
 </div>
 </div>
 </footer>

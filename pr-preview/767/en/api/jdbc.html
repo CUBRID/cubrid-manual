@@ -494,7 +494,7 @@
 <section id="configuring-driver-logs">
 <span id="jdbc-logging-conf"></span><h3>Configuring Driver Logs<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#configuring-driver-logs" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#configuring-driver-logs'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>Driver logs written by <strong>logOnException</strong> and <strong>logSlowQueries</strong> are emitted through <strong>java.util.logging</strong>. Where the logs are stored is determined by the <strong>java.util.logging</strong> configuration of the application; the driver does not create a log file by itself.</p>
-<p>The logger name is <strong>cubrid.jdbc</strong>, and the level differs by the kind of log.</p>
+<p>Logs are emitted by the <strong>cubrid.jdbc.jci.UConnection</strong> logger, and the configuration is done on its parent logger, <strong>cubrid.jdbc</strong>. The level differs by the kind of log.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Log</p></th>
@@ -518,10 +518,13 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">handlers</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span>
 </span><span id="line-2"><span class="n">cubrid</span><span class="o">.</span><span class="n">jdbc</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">FINEST</span>
 </span><span id="line-3"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">myapp</span><span class="o">/</span><span class="n">cubrid_jdbc</span><span class="o">%</span><span class="n">g</span><span class="o">.</span><span class="n">log</span>
-</span><span id="line-4"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">append</span> <span class="o">=</span> <span class="n">true</span>
-</span><span id="line-5"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">formatter</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">SimpleFormatter</span>
+</span><span id="line-4"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="mi">10485760</span>
+</span><span id="line-5"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span id="line-6"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">append</span> <span class="o">=</span> <span class="n">true</span>
+</span><span id="line-7"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="o">.</span><span class="n">formatter</span> <span class="o">=</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">SimpleFormatter</span>
 </span></code></pre></div>
 </div>
+<p><strong>%g</strong> is the generation number of a log file. With the configuration above, files are created from cubrid_jdbc0.log to cubrid_jdbc9.log, and the most recent log is always <strong>cubrid_jdbc0.log</strong>. If <strong>limit</strong> is not specified, the size of a log file is not limited.</p>
 <p>The configuration file written as above is specified as follows.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">java</span> <span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">properties</span> <span class="o">-</span><span class="n">jar</span> <span class="n">app</span><span class="o">.</span><span class="n">jar</span>
 </span></code></pre></div>
@@ -530,7 +533,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>The default formatter of <strong>FileHandler</strong> is <strong>XMLFormatter</strong>. If <strong>formatter</strong> is not specified as in the example above, logs are written in XML format instead of line-oriented text.</p></li>
+<li><p>The default formatter of <strong>FileHandler</strong> is <strong>XMLFormatter</strong>. Unless <strong>formatter</strong> is specified as in the example above, logs are written in XML format instead of line-oriented text.</p></li>
 <li><p>A slow query log contains the SQL statement and the bound values as they are. Check the access permission of the log file when setting <strong>cubrid.jdbc.level</strong> to <strong>FINEST</strong>.</p></li>
 <li><p>To separate driver logs from the logs of the application, specify <strong>cubrid.jdbc.handlers</strong> and set <strong>cubrid.jdbc.useParentHandlers</strong> to <strong>false</strong>.</p></li>
 </ul>
@@ -584,7 +587,7 @@
 </span><span id="line-2"><span class="p">...</span>
 </span><span id="line-3"><span class="n">CUBRIDDataSource</span><span class="w"> </span><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
 </span><span id="line-4"><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CUBRIDDataSource</span><span class="p">();</span>
-</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setUrl</span><span class="p">(</span><span class="s">"jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000&amp;logTraceApi=true&amp;logTraceNetwork=true"</span><span class="p">);</span>
+</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setUrl</span><span class="p">(</span><span class="s">"jdbc:cubrid:192.168.0.1:55300:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000"</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
 <p>Call getConnection method to get a connection object from DataSource.</p>
@@ -1541,7 +1544,7 @@ To create a <strong>Connection</strong> object, you must specify information suc
 </span><span id="line-2"><span class="p">...</span>
 </span><span id="line-3">
 </span><span id="line-4"><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CUBRIDDataSource</span><span class="p">();</span>
-</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000&amp;logTraceApi=true&amp;logTraceNetwork=true"</span><span class="p">);</span>
+</span><span id="line-5"><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000"</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
 <p>For details about CUBRIDDataSource, see <a class="reference internal" href="#jdbc-conn-datasource"><span class="std std-ref">Connecting with DataSource</span></a>.</p>
@@ -1563,7 +1566,7 @@ Codes are separated with DataSourceMT.java and DataSourceExample.java.</p>
 </span><span id="line-8"><span class="w">        </span><span class="n">thrCPDSMT</span><span class="w"> </span><span class="n">thread</span><span class="o">[]</span><span class="p">;</span>
 </span><span id="line-9">
 </span><span id="line-10"><span class="w">        </span><span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CUBRIDDataSource</span><span class="p">();</span>
-</span><span id="line-11"><span class="w">        </span><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000&amp;logTraceApi=true&amp;logTraceNetwork=true"</span><span class="p">);</span>
+</span><span id="line-11"><span class="w">        </span><span class="n">ds</span><span class="p">.</span><span class="na">setURL</span><span class="p">(</span><span class="s">"jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&amp;logSlowQueries=true&amp;slowQueryThresholdMillis=1000"</span><span class="p">);</span>
 </span><span id="line-12">
 </span><span id="line-13"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 </span><span id="line-14"><span class="w">            </span><span class="n">thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">thrCPDSMT</span><span class="o">[</span><span class="n">num_thread</span><span class="o">]</span><span class="p">;</span>
@@ -1991,7 +1994,7 @@ You can use the <strong>next</strong> () method to process the next row from the
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Aug 24, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Aug 28, 2026. </p>
 </div>
 </div>
 </footer>

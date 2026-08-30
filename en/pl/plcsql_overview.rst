@@ -147,14 +147,14 @@ SQL statements not included in the above list cannot be used directly,
 but they can be executed using the Dynamic SQL statements described below.
 
 The SELECT statement can be used not only as an execution statement
-but also when :ref:`declaring a cursor <cursor_decl>`
+but also when :ref:`defining a cursor <cursor_def>`
 or in the :ref:`OPEN-FOR <cursor_manipulation>` statement.
 The INTO clause of a SELECT statement can be used to store query results in program variables or OUT parameters.
 In this case, the number of retrieved values must match the number of variables or OUT parameters in the INTO clause,
 and the values must have types that can be assigned to the corresponding variables or OUT parameters.
 
 When using a SELECT statement as an execution statement, the INTO clause must be included.
-However, when using a SELECT statement in a :ref:`cursor declaration <cursor_decl>`
+However, when using a SELECT statement in a :ref:`cursor definition <cursor_def>`
 or an :ref:`OPEN-FOR <cursor_manipulation>` statement, the INTO clause may not be included.
 
 .. code-block:: sql

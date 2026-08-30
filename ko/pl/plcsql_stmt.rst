@@ -1,3 +1,5 @@
+.. _plcsql_statement:
+
 ------------------
 실행문
 ------------------
@@ -34,10 +36,10 @@ BLOCK은 프로시저/함수와 마찬가지로 Exception 처리 구조를 가�
         [ DECLARE <seq_of_declare_specs> ] <body>
 
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
-    <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
-    <seq_of_handlers> ::= <handler> [ <handler> ... ]
-    <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
+    <seq_of_statements> ::= <statement> ; { <statement> ; }...
+    <seq_of_handlers> ::= <handler> { <handler> }...
+    <handler> ::= WHEN <exception_name> [ OR <exception_name> OR ... ] THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
 

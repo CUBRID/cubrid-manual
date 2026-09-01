@@ -33,13 +33,16 @@ Function getting CAS information
 Application log
 ---------------
 
-If you specify the connection URL for printing out the log in the application, you can check the CAS ID which brought an error when an error occurs in the specific query. The following are examples that an application log is written when an error occurs.
+If you configure the application to print out the log, you can check the CAS ID which brought an error when an error occurs in the specific query. For JDBC, the level of **cubrid.jdbc** must be set to **FINE** or lower in **java.util.logging**, and the format of the log is also determined by the **java.util.logging** configuration of the application. The following are examples that an application log is written when an error occurs; the JDBC example is the output with the configuration in :ref:`jdbc-logging-conf` (**SimpleFormatter**).
 
 **JDBC application log**
   
 :: 
  
-    Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logFile=driver_1.log&logSlowQueries=true&slowQueryThresholdMillis=5]. 
+    May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logException
+    FINE: DUMP EXCEPTION
+    [cubrid.jdbc.driver.CUBRIDException]
+    cubrid.jdbc.driver.CUBRIDException: Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&slowQueryThresholdMillis=5].
 
 **CCI application log**
 
@@ -64,13 +67,14 @@ Some examples are as below.
 
 If application log and CAS SQL log show the slow query log together and there is almost no gab between the slow query times of application log and the CAS SQL log, the cause which the query was slow will exist between the broker and DB server. For example, the query execution in the DB server was slow.
 
-There are examples of each application log when a slow query occurs.
+There are examples of each application log when a slow query occurs. The JDBC example is the output with the configuration in :ref:`jdbc-logging-conf` (**SimpleFormatter**).
 
 **JDBC application log** 
  
 :: 
  
-    2013-05-09 16:25:08.831|INFO|SLOW QUERY 
+    May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logSlowQuery
+    FINEST: SLOW QUERY
     [CAS INFO] 
     localhost:33000, 1, 12916 
     [TIME] 
@@ -86,7 +90,9 @@ There are examples of each application log when a slow query occurs.
 
 Slow query information in an application and in a broker is stored in each file when the setting is as following.
      
-*   The slow query information in application is stored in application log file when the value of **logSlowQueries** property in the connection URL is set to **yes** and the value of **slowQueryThresholdMillis** is set; it is stored to the application logfile specified with the **logFile** property (see :func:`cci_connect_with_url` and :ref:`jdbc-connection-conf`).
+*   The slow query information in a CCI application is stored in the application log file specified with the **logFile** property when the value of the **logSlowQueries** property in the connection URL is set to **yes** and the value of **slowQueryThresholdMillis** is set (see :func:`cci_connect_with_url`).
+
+*   The slow query information in a JDBC application is printed when the value of the **logSlowQueries** property in the connection URL is set to **true**, the value of **slowQueryThresholdMillis** is set, and the level of **cubrid.jdbc** is set to **FINEST** in **java.util.logging** (see :ref:`jdbc-logging-conf`).
 
 *   The slow query information in broker is stored in the $CUBRID/log/broker/sql_log directory when **SLOW_LOG** of :ref:`broker-configuration` is set to ON and **LONG_QUERY_TIME** is set.
 

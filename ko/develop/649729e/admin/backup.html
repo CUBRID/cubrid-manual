@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>backupdb | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="backupdb | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="backupdb | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/admin/backup.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">backupdb</span>
+</nav>
+<div id="content" role="main">
+<section id="backupdb">
+<span id="id1"></span><h1>backupdb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#backupdb"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>데이터베이스 백업은 CUBRID 데이터베이스 볼륨, 제어 파일, 로그 파일을 저장하는 작업으로 <strong>cubrid backupdb</strong> 유틸리티 또는 CUBRID 매니저를 이용하여 수행된다. <strong>DBA</strong> 는 저장 매체의 오류 또는 파일 오류 등의 장애에 대비하여 데이터베이스를 정상적으로 복구할 수 있도록 주기적으로 데이터베이스를 백업해야 한다. 이 때 복구 환경은 백업 환경과 동일한 운영체제 및 동일한 버전의 CUBRID가 설치된 환경이어야 한다. 이러한 이유로 데이터베이스를 새로운 버전으로 마이그레이션한 후에는 즉시 새로운 버전의 환경에서 백업을 수행해야 한다. 다만, CUBRID에서 사용하는 LOB(Large Object) 데이터는 데이터베이스 볼륨과 별도의 파일로 관리되므로, backupdb 유틸리티에 의해 자동으로 백업되지 않는다. 따라서 DBA는 데이터베이스 백업 시 LOB 파일이 저장된 디렉터리를 별도로 백업하여야 하며, 복구 시에도 데이터베이스 복구와 함께 해당 LOB 파일을 원래 위치에 복원해야 한다.</p>
+<p><strong>cubrid backupdb</strong> 유틸리티는 모든 데이터베이스 페이지들, 제어 파일들, 데이터베이스를 백업 시와 일치된 상태로 복구하기 위해 필요한 로그 레코드들을 복사한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span><span class="p">[</span><span class="nd">@hostname</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>@<em>hostname</em>: 독립(Standalone) 모드 DB를 백업하는 경우 생략되며, HA 환경에서 백업하는 경우 데이터베이스 이름 뒤에 “@<em>hostname</em>”을 지정한다. <em>hostname</em>은 $CUBRID_DATABASES/databases.txt에 지정된 이름이다. 로컬 서버를 설정하려면 “@localhost”를 지정하면 된다.</p></li>
+</ul>
+<p>다음은 <strong>cubrid backupdb</strong> 유틸리티와 결합할 수 있는 옵션이다. 대소문자가 구분됨을 주의한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">-</span><span class="n">D</span><span class="p">,</span> <span class="o">--</span><span class="n">destination</span><span class="o">-</span><span class="n">path</span><span class="o">=&lt;</span><span class="n">백업</span><span class="o">&gt;</span> <span class="n">볼륨이</span> <span class="n">저장될</span> <span class="n">디렉터리</span> <span class="n">경로</span>
+</span><span id="line-2"><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="o">--</span><span class="n">remove</span><span class="o">-</span><span class="n">archive</span>         <span class="n">불필요한</span> <span class="n">로그</span> <span class="n">파일을</span> <span class="n">지움</span>
+</span><span id="line-3"><span class="o">-</span><span class="n">l</span><span class="p">,</span> <span class="o">--</span><span class="n">level</span><span class="o">=</span><span class="n">LEVEL</span>            <span class="n">백업</span> <span class="n">수준</span>
+</span><span id="line-4"><span class="o">-</span><span class="n">o</span><span class="p">,</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">file</span><span class="o">=&lt;</span><span class="n">파일</span><span class="o">&gt;</span>     <span class="n">자세한</span> <span class="n">백업</span> <span class="n">메시지를</span> <span class="n">파일에</span> <span class="n">출력합니다</span><span class="o">.</span>
+</span><span id="line-5"><span class="o">-</span><span class="n">S</span><span class="p">,</span> <span class="o">--</span><span class="n">SA</span><span class="o">-</span><span class="n">mode</span>                <span class="n">독립</span> <span class="n">모드</span> <span class="n">실행</span>
+</span><span id="line-6"><span class="o">-</span><span class="n">C</span><span class="p">,</span> <span class="o">--</span><span class="n">CS</span><span class="o">-</span><span class="n">mode</span>                <span class="n">클라이언트</span> <span class="n">서버</span> <span class="n">모드</span> <span class="n">실행</span>
+</span><span id="line-7">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">check</span>               <span class="n">데이터베이스의</span> <span class="n">정합성</span> <span class="n">확인</span> <span class="n">작업을</span> <span class="n">수행하지</span> <span class="n">않습니다</span>
+</span><span id="line-8"><span class="o">-</span><span class="n">t</span><span class="p">,</span> <span class="o">--</span><span class="n">thread</span><span class="o">-</span><span class="n">count</span><span class="o">=</span><span class="n">COUNT</span>     <span class="n">백업을</span> <span class="n">수행하는</span> <span class="n">스레드</span> <span class="n">개수</span>
+</span><span id="line-9">    <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">compress</span>            <span class="n">백업</span> <span class="n">볼륨을</span> <span class="n">압축하지</span> <span class="n">않습니다</span>
+</span><span id="line-10">    <span class="o">--</span><span class="n">sleep</span><span class="o">-</span><span class="n">msecs</span><span class="o">=</span><span class="n">N</span>          <span class="n">매</span> <span class="mi">1</span><span class="n">M</span> <span class="n">읽기</span> <span class="n">마다</span> <span class="n">N</span> <span class="n">밀리초를</span> <span class="n">쉽니다</span>
+</span><span id="line-11"><span class="o">-</span><span class="n">k</span><span class="p">,</span> <span class="o">--</span><span class="n">separate</span><span class="o">-</span><span class="n">keys</span>          <span class="n">TDE에</span> <span class="n">사용되는</span> <span class="n">Key</span> <span class="n">File</span> <span class="p">(</span><span class="n">_keys</span><span class="p">)</span><span class="n">을</span> <span class="n">백업볼륨에</span> <span class="n">포함하지</span> <span class="n">않고</span> <span class="n">별개의</span> <span class="n">파일로</span> <span class="n">분리합니다</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-D">
+<span id="cmdoption-backupdb-destination-path"></span><span class="sig-name descname"><span class="pre">-D</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--destination-path</span></span><span class="sig-prename descclassname"><span class="pre">=PATH</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-D" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-D'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>지정된 디렉터리에 백업 파일이 저장되도록 하며, 현재 존재하는 디렉터리가 지정되어야 한다. 그렇지 않으면 지정한 이름의 백업 파일이 생성된다. <strong>-D</strong> 옵션이 지정되지 않으면 백업 파일은 해당 데이터베이스의 위치 정보를 저장하는 파일인 <strong>databases.txt</strong> 에 명시된 로그 디렉터리에 생성된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">D</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">backup</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p><strong>-D</strong> 옵션을 이용하여 현재 디렉터리에 백업 파일이 저장되도록 한다. <strong>-D</strong> 옵션의 인수로 “.”을 입력하면 현재 디렉터리가 지정된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">D</span> <span class="o">.</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-r">
+<span id="cmdoption-backupdb-remove-archive"></span><span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--remove-archive</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-r" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-r'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>활성 로그(active log)가 꽉 차면 활성 로그를 새로운 보관 로그 파일에 기록한다. 이때 백업을 수행하여 백업 볼륨이 생성되면, 백업 시점보다 앞의 보관 로그는 추후 복구 작업에 불필요하다. <strong>-r</strong> 옵션은 백업을 수행한 후에, 추후 복구 작업에 더 이상 사용되지 않을 보관 로그 파일을 제거하는 옵션이다. <strong>-r</strong> 옵션은 백업 시점 이전의 불필요한 보관 로그만 제거하므로 복구 작업에는 영향을 끼치지 않지만, 관리자가 백업 시점 이후의 보관 로그까지 제거하는 경우 전체 복구가 불가능할 수도 있다. 따라서 보관 로그를 제거할 때에는 추후 복구 작업에 필요한 것인지 반드시 검토해야 한다.</p>
+<p><strong>-r</strong> 옵션을 사용하여 증분 백업(백업 수준 1 또는 2)을 수행하는 경우, 추후 데이터베이스의 정상 복구가 불가능할 수도 있으므로 <strong>-r</strong> 옵션은 전체 백업 수행 시에만 사용하는 것을 권장한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">r</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-l">
+<span id="cmdoption-backupdb-level"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--level</span></span><span class="sig-prename descclassname"><span class="pre">=LEVEL</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-l" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-l'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>지정된 백업 수준으로 증분 백업을 수행한다. <strong>-l</strong> 옵션이 지정되지 않으면 전체 백업이 수행된다. 백업 수준에 대한 자세한 내용은 <a class="reference internal" href="#incremental-backup"><span class="std std-ref">증분 백업</span></a> 을 참조한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">l</span> <span class="mi">1</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-o">
+<span id="cmdoption-backupdb-output-file"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-o" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-o'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>대상 데이터베이스의 백업에 관한 진행 정보를 info_backup이라는 파일에 기록한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">o</span> <span class="n">info_backup</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>다음은 info_backup 파일 내용의 예시로서, 스레드 개수, 압축 방법, 백업 시작 시간, 영구 볼륨의 개수, 백업 진행 정보, 백업 완료 시간 등의 정보를 확인할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span> <span class="n">Database</span><span class="p">(</span><span class="n">demodb</span><span class="p">)</span> <span class="n">Full</span> <span class="n">Backup</span> <span class="n">start</span> <span class="p">]</span>
+</span><span id="line-2"><span class="o">-</span> <span class="n">num</span><span class="o">-</span><span class="n">threads</span><span class="p">:</span> <span class="mi">1</span>
+</span><span id="line-3"><span class="o">-</span> <span class="n">compression</span> <span class="n">method</span><span class="p">:</span> <span class="n">NONE</span>
+</span><span id="line-4"><span class="o">-</span> <span class="n">backup</span> <span class="n">start</span> <span class="n">time</span><span class="p">:</span> <span class="n">Mon</span> <span class="n">Jul</span> <span class="mi">21</span> <span class="mi">16</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mi">51</span> <span class="mi">2008</span>
+</span><span id="line-5"><span class="o">-</span> <span class="n">number</span> <span class="n">of</span> <span class="n">permanent</span> <span class="n">volumes</span><span class="p">:</span> <span class="mi">1</span>
+</span><span id="line-6"><span class="o">-</span> <span class="n">backup</span> <span class="n">progress</span> <span class="n">status</span>
+</span><span id="line-7"><span class="o">-----------------------------------------------------------------------------</span>
+</span><span id="line-8"> <span class="n">volume</span> <span class="n">name</span>                  <span class="o">|</span> <span class="c1"># of pages | backup progress status    | done</span>
+</span><span id="line-9"><span class="o">-----------------------------------------------------------------------------</span>
+</span><span id="line-10"> <span class="n">demodb_keys</span>                  <span class="o">|</span>          <span class="mi">1</span> <span class="o">|</span> <span class="c1">######################### | done</span>
+</span><span id="line-11"> <span class="n">demodb_vinf</span>                  <span class="o">|</span>          <span class="mi">1</span> <span class="o">|</span> <span class="c1">######################### | done</span>
+</span><span id="line-12"> <span class="n">demodb</span>                       <span class="o">|</span>      <span class="mi">25000</span> <span class="o">|</span> <span class="c1">######################### | done</span>
+</span><span id="line-13"> <span class="n">demodb_lginf</span>                 <span class="o">|</span>          <span class="mi">1</span> <span class="o">|</span> <span class="c1">######################### | done</span>
+</span><span id="line-14"> <span class="n">demodb_lgat</span>                  <span class="o">|</span>      <span class="mi">25000</span> <span class="o">|</span> <span class="c1">######################### | done</span>
+</span><span id="line-15"><span class="o">-----------------------------------------------------------------------------</span>
+</span><span id="line-16"><span class="c1"># backup end time: Mon Jul 21 16:51:53 2008</span>
+</span><span id="line-17"><span class="p">[</span><span class="n">Database</span><span class="p">(</span><span class="n">demodb</span><span class="p">)</span> <span class="n">Full</span> <span class="n">Backup</span> <span class="n">end</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-S">
+<span id="cmdoption-backupdb-SA-mode"></span><span class="sig-name descname"><span class="pre">-S</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--SA-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-S" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-S'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>독립 모드, 즉 오프라인으로 백업을 수행한다. <strong>-S</strong> 옵션이 생략되면 클라이언트/서버 모드에서 백업이 수행된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">S</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-C">
+<span id="cmdoption-backupdb-CS-mode"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--CS-mode</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-C" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-C'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>클라이언트/서버 모드에서 백업을 수행하며, demodb를 온라인 백업한다. <strong>-C</strong> 옵션이 생략되면 클라이언트/서버 모드에서 백업이 수행된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">C</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-no-check">
+<span class="sig-name descname"><span class="pre">--no-check</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-no-check" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-no-check'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>대상 데이터베이스의 일관성을 체크하지 않고 백업을 수행한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">check</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-t">
+<span id="cmdoption-backupdb-thread-count"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--thread-count</span></span><span class="sig-prename descclassname"><span class="pre">=COUNT</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-t" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-t'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>관리자가 임의로 스레드의 개수를 지정함으로써 병렬 백업을 수행한다. <strong>-t</strong> 옵션의 인수를 지정하지 않더라도 시스템의 CPU 개수만큼 스레드를 자동 부여하여 병렬 백업을 수행한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-no-compress">
+<span class="sig-name descname"><span class="pre">--no-compress</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-no-compress" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-no-compress'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>기본적으로 큐브리드는 백업 볼륨의 크기를 줄이기 위해서, 대상 데이터베이스를 압축한 뒤 저장한다. 백업 파일 압축 실행 시 발생하는 CPU 사용량을 없애고 싶다면, <strong>--no-compress</strong> 옵션을 통해 백업 볼륨을 압축하지 않을 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">compress</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-sleep-msecs">
+<span class="sig-name descname"><span class="pre">--sleep-msecs</span></span><span class="sig-prename descclassname"><span class="pre">=NUMBER</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-sleep-msecs" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-sleep-msecs'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>대상 데이터베이스를 백업하는 도중 쉬는 시간을 설정한다. 단위는 밀리초이며, 기본값은 <strong>0</strong> 이다. 1MB의 파일을 읽을 때마다 설정한 시간만큼 쉰다. 백업 작업이 과도한 디스크 I/O를 유발하기 때문에, 운영 중인 서비스에 백업 작업으로 인한 영향을 줄이고자 할 때 이 옵션이 사용된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">--</span><span class="n">sleep</span><span class="o">-</span><span class="n">msecs</span><span class="o">=</span><span class="mi">5</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-backupdb-k">
+<span id="cmdoption-backupdb-separate-keys"></span><span class="sig-name descname"><span class="pre">-k</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--separate-keys</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-backupdb-k" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-backupdb-k'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>백업 볼륨에 키 파일을 포함하지 않는다. 포함되지 않은 키는 &lt;database_name&gt;_bk&lt;backup_level&gt;_keys 라는 이름을 가진 별도의 파일로 분리된다. 옵션을 주지 않을 경우 기본적으로 키 파일은 백업 볼륨에 포함된다. 키 파일 분리에 대한 자세한 설명은 <a class="reference internal" href="../security.html#tde-enc-backup"><span class="std std-ref">백업 볼륨 암호화</span></a> 을 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">k</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>키 파일은 DB 내부에 저장되어 있는 TDE의 master key를 암/복호화하기 위한 보조 키를 관리하는 파일로 TDE 기능을 사용할 경우  백업시 배업 볼륨에 함께 백업하거나 동일한 저장 매체에 보관하지 말고, 별도의 안전한 방법으로 분리하여 관리를 권장한다. 키 파일이 유실되거나 노출될 경우 TDE 기능 사용한 데이터를 사용할 수 없거나 보안 사고로 이어질 수 있으므로 보관 정책을 명확히 수립하는 것을 권장한다.</p>
+</div>
+</dd></dl>
+<section id="id2">
+<h2>백업 정책 및 방식<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>백업을 진행할 때 고려해야 할 사항은 다음과 같다.</p>
+<ul class="simple">
+<li><p><strong>백업할 대상 데이터 선별</strong></p>
+<ul>
+<li><p>보존 가치가 있는 유효한 데이터인지 판단한다.</p></li>
+<li><p>데이터베이스 전체를 백업할 것인지, 일부만 백업할 것인지 결정한다.</p></li>
+<li><p>데이터베이스와 함께 백업해야 할 다른 파일이 있는지 확인한다.</p></li>
+</ul>
+</li>
+<li><p><strong>백업 방식 결정</strong></p>
+<ul>
+<li><p>증분 백업, 온라인 백업 방식을 결정한다. 부가적으로 압축 백업, 병렬 백업 모드 사용 여부를 결정한다.</p></li>
+<li><p>사용 가능한 백업 도구 및 백업 장비를 준비한다.</p></li>
+</ul>
+</li>
+<li><p><strong>백업 시기 판단</strong></p>
+<ul>
+<li><p>데이터베이스 사용이 가장 적은 시간을 파악한다.</p></li>
+<li><p>보관 로그의 양을 파악한다.</p></li>
+<li><p>백업할 데이터베이스를 이용하는 클라이언트 수를 파악한다.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>온라인 백업</strong></p>
+<p>온라인 백업(또는 핫 백업)은 운영 중인 데이터베이스에 대해 백업을 수행하는 방식으로, 특정 시점의 데이터베이스 이미지의 스냅샷을 제공한다. 운영 중인 데이터베이스를 대상으로 백업을 수행하기 때문에 커밋되지 않은 데이터가 저장될 우려가 있고, 다른 데이터베이스 운영에도 영향을 줄 수 있다.</p>
+<p>온라인 백업을 하려면 <strong>cubrid backupdb -C</strong> 명령어를 사용한다.</p>
+<p><strong>오프라인 백업</strong></p>
+<p>오프라인 백업(또는 콜드 백업)은 정지 상태인 데이터베이스에 대해 백업을 수행하는 방식으로 특정 시점의 데이터베이스 이미지의 스냅샷을 제공한다.</p>
+<p>오프라인 백업을 하려면 <strong>cubrid backupdb -S</strong> 명령어를 사용한다.</p>
+<p id="incremental-backup"><strong>증분 백업</strong></p>
+<p>증분 백업(incremental backup)은 전체 백업에 종속적으로 수행되는 백업으로 먼저 수행된 백업 이후의 변경된 사항만을 선택적으로 백업하는 방식이다. 이는 전체 백업보다 백업 볼륨이 적고, 백업 소요 시간이 짧다는 장점이 있다. CUBRID는 0, 1, 2의 백업 수준을 제공하며, 낮은 백업 수준으로 백업을 수행한 이후에만 순차적으로 다음 수준의 백업을 수행할 수 있다.</p>
+<p>증분 백업을 하려면 <strong>cubrid backupdb -l</strong> <em>LEVEL</em> 명령어를 사용한다.</p>
+<p>다음은 증분 백업에 관한 예시로서, 이를 참조하여 백업 수준에 관해 상세하게 살펴보기로 한다.</p>
+<img alt="../_images/image11.png" src="../_images/image11.png"/>
+<ul>
+<li><p><strong>전체 백업(백업 수준 0)</strong>: 백업 수준 0은 모든 데이터베이스 페이지를 포함하는 전체 백업이다.</p>
+<p>데이터베이스에 최초 시도되는 백업 수준은 당연히 수준 0이 된다. <strong>DBA</strong> 는 복구 상황을 대비하여 정기적으로 전체 백업을 수행해야 하며, 예시에서는 12월 31일과 1월 5일에 전체 백업을 수행하였다.</p>
+</li>
+<li><p><strong>1차 증분 백업(백업 수준 1)</strong>: 백업 수준 1은 수준 0의 전체 백업 이후의 변경 사항만 저장하는 증분 백업으로서, 이를 “1차 증분 백업”이라 한다.</p>
+<p>주의할 점은 예시의 &lt;1-1&gt;, &lt;1-2&gt;, &lt;1-3&gt;과 같이 1차 증분 백업이 연속적으로 시도되더라도 언제나 수준 0의 전체 백업을 기본으로 증분 백업을 수행한다는 점이다.</p>
+<p>만약, 동일 디렉터리에서 백업 파일이 생성된다고 할 때, 1월 1일에 이미 1차 증분 백업 &lt;1-1&gt;이 수행되고, 1월 2일에 또다시 1차 증분 백업 &lt;1-2&gt;가 시도되면, &lt;1-1&gt;에서 생성된 증분 백업 파일을 덮어쓰게 된다. 1월 3일에 1차 증분 백업이 다시 수행되었으므로, 최종 증분 파일은 이 때 생성된다.</p>
+<p>그러나, 1월 1일이나 1월 2일의 상태로 데이터베이스를 복구해야 하는 상황이 발생될 수 있으므로, <strong>DBA</strong> 는 최종 증분 파일로 덮어쓰기 전에 &lt;1-1&gt;과 &lt;1-2&gt; 각각의 증분 백업 파일을 저장 매체에 별도로 보관하는 것이 좋다.</p>
+</li>
+<li><p><strong>2차 증분 백업(백업 수준 2)</strong>: 백업 수준 2는 1차 증분 백업 이후의 변경 사항만 저장하는 증분 백업으로 이를 “2차 증분 백업”이라 한다.</p>
+<p>1차 증분 백업이 선행되어야만 2차 증분 백업을 수행할 수 있으므로, 1월 4일에 시도한 2차 증분 백업 시도는 성공할 것이고, 1월 6일에 시도한 2차 증분 백업 시도는 당연히 허용되지 않을 것이다.</p>
+<p>이러한 백업 수준 0, 1, 2로 생성된 백업 파일들은 모두 데이터베이스를 복구할 때 필요하므로, 2차 증분 백업이 완료된 1월 4일의 상태로 데이터베이스를 복구하기 위해서는 &lt;2-1&gt;에서 생성된 2차 증분 백업 파일, &lt;1-3&gt;에서 생성된 1차 증분 백업 파일, &lt;0-1&gt;에서 생성된 전체 백업 파일이 모두 필요하다. 즉, 완전한 복구를 위해서는 직전에 생성된 증분 백업 파일보다 앞서서 최종으로 생성된 전체 백업 파일이 요구된다.</p>
+</li>
+</ul>
+<p><strong>압축 백업 모드</strong></p>
+<p>압축 백업(compress backup)은 데이터베이스를 압축하여 백업을 수행하기 때문에 백업 볼륨의 크기가 줄어들어 디스크 I/O 비용을 감소시킬 수 있고, 디스크 공간을 절약할 수 있다.</p>
+<p>큐브리드 11.2버전부터는 압축 백업 모드가 기본값으로 설정되어 있다.</p>
+<p><strong>병렬 백업 모드</strong></p>
+<p>병렬 백업 또는 다중 백업(multi-thread backup)은 지정된 스레드 개수만큼 동시 백업을 수행하기 때문에 백업 시간을 크게 단축시켜 준다. 기본적으로 시스템의 CPU 수만큼 스레드를 부여하게 된다.</p>
+<p>병렬 백업을 하려면 <strong>cubrid backupdb -t</strong> | <strong>--thread-count</strong> 명령어를 사용한다.</p>
+</section>
+<section id="id3">
+<h2>백업 파일 관리<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>백업 대상 데이터베이스의 크기에 따라 하나 이상의 백업 파일이 연속적으로 생성될 수 있으며, 각각의 백업 파일의 확장자에는 생성 순서에 따라 000, 001~0xx와 같은 유닛 번호가 순차적으로 부여된다.</p>
+<p><strong>백업 작업 중 디스크 용량 관리</strong></p>
+<p>백업 작업 도중, 백업 파일이 저장되는 디스크 용량에 여유가 없는 경우 백업 작업을 진행할 수 없다는 안내 메시지가 화면에 나타난다. 안내 메시지에는 백업 대상이 되는 데이터베이스의 이름과 경로명, 백업 파일명, 백업 파일의 유닛 번호, 백업 수준이 표시된다. 백업 작업을 계속 진행하려는 관리자는 다음과 같이 옵션을 선택할 수 있다.</p>
+<ul class="simple">
+<li><p>옵션 0: 백업 작업을 더 이상 진행하지 않을 경우, 0을 입력한다.</p></li>
+<li><p>옵션 1: 백업 작업을 진행하기 위해 관리자는 현재 장치에 새로운 디스크를 삽입한 후 1을 입력한다.</p></li>
+<li><p>옵션 2: 백업 작업을 진행하기 위해 관리자는 장치를 변경하거나 백업 파일이 저장되는 디렉터리 경로를 변경한 후 2를 입력한다.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">******************************************************************</span>
+</span><span id="line-2"><span class="n">Backup</span> <span class="n">destination</span> <span class="ow">is</span> <span class="n">full</span><span class="p">,</span> <span class="n">a</span> <span class="n">new</span> <span class="n">destination</span> <span class="ow">is</span> <span class="n">required</span> <span class="n">to</span> <span class="k">continue</span><span class="p">:</span>
+</span><span id="line-3"><span class="n">Database</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">local1</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">demodb</span>
+</span><span id="line-4">     <span class="n">Volume</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">rst1</span>
+</span><span id="line-5">        <span class="n">Unit</span> <span class="n">Num</span><span class="p">:</span> <span class="mi">1</span>
+</span><span id="line-6">    <span class="n">Backup</span> <span class="n">Level</span><span class="p">:</span> <span class="mi">0</span> <span class="p">(</span><span class="n">FULL</span> <span class="n">LEVEL</span><span class="p">)</span>
+</span><span id="line-7"><span class="n">Enter</span> <span class="n">one</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span> <span class="n">options</span><span class="p">:</span>
+</span><span id="line-8"><span class="n">Type</span>
+</span><span id="line-9">   <span class="o">-</span>  <span class="mi">0</span> <span class="n">to</span> <span class="n">quit</span><span class="o">.</span>
+</span><span id="line-10">   <span class="o">-</span>  <span class="mi">1</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">after</span> <span class="n">the</span> <span class="n">volume</span> <span class="ow">is</span> <span class="n">mounted</span><span class="o">/</span><span class="n">loaded</span><span class="o">.</span> <span class="p">(</span><span class="n">retry</span><span class="p">)</span>
+</span><span id="line-11">   <span class="o">-</span>  <span class="mi">2</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">after</span> <span class="n">changing</span> <span class="n">the</span> <span class="n">volume</span><span class="s1">'s directory or device.</span>
+</span><span id="line-12"><span class="o">******************************************************************</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="managing-archive-logs">
+<span id="id4"></span><h2>보관 로그 관리<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#managing-archive-logs" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#managing-archive-logs'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>운영체제의 파일 삭제 명령(rm, del)을 사용하여 보관 로그(archive log)를 임의로 삭제해서는 안 되며, 시스템의 설정, <strong>cubrid backupdb</strong> 유틸리티 또는 서버 프로세스에 의해 보관 로그가 삭제되어야 한다. 보관 로그가 삭제될 수 있는 경우는 다음의 3가지이다.</p>
+<ul>
+<li><p>HA 환경이 아닌 경우(ha_mode=off)</p>
+<p><strong>force_remove_log_archives</strong>  를 yes(기본값)로 설정하면, 최대 <strong>log_max_archives</strong> 개수만큼만 보관 로그가 유지되고 나머지는 자동으로 삭제된다. 단, 가장 오래된 보관 로그 파일에 액티브한 트랜잭션이 있다면 이 트랜잭션이 종료될 때까지 해당 로그 파일이 삭제되지 않는다.</p>
+</li>
+<li><p>HA 환경인 경우(ha_mode=on)</p>
+<p><strong>force_remove_log_archives</strong>를 no로 설정하고, <strong>log_max_archives</strong> 개수를 지정하면 복제 반영 후 자동으로 삭제된다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>ha_mode=on일 때 <strong>force_remove_log_archives</strong>를 yes로 설정하면 복제 반영이 안 된 보관 로그가 삭제될 수 있으므로, 이를 권장하지는 않는다. 다만, 복제 재구축을 감수하더라도 마스터 노드의 디스크 여유 공간을 확보하는 것이 우선된다면 <strong>force_remove_log_archives</strong>를 yes로 설정하고, <strong>log_max_archives</strong>를 적당한 값으로 설정한다.</p>
+</div>
+</li>
+<li><p><strong>cubrid backupdb -r</strong> 옵션을 사용하여 명령을 실행하면 삭제된다. 하지만 HA 환경에서는 -r 옵션을 사용하면 안 된다.</p></li>
+</ul>
+<p>즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 <strong>cubrid.conf</strong>의 <strong>log_max_archives</strong> 값을 작은 값 또는 0으로 설정하되, <strong>force_remove_log_archives</strong>의 값은 HA 환경이면 가급적 no로 설정한다.</p>
+</section>
+</section>
+<section id="restoredb">
+<span id="id5"></span><h1>restoredb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#restoredb"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>데이터베이스 복구는 동일 버전의 CUBRID 환경에서 수행된 백업 작업에 의해 생성된 백업 파일, 활성 로그 및 보관 로그를 이용하여 특정 시점의 데이터베이스로 복구하는 작업이다. 데이터베이스 복구를 진행하려면 <strong>cubrid restoredb</strong> 유틸리티 또는 CUBRID 매니저를 사용한다.</p>
+<p><strong>cubrid restoredb</strong> 유틸리티는 최종 백업을 수행한 이후 모든 활성 로그와 보관 로그의 정보를 이용해 데이터베이스 백업본으로부터 데이터베이스를 복구한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
+</span></code></pre></div>
+</div>
+<p>어떠한 옵션도 지정되지 않은 경우 기본적으로 마지막 커밋 시점까지 데이터베이스가 복구된다. 만약, 마지막 커밋 시점까지 복구하기 위해 필요한 활성 로그/보관 로그 파일이 없다면 마지막 백업 시점까지만 부분 복구된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>다음은 <strong>cubrid restoredb</strong> 유틸리티와 결합할 수 있는 옵션을 정리한 표이다. 대소문자가 구분됨을 주의한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="o">--</span><span class="n">up</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">date</span><span class="o">=</span><span class="n">DATE</span>             <span class="n">주어진</span> <span class="n">시간으로</span> <span class="n">데이터베이스</span> <span class="n">상태를</span> <span class="n">복구</span>
+</span><span id="line-2">    <span class="o">--</span><span class="nb">list</span>                        <span class="n">복구를</span> <span class="n">하지</span> <span class="n">않고</span> <span class="n">모든</span> <span class="n">백업</span> <span class="n">볼륨을</span> <span class="n">나열</span>
+</span><span id="line-3"><span class="o">-</span><span class="n">B</span><span class="p">,</span> <span class="o">--</span><span class="n">backup</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">PATH</span>       <span class="n">백업된</span> <span class="n">볼륨이</span> <span class="n">존재하는</span> <span class="n">디렉터리</span> <span class="n">경로</span>
+</span><span id="line-4"><span class="o">-</span><span class="n">l</span><span class="p">,</span> <span class="o">--</span><span class="n">level</span><span class="o">=</span><span class="n">LEVEL</span>                 <span class="n">복구에</span> <span class="n">사용될</span> <span class="n">백업의</span> <span class="n">레벨</span>
+</span><span id="line-5"><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="o">--</span><span class="n">partial</span><span class="o">-</span><span class="n">recovery</span>            <span class="n">archive</span> <span class="n">로그가</span> <span class="n">존재하지</span> <span class="n">않으면</span> <span class="n">강제로</span> <span class="n">partial</span> <span class="n">recovery</span> <span class="n">수행함</span>
+</span><span id="line-6"><span class="o">-</span><span class="n">o</span><span class="p">,</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>            <span class="n">출력</span> <span class="n">메시지가</span> <span class="n">저장될</span> <span class="n">파일</span>
+</span><span id="line-7"><span class="o">-</span><span class="n">u</span><span class="p">,</span> <span class="o">--</span><span class="n">use</span><span class="o">-</span><span class="n">database</span><span class="o">-</span><span class="n">location</span><span class="o">-</span><span class="n">path</span>  <span class="n">데이터베이스</span> <span class="n">위치</span> <span class="n">파일에</span> <span class="n">설정된</span> <span class="n">경로에</span> <span class="n">데이터베이스</span> <span class="n">볼륨과</span> <span class="n">로그</span> <span class="n">볼륨을</span> <span class="n">복구</span>
+</span><span id="line-8"><span class="o">-</span><span class="n">k</span><span class="p">,</span> <span class="o">--</span><span class="n">keys</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">path</span>              <span class="n">복구에</span> <span class="n">사용될</span> <span class="n">키</span> <span class="n">파일</span> <span class="p">(</span><span class="n">_keys</span><span class="p">)</span><span class="n">의</span> <span class="n">경로</span>
+</span></code></pre></div>
+</div>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-d">
+<span id="cmdoption-restoredb-up-to-date"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--up-to-date</span></span><span class="sig-prename descclassname"><span class="pre">=DATE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-d" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-d'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p><strong>-d</strong> 옵션으로 지정된 날짜-시간까지 데이터베이스를 복구한다. 사용자는 dd-mm-yyyy:hh:mi:ss(예: 14-10-2008:14:10:00)의 형식으로 복구 시점을 직접 지정할 수 있다. 만약 지정한 복구 시점까지 복구하기 위해 필요한 활성 로그/보관 로그 파일이 없다면 마지막 백업 시점까지만 부분 복구된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">d</span> <span class="mi">14</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">2008</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">00</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p><strong>backuptime</strong> 이라는 키워드를 복구 시점으로 지정하면 데이터베이스를 마지막 백업이 수행된 시점까지 복구한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">d</span> <span class="n">backuptime</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-list">
+<span class="sig-name descname"><span class="pre">--list</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-list" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-list'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>대상 데이터베이스의 백업 파일에 관한 정보를 화면에 출력하며 복구는 수행하지 않는다. 이 옵션은 CUBRID 9.3부터 데이터베이스가 운영 중인 경우에도 수행 가능하다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">--</span><span class="nb">list</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>다음은 <strong>--list</strong> 옵션에 의해 출력되는 백업 정보의 예로서, 복구 작업을 수행하기 전에 대상 데이터베이스의 백업 파일이 최초 저장된 경로와 백업 수준을 검증할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">***</span> <span class="n">BACKUP</span> <span class="n">HEADER</span> <span class="n">INFORMATION</span> <span class="o">***</span>
+</span><span id="line-2"><span class="n">Database</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">local1</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">demodb</span>
+</span><span id="line-3">   <span class="n">DB</span> <span class="n">Creation</span> <span class="n">Time</span><span class="p">:</span> <span class="n">Mon</span> <span class="n">Oct</span> <span class="mi">1</span> <span class="mi">17</span><span class="p">:</span><span class="mi">27</span><span class="p">:</span><span class="mi">40</span> <span class="mi">2008</span>
+</span><span id="line-4">   <span class="n">Pagesize</span><span class="p">:</span> <span class="mi">4096</span>
+</span><span id="line-5"><span class="n">Backup</span> <span class="n">Level</span><span class="p">:</span> <span class="mi">1</span> <span class="p">(</span><span class="n">INCREMENTAL</span> <span class="n">LEVEL</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-6">   <span class="n">Start_lsa</span><span class="p">:</span> <span class="mi">513</span><span class="o">|</span><span class="mi">3688</span>
+</span><span id="line-7">   <span class="n">Last_lsa</span><span class="p">:</span> <span class="mi">513</span><span class="o">|</span><span class="mi">3688</span>
+</span><span id="line-8"><span class="n">Backup</span> <span class="n">Time</span><span class="p">:</span> <span class="n">Mon</span> <span class="n">Oct</span> <span class="mi">1</span> <span class="mi">17</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">50</span> <span class="mi">2008</span>
+</span><span id="line-9">   <span class="n">Backup</span> <span class="n">Unit</span> <span class="n">Num</span><span class="p">:</span> <span class="mi">0</span>
+</span><span id="line-10"><span class="n">Release</span><span class="p">:</span> <span class="mf">8.1.0</span>
+</span><span id="line-11">   <span class="n">Disk</span> <span class="n">Version</span><span class="p">:</span> <span class="mi">8</span>
+</span><span id="line-12"><span class="n">Backup</span> <span class="n">Pagesize</span><span class="p">:</span> <span class="mi">4096</span>
+</span><span id="line-13"><span class="n">Zip</span> <span class="n">Method</span><span class="p">:</span> <span class="mi">0</span> <span class="p">(</span><span class="n">NONE</span><span class="p">)</span>
+</span><span id="line-14">   <span class="n">Zip</span> <span class="n">Level</span><span class="p">:</span> <span class="mi">0</span> <span class="p">(</span><span class="n">NONE</span><span class="p">)</span>
+</span><span id="line-15"><span class="n">Previous</span> <span class="n">Backup</span> <span class="n">Level</span><span class="p">:</span> <span class="mi">0</span>
+</span><span id="line-16">   <span class="n">Time</span><span class="p">:</span> <span class="n">Mon</span> <span class="n">Oct</span> <span class="mi">1</span> <span class="mi">17</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">40</span> <span class="mi">2008</span>
+</span><span id="line-17">   <span class="p">(</span><span class="n">start_lsa</span> <span class="n">was</span> <span class="o">-</span><span class="mi">1</span><span class="o">|-</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="line-18"><span class="n">Database</span> <span class="n">Volume</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">local1</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">demodb_keys</span>
+</span><span id="line-19">   <span class="n">Volume</span> <span class="n">Identifier</span><span class="p">:</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="n">Size</span><span class="p">:</span> <span class="mi">65</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mi">1</span> <span class="n">pages</span><span class="p">)</span>
+</span><span id="line-20"><span class="n">Database</span> <span class="n">Volume</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">local1</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">demodb_vinf</span>
+</span><span id="line-21">   <span class="n">Volume</span> <span class="n">Identifier</span><span class="p">:</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">Size</span><span class="p">:</span> <span class="mi">308</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mi">1</span> <span class="n">pages</span><span class="p">)</span>
+</span><span id="line-22"><span class="n">Database</span> <span class="n">Volume</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">local1</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">demodb</span>
+</span><span id="line-23">   <span class="n">Volume</span> <span class="n">Identifier</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Size</span><span class="p">:</span> <span class="mi">2048000</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mi">500</span> <span class="n">pages</span><span class="p">)</span>
+</span><span id="line-24"><span class="n">Database</span> <span class="n">Volume</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">local1</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">demodb_lginf</span>
+</span><span id="line-25">   <span class="n">Volume</span> <span class="n">Identifier</span><span class="p">:</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="n">Size</span><span class="p">:</span> <span class="mi">165</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mi">1</span> <span class="n">pages</span><span class="p">)</span>
+</span><span id="line-26"><span class="n">Database</span> <span class="n">Volume</span> <span class="n">Name</span><span class="p">:</span> <span class="o">/</span><span class="n">local1</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">demodb_bkvinf</span>
+</span><span id="line-27">   <span class="n">Volume</span> <span class="n">Identifier</span><span class="p">:</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">Size</span><span class="p">:</span> <span class="mi">132</span> <span class="nb">bytes</span> <span class="p">(</span><span class="mi">1</span> <span class="n">pages</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p><strong>--list</strong> 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 앞의 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.</p>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-B">
+<span id="cmdoption-restoredb-backup-file-path"></span><span class="sig-name descname"><span class="pre">-B</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--backup-file-path</span></span><span class="sig-prename descclassname"><span class="pre">=PATH</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-B" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-B'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>백업 파일이 위치하는 디렉터리를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 시스템은 데이터베이스 위치 정보 파일인 <strong>databases.txt</strong> 에 지정된 <strong>log-path</strong> 디렉터리에서 대상 데이터베이스를 백업했을 때 생성된 백업 정보 파일(<em>dbname</em> <strong>_bkvinf</strong>)을 검색하고, 백업 정보 파일에 지정된 디렉터리 경로에서 백업 파일을 찾는다. 그러나, 백업 정보 파일이 손상되거나 백업 파일의 위치 정보가 삭제된 경우라면 시스템이 백업 파일을 찾을 수 없으므로, 관리자가 <strong>-B</strong> 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 직접 지정해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">B</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">backup</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>데이터베이스의 백업 파일이 현재 디렉터리에 있는 경우, 관리자는 <strong>-B</strong> 옵션을 이용하여 백업 파일이 위치하는 디렉터리를 지정할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">B</span> <span class="o">.</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-l">
+<span id="cmdoption-restoredb-level"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--level</span></span><span class="sig-prename descclassname"><span class="pre">=LEVEL</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-l" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-l'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>대상 데이터베이스의 백업 수준(0, 1, 2)을 지정하여 복구를 수행한다. 백업 수준에 대한 자세한 내용은 <a class="reference internal" href="#incremental-backup"><span class="std std-ref">증분 백업</span></a> 을 참조한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">l</span> <span class="mi">1</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-p">
+<span id="cmdoption-restoredb-partial-recovery"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--partial-recovery</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-p" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-p'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>사용자 응답을 요청하지 않고 부분 복구를 수행하라는 명령이다. 백업 시점 이후에 기록된 활성 로그나 보관 로그가 완전하지 않을 때 기본적으로 시스템은 로그 파일이 필요하다는 것을 알리면서 실행 옵션을 입력하라는 요청 메시지를 출력하는데, <strong>-p</strong> 옵션을 이용하면 이러한 요청 메시지의 출력 없이 직접 부분 복구를 수행할 수 있다. 따라서, <strong>-p</strong> 옵션을 이용하여 복구를 수행하면 언제나 마지막 백업 시점까지 데이터가 복구된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">p</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p><strong>-p</strong> 옵션이 지정되지 않은 경우, 사용자에게 실행 옵션을 선택하라는 요청 메시지는 다음과 같다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">***********************************************************</span>
+</span><span id="line-2"><span class="n">Log</span> <span class="n">Archive</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">test</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">demodb_lgar002</span>
+</span><span id="line-3"> <span class="ow">is</span> <span class="n">needed</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">normal</span> <span class="n">execution</span><span class="o">.</span>
+</span><span id="line-4">   <span class="n">Type</span>
+</span><span id="line-5">   <span class="o">-</span>  <span class="mi">0</span> <span class="n">to</span> <span class="n">quit</span><span class="o">.</span>
+</span><span id="line-6">   <span class="o">-</span>  <span class="mi">1</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">without</span> <span class="n">present</span> <span class="n">archive</span><span class="o">.</span> <span class="p">(</span><span class="n">Partial</span> <span class="n">recovery</span><span class="p">)</span>
+</span><span id="line-7">   <span class="o">-</span>  <span class="mi">2</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">after</span> <span class="n">the</span> <span class="n">archive</span> <span class="ow">is</span> <span class="n">mounted</span><span class="o">/</span><span class="n">loaded</span><span class="o">.</span>
+</span><span id="line-8">   <span class="o">-</span>  <span class="mi">3</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">after</span> <span class="n">changing</span> <span class="n">location</span><span class="o">/</span><span class="n">name</span> <span class="n">of</span> <span class="n">archive</span><span class="o">.</span>
+</span><span id="line-9"><span class="o">***********************************************************</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>옵션 0: 복구 작업을 더 이상 진행하지 않을 경우, 0을 입력한다.</p></li>
+<li><p>옵션 1: 로그 파일 없이 부분 복구를 진행하려면, 1을 입력한다.</p></li>
+<li><p>옵션 2: 복구 작업을 진행하기 위해 관리자는 현재 장치에 보관 로그를 위치시킨 후 2를 입력한다.</p></li>
+<li><p>옵션 3: 복구 작업을 계속하기 위해 관리자는 로그 위치를 변경한 후 3을 입력한다.</p></li>
+</ul>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-o">
+<span id="cmdoption-restoredb-output-file"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-o" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-o'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>대상 데이터베이스의 복구에 관한 진행 정보를 info_restore라는 파일에 기록하는 명령이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">o</span> <span class="n">info_restore</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-u">
+<span id="cmdoption-restoredb-use-database-location-path"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--use-database-location-path</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-u" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-u'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>데이터베이스 위치 정보 파일(<strong>databases.txt</strong>)에 지정된 경로에서 대상 데이터베이스를 복구하는 구문이다. <strong>-u</strong> 옵션은 A 서버에서 백업을 수행하고 B 서버에서 백업 파일을 복구하고자 할 때 사용할 수 있는 유용한 옵션이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">u</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-restoredb-k">
+<span id="cmdoption-restoredb-keys-file-path"></span><span class="sig-name descname"><span class="pre">-k</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--keys-file-path</span></span><span class="sig-prename descclassname"><span class="pre">=PATH</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoredb-k" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoredb-k'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>대상 데이터베이스 복구 시 필요한 키 파일을 지정한다. 올바른 키 파일이 주어지지 않았을 경우 복구에 실패한다. 옵션을 지정해주지 않을 경우 적절한 키 파일을 탐색하여 사용한다. 이에 대한 자세한 내용은 <a class="reference internal" href="../security.html#tde-enc-backup"><span class="std std-ref">백업 볼륨 암호화</span></a> 을 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">k</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">backup_keys</span><span class="o">/</span><span class="n">demodb_bk1_keys</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</dd></dl>
+<p>데이터베이스 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 restoredb 에러 로그 파일에 로그 회복(log recovery) 시작 시간과 종료 시간에 대한 NOTIFICATION 메시지를 출력하여, 해당 작업의 소요 시간을 확인할 수 있다. 해당 메시지에는 적용(redo)해야할 로그의 개수와 로그 페이지 개수가 함께 기록된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">14</span><span class="o">/</span><span class="mi">13</span> <span class="mi">21</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="mf">04.059</span> <span class="o">-</span> <span class="n">NOTIFICATION</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">log_recovery</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">748</span> <span class="n">CODE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1128</span> <span class="n">Tran</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">EID</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="line-2"><span class="n">Log</span> <span class="n">recovery</span> <span class="ow">is</span> <span class="n">started</span><span class="o">.</span> <span class="n">The</span> <span class="n">number</span> <span class="n">of</span> <span class="n">log</span> <span class="n">records</span> <span class="n">to</span> <span class="n">be</span> <span class="n">applied</span><span class="p">:</span> <span class="mf">96916.</span> <span class="n">Log</span> <span class="n">page</span><span class="p">:</span> <span class="mi">343</span> <span class="o">~</span> <span class="mf">5104.</span>
+</span><span id="line-3"><span class="o">.....</span>
+</span><span id="line-4"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">14</span><span class="o">/</span><span class="mi">13</span> <span class="mi">21</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="mf">05.170</span> <span class="o">-</span> <span class="n">NOTIFICATION</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">log_recovery</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">843</span> <span class="n">CODE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1129</span> <span class="n">Tran</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">EID</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span id="line-5"><span class="n">Log</span> <span class="n">recovery</span> <span class="ow">is</span> <span class="n">finished</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<section id="id6">
+<h2>복구 정책과 절차<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>데이터베이스를 복구할 때 고려해야 할 사항은 다음과 같다.</p>
+<ul class="simple">
+<li><p><strong>백업 파일 준비</strong></p>
+<ul>
+<li><p>백업 파일 및 로그 파일이 저장된 디렉터리를 파악한다.</p></li>
+<li><p>증분 백업으로 대상 데이터베이스가 백업된 경우, 각 백업 수준에 따른 백업 파일이 존재하는지를 파악한다.</p></li>
+<li><p>백업이 수행된 CUBRID 데이터베이스의 버전과 복구가 이루어질 CUBRID 데이터베이스 버전이 동일한지를 파악한다.</p></li>
+</ul>
+</li>
+<li><p><strong>복구 방식 결정</strong></p>
+<ul>
+<li><p>부분 복구인지 전체 복구인지를 결정한다.</p></li>
+<li><p>증분 백업 파일을 이용한 복구인지를 결정한다.</p></li>
+<li><p>사용 가능한 복구 도구 및 복구 장비를 준비한다.</p></li>
+</ul>
+</li>
+<li><p><strong>복구 시점 판단</strong></p>
+<ul>
+<li><p>데이터베이스 서버가 종료된 시점을 파악한다.</p></li>
+<li><p>장애 발생 전에 이루어진 마지막 백업 시점을 파악한다.</p></li>
+<li><p>장애 발생 전에 이루어진 마지막 커밋 시점을 파악한다.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>데이터베이스 복구 절차</strong></p>
+<p>다음은 백업 및 복구 작업의 절차를 시간별로 예시한 것이다.</p>
+<ol class="arabic simple">
+<li><p>2008/8/14 04:30분에 운영이 중단된 <em>demodb</em> 를 전체 백업을 수행한다.</p></li>
+<li><p>2008/8/14 10:00분에 운영 중인 <em>demodb</em> 를 1차 증분 백업 수행한다.</p></li>
+<li><p>2008/8/14 15:00분에 운영 중인 <em>demodb</em> 를 1차 증분 백업을 수행한다. 2번의 1차 증분 백업 파일을 덮어쓴다.</p></li>
+<li><p>2008/8/14 15:30분에 시스템 장애가 발생하였고, 관리자는 <em>demodb</em> 의 복구 작업을 준비한다. 장애 발생 전의 마지막 커밋 시점이 15:25분이므로 이를 복구 시점으로 지정한다.</p></li>
+<li><p>관리자는 1.에서 생성된 전체 백업 파일 및 3.에서 생성된 1차 증분 백업 파일, 활성 로그 및 보관 로그를 준비하여 마지막 커밋 시점인 15:25 시점까지 <em>demodb</em> 를 복구한다.</p></li>
+</ol>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Time</p></th>
+<th class="head"><p>Command</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2008/8/14 04:25</p></td>
+<td><p>cubrid server stop demodb</p></td>
+<td><p><em>demodb</em>
+운영을 중단한다.</p></td>
+</tr>
+<tr class="row-odd"><td><p>2008/8/14 04:30</p></td>
+<td><p>cubrid backupdb -S -D /home/backup -l 0
+demodb</p></td>
+<td><p>오프라인에서
+<em>demodb</em>
+를 전체 백업하여 지정된 디렉터리에 백업 파일을 생성한다.</p></td>
+</tr>
+<tr class="row-even"><td><p>2008/8/14 05:00</p></td>
+<td><p>cubrid server start demodb</p></td>
+<td><p><em>demodb</em>
+운영을 시작한다.</p></td>
+</tr>
+<tr class="row-odd"><td><p>2008/8/14 10:00</p></td>
+<td><p>cubrid backupdb -C -D /home/backup -l 1
+demodb</p></td>
+<td><p>온라인에서
+<em>demodb</em>
+를 1차 증분 백업하여 지정된 디렉터리에 백업 파일을 생성한다.</p></td>
+</tr>
+<tr class="row-even"><td><p>2008/8/14 15:00</p></td>
+<td><p>cubrid backupdb -C -D /home/backup -l 1
+demodb</p></td>
+<td><p>온라인에서
+<em>demodb</em>
+를 1차 증분 백업하여 지정된 디렉터리에 백업 파일을 생성한다.
+10:00에 생성된 1차 증분 백업파일을 덮어쓴다.</p></td>
+</tr>
+<tr class="row-odd"><td><p>2008/8/14 15:30</p></td>
+<td></td>
+<td><p>시스템 장애가 발생한 시각이다.</p></td>
+</tr>
+<tr class="row-even"><td><p>2008/8/14 15:40</p></td>
+<td><p>cubrid restoredb -l 1 -d 08/14/2008:15:25:00
+demodb</p></td>
+<td><p>전체 백업 파일, 1차 증분 백업 파일, 활성 로그 및 보관 로그를
+기반으로 <em>demodb</em> 를 복구한다. 전체 백업 파일, 1차 증분된
+백업 파일, 활성 로그 및 보관 로그에 의해 15:25 시점까지 복구된다.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id7">
+<h2>다른 서버로의 데이터베이스 복구<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>다음은 <em>A</em> 서버에서 <em>demodb</em> 를 백업하고, 백업된 파일을 기반으로 <em>B</em> 서버에서 <em>demodb</em> 를 복구하는 방법이다.</p>
+<p><strong>백업 환경과 복구 환경</strong></p>
+<p><em>A</em> 서버의 /home/cubrid/db/demodb 디렉터리에서 <em>demodb</em> 를 백업하고, <em>B</em> 서버의 /home/cubrid/data/demodb 디렉터리에 <em>demodb</em> 를 복구하는 것으로 가정한다.</p>
+<img alt="../_images/image12.png" src="../_images/image12.png"/>
+<ol class="arabic">
+<li><p>A 서버에서 백업</p>
+<p><em>A</em> 서버에서 <em>demodb</em> 를 백업한다. 이보다 먼저 백업을 수행하였다면 이후 변경된 부분만 증분 백업을 수행할 수 있다. 백업 파일이 생성되는 디렉터리는 <strong>-D</strong> 옵션에 의해 지정하지 않으면, 기본적으로 로그 볼륨이 저장되는 위치에 생성된다. 다음은 권장되는 옵션을 사용한 백업 명령이며, 옵션에 관한 보다 자세한 내용은 <a class="reference internal" href="#backupdb"><span class="std std-ref">backupdb</span></a>를 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">z</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>B 서버에서 데이터베이스 위치 정보 파일 편집</p>
+<p>동일한 서버에서 백업 및 복구 작업이 이루어지는 일반적인 시나리오와는 달리, 타 서버 환경에서 백업 파일을 복구하는 시나리오에서는 <em>B</em> 서버의 데이터베이스 위치 정보 파일(<strong>databases.txt</strong>)에서 데이터베이스를 복구할 위치 정보를 추가해야 한다. 위 그림에서는 <em>B</em> 서버(호스트명은 pmlinux)의 /home/cubrid/data/demodb 디렉터리에 <em>demodb</em> 를 복구하는 것을 가정하였으므로, 이에 따라 데이터베이스 위치 정보 파일을 편집하고, 해당 디렉터리를 <em>B</em> 서버에서 생성한다.</p>
+<p>데이터베이스 위치 정보는 한 라인으로 작성하고, 각 항목은 공백으로 구분한다. 한 라인은 [데이터베이스명] [데이터볼륨경로] [호스트명] [로그볼륨경로]의 형식으로 작성한다. 따라서 다음과 같이 <em>demodb</em> 의 위치 정보를 작성한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">demodb</span> <span class="n">pmlinux</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>B 서버로 백업 파일 전송</p>
+<p>복구를 위해서는 대상 데이터베이스의 백업 파일이 필수적으로 준비되어야 한다. 따라서, <em>A</em> 서버에서 생성된 백업 파일(예: demodb_bk0v000)을 <em>B</em> 서버에 전송한다. 즉, <em>B</em> 서버의 임의 디렉터리(예: /home/cubrid/temp)에는 백업 파일이 위치해야 한다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>백업 이후에 현재 시점까지 모두 복구하려면 백업 이후의 로그, 즉 활성 로그(예: demodb_lgat)와 보관 로그(예: demodb_lgar000)까지 모두 추가적으로 복사해야 된다. 활성 로그와 보관 로그는 복구될 데이터베이스의 로그 디렉터리, 즉 $CUBRID/databases/databases.txt 파일에서 명시한 로그 파일의 디렉터리(예: $CUBRID/databases/demodb/log)에 위치해야 한다. 하지만 백업 파일의 위치는 -D 옵션으로 명시할 수 있기 때문에 다른 위치에 있어도 된다.</p>
+<p>또한, 백업 이후 추가된 로그를 반영하려면 보관 로그 파일이 삭제되기 전에 복사해야 하는데, 보관 로그의 삭제 관련 시스템 파라미터인 log_max_archives의 기본값이 0으로 설정되어 있으므로 백업 이후 보관 로그 파일이 삭제될 수 있다. 이러한 상황을 방지하기 위해, log_max_archives의 값을 적당히 크게 설정하여야 한다. <a class="reference internal" href="config.html#log-max-archives"><span class="std std-ref">log_max_archives</span></a>를 참고한다.</p>
+</div>
+</li>
+<li><p>B 서버에서 복구</p>
+<p><em>B</em> 서버로 전송한 백업 파일이 있는 디렉터리에서 <strong>cubrid restoredb</strong> 유틸리티를 호출하여 데이터베이스 복구 작업을 수행한다. <strong>-u</strong> 옵션에 의해 <strong>databases.txt</strong> 에 지정된 디렉터리 경로에 <em>demodb</em> 가 복구된다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">u</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+<p>다른 위치에서 <strong>cubrid restoredb</strong> 유틸리티를 호출하려면, 다음과 같이 <strong>-B</strong> 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 지정해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">restoredb</span> <span class="o">-</span><span class="n">u</span> <span class="o">-</span><span class="n">B</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">temp</span> <span class="n">demodb</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><ul>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">백업 정책 및 방식</a></li>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">백업 파일 관리</a></li>
+<li><a :data-current="activeSection === '#managing-archive-logs'" class="reference internal" href="#managing-archive-logs">보관 로그 관리</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#restoredb'" class="reference internal" href="#restoredb">restoredb</a><ul>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">복구 정책과 절차</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">다른 서버로의 데이터베이스 복구</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 01, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

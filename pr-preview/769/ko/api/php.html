@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>PHP 드라이버 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="PHP 드라이버 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="PHP 드라이버 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="pdo.html" rel="next" title="PDO 드라이버"/>
+<link href="cciapi.html" rel="prev" title="CCI API 레퍼런스"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/api/php.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">API 레퍼런스</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">PHP 드라이버</span>
+</nav>
+<div id="content" role="main">
+<section id="php">
+<h1>PHP 드라이버<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#php"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>CUBRID PHP 드라이버는 PHP로 작성한 응용 프로그램에서 CUBRID 데이터베이스를 사용할 수 있는 API를 제공한다. CUBRID PHP 드라이버가 제공하는 모든 함수는 앞에 <strong>cubrid_</strong> 가 붙는다 (예: cubrid_connect(), cubrid_connect_with_url()).</p>
+<p>공식 CUBRID PHP 드라이버는 PECL 패키지로 제공한다. PECL은 PHP 확장 저장소로, PHP 확장 개발 및 다운로드를 위한 편의 기능을 제공한다. PECL에 대한 자세한 내용은 <a class="reference external" href="https://pecl.php.net/">https://pecl.php.net/</a> 을 참고한다.</p>
+<p>CUBRID PHP 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 <strong>CCI_DEFAULT_AUTOCOMMIT</strong> 과 같은 설정 파라미터에 영향을 받는다.</p>
+<section id="id1">
+<h2>PHP 설치 및 설정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id1'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>가장 쉽고 빠르게 응용 프로그램을 시스템에 설치하려면 Ubuntu에 CUBRID와 Apache, PHP를 설치한다.</p>
+<section id="linux">
+<h3>Linux<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>기본 환경</strong></p>
+<ul class="simple">
+<li><p>운영체제: Linux: 32 비트 또는 64비트</p></li>
+<li><p>웹 서버: Apache</p></li>
+<li><p>PHP: 5.2 또는 5.3( <a class="reference external" href="https://www.php.net/downloads.php">https://www.php.net/downloads.php</a> )</p></li>
+<li><p>PHP: 5.x, 또는 7.x (<a class="reference external" href="https://www.php.net/downloads.php">https://www.php.net/downloads.php</a>)</p></li>
+<li><p>편의상 최신 PHP 5.6.x, 7.1.x 및 7.4.x를 참조 바랍니다.</p></li>
+</ul>
+<p><strong>PECL을 이용한 설치</strong></p>
+<p><strong>PECL</strong> 이 설치되어 있다면, <strong>PECL</strong> 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PHP 드라이버를 설치할 수 있다.</p>
+<ol class="arabic">
+<li><p>다음과 같은 명령어를 입력하여 CUBRID PHP 드라이버 최신 버전을 설치한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">pecl</span> <span class="n">install</span> <span class="n">cubrid</span>
+</span></code></pre></div>
+</div>
+<p>하위 버전의 드라이버가 필요하면 다음과 같이 설치할 버전을 지정할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">pecl</span> <span class="n">install</span> <span class="n">cubrid</span><span class="o">-</span><span class="mf">10.1.0.0002</span>
+</span></code></pre></div>
+</div>
+<p>설치가 진행되는 중에 <strong>CUBRID base install dir autodetect :</strong> 라는 프롬프트가 표시된다. 설치를 원활하게 진행하기 위해서 CUBRID를 설치한 디렉터리의 전체 경로를 입력한다. 예를 들어 CUBRID가 <strong>/home/cubridtest/CUBRID</strong> 디렉터리에 설치되었다면, <strong>/home/cubridtest/CUBRID</strong> 를 입력한다.</p>
+</li>
+<li><p>설정 파일을 수정한다.</p>
+<p>CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 <strong>cubrid.ini</strong> 파일을 생성하고 내용에 <strong>extension=cubrid.so</strong> 를 입력하여 <strong>/etc/php.d</strong> 디렉터리에 저장한다.</p>
+<p>다른 운영체제를 사용한다면 <strong>php.ini</strong> 파일 끝에 다음 두 줄의 내용을 추가한다. <strong>php.ini</strong> 파일의 기본 위치는 <strong>/etc/php5/apache2</strong> 또는 <strong>/etc</strong> 이다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span><span class="o">=</span><span class="n">cubrid</span><span class="o">.</span><span class="n">so</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>변경된 내용을 반영하려면 웹 서버를 재시작한다.</p></li>
+</ol>
+<p><strong>apt-get을 이용하여 Ubuntu에 설치</strong></p>
+<ol class="arabic">
+<li><p>PHP가 설치되어 있지 않다면, 다음 명령어로 PHP를 설치한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">php5</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="ow">or</span> <span class="k">for</span> <span class="n">PHP</span> <span class="n">version</span> <span class="mi">7</span>
+</span><span id="line-4"><span class="n">sudo</span> <span class="n">add</span><span class="o">-</span><span class="n">apt</span><span class="o">-</span><span class="n">repository</span> <span class="n">ppa</span><span class="p">:</span><span class="n">ondrej</span><span class="o">/</span><span class="n">php</span>
+</span><span id="line-5"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+</span><span id="line-6"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">php7</span><span class="mf">.1</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p><strong>apt-get</strong> 를 이용하여 CUBRID PHP 드라이버를 설치하려면, Ubuntu가 패키지 다운로드 위치를 알고 인덱스를 업데이트하도록 CUBRID 저장소를 추가해야 한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">add</span><span class="o">-</span><span class="n">apt</span><span class="o">-</span><span class="n">repository</span> <span class="n">ppa</span><span class="p">:</span><span class="n">cubrid</span><span class="o">/</span><span class="n">cubrid</span>
+</span><span id="line-2"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>다음과 같이 드라이버를 설치한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">php5</span><span class="o">-</span><span class="n">cubrid</span>
+</span></code></pre></div>
+</div>
+<p>최신 버전보다 하위 버전을 설치하려면 다음과 같이 버전을 명시한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">php5</span><span class="o">-</span><span class="n">cubrid</span><span class="o">-</span><span class="mf">8.3.1</span>
+</span></code></pre></div>
+</div>
+<p>위 명령어는 <strong>cubrid.so</strong> 드라이버를 <strong>/usr/local/lib/php/*</strong> 디렉터리에 복사하고 다음과 같은 설정을 <strong>/etc/php.ini</strong> 파일에 추가한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">PHP_CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span><span class="o">=</span><span class="n">cubrid</span><span class="o">.</span><span class="n">so</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>PHP가 모듈을 읽어들이도록 Apache 서버를 재시작한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">service</span> <span class="n">apache2</span> <span class="n">restart</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="windows">
+<h3>Windows<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#windows" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#windows'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>기본 환경</strong></p>
+<ul class="simple">
+<li><p>CUBRID: 9.3.x 이상</p></li>
+<li><p>운영체제: Windows 32 비트 또는 64비트</p></li>
+<li><p>웹 서버: Apache 또는 IIS</p></li>
+<li><p>PHP: 5.6.x, 7.1.x 또는 7.4.x(<a class="reference external" href="https://windows.php.net/download/">https://windows.php.net/download/</a>)</p></li>
+<li><p>PHP 7.1.x 또는 7.4.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.</p></li>
+</ul>
+<p><strong>CUBRID PHP API Installer를 사용한 설치</strong></p>
+<p>CUBRID PHP API Installer는 자동으로 CUBRID와 PHP의 버전을 인식하여 해당 버전에 맞는 드라이버를 설치하는 Windows 설치 관리자이다. 드라이버를 기본 PHP 확장 디렉터리( <strong>C:\Program Files\PHP\ext</strong> )에 복사하고 <strong>php.ini</strong> 파일을 수정한다. 여기에서는 CUBRID PHP API Installer를 이용하여 Windows에 CUBRID PHP 확장을 설치하는 방법을 설명한다.</p>
+<p>CUBRID PHP 드라이버를 제거하려면 CUBRID PHP API Installer를 다시 실행하여 프로그램 제거를 선택한다. 이 방법으로 CUBRID PHP 드라이버를 제거하면 설치할 때 발생한 모든 변경 사항이 복구된다.</p>
+<p>CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스템 변수의 <strong>Path</strong> 에 추가되어 있어야 한다.</p>
+<ol class="arabic">
+<li><p>다음 주소에서 CUBRID PHP API Installer를 다운로드한다. 아래 주소에서는 모든 CUBRID 버전에 대한 CUBRID PHP 드라이버를 제공한다.</p>
+<p><a class="reference external" href="https://www.cubrid.org/downloads#php">https://www.cubrid.org/downloads#php</a></p>
+</li>
+<li><p>CUBRID PHP API Installer를 실행하고 [다음]을 클릭하여 설치를 진행한다.</p></li>
+<li><p>BSD 라이선스 조항에 동의하고 [다음]을 클릭한다.</p></li>
+<li><p>CUBRID PHP API Installer를 설치할 경로를 지정하고 [다음]을 클릭한다. PHP를 설치한 경로가 아니라 예를 들면 <strong>C:\Program Files\CUBRID PHP API</strong> 와 같은 새로운 경로를 입력해야 한다.</p></li>
+<li><p>Windows [시작] 메뉴의 폴더 이름을 지정하고 [설치]를 클릭한다. 설치에 실패하면 아래의 <strong>환경 변수 설정</strong> 을 참고한다.</p></li>
+<li><p>설치를 마치면 [마침]을 클릭한다.</p></li>
+<li><p>변경 내용을 반영하기 위해서 웹 서버를 재시작한다. 제대로 설치되었는지 확인하려면 phpinfo()를 실행한다.</p>
+<img alt="../_images/image56.png" src="../_images/image56.png"/>
+</li>
+</ol>
+<p><strong>시스템 환경 변수 설정</strong></p>
+<p>설치 중에 오류가 발생하면 시스템 환경 변수가 제대로 설정되었는지 확인해야 한다. CUBRID를 설치하면 자동으로 설치 경로가 시스템 환경 변수 <strong>Path</strong> 에 추가된다. 시스템 환경 변수가 제대로 설치되었는지 확인하려면, Windows의 [시작] &gt; [모든 프로그램] &gt; [보조프로그램] &gt; [명령 프롬프트]를 실행하고 다음 작업을 수행한다.</p>
+<ol class="arabic">
+<li><p>다음 명령을 입력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">php</span> <span class="o">--</span><span class="n">version</span>
+</span></code></pre></div>
+</div>
+<p>시스템 환경 변수가 제대로 설정되었다면 아래와 같이 PHP 버전을 확인할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">PHP</span> <span class="mf">5.6.30</span> <span class="p">(</span><span class="n">cli</span><span class="p">)</span> <span class="p">(</span><span class="n">built</span><span class="p">:</span> <span class="n">Jun</span> <span class="mi">13</span> <span class="mi">2017</span> <span class="mi">16</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">30</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">또는</span> <span class="mf">7.1</span><span class="o">.</span><span class="n">x</span>
+</span><span id="line-3"><span class="n">PHP</span> <span class="mf">7.1.7</span> <span class="p">(</span><span class="n">cli</span><span class="p">)</span> <span class="p">(</span><span class="n">built</span><span class="p">:</span> <span class="n">Aug</span>  <span class="mi">3</span> <span class="mi">2017</span> <span class="mi">10</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">35</span><span class="p">)</span> <span class="p">(</span> <span class="n">NTS</span> <span class="p">)</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Administrator</span><span class="o">&gt;</span><span class="n">php</span> <span class="o">--</span><span class="n">version</span>
+</span><span id="line-6"><span class="n">PHP</span> <span class="mf">5.6.30</span> <span class="p">(</span><span class="n">cli</span><span class="p">)</span> <span class="p">(</span><span class="n">built</span><span class="p">:</span> <span class="n">Jan</span> <span class="mi">18</span> <span class="mi">2017</span> <span class="mi">19</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="mi">28</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>다음 명령을 입력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="o">--</span><span class="n">version</span>
+</span></code></pre></div>
+</div>
+<p>시스템 환경 변수가 제대로 설정되었다면 아래와 같이 CUBRID 버전을 확인할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Administrator</span><span class="o">&gt;</span><span class="n">cubrid</span> <span class="o">--</span><span class="n">version</span>
+</span><span id="line-2"><span class="n">cubrid</span><span class="o">.</span><span class="n">exe</span> <span class="p">(</span><span class="n">CUBRID</span> <span class="n">utilities</span><span class="p">)</span>
+</span><span id="line-3"><span class="n">CUBRID</span> <span class="mf">9.3</span> <span class="p">(</span><span class="mf">9.3.8.0003</span><span class="p">)</span> <span class="p">(</span><span class="mi">64</span><span class="n">bit</span> <span class="n">release</span> <span class="n">build</span> <span class="k">for</span> <span class="n">Windows_NT</span><span class="p">)</span> <span class="p">(</span><span class="n">Apr</span> <span class="mi">11</span> <span class="mi">2017</span> <span class="mi">11</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">08</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+<p>위와 같은 결과가 출력되지 않는다면 PHP와 CUBRID가 설치되지 않았을 가능성이 높으므로 PHP와 CUBRID를 다시 설치한다. 만약 다시 설치해도 시스템 환경 변수가 제대로 설정되지 않는다면, 다음과 같이 수동으로 시스템 환경 변수를 설정한다.</p>
+<ol class="arabic simple">
+<li><p>[내 컴퓨터]를 마우스 오른쪽 버튼으로 클릭하여 [속성]을 선택하면 [시스템 속성] 대화 상자가 나타난다.</p></li>
+<li><p>[고급] 탭을 선택하고 [환경 변수]를 클릭한다.</p></li>
+<li><p>[시스템 변수]에서 <strong>Path</strong> 를 선택하고 [편집]을 클릭한다.</p></li>
+<li><p>변수 값에 CUBRID와 PHP의 설치 경로를 추가한다. 각 경로는 세미콜론(;)으로 구분한다. 만약 PHP를 <strong>C:\Program Files\PHP</strong> 디렉터리에 설치하고 CUBRID를 <strong>C:\CUBRID\bin</strong> 디렉터리에 설치했다면, 변수 값의 끝에 <strong>C:\CUBRID\bin;C:\Program Files\PHP</strong> 를 덧붙인다.</p></li>
+<li><p>[확인]을 클릭한다.</p></li>
+<li><p>앞에서 설명한 방법으로 시스템 환경 변수가 제대로 설정되었는지 확인한다.</p></li>
+</ol>
+<p><strong>빌드된 드라이버 다운로드 및 설치</strong></p>
+<p>운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 <a class="reference external" href="https://www.cubrid.org/downloads#php">https://www.cubrid.org/downloads#php</a> 에서 다운로드한다.</p>
+<p>PHP 드라이버를 다운로드하면 <strong>php_cubrid.dll</strong> 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 <strong>php_pdo_cubrid.dll</strong> 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.</p>
+<ol class="arabic">
+<li><p>드라이버 파일을 기본 PHP 확장 디렉터리( <strong>C:\Program Files\PHP\ext</strong> )에 복사한다.</p></li>
+<li><p>시스템 환경 변수를 설정한다. 시스템 환경 변수 <strong>PHPRC</strong> 의 값으로 <strong>C:\Program Files\PHP</strong> 가 설정되고, <strong>Path</strong> 에 <strong>%PHPRC%</strong> 와 <strong>%PHPRC\ext</strong> 가 추가되었는지 확인한다.</p></li>
+<li><p><strong>php.ini</strong> ( <strong>C:\Program Files\PHP\php.ini</strong> ) 파일을 열어 끝에 다음 두 줄을 추가한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">PHP_CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span><span class="o">=</span><span class="n">php_cubrid</span><span class="o">.</span><span class="n">dll</span>
+</span></code></pre></div>
+</div>
+<p>PDO 드라이버의 경우에는 다음 내용을 추가한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">PHP_PDO_CUBRID</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">extension</span> <span class="o">=</span> <span class="n">php_pdo_cubrid</span><span class="o">.</span><span class="n">dll</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>웹 서버를 재시작한다.</p></li>
+</ol>
+</section>
+</section>
+<section id="how-to-php-driver-build">
+<span id="id2"></span><h2>PHP 드라이버 빌드<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#how-to-php-driver-build" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#how-to-php-driver-build'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id3">
+<h3>Linux<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>여기에서는 Linux에서 CUBRID PHP 드라이버를 빌드하는 방법을 설명한다.</p>
+<p><strong>환경 설정</strong></p>
+<ul class="simple">
+<li><p>CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 <strong>%CUBRID%</strong> 가 정의되어 있는지 확인한다.</p></li>
+<li><p>PHP 5.6.x , 7.1.x 또는 7.4.x 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. <a class="reference external" href="https://www.php.net/downloads.php">https://www.php.net/downloads.php</a></p></li>
+<li><p>Apache 2: PHP 테스트에 Apache 2를 사용할 수 있다.</p></li>
+<li><p>CUBRID PHP 드라이버 소스코드: <a class="reference external" href="https://www.cubrid.org/downloads#php">https://www.cubrid.org/downloads#php</a> 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.</p></li>
+<li><p>Linux 또는 Mac 에서는 CCI 드라이버 빌드를 하려면 GNU Developer Toolset 8 또는 그 이상이 필요하다.</p></li>
+</ul>
+<p><strong>CUBRID PHP 드라이브 빌드</strong></p>
+<ol class="arabic">
+<li><p>PHP 소스코드를 압축 해제하여 해당 디렉터리로 이동한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$&gt; tar zxvf php-&lt;version&gt;.tar.gz (or tar jxvf php-&lt;version&gt;.tar.bz2)
+</span><span id="line-2">$&gt; cd php-&lt;version&gt;/ext
+</span></code></pre></div>
+</div>
+</li>
+<li><p>phpize를 실행한다. phpize에 대한 내용은 <a class="reference internal" href="#phpize-remark"><span class="std std-ref">참고 사항</span></a> 을 참고한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">phpize</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>프로젝트를 설정한다. 설정을 실행하기 전에 먼저 <strong>./configure -h</strong> 를 실행하여 설정 옵션을 확인하는 것을 권장한다. 설정 방법은 다음과 같다(Apache 2가 <strong>/usr/local</strong> 에 설치되어 있다고 가정한다).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;./</span><span class="n">configure</span> <span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">cubrid</span> <span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">php</span><span class="o">-</span><span class="n">config</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">php</span><span class="o">-</span><span class="n">config</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p>--with-cubrid=shared: CUBRID 지원을 포함한다.</p></li>
+<li><p>--with-php-config=PATH: 절대 경로를 포함한 php-config의 파일 이름을 입력한다.</p></li>
+</ul>
+</li>
+<li><p>프로젝트를 빌드한다. 프로젝트가 성공적으로 빌드되면 <strong>/modules</strong> 디렉터리에 <strong>cubrid.so</strong> 파일이 생성된다.</p></li>
+<li><p><strong>cubrid.so</strong> 파일을 <strong>/usr/local/php/lib/php/extensions</strong> 디렉터리에 복사한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">extensions</span>
+</span><span id="line-2"><span class="n">cubrid</span><span class="o">-</span><span class="n">php</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="n">modules</span><span class="o">/</span><span class="n">cubrid</span><span class="o">.</span><span class="n">so</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">php</span><span class="o">/</span><span class="n">extensions</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p><strong>php.ini</strong> 파일에 <strong>extension_dir</strong> 변수에 PHP 확장의 경로를 입력하고 <strong>extension</strong> 변수에 CUBRID PHP 드라이버 파일 이름을 입력한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">extension_dir</span> <span class="o">=</span> <span class="s2">"/usr/local/php/lib/php/extension/no-debug-zts-xxx"</span>
+</span><span id="line-2"><span class="n">extension</span> <span class="o">=</span> <span class="n">cubrid</span><span class="o">.</span><span class="n">so</span>
+</span></code></pre></div>
+</div>
+</li>
+</ol>
+<p><strong>CUBRID PHP 드라이버 설치 확인</strong></p>
+<ol class="arabic">
+<li><p>다음과 같은 내용의 <strong>test.php</strong> 파일을 생성한다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cp">&lt;?php</span> <span class="nb">phpinfo</span><span class="p">();</span> <span class="cp">?&gt;</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>웹 브라우저로 http://localhost/test.php 에 접속하여 다음 내용이 보이는지 확인한다. 다음 내용이 보이면 설치가 완료된 것이다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>CUBRID</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>10.1.0.XXXX</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<p id="phpize-remark"><strong>참고 사항</strong></p>
+<p>phpize는 PHP 확장의 컴파일을 준비하는 셸 스크립트로, 일반적으로 PHP를 설치할 때 자동으로 설치된다. 만약 phpize가 설치되어 있지 않으면 다음과 같은 방법으로 설치할 수 있다.</p>
+<ol class="arabic">
+<li><p>PHP 소스코드를 다운로드한다. PHP 확장을 사용할 버전과 일치하는 버전을 다운로드해야 한다. 다운로드한 PHP 소스코드를 압축 해제하고 소스코드의 최상위 디렉터리로 이동한다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$&gt; tar zxvf php-&lt;version&gt;.tar.gz (or tar jxvf php-&lt;version&gt;.tar.bz2)
+</span><span id="line-2">$&gt; cd php-&lt;version&gt;
+</span></code></pre></div>
+</div>
+</li>
+<li><p>프로젝트를 설정하고, 빌드한 후 설치한다. <strong>--prefix</strong> 옵션으로 PHP를 설치할 디렉터리를 지정할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">php</span><span class="o">-</span><span class="n">root</span><span class="o">&gt;</span> <span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix_dir</span><span class="p">;</span> <span class="n">make</span><span class="p">;</span> <span class="n">make</span> <span class="n">install</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>phpize는 <strong>prefix_dir/bin</strong> 디렉터리에 위치한다.</p></li>
+</ol>
+</section>
+<section id="id4">
+<h3>Windows<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>여기에서는 Windows에서 CUBRID PHP 드라이버를 빌드하는 방법을 설명한다. 어떤 버전을 선택해야 할지 알 수 없는 경우 다음 내용을 참고한다.</p>
+<p>Apache.org에서 Apache 빌드시 PHP를 모듈로 사용하는 경우(권장되지 않음) Visual Studio 6 컴파일러로 컴파일 된 VC6 PHP버전을 사용해야 한다. Apache.org 바이너리와 함께 VC11+ 버전의 PHP를 사용하면 안된다.</p>
+<p>Apache에서는 PHP의 Thread Safe(TS) 버전을 사용해야 한다.</p>
+<ul class="simple">
+<li><p>PHP 버전 5.5.x 이상을 사용하는 경우 VC11 버전을 사용해야 한다. (Visual Studio 2012)</p></li>
+<li><p>PHP 버전 7.1.x 이상을 사용하는 경우 VC14 버전을 사용해야 한다. (Visual Studio 2015)</p></li>
+</ul>
+<p>VC11 및 VC14 버전은 각각 Visual Studio 2012 및 2015 컴파일러로 컴파일된다. VC11 또는 VC14 버전은 성능과 안정성이 더욱 향상되었다.</p>
+<p>PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파일러)로 빌드되며 성능 및 안정성이 향상되었다.
+*       VC11 에서 빌드를 하기 위해서는 Visual C ++ Redistributable for Visual Studio 2012 x86 또는 x64가 설치되어 있어야 한다.
+*       VC14 에서 빌드를 하기 위해서는 Visual C ++ Redistributable for Visual Studio 2015 x86 또는 x64가 설치되어 있어야 한다.</p>
+<p><strong>VC11를 이용하여 PHP 5.6.x CUBRID PHP 드라이버 빌드</strong></p>
+<p><strong>환경 설정</strong></p>
+<ul>
+<li><p>CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 <strong>%CUBRID%</strong> 가 정의되어 있는지 확인한다.</p></li>
+<li><p>Visual Studio 2012: makefile을 잘 다룰 수 있는 사용자라면, Visual Studio 대신에 무료인 Visual C++ Express Edition이나 Windows SDK 에 포함된 VC++ 11 컴파일러를 사용할 수 있다. Windows에서 CUBRID PHP VC11 드라이버를 사용하려면 Visual C++ Redistributable Package가 설치되어 있어야 한다.</p></li>
+<li><p>PHP 5.6.x 바이너리: VC11 x86 Non Thread Safe 또는 VC11 x86 Thread Safe를 사용할 수 있다. 시스템 환경 변수 <strong>%PHPRC%</strong> 가 제대로 정의되어 있어야 한다. VC11 프로젝트 속성에서 [Linker] &gt; [General]을 선택하면 [Additional Library Directories]에서 <strong>$(PHPRC)</strong> 가 사용되는 것을 볼 수 있다.</p>
+<img alt="../_images/image57.png" src="../_images/image57.png"/>
+</li>
+<li><p>PHP 5.6.x 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 5.6.x 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 <strong>%PHP5_SRC%</strong> 를 추가하여 PHP 5.6.x 소스코드의 경로를 값으로 설정한다. VC11 프로젝트 속성에서 [C/C++] &gt; [General]을 선택하면 [Additional Library Directories]에서 <strong>$(PHP5_SRC)</strong> 가 사용되는 것을 볼 수 있다.</p>
+<img alt="../_images/image58.png" src="../_images/image58.png"/>
+</li>
+<li><p>CUBRID PHP 드라이버 소스코드: <a class="reference external" href="https://www.cubrid.org/downloads#php">https://www.cubrid.org/downloads#php</a> 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>PHP 5.6.x을 소스코드에서 빌드할 필요는 없지만 PHP 5.6.x 프로젝트를 설정해야 한다. PHP 5.6.x 프로젝트를 설정하지 않으면 VC11에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">https://wiki.php.net/internals/windows/stepbystepbuild</a></p>
+</div>
+<p><strong>CUBRID PHP 드라이버 빌드</strong></p>
+<ol class="arabic">
+<li><p>다운로드한 CUBRID PHP 드라이버 소스코드의 <strong>\win</strong> 디렉터리에 있는 <strong>php_cubrid.vcproj</strong> 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 <strong>php_cubrid</strong> 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.</p>
+<img alt="../_images/image59.png" src="../_images/image59.png"/>
+</li>
+<li><p>[Property Page] 대화 상자에서 [Configuration Manager]을 클릭한다. [Project context]의 [Configuration]에서 네 가지 설정(Release_TS, Release_NTS, Debug_TS and Debug_NTS) 중 원하는 값을 선택하고 [닫기]를 클릭한다.</p>
+<img alt="../_images/image60.png" src="../_images/image60.png"/>
+</li>
+<li><p>설정을 마친 후에는 [OK]를 클릭한 후, &lt;F7&gt; 키를 눌러 컴파일한다.</p></li>
+<li><p><strong>php_cubrid.dll</strong> 파일을 빌드한 후에는 PHP가 <strong>php_cubrid.dll</strong> 파일을 PHP 확장으로 인식하도록 다음 작업을 수행한다.</p>
+<ul class="simple">
+<li><p>PHP를 설치한 폴더에 <strong>cubrid</strong> 폴더를 생성하고 해당 폴더에 <strong>php_cubrid.dll</strong> 파일을 복사한다. <strong>%PHPRC%\ext</strong> 디렉터리가 있다면 이 디렉터리에 <strong>php_cubrid.dll</strong> 파일을 복사해도 된다.</p></li>
+<li><p>In <strong>php.ini</strong> 파일의 <strong>extension_dir</strong> 변수의 값으로 <strong>php_cubrid.dll</strong> 파일의 경로를 입력하고, <strong>extension</strong> 변수의 값으로 <strong>php_cubrid.dll</strong> 을 입력한다.</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>VC14을 이용하여 PHP 7.1.x용 CUBRID PHP 드라이버 빌드</strong></p>
+<p><strong>환경 설정</strong></p>
+<ul>
+<li><p>CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 <strong>%CUBRID%</strong> 가 정의되어 있는지 확인한다.</p></li>
+<li><p>Windows SDK에 포함 된 무료 Visual C++ Express Edition 또는 Visual C++ 14 컴파일러를 모두 사용할 수 있다. CUBRID PHP VC14 드라이버를 사용하려면 시스템에 Microsoft Visual C++ Redistributable Package가 설치되어 있어야 한다.</p></li>
+<li><p>PHP 7.1.x 바이너리: VC14 x86 Non Thread Safe 또는 VC6 x86 Thread Safe를 사용할 수 있다. 시스템 환경 변수 <strong>%PHPRC%</strong> 가 제대로 정의되어 있어야 한다. VC14 프로젝트의 [Project Settings]을 열면 [Link] 탭의 [Additional library path]에서 <strong>$(PHPRC)</strong> 가 사용되는 것을 볼 수 있다.</p>
+<img alt="../_images/image61.png" src="../_images/image61.png"/>
+</li>
+<li><p>PHP 7.1.x 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 <strong>%PHP7_SRC%</strong> 를 추가하여 PHP 소스코드의 경로를 값으로 설정한다. VC11 프로젝트의 [Project Settings]을 열면 [C/C++] 탭의 [Additional include directories]에서 <strong>$(PHP7_SRC)</strong> 가 사용되는 것을 볼 수 있다.</p>
+<img alt="../_images/image62.png" src="../_images/image62.png"/>
+</li>
+<li><p>CUBRID PHP 드라이버 소스코드: <a class="reference external" href="https://www.cubrid.org/downloads#php">https://www.cubrid.org/downloads#php</a> 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>PHP 7.1.x 소스코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에서 PHP 7.1.x를 설정해야 한다. PHP 7.1.x 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">https://wiki.php.net/internals/windows/stepbystepbuild</a></p>
+</div>
+<p><strong>CUBRID PHP 드라이버 빌드</strong></p>
+<ol class="arabic">
+<li><p>다운로드한 CUBRID PHP 드라이버 소스코드에서 <strong>php_cubrid.dsp</strong> 파일을 열고, 메뉴에서 [Build] &gt; [Set Active Configuration]를 선택한다. There are four configurations (Win32 Release_TS, Win32 Release, Win32 Debug_TS and Win32 Debug). Choose what you want, then close the [Set Active Project Configuration].</p>
+<img alt="../_images/image63.png" src="../_images/image63.png"/>
+</li>
+<li><p>네 가지 프로젝트 설정(Win32 Release_TS, Win32 Release, Win32 Debug_TS and Win32 Debug) 중에서 원하는 설정을 선택하고 [OK]를 클릭한다.</p>
+<img alt="../_images/image64.png" src="../_images/image64.png"/>
+</li>
+<li><p>&lt;F7&gt; 키를 눌러 소스코드를 컴파일한다.</p></li>
+<li><p><strong>php_cubrid.dll</strong> 파일을 빌드한 후에는 PHP가 <strong>php_cubrid.dll</strong> 파일을 PHP 확장으로 인식하도록 다음 작업을 수행한다.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>PHP를 설치한 폴더에 <strong>cubrid</strong> 폴더를 생성하고 해당 폴더에 <strong>php_cubrid.dll</strong> 파일을 복사한다. <strong>%PHPRC%\ext</strong> 디렉터리가 있다면 이 디렉터리에 <strong>php_cubrid.dll</strong> 파일을 복사해도 된다.</p></li>
+<li><p>In <strong>php.ini</strong> 파일의 <strong>extension_dir</strong> 변수의 값으로 <strong>php_cubrid.dll</strong> 파일의 경로를 입력하고, <strong>extension</strong> 변수의 값으로 <strong>php_cubrid.dll</strong> 을 입력한다.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Windows x64 CUBRID PHP 드라이버 빌드</strong></p>
+<p><strong>x64 PHP</strong></p>
+<ul>
+<li><p>PHP 5.6.x 바이너리 : VC11 x64 Non Thread Safe 또는 VC11 x64 Thread Safe를 설치할 수 있다. 시스템 환경 변수 <strong>%PHPRC%</strong> 가 제대로 정의되어 있어야 한다. [Property Pages] 대화 상자의 [Linker] 에서 [General]을 선택한다. [Additional Library Directories]에서 <strong>$(PHPRC)</strong> 를 볼 수 있다.</p>
+<img alt="../_images/image57.jpg" src="../_images/image57.jpg"/>
+</li>
+<li><p>PHP 5.6.x 소스 코드 : 바이너리 버전과 일치하는 소스 코드를 가져와야 한다. PHP 5.6.x 소스 코드를 압축 해제한 후 시스템 환경 변수 <strong>%PHPRC%</strong> 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정해야 한다. [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Library Directories]에서 <strong>$(PHP5_SRC)</strong> 를 볼 수 있다..</p>
+<img alt="../_images/image58.jpg" src="../_images/image58.jpg"/>
+</li>
+<li><p>PHP 7.1.x 바이너리 : VC14 x64 Non Thread Safe 또는 VC14 x64 Thread Safe를 설치할 수 있다. 시스템 환경 변수 <strong>%PHPRC%</strong> 가 올바르게 설정되어 있는지 확인해야 한다. [Property Pages] 대화 상자의 [Linker] 에서 [General]을 선택한다. [Additional Library Directories]에서 <strong>$(PHPRC)</strong> 를 볼 수 있다.</p>
+<img alt="../_images/image57.jpg" src="../_images/image57.jpg"/>
+</li>
+<li><p>PHP 7.1.x 소스 코드 : 바이너리 버전과 일치하는 소스 코드를 가져와야 한다. PHP 7.1.x 소스 코드를 압축을 해제한 후 시스템 환경 변수에 <strong>%PHP7_SRC%</strong> 를 추가하고 해당 값에 PHP 7.1.x 소스 코드의 경로로 설정해야 한다. [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Library Directories]에서 <strong>$(PHP7_SRC)</strong> 를 볼 수 있다.</p></li>
+</ul>
+<p>Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 <a class="reference external" href="https://wiki.php.net/internals/windows/compiler">https://wiki.php.net/internals/windows/compiler</a> 에서 제공하며, x64 PHP를 빌드할 때에는 Visual C++ 8(2005)와 Visual C++ 9(2008 SP1 only)을 사용할 수 있다는 것을 확인할 수 있다. Visual C++ 2005 미만 버전에서 x64 PHP를 빌드하려면 Windows Server Feb. 2003 SDK를 사용해야 한다.</p>
+<blockquote>
+<div><img alt="../_images/image58.jpg" src="../_images/image58.jpg"/>
+</div></blockquote>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.php.net/internals/windows">https://wiki.php.net/internals/windows</a>/compiler에는 Windows용 PHP 빌드를 지원하는 컴파일러를 찾을 수 있다. Visual C++ 11 (2012)과 Visual C++ 14 (2015)를 모두 사용하여 64bit PHP를 빌드 할 수 있음을 알 수 있다.</p></li>
+</ul>
+<p><strong>x64 Apache</strong></p>
+<ul class="simple">
+<li><p>Apache Lounge는 64bit 버전을 포함한 최신 Windows 바이너리를 제공한다. 다음 링크에서 최신 Apache 2.2.34 64bit 버전을 다운로드 할 수 있다.</p></li>
+</ul>
+<blockquote>
+<div><p><a class="reference external" href="https://www.apachelounge.com/download/win64/binaries/httpd-2.2.34-win64.zip">https://www.apachelounge.com/download/win64/binaries/httpd-2.2.34-win64.zip</a></p>
+</div></blockquote>
+<p><strong>환경 설정</strong></p>
+<ul class="simple">
+<li><p>CUBRID x64 버전: CUBRID x64의 최신 버전을 설치한다.시스템에 환경 변수 <strong>%CUBRID%</strong> 가 정의되어 있는지 확인한다.</p></li>
+<li><p>Visual Studio 2012 or 2015: makefile을 잘 다룰 수 있는 사용자라면, Visual Studio 2008 대신에 무료인 Visual C++ Express Edition이나 Windows SDK v6.1에 포함된 VC++ 9 컴파일러를 사용할 수 있다. Windows에서 CUBRID PHP VC9 드라이버를 사용하려면 Visual C++ 2008 Redistributable Package가 설치되어 있어야 한다.</p></li>
+<li><p>64-bit Windows 용 PHP 5.6.x 또는 7.1.x 바이너리 : VC11 또는 VC14 x64 이용하여 PHP를 빌드 할 수 있다. x64 Non Thread Safe와 x64 Thread Safe를 모두 사용할 수 있다. 설치 한 후 시스템 환경 변수 <strong>%PHPRC%</strong> 의 값이 올바르게 설정되어 있는지 확인 한다.</p></li>
+<li><p>PHP 5.6.x 소스: 바이너리 버전에 맞는 소스코드를  소스코드를 다운로드해야 한다. PHP 5.6.x 소스를 압축 해제한 후 시스템 환경 변수에 <strong>%PHP5_SRC%</strong> 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정해야 한다. VC11 [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Include Directories]에서 <strong>$(PHP5_SRC)</strong> 를 볼 수 있다.</p></li>
+<li><p>PHP 7.1.x 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 7.1.x 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 <strong>%PHP7_SRC%</strong> 를 추가하여 PHP 7.1.x 소스코드의 경로를 값으로 설정한다. VC14 프로젝트 속성에서 [C/C++] &gt; [General]을 선택하면 [Additional Library Directories]에서 <strong>$(PHP7_SRC)</strong> 가 사용되는 것을 볼 수 있다.</p></li>
+<li><p>CUBRID PHP 드라이버 소스코드: <a class="reference external" href="https://www.cubrid.org/downloads#php">https://www.cubrid.org/downloads#php</a> 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>PHP 7.1.x을 소스코드에서 빌드할 필요는 없지만 PHP 7.1.x 프로젝트를 설정해야 한다.PHP 7.1.x 프로젝트를 설정하지 않으면 VC14에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">https://wiki.php.net/internals/windows/stepbystepbuild</a></p>
+</div>
+<p><strong>PHP 5.6.x 또는 7.1.x 설정</strong></p>
+<ol class="arabic">
+<li><p>SDK 6.1 또는 8.1 이상을 설치한 후에는 Windows [시작] 메뉴에서 [Microsoft Windows SDK v.x] &gt; [CMD Shell]을 선택하여 명령 셸을 시작한다.</p>
+<img alt="../_images/image65.png" src="../_images/image65.png"/>
+</li>
+<li><p><strong>setenv /x64 /release</strong> 을 실행한다.</p>
+<img alt="../_images/image66.png" src="../_images/image66.png"/>
+</li>
+<li><p>PHP 5.3 소스코드 디렉터리로 이동한 후 <strong>buildconf</strong> 을 실행하여 <strong>configure.js</strong> 파일을 생성한다.</p>
+<img alt="../_images/image67.png" src="../_images/image67.png"/>
+<p>또는 PHP 5.3 소스코드에서 <strong>buildconf.bat</strong> 파일을 실행해도 같은 동작을 수행한다.</p>
+<img alt="../_images/image68.png" src="../_images/image68.png"/>
+</li>
+<li><p>PHP 프로젝트를 설정하기 위해서 <strong>configure</strong> 를 실행한다.</p>
+<img alt="../_images/image69.png" src="../_images/image69.png"/>
+<img alt="../_images/image70.png" src="../_images/image70.png"/>
+</li>
+</ol>
+<p><strong>CUBRID PHP 드라이버 빌드</strong></p>
+<ol class="arabic">
+<li><p>다운로드한 CUBRID PHP 드라이버 소스코드의 <strong>\win</strong> 디렉터리에 있는 <strong>php_cubrid.vcproj</strong> 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 <strong>php_cubrid</strong> 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.</p></li>
+<li><p>[Property Page] 대화 상자에서 [Configuration Manager]을 클릭한다.</p>
+<img alt="../_images/image71.png" src="../_images/image71.png"/>
+</li>
+<li><p>[Configuration Manager] 대화 상자의 [Active solution configuration]에는 네 가지 설정(Release_TS, Release_NTS, Debug_TS and Debug_NTS)만 보인다. x64 CUBRID PHP 드라이버를 빌드하려면 새로운 설정을 생성해야 하므로 <strong>New</strong> 를 선택한다.</p>
+<img alt="../_images/image72.png" src="../_images/image72.png"/>
+</li>
+<li><p>[New Solution Configuration] 대화상자에서 새로운 설정의 이름(예: Release_TS_x64)을 입력하고 [Copy settings from]에서 사용할 PHP와 같은 설정을 선택한다. 여기에서는 <strong>Release_TS</strong> 를 선택했다. 선택한 후에 [OK]를 클릭한다.</p>
+<img alt="../_images/image73.png" src="../_images/image73.png"/>
+</li>
+<li><p>[Configuration Manager] 대화 상자에서 해당 프로젝트의 [Platform] 항목을 열어서 <strong>x64</strong> 가 있다면 <strong>x64</strong> 를 선택하고, 없으면 <strong>New</strong> 를 선택한다.</p>
+<img alt="../_images/image74.png" src="../_images/image74.png"/>
+<p><strong>New</strong> 를 선택하면 [New Project Platform] 대화 상자가 나타난다. <strong>x64</strong> 를 선택하고 [OK]를 클릭한다.</p>
+<img alt="../_images/image75.png" src="../_images/image75.png"/>
+</li>
+<li><p>[php_cubrid Property Pages] 대화 상자에서 [C/C++] &gt; [Preprocessor]를 선택하고, [Preprocessor Definitions]에서 <strong>_USE_32BIT_TIME_T</strong> 를 삭제한 후 [OK]를 클릭한다.</p>
+<img alt="../_images/image76.png" src="../_images/image76.png"/>
+</li>
+<li><p>&lt;F7&gt; 키를 눌러 소스코드를 컴파일하면 x64 PHP 드라이버 파일이 생성된다.</p></li>
+</ol>
+</section>
+</section>
+<section id="id5">
+<h2>PHP 프로그래밍<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id6">
+<h3>데이터베이스 연결<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>데이터베이스 응용에서 첫 단계는 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-connect.php">cubrid_connect</a> () 함수 또는 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-connect-with-url.php">cubrid_connect_with_url</a> () 함수를 사용하는 것으로 데이터베이스 연결을 제공한다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-connect.php">cubrid_connect</a> 함수 또는 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-connect-with-url.php">cubrid_connect_with_url</a> () 함수가 성공적으로 수행되면, 데이터베이스를 사용할 수 있는 모든 함수를 사용할 수 있다. 응용을 완전히 끝내기 전에 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-disconnect.php">cubrid_disconnect</a> () 함수를 호출하는 것은 매우 중요하다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-disconnect.php">cubrid_disconnect</a> () 함수는 현재 발생한 트랜잭션을 끝마치고 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-connect.php">cubrid_connect</a> () 함수에 의해 생성된 연결 핸들과 모든 요청 핸들을 종료한다.</p>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.</p></li>
+<li><p>자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다.</p></li>
+</ul>
+</div>
+</section>
+<section id="id11">
+<h3>트랜잭션과 자동 커밋<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id11" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id11'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커밋 모드에서는 하나의 질의마다 하나의 트랜잭션이 이루어진다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-get-autocommit.php">cubrid_get_autocommit</a> () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 확인할 수 있다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-set-autocommit.php">cubrid_set_autocommit</a> () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 설정할 수 있으며, 진행 중이던 트랜잭션은 모드 설정과 상관없이 커밋된다.</p>
+<p>응용 프로그램 시작 시 자동 커밋 모드의 기본값은 브로커 파라미터인 <strong>CCI_DEFAULT_AUTOCOMMIT</strong> 으로 설정한다. 브로커 파라미터 설정을 생략하면 기본값은 <strong>ON</strong> 이다.</p>
+<p><a class="reference external" href="https://www.php.net/manual/en/function.cubrid-set-autocommit.php">cubrid_set_autocommit</a> () 함수에서 자동 커밋 모드를 OFF로 설정하면 커밋 또는 롤백을 명시하여 트랜잭션을 처리할 수 있다. 트랜잭션을 커밋하려면 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-commit.php">cubrid_commit</a> () 함수를 사용하고 트랜잭션을 롤백하려면 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-rollback.php">cubrid_rollback</a> () 함수를 사용한다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-disconnect.php">cubrid_disconnect</a> () 함수는 트랜잭션을 종료하고 커밋되지 않은 작업을 롤백한다.</p>
+</section>
+<section id="id14">
+<h3>질의 처리<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id14" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id14'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><strong>질의 실행</strong></p>
+<p>다음은 질의 실행을 위한 기본 단계이다.</p>
+<ul class="simple">
+<li><p>연결 핸들 생성</p></li>
+<li><p>SQL 질의 요청에 대한 요청 핸들 생성</p></li>
+<li><p>결과 가져오기</p></li>
+<li><p>요청 핸들 종료</p></li>
+</ul>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$con = cubrid_connect("192.168.0.10", 33000, "demodb");</span>
+</span><span id="line-2"><span class="x">if($con) {</span>
+</span><span id="line-3"><span class="x">    $req = cubrid_execute($con, "select * from code");</span>
+</span><span id="line-4"><span class="x">    if($req) {</span>
+</span><span id="line-5"><span class="x">        while ($row = cubrid_fetch($req)) {</span>
+</span><span id="line-6"><span class="x">            echo $row["s_name"];</span>
+</span><span id="line-7"><span class="x">            echo $row["f_name"];</span>
+</span><span id="line-8"><span class="x">        }</span>
+</span><span id="line-9"><span class="x">        cubrid_close_request($req);</span>
+</span><span id="line-10"><span class="x">    }</span>
+</span><span id="line-11"><span class="x">    cubrid_disconnect($con);</span>
+</span><span id="line-12"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>질의 결과의 열 타입과 이름</strong></p>
+<p><a class="reference external" href="https://www.php.net/manual/en/function.cubrid-column-types.php">cubrid_column_types</a> () 함수를 사용하여 열 타입이 들어있는 배열을 얻을 수 있고, <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-column-types.php">cubrid_column_types</a> () 함수를 사용하여 열의 이름이 들어있는 배열을 얻을 수 있다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$req = cubrid_execute($con, "select host_year, host_city from olympic");</span>
+</span><span id="line-2"><span class="x">if($req) {</span>
+</span><span id="line-3"><span class="x">    $col_types = cubrid_column_types($req);</span>
+</span><span id="line-4"><span class="x">    $col_names = cubrid_column_names($req);</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="x">    while (list($key, $col_type) = each($col_types)) {</span>
+</span><span id="line-7"><span class="x">        echo $col_type;</span>
+</span><span id="line-8"><span class="x">    }</span>
+</span><span id="line-9"><span class="x">    while (list($key, $col_name) = each($col_names))</span>
+</span><span id="line-10"><span class="x">        echo $col_name;</span>
+</span><span id="line-11"><span class="x">    }</span>
+</span><span id="line-12"><span class="x">    cubrid_close_request($req);</span>
+</span><span id="line-13"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>커서 조정</strong></p>
+<p>질의 결과의 위치를 설정할 수 있다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-move-cursor.php">cubrid_move_cursor</a> () 함수를 사용하여 커서를 세 가지 포인트(질의 결과의 처음, 현재 커서 위치, 질의 결과의 끝) 중 한 포인트로부터 일정한 위치로 이동할 수 있다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$req = cubrid_execute($con, "select host_year, host_city from olympic order by host_year");</span>
+</span><span id="line-2"><span class="x">if($req) {</span>
+</span><span id="line-3"><span class="x">    cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)</span>
+</span><span id="line-4"><span class="x">    while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {</span>
+</span><span id="line-5"><span class="x">        echo $row["host_year"]." ";</span>
+</span><span id="line-6"><span class="x">        echo $row["host_city"]."\n";</span>
+</span><span id="line-7"><span class="x">    }</span>
+</span><span id="line-8"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>결과 배열 타입</strong></p>
+<p><a class="reference external" href="https://www.php.net/manual/en/function.cubrid-fetch.php">cubrid_fetch</a> () 함수의 결과에는 세가지 종류의 배열 타입 중 하나가 사용된다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-fetch.php">cubrid_fetch</a> () 함수가 호출될 때 배열의 타입을 결정할 수 있다. 그 중 하나인 연관배열은 문자열 색인을 사용한다. 두 번째로 수치배열은 숫자 순서 색인을 사용한다. 마지막 배열은 연관배열과 수치배열을 둘 다 포함한다.</p>
+<ul>
+<li><p>수치배열</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {</span>
+</span><span id="line-2"><span class="x">    echo $id;</span>
+</span><span id="line-3"><span class="x">    echo $name;</span>
+</span><span id="line-4"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+</li>
+<li><p>연관배열</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {</span>
+</span><span id="line-2"><span class="x">    echo $row["id"];</span>
+</span><span id="line-3"><span class="x">    echo $row["name"];</span>
+</span><span id="line-4"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+</li>
+</ul>
+<p><strong>카탈로그 연산</strong></p>
+<p>클래스, 가상 클래스, 속성, 메서드, 트리거, 제약 조건 등 데이터베이스의 스키마 정보는 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-schema.php">cubrid_schema</a> () 함수를 호출하여 얻을 수 있다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-schema.php">cubrid_schema</a> () 함수의 리턴 값은 2차원 배열이다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$pk = cubrid_schema($con, CUBRID_SCH_PRIMARY_KEY, "game");</span>
+</span><span id="line-2"><span class="x">if ($pk) {</span>
+</span><span id="line-3"><span class="x">    print_r($pk);</span>
+</span><span id="line-4"><span class="x">}</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="x">$fk = cubrid_schema($con, CUBRID_SCH_IMPORTED_KEYS, "game");</span>
+</span><span id="line-7"><span class="x">if ($fk) {</span>
+</span><span id="line-8"><span class="x">    print_r($fk);</span>
+</span><span id="line-9"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p><strong>에러 처리</strong></p>
+<p>에러가 발생하면 대부분의 PHP 인터페이스 함수는 에러 메시지를 출력하고 false나 -1을 반환한다. <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-error-msg.php">cubrid_error_msg</a> (), <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-error-code.php">cubrid_error_code</a> () 그리고 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-error-code-facility.php">cubrid_error_code_facility</a> () 함수를 사용하면 각각 에러 메시지, 에러 코드, 에러 기능 코드를 확인할 수 있다.</p>
+<p><a class="reference external" href="https://www.php.net/manual/en/function.cubrid-error-code-facility.php">cubrid_error_code_facility</a> () 함수의 결과 값은 <strong>CUBRID_FACILITY_DBMS</strong> (DBMS 에러), <strong>CUBRID_FACILITY_CAS</strong> (CAS 서버 에러), <strong>CUBRID_FACILITY_CCI</strong> (CCI 에러), <strong>CUBRID_FACILITY_CLIENT</strong> (PHP 모듈 에러) 중 하나이다.</p>
+<p><strong>OID 사용</strong></p>
+<p><a class="reference external" href="https://www.php.net/manual/en/function.cubrid-execute.php">cubrid_execute</a> () 함수에서 CUBRID_INCLUDE_OID 옵션을 업데이트할 수 있는 질의를 함께 사용하면 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-current-oid.php">cubrid_current_oid</a> 함수를 통해 업데이트된 현재 f 레코드의 OID 값을 가져올 수 있다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$req = cubrid_execute($con, "select * from person where id = 1", CUBRID_INCLUDE_OID);</span>
+</span><span id="line-2"><span class="x">if ($req) {</span>
+</span><span id="line-3"><span class="x">    while ($row = cubrid_fetch($req)) {</span>
+</span><span id="line-4"><span class="x">        echo cubrid_current_oid($req);</span>
+</span><span id="line-5"><span class="x">        echo $row["id"];</span>
+</span><span id="line-6"><span class="x">        echo $row["name"];</span>
+</span><span id="line-7"><span class="x">    }</span>
+</span><span id="line-8"><span class="x">    cubrid_close_request($req);</span>
+</span><span id="line-9"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p>OID를 사용하여 인스턴스의 모든 속성, 지정한 속성 또는 한 속성의 값을 얻을 수 있다.</p>
+<p>만약 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-get.php">cubrid_get</a> () 함수에 속성을 명시하지 않으면 모든 속성의 값을 반환한다(a).
+만약 배열 데이터 타입으로 속성을 명시하면 지정한 속성 값이 들어있는 배열은 연관배열로 반환된다(b).
+만약 문자열 타입으로 한 속성을 명시하면 속성의 값이 반환된다(c).</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$attrarray = cubrid_get ($con, $oid); // (a)</span>
+</span><span id="line-2"><span class="x">$attrarray = cubrid_get ($con, $oid, array("id", "name")); // (b)</span>
+</span><span id="line-3"><span class="x">$attrarray = cubrid_get ($con, $oid, "id"); // (c)</span>
+</span></code></pre></div>
+</div>
+<p>OID를 사용하여 인스턴스의 속성 값을 갱신할 수도 있다. 하나의 속성의 값을 갱신하려면 속성 이름을 문자열 타입으로 명시하고 값을 명시한다(a). 다중 속성의 값을 설정하려면 속성 명과 값을 연관배열로 명시해야 한다(b).</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$cubrid_put ($con, $oid, "id", 1); // (a)</span>
+</span><span id="line-2"><span class="x">$cubrid_put ($con, $oid, array("id"=&gt;1, "name"=&gt;"Tomas")); // (b)</span>
+</span></code></pre></div>
+</div>
+<p><strong>컬렉션 사용</strong></p>
+<p>컬렉션 데이터 타입은 PHP 배열 데이터 타입을 통해 사용할 수 있고 배열 데이터 타입을 지원하는 PHP 함수를 사용할 수 있다. 다음은 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-fetch.php">cubrid_fetch</a> () 함수를 사용하여 질의 결과를 가져오는 예제이다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$row = cubrid_fetch ($req);</span>
+</span><span id="line-2"><span class="x">$col = $row["customer"];</span>
+</span><span id="line-3"><span class="x">while (list ($key, $cust) = each ($col)) {</span>
+</span><span id="line-4"><span class="x">   echo $cust;</span>
+</span><span id="line-5"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p>컬렉션 속성의 값도 얻을 수 있다. 다음은 <a class="reference external" href="https://www.php.net/manual/en/function.cubrid-col-get.php">cubrid_col_get</a> () 함수를 사용하여 컬렉션 속성 값을 가져오는 예제이다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$tels = cubrid_col_get ($con, $oid, "tels");</span>
+</span><span id="line-2"><span class="x">while (list ($key, $tel) = each ($tels)) {</span>
+</span><span id="line-3"><span class="x">   echo $tel."\n";</span>
+</span><span id="line-4"><span class="x">}</span>
+</span></code></pre></div>
+</div>
+<p>cubrid_set_add() 함수와 cubrid_set_drop() 함수를 사용하면 컬렉션 타입의 값을 직접적으로 갱신할 수 있다.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="x">$tels = cubrid_col_get ($con, $oid, "tels");</span>
+</span><span id="line-2"><span class="x">while (list ($key, $tel) = each ($tels)) {</span>
+</span><span id="line-3"><span class="x">   $res = cubrid_set_drop ($con, $oid, "tel", $tel);</span>
+</span><span id="line-4"><span class="x">}</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="x">cubrid_commit ($con);</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>칼럼에서 정의한 크기보다 큰 문자열을 <strong>INSERT</strong> / <strong>UPDATE</strong> 하면 문자열이 잘려서 입력된다.</p>
+</div>
+</section>
+</section>
+<section id="php-api">
+<h2>PHP API<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#php-api" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#php-api'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><a class="reference external" href="http://ftp.cubrid.org/CUBRID_Docs/Drivers/">http://ftp.cubrid.org/CUBRID_Docs/Drivers/</a>를 참고한다.</p>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="cciapi.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        CCI API 레퍼런스
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="pdo.html">
+        PDO 드라이버
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#id1'" class="reference internal" href="#id1">PHP 설치 및 설정</a><ul>
+<li><a :data-current="activeSection === '#linux'" class="reference internal" href="#linux">Linux</a></li>
+<li><a :data-current="activeSection === '#windows'" class="reference internal" href="#windows">Windows</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#how-to-php-driver-build'" class="reference internal" href="#how-to-php-driver-build">PHP 드라이버 빌드</a><ul>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">Linux</a></li>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">Windows</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">PHP 프로그래밍</a><ul>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">데이터베이스 연결</a></li>
+<li><a :data-current="activeSection === '#id11'" class="reference internal" href="#id11">트랜잭션과 자동 커밋</a></li>
+<li><a :data-current="activeSection === '#id14'" class="reference internal" href="#id14">질의 처리</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#php-api'" class="reference internal" href="#php-api">PHP API</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 02, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

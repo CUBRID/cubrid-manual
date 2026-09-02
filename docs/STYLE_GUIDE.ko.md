@@ -562,6 +562,13 @@ en/.greptile/
 상위 디렉터리 규칙과 하위 디렉터리 규칙은 **덮어쓰지 않고 합쳐집니다.**
 `ko/`의 파일을 리뷰할 때는 루트 규칙 + `ko` 규칙이 모두 적용됩니다.
 
+> **`ko/.greptile`, `en/.greptile`는 Sphinx 빌드에서 제외되어 있습니다.**
+> `conf.py`의 `source_suffix`가 `.md`를 마크다운 소스로 선언하지만 마크다운 파서는
+> 설치되어 있지 않습니다. 두 디렉터리가 Sphinx 소스 트리 안에 있으므로
+> `ko/conf.py`·`en/conf.py`의 `exclude_patterns`에 `.greptile`을 추가했습니다.
+> 이 항목을 지우면 `make html`이 `.greptile/rules.md`를 소스로 읽으려다 실패합니다.
+> 같은 이유로 `ko/`·`en/` 아래에 `.md` 파일을 새로 추가할 때는 제외 여부를 먼저 확인합니다.
+
 `en/`에서는 한국어 규칙 3개(`ko-notation-auto`, `ko-notation-manual`,
 `ko-honorific-consistency`)를 `disabledRules`로 껐습니다. 오탐 소음을 줄이기 위한 것입니다.
 

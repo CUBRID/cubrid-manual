@@ -505,8 +505,9 @@ cd ko && make html 2>&1 | grep -E "WARNING|ERROR" | grep -F "수정한파일명.
 cd ko && make html SPHINXOPTS="-W --keep-going"
 ```
 
-> `SPHINXOPTS="-W"`를 워크플로 기본값으로 넣는 것은 기존 경고를 먼저 정리한 뒤
-> 별도 PR로 처리합니다. 표기 수정 PR에 섞지 않습니다(12절 절차).
+> `SPHINXOPTS="-W"`를 워크플로 기본값으로 넣을지는 아직 결정되지 않았습니다.
+> 기존 문서의 경고를 먼저 정리해야 하므로, 필요하다고 판단되면 그때 Jira 이슈를
+> 등록해 진행합니다(12절 절차). 표기 수정 PR에 섞지 않습니다.
 
 ### 5단계 — 번역 쌍 확인
 

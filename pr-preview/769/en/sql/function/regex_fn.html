@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Regular Expressions Functions and Operators | CUBRID 11.4 User Manual</title>
+<meta content="Regular Expressions Functions and Operators | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Regular Expressions Functions and Operators | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/logo_only.png" rel="icon"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="numeric_fn.html" rel="next" title="Numeric/Mathematical Functions"/>
+<link href="string_fn.html" rel="prev" title="String Functions and Operators"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../.././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/function/regex_fn.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../release_note/index.html">Release Note</a>
+<a href="../.././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oodb.html">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../catalog.html">System Catalog</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../admin/error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">Operators and Functions</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Regular Expressions Functions and Operators</span>
+</nav>
+<div id="content" role="main">
+<section id="regular-expressions-functions-and-operators">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">Regular Expressions Functions and Operators</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regular-expressions-functions-and-operators"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>A regular expression is a powerful way to specify a pattern for a complex search.
+The functions and operators described in this section performs regular expression matching on a string.</p>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#regular-expressions-functions-and-operators" id="id1">Regular Expressions Functions and Operators</a></p>
+<ul>
+<li><p><a class="reference internal" href="#regular-expressions-pattern-syntax" id="id2">Regular Expressions Pattern Syntax</a></p>
+<ul>
+<li><p><a class="reference internal" href="#special-pattern-characters" id="id3">Special Pattern Characters</a></p></li>
+<li><p><a class="reference internal" href="#quantifiers" id="id4">Quantifiers</a></p></li>
+<li><p><a class="reference internal" href="#groups" id="id5">Groups</a></p></li>
+<li><p><a class="reference internal" href="#assertions" id="id6">Assertions</a></p></li>
+<li><p><a class="reference internal" href="#alternatives" id="id7">Alternatives</a></p></li>
+<li><p><a class="reference internal" href="#character-classes" id="id8">Character classes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#individual-characters" id="id9">Individual characters</a></p></li>
+<li><p><a class="reference internal" href="#ranges" id="id10">Ranges</a></p></li>
+<li><p><a class="reference internal" href="#posix-based-character-classes" id="id11">POSIX-based character classes</a></p></li>
+<li><p><a class="reference internal" href="#unicode-character-class" id="id12">Unicode Character Class</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#regexp-rlike" id="id13">REGEXP, RLIKE</a></p></li>
+<li><p><a class="reference internal" href="#regexp-count" id="id14">REGEXP_COUNT</a></p></li>
+<li><p><a class="reference internal" href="#regexp-instr" id="id15">REGEXP_INSTR</a></p></li>
+<li><p><a class="reference internal" href="#regexp-like" id="id16">REGEXP_LIKE</a></p></li>
+<li><p><a class="reference internal" href="#regexp-replace" id="id17">REGEXP_REPLACE</a></p></li>
+<li><p><a class="reference internal" href="#regexp-substr" id="id18">REGEXP_SUBSTR</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="regular-expressions-pattern-syntax">
+<span id="regex-syntax"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Regular Expressions Pattern Syntax</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regular-expressions-pattern-syntax" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regular-expressions-pattern-syntax'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>To implement regular expressions, CUBRID uses the Google RE2 library and the C++ &lt;regex&gt; standard library.
+You can select the regular expression library to use by setting the <strong>regexp_engine</strong> system parameter, and the Google RE2 library is used as a default.</p>
+<p>The following sub-sections describes supported regular expression grammars with several examples.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Compatibility Considerations</strong></p>
+<ul class="simple">
+<li><p>In the prior version of CUBRID 11, CUBRID used Henry Spencer’s implementation of regular expressions.</p></li>
+<li><p>From the CUBRID 11.0, CUBRID removes the Henry Spencer library and uses C++ &lt;regex&gt; standard library to support regular expression functions and operators.</p></li>
+<li><p>From the CUBRID 11.2, CUBRID has added the Google RE2 library. Either C++ &lt;regex&gt; or Google RE2 can be used by setting the system parameter.</p></li>
+</ul>
+<p>1. The Henry Spencer’s implementation of regular expressions operates in byte-wise fashion. So the REGEXP and RLIKE were not multibyte safe,
+they only worked as ASCII encoding without considering the collation of operands.</p>
+<p>2. The Spencer library supports the POSIX <em>collating sequence</em> expressions (<em>[.character.]</em>). But it does not support anymore.
+Also, <em>character equivalents</em> (<em>[=word=]</em>) does not support. CUBRID occurs an error when these collating element syntax is given.</p>
+<p>3. The Spencer library matches line-terminator characters for the dot operator (.). But it does not.</p>
+<p>4. The word-beginning and word-end boundary ([[:&lt;:]] and [[:&gt;:]]) doesn’t support anymore. Instead, the word boundary notation (\b) can be used.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>C++ &lt;regex&gt; library caveats</strong></p>
+<p>There is an issue with the C++ &lt;regex&gt; library that can cause excessive recursive calls when the input string is long or the regular expression pattern is complex.
+Therefore, it is recommended to use Google RE2 instead of C++ &lt;regex&gt;.
+C++ &lt;regex&gt; is reserved for backwards compatibility and has been deprecated.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Multibyte Character Comparision Considerations</strong></p>
+<p>C++ &lt;regex&gt; performs multibyte comparision by C++ &lt;locale&gt; standard dependent on system-supplied locales. Therefore, system locale should be installed on your system for locale-sensitive functions.</p>
+</div>
+<section id="special-pattern-characters">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Special Pattern Characters</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#special-pattern-characters" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#special-pattern-characters'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Special pattern characters are characters (or sequences of characters) that have a special meaning when they appear in a regular expression pattern, either to represent a character that is difficult to express in a string, or to represent a category of characters.
+Each of these special pattern characters is matched in a string against a single character (unless a quantifier specifies otherwise).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Characters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>.</p></td>
+<td><p>Any character except line terminators (LF, CR, LS, PS).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\t</p></td>
+<td><p>A horizontal tab character (same as \u0009).</p></td>
+</tr>
+<tr class="row-even"><td><p>\n</p></td>
+<td><p>A newline (line feed) character (same as \u000A).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\v</p></td>
+<td><p>A vertical tab character (same as \u000B).</p></td>
+</tr>
+<tr class="row-even"><td><p>\f</p></td>
+<td><p>A form feed character (same as \u000C).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\r</p></td>
+<td><p>A carriage return character (same as \u000D)</p></td>
+</tr>
+<tr class="row-even"><td><p>\c<em>letter</em></p></td>
+<td><p>A control code character whose code unit value is the same as the remainder of dividing
+the code unit value of <em>letter</em> by 32.</p></td>
+</tr>
+<tr class="row-odd"><td><p>\x<em>hh</em></p></td>
+<td><p>A a character whose code unit value has an hex value equivalent to the two hex digits <em>hh</em>.</p></td>
+</tr>
+<tr class="row-even"><td><p>\u<em>hhhh</em></p></td>
+<td><p>A character whose code unit value has an hex value equivalent to the four hex digits <em>hhhh</em>. <em>Only supported in C++ &lt;regex&gt;</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>\x{<em>digits</em>}</p></td>
+<td><p>A hex character code corresponds to the value of <em>digits</em> <em>Only supported in Google RE2</em></p></td>
+</tr>
+<tr class="row-even"><td><p>\0</p></td>
+<td><p>A null character (same as \u0000). <em>Only supported in C++ &lt;regex&gt;</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>\<em>num</em></p></td>
+<td><p>The result of the submatch whose opening parenthesis is the <em>num</em>-th. See groups below for more info.</p></td>
+</tr>
+<tr class="row-even"><td><p>\d</p></td>
+<td><p>A decimal digit character (same as [[:digit:]]).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\D</p></td>
+<td><p>Any character that is not a decimal digit character (same as [^[:digit:]]).</p></td>
+</tr>
+<tr class="row-even"><td><p>\s</p></td>
+<td><p>A whitespace character (same as [[:space:]]).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\S</p></td>
+<td><p>Any character that is not a whitespace character (same as [^[:space:]]).</p></td>
+</tr>
+<tr class="row-even"><td><p>\w</p></td>
+<td><p>An alphanumeric or underscore character (same as [_[:alnum:]]).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\W</p></td>
+<td><p>Any character that is not an alphanumeric or underscore character (same as [^_[:alnum:]]).</p></td>
+</tr>
+<tr class="row-even"><td><p>\<em>character</em></p></td>
+<td><div class="line-block">
+<div class="line">The <em>character</em> character as it is, without interpreting its special meaning within a regex expression.</div>
+<div class="line">Any character can be escaped except those which form any of the special character sequences above.</div>
+<div class="line">Needed for: ^ $ \ . * + ? ( ) [ ] { } |</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>[<em>class</em>]</p></td>
+<td><p>A string is part of the <em>class</em>. see <a class="reference internal" href="#regex-posix-character-class"><span class="std std-ref">POSIX-based character classes</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>[^<em>class</em>]</p></td>
+<td><p>A string is not part of the <em>class</em>. see <a class="reference internal" href="#regex-posix-character-class"><span class="std std-ref">POSIX-based character classes</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>\p{<em>class</em>}</p></td>
+<td><p>A string is range of Unicode range of <em>class</em>. see <a class="reference internal" href="#regex-unicode-character-class"><span class="std std-ref">Unicode Character Class</span></a>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- .: match any character</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^c.*$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'cubrid dbms'</span> <span class="n">regexp</span> <span class="s1">'^c.*$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<p>To match special characters such as “\n”, “\t”, “\r”, and “\\”, some must be escaped with the backslash (\) by specifying the value of <strong>no_backslash_escapes</strong> (default: yes) to <strong>no</strong>.
+For details on <strong>no_backslash_escapes</strong>, see <a class="reference internal" href="../datatype.html#escape-characters"><span class="std std-ref">Escape Special Characters</span></a>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- \n : match a special character, when no_backslash_escapes=yes (default)</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'new\nline'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'new\\nline'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'new</span><span class="se">\n</span><span class="s1">line'</span> <span class="n">REGEXP</span> <span class="s1">'new</span><span class="se">\\</span><span class="s1">nline'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">=====================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- \n : match a special character, when no_backslash_escapes=no</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'new\nline'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'new</span>
+</span><span id="line-3"><span class="s1">line'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'new</span>
+</span><span id="line-2"><span class="n">line</span><span class="s1">' regexp '</span><span class="n">new</span>
+</span><span id="line-3"><span class="n">line</span><span class="s1">')</span>
+</span><span id="line-4"><span class="o">=====================================</span>
+</span><span id="line-5">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="quantifiers">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Quantifiers</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#quantifiers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#quantifiers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Quantifiers follow a character or a special pattern character. They can modify the amount of times that character is repeated in the match:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Characters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>*</p></td>
+<td><p>The preceding is matched 0 or more times.</p></td>
+</tr>
+<tr class="row-odd"><td><p>+</p></td>
+<td><p>The preceding is matched 1 or more times.</p></td>
+</tr>
+<tr class="row-even"><td><p>?</p></td>
+<td><p>The preceding is optional (matched either 0 times or once).</p></td>
+</tr>
+<tr class="row-odd"><td><p>{<em>num</em>}</p></td>
+<td><p>The preceding is matched exactly <em>num</em> times.</p></td>
+</tr>
+<tr class="row-even"><td><p>{<em>num,</em>}</p></td>
+<td><p>The preceding is matched <em>num</em> or more times.</p></td>
+</tr>
+<tr class="row-odd"><td><p>{<em>min,max</em>}</p></td>
+<td><p>The preceding is matched at least <em>min</em> times, but not more than <em>max</em>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a+ : match any sequence of one or more a characters. case insensitive.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Aaaapricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^A+pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Aaaapricot'</span> <span class="n">regexp</span> <span class="s1">'^A+pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a? : match either zero or one a character.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Apricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^Aa?pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Apricot'</span> <span class="n">regexp</span> <span class="s1">'^Aa?pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==========================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Aapricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^Aa?pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Aapricot'</span> <span class="n">regexp</span> <span class="s1">'^Aa?pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'Aaapricot'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^Aa?pricot'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'Aaapricot'</span> <span class="n">regexp</span> <span class="s1">'^Aa?pricot'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- (cub)* : match zero or more instances of the sequence abc.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubcub'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^(cub)*$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'cubcub'</span> <span class="n">regexp</span> <span class="s1">'^(cub)*$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==========================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<p>By default, all these quantifiers perform in a <em>greedy</em> way which takes as many characters that meet the condition as possible.
+And this behavior can be overridden to <em>non-greedy</em> by adding a question mark (?) after the quantifier.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- (a+), (a+?) : match with quantifiers performs greedy and ungreedy respectively.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span><span class="w"> </span><span class="s1">'(a+)'</span><span class="p">),</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span><span class="w"> </span><span class="s1">'(a+?)'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span> <span class="s1">'(a+)'</span><span class="p">)</span>  <span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'aardvark'</span><span class="p">,</span> <span class="s1">'(a+?)'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================================</span>
+</span><span id="line-3">  <span class="s1">'aa'</span>                  <span class="s1">'a'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="groups">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Groups</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#groups" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#groups'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Groups allow to apply quantifiers to a sequence of characters (instead of a single character). There are two kinds of groups:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>a backreference syntax using $int is supported only in C++ &lt;regex&gt;.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Characters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>(<em>subpattern</em>)</p></td>
+<td><p>Group which creates a backreference.</p></td>
+</tr>
+<tr class="row-odd"><td><p>(?:<em>subpattern</em>)</p></td>
+<td><p>Passive group which does not create a backreference.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- The captured group can be referenced with $int</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'hello cubrid'</span><span class="p">,</span><span class="s1">'([[:alnum:]]+)'</span><span class="p">,</span><span class="s1">'$1!'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'hello cubrid'</span><span class="p">,</span><span class="s1">'([[:alnum:]]+)'</span><span class="p">,</span><span class="s1">'$1!'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==========================</span>
+</span><span id="line-3">  <span class="s1">'hello! cubrid!'</span>
+</span></code></pre></div>
+</div>
+<p>When a group creates a backreference, the characters that represent the subpattern in a string are stored as a submatch. Each submatch is numbered after the order of appearance of their opening parenthesis (the first submatch is number 1, the second is number 2, and so on…).
+These submatches can be used in the regular expression itself to specify that the entire subpattern should appear again somewhere else (see int in the special characters list). They can also be used in the replacement string in the REGEXP_REPLACE function.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- performs regexp_substr without groups. the following is the case that fully matched.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span><span class="w"> </span><span class="s1">'[a-c]{3}k[a-c]{3}j[a-c]{3}'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- ([a-c]{3}) creates a backreference, \1</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span><span class="w"> </span><span class="s1">'([a-c]{3})k\1j\1'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span> <span class="s1">'[a-c]</span><span class="si">{3}</span><span class="s1">k[a-c]</span><span class="si">{3}</span><span class="s1">j[a-c]</span><span class="si">{3}</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'abckabcjabc'</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'abckabcjabc'</span><span class="p">,</span> <span class="s1">'([a-c]</span><span class="si">{3}</span><span class="s1">)k</span><span class="se">\1</span><span class="s1">j</span><span class="se">\1</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">======================</span>
+</span><span id="line-7">  <span class="s1">'abckabcjabc'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="assertions">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Assertions</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#assertions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#assertions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Assertions are conditions that do not consume characters in a string: they do not describe a character, but a condition that must be fulfilled before or after a character.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Characters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>^</p></td>
+<td><p>The beginning of a string, or follows a line terminator</p></td>
+</tr>
+<tr class="row-odd"><td><p>$</p></td>
+<td><p>The end of a string, or precedes a line terminator</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following syntax is supported only in C++ &lt;regex&gt;.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Characters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>\b</p></td>
+<td><p>The previous character is a word character and the next is a non-word character (or vice-versa).</p></td>
+</tr>
+<tr class="row-odd"><td><p>\B</p></td>
+<td><p>The previous and next characters are both word characters or both are non-word characters.</p></td>
+</tr>
+<tr class="row-even"><td><p>(?=subpattern)</p></td>
+<td><p>Positive lookahead. The characters following the character must match subpattern, but no characters are consumed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>(?!subpattern)</p></td>
+<td><p>Negative lookahead. The characters following the assertion must not match subpattern, but no characters are consumed.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- ^ : match the beginning of a string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^cub'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'cubrid dbms'</span> <span class="n">regexp</span> <span class="s1">'^cub'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- $ : match the end of a string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'this is cubrid dbms'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'dbms$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'this is cubrid dbms'</span> <span class="n">regexp</span> <span class="s1">'dbms$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">========================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- (?=subpattern): positive lookahead</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span><span class="w"> </span><span class="s1">'cubrid(?= sql)'</span><span class="p">,</span><span class="w"> </span><span class="s1">'CUBRID'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- (?!subpattern): nagative lookahead</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span><span class="w"> </span><span class="s1">'cubrid(?! sql)'</span><span class="p">,</span><span class="w"> </span><span class="s1">'CUBRID'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span> <span class="s1">'cubrid(?= sql)'</span><span class="p">,</span> <span class="s1">'CUBRID'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'cubrid dbms CUBRID sql cubrid rdbms'</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'cubrid dbms cubrid sql cubrid rdbms'</span><span class="p">,</span> <span class="s1">'cubrid(?! sql)'</span><span class="p">,</span> <span class="s1">'CUBRID'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">======================</span>
+</span><span id="line-7">  <span class="s1">'CUBRID dbms cubrid sql CUBRID rdbms'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="alternatives">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Alternatives</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alternatives" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#alternatives'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A pattern can include different alternatives:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Characters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>|</p></td>
+<td><p>Separates two alternative patterns or subpatterns.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a|b : matches any character that is either a or b.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'a'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'d'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'a'</span> <span class="n">regexp</span> <span class="s1">'a|b'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'d'</span> <span class="n">regexp</span> <span class="s1">'a|b'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">==============================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<p>A regular expression can contain multiple alternative patterns simply by separating them with the separator operator (|): The regular expression will match if any of the alternatives match, and as soon as one does.
+Subpatterns (in groups or assertions) can also use the separator operator to separate different alternatives.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- a|b|c : matches any character that is either a, b or c.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'a'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b|c'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'d'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'a|b|c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'a'</span> <span class="n">regexp</span> <span class="s1">'a|b|c'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'d'</span> <span class="n">regexp</span> <span class="s1">'a|b|c'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">==============================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="character-classes">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Character classes</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#character-classes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#character-classes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Character classes syntax matches one of characters or a category of characters within square brackets.</p>
+<section id="individual-characters">
+<h4><a class="toc-backref" href="#id9" role="doc-backlink">Individual characters</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#individual-characters"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>Any character specified is considered part of the class (except the characters \, [, ]).</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- [abc] : matches any character that is either a, b or c.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'a'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[abc]'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'d'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[abc]'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'a'</span> <span class="n">regexp</span> <span class="s1">'[abc]'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'d'</span> <span class="n">regexp</span> <span class="s1">'[abc]'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">==============================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="ranges">
+<h4><a class="toc-backref" href="#id10" role="doc-backlink">Ranges</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ranges"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>To represent a range of characters, use the dash character (-) between two valid characters.
+For example, “[a-z]” matches any alphabet letter whereas “[0-9]” matches any single number.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'adf'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[a-f]'</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'adf'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[g-z]'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'adf'</span> <span class="n">regexp</span> <span class="s1">'[a-f]'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="p">(</span><span class="s1">'adf'</span> <span class="n">regexp</span> <span class="s1">'[g-z]'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">================================</span>
+</span><span id="line-7">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- [0-9]+: matches number sequence in a string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'aas200gjb'</span><span class="p">,</span><span class="w"> </span><span class="s1">'[0-9]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'aas200gjb'</span><span class="p">,</span> <span class="s1">'[0-9]+'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'200'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'strike'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^[^a-dXYZ]+$'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'strike'</span> <span class="n">regexp</span> <span class="s1">'^[^a-dXYZ]+$'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="posix-based-character-classes">
+<span id="regex-posix-character-class"></span><h4><a class="toc-backref" href="#id11" role="doc-backlink">POSIX-based character classes</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#posix-based-character-classes"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>The POSIX-based character class (<em>[:classname:]</em>) defines categories of characters as shown below.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Google RE2 matches only ASCII characters, and C++ &lt;regex&gt; matches Unicode characters as well.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[:alnum:]</p></td>
+<td><p>Alpha-numerical character</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:alpha:]</p></td>
+<td><p>Alphabetic character</p></td>
+</tr>
+<tr class="row-even"><td><p>[:blank:]</p></td>
+<td><p>Blank character</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:cntrl:]</p></td>
+<td><p>Control character</p></td>
+</tr>
+<tr class="row-even"><td><p>[:digit:]</p></td>
+<td><p>Decimal digit character</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:graph:]</p></td>
+<td><p>Character with graphical representation</p></td>
+</tr>
+<tr class="row-even"><td><p>[:lower:]</p></td>
+<td><p>Lowercase letter</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:print:]</p></td>
+<td><p>Printable character</p></td>
+</tr>
+<tr class="row-even"><td><p>[:punct:]</p></td>
+<td><p>Punctuation mark character</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:space:]</p></td>
+<td><p>Whitespace character</p></td>
+</tr>
+<tr class="row-even"><td><p>[:upper:]</p></td>
+<td><p>Uppercase letter</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:xdigit:]</p></td>
+<td><p>Hexadecimal digit character</p></td>
+</tr>
+</tbody>
+</table>
+<p>[:d:], [:w:] and [:s:] are an extension to the ECMAScript grammar. Only available in C++ &lt;regex&gt;.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[:d:]</p></td>
+<td><p>Decimal digit character (0-9)</p></td>
+</tr>
+<tr class="row-odd"><td><p>[:w:]</p></td>
+<td><p>Word character</p></td>
+</tr>
+<tr class="row-even"><td><p>[:s:]</p></td>
+<td><p>Whitespace character</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="w"> </span><span class="p">(</span><span class="s1">'Samseong-ro 86-gil, Gangnam-gu, Seoul 06178'</span><span class="p">,</span><span class="w"> </span><span class="s1">'[[:digit:]]{5}'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'Samseong-ro 86-gil, Gangnam-gu, Seoul 06178'</span><span class="p">,</span> <span class="s1">'[[:digit:]]</span><span class="si">{5}</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'06178'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- ;set regexp_engine=cppstd</span>
+</span><span id="line-2"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="w"> </span><span class="p">(</span><span class="s1">'가나다 가나 가나다라'</span><span class="p">,</span><span class="w"> </span><span class="s1">'\b([[:alpha:]]{2})\b'</span><span class="p">,</span><span class="w"> </span><span class="s1">'#'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'가나다 가나 가나다라'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'</span><span class="se">\b</span><span class="s1">([[:alpha:]]</span><span class="si">{2}</span><span class="s1">)</span><span class="se">\b</span><span class="s1">'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'#'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'가나다 # 가나다라'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="unicode-character-class">
+<span id="regex-unicode-character-class"></span><h4><a class="toc-backref" href="#id12" role="doc-backlink">Unicode Character Class</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#unicode-character-class"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>Unicode character classes (<em>\p{classname}</em>) are only supported by Google RE2. The Unicode class name can be specified as shown in the table below.
+For example, to match Korean characters, you can use <strong>\p{Hangul}</strong>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Unicode Character Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Adlam</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ahom</p></td>
+</tr>
+<tr class="row-even"><td><p>Anatolian_Hieroglyphs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Arabic</p></td>
+</tr>
+<tr class="row-even"><td><p>Armenian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Avestan</p></td>
+</tr>
+<tr class="row-even"><td><p>Balinese</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bamum</p></td>
+</tr>
+<tr class="row-even"><td><p>Bassa_Vah</p></td>
+</tr>
+<tr class="row-odd"><td><p>Batak</p></td>
+</tr>
+<tr class="row-even"><td><p>Bengali</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bhaiksuki</p></td>
+</tr>
+<tr class="row-even"><td><p>Bopomofo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Brahmi</p></td>
+</tr>
+<tr class="row-even"><td><p>Braille</p></td>
+</tr>
+<tr class="row-odd"><td><p>Buginese</p></td>
+</tr>
+<tr class="row-even"><td><p>Buhid</p></td>
+</tr>
+<tr class="row-odd"><td><p>Canadian_Aboriginal</p></td>
+</tr>
+<tr class="row-even"><td><p>Carian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Caucasian_Albanian</p></td>
+</tr>
+<tr class="row-even"><td><p>Chakma</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cham</p></td>
+</tr>
+<tr class="row-even"><td><p>Cherokee</p></td>
+</tr>
+<tr class="row-odd"><td><p>Chorasmian</p></td>
+</tr>
+<tr class="row-even"><td><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td><p>Coptic</p></td>
+</tr>
+<tr class="row-even"><td><p>Cuneiform</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cypriot</p></td>
+</tr>
+<tr class="row-even"><td><p>Cypro_Minoan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cyrillic</p></td>
+</tr>
+<tr class="row-even"><td><p>Deseret</p></td>
+</tr>
+<tr class="row-odd"><td><p>Devanagari</p></td>
+</tr>
+<tr class="row-even"><td><p>Dives_Akuru</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dogra</p></td>
+</tr>
+<tr class="row-even"><td><p>Duployan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Egyptian_Hieroglyphs</p></td>
+</tr>
+<tr class="row-even"><td><p>Elbasan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Elymaic</p></td>
+</tr>
+<tr class="row-even"><td><p>Ethiopic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Georgian</p></td>
+</tr>
+<tr class="row-even"><td><p>Glagolitic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gothic</p></td>
+</tr>
+<tr class="row-even"><td><p>Grantha</p></td>
+</tr>
+<tr class="row-odd"><td><p>Greek</p></td>
+</tr>
+<tr class="row-even"><td><p>Gujarati</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gunjala_Gondi</p></td>
+</tr>
+<tr class="row-even"><td><p>Gurmukhi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Han</p></td>
+</tr>
+<tr class="row-even"><td><p>Hangul</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hanifi_Rohingya</p></td>
+</tr>
+<tr class="row-even"><td><p>Hanunoo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hatran</p></td>
+</tr>
+<tr class="row-even"><td><p>Hebrew</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hiragana</p></td>
+</tr>
+<tr class="row-even"><td><p>Imperial_Aramaic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Inherited</p></td>
+</tr>
+<tr class="row-even"><td><p>Inscriptional_Pahlavi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Inscriptional_Parthian</p></td>
+</tr>
+<tr class="row-even"><td><p>Javanese</p></td>
+</tr>
+<tr class="row-odd"><td><p>Kaithi</p></td>
+</tr>
+<tr class="row-even"><td><p>Kannada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Katakana</p></td>
+</tr>
+<tr class="row-even"><td><p>Kawi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Kayah_Li</p></td>
+</tr>
+<tr class="row-even"><td><p>Kharoshthi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Khitan_Small_Script</p></td>
+</tr>
+<tr class="row-even"><td><p>Khmer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Khojki</p></td>
+</tr>
+<tr class="row-even"><td><p>Khudawadi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lao</p></td>
+</tr>
+<tr class="row-even"><td><p>Latin</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lepcha</p></td>
+</tr>
+<tr class="row-even"><td><p>Limbu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linear_A</p></td>
+</tr>
+<tr class="row-even"><td><p>Linear_B</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lisu</p></td>
+</tr>
+<tr class="row-even"><td><p>Lycian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lydian</p></td>
+</tr>
+<tr class="row-even"><td><p>Mahajani</p></td>
+</tr>
+<tr class="row-odd"><td><p>Makasar</p></td>
+</tr>
+<tr class="row-even"><td><p>Malayalam</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mandaic</p></td>
+</tr>
+<tr class="row-even"><td><p>Manichaean</p></td>
+</tr>
+<tr class="row-odd"><td><p>Marchen</p></td>
+</tr>
+<tr class="row-even"><td><p>Masaram_Gondi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Medefaidrin</p></td>
+</tr>
+<tr class="row-even"><td><p>Meetei_Mayek</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mende_Kikakui</p></td>
+</tr>
+<tr class="row-even"><td><p>Meroitic_Cursive</p></td>
+</tr>
+<tr class="row-odd"><td><p>Meroitic_Hieroglyphs</p></td>
+</tr>
+<tr class="row-even"><td><p>Miao</p></td>
+</tr>
+<tr class="row-odd"><td><p>Modi</p></td>
+</tr>
+<tr class="row-even"><td><p>Mongolian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mro</p></td>
+</tr>
+<tr class="row-even"><td><p>Multani</p></td>
+</tr>
+<tr class="row-odd"><td><p>Myanmar</p></td>
+</tr>
+<tr class="row-even"><td><p>Nabataean</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nag_Mundari</p></td>
+</tr>
+<tr class="row-even"><td><p>Nandinagari</p></td>
+</tr>
+<tr class="row-odd"><td><p>New_Tai_Lue</p></td>
+</tr>
+<tr class="row-even"><td><p>Newa</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nko</p></td>
+</tr>
+<tr class="row-even"><td><p>Nushu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nyiakeng_Puachue_Hmong</p></td>
+</tr>
+<tr class="row-even"><td><p>Ogham</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ol_Chiki</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_Hungarian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Italic</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_North_Arabian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Permic</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_Persian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Sogdian</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_South_Arabian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Old_Turkic</p></td>
+</tr>
+<tr class="row-even"><td><p>Old_Uyghur</p></td>
+</tr>
+<tr class="row-odd"><td><p>Oriya</p></td>
+</tr>
+<tr class="row-even"><td><p>Osage</p></td>
+</tr>
+<tr class="row-odd"><td><p>Osmanya</p></td>
+</tr>
+<tr class="row-even"><td><p>Pahawh_Hmong</p></td>
+</tr>
+<tr class="row-odd"><td><p>Palmyrene</p></td>
+</tr>
+<tr class="row-even"><td><p>Pau_Cin_Hau</p></td>
+</tr>
+<tr class="row-odd"><td><p>Phags_Pa</p></td>
+</tr>
+<tr class="row-even"><td><p>Phoenician</p></td>
+</tr>
+<tr class="row-odd"><td><p>Psalter_Pahlavi</p></td>
+</tr>
+<tr class="row-even"><td><p>Rejang</p></td>
+</tr>
+<tr class="row-odd"><td><p>Runic</p></td>
+</tr>
+<tr class="row-even"><td><p>Samaritan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Saurashtra</p></td>
+</tr>
+<tr class="row-even"><td><p>Sharada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Shavian</p></td>
+</tr>
+<tr class="row-even"><td><p>Siddham</p></td>
+</tr>
+<tr class="row-odd"><td><p>SignWriting</p></td>
+</tr>
+<tr class="row-even"><td><p>Sinhala</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sogdian</p></td>
+</tr>
+<tr class="row-even"><td><p>Sora_Sompeng</p></td>
+</tr>
+<tr class="row-odd"><td><p>Soyombo</p></td>
+</tr>
+<tr class="row-even"><td><p>Sundanese</p></td>
+</tr>
+<tr class="row-odd"><td><p>Syloti_Nagri</p></td>
+</tr>
+<tr class="row-even"><td><p>Syriac</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tagalog</p></td>
+</tr>
+<tr class="row-even"><td><p>Tagbanwa</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tai_Le</p></td>
+</tr>
+<tr class="row-even"><td><p>Tai_Tham</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tai_Viet</p></td>
+</tr>
+<tr class="row-even"><td><p>Takri</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tamil</p></td>
+</tr>
+<tr class="row-even"><td><p>Tangsa</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tangut</p></td>
+</tr>
+<tr class="row-even"><td><p>Telugu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Thaana</p></td>
+</tr>
+<tr class="row-even"><td><p>Thai</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tibetan</p></td>
+</tr>
+<tr class="row-even"><td><p>Tifinagh</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tirhuta</p></td>
+</tr>
+<tr class="row-even"><td><p>Toto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ugaritic</p></td>
+</tr>
+<tr class="row-even"><td><p>Vai</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vithkuqi</p></td>
+</tr>
+<tr class="row-even"><td><p>Wancho</p></td>
+</tr>
+<tr class="row-odd"><td><p>Warang_Citi</p></td>
+</tr>
+<tr class="row-even"><td><p>Yezidi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Yi</p></td>
+</tr>
+<tr class="row-even"><td><p>Zanabazar_Square</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- ;set regexp_engine=re2</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'가나 가나다라 마바사아 자차카타 파하'</span><span class="p">,</span><span class="w"> </span><span class="s1">'\p{Hangul}+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="n">_utf8</span><span class="s1">'가나 가나다라 마바사아 자차카타 파하'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="n">_utf8</span><span class="s1">'\p</span><span class="si">{Hangul}</span><span class="s1">+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3"><span class="mi">5</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="regexp-rlike">
+<span id="regex-rlike"></span><h2><a class="toc-backref" href="#id13" role="doc-backlink">REGEXP, RLIKE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-rlike" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-rlike'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The <strong>REGEXP</strong> and <strong>RLIKE</strong> are used interchangeably. It performs a regular expression matcinh of a string. In the below syntax, if <em>expression</em> matches <em>pattern</em>, 1 is returned; otherwise, 0 is returned. If either <em>expression</em> or <em>pattern</em> is <strong>NULL</strong>, <strong>NULL</strong> is returned.
+The second syntax has the same meaning as the third syntax, which both syntaxes are using <strong>NOT</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">expression</span> <span class="n">REGEXP</span> <span class="o">|</span> <span class="n">RLIKE</span> <span class="p">[</span><span class="n">BINARY</span><span class="p">]</span> <span class="n">pattern</span>
+</span><span id="line-2"><span class="n">expression</span> <span class="n">NOT</span> <span class="n">REGEXP</span> <span class="o">|</span> <span class="n">RLIKE</span> <span class="n">pattern</span>
+</span><span id="line-3"><span class="n">NOT</span> <span class="p">(</span><span class="n">expression</span> <span class="n">REGEXP</span> <span class="o">|</span> <span class="n">RLIKE</span> <span class="n">pattern</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<ul class="simple">
+<li><p><em>expression</em> : Column or input expression</p></li>
+<li><p><em>pattern</em> : Pattern used in regular expressions</p></li>
+</ul>
+<p>The difference between <strong>REGEXP</strong> and <strong>LIKE</strong> are as follows:</p>
+<ul class="simple">
+<li><p>The <strong>LIKE</strong> operator succeeds only if the pattern matches the entire value.</p></li>
+<li><p>The <strong>REGEXP</strong> operator succeeds if the pattern matches anywhere in the value. To match the entire value, you should use “^” at the beginning and “$” at the end.</p></li>
+<li><p>The <strong>LIKE</strong> operator is case sensitive, but patterns of regular expressions in <strong>REGEXP</strong> is not case sensitive. To enable case sensitive, you should use <strong>REGEXP BINARY</strong> statement.</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- [a-dX] : matches any character that is either a, b, c, d or X.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="s1">'aXbc'</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'[a-dX]'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">(</span><span class="s1">'aXbc'</span> <span class="n">regexp</span> <span class="s1">'[a-dX]'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================</span>
+</span><span id="line-3"><span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- When REGEXP is used in SELECT list, enclosing this with parentheses is required.</span>
+</span><span id="line-2"><span class="c1">-- But used in WHERE clause, no need parentheses.</span>
+</span><span id="line-3"><span class="c1">-- case insensitive, except when used with BINARY.</span>
+</span><span id="line-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">athlete</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^[a-d]'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">name</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'Dziouba Irina'</span>
+</span><span id="line-4"><span class="s1">'Dzieciol Iwona'</span>
+</span><span id="line-5"><span class="s1">'Dzamalutdinov Kamil'</span>
+</span><span id="line-6"><span class="s1">'Crucq Maurits'</span>
+</span><span id="line-7"><span class="s1">'Crosta Daniele'</span>
+</span><span id="line-8"><span class="s1">'Bukovec Brigita'</span>
+</span><span id="line-9"><span class="s1">'Bukic Perica'</span>
+</span><span id="line-10"><span class="s1">'Abdullayev Namik'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-count">
+<span id="regex-count"></span><h2><a class="toc-backref" href="#id14" role="doc-backlink">REGEXP_COUNT</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-count" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-count'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_COUNT">
+<span class="sig-name descname"><span class="pre">REGEXP_COUNT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_COUNT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_COUNT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>REGEXP_COUNT</strong> function returns the number of occurrences of the regular expression pattern, <em>pattern_string</em>, within a given character string, <em>string</em>. If <strong>NULL</strong> is specified as an argument, <strong>NULL</strong> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – Specifies the original string. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>pattern_string</strong> – Specifies the regular expression pattern string to be searched. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>position</strong> – Specifies the position of the <em>string</em> to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned</p></li>
+<li><p><strong>match_type</strong> – Specifies the string to change default matching behavior of the function. If the value is omitted, the default value ‘i’ is applied. If the value is other than ‘c’ or ‘i’, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- it returns NULL when an argument is specified with NULL value</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">'[a-d]+'</span><span class="p">,</span><span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">'[a-d]+'</span><span class="p">,</span><span class="n">NULL</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- an empty string pattern doesn't match with any string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123ab111a'</span><span class="p">,</span><span class="s1">''</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">===========================================</span>
+</span><span id="line-3">                                        <span class="mi">5</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- case insensitive ('i') is the default value</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'i'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- If case sensitive ('c') is specified as match_type, A is not matched.</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'i'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">================================================</span>
+</span><span id="line-3">                                             <span class="mi">5</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'ab123Ab111aAA'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">================================================</span>
+</span><span id="line-7">                                             <span class="mi">2</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_COUNT</span><span class="p">(</span><span class="s1">'가나123abc가다abc가가'</span><span class="p">,</span><span class="s1">'[가-나]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_count</span><span class="p">(</span><span class="s1">'가나123abc가다abc가가'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'[가-나]+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">=================================================================================================</span>
+</span><span id="line-3">                                                                                                <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-instr">
+<span id="regex-instr"></span><h2><a class="toc-backref" href="#id15" role="doc-backlink">REGEXP_INSTR</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-instr" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-instr'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_INSTR">
+<span class="sig-name descname"><span class="pre">REGEXP_INSTR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">occurrence</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">return_option</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_INSTR" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_INSTR'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>REGEXP_INSTR</strong> function returns the beginning or ending position by searching for a regular expression pattern, <em>pattern_string</em>, within a given character string, <em>string</em>. If <strong>NULL</strong> is specified as an argument, <strong>NULL</strong> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – Specifies the original string. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>pattern_string</strong> – Specifies the regular expression pattern string to be searched. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>position</strong> – Specifies the position of the <em>string</em> to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned</p></li>
+<li><p><strong>occurrence</strong> – Specifies the occurrence of the match to use. If the value is omitted, the default value 1 is applied. If the value is negative, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>return_option</strong> – Specifies whether to return the position of the start or end of the matched string. If the value is 0, the position of the first character of the match is returned. If the value is 0, the starting position of the matched string is returned. If the value is 1, the end position of the matched string is returned. If the value is other than 0 or 1, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>match_type</strong> – Specifies the string to change default matching behavior of the function. If the value is omitted, the default value ‘i’ is applied. If the value is other than ‘c’ or ‘i’, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- it returns NULL when an argument is specified with NULL value</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[abc]'</span><span class="p">,</span><span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">'[abc]'</span><span class="p">,</span> <span class="n">null</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- an empty string pattern doesn't match with any string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- it returns the position of the first character of the match.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">6</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- it returns the position of the character following the match.</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12354abc5'</span><span class="p">,</span><span class="s1">'[:alpha:]+'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">7</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_INSTR</span><span class="p">(</span><span class="s1">'12345가나다라마가나다라마바'</span><span class="p">,</span><span class="s1">'[가-다]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_instr</span><span class="p">(</span><span class="s1">'12345가나다라마가나다라마바'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'[가-다]+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">============================================================================================================</span>
+</span><span id="line-3">                                                                                                        <span class="mi">6</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-like">
+<span id="regex-like"></span><h2><a class="toc-backref" href="#id16" role="doc-backlink">REGEXP_LIKE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-like" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-like'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_LIKE">
+<span class="sig-name descname"><span class="pre">REGEXP_LIKE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_LIKE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_LIKE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>REGEXP_LIKE</strong> function searches for a regular expression pattern, <em>pattern_string</em>, within a given character string, <em>string</em>. If the pattern matched anywhere in the <em>string</em>, 1 is returned. Otherwise, 0 is returned. If <strong>NULL</strong> is specified as an argument, <strong>NULL</strong> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – Specifies the original string. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>pattern_string</strong> – Specifies the regular expression pattern string to be searched. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>match_type</strong> – Specifies the string to change default matching behavior of the function. If the value is omitted, the default value ‘i’ is applied. If the value is other than ‘c’ or ‘i’, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>INT</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span><span class="s1">'ab+c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span> <span class="s1">'ab+c'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- an empty string pattern doesn't match with any string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span> <span class="s1">''</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span><span class="s1">'AB+C'</span><span class="p">,</span><span class="w"> </span><span class="s1">'c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'abbbbc'</span><span class="p">,</span> <span class="s1">'AB+C'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'가나다'</span><span class="p">,</span><span class="s1">'가나?다'</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_LIKE</span><span class="p">(</span><span class="s1">'가나라다'</span><span class="p">,</span><span class="s1">'가나?다'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'가나다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'가나?다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">==============================================================================</span>
+</span><span id="line-3">                                                                            <span class="mi">1</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">regexp_like</span><span class="p">(</span><span class="s1">'가나라다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'가나?다'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">=================================================================================</span>
+</span><span id="line-7">                                                                                <span class="mi">0</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-replace">
+<span id="regex-replace"></span><h2><a class="toc-backref" href="#id17" role="doc-backlink">REGEXP_REPLACE</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-replace" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-replace'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_REPLACE">
+<span class="sig-name descname"><span class="pre">REGEXP_REPLACE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">occurrence</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_REPLACE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_REPLACE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>REGEXP_REPLACE</strong> function searches for a regular expression pattern, <em>pattern_string</em>, within a given character string, <em>string</em>, and replaces it with a character string, <em>replacement_string</em>. If <strong>NULL</strong> is specified as an argument, <strong>NULL</strong> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – Specifies the original string. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>pattern_string</strong> – Specifies the regular expression pattern string to be searched. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>replacement_string</strong> – Specifies the string to replace the matched string by <em>pattern_string</em>. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>position</strong> – Specifies the position of the <em>string</em> to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned</p></li>
+<li><p><strong>occurrence</strong> – Specifies the occurrence of the pattern to use. If the value is omitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>match_type</strong> – Specifies the string to change default matching behavior of the function. If the value is omitted, the default value ‘i’ is applied. If the value is other than ‘c’ or ‘i’, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- it returns NULL when an argument is specified with NULL value</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="n">null</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- an empty string pattern doesn't match with any string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="s1">'#'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'12345abcdeabcde'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'12345###EK###e'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- case insensitive ('i') is the default value</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">'i'</span><span class="p">);</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1">-- match_type is specified as case sensitive ('c'). 'B' and 'D' are not matched.</span>
+</span><span id="line-5"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span><span class="s1">'[a-d]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">'c'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'i'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">'12345###EK###e'</span>
+</span><span id="line-4">
+</span><span id="line-5">
+</span><span id="line-6"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'12345abDEKBcde'</span><span class="p">,</span> <span class="s1">'[a-d]'</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">)</span>
+</span><span id="line-7"><span class="o">======================</span>
+</span><span id="line-8">  <span class="s1">'12345##DEKB##e'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_REPLACE</span><span class="p">(</span><span class="s1">'a1가b2나다라'</span><span class="p">,</span><span class="s1">'[가-다]'</span><span class="p">,</span><span class="s1">'#'</span><span class="p">,</span><span class="mi">6</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_replace</span><span class="p">(</span><span class="s1">'a1가b2나다라'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'[가-다]'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'#'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'a1가b2##라'</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="regexp-substr">
+<span id="regex-substr"></span><h2><a class="toc-backref" href="#id18" role="doc-backlink">REGEXP_SUBSTR</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#regexp-substr" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#regexp-substr'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="REGEXP_SUBSTR">
+<span class="sig-name descname"><span class="pre">REGEXP_SUBSTR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_string</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">occurrence</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">match_type</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REGEXP_SUBSTR" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REGEXP_SUBSTR'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>The <strong>REGEXP_SUBSTR</strong> function extracts a character string matched for a regular expression pattern, <em>pattern_string</em>, within a given character string, <em>string</em>. If <strong>NULL</strong> is specified as an argument, <strong>NULL</strong> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – Specifies the original string. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>pattern_string</strong> – Specifies the regular expression pattern string to be searched. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>position</strong> – Specifies the position of the <em>string</em> to start the search. If the value is omitted, the default value 1 is applied. If the value is negative or zero, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned</p></li>
+<li><p><strong>occurrence</strong> – Specifies the occurrence of the pattern to use. If the value is omitted, the default value 0 is applied. If the value is negative, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+<li><p><strong>match_type</strong> – Specifies the string to change default matching behavior of the function. If the value is omitted, the default value ‘i’ is applied. If the value is other than ‘c’ or ‘i’, an error will be returned. If the value is <strong>NULL</strong>, <strong>NULL</strong> is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>STRING</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- if pattern is not matched, null is returned</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[k-z]+'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">'[k-z]+'</span><span class="p">);</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- an empty string pattern doesn't match with any string</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'12345abcdeabcde'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'Samseong-ro, Gangnam-gu, Seoul'</span><span class="p">,</span><span class="s1">',[^,]+,'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'Samseong-ro, Gangnam-gu, Seoul'</span><span class="p">,</span> <span class="s1">',[^,]+,'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="s1">', Gangnam-gu,'</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_ko_cs</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">REGEXP_SUBSTR</span><span class="p">(</span><span class="s1">'삼성로, 강남구, 서울특별시'</span><span class="p">,</span><span class="s1">'\p{Hangul}+'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">regexp_substr</span><span class="p">(</span><span class="s1">'삼성로, 강남구, 서울특별시'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="s1">'\p</span><span class="si">{Hangul}</span><span class="s1">+'</span> <span class="n">collate</span> <span class="n">utf8_ko_cs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3"><span class="s1">'강남구'</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="string_fn.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        String Functions and Operators
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="numeric_fn.html">
+        Numeric/Mathematical Functions
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#regular-expressions-pattern-syntax'" class="reference internal" href="#regular-expressions-pattern-syntax">Regular Expressions Pattern Syntax</a><ul>
+<li><a :data-current="activeSection === '#special-pattern-characters'" class="reference internal" href="#special-pattern-characters">Special Pattern Characters</a></li>
+<li><a :data-current="activeSection === '#quantifiers'" class="reference internal" href="#quantifiers">Quantifiers</a></li>
+<li><a :data-current="activeSection === '#groups'" class="reference internal" href="#groups">Groups</a></li>
+<li><a :data-current="activeSection === '#assertions'" class="reference internal" href="#assertions">Assertions</a></li>
+<li><a :data-current="activeSection === '#alternatives'" class="reference internal" href="#alternatives">Alternatives</a></li>
+<li><a :data-current="activeSection === '#character-classes'" class="reference internal" href="#character-classes">Character classes</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-rlike'" class="reference internal" href="#regexp-rlike">REGEXP, RLIKE</a></li>
+<li><a :data-current="activeSection === '#regexp-count'" class="reference internal" href="#regexp-count">REGEXP_COUNT</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_COUNT'" class="reference internal" href="#REGEXP_COUNT"><code class="docutils literal notranslate"><span class="pre">REGEXP_COUNT()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-instr'" class="reference internal" href="#regexp-instr">REGEXP_INSTR</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_INSTR'" class="reference internal" href="#REGEXP_INSTR"><code class="docutils literal notranslate"><span class="pre">REGEXP_INSTR()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-like'" class="reference internal" href="#regexp-like">REGEXP_LIKE</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_LIKE'" class="reference internal" href="#REGEXP_LIKE"><code class="docutils literal notranslate"><span class="pre">REGEXP_LIKE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-replace'" class="reference internal" href="#regexp-replace">REGEXP_REPLACE</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_REPLACE'" class="reference internal" href="#REGEXP_REPLACE"><code class="docutils literal notranslate"><span class="pre">REGEXP_REPLACE()</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#regexp-substr'" class="reference internal" href="#regexp-substr">REGEXP_SUBSTR</a><ul>
+<li><a :data-current="activeSection === '#REGEXP_SUBSTR'" class="reference internal" href="#REGEXP_SUBSTR"><code class="docutils literal notranslate"><span class="pre">REGEXP_SUBSTR()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 02, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../../_static/theme.js?v=b0acb063"></script>
+<script src="../../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../../_static/version-switcher.js?v=993d9931"></script>
+<script src="../../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

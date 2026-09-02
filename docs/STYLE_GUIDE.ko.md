@@ -479,13 +479,34 @@ git diff develop...HEAD -- ko | grep '^+' | grep -E "(합니다|입니다|됩니
 ### 4단계 — 빌드 검증
 
 ```bash
-make html          # ko, en 모두 빌드
-# 또는
+# 자신이 수정한 부분에서 새 경고가 나오는지 확인
 cd ko && make html
 ```
 
-**경고가 0건이어야 합니다.** 제목 밑줄 길이, 깨진 참조, 누락된 이미지, `toctree` 누락이 여기서 잡힙니다.
-`.github/workflows/check.yml`이 PR에서 `ko`/`en`을 병렬 빌드하므로 CI 결과도 함께 확인합니다.
+제목 밑줄 길이, 깨진 `:ref:` 참조, 누락된 이미지, `toctree` 누락은 Sphinx **경고**로 출력됩니다.
+**자신이 수정한 파일에서 새로 생긴 경고는 0건이어야 합니다.**
+
+> **경고는 CI가 강제하지 않습니다.**
+> `ko/Makefile`과 `en/Makefile`의 `SPHINXOPTS`가 비어 있어 `-W`(경고를 오류로 처리)가 적용되지 않습니다.
+> `.github/workflows/check.yml`은 `make html` → `make pdf` → `make linkcheck`를 `ko`/`en` 병렬로 실행하지만,
+> **빌드 실패와 깨진 외부 링크만 CI를 실패시키고 Sphinx 경고는 통과합니다.**
+> 경고 0건은 작성자가 지켜야 하는 기준이며, CI 초록불이 경고 0건을 뜻하지 않습니다.
+
+수정한 파일의 경고만 걸러 보려면 다음과 같이 확인합니다.
+
+```bash
+cd ko && make html 2>&1 | grep -E "WARNING|ERROR" | grep -F "수정한파일명.rst"
+```
+
+전체를 경고 없이 빌드하려면 `-W`를 직접 붙입니다.
+단 기존 문서에 이미 경고가 있어 저장소 전체 빌드는 실패할 수 있으므로, 자신이 만든 경고와 구분해야 합니다.
+
+```bash
+cd ko && make html SPHINXOPTS="-W --keep-going"
+```
+
+> `SPHINXOPTS="-W"`를 워크플로 기본값으로 넣는 것은 기존 경고를 먼저 정리한 뒤
+> 별도 PR로 처리합니다. 표기 수정 PR에 섞지 않습니다(12절 절차).
 
 ### 5단계 — 번역 쌍 확인
 

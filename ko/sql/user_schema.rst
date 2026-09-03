@@ -30,7 +30,7 @@
             ======================
               'Fernandez Jesus'
 
-테이블, 시리얼, 트리거, 동의어 및 저장 프로시저/함수를 관리하는 시스템 테이블에 (_db_class, db_serial, db_trigger, _db_synonym, _db_stored_procedure) unique_name 칼럼이 추가되었다. unique_name 칼럼은 스키마 이름이 접두사로 붙은 이름을 저장한다. _db_class의 unique_name 칼럼에서 시스템 테이블 이름은 스키마 이름이 접두사로 붙지 않는다.
+테이블, 시리얼, 트리거, 동의어 및 저장 프로시저/함수를 관리하는 시스템 테이블에 (_db_class, _db_serial, _db_trigger, _db_synonym, _db_stored_procedure) unique_name 칼럼이 추가되었다. unique_name 칼럼은 스키마 이름이 접두사로 붙은 이름을 저장한다. _db_class의 unique_name 칼럼에서 시스템 테이블 이름은 스키마 이름이 접두사로 붙지 않는다.
 
 .. code-block:: shell
 
@@ -62,7 +62,6 @@
           'db_attribute'           'db_attribute'           'DBA'
           'db_auth'                'db_auth'                'DBA'
           'db_authorization'       'db_authorization'       'DBA'
-          'db_authorizations'      'db_authorizations'      'DBA'
               ...
           'public.athlete'         'athlete'                'PUBLIC'
           'public.code'            'code'                   'PUBLIC'
@@ -70,7 +69,7 @@
           'public.game'            'game'                   'PUBLIC'
           'public.history'         'history'                'PUBLIC'
 
-    SELECT unique_name, name, owner.name FROM db_serial ORDER BY unique_name;
+    SELECT unique_name, name, owner.name FROM _db_serial ORDER BY unique_name;
 
           unique_name               name               owner.name
         =========================================================
@@ -78,7 +77,7 @@
           'public.event_no'         'event_no'         'PUBLIC'
           'public.stadium_no'       'stadium_no'       'PUBLIC'
 
-    SELECT unique_name, name, owner.name FROM db_trigger ORDER BY unique_name;
+    SELECT unique_name, name, owner.name FROM _db_trigger ORDER BY unique_name;
 
           unique_name         name         owner.name
         =============================================

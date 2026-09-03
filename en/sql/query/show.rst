@@ -1892,9 +1892,9 @@ This query has the following columns:
 =========================== =============== ================================================================================
 Column name                 Type            Description
 =========================== =============== ================================================================================
-Hit_rate                    NUMERIC(13,10)  The buffer pool hit rate (since the last printout)
-Num_hit                     BIGINT          The number of buffer hits (since the last printout)
-Num_page_request            BIGINT          The number of page requests (since the last printout)
+Hit_rate                    NUMERIC(13,10)  The buffer pool hit rate (deprecated, always NULL)
+Num_hit                     BIGINT          The number of buffer hits (deprecated, always NULL)
+Num_page_request            BIGINT          The number of page requests (deprecated, always NULL)
 Pool_size                   INT             Buffer pool size in pages
 Page_size                   INT             Data page size
 Free_pages                  INT             The number of free pages in the buffer pool
@@ -1905,13 +1905,30 @@ Num_index_pages             INT             The number of index pages in the buf
 Num_data_pages              INT             The number of data pages in the buffer pool
 Num_system_pages            INT             The number of system pages in the buffer pool
 Num_temp_pages              INT             The number of temp pages in the buffer pool
-Num_pages_created           BIGINT          The number of pages created in the buffer pool (since the last printout)
-Num_pages_written           BIGINT          The number of pages written to disk in the buffer pool (since the last printout)
-Pages_written_rate          NUMERIC(20,10)  The number of pages written per second (since the last printout)
-Num_pages_read              BIGINT          The number of pages read from disk in the buffer pool (since the last printout)
-Pages_read_rate             NUMERIC(20,10)  The number of pages read per second (since the last printout)
-Num_flusher_waiting_threads INT             The number of waiting threads for flusher
+Num_pages_created           BIGINT          The number of pages created in the buffer pool (deprecated, always NULL)
+Num_pages_written           BIGINT          The number of pages written to disk in the buffer pool (deprecated, always NULL)
+Pages_written_rate          NUMERIC(20,10)  The number of pages written per second (deprecated, always NULL)
+Num_pages_read              BIGINT          The number of pages read from disk in the buffer pool (deprecated, always NULL)
+Pages_read_rate             NUMERIC(20,10)  The number of pages read per second (deprecated, always NULL)
+Num_flusher_waiting_threads INT             The number of waiting threads for flusher (deprecated, always NULL)
 =========================== =============== ================================================================================
+
+.. note::
+
+    The **Hit_rate**, **Num_hit**, **Num_page_request**, **Num_pages_created**, **Num_pages_written**, **Pages_written_rate**, **Num_pages_read**, **Pages_read_rate** and **Num_flusher_waiting_threads** columns are deprecated as of version 11.5 and always return NULL. The columns themselves are not removed, so the number of columns, their names, types and order stay the same as in the earlier versions.
+
+    Four of them can be replaced with a statistic of **cubrid statdump**. For details on each item, see :ref:`statdump`.
+
+    *   **Hit_rate**: **Data_page_buffer_hit_ratio** (printed with two decimal places)
+    *   **Num_page_request**: **Num_data_page_fetches**
+    *   **Num_pages_read**: **Num_data_page_ioreads**
+    *   **Num_pages_written**: **Num_data_page_iowrites**
+
+    Note that before they were deprecated, these columns reported the increment since the previous **SHOW PAGE BUFFER STATUS**, while the **cubrid statdump** statistics are cumulative. To get the value of the same interval, run **cubrid statdump -i** *SECOND* and read its periodic output, or take the difference between two cumulative values.
+
+    The other five columns have no counterpart in **cubrid statdump**. **Num_hit** can be obtained indirectly by subtracting **Num_data_page_ioreads** from **Num_data_page_fetches**, and **Pages_written_rate** and **Pages_read_rate** from each periodic value above divided by the interval. **Num_pages_created** and **Num_flusher_waiting_threads** have no replacement statistic.
+
+    The columns that are not deprecated (**Pool_size**, **Page_size**, **Free_pages**, **Victim_candidate_pages**, **Clean_pages**, **Dirty_pages**, **Num_index_pages**, **Num_data_pages**, **Num_system_pages**, **Num_temp_pages**) describe the page composition of the buffer pool and still report their real values.
 
 The following shows the examples of this syntax.
 
@@ -1922,9 +1939,9 @@ The following shows the examples of this syntax.
 
 ::
 
-    <00001> Hit_rate                   : 0.0000000000
-            Num_hit                    : 0
-            Num_page_request           : 0
+    <00001> Hit_rate                   : NULL
+            Num_hit                    : NULL
+            Num_page_request           : NULL
             Pool_size                  : 32768
             Page_size                  : 16392
             Free_pages                 : 32739
@@ -1935,9 +1952,9 @@ The following shows the examples of this syntax.
             Num_data_pages             : 15
             Num_system_pages           : 12
             Num_temp_pages             : 0
-            Num_pages_created          : 0
-            Num_pages_written          : 0
-            Pages_written_rate         : 0.0000000000
-            Num_pages_read             : 0
-            Pages_read_rate            : 0.0000000000
-            Num_flusher_waiting_threads: 0
+            Num_pages_created          : NULL
+            Num_pages_written          : NULL
+            Pages_written_rate         : NULL
+            Num_pages_read             : NULL
+            Pages_read_rate            : NULL
+            Num_flusher_waiting_threads: NULL

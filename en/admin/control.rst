@@ -996,7 +996,8 @@ The following [options] are available with the **cubrid broker status** utility.
 
 .. option:: -b
 
-    Displays the status information of a broker but does not display information on broker application server.
+    Displays the status information of a broker but does not display information on broker application server. In addition, QPS and TPS are displayed as cumulative values since the broker was started. When used with the -s option, QPS and TPS are displayed based on the time specified by the -s option.
+
 
 .. option:: -q
 

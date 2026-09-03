@@ -288,75 +288,939 @@
 .. _partition-pruning:
 
 분할 프루닝
-===========
+========================================
 
-분할 프루닝(partition pruning)은 검색 조건을 통해 데이터 검색 범위를 한정시키는 최적화 기법이다. 분할 프루닝을 수행하는 과정 중에 분할 정의를 고려하여 질의문에 대해 항상 거짓인 분할들을 식별한다. 다음 예의 **SELECT** 문에 대해 *before_2008*\과 *before_2012* 분할을 제외한 나머지 분할들은 모두 *YEAR (opening_date)*\가 2004 보다 작다는 것을 알 수 있기 때문에, *before_2008*\과 *before_2012* 분할에 대해서만 질의가 이루어진다.
+분할 프루닝(Partition Pruning)은 분할 테이블 조회 시 분할 키 조건을 평가하여, 접근해야 할 분할(Partition) 범위를 최소화하는 최적화 기법이다.
+결과에 포함될 가능성이 없는 분할을 미리 제외함으로써 디스크 I/O와 스캔 비용을 줄이고 질의 성능을 향상시킬 수 있다.
 
-.. code-block:: sql
+분할 프루닝의 적용 여부는 질의 컴파일 단계에서 결정하지 않으며, 질의 실행을 준비하는 단계에서 분할 키 조건으로 사용되는 값을 분석하여 결정한다.
+따라서 동일한 형태의 질의라도 분할 키 조건으로 사용되는 값이 달라지면 분할 프루닝 적용 여부도 달라질 수 있다.
 
-    CREATE TABLE olympic2 (opening_date DATE, host_nation VARCHAR (40))
-    PARTITION BY RANGE (YEAR(opening_date)) (
-        PARTITION before_1996 VALUES LESS THAN (1996),
-        PARTITION before_2000 VALUES LESS THAN (2000),
-        PARTITION before_2004 VALUES LESS THAN (2004),
-        PARTITION before_2008 VALUES LESS THAN (2008),
-        PARTITION before_2012 VALUES LESS THAN (2012)
-    );
-     
-    SELECT opening_date, host_nation 
-    FROM olympic2 
-    WHERE YEAR(opening_date) > 2004;
+분할 프루닝 적용 여부는 질의 실행 계획에 표시되지 않지만, 질의 실행 후 프로파일링 결과를 통해 이를 확인할 수 있다.
+질의 프로파일링에 대한 자세한 내용은 :ref:`질의 프로파일링 <query-profiling>`\을 참고한다.
 
-분할 프루닝은 디스크 I/O와 질의 수행 중 처리해야 할 데이터 양을 크게 줄여준다. 프루닝의 이점을 최대한 활용하기 위해서 프루닝이 수행되는 시점을 이해하는 것이 중요하다. 분할을 프루닝하려면 다음 조건들을 만족해야 한다.
+.. note::
 
-*   분할 키는 *WHERE* 절에서 다른 표현식을 통하지 않고 직접 사용되어야 한다.
-*   영역 분할에서 분할 키는 범위 조건(**<**, **>**, **BETWEEN** 등)이나 동등 조건(**=**, **IN** 등)으로 사용되어야 한다.
-*   리스트 분할과 해시 분할에서 분할 키는 동등 조건(**=**, **IN** 등)으로 사용되어야 한다.
+  CUBRID 9.0 미만 버전에서는 분할 프루닝 여부를 질의 컴파일 단계에서 결정되지만,
+  9.0 이상 버전부터는 질의 실행 준비 단계에서 결정된다.
 
-다음 예는 위의 *olympic2* 테이블을 가지고 프루닝이 어떻게 수행되는가를 설명한다.  
+.. rubric:: 분할 방식별 분할 프루닝 지원 비교 연산자
 
-.. code-block:: sql
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 60
 
-    -- prune all partitions except before_2012
-    SELECT host_nation 
-    FROM olympic2 
-    WHERE YEAR (opening_date) >= 2008;
+  * - 분할 방법
+    - 동등 조건
+    - 범위 조건
+  * - 영역 분할
+    - ``=``, ``IN``
+    - ``<``, ``<=``, ``>``, ``>=``, ``BETWEEN``
+  * - 리스트 분할
+    - ``=``, ``IN``
+    - 미지원
+  * - 해시 분할
+    - ``=``, ``IN``
+    - 미지원
 
-    -- prune all partitions except before_2008
-    SELECT host_nation 
-    FROM olympic2 
-    WHERE YEAR(opening_date) BETWEEN 2005 and 2007;
+.. rubric:: 분할 프루닝이 적용되지 않는 경우
 
-    -- no partition is pruned because partitioning key is not used
-    SELECT host_nation 
-    FROM olympic2 
-    WHERE opening_date = '2008-01-02';
+- **WHERE** 절의 분할 키 조건이 분할 키로 정의한 표현식과 다르거나, 표현식이 동일하더라도 인자 순서가 다른 경우
+- 분할 방식에서 분할 프루닝을 지원하지 않는 비교 연산자를 사용하는 경우
+- 질의 실행 준비 단계에서 분할 키 조건의 값을 확인할 수 없는 경우
 
-    -- no partition is pruned because partitioning key is not used directly
-    SELECT host_nation 
-    FROM olympic2 
-    WHERE YEAR(opening_date) + 1 = 2008;
-
-    -- no partition is pruned because there is no useful predicate in the WHERE clause
-    SELECT host_nation 
-    FROM olympic2 
-    WHERE YEAR(opening_date) != 2008;
-
-.. note:: CUBRID 9.0 미만 버전에서 분할 프루닝은 질의 컴파일 단계에서 수행되었다. CUBRID 9.0부터 분할 프루닝은 질의 실행 단계에서 수행되는데, 질의를 실행하는 동안 분할 프루닝을 실행하면 훨씬 복잡한 질의에 대해서도 이 최적화를 적용할 수 있게 되기 때문이다. 그러나 질의 실행 계획은 질의 실행 전에 수행되어 프루닝 정보는 질의 실행 전에는 알 수 없으므로, 프루닝 정보는 더 이상 질의 실행 계획 단계에서 출력되지 않는다.
-
-사용자는 분할 테이블을 접근하는 방법 외에 시스템에 의해 부여된 분할 이름을 직접 명시하거나 *table PARTITION (name)* 절을 사용하여 각 분할에 직접 접근할 수 있다.
+.. rubric:: 분할 직접 접근
 
 .. code-block:: sql
 
-    -- to specify a partition with its table name
-    SELECT * FROM olympic2__p__before_2008;
-    
-    -- to specify a partition with PARTITION clause
-    SELECT * FROM olympic2 PARTITION (before_2008);
+  ... FROM [<schema_name>.]<partition_table_name>__p__<partition_name> [AS <alias_name>] ...
 
-위의 *before_2008* 분할에 접근하는 두 개의 질의는 분할(partition)이 아닌 일반 테이블인 것처럼 보인다. 분할 테이블(partitioned table)에서는 사용할 수 없는 최적화 기법(이에 대한 자세한 내용은 :ref:`partitioning-notes` 참고)을 이 방법을 통해서 사용할 수 있기 때문에 매우 유용하게 활용될 수 있다. 사용자가 분할을 직접 명시하면 해당 질의는 지정한 분할에만 제한된다는 것을 유의해야 한다. 질의의 **WHERE** 절 조건을 만족하는 레코드를 포함하더라도 명시되지 않은 분할들은 질의 수행 시에 전혀 고려되지 않으며, **INSERT**\와 **UPDATE** 문에 의해 삽입/수정되는 레코드가 지정된 분할에 속하지 않는 경우 오류가 발생된다.
+  ... FROM [<schema_name>.]<partition_table_name> PARTITION (<partition_name>) [AS <alias_name>] ...
 
-분할 테이블(partitioned table)이 아닌 각 분할(partition)에 대해 질의를 수행하면, 분할 기법의 몇 가지 이점을 잃게 된다. 예를 들어, 사용자가 단지 분할 테이블에 대해서만 질의를 수행하면 사용자의 응용 프로그램을 수정할 필요 없이 추후에 해당 테이블을 재분할하거나 특정 분할을 제거(drop)할 수 있다. 사용자가 분할에 직접 접근하면 이러한 이점을 잃게 된다. 또한, **INSERT** 문에서 특정 분할을 명시하는 것이 허용되기는 하지만 이로 인해 얻을 수 있는 성능 이득이 없으므로 권장되지 않는다.
+**WHERE** 절에 분할 키 조건이 없거나 분할 프루닝이 적용되지 않더라도, **PARTITION** 절을 사용하거나 분할 이름을 직접 지정하여 특정 분할만 조회할 수 있다.
+이 방식은 일반 테이블을 조회하는 것과 동일하게 동작하므로 분할 테이블에서는 제한되었던 일부 최적화 기법도 적용 가능하다.
+다만 질의 범위가 해당 분할로 고정되기 때문에, 조건에 맞는 레코드가 다른 분할에 있더라도 검색 대상에서 제외되므로 잘못된 결과가 반환될 수 있다.
+
+**INSERT**\와 **UPDATE** 문에서도 특정 분할을 지정할 수 있지만, 처리하려는 레코드가 해당 분할에 속하지 않으면 오류가 발생할 수 있으니 주의해야 한다.
+특히 **INSERT** 문은 분할을 지정하더라도 별도의 성능 이점이 없으므로 분할을 직접 지정하는 방식을 권장하지 않는다.
+
+또한, 분할에 직접 접근하면 분할 테이블이 제공하는 운영상의 장점을 누리기 어렵다.
+테이블 단위로 질의를 작성하면 향후 분할 구성이 변경되어도 응용 프로그램을 수정할 필요가 없지만,
+분할을 직접 명시하면 이러한 유연성을 확보할 수 없기 때문이다.
+따라서 특별한 목적이 있는 경우가 아니라면 분할 테이블을 통해 데이터에 접근하는 것을 권장한다.
+
+분할 테이블에 적용할 수 없는 최적화 기법에 대한 자세한 내용은 :ref:`분할된 테이블에 대한 제약들 <partitioning-notes>`\을 참고한다.
+
+.. _example_partition-pruning_query-profiling:
+
+.. rubric:: 예제 1. 질의 프로파일링 결과를 통해 분할 프루닝 확인
+
+이번 예제에서는 질의 프로파일링 결과를 통해 분할 프루닝의 적용 여부를 확인한다.
+
+아래 질의는 **WHERE** 절에 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
+또한 범위 분할은 범위 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
+다만 분할 프루닝은 질의 실행 준비 단계에서 결정하므로 실행 계획만으로는 적용 여부를 확인할 수 없다.
+
+.. code-block:: sql
+
+  drop table if exists olympic_range;
+
+  create table olympic_range
+  partition by range (host_year) (
+      partition before_1920 values less than (1920),
+      partition before_1940 values less than (1940),
+      partition before_1960 values less than (1960),
+      partition before_1980 values less than (1980),
+      partition before_2000 values less than (2000),
+      partition latest values less than maxvalue
+    )
+  as (select * from olympic);
+
+  create index i_olympic_range_host_nation on olympic_range (host_nation);
+
+  update statistics on olympic_range;
+
+.. code-block:: sql
+
+  set optimization level 513;
+  set trace on;
+
+  select /*+ recompile */
+      o.host_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_range as o
+  where
+      o.host_year > 1990
+      and o.host_nation = 'USA';
+
+.. code-block:: text
+
+  Join graph segments (f indicates final):
+  seg[0]: [0]
+  seg[1]: host_year[0] (f)
+  seg[2]: host_nation[0] (f)
+  seg[3]: host_city[0] (f)
+  seg[4]: mascot[0] (f)
+  Join graph nodes:
+  node[0]: public.olympic_range o(25/6) (sargs 0 1) (loc 0)
+  Join graph terms:
+  term[0]: o.host_nation='USA' (sel 0.0555556) (sarg term) (not-join eligible) (indexable host_nation[0]) (loc 0)
+  term[1]: o.host_year range (1990 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (loc 0)
+
+  Query plan:
+
+  iscan
+      class: o node[0]
+      index: i_olympic_range_host_nation term[0]
+      sargs: term[1]
+      cost:  3 card 1
+
+  Query stmt:
+
+  select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range o where (o.host_year> ?:0 ) and o.host_nation= ?:1
+
+.. code-block:: text
+
+      host_year  host_nation           host_city             mascot
+  ===============================================================================
+           1996  'USA'                 'Atlanta'             'Izzy'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+분할 테이블의 각 분할에 대한 스캔이 **SCAN** 하위에 **PARTITION**\으로 출력되는 것을 확인할 수 있다.
+**SCAN**\에는 분할 테이블 전체에 대한 스캔 정보가 표시되고, **PARTITION**\에는 각 분할에 대한 스캔 정보가 표시된다.
+**PARTITION**\으로 출력되지 않은 분할은 분할 프루닝이 적용되어 스캔 대상에서 제외된 것이다.
+
+``o.host_year > 1990`` 조건을 만족하는 ``before_2000``\과 ``latest`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. code-block:: sql
+
+  show trace;
+
+.. code-block:: text
+
+  Query Plan:
+    INDEX SCAN (o.i_olympic_range_host_nation) (key range: o.host_nation= ?:1 )
+
+    rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range] o where (o.host_year> ?:0 ) and o.host_nation= ?:1
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 10, fetch_time: 0, ioread: 0)
+      SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 0, fetch: 6, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 0, rows: 1)
+             PARTITION (index: public.olympic_range__p__before_2000.i_olympic_range_host_nation), (btree time: 0, fetch: 4, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 0, rows: 1)
+             PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
+
+아래 질의는 **WHERE** 절에 분할 키 조건이 없으므로 분할 프루닝이 적용되지 않는다.
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      o.host_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_range as o
+  where
+      o.opening_date > '1990-12-31'
+      and o.host_nation = 'USA';
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  host_nation           host_city             mascot
+  ===============================================================================
+           1996  'USA'                 'Atlanta'             'Izzy'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 1, fetch: 24, fetch_time: 1, ioread: 0)
+      SCAN (index: public.olympic_range.i_olympic_range_host_nation), (btree time: 1, fetch: 16, ioread: 0, readkeys: 3, filteredkeys: 3, rows: 4) (lookup time: 1, rows: 1)
+             PARTITION (index: public.olympic_range__p__before_1920.i_olympic_range_host_nation), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_1940.i_olympic_range_host_nation), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_1960.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_1980.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
+             PARTITION (index: public.olympic_range__p__before_2000.i_olympic_range_host_nation), (btree time: 1, fetch: 4, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 2) (lookup time: 1, rows: 1)
+             PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_nation), (btree time: 0, fetch: 2, ioread: 0, readkeys: 0, filteredkeys: 0, rows: 0) (lookup time: 0, rows: 0)
+
+.. _example_partition-pruning_arithmetic-expression:
+
+.. rubric:: 예제 2. 산술 표현식 분할 키의 분할 프루닝
+
+이번 예제에서는 산술 표현식으로 정의한 분할 키를 **WHERE** 절에서 동일한 표현식으로 사용하는 경우와,
+인자 순서만 달라진 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
+
+아래 질의는 **WHERE** 절에 산술 표현식 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
+또한 범위 분할은 범위 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
+
+.. code-block:: sql
+
+  drop table if exists olympic_arith_range;
+
+  create table olympic_arith_range
+  partition by range (host_year + 5) (
+      partition before_1925 values less than (1925),
+      partition before_1945 values less than (1945),
+      partition before_1965 values less than (1965),
+      partition before_1985 values less than (1985),
+      partition before_2005 values less than (2005),
+      partition latest values less than maxvalue
+    )
+  as (select * from olympic);
+
+  update statistics on olympic_arith_range;
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      o.host_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_arith_range as o
+  where
+      o.host_year + 5 between 1975 and 1995
+  order by
+      o.host_year;
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  host_nation           host_city             mascot
+  ===============================================================================
+           1972  'Germany'             'Munich'              'Waldi'
+           1976  'Canada'              'Montreal'            'Amik'
+           1980  'USSR'                'Moscow'              'Misha'
+           1984  'USA'                 'Los Angeles'         'Sam'
+           1988  'Korea'               'Seoul'               'HODORI'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+``o.host_year + 5 between 1975 and 1995`` 조건을 만족하는 ``before_1985``\와 ``before_2005`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 4, fetch: 4, fetch_time: 0, ioread: 0)
+      SCAN (table: public.olympic_arith_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
+             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
+      ORDERBY (time: 4, sort: true, page: 0, ioread: 0)
+
+산술 표현식의 결과는 같지만 인자 순서가 다르면 분할 프루닝이 적용되지 않는다.
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      o.host_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_arith_range as o
+  where
+      5 + o.host_year between 1975 and 1995
+  order by
+      o.host_year;
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  host_nation           host_city             mascot
+  ===============================================================================
+           1972  'Germany'             'Munich'              'Waldi'
+           1976  'Canada'              'Montreal'            'Amik'
+           1980  'USSR'                'Moscow'              'Misha'
+           1984  'USA'                 'Los Angeles'         'Sam'
+           1988  'Korea'               'Seoul'               'HODORI'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 12, fetch_time: 0, ioread: 0)
+      SCAN (table: public.olympic_arith_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 25, rows: 5)
+             PARTITION (table: public.olympic_arith_range__p__before_1925), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1945), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1965), (heap time: 0, fetch: 1, ioread: 0, readrows: 3, rows: 0)
+             PARTITION (table: public.olympic_arith_range__p__before_1985), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_arith_range__p__before_2005), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
+             PARTITION (table: public.olympic_arith_range__p__latest), (heap time: 0, fetch: 1, ioread: 0, readrows: 2, rows: 0)
+      ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+
+.. _example_partition-pruning_function-expression:
+
+.. rubric:: 예제 3. 함수 표현식 분할 키의 분할 프루닝
+
+이번 예제에서는 함수 표현식으로 정의한 분할 키를 **WHERE** 절에서 동일한 표현식으로 사용하는 경우와,
+함수 표현식을 사용하지 않고 원본 컬럼만 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
+
+아래 질의는 **WHERE** 절에 함수 표현식 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
+또한 범위 분할은 범위 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
+
+.. code-block:: sql
+
+  drop table if exists olympic_func_range;
+
+  create table olympic_func_range
+  partition by range (YEAR (opening_date)) (
+      partition before_1920 values less than (1920),
+      partition before_1940 values less than (1940),
+      partition before_1960 values less than (1960),
+      partition before_1980 values less than (1980),
+      partition before_2000 values less than (2000),
+      partition latest values less than maxvalue
+    )
+  as (select * from olympic);
+
+  update statistics on olympic_func_range;
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      YEAR (o.opening_date) as opening_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_func_range as o
+  where
+      YEAR (o.opening_date) between 1970 and 1990
+  order by
+      opening_year;
+
+  show trace;
+
+.. code-block:: text
+
+    opening_year  host_nation           host_city             mascot
+  ================================================================================
+            1972  'Germany'             'Munich'              'Waldi'
+            1976  'Canada'              'Montreal'            'Amik'
+            1980  'USSR'                'Moscow'              'Misha'
+            1984  'USA'                 'Los Angeles'         'Sam'
+            1988  'Korea'               'Seoul'               'HODORI'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+``YEAR (o.opening_date) between 1970 and 1990`` 조건을 만족하는 ``before_1980``\과 ``before_2000`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
+      SCAN (table: public.olympic_func_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
+             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
+      ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+
+분할 키로 정의한 함수 표현식이 원본 컬럼과 동일한 정렬 순서를 보장하는 경우에는,
+함수 표현식 대신 원본 컬럼을 사용하더라도 분할 프루닝이 적용될 수 있다.
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      YEAR (o.opening_date) as opening_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_func_range as o
+  where
+      o.opening_date between '1970-01-01' and '1990-12-31'
+  order by
+      opening_year;
+
+  show trace;
+
+.. code-block:: text
+
+    opening_year  host_nation           host_city             mascot
+  ================================================================================
+            1972  'Germany'             'Munich'              'Waldi'
+            1976  'Canada'              'Montreal'            'Amik'
+            1980  'USSR'                'Moscow'              'Misha'
+            1984  'USA'                 'Los Angeles'         'Sam'
+            1988  'Korea'               'Seoul'               'HODORI'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+함수 표현식 분할 키 조건을 직접 사용하지 않았음에도 **YEAR** 함수가 원본 컬럼과 동일한 정렬 순서를 보장하므로 분할 프루닝이 적용되었음을 확인할 수 있다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
+      SCAN (table: public.olympic_func_range), (heap time: 0, fetch: 2, ioread: 0, readrows: 10, rows: 5)
+             PARTITION (table: public.olympic_func_range__p__before_1980), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 2)
+             PARTITION (table: public.olympic_func_range__p__before_2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 5, rows: 3)
+      ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+
+조건절에는 ``o.opening_date``\가 사용되었지만 ``YEAR(o.opening_date)``\와 정렬 순서가 동일하기 때문에,
+``YEAR(o.opening_date) between YEAR('1970-01-01') and YEAR('1990-12-31')`` 조건을 만족하는 ``before_1980``\과 ``before_2000`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. _example_partition-pruning_list:
+
+.. rubric:: 예제 4. 리스트 분할의 분할 프루닝
+
+이번 예제에서는 리스트 분할 방식으로 분할 테이블을 생성한 뒤,
+**WHERE** 절에 동등 조건을 사용하는 경우와 범위 조건을 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
+
+아래 질의는 **WHERE** 절에 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
+또한 리스트 분할은 동등 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
+
+.. code-block:: sql
+
+  drop table if exists participant_list;
+
+  create table participant_list
+  partition by list (host_year) (
+      partition p1988 values IN (1988),
+      partition p1992 values IN (1992),
+      partition p1996 values IN (1996),
+      partition p2000 values IN (2000),
+      partition p2004 values IN (2004)
+    )
+  as (select * from participant);
+
+  update statistics on participant_list;
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      p.host_year, p.nation_code, p.gold
+  from
+      participant_list as p
+  where
+      p.host_year in (1988, 1996)
+      and p.gold > 40
+  order by
+      p.host_year, p.gold, p.nation_code;
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  nation_code                  gold
+  ================================================
+           1988  'URS'                          55
+           1996  'USA'                          44
+
+질의 실행 후 프로파일링 결과를 확인하면,
+``p.host_year in (1988, 1996)`` 조건을 만족하는 ``p1988``\과 ``p1996`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 1, fetch: 4, fetch_time: 0, ioread: 0)
+      SCAN (table: public.participant_list), (heap time: 1, fetch: 2, ioread: 0, readrows: 352, rows: 2)
+             PARTITION (table: public.participant_list__p__p1988), (heap time: 1, fetch: 1, ioread: 0, readrows: 156, rows: 1)
+             PARTITION (table: public.participant_list__p__p1996), (heap time: 0, fetch: 1, ioread: 0, readrows: 196, rows: 1)
+      ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+
+리스트 분할은 동등 조건에서만 분할 프루닝을 지원하므로,
+범위 조건 등 동등 조건이 아닌 경우에는 분할 프루닝이 적용되지 않는다.
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      p.host_year, p.nation_code, p.gold
+  from
+      participant_list as p
+  where
+      p.host_year < 1996
+      and p.gold > 40
+  order by
+      p.host_year;
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  nation_code                  gold
+  ================================================
+           1988  'URS'                          55
+           1992  'EUN'                          45
+
+질의 실행 후 프로파일링 결과를 확인하면,
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
+
+각 분할의 값을 기준으로 보면 ``p1996``, ``p2000``, ``p2004`` 분할은 스캔 대상에서 제외될 것처럼 보이지만,
+리스트 분할은 정렬된 순서대로 값이 배치되는 구조가 아니므로 범위 조건만으로는 특정 분할이 스캔 대상에서 제외될 수 없다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 1, fetch: 10, fetch_time: 0, ioread: 0)
+      SCAN (table: public.participant_list), (heap time: 0, fetch: 5, ioread: 0, readrows: 916, rows: 2)
+             PARTITION (table: public.participant_list__p__p1988), (heap time: 0, fetch: 1, ioread: 0, readrows: 156, rows: 1)
+             PARTITION (table: public.participant_list__p__p1992), (heap time: 0, fetch: 1, ioread: 0, readrows: 165, rows: 1)
+             PARTITION (table: public.participant_list__p__p1996), (heap time: 0, fetch: 1, ioread: 0, readrows: 196, rows: 0)
+             PARTITION (table: public.participant_list__p__p2000), (heap time: 0, fetch: 1, ioread: 0, readrows: 197, rows: 0)
+             PARTITION (table: public.participant_list__p__p2004), (heap time: 0, fetch: 1, ioread: 0, readrows: 202, rows: 0)
+      ORDERBY (time: 0, sort: true, page: 0, ioread: 0)
+
+.. _example_partition-pruning_hash:
+
+.. rubric:: 예제 5. 해시 분할의 분할 프루닝
+
+이번 예제에서는 해시 분할 방식으로 분할 테이블을 생성한 뒤,
+**WHERE** 절에 동등 조건을 사용하는 경우와 부정 조건을 사용하는 경우에 대해, 분할 프루닝의 적용 여부를 확인한다.
+
+아래 질의는 **WHERE** 절에 분할 키 조건이 존재하며, 해당 조건은 **CREATE TABLE** 문에서 정의한 분할 키 표현식과 동일하다.
+또한 해시 분할은 동등 조건에 대한 분할 프루닝을 지원하므로 분할 프루닝이 적용될 수 있다.
+
+.. code-block:: sql
+
+  drop table if exists stadium_hash;
+
+  create table stadium_hash
+  partition by hash (nation_code) partitions 4
+  as (select * from stadium);
+
+  update statistics on stadium_hash;
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      s.nation_code, s.name, s.seats
+  from
+      stadium_hash as s
+  where
+      s.nation_code = 'KOR'
+      and s.seats >= 100000
+  order by
+      s.name;
+
+  show trace;
+
+.. code-block:: text
+
+    nation_code           name                        seats
+  =========================================================
+    'KOR'                 'Seoul Olympic Stadium'       100000
+
+질의 실행 후 프로파일링 결과를 확인하면,
+``s.nation_code = 'KOR'`` 조건을 만족하는 ``p2`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 2, fetch_time: 0, ioread: 0)
+      SCAN (table: public.stadium_hash), (heap time: 0, fetch: 1, ioread: 0, readrows: 32, rows: 1)
+             PARTITION (table: public.stadium_hash__p__p2), (heap time: 0, fetch: 1, ioread: 0, readrows: 32, rows: 1)
+
+해시 분할은 동등 조건에서만 분할 프루닝을 지원하므로,
+부정 조건 등 동등 조건이 아닌 경우에는 분할 프루닝이 적용되지 않는다.
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile */
+      s.nation_code, s.name, s.seats
+  from
+      stadium_hash as s
+  where
+      s.nation_code != 'KOR'
+      and s.seats > 100000
+  order by
+      s.name;
+
+  show trace;
+
+.. code-block:: text
+
+    nation_code           name                        seats
+  =========================================================
+    'AUS'                 'Olympic Stadium'          115600
+
+질의 실행 후 프로파일링 결과를 확인하면,
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
+
+앞선 질의에서 ``s.nation_code = 'KOR'`` 조건을 만족하는 경우 ``p2`` 분할만 스캔되었으므로 부정 조건에서는 스캔 대상에서 제외될 것처럼 보이지만,
+해당 분할에도 ``s.nation_code != 'KOR'`` 조건을 만족하는 레코드가 존재할 수 있어 스캔 대상에서 제외될 수 없다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 8, fetch_time: 0, ioread: 0)
+      SCAN (table: public.stadium_hash), (heap time: 0, fetch: 4, ioread: 0, readrows: 141, rows: 1)
+             PARTITION (table: public.stadium_hash__p__p0), (heap time: 0, fetch: 1, ioread: 0, readrows: 27, rows: 0)
+             PARTITION (table: public.stadium_hash__p__p1), (heap time: 0, fetch: 1, ioread: 0, readrows: 53, rows: 0)
+             PARTITION (table: public.stadium_hash__p__p2), (heap time: 0, fetch: 1, ioread: 0, readrows: 32, rows: 0)
+             PARTITION (table: public.stadium_hash__p__p3), (heap time: 0, fetch: 1, ioread: 0, readrows: 29, rows: 1)
+
+.. _example_partition-pruning_join:
+
+.. rubric:: 예제 6. 조인에서의 분할 프루닝
+
+이번 예제에서는 조인 질의 시 분할 테이블이 드리븐(driven) 테이블로 사용되는 경우, 분할 프루닝의 적용 여부를 확인한다.
+
+아래 질의는 힌트를 사용하여 분할 테이블이 드리븐 테이블로 사용되도록 조인 순서를 고정하며,
+이에 따라 조인 조건이 분할 키 조건으로 활용될 것으로 기대할 수 있다.
+하지만 분할 프루닝은 질의 실행 준비 단계에서 확인 가능한 값을 분석하여 결정된다.
+따라서 조인 실행 시점에 컬럼 값이 확정되는 조인 조건으로는 질의 실행 준비 단계에서 값을 미리 알 수 없으므로, 분할 프루닝이 적용되지 않는다.
+
+.. code-block:: sql
+
+  drop table if exists olympic_range;
+
+  create table olympic_range
+  partition by range (host_year) (
+      partition before_1920 values less than (1920),
+      partition before_1940 values less than (1940),
+      partition before_1960 values less than (1960),
+      partition before_1980 values less than (1980),
+      partition before_2000 values less than (2000),
+      partition latest values less than maxvalue
+    )
+  as (select * from olympic);
+
+  update statistics on olympic_range;
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile ordered */
+      p.host_year, p.nation_code, p.gold,
+      o.host_nation, o.slogan
+  from
+      participant as p
+      inner join olympic_range as o on p.host_year = o.host_year
+  where
+      p.host_year in (1988, 2004)
+      and p.gold > 40
+  order by
+      p.host_year, p.gold, p.nation_code;
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  nation_code                  gold  host_nation           slogan
+  ============================================================================================
+           1988  'URS'                          55  'Korea'               'Harmony and progress'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+분할 프루닝이 적용되지 않아 모든 분할에 대한 스캔 정보가 **SCAN** 하위에 **PARTITION**\으로 출력된 것을 확인할 수 있다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 1, fetch: 2204, fetch_time: 0, ioread: 0)
+      SCAN (index: public.participant.pk_participant_host_year_nation_code), (btree time: 1, fetch: 2172, ioread: 0, readkeys: 2154, filteredkeys: 2148, rows: 2148) (lookup time: 1, rows: 6)
+        SCAN (table: public.olympic_range), (heap time: 0, fetch: 31, ioread: 0, readrows: 25, rows: 1)
+               PARTITION (table: public.olympic_range__p__before_1920), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1940), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1960), (heap time: 0, fetch: 4, ioread: 0, readrows: 3, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_1980), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 0)
+               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 1)
+               PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 3, ioread: 0, readrows: 2, rows: 0)
+        MEMOIZE (time: 0, hit: 0, miss: 1, size: 0KB, enabled: true)
+
+분할 테이블이 드리븐 테이블로 사용되는 경우에도,
+조건절에 질의 실행 준비 단계에서 확인 가능한 값을 가진 분할 키 조건이 존재한다면 분할 프루닝이 적용될 수 있다.
+
+.. code-block:: sql
+
+  set trace on;
+
+  select /*+ recompile ordered */
+      p.host_year, p.nation_code, p.gold,
+      o.host_nation, o.slogan
+  from
+      participant as p
+      inner join olympic_range as o on p.host_year = o.host_year
+  where
+      o.host_year in (1988, 2004)
+      and p.gold > 40
+  order by
+      p.host_year, p.gold, p.nation_code;
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  nation_code                  gold  host_nation           slogan
+  ============================================================================================
+           1988  'URS'                          55  'Korea'               'Harmony and progress'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+``o.host_year in (1988, 2004)`` 조건을 만족하는 ``before_2000`` 분할과 ``latest`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 1, fetch: 1845, fetch_time: 1, ioread: 0)
+      SCAN (table: public.participant), (heap time: 1, fetch: 1838, ioread: 0, readrows: 1832, rows: 6)
+        SCAN (table: public.olympic_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 21, rows: 1)
+               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 3, ioread: 0, readrows: 15, rows: 1)
+               PARTITION (table: public.olympic_range__p__latest), (heap time: 0, fetch: 3, ioread: 0, readrows: 6, rows: 0)
+        MEMOIZE (time: 0, hit: 0, miss: 3, size: 0KB, enabled: true)
+
+분할 키 조건에 바인드 변수가 사용되는 경우에도,
+질의 실행 준비 단계에서 바인딩된 값을 확인할 수 있으므로 분할 프루닝이 적용될 수 있다.
+여러 종류의 표현식이 중첩되더라도 질의 실행 준비 단계에서 상수로 평가될 수 있다면 분할 프루닝이 적용될 수 있다.
+
+.. code-block:: sql
+
+  set trace on;
+
+  prepare q from '
+    select /*+ ordered */
+        p.host_year, p.nation_code, p.gold,
+        o.host_nation, o.slogan
+    from
+        participant as p
+        inner join olympic_range as o on p.host_year = o.host_year
+    where
+        o.host_year = year (to_date (?, ''YYYY-MM-DD''))
+        and p.gold > 40
+    order by
+        p.host_year, p.gold, p.nation_code;
+  ';
+
+  execute q using '1988-01-01';
+
+  show trace;
+
+.. code-block:: text
+
+      host_year  nation_code                  gold  host_nation           slogan
+  ============================================================================================
+           1988  'URS'                          55  'Korea'               'Harmony and progress'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+``o.host_year = year (to_date ('1988-01-01', 'YYYY-MM-DD'))`` 조건을 만족하는 ``before_2000`` 분할만 스캔되었으며,
+그 외 나머지 분할은 스캔 대상에서 제외되었다.
+
+.. code-block:: text
+
+  Trace Statistics:
+    SELECT (time: 1, fetch: 165, fetch_time: 0, ioread: 0)
+      SCAN (index: public.participant.pk_participant_host_year_nation_code), (btree time: 1, fetch: 158, ioread: 0, readkeys: 157, filteredkeys: 156, rows: 156) (lookup time: 1, rows: 1)
+        SCAN (table: public.olympic_range), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 1)
+               PARTITION (table: public.olympic_range__p__before_2000), (heap time: 0, fetch: 6, ioread: 0, readrows: 5, rows: 1)
+
+.. _example_partition-pruning_direct-access:
+
+.. rubric:: 예제 7. 분할 직접 접근
+
+이번 예제에서는 분할 프루닝 외에 **PARTITION** 절을 사용하여 특정 분할을 직접 조회하는 방법을 확인한다.
+이를 통해 분할 테이블에는 적용할 수 없었던 최적화 기법이 분할 단위에서는 적용되는지 그 여부를 확인한다.
+
+아래 질의는 분할 테이블을 대상으로 조회하므로, **ORDER BY** 및 **LIMIT** 절과 적절한 인덱스가 존재하더라도
+**SKIP ORDER BY** 최적화는 적용되지 않는다.
+
+.. code-block:: sql
+
+  drop table if exists olympic_range;
+
+  create table olympic_range
+  partition by range (host_year) (
+      partition before_1920 values less than (1920),
+      partition before_1940 values less than (1940),
+      partition before_1960 values less than (1960),
+      partition before_1980 values less than (1980),
+      partition before_2000 values less than (2000),
+      partition latest values less than maxvalue
+    )
+  as (select * from olympic);
+
+  create index i_olympic_range_host_year on olympic_range (host_year);
+
+  update statistics on olympic_range;
+
+.. code-block:: sql
+
+  set optimization level 513;
+  set trace on;
+
+  select /*+ recompile */
+      o.host_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_range as o
+  where
+      o.host_year > 2000
+  order by
+      o.host_year desc
+  limit 1;
+
+  show trace;
+
+.. code-block:: text
+
+  Join graph segments (f indicates final):
+  seg[0]: [0]
+  seg[1]: host_year[0] (f)
+  seg[2]: host_nation[0] (f)
+  seg[3]: host_city[0] (f)
+  seg[4]: mascot[0] (f)
+  Join graph nodes:
+  node[0]: public.olympic_range o(25/6) (sargs 0) (loc 0)
+  Join graph terms:
+  term[0]: o.host_year range (2000 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[0]) (loc 0)
+
+  Query plan:
+
+  temp(order by)
+      subplan: iscan
+                   class: o node[0]
+                   index: i_olympic_range_host_year term[0]
+                   cost:  3 card 2
+      sort:  1 desc
+      cost:  9 card 2
+
+  Query stmt:
+
+  select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
+
+.. code-block:: text
+
+      host_year  host_nation           host_city             mascot
+  ===============================================================================
+           2004  'Greece'              'Athens'              'Athena  Phevos'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+**SKIP ORDER BY** 최적화가 적용되지 않아 **ORDERBY**\에서 **TopNSort**\가 수행되었음을 확인할 수 있다.
+
+.. code-block:: text
+
+  Query Plan:
+    SORT (order by)
+      INDEX SCAN (o.i_olympic_range_host_year) (key range: (o.host_year> ?:0 ))
+
+    rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range] o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 6, fetch_time: 0, ioread: 0)
+      SCAN (index: public.olympic_range.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)
+             PARTITION (index: public.olympic_range__p__latest.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 1, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)
+      ORDERBY (time: 0, topnsort: true)
+
+**PARTITION** 절을 통해 특정 분할만 직접 조회하면
+일반 테이블과 동일하게 처리되므로, **SKIP ORDER BY** 최적화가 적용될 수 있다.
+
+.. code-block:: sql
+
+  set optimization level 513;
+  set trace on;
+
+  select /*+ recompile */
+      o.host_year, o.host_nation, o.host_city, o.mascot
+  from
+      olympic_range partition (latest) as o
+  where
+      o.host_year > 2000
+  order by
+      o.host_year desc
+  limit 1;
+
+  show trace;
+
+.. code-block:: text
+
+  Join graph segments (f indicates final):
+  seg[0]: [0]
+  seg[1]: host_year[0] (f)
+  seg[2]: host_nation[0] (f)
+  seg[3]: host_city[0] (f)
+  seg[4]: mascot[0] (f)
+  Join graph nodes:
+  node[0]: public.olympic_range__p__latest o(25/1) (sargs 0) (loc 0)
+  Join graph terms:
+  term[0]: o.host_year range (2000 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[0]) (loc 0)
+
+  Query plan:
+
+  iscan
+      class: o node[0]
+      index: i_olympic_range_host_year term[0] (desc_index)
+      sort:  1 desc
+      cost:  4 card 2
+
+  Query stmt:
+
+  select o.host_year, o.host_nation, o.host_city, o.mascot from olympic_range__p__latest o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
+
+  /* ---> skip ORDER BY */
+
+.. code-block:: text
+
+      host_year  host_nation           host_city             mascot
+  ===============================================================================
+           2004  'Greece'              'Athens'              'Athena  Phevos'
+
+질의 실행 후 프로파일링 결과를 확인하면,
+**SKIP ORDER BY** 최적화가 적용되었음을 확인할 수 있다.
+
+.. code-block:: text
+
+  Query Plan:
+    INDEX SCAN (o.i_olympic_range_host_year) (key range: (o.host_year> ?:0 ), desc_index: true)
+    skip order by: true
+
+    rewritten query: select o.host_year, o.host_nation, o.host_city, o.mascot from [public.olympic_range__p__latest] o where (o.host_year> ?:0 ) order by 1 desc  for orderby_num()<= ?:1
+
+  Trace Statistics:
+    SELECT (time: 0, fetch: 4, fetch_time: 0, ioread: 0)
+      SCAN (index: public.olympic_range__p__latest.i_olympic_range_host_year), (btree time: 0, fetch: 3, ioread: 0, readkeys: 2, filteredkeys: 1, rows: 1) (lookup time: 0, rows: 1)
 
 분할 관리
 =========

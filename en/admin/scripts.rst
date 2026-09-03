@@ -12,7 +12,7 @@ unloaddb.sh script
 ==================
 
 To shorten the execution time of **unloaddb** of a large size database, it is possible to run **cubrid unloaddb** processes concurrently over groups of different tables.
-**unloaddb.sh** is a shell script that automates this process.
+**unloaddb.sh** is a shell script that automates this process and can be found in the $CUBRID/share/scripts directory.
 
 To evenly distribute unloaddb load over multiple child processes, the **unloadb.sh** gets the size information of the tables to be unloaded from the system catalog (this requires dba privileges).
 
@@ -119,6 +119,7 @@ restore_to_newdb.sh script
 When data recovery is required due to user errors or system failures, the recovery process typically involves restoring a backup to the production server. This often requires additional steps such as creating new user accounts or installing database engines, making the process cumbersome. \
 
 The restore_to_newdb.sh script allows you to restore a backup and create a new database instance under a new database name without any additional setup, using the existing CUBRID environment.
+The script can be found in the $CUBRID/share/scripts directory.
 
 .. warning::
 
@@ -131,14 +132,14 @@ The restore_to_newdb.sh script allows you to restore a backup and create a new d
 
 **Basic Usage** ::
 
-	sh restore_to_new.sh [options] backuped-database-name new-database-name
+	sh restore_to_newdb.sh [options] backuped-database-name new-database-name
 
-* **restore_to_new.sh** : A script that restores a backup and creates a new DBMS instance.
+* **restore_to_newdb.sh** : A script that restores a backup and creates a new DBMS instance.
 * **backup-database-name** : Name of the backed-up database to be restored.
 * **new-database-name** : Name of the newly created database after restoration.
 
 
-**[Options] for restore_to_new.sh**
+**[Options] for restore_to_newdb.sh**
 
 .. program:: sh restore_to_newdb.sh backuped-database-name new-database-name
 

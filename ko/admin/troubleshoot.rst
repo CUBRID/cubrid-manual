@@ -33,13 +33,16 @@ CAS 정보 출력 함수
 응용 프로그램 로그
 ------------------
 
-응용 프로그램에서 로그를 출력하도록 연결 URL을 설정하면 특정 질의에서 오류가 발생했을 때 해당 오류가 발생한 CAS ID를 확인할 수 있다. 에러가 발생했을 때 작성되는 응용 프로그램 로그의 예는 다음과 같다. 
+응용 프로그램에서 로그를 출력하도록 설정하면 특정 질의에서 오류가 발생했을 때 해당 오류가 발생한 CAS ID를 확인할 수 있다. JDBC는 **java.util.logging** 에서 **cubrid.jdbc** 의 레벨을 **FINE**\ 이하로 설정해야 하고, 로그 형식도 응용 프로그램의 **java.util.logging** 설정이 결정한다. 에러가 발생했을 때 작성되는 응용 프로그램 로그의 예는 다음과 같으며, JDBC 예는 :ref:`jdbc-logging-conf`\ 의 설정(**SimpleFormatter**)을 사용했을 때의 출력이다. 
 
 **JDBC 응용 프로그램 로그**
   
 :: 
  
-    Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logFile=driver_1.log&logSlowQueries=true&slowQueryThresholdMillis=5]. 
+    May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logException
+    FINE: DUMP EXCEPTION
+    [cubrid.jdbc.driver.CUBRIDException]
+    cubrid.jdbc.driver.CUBRIDException: Syntax: syntax error, unexpected IdName [CAS INFO - localhost:33000,1,30560],[SESSION-16],[URL-jdbc:cubrid:localhost:33000:demodb::********:?logSlowQueries=true&slowQueryThresholdMillis=5].
 
 **CCI 응용 프로그램 로그**
 
@@ -63,13 +66,14 @@ CUBRID는 응용 프로그램-브로커-DB 서버의 3 계층 구조로 되어 �
 
 응용 프로그램 로그와 CAS의 SQL 로그에 둘 다 슬로우 쿼리로 출력되고 둘 사이에 해당 질의의 수행 시간 차이가 거의 없다면, 브로커-DB 서버 사이에서 속도가 저하된 원인이 존재할 것이다. 한 예로, DB 서버에서 질의를 처리하는데 시간이 걸렸을 것이다. 
 
-슬로우 쿼리 발생 시 각 응용 프로그램 로그의 예는 다음과 같다. 
+슬로우 쿼리 발생 시 각 응용 프로그램 로그의 예는 다음과 같다. JDBC 예는 :ref:`jdbc-logging-conf`\ 의 설정(**SimpleFormatter**)을 사용했을 때의 출력이다. 
 
 **JDBC 응용 프로그램 로그** 
  
 :: 
  
-    2013-05-09 16:25:08.831|INFO|SLOW QUERY 
+    May 9, 2013 4:25:08 PM cubrid.jdbc.jci.UConnection logSlowQuery
+    FINEST: SLOW QUERY
     [CAS INFO] 
     localhost:33000, 1, 12916 
     [TIME] 
@@ -85,7 +89,9 @@ CUBRID는 응용 프로그램-브로커-DB 서버의 3 계층 구조로 되어 �
 
 응용 프로그램과 브로커의 슬로우 쿼리 정보는 각각 다른 파일로 다음과 같은 경우에 저장된다. 
      
-*   응용 프로그램의 슬로우 쿼리 정보는 연결 URL의 **logSlowQueries** 속성을 **yes**\ 로 설정하고 **slowQueryThresholdMillis** 값을 설정하면 logFile 속성으로 지정한 응용 프로그램 로그 파일에 저장된다(:func:`cci_connect_with_url`, :ref:`jdbc-connection-conf` 참고). 
+*   CCI 응용 프로그램의 슬로우 쿼리 정보는 연결 URL의 **logSlowQueries** 속성을 **yes**\ 로 설정하고 **slowQueryThresholdMillis** 값을 설정하면 **logFile** 속성으로 지정한 응용 프로그램 로그 파일에 저장된다(:func:`cci_connect_with_url` 참고).
+
+*   JDBC 응용 프로그램의 슬로우 쿼리 정보는 연결 URL의 **logSlowQueries** 속성을 **true**\ 로 설정하고 **slowQueryThresholdMillis** 값을 설정한 후, **java.util.logging** 에서 **cubrid.jdbc** 의 레벨을 **FINEST** 로 설정하면 출력된다(:ref:`jdbc-logging-conf` 참고).
  
 *   브로커의 슬로우 쿼리 정보는 :ref:`broker-configuration`\ 의 SLOW_LOG 값을 ON으로 설정하고 **LONG_QUERY_TIME** 값을 설정하면 $CUBRID/log/broker/sql_log 디렉터리에 저장된다. 
 
@@ -266,7 +272,7 @@ HA 구동 실패
     |                                                            |                                                                                                  |
     |                                                            | Internal error: logical log page 81 may be corrupted.                                            |
     +------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-    | db_ha_apply_info 카탈로그와 현재 복제 로그의 DB 생성       | HA generic: Failed to initialize db_ha_apply_info.                                               |
+    | _db_ha_apply_info 카탈로그와 현재 복제 로그의 DB 생성      | HA generic: Failed to initialize _db_ha_apply_info.                                              |
     | 시간이 다름. 즉, 이전 반영하던 복제 로그가 아님            |                                                                                                  |
     |                                                            |                                                                                                  |
     +------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -281,5 +287,5 @@ HA 구동 실패 시 대처 방법
 상황                                             대처 방법
 ================================================ ===============================================================
 실패 원인이 된 원본 노드가 마스터 상태인 경우    복제 재구성
-실패 원인이 된 원본 노드가 슬레이브 상태인 경우  복제 로그 및 db_ha_apply_info 카탈로그 초기화 후 재시작
+실패 원인이 된 원본 노드가 슬레이브 상태인 경우  복제 로그 및 _db_ha_apply_info 카탈로그 초기화 후 재시작
 ================================================ ===============================================================

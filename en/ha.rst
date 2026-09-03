@@ -52,7 +52,7 @@ A CUBRID HA node consists of one master process (cub_master), one or more databa
 
 .. image:: /images/image15.png
 
-*   **Replication log reflection process (applylogdb)** : Reflects the log that has been copied by the replication log copy process to a node. The information of reflected replications is stored in the internal catalog (db_ha_apply_info). You can use the :ref:`cubrid-applyinfo` utility to verify this information.
+*   **Replication log reflection process (applylogdb)** : Reflects the log that has been copied by the replication log copy process to a node. The information of reflected replications is stored in the internal catalog (_db_ha_apply_info). You can use the :ref:`cubrid-applyinfo` utility to verify this information.
 
 .. image:: /images/image16.png
 
@@ -649,9 +649,13 @@ Configuring this parameter can prevent split-brain, a phenomenon in which two ma
 
 However, the "ping check" does not work if the ICMP protocol is disabled. CUBRID provides **ha_tcp_ping_hosts** as an alternative to address this.
 
+This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
+
 **ha_tcp_ping_hosts**
 
 **ha_tcp_ping_hosts** is a parameter that can be used as an alternative to **ha_ping_hosts** when the ICMP protocol is disabled. **ha_tcp_ping_hosts** works like **ha_ping_hosts** except that the TCP layer is used instead of the IP layer for the "ping check". The default is **NULL**. A comma(,) is used to separate individual host names, and a colon(:) is used to separate a host name and a port number. So, the format of this parameter is like "ha_tcp_ping_hosts=host1:port1,host2:port2". In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in **ha_tcp_ping_hosts** and the firewall must not block the requests. **ha_tcp_ping_hosts** is ignored if the **ha_ping_hosts** is also set.
+
+This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
 Replication
 ^^^^^^^^^^^
@@ -2287,7 +2291,7 @@ Building Replication
 restoreslave
 ------------
 
-**cubrid restoreslave** is the same as **cubrid restoredb** which restores a database from a backup but it includes several convenient features when rebuilding a slave or a replica. With **cubrid restoreslave**, user does not need to manually collect replication-related information from a backup output to create a replication catalog which is stored in **db_ha_apply_info**. It automatically reads any necessary information from a backup image and an active log and then it adds the relevant replication catalog into **db_ha_apply_info**. All you need to do is to provide two mandatory options: the state of the node where the backup image was created, and the hostname of the current master node. Please also refer :ref:`restoredb` for more details. ::
+**cubrid restoreslave** is the same as **cubrid restoredb** which restores a database from a backup but it includes several convenient features when rebuilding a slave or a replica. With **cubrid restoreslave**, user does not need to manually collect replication-related information from a backup output to create a replication catalog which is stored in **_db_ha_apply_info**. It automatically reads any necessary information from a backup image and an active log and then it adds the relevant replication catalog into **_db_ha_apply_info**. All you need to do is to provide two mandatory options: the state of the node where the backup image was created, and the hostname of the current master node. Please also refer :ref:`restoredb` for more details. ::
 
     cubrid restoreslave [OPTION] database-name
 
@@ -2354,7 +2358,7 @@ In this section, we will see various scenarios regarding adding a new node or re
     
 *   :ref:`rebuild-slave`
 
-    Rebuild the slave using the existing master in the environment which a master, a slave and a replica are built. A new information should be updated by a user in the db_ha_apply_info catalog table.
+    Rebuild the slave using the existing master in the environment which a master, a slave and a replica are built. A new information should be updated by a user in the _db_ha_apply_info catalog table.
     
 Now let's see in detail about the above scenarios.    
 
@@ -2363,15 +2367,15 @@ When you want to rebuild only the abnormal node in the HA environment, see :ref:
 .. note::
 
     *   During building a replication, please note that added or rebuilt node's replication information and replication logs should be updated or removed when you add, rebuild or remove a certain node.
-        Replication information is saved on the db_ha_apply_info table, and it has other nodes' replication process information.
+        Replication information is saved on the _db_ha_apply_info table, and it has other nodes' replication process information.
     
         However, because role change does not occur in a replica node, the other node is not required to have replication information and a replication logs about the replica node. On the other hand, the replica node has all information about a master and a slave.
 
-    *   When you run a scenario of :ref:`rebuild-slave`, you should update db_ha_apply_info's information directly.
+    *   When you run a scenario of :ref:`rebuild-slave`, you should update _db_ha_apply_info's information directly.
     
     *   When you run a scenario of :ref:`build-slave`, a slave is newly built; therefore, you can use the automatically added information.
     
-    *   When you run a a scenario of :ref:`build-another-slave` or :ref:`add-replica`, backed-up database from the existing slave is used; you can use as it exists because master's db_ha_apply_info information is included in the existing slave. 
+    *   When you run a a scenario of :ref:`build-another-slave` or :ref:`add-replica`, backed-up database from the existing slave is used; you can use as it exists because master's _db_ha_apply_info information is included in the existing slave. 
     
     *   When you run a scenario of :ref:`remove-slave`, you must remove replication information about a removed slave. However, this information does not make a problem even if this is left.
 
@@ -2795,7 +2799,7 @@ You can use an existing master or slave if you want to add a new slave during HA
             
             You can check if requried replication logs are deleted or not by watching the testdb_lginf file.
 
-            1.  If this is the case of restoring a database from a slave backup file, you can check what pages are required, from the page of master by watching the value of required_lsa_pageid in the db_ha_apply_info catalog table.
+            1.  If this is the case of restoring a database from a slave backup file, you can check what pages are required, from the page of master by watching the value of required_lsa_pageid in the _db_ha_apply_info catalog table.
 
             2.  Watch the contents of the testdb_lginf file located in $CUBRID_DATABASES/testdb/log directory from  bottom to top.
             
@@ -2945,7 +2949,7 @@ Let's remove a slave when the HA environment is composed of "master:slave = 1:2"
         
             $ csql -u dba --sysadm --write-on-standby testdb@localhost
             
-            sysadm> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeC';
+            sysadm> DELETE FROM _db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeC';
         
         copied_log_path is the path in which replication log files are stored.
         
@@ -3288,15 +3292,15 @@ Now let's see the case of rebuilding a existing slave node during a service in a
 
 2.  Restore *nodeB*'s database from *nodeA*'s backup, and add data to HA catalog table.
 
-    *    Delete db_ha_apply_info data for *nodeB* from *nodeA* and *nodeC*.
+    *    Delete _db_ha_apply_info data for *nodeB* from *nodeA* and *nodeC*.
         
         ::
         
             [nodeA]$ csql --sysadm -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
+            csql> DELETE FROM _db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
             [nodeC]$ csql --sysadm --write-on-standby -u dba testdb@localhost 
-            csql> DELETE FROM db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
+            csql> DELETE FROM _db_ha_apply_info WHERE copied_log_path='/home/cubrid/DB/databases/testdb_nodeB';
 
     *   Backup a database from *nodeA*.
 
@@ -3329,9 +3333,9 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             [nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log testdb
 
 
-    *   Add a replication information record for *nodeA* to *nodeB*'s db_ha_apply_info.
+    *   Add a replication information record for *nodeA* to *nodeB*'s _db_ha_apply_info.
         
-        Get an update information of **db_ha_apply_info** from output.txt file, which has backup result messages in *nodeA*. output.txt is saved at the directory on which a user ran "cubrid backupdb" command.
+        Get an update information of **_db_ha_apply_info** from output.txt file, which has backup result messages in *nodeA*. output.txt is saved at the directory on which a user ran "cubrid backupdb" command.
                 
         ::
             
@@ -3376,7 +3380,7 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             local_db_creation=`awk 'BEGIN { print strftime("%m/%d/%Y %H:%M:%S", '$db_creation') }'`
                 csql_cmd="\
                 INSERT INTO \
-                        db_ha_apply_info \
+                        _db_ha_apply_info \
                 VALUES \
                 ( \
                         '$db_name', \
@@ -3415,7 +3419,7 @@ Now let's see the case of rebuilding a existing slave node during a service in a
             [nodeB]$ csql -u dba -S testdb
             
             csql> ;line on
-            csql> SELECT * FROM db_ha_apply_info;
+            csql> SELECT * FROM _db_ha_apply_info;
             
 3.  Copy *nodeA*'s active log into *nodeB*
 
@@ -4112,7 +4116,7 @@ When you rebuild only a slave because the slave is abnormal in the environment o
 
 1.  Backup the master database. 
 2.  Restore the database from slave.
-3.  Save backup time into the slave's HA meta table (db_ha_apply_info).
+3.  Save backup time into the slave's HA meta table (_db_ha_apply_info).
 4.  Start HA service from slave. (cubrid hb start)
 
 For rebuilding replications, the following environment must be the same in master, slave and replica nodes.
@@ -4187,4 +4191,4 @@ Once the script has been configured, execute the **ha_make_slavedb.sh** script i
 
     *   **Error while executing the rebuilding replication script**
     
-        The rebuilding replication script is not automatically rolled back to its previous stage even when an error occurs during the execution. This is because the slave node cannot provide normal service before rebuilding replication script is executed. To return to the phase before rebuilding replication script is executed, you must back up the existing replication logs and **db_ha_apply_info** information which is internal catalog of the master and slave nodes before building replication is executed.
+        The rebuilding replication script is not automatically rolled back to its previous stage even when an error occurs during the execution. This is because the slave node cannot provide normal service before rebuilding replication script is executed. To return to the phase before rebuilding replication script is executed, you must back up the existing replication logs and **_db_ha_apply_info** information which is internal catalog of the master and slave nodes before building replication is executed.

@@ -941,6 +941,9 @@ SQL 힌트
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
+    PARALLEL (<degree>) |
+    NO_PARALLEL_HEAP_SCAN |
+    NO_PARALLEL_SUBQUERY |
     RECOMPILE
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
@@ -1009,6 +1012,32 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
     .. note::
 
         현재 레코드 삽입, 갱신, 삭제 시 힙 파일에서 생성되는 로그에만 영향을 준다. 따라서 복구 후 테이블과 인덱스의 데이터가 불일치하는 문제, 커밋된 레코드가 복구되지 않는 문제 등이 발생할 수 있다. 반드시 주의하여 사용하여야 한다.
+
+.. _parallel-hint:
+
+*   **PARALLEL** ( *degree* ): 병렬 질의 실행(병렬 힙 스캔, 병렬 부질의 실행, 병렬 해시 조인, 병렬 정렬)을 활성화하고 병렬 처리 정도를 지정하는 힌트이다. *degree* 는 0 이상의 정수 값이어야 하며, 병렬로 처리할 워커 스레드의 수를 의미한다. 0이나 1로 지정할 경우 병렬 처리 기능이 비활성화된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+
+    .. code-block:: sql
+
+        SELECT /*+ PARALLEL(4) */ * FROM large_table WHERE condition;
+
+.. _no-parallel-heap-scan:
+
+*   **NO_PARALLEL_HEAP_SCAN**: 병렬 힙 스캔을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+
+    .. code-block:: sql
+
+        SELECT /*+ NO_PARALLEL_HEAP_SCAN */ * FROM large_table WHERE condition;
+
+.. _no-parallel-subquery:
+
+*   **NO_PARALLEL_SUBQUERY**: 부질의(subquery)의 병렬 실행을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+
+    .. code-block:: sql
+
+        SELECT /*+ NO_PARALLEL_SUBQUERY */ * 
+        FROM table1 
+        WHERE id IN (SELECT id FROM table2 WHERE status = 'active');
 
 .. _recompile:
 
@@ -4711,7 +4740,7 @@ WITH절에 포함되는 재귀 부분 중 다른 CTE를 참조하는 부질의�
 
 :ref:`질의 프로파일링 <query-profiling>` 요청과 함께 질의 수행시 비상관 서브쿼리(uncorrelated subquery) 캐시가 적용된 부질의의 하위 정보로 비상관 서브쿼리 캐시에 대한 프로파일링 정보가 출력된다.
 
-다음은 비상관 부질의 수행시 서브 쿼리 캐시 프로파일링 정보가 표시되는 예시이다.
+다음은 부질의 수행시 서브 쿼리 캐시 프로파일링 정보가 표시되는 예시이다.
 
 ::
 

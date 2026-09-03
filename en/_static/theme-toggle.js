@@ -1,320 +1,240 @@
-(function() {
-  // #left-sidebar 찾기
-  var sidebar = document.getElementById('left-sidebar');
-  if (!sidebar) {
-    console.error('[ERROR] #left-sidebar 요소를 찾을 수 없습니다.');
-    return;
-  }
-  console.log('[OK] #left-sidebar 발견');
+(function () {
+    'use strict';
 
-  // 부모 container (grid 컨테이너) 찾기
-  var container = sidebar.parentElement;
-  if (!container) {
-    console.error('[ERROR] container를 찾을 수 없습니다.');
-    return;
-  }
-  console.log('[OK] container 발견:', container.className);
+    const CFG = {
+        minW: 98, iconW: 24, maxW: 360, defW: 240,
+        storageKey: 'sidebarGridWidth',
+        hideDelay: 2000
+    };
 
-  // 중복 방지: 이미 resizer가 있으면 종료
-  if (document.getElementById('sidebar-grid-resizer')) {
-    console.warn('[WARN] Resizer가 이미 존재합니다.');
-    return;
-  }
-
-  // Breakpoint별 초기 크기 정의
-  function getInitialWidth() {
-    var windowWidth = window.innerWidth;
-    if (windowWidth >= 1024) {
-      return 240; // lg: breakpoint
-    } else if (windowWidth >= 768) {
-      return 220; // md: breakpoint
-    } else {
-      return 220; // 기본값 (모바일에서는 사용 안함)
+    if (window.sidebarControlInstance) {
+        window.sidebarControlInstance.destroy();
     }
-  }
 
-  // localStorage에서 이전 width 가져오기 (없으면 breakpoint 기준)
-  var savedWidth = localStorage.getItem('sidebarGridWidth');
-  var width = savedWidth ? parseInt(savedWidth, 10) : getInitialWidth();
-  var defaultWidth = getInitialWidth();
-  var iconModeWidth = 24;
-  var isIconMode = false;
+    class SidebarSystem {
+        constructor() {
+            const saved = parseInt(localStorage.getItem(CFG.storageKey), 10);
+            this.state = {
+                curW: Number.isFinite(saved) ? saved : CFG.defW,
+                isDragging: false
+            };
+            this.dom = {};
+            this.ticking = { main: false, drag: false };
+            this.timer = null;
+            this.ro = null;
 
-  console.log('[INFO] 사이드바 초기 너비:', width + 'px (breakpoint 기준: ' + getInitialWidth() + 'px)');
+            this.boundResize = () => this.updateAll();
+            this.boundScroll = () => this.handleScroll();
+            this.boundMove = (e) => this.onMouseMove(e);
+            this.boundUp = () => this.onMouseUp();
 
-  // 데스크톱 모드일 때만 grid 적용 함수
-  function applyGridWidth() {
-    if (window.innerWidth >= 768) {
-      container.style.gridTemplateColumns = width + 'px minmax(0, 1fr)';
-    } else {
-      container.style.gridTemplateColumns = '';
-    }
-  }
-
-  // 아이콘 모드 체크 및 전환
-  function checkIconMode() {
-    if (window.innerWidth >= 768) {
-      if (width <= 98) {
-        if (!isIconMode) {
-          isIconMode = true;
-          width = iconModeWidth;
-          sidebar.classList.add('icon-mode');
-          applyGridWidth();
-          console.log('[INFO] 아이콘 모드 활성화 (24px)');
+            this.init();
         }
-      } else {
-        if (isIconMode) {
-          isIconMode = false;
-          sidebar.classList.remove('icon-mode');
-          console.log('[INFO] 아이콘 모드 비활성화');
+
+        init() {
+            if (!this.cacheDOM()) return;
+            this.injectStyles();
+            this.buildUI();
+            this.attachEvents();
+            this.updateAll();
         }
-      }
-    } else {
-      if (isIconMode) {
-        isIconMode = false;
-        sidebar.classList.remove('icon-mode');
-        console.log('[INFO] 모바일 모드 - 아이콘 모드 해제');
-      }
+
+        cacheDOM() {
+            this.dom.sbL = document.getElementById('left-sidebar');
+            this.dom.sbR = document.getElementById('right-sidebar');
+            this.dom.main = document.querySelector('main');
+            this.dom.cntr = this.dom.sbL?.parentElement;
+            return !!(this.dom.sbL && this.dom.sbR && this.dom.cntr);
+        }
+
+        injectStyles() {
+            if (document.getElementById('sb-final-fixed-v2')) return;
+            const style = document.createElement('style');
+            style.id = 'sb-final-fixed-v2';
+            style.textContent = `
+                :root { --sb-l-w: ${CFG.defW}px; --sb-gap: calc(var(--spacing) * 9); }
+                @media (min-width: 1024px) { :root { --sb-gap: calc(var(--spacing) * 13); } }
+                #sidebar-grid-resizer { position: absolute; left: calc(var(--sb-gap) * -1 + 2px); top: 0; width: 8px; height: 100%; cursor: ew-resize; z-index: 1000; display: none; touch-action: none; }
+                #sidebar-expand-icon { position: fixed; top: 40%; left: 2%; z-index: 1001; cursor: pointer; display: none; background: var(--color-muted); color: var(--color-muted-foreground); padding: 6px; border: 1px solid var(--color-border); border-radius: 4px; align-items: center; justify-content: center; }
+                #scrolltop-toggle { position: fixed; top: 87px; right: 1.9%; z-index: 9999; background: var(--color-muted); color: var(--color-muted-foreground); border: 1px solid var(--color-border); border-radius: 4px; padding: 6px; cursor: pointer; display: none; align-items: center; justify-content: center; transition: opacity .5s ease, transform 0.3s ease; opacity: 1; }
+                .icon-mode { overflow: hidden; }
+                .icon-mode > *:not(#sidebar-expand-icon) { opacity: 0; pointer-events: none; }
+                .resizing { cursor: ew-resize !important; user-select: none !important; }
+                .force-hide-sidebar { display: none !important; }
+                .full-width-layout { grid-template-columns: 1fr !important; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        buildUI() {
+            this.dom.resizer = document.createElement('div');
+            this.dom.resizer.id = 'sidebar-grid-resizer';
+            this.dom.exBtn = document.createElement('button');
+            this.dom.exBtn.id = 'sidebar-expand-icon';
+            this.dom.tgBtn = document.createElement('button');
+            this.dom.tgBtn.id = 'scrolltop-toggle';
+
+            this.dom.exBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`;
+            this.dom.tgBtn.innerHTML = `<svg height="18" viewBox="0 0 24 24" width="18" fill="currentColor" style="transition: transform 0.3s"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>`;
+
+            const wrap = this.dom.sbL.nextElementSibling;
+            if (wrap) {
+                wrap.style.position = 'relative';
+                wrap.insertBefore(this.dom.resizer, wrap.firstChild);
+            }
+            this.dom.resizer.appendChild(this.dom.exBtn);
+            document.body.appendChild(this.dom.tgBtn);
+        }
+
+        attachEvents() {
+            this.dom.resizer.addEventListener('mousedown', (e) => this.onDragStart(e));
+            window.addEventListener('resize', this.boundResize);
+            window.addEventListener('scroll', this.boundScroll, { passive: true });
+            
+            this.dom.tgBtn.addEventListener('click', () => this.onToggleRight());
+            this.dom.exBtn.addEventListener('click', () => this.onExpandLeft());
+            
+            this.dom.tgBtn.addEventListener('mouseenter', () => this.clearTimer());
+            this.dom.tgBtn.addEventListener('mouseleave', () => {
+                if (this.dom.sbR.dataset.manualHidden === "true") this.resetTimer();
+            });
+            
+            this.ro = new ResizeObserver(() => this.updateAll());
+            this.ro.observe(this.dom.sbL);
+            this.ro.observe(this.dom.sbR);
+        }
+
+        isVisible(el, side) {
+            if (!el || el.offsetWidth <= 0) return false;
+            const rect = el.getBoundingClientRect();
+            return side === 'left' ? rect.right > 5 : rect.left < window.innerWidth - 5;
+        }
+
+        updateLeft(w = this.state.curW) {
+            const show = this.isVisible(this.dom.sbL, 'left');
+            this.dom.resizer.style.display = show ? 'block' : 'none';
+            if (show) {
+                const isIcon = w <= CFG.minW;
+                const finalW = isIcon ? CFG.iconW : w;
+                this.dom.cntr.style.gridTemplateColumns = `${finalW}px minmax(0, 1fr)`;
+                this.dom.sbL.classList.toggle('icon-mode', isIcon);
+                this.dom.exBtn.style.display = isIcon ? 'flex' : 'none';
+            }
+        }
+
+        updateRight() {
+            this.dom.sbR.classList.remove('force-hide-sidebar');
+            const show = this.isVisible(this.dom.sbR, 'right');
+            const manual = this.dom.sbR.dataset.manualHidden === "true";
+
+            if (!show) {
+                this.dom.tgBtn.style.display = 'none';
+                this.dom.main.classList.remove('full-width-layout');
+                this.clearTimer();
+            } else {
+                this.dom.tgBtn.style.display = 'flex';
+                this.dom.tgBtn.firstElementChild.style.transform = manual ? "rotate(180deg)" : "rotate(0deg)";
+                
+                if (manual) {
+                    this.dom.sbR.classList.add('force-hide-sidebar');
+                    this.dom.main.classList.add('full-width-layout');
+                    this.resetTimer();
+                } else {
+                    this.dom.sbR.classList.remove('force-hide-sidebar');
+                    this.dom.main.classList.remove('full-width-layout');
+                    this.clearTimer();
+                    this.dom.tgBtn.style.opacity = "1";
+                }
+            }
+        }
+
+        updateAll() {
+            if (this.ticking.main) return;
+            this.ticking.main = true;
+            requestAnimationFrame(() => {
+                this.updateLeft();
+                this.updateRight();
+                this.ticking.main = false;
+            });
+        }
+
+        onDragStart(e) {
+            this.state.isDragging = true;
+            this.state.cLeft = this.dom.cntr.getBoundingClientRect().left;
+            document.body.classList.add('resizing');
+            window.addEventListener('mousemove', this.boundMove);
+            window.addEventListener('mouseup', this.boundUp);
+        }
+
+        onMouseMove(ev) {
+            if (!this.state.isDragging || this.ticking.drag) return;
+            this.ticking.drag = true;
+            requestAnimationFrame(() => {
+                this.state.curW = Math.max(CFG.iconW, Math.min(CFG.maxW, ev.clientX - this.state.cLeft));
+                this.updateLeft();
+                this.ticking.drag = false;
+            });
+        }
+
+        onMouseUp() {
+            this.state.isDragging = false;
+            document.body.classList.remove('resizing');
+            localStorage.setItem(CFG.storageKey, this.state.curW);
+            window.removeEventListener('mousemove', this.boundMove);
+            window.removeEventListener('mouseup', this.boundUp);
+        }
+
+        onToggleRight() {
+            const isHidden = this.dom.sbR.dataset.manualHidden === "true";
+            this.dom.sbR.dataset.manualHidden = String(!isHidden);
+            this.updateRight();
+        }
+
+        onExpandLeft() {
+            this.state.curW = CFG.defW;
+            this.updateLeft();
+            localStorage.setItem(CFG.storageKey, this.state.curW);
+        }
+
+        handleScroll() {
+            if (this.dom.sbR.dataset.manualHidden === "true") {
+                this.resetTimer();
+            }
+        }
+
+        resetTimer() {
+            if (this.dom.sbR.dataset.manualHidden !== "true") {
+                this.clearTimer();
+                this.dom.tgBtn.style.opacity = "1";
+                return;
+            }
+            this.clearTimer();
+            this.dom.tgBtn.style.opacity = "1";
+            this.timer = setTimeout(() => {
+                this.dom.tgBtn.style.opacity = "0.1";
+            }, CFG.hideDelay);
+        }
+
+        clearTimer() {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+
+        destroy() {
+            this.ro?.disconnect();
+            window.removeEventListener('resize', this.boundResize);
+            window.removeEventListener('scroll', this.boundScroll);
+            window.removeEventListener('mousemove', this.boundMove);
+            window.removeEventListener('mouseup', this.boundUp);
+            this.clearTimer();
+            this.dom.resizer?.remove();
+            this.dom.tgBtn?.remove();
+            window.sidebarControlInstance = null;
+        }
     }
-  }
 
-  // 초기 적용
-  applyGridWidth();
-  checkIconMode();
-
-  // 아이콘 모드 스타일 + 스크롤바 영역 보존 스타일 추가
-  var iconModeStyle = document.createElement('style');
-  iconModeStyle.textContent = `
-    @media (min-width: 768px) {
-      /* 스크롤바 공간 항상 확보 */
-      #left-sidebar {
-        scrollbar-gutter: stable;
-      }
-      
-      #left-sidebar.icon-mode {
-        overflow: hidden;
-      }
-      #left-sidebar.icon-mode > div:not(#sidebar-expand-icon),
-      #left-sidebar.icon-mode > nav,
-      #left-sidebar.icon-mode > a,
-      #left-sidebar.icon-mode > button {
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s;
-      }
-      #left-sidebar.icon-mode #sidebar-expand-icon {
-        opacity: 0.6 !important;
-        pointer-events: auto !important;
-      }
-      
-      /* Resizer hover 시 스크롤 비활성화 (영역은 유지) */
-      #left-sidebar.resizer-hover {
-        pointer-events: none;
-        user-select: none;
-      }
+    if (window.sidebarControlInstance) window.sidebarControlInstance.destroy();
+    if (document.getElementById('left-sidebar')) {
+        window.sidebarControlInstance = new SidebarSystem();
     }
-    
-    @media (max-width: 767px) {
-      #left-sidebar.icon-mode > div,
-      #left-sidebar.icon-mode > nav,
-      #left-sidebar.icon-mode > a,
-      #left-sidebar.icon-mode > button {
-        opacity: 0.6 !important;
-        pointer-events: auto !important;
-      }
-      #left-sidebar.icon-mode #sidebar-expand-icon {
-        display: none !important;
-      }
-    }
-  `;
-  document.head.appendChild(iconModeStyle);
-
-  // 확장 아이콘 생성
-  var expandIcon = document.createElement('div');
-  expandIcon.id = 'sidebar-expand-icon';
-  expandIcon.innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  `;
-  expandIcon.style.cssText = `
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background 0.2s, opacity 0.2s;
-    z-index: 10;
-    opacity: 0;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `;
-
-  expandIcon.addEventListener('mouseenter', function() {
-    if (window.innerWidth >= 768) {
-      this.style.background = 'rgba(59, 130, 246, 0.1)';
-    }
-  });
-  expandIcon.addEventListener('mouseleave', function() {
-    this.style.background = 'transparent';
-  });
-
-  expandIcon.addEventListener('click', function(e) {
-    if (window.innerWidth < 768) return;
-    e.stopPropagation();
-    width = getInitialWidth();
-    isIconMode = false;
-    sidebar.classList.remove('icon-mode');
-    applyGridWidth();
-    localStorage.setItem('sidebarGridWidth', width);
-    console.log('[INFO] 사이드바 복원:', width + 'px (breakpoint 기준)');
-  });
-
-  sidebar.appendChild(expandIcon);
-
-  // Resizer 핸들 생성 - 4px, sidebar와 main 사이에 독립적으로 배치
-  var resizer = document.createElement('div');
-  resizer.id = 'sidebar-grid-resizer';
-  resizer.style.position = 'absolute';
-  resizer.style.left = '-3rem';  // sidebar 우측 border 바로 옆
-  resizer.style.top = '0';
-  resizer.style.width = '4px';
-  resizer.style.height = '100%';
-  resizer.style.cursor = 'ew-resize';
-  resizer.style.zIndex = '999';
-  resizer.style.background = 'transparent';
-  resizer.style.transition = 'background 0.2s, opacity 0.2s';
-  resizer.style.transform = 'translateX(0)';  // 정확한 위치 제어
-
-  // Container를 relative로 설정
-  if (getComputedStyle(container).position === 'static') {
-    container.style.position = 'relative';
-  }
-
-  // 모바일에서는 숨김 처리
-  function updateResizerVisibility() {
-    if (window.innerWidth >= 768) {
-      resizer.style.display = 'block';
-      resizer.style.pointerEvents = 'auto';
-    } else {
-      resizer.style.display = 'none';
-      resizer.style.pointerEvents = 'none';
-    }
-  }
-
-  updateResizerVisibility();
-
-  // hover 효과 - 스크롤바 영역은 유지하면서 스크롤 기능만 비활성화
-  resizer.addEventListener('mouseenter', function() {
-    if (window.innerWidth >= 768) {
-      //this.style.background = 'rgba(59, 130, 246, 0.6)';
-      // 스크롤 인터랙션만 비활성화 (영역은 유지)
-      sidebar.classList.add('resizer-hover');
-      console.log('[INFO] Resizer hover - 스크롤 인터랙션 비활성화 (영역 유지)');
-    }
-  });
-  
-  resizer.addEventListener('mouseleave', function() {
-    if (window.innerWidth >= 768 && !isResizing) {
-      //this.style.background = 'transparent';
-      // 스크롤 인터랙션 복원
-      sidebar.classList.remove('resizer-hover');
-      console.log('[INFO] Resizer leave - 스크롤 인터랙션 복원');
-    }
-  });
-
-  // Resizer를 sidebar 다음(main 이전)에 삽입
-  var mainElement = sidebar.nextElementSibling;
-  if (mainElement) {
-    // main 요소를 relative로 설정하고 resizer를 내부에 배치
-    if (getComputedStyle(mainElement).position === 'static') {
-      mainElement.style.position = 'relative';
-    }
-    mainElement.insertBefore(resizer, mainElement.firstChild);
-    console.log('[OK] Resizer 핸들 추가됨 (4px, main 내부 좌측에 배치 - sidebar border 바로 옆)');
-  } else {
-    console.error('[ERROR] main 요소를 찾을 수 없습니다.');
-    return;
-  }
-
-  // === 드래그 기능 ===
-  var isResizing = false;
-
-  resizer.addEventListener('mousedown', function(e) {
-    if (window.innerWidth < 768) return;
-
-    isResizing = true;
-    document.body.style.cursor = 'ew-resize';
-    document.body.style.userSelect = 'none';
-    //this.style.background = 'rgba(59, 130, 246, 0.8)';
-    // 드래그 중에는 스크롤 인터랙션 비활성화
-    sidebar.classList.add('resizer-hover');
-    e.preventDefault();
-
-    console.log('[INFO] 드래그 시작');
-  });
-
-  document.addEventListener('mousemove', function(e) {
-    if (!isResizing || window.innerWidth < 768) return;
-
-    var containerLeft = container.getBoundingClientRect().left;
-    var newWidth = e.clientX - containerLeft;
-
-    newWidth = Math.max(24, Math.min(600, newWidth));
-
-    if (newWidth <= 98) {
-      container.style.gridTemplateColumns = newWidth + 'px minmax(0, 1fr)';
-      width = newWidth;
-    } else {
-      container.style.gridTemplateColumns = newWidth + 'px minmax(0, 1fr)';
-      width = newWidth;
-      if (isIconMode) {
-        isIconMode = false;
-        sidebar.classList.remove('icon-mode');
-      }
-    }
-  });
-
-  document.addEventListener('mouseup', function(e) {
-    if (isResizing) {
-      isResizing = false;
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-      //resizer.style.background = 'transparent';
-
-      if (window.innerWidth >= 768 && width <= 98) {
-        width = iconModeWidth;
-        isIconMode = true;
-        sidebar.classList.add('icon-mode');
-        applyGridWidth();
-        console.log('[INFO] 아이콘 모드 활성화 (24px)');
-      }
-
-      // 스크롤 인터랙션 복원
-      sidebar.classList.remove('resizer-hover');
-      console.log('[INFO] 드래그 종료 - 스크롤 인터랙션 복원');
-
-      localStorage.setItem('sidebarGridWidth', width);
-      console.log('[OK] 사이드바 너비 저장됨:', width + 'px');
-    }
-  });
-
-  // 윈도우 리사이즈 이벤트
-  var resizeTimer;
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-      defaultWidth = getInitialWidth();
-      applyGridWidth();
-      updateResizerVisibility();
-      checkIconMode();
-      console.log('[INFO] 화면 크기 변경 감지 - 너비:', window.innerWidth + 'px, breakpoint 기준:', defaultWidth + 'px');
-    }, 150);
-  });
-
-  console.log('[SUCCESS] 사이드바 리사이저 설치 완료! (4px resizer, sidebar와 main 사이 배치, 스크롤바 영역 보존)');
 })();

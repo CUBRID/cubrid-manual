@@ -229,6 +229,121 @@ The recursive CTE must be referenced directly in the **FROM** clause, referencin
     '
     Recursive CTE 'cte1' must be referenced directly in its recursive query.
 
+.. _cte-inline-materialize:
+
+CTE Execution Methods (Materialize and Inline)
+==============================================
+
+A CTE is executed in one of two methods: materialize or inline.
+
+*   **Materialize**: The CTE's subquery is executed in advance, its result is stored in a temporary file, and the stored result is shared by the places that reference the CTE. The same data is scanned only once; however, indexes cannot be used on the result stored in the temporary file, and query rewrites such as :ref:`View Merging <view_merge>` and :ref:`Predicate Push <pred-push>` are not possible.
+
+*   **Inline**: The query is rewritten so that the CTE's subquery is expanded as an inline view at each place that references the CTE. Query rewrites such as :ref:`View Merging <view_merge>` and :ref:`Predicate Push <pred-push>` are possible so indexes can be utilized; however, the same data can be scanned multiple times if the CTE is referenced more than once.
+
+The inline method is supported since version 11.5; in earlier versions, a CTE is always executed in the materialize method.
+
+If no hint is specified, the execution method is determined by the number of times the CTE is referenced in the query. The reference count also includes references from other CTEs.
+
+*   A CTE referenced once is executed in the inline method.
+*   A CTE referenced two or more times is executed in the materialize method.
+*   A CTE that is not referenced is not executed and is removed from the query.
+
+You can specify the **INLINE** or **MATERIALIZE** hint in the CTE's subquery to decide the execution method directly. For how to use hints, see :ref:`sql-hint`.
+
+*   **INLINE**: Executes the CTE in the inline method regardless of the reference count.
+*   **MATERIALIZE**: Executes the CTE in the materialize method regardless of the reference count.
+
+However, in the following cases, the CTE is executed in the materialize method even if the **INLINE** hint is specified.
+
+*   The CTE is recursive.
+*   The CTE is defined in a **WITH RECURSIVE** clause (including non-recursive CTEs).
+*   The **QUERY_CACHE** hint is specified in the CTE's subquery.
+
+.. note::
+
+    If the CTE's subquery consists of set operations such as **UNION ALL**, the hint specified in the leftmost **SELECT** statement is applied to the entire CTE.
+
+The following example shows the difference in execution depending on the execution method of a CTE.
+
+.. code-block:: sql
+
+    -- Creating a table and data used in the examples
+    CREATE TABLE tbl (c1 INT, c2 INT, c3 INT, c4 INT, INDEX i1 (c1));
+
+    INSERT INTO tbl
+    SELECT ROWNUM, MOD (ROWNUM, 10), MOD (ROWNUM, 100), MOD (ROWNUM, 1000)
+    FROM db_class a, db_class b, db_class c LIMIT 10000;
+
+    UPDATE STATISTICS ON tbl;
+
+In the query below, the CTE is referenced only once, so it is executed in the inline method. After the CTE is rewritten as an inline view, View Merging and Predicate Push are applied so the index *i1* can be used, and only the 100 rows that satisfy the condition are read.
+
+.. code-block:: sql
+
+    -- Example of a CTE referenced once being executed in the inline method
+    csql> ;trace on
+
+    WITH cte AS (SELECT * FROM tbl)
+    SELECT /*+ RECOMPILE */ c1 FROM cte WHERE c1 <= 100;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 0, fetch: 3, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.tbl.i1), (btree time: 0, fetch: 2, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100, covered: true)
+
+If the **MATERIALIZE** hint is specified as in the query below, the CTE is executed in the materialize method even though it is referenced only once. The CTE's subquery scans all rows of the table and stores the result in a temporary file, and the main query finds the rows that satisfy the condition from the stored result.
+
+.. code-block:: sql
+
+    -- Example of forcing the materialize method with the MATERIALIZE hint
+    WITH cte AS (SELECT /*+ MATERIALIZE */ * FROM tbl)
+    SELECT /*+ RECOMPILE */ c1 FROM cte WHERE c1 <= 100;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 6, fetch: 155, fetch_time: 0, ioread: 0)
+        SCAN (temp time: 0, fetch: 41, ioread: 0, readrows: 10000, rows: 100)
+        SUBQUERY (uncorrelated)
+          CTE (non_recursive_part)
+            SELECT (time: 5, fetch: 114, fetch_time: 0, ioread: 0)
+              SCAN (table: dba.tbl), (heap time: 2, fetch: 30, ioread: 0, readrows: 10000, rows: 10000)
+
+In the query below, the CTE is referenced twice, so it is executed in the materialize method if no hint is given. The CTE's subquery is executed only once, and the stored result is shared by the two references.
+
+.. code-block:: sql
+
+    -- Example of a CTE referenced twice being executed in the materialize method
+    WITH cte AS (SELECT * FROM tbl)
+    SELECT /*+ RECOMPILE */ a.c1 FROM cte a, cte b WHERE a.c1 <= 100 AND a.c1 = b.c1;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 56, fetch: 4255, fetch_time: 1, ioread: 0)
+        SCAN (temp time: 0, fetch: 41, ioread: 0, readrows: 10000, rows: 100)
+          SCAN (temp time: 51, fetch: 4100, ioread: 0, readrows: 1000000, rows: 100)
+        SUBQUERY (uncorrelated)
+          CTE (non_recursive_part)
+            SELECT (time: 5, fetch: 114, fetch_time: 0, ioread: 0)
+              SCAN (table: dba.tbl), (heap time: 5, fetch: 30, ioread: 0, readrows: 10000, rows: 10000)
+
+If the **INLINE** hint is specified, a CTE referenced two or more times is also executed in the inline method. Indexes can be utilized at each reference, but the same table is scanned multiple times.
+
+.. code-block:: sql
+
+    -- Example of forcing a CTE referenced twice to the inline method with the INLINE hint
+    WITH cte AS (SELECT /*+ INLINE */ * FROM tbl)
+    SELECT /*+ RECOMPILE */ a.c1 FROM cte a, cte b WHERE a.c1 <= 100 AND a.c1 = b.c1;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 0, fetch: 204, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.tbl.i1), (btree time: 0, fetch: 2, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100, covered: true)
+          SCAN (index: dba.tbl.i1), (btree time: 0, fetch: 200, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100, covered: true)
+
 CTE Usage in DMLs and CREATE
 ============================
 

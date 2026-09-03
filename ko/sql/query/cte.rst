@@ -238,7 +238,7 @@ CTE 실행 방식(Materialize와 Inline)
 
 CTE는 실행 방식에 따라 materialize 방식과 inline 방식으로 나뉜다.
 
-*   **Materialize** 방식: CTE의 부질의를 미리 수행하여 결과를 임시 파일로 저장하고, CTE를 참조하는 위치에서 저장된 결과를 공유한다. 동일한 데이터를 한 번만 스캔하는 장점이 있으나, 임시 파일로 저장된 결과에는 인덱스를 사용할 수 없으며 :ref:`View Merging <view_merge>`, :ref:`Predicate Push <pred-push>` 등의 질의 재작성이 불가능하다.
+*   **Materialize** 방식: CTE의 부질의를 미리 수행하여 결과를 임시 파일로 저장하고, CTE를 참조하는 위치에서 저장된 결과를 공유한다. CTE가 여러 번 참조되어도 부질의는 한 번만 수행되는 장점이 있으나, 임시 파일로 저장된 결과는 참조하는 위치마다 다시 스캔되며, 저장된 결과에는 인덱스를 사용할 수 없고 :ref:`View Merging <view_merge>`, :ref:`Predicate Push <pred-push>` 등의 질의 재작성이 불가능하다.
 
 *   **Inline** 방식: CTE를 참조하는 위치에 CTE의 부질의를 인라인 뷰로 재작성하여 수행한다. :ref:`View Merging <view_merge>`, :ref:`Predicate Push <pred-push>` 등의 질의 재작성이 가능하여 인덱스를 활용할 수 있으나, CTE가 여러 번 참조되는 경우 동일한 데이터를 여러 번 스캔할 수 있다.
 

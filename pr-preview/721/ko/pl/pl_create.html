@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="ko" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>저장 프로시저의 생성 | CUBRID 11.4 사용자 매뉴얼</title>
+<meta content="저장 프로시저의 생성 | CUBRID 11.4 사용자 매뉴얼" property="og:title"/>
+<meta content="저장 프로시저의 생성 | CUBRID 11.4 사용자 매뉴얼" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="검색"/>
+<link href="../genindex.html" rel="index" title="색인"/>
+<link href="pl_call.html" rel="next" title="저장 프로시저의 호출"/>
+<link href="index.html" rel="prev" title="CUBRID 절차적 언어"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/en/11.4/pl/pl_create.html" rel="noopener nofollow" title="Switch to English">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">EN</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 사용자 매뉴얼</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">매뉴얼 소개</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">CUBRID 소개</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">설치 및 업그레이드<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">설치와 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">환경 변수 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#connect-to-cubrid-server">포트 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">업그레이드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#ha-db">HA 환경에서 DB 마이그레이션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">CUBRID 제거</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">시작하기<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">CUBRID 서비스 시작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">질의 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#cm-cqb">관리 도구</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#id3">드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL 인터프리터</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../sql/index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../sql/syntax.html">작성 규칙</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/datatype_index.html">데이터 타입</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/schema/index.html">데이터 정의문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/function/index.html">연산자와 함수</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/query/index.html">데이터 조작문</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/tuning_index.html">질의 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/parallel_index.html">병렬 실행</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/partition_index.html">분할</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/i18n_index.html">다국어 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/transaction_index.html">트랜잭션과 잠금</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/trigger.html">트리거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/oodb.html">클래스 상속</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/db_admin.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/user_schema.html">사용자 스키마</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sql/catalog.html">시스템 카탈로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID 절차적 언어<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">저장 프로시저의 생성</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_call.html">저장 프로시저의 호출</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_auth.html">저장 프로시저의 권한</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_tcl.html">트랜잭션 커밋과 롤백 지원</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_tuning.html">성능 최적화</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pl_package.html">시스템 패키지</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsp.html">자바 저장 프로시저</a></li>
+<li class="toctree-l2"><a class="reference internal" href="method.html">메서드</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID 운영<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">CUBRID 프로세스 제어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-services">CUBRID 서비스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#control-cubrid-server">데이터베이스 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">브로커</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">게이트웨이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID 매니저 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-pl-server">CUBRID 프로시저 언어 서버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">데이터베이스 관리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid 유틸리티</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">시스템 설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid 스크립트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">트러블슈팅</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">데이터베이스 오류 로그</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../security.html">CUBRID 보안<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="simple" x-cloak="" x-show="expanded">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API 레퍼런스<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby 드라이버</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js 드라이버</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">릴리스 노트<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 릴리스 노트</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 사용자 매뉴얼</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID 절차적 언어</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">저장 프로시저의 생성</span>
+</nav>
+<div id="content" role="main">
+<section id="id1">
+<h1>저장 프로시저의 생성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>저장 프로시저와 저장 함수는 각각 <a class="reference internal" href="../sql/schema/stored_routine_stmt.html#create-procedure"><span class="std std-ref">CREATE PROCEDURE</span></a>와 <a class="reference internal" href="../sql/schema/stored_routine_stmt.html#create-function"><span class="std std-ref">CREATE FUNCTION</span></a>을 사용하여 생성 할 수 있다.
+CUBRID에서는 저장 프로시저와 저장 함수에 대해서 기능에 특별한 차이점은 없다.
+유일한 차이점은 저장 함수의 경우 반환 타입을 정의하지만, 저장 프로시저는 반환 타입은 void로 항상 NULL 값을 반환한다.</p>
+<p>이 장에서는 저장 프로시저와 저장 함수를 생성할 때 고려해야 할 사항에 대하여 자세히 설명한다.</p>
+<section id="pl-schema">
+<span id="id2"></span><h2>스키마와 프로시저 이름 지정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-schema" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-schema'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="p">[</span><span class="n">OR</span> <span class="n">REPLACE</span><span class="p">]</span> <span class="p">[</span><span class="n">PROCEDURE</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">procedure_name</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">CREATE</span> <span class="p">[</span><span class="n">OR</span> <span class="n">REPLACE</span><span class="p">]</span> <span class="p">[</span><span class="n">FUNCTION</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">function_name</span>
+</span></code></pre></div>
+</div>
+<p>저장 프로시저와 저장 함수의 이름은 식별자에 해당하며 <a class="reference internal" href="../sql/identifier.html"><span class="doc">식별자</span></a>의 작성 원칙에 따라 작성해야 한다.
+이름의 최대 222 바이트 길이로 제한되며, 이 길이를 초과하면 오류가 발생한다.</p>
+<p>저장 프로시저와 저장 함수의 이름을 지정할 때 스키마 이름(<strong>schema_name</strong>)을 지정하지 않아도 현재 로그인 된 <a class="reference internal" href="../sql/user_schema.html#user-schema"><span class="std std-ref">사용자의 스키마</span></a>에 저장되어 생성된다.
+DBA 권한이 있는 사용자는 다른 사용자의 스키마에 저장 프로시저와 저장 함수를 생성할 수 있지만, 일반 사용자의 경우 자신의 스키마에만 저장 프로시저와 저장 함수를 생성할 수 있다.</p>
+<p>만약 일반 사용자가 다른 사용자의 스키마에 저장 프로시저와 저장 함수를 생성하려고 시도하면 에러가 발생한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Login as DBA</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">U1</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">U2</span><span class="p">;</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">CALL</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'U1'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">u2</span><span class="p">.</span><span class="n">test_proc</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span>
+</span><span id="line-8"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">arg2</span><span class="p">);</span>
+</span><span id="line-10"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">before</span> <span class="s1">' ; '</span>
+</span><span id="line-2"><span class="n">DBA</span><span class="p">,</span> <span class="n">members</span> <span class="n">of</span> <span class="n">DBA</span> <span class="n">group</span><span class="p">,</span> <span class="ow">and</span> <span class="n">owner</span> <span class="n">can</span> <span class="n">perform</span> <span class="n">CREATE</span> <span class="n">PROCEDURE</span><span class="o">/</span><span class="n">FUNCTION</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="pl-parameter">
+<span id="id3"></span><h2>저장 프로시저의 인자 지정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-parameter" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-parameter'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>저장 프로시저와 저장 함수에 인자를 지정하면 호출 시 인수를 전달할 수 있다. 인자를 지정할 때에는 인자의 이름과 데이터 타입을 지정해야 하며 최대 <strong>64</strong>개의 인자를 지정할 수 있다.</p>
+<p>저장 함수는 입력 매개 변수를 받아 결과값을 반환하므로 결과 데이터 타입을 지정해야 하며, 저장 프로시저는 결과 데이터 타입을 지정하지 않고 항상 NULL 을 반환하는 void 타입으로 간주한다.
+저장 프로시저와 저장 함수의 결과 타입으로 CUBRID SQL이 지원하는 (<a class="reference internal" href="../sql/datatype.html"><span class="doc">데이터 타입</span></a>) 중 일부만을 지원한다. 자세한 내용은 <a class="reference internal" href="#pl-arg-type-restriction"><span class="std std-ref">지원하는 인자와 결과 데이터 타입</span></a>을 참고한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_proc</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">put_line</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">arg2</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-7"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">arg1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">arg2</span><span class="p">;</span>
+</span><span id="line-9"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_proc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="line-12"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">test_proc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">======================</span>
+</span><span id="line-3">  <span class="n">NULL</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="o">&lt;</span><span class="n">DBMS_OUTPUT</span><span class="o">&gt;</span>
+</span><span id="line-6"><span class="o">====</span>
+</span><span id="line-7"><span class="mi">3</span>
+</span><span id="line-8">
+</span><span id="line-9">  <span class="n">test_func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="line-10"><span class="o">=================</span>
+</span><span id="line-11">                <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>저장 프로시저와 저장 함수의 인자 또는 반환 값의 데이터 타입의 이름 만을 명시할 수 있다.
+즉, VARCHAR 또는 NUMERIC 와 같은 타입에 정밀도와 스케일을 지정하지 않는다.
+실행 시 실제 전달되는 데이터에 따라 가변적으로 정밀도와 스케일이 결정된다.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">create</span> <span class="ow">or</span> <span class="n">replace</span> <span class="n">funtion</span> <span class="n">t</span> <span class="p">(</span><span class="n">i_min</span> <span class="n">VARCHAR</span><span class="p">,</span> <span class="n">i_max</span> <span class="n">VARCHAR</span><span class="p">)</span> <span class="n">RETURN</span> <span class="n">VARCHAR</span> <span class="k">as</span>
+</span><span id="line-2">    <span class="n">var_min</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">:=</span> <span class="n">i_min</span><span class="p">;</span>
+</span><span id="line-3">    <span class="n">var_max</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">:=</span> <span class="n">i_max</span><span class="p">;</span>
+</span><span id="line-4"><span class="n">begin</span>
+</span><span id="line-5">    <span class="k">return</span> <span class="n">var_min</span> <span class="o">||</span> <span class="s1">','</span> <span class="o">||</span> <span class="n">var_max</span><span class="p">;</span>
+</span><span id="line-6"><span class="n">end</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="pl-arg-type-restriction">
+<span id="id4"></span><h2>지원하는 인자와 결과 데이터 타입<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-arg-type-restriction" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-arg-type-restriction'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>저장 프로시저와 저장 함수의 인수와 결과 데이터 타입으로 CUBRID SQL이 지원하는 데이터 타입 중 일부 데이터 타입을 명시할 수 있다.
+다음의 표는 언어 확장에서 지원하는 데이터 타입이다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" rowspan="2"><p>유형</p></th>
+<th class="head" rowspan="2"><p>타입</p></th>
+<th class="head" colspan="2"><p>지원 여부 (O, X)</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>PL/CSQL</p></th>
+<th class="head"><p>Java SP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td rowspan="6"><p>수치</p></td>
+<td><p>SHORT, SMALLINT</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-even"><td><p>INTEGER, INT</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-odd"><td><p>BIGINT</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-even"><td><p>NUMERIC, DECIMAL</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-odd"><td><p>FLOAT, REAL</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-even"><td><p>DOUBLE, DOUBLE PRECISION</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>날짜/시간</p></td>
+<td><p>DATE, TIME, TIMESTAMP, DATETIME</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-even"><td><p>TIMESTAMPLTZ, TIMESTAMPTZ
+DATETIMELTZ, DATETIMETZ</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-odd"><td><p>문자열</p></td>
+<td><p>CHAR, VARCHAR, STRING, CHAR VARYING</p></td>
+<td><p>O</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-even"><td><p>컬렉션</p></td>
+<td><p>SET, MULTISET, LIST, SEQUENCE</p></td>
+<td><p>X</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><p>기타</p></td>
+<td><p>BIT, BIT VARYING</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-even"><td><p>ENUM</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-odd"><td><p>BLOB/CLOB</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-even"><td><p>JSON</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-odd"><td><p>CURSOR</p></td>
+<td><p>X</p></td>
+<td><p>O*</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Java SP에서는 CURSOR 타입에 대해서 반환 타입만을 지원하며, 인수 타입으로는 지원하지 않는다.</p></li>
+</ul>
+<p>지원하지 않는 데이터 타입을 사용해서 저장 프로시저를 생성하면 다음과 같은 오류가 발생한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">unsupported_json</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="n">JSON</span>
+</span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span><span class="w"> </span><span class="k">END</span><span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">unsupproted_args</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="n">TIMESTAMPLTZ</span><span class="p">)</span>
+</span><span id="line-5"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span><span class="w"> </span><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Unsupported</span> <span class="k">return</span> <span class="nb">type</span> <span class="s1">'json'</span> <span class="n">of</span> <span class="n">the</span> <span class="n">stored</span> <span class="n">procedure</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">ERROR</span><span class="p">:</span> <span class="n">before</span> <span class="s1">' )</span>
+</span><span id="line-4"><span class="n">AS</span> <span class="n">BEGIN</span> <span class="n">NULL</span><span class="p">;</span> <span class="n">END</span><span class="p">;</span> <span class="s1">'</span>
+</span><span id="line-5"><span class="n">Unsupported</span> <span class="n">argument</span> <span class="nb">type</span> <span class="s1">'timestampltz'</span> <span class="n">of</span> <span class="n">the</span> <span class="n">stored</span> <span class="n">procedure</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="pl-arg-mode">
+<span id="id5"></span><h2>인자의 모드 지정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-arg-mode" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-arg-mode'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>인자의 모드에는 IN, OUT, IN OUT 모드가 있다. 인자를 지정할 때 모드를 지정하지 않으면 기본적으로 IN 모드로 간주한다.</p>
+<p>저장 프로시저와 저장 함수에서 <strong>CALL</strong>구문과 OUT 또는 IN OUT 인자를 사용하여 저장 프로시저와 저장 함수에서 변경한 인자의 값을 다시 반환할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">test_proc</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span>
+</span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">arg1</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-8"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span>
+</span><span id="line-9"><span class="w">    </span><span class="n">arg1</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">arg1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">arg1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="p">:</span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">select</span><span class="w"> </span><span class="p">:</span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">CALL</span><span class="w"> </span><span class="n">test_proc</span><span class="p">(:</span><span class="n">a</span><span class="p">);</span>
+</span><span id="line-4"><span class="k">select</span><span class="w"> </span><span class="p">:</span><span class="n">a</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">--</span> <span class="n">select</span> <span class="p">:</span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3">           <span class="p">:</span><span class="n">a</span>
+</span><span id="line-4"><span class="o">=============</span>
+</span><span id="line-5">            <span class="mi">1</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="o">--</span> <span class="n">select</span> <span class="p">:</span><span class="n">a</span><span class="p">;</span>
+</span><span id="line-8">
+</span><span id="line-9">           <span class="p">:</span><span class="n">a</span>
+</span><span id="line-10"><span class="o">=============</span>
+</span><span id="line-11">            <span class="mi">5</span>
+</span></code></pre></div>
+</div>
+<p>만약 저장 프로시저와 함수의 어떠한 인자에 OUT 또는 IN OUT 모드를 지정하는 경우, <strong>CALL</strong>이 아닌 질의문 (<strong>SELECT</strong>, <strong>UPDATE</strong>, <strong>DELETE</strong> 등) 내에서 호출할 수 없으며 에러를 반환한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">In</span> <span class="n">the</span> <span class="n">command</span> <span class="kn">from</span><span class="w"> </span><span class="nn">line</span> <span class="mi">1</span><span class="p">,</span>
+</span><span id="line-2"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Semantic</span><span class="p">:</span> <span class="n">Stored</span> <span class="n">procedure</span><span class="o">/</span><span class="n">function</span> <span class="s1">'u1.test_func'</span> <span class="n">has</span> <span class="n">OUT</span> <span class="ow">or</span> <span class="n">IN</span> <span class="n">OUT</span> <span class="n">arguments</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="pl-arg-default">
+<span id="id6"></span><h2>기본값 인자 지정<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-arg-default" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-arg-default'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>저장 프로시저와 저장 함수의 인자에 기본값을 지정할 수 있다.</p>
+<ul class="simple">
+<li><p><strong>:=</strong> 또는 <strong>DEFAULT</strong> 키워드를 사용하여 기본값을 지정할 수 있다.</p></li>
+<li><p>기본값을 지정하면 저장 프로시저와 저장 함수의 인수를 생략하고 호출할 수 있다. 생략된 인수는 기본값으로 대체된다.</p></li>
+<li><p>기본값은 리터럴 값으로 지정할 수 있으며, 255 바이트 이하의 문자열 값으로 저장한다. 이 때 크기를 초과하면 오류가 발생한다.</p></li>
+<li><p>기본값에 리터럴 값 외에 허용하는 함수는 다음과 같다.</p></li>
+</ul>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>기본값</p></th>
+<th class="head"><p>데이터 타입</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SYS_TIMESTAMP</p></td>
+<td><p>TIMESTAMP</p></td>
+</tr>
+<tr class="row-odd"><td><p>UNIX_TIMESTAMP()</p></td>
+<td><p>INTEGER</p></td>
+</tr>
+<tr class="row-even"><td><p>CURRENT_TIMESTAMP</p></td>
+<td><p>TIMESTAMP</p></td>
+</tr>
+<tr class="row-odd"><td><p>SYS_DATETIME</p></td>
+<td><p>DATETIME</p></td>
+</tr>
+<tr class="row-even"><td><p>CURRENT_DATETIME</p></td>
+<td><p>DATETIME</p></td>
+</tr>
+<tr class="row-odd"><td><p>SYS_DATE</p></td>
+<td><p>DATE</p></td>
+</tr>
+<tr class="row-even"><td><p>CURRENT_DATE</p></td>
+<td><p>DATE</p></td>
+</tr>
+<tr class="row-odd"><td><p>SYS_TIME</p></td>
+<td><p>TIME</p></td>
+</tr>
+<tr class="row-even"><td><p>CURRENT_TIME</p></td>
+<td><p>TIME</p></td>
+</tr>
+<tr class="row-odd"><td><p>USER, USER()</p></td>
+<td><p>STRING</p></td>
+</tr>
+<tr class="row-even"><td><p>TO_CHAR(date_time[, format])</p></td>
+<td><p>STRING</p></td>
+</tr>
+<tr class="row-odd"><td><p>TO_CHAR(number[, format])</p></td>
+<td><p>STRING</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>위의 표에 명시되지 않은 함수를 <strong>DEFAULT</strong> 값으로 사용하는 경우, 프로시저 생성 시점에 평가된 결과를 <strong>DEFAULT</strong> 값으로 저장한다.
+따라서 <strong>INSERT</strong> 시 해당 칼럼의 기본 값은 <strong>INSERT</strong> 수행시 함수 수행 값이 아닌, 프로시저 생성 시점에 수행된 결과 값을 사용한다.
+저장 함수인 경우 <strong>DEFAULT</strong> 값으로 사용할 수 없으므로 오류를 반환한다.</p>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">fn_int</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">int</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">begin</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="k">end</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="c1">-- error</span>
+</span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">default_val_func_test</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">fn_int</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">begin</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="k">end</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">before</span> <span class="s1">' ); '</span>
+</span><span id="line-2"><span class="s1">'fn_int(1)'</span> <span class="n">function</span> <span class="n">can</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">DEFAULT</span> <span class="n">clause</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
+<p>다음은 기본값에 리터럴 값을 지정하는 간단한 예시이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">default_args</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">        </span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">        </span><span class="n">b</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">2</span>
+</span><span id="line-4"><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-5"><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="k">END</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">default_args</span><span class="p">();</span>
+</span><span id="line-8"><span class="k">SELECT</span><span class="w"> </span><span class="n">default_args</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span><span id="line-9"><span class="k">SELECT</span><span class="w"> </span><span class="n">default_args</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">default_args</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">================</span>
+</span><span id="line-3">                <span class="mi">3</span>
+</span><span id="line-4">
+</span><span id="line-5">  <span class="n">default_args</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">=================</span>
+</span><span id="line-7">                <span class="mi">5</span>
+</span><span id="line-8">
+</span><span id="line-9">  <span class="n">default_args</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</span><span id="line-10"><span class="o">====================</span>
+</span><span id="line-11">                <span class="mi">7</span>
+</span></code></pre></div>
+</div>
+<p>다음은 기본값에 함수를 지정하는 예시이다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">get_age</span><span class="w"> </span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">birth</span><span class="w"> </span><span class="nb">DATE</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="nb">DATE</span><span class="s1">'2000-01-01'</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">today</span><span class="w"> </span><span class="nb">DATE</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">SYS_DATE</span>
+</span><span id="line-4"><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-5"><span class="k">AS</span>
+</span><span id="line-6"><span class="k">BEGIN</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">today</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="k">YEAR</span><span class="p">(</span><span class="n">birth</span><span class="p">)</span>
+</span><span id="line-8"><span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="n">today</span><span class="p">,</span><span class="w"> </span><span class="s1">'MMDD'</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="n">birth</span><span class="p">,</span><span class="w"> </span><span class="s1">'MMDD'</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">END</span><span class="p">;</span>
+</span><span id="line-9"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="k">SELECT</span><span class="w"> </span><span class="n">get_age</span><span class="p">();</span>
+</span><span id="line-12"><span class="k">SELECT</span><span class="w"> </span><span class="n">get_age</span><span class="p">(</span><span class="nb">DATE</span><span class="s1">'2000-05-10'</span><span class="p">);</span>
+</span><span id="line-13"><span class="k">SELECT</span><span class="w"> </span><span class="n">get_age</span><span class="p">(</span><span class="nb">DATE</span><span class="s1">'2000-05-10'</span><span class="p">,</span><span class="w"> </span><span class="nb">DATE</span><span class="s1">'2025-03-24'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">get_age</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">           <span class="mi">25</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">get_age</span><span class="p">(</span><span class="n">date</span> <span class="s1">'2000-05-10'</span><span class="p">)</span>
+</span><span id="line-6"><span class="o">============================</span>
+</span><span id="line-7">                          <span class="mi">24</span>
+</span><span id="line-8">
+</span><span id="line-9"><span class="n">get_age</span><span class="p">(</span><span class="n">date</span> <span class="s1">'2000-05-10'</span><span class="p">,</span> <span class="n">date</span> <span class="s1">'2025-03-24'</span><span class="p">)</span>
+</span><span id="line-10"><span class="o">===============================================</span>
+</span><span id="line-11">                                             <span class="mi">24</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="pl-function-overloading">
+<span id="id7"></span><h2>함수 오버로딩 미지원<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-function-overloading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-function-overloading'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>함수 오버로딩이란 동일한 이름이지만 인자의 타입이나 개수가 다른 함수를 여러 개 정의하는 것을 의미한다.
+CUBRID에서는 <strong>함수 오버로딩을 지원하지 않는다.</strong> 즉, 인수의 갯수나 데이터 타입이 다르더라도 동일한 이름의 저장 프로시저와 저장 함수를 생성할 수 없다.
+따라서 <strong>CREATE OR REPLACE</strong> 구문을 사용했을 때, 새로운 프로시저가 생성되지 않고 기존에 등록한 프로시저를 덮어쓰기 때문에 주의가 필요하다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="line-2"><span class="k">BEGIN</span>
+</span><span id="line-3"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">arg1</span><span class="p">;</span>
+</span><span id="line-4"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="n">arg1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="w"> </span><span class="nb">INT</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="line-9"><span class="k">BEGIN</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">arg1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">arg2</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">-- error</span>
+</span><span id="line-14"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">-- 3</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Parameter</span> <span class="n">count</span> <span class="ow">is</span> <span class="n">invalid</span><span class="o">.</span> <span class="n">expected</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">actual</span><span class="p">:</span> <span class="mi">1</span>
+</span><span id="line-2">
+</span><span id="line-3">  <span class="n">test_func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="line-4"><span class="o">=================</span>
+</span><span id="line-5">                <span class="mi">3</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="pl-object-dependencies">
+<span id="id8"></span><h2>객체 의존성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-object-dependencies" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-object-dependencies'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>저장 프로시저와 저장 함수가 내부적으로 참조하는 데이터베이스 객체에 대한 의존성은 PL/CSQL에서 등록 시에만 확인한다.
+따라서 PL/CSQL 프로시저에서 참조하는 테이블, 뷰, 시퀀스, 인덱스 등의 객체가 존재하지 않는 경우 프로시저 등록 시 오류가 발생한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test_tbl</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">k</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">AS</span>
+</span><span id="line-6"><span class="k">BEGIN</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+</span><span id="line-9"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">ERROR: Stored procedure compile error: Syntax: before '  LIMIT 1'
+</span><span id="line-2">Unknown class "dba.test_tbl". select id from [dba.test_tbl] limit 1
+</span></code></pre></div>
+</div>
+<p>다음 예제에서 test_tbl 테이블을 생성하는 경우 올바르게 생성된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test_tbl</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-6"><span class="k">AS</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">k</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+</span><span id="line-8"><span class="k">BEGIN</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">  <span class="n">test_func</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">            <span class="mi">1</span>
+</span></code></pre></div>
+</div>
+<p>단, PL/CSQL의 Dynamic SQL 이나 Java SP의 경우 저장된 문자열을 런타임에 실행하기 때문에
+프로시저 등록 시 확인하지 않고, 프로시저 호출 시 확인된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test_tbl</span><span class="p">;</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-4"><span class="k">AS</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">k</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+</span><span id="line-6"><span class="k">BEGIN</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">execute</span><span class="w"> </span><span class="k">immediate</span><span class="w"> </span><span class="s1">'SELECT id FROM test_tbl LIMIT 1'</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+</span><span id="line-8"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+</span><span id="line-9"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-10">
+</span><span id="line-11"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">ERROR: Stored procedure execute error:
+</span><span id="line-2">  (line 5, column 9) Syntax: before '  LIMIT 1'
+</span><span id="line-3">Unknown class "dba.test_tbl". select id from [dba.test_tbl] limit 1
+</span></code></pre></div>
+</div>
+<p>저장 프로시저와 저장 함수가 내부적으로 참조하는 객체가 삭제되는 경우에는 시스템에서 의존성을 확인하지 않으므로
+올바르게 등록되더라도 프로시저 호출 시 오류가 발생할 수 있다.
+따라서 저장 프로시저와 저장 함수가 참조하는 객체가 삭제되지 않도록 주의해야 한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test_tbl</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INT</span>
+</span><span id="line-6"><span class="k">AS</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">k</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+</span><span id="line-8"><span class="k">BEGIN</span>
+</span><span id="line-9"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test_tbl</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-10"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+</span><span id="line-11"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-12">
+</span><span id="line-13"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test_tbl</span><span class="p">;</span>
+</span><span id="line-14"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">ERROR: Stored procedure execute error:
+</span><span id="line-2">  (line 5, column 9) Syntax: Unknown class "dba.test_tbl". select [dba.test_tbl].id from [dba.test_tbl] [dba.test_tbl] ...
+</span></code></pre></div>
+</div>
+</section>
+<section id="pl-string-codeset">
+<span id="id9"></span><h2>문자열 코드셋 인코딩 고려사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-string-codeset" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-string-codeset'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CUBRID의 모든 문자열 데이터는 코드셋을 가지고 있다.
+CUBRID PL 엔진에서는 저장 프로시저와 저장 함수의 내부에서 문자열 데이터를 단일 코드셋으로만 처리한다.
+그리고 문자열 데이터를 입출력할 때는 코드셋 변환을 수행하지 않는다.
+다음의 규칙에 따라 문자열 데이터를 처리한다.</p>
+<ul class="simple">
+<li><p><strong>문자열 타입의 인수값</strong>은 데이터베이스의 코드셋과 동일 코드셋을 사용하는 것으로 간주한다.</p></li>
+<li><p><strong>문자열 타입의 결과값</strong>은 데이터베이스의 코드셋과 동일 코드셋을 사용하는 것으로 간주한다.</p></li>
+<li><p><strong>문자열 리터럴 값</strong>은 데이터베이스의 코드셋과 동일한 코드셋을 사용하는 것으로 간주한다.</p></li>
+<li><p><strong>SQL 질의문의 결과</strong>가 문자열 타입인 경우, 해당 컬럼의 코드셋에서 데이터베이스의 코드셋으로 변환된 문자열이 전달된다.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<ul class="simple">
+<li><p>데이터베이스의 코드셋은 <a class="reference internal" href="../admin/admin_utils.html#createdb"><span class="std std-ref">cubrid createdb</span></a>유틸리티에서 <strong>charset</strong> 옵션을 사용하여 설정되며, DB 생성 이후에는 변경할 수 없다.</p></li>
+<li><p>저장 프로시저/함수에서 문자열을 입력하거나 출력하는 모든 작업은 데이터베이스 코드셋과 일치하는 코드셋을 사용해야만 올바르게 동작한다.</p></li>
+</ul>
+</div>
+<p><strong>예제 1</strong></p>
+<p>다음의 예시는 문자열 타입의 인수가 ‘한글’ 리터럴 값과 연산하여 결과를 반환하는 예시이다.
+문자열 타입의 인수와 결과 그리고 리터럴 값의 코드셋은 데이터베이스의 코드셋과 동일하다고 가정한다.
+따라서 다음의 SQL 문을 올바르게 실행하기 위해서는 UTF-8 인코딩으로 저장하고 수행해야 한다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span>
+</span><span id="line-2"><span class="k">AS</span>
+</span><span id="line-3"><span class="k">BEGIN</span>
+</span><span id="line-4"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">','</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">'한글'</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="p">(</span><span class="s1">'큐브리드'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">test_func</span><span class="p">(</span><span class="s1">'큐브리드'</span><span class="p">)</span>
+</span><span id="line-2"><span class="o">=====================</span>
+</span><span id="line-3">  <span class="n">큐브리드</span><span class="p">,</span><span class="n">한글</span>
+</span></code></pre></div>
+</div>
+<p><strong>예제 2</strong></p>
+<p>SQL 질의문의 결과에 사용되는 코드셋은 기본적으로 데이터베이스의 코드셋을 따르지만, <a class="reference internal" href="../sql/i18n.html#collation-charset-column"><span class="std std-ref">칼럼의 문자셋과 콜레이션</span></a> 의 설명한 것처럼 테이블의 각 컬럼의 코드셋을 개별적으로 지정할 수 있다.
+이 경우, 다음과 같은 상황이 발생할 수 있다.</p>
+<ul class="simple">
+<li><p>컬럼 코드셋과 데이터베이스 코드셋이 동일: 변환이 필요하지 않는다.</p></li>
+<li><p>컬럼 코드셋과 데이터베이스 코드셋이 다름: CUBRID는 내부적으로 데이터베이스 코드셋으로 변환한다. 변환 과정에서 잘못된 문자 변환이나 데이터 손실이 발생할 수 있으니 주의해야 한다.</p></li>
+</ul>
+<p>다음의 예시는 UTF-8로 설정된 데이터베이스에서 테이블 컬럼의 코드셋을 EUC-KR로 지정된 경우에, 질의문 결과로 반환되는 문자열은 EUC-KR에서 UTF-8로 내부적으로 변환되어 문자열 리터럴과 연산한 후 반환하는 것을 보여준다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 이 파일은 euc-kr로 저장되어야 하며, '큐브리드'도 euc-kr 인코딩으로 입력되어야 한다.</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tblcharcol</span><span class="w"> </span><span class="p">(</span><span class="n">col</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="n">CHARSET</span><span class="w"> </span><span class="n">euckr</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">euckr_bin</span><span class="p">;</span>
+</span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tblcharcol</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'큐브리드'</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 이 파일은 utf-8로 저장되어야 하며, '한글'도 utf-8 인코딩으로 입력되어야 한다.</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">test_func</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span>
+</span><span id="line-3"><span class="k">AS</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">BEGIN</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tblcharcol</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">'한글'</span><span class="p">;</span>
+</span><span id="line-8"><span class="k">END</span><span class="p">;</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="k">SELECT</span><span class="w"> </span><span class="n">test_func</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">test_func</span><span class="p">()</span>
+</span><span id="line-2"><span class="o">=============</span>
+</span><span id="line-3">   <span class="n">큐브리드한글</span>
+</span></code></pre></div>
+</div>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="index.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        CUBRID 절차적 언어
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="pl_call.html">
+        저장 프로시저의 호출
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#pl-schema'" class="reference internal" href="#pl-schema">스키마와 프로시저 이름 지정</a></li>
+<li><a :data-current="activeSection === '#pl-parameter'" class="reference internal" href="#pl-parameter">저장 프로시저의 인자 지정</a></li>
+<li><a :data-current="activeSection === '#pl-arg-type-restriction'" class="reference internal" href="#pl-arg-type-restriction">지원하는 인자와 결과 데이터 타입</a></li>
+<li><a :data-current="activeSection === '#pl-arg-mode'" class="reference internal" href="#pl-arg-mode">인자의 모드 지정</a></li>
+<li><a :data-current="activeSection === '#pl-arg-default'" class="reference internal" href="#pl-arg-default">기본값 인자 지정</a></li>
+<li><a :data-current="activeSection === '#pl-function-overloading'" class="reference internal" href="#pl-function-overloading">함수 오버로딩 미지원</a></li>
+<li><a :data-current="activeSection === '#pl-object-dependencies'" class="reference internal" href="#pl-object-dependencies">객체 의존성</a></li>
+<li><a :data-current="activeSection === '#pl-string-codeset'" class="reference internal" href="#pl-string-codeset">문자열 코드셋 인코딩 고려사항</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 03, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=dcb1e111"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/translations.js?v=afa94a99"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

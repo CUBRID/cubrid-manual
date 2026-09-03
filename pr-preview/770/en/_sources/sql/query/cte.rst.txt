@@ -236,7 +236,7 @@ CTE Execution Methods (Materialize and Inline)
 
 A CTE is executed in one of two methods: materialize or inline.
 
-*   **Materialize**: The CTE's subquery is executed in advance, its result is stored in a temporary file, and the stored result is shared by the places that reference the CTE. The same data is scanned only once; however, indexes cannot be used on the result stored in the temporary file, and query rewrites such as :ref:`View Merging <view_merge>` and :ref:`Predicate Push <pred-push>` are not possible.
+*   **Materialize**: The CTE's subquery is executed in advance, its result is stored in a temporary file, and the stored result is shared by the places that reference the CTE. The CTE's subquery is executed only once even if the CTE is referenced multiple times; however, the stored result is scanned again at each reference, indexes cannot be used on it, and query rewrites such as :ref:`View Merging <view_merge>` and :ref:`Predicate Push <pred-push>` are not possible.
 
 *   **Inline**: The query is rewritten so that the CTE's subquery is expanded as an inline view at each place that references the CTE. Query rewrites such as :ref:`View Merging <view_merge>` and :ref:`Predicate Push <pred-push>` are possible so indexes can be utilized; however, the same data can be scanned multiple times if the CTE is referenced more than once.
 

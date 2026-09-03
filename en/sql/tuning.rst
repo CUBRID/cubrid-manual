@@ -4,6 +4,8 @@
 
 .. include:: join_method.inc
 
+.. _update-statistics:
+
 Updating Statistics
 ===================
 
@@ -26,7 +28,7 @@ The user can delete plan cache using the **PLANDUMP** utility. For more informat
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 5000 pages regardless of total pages of table.
+*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 5000 pages regardless of total pages of table. However, on a large table the column statistics are collected with sampling data even if **WITH FULLSCAN** is specified.
 
 *   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
 
@@ -56,6 +58,16 @@ When starting and ending an update of statistics information, NOTIFICATION messa
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+When **WITH FULLSCAN** is specified, the *Number of Distinct Values* of each column is computed by reading the entire target table, so the **UPDATE STATISTICS** statement takes very long on a large table. To bound this cost, if the number of heap pages of the target table exceeds the value of the :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>` parameter, the column statistics are collected with sampling data as if **WITH FULLSCAN** were omitted, even though **WITH FULLSCAN** is specified, and the *Number of Distinct Values* collected in this case is an estimate.
+
+For a partitioned table, the heap pages of all partitions are summed for this decision, and the column statistics are also collected with sampling data when the number of heap pages cannot be determined.
+
+Index (B+tree) statistics are not affected by this change; they are collected with all the data of the table as specified by **WITH FULLSCAN**.
+
+To collect the column statistics with all the data of the table, set :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>` to a value greater than the number of heap pages of the target table or to **0**, and then execute the **UPDATE STATISTICS** statement again.
+
+When **WITH FULLSCAN** is changed to sampling, NOTIFICATION message is written on the client error log. You can check which table's column statistics were collected as estimates by this message.
 
 .. note::
 

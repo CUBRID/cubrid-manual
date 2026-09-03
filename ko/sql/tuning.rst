@@ -3,6 +3,8 @@
 
 .. include:: join_method.inc
 
+.. _update-statistics:
+
 통계 정보 갱신
 ==============
 
@@ -25,7 +27,7 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다.
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다. 단, 테이블이 큰 경우에는 **WITH FULLSCAN**\ 을 지정해도 칼럼 통계가 샘플링한 데이터로 수집된다.
 
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
 
@@ -55,6 +57,16 @@
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+**WITH FULLSCAN**\ 을 지정하면 칼럼의 *Number of Distinct Values*\ 는 대상 테이블 전체를 읽어 계산하므로, 테이블이 크면 **UPDATE STATISTICS** 문의 수행 시간이 매우 길어진다. 이 비용을 제한하기 위해, 대상 테이블의 힙 페이지 개수가 :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>` 파라미터의 값을 초과하면 **WITH FULLSCAN**\ 을 지정하더라도 칼럼 통계는 **WITH FULLSCAN**\ 을 생략한 경우와 같이 샘플링한 데이터로 수집되며, 이때 수집된 *Number of Distinct Values*\ 는 추정치이다.
+
+파티션 테이블은 각 파티션의 힙 페이지 개수를 합산하여 판정하며, 힙 페이지 개수를 확인할 수 없는 경우에도 샘플링한 데이터로 수집한다.
+
+인덱스(B+tree) 통계는 이 전환의 대상이 아니며, **WITH FULLSCAN**\ 을 지정한 대로 테이블 전체 데이터로 수집한다.
+
+테이블 전체 데이터로 칼럼 통계를 수집해야 하는 경우에는 :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>`\ 의 값을 대상 테이블의 힙 페이지 개수보다 크게 설정하거나 **0**\ 으로 설정한 후 **UPDATE STATISTICS** 문을 다시 수행한다.
+
+샘플링 방식으로 전환될 때 클라이언트 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 어떤 테이블의 칼럼 통계가 추정치로 수집되었는지 확인할 수 있다.
 
 .. note:: 
 

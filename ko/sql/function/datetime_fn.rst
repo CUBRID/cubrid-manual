@@ -2213,9 +2213,9 @@ UTC_TIMESTAMP
 
 .. function:: UTC_TIMESTAMP ()
 
-    **UTC_TIMESTAMP** 함수는 UTC 날짜와 시간을 'YYYY-MM-DD HH:MI:SS' 형태로 반환한다.
+    **UTC_TIMESTAMP** 함수는 UTC 날짜와 시간을 **TIMESTAMP** 타입으로 반환한다.
 
-    :rtype: STRING
+    :rtype: TIMESTAMP
 
 .. code-block:: sql
 

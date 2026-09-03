@@ -66,18 +66,12 @@
     *   :c:macro:`SYS_TIMESTAMP`
     *   :c:macro:`SYSTIMESTAMP`
     *   :func:`CURDATE`
-    *   :func:`CURRENT_DATE`
     *   :c:macro:`CURRENT_DATE`
     *   :func:`CURTIME`
-    *   :func:`CURRENT_TIME`
     *   :c:macro:`CURRENT_TIME`
     *   :c:macro:`CURRENT_TIMESTAMP`
-    *   :func:`CURRENT_TIMESTAMP`
     *   :c:macro:`LOCALTIME`
-    *   :func:`LOCALTIME`
     *   :c:macro:`LOCALTIMESTAMP`
-    *   :func:`LOCALTIMESTAMP`
-    *   :func:`CURRENT_DATETIME`
     *   :c:macro:`CURRENT_DATETIME`
     *   :func:`NOW`
     *   :func:`UTC_TIME`

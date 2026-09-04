@@ -407,6 +407,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               | enable_memory_monitoring            | client/server parameter |         | bool     | no                             |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | flashback_timeout                   | client parameter        |         | int      | 300                            |                       |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | stats_fullscan_max_pages            | client parameter        | O       | int      | 10,000                         | available             |
 +-------------------------------+-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 
 .. _lpg:
@@ -2270,6 +2272,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | flashback_timeout                   | int    | 300            | 0              | 3600           |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| stats_fullscan_max_pages            | int    | 10,000         | 0              |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 
 **access_ip_control**
 
@@ -2510,6 +2514,21 @@ The following are other parameters. The type and value range for each parameter 
 **flashback_timeout**
 
  It specifies the timeout for entering a transaction identifier in the flashback utility. If a transaction to be rewind is not entered within the specified timeout, an error message will be displayed, and the flashback utility will terminate. If there is no timeout, it may cause an issue where the archive log volumes required by the flashback utility are not deleted. Therefore, a method to remove the timeout is not provided. The default value is 300 seconds.
+
+.. _stats_fullscan_max_pages:
+
+**stats_fullscan_max_pages**
+
+    **stats_fullscan_max_pages** is a parameter that specifies the upper limit on the number of heap pages for which column statistics are collected with all the data of the table when **WITH FULLSCAN** is specified in the **UPDATE STATISTICS** statement. If the number of heap pages of the target table exceeds this value, the column statistics are collected with sampling data. The default value is **10,000** and the minimum value is **0**. This parameter is supported from version 11.4 Patch 6 of CUBRID.
+
+    If this parameter is set to **0**, the upper limit is not applied and **WITH FULLSCAN** always collects the column statistics with all the data of the table.
+
+    For more information, see :ref:`update-statistics`.
+
+    The following is an example of setting the parameter so that the upper limit is not applied. ::
+
+        stats_fullscan_max_pages=0
+
 
 .. _broker-configuration:
 

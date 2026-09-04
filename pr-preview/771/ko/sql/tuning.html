@@ -1154,7 +1154,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>WITH FULLSCAN</strong>: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다. 단, 테이블이 큰 경우에는 <strong>WITH FULLSCAN</strong>을 지정해도 칼럼 통계가 샘플링한 데이터로 수집된다.</p></li>
+<li><p><strong>WITH FULLSCAN</strong>: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다. 단, 테이블의 힙 페이지 개수가 <a class="reference internal" href="../admin/config.html#stats-fullscan-max-pages"><span class="std std-ref">stats_fullscan_max_pages</span></a> 파라미터의 값을 초과하면 <strong>WITH FULLSCAN</strong>을 지정해도 칼럼 통계가 샘플링한 데이터로 수집된다.</p></li>
 <li><p><strong>ALL CLASSES</strong>: 모든 테이블의 통계 정보를 업데이트한다.</p></li>
 <li><p><strong>CATALOG CLASSES</strong>: 카탈로그 테이블에 대한 통계 정보를 업데이트한다.</p></li>
 </ul>
@@ -1184,7 +1184,11 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <p>파티션 테이블은 각 파티션의 힙 페이지 개수를 합산하여 판정하며, 힙 페이지 개수를 확인할 수 없는 경우에도 샘플링한 데이터로 수집한다.</p>
 <p>인덱스(B+tree) 통계는 이 전환의 대상이 아니며, <strong>WITH FULLSCAN</strong>을 지정한 대로 테이블 전체 데이터로 수집한다.</p>
 <p>테이블 전체 데이터로 칼럼 통계를 수집해야 하는 경우에는 <a class="reference internal" href="../admin/config.html#stats-fullscan-max-pages"><span class="std std-ref">stats_fullscan_max_pages</span></a>의 값을 대상 테이블의 힙 페이지 개수보다 크게 설정하거나 <strong>0</strong>으로 설정한 후 <strong>UPDATE STATISTICS</strong> 문을 다시 수행한다.</p>
-<p>샘플링 방식으로 전환될 때 클라이언트 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 어떤 테이블의 칼럼 통계가 추정치로 수집되었는지 확인할 수 있다.</p>
+<p>샘플링 방식으로 전환될 때 클라이언트 에러 로그에 다음과 같은 NOTIFICATION 메시지를 출력하며, 이를 통해 어떤 테이블의 칼럼 통계가 추정치로 수집되었는지와 그 테이블의 힙 페이지 개수를 확인할 수 있다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Time: 09/04/26 11:33:46.772 - NOTIFICATION *** file ../../src/storage/statistics_cl.c, line 562  CODE = -1371, Tran = 1, EID = 3
+</span><span id="line-2">WITH FULLSCAN is downgraded to sampling (class "dba.large_table", heap pages : 10965, stats_fullscan_max_pages : 10000).
+</span></code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>CUBRID 10.0 부터는 HA 환경의 마스터에서 수행한 <strong>UPDATE STATISTICS</strong> 문이 슬레이브/레플리카에 복제된다.</p>
@@ -5669,7 +5673,7 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 03, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 04, 2026. </p>
 </div>
 </div>
 </footer>

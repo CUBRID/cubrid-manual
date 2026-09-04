@@ -3990,7 +3990,7 @@ You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, m
 </div></blockquote>
 <p id="stats-fullscan-max-pages"><strong>stats_fullscan_max_pages</strong></p>
 <blockquote>
-<div><p><strong>stats_fullscan_max_pages</strong> is a parameter that specifies the upper limit on the number of heap pages for which column statistics are collected with all the data of the table when <strong>WITH FULLSCAN</strong> is specified in the <strong>UPDATE STATISTICS</strong> statement. If the number of heap pages of the target table exceeds this value, the column statistics are collected with sampling data. The default value is <strong>10,000</strong> and the minimum value is <strong>0</strong>.</p>
+<div><p><strong>stats_fullscan_max_pages</strong> is a parameter that specifies the upper limit on the number of heap pages for which column statistics are collected with all the data of the table when <strong>WITH FULLSCAN</strong> is specified in the <strong>UPDATE STATISTICS</strong> statement. If the number of heap pages of the target table exceeds this value, the column statistics are collected with sampling data. The default value is <strong>10,000</strong> and the minimum value is <strong>0</strong>. This parameter is supported from version 11.4 Patch 6 of CUBRID.</p>
 <p>If this parameter is set to <strong>0</strong>, the upper limit is not applied and <strong>WITH FULLSCAN</strong> always collects the column statistics with all the data of the table.</p>
 <p>For more information, see <a class="reference internal" href="../sql/tuning.html#update-statistics"><span class="std std-ref">Updating Statistics</span></a>.</p>
 <p>The following is an example of setting the parameter so that the upper limit is not applied.</p>

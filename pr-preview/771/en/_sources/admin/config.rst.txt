@@ -2519,7 +2519,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **stats_fullscan_max_pages**
 
-    **stats_fullscan_max_pages** is a parameter that specifies the upper limit on the number of heap pages for which column statistics are collected with all the data of the table when **WITH FULLSCAN** is specified in the **UPDATE STATISTICS** statement. If the number of heap pages of the target table exceeds this value, the column statistics are collected with sampling data. The default value is **10,000** and the minimum value is **0**.
+    **stats_fullscan_max_pages** is a parameter that specifies the upper limit on the number of heap pages for which column statistics are collected with all the data of the table when **WITH FULLSCAN** is specified in the **UPDATE STATISTICS** statement. If the number of heap pages of the target table exceeds this value, the column statistics are collected with sampling data. The default value is **10,000** and the minimum value is **0**. This parameter is supported from version 11.4 Patch 6 of CUBRID.
 
     If this parameter is set to **0**, the upper limit is not applied and **WITH FULLSCAN** always collects the column statistics with all the data of the table.
 

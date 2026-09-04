@@ -27,7 +27,7 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다. 단, 테이블이 큰 경우에는 **WITH FULLSCAN**\ 을 지정해도 칼럼 통계가 샘플링한 데이터로 수집된다.
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 데이터 샘플은 테이블 전체 페이지 수와 상관없이 5000페이지이다. 단, 테이블의 힙 페이지 개수가 :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>` 파라미터의 값을 초과하면 **WITH FULLSCAN**\ 을 지정해도 칼럼 통계가 샘플링한 데이터로 수집된다.
 
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
 
@@ -66,7 +66,12 @@
 
 테이블 전체 데이터로 칼럼 통계를 수집해야 하는 경우에는 :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>`\ 의 값을 대상 테이블의 힙 페이지 개수보다 크게 설정하거나 **0**\ 으로 설정한 후 **UPDATE STATISTICS** 문을 다시 수행한다.
 
-샘플링 방식으로 전환될 때 클라이언트 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 어떤 테이블의 칼럼 통계가 추정치로 수집되었는지 확인할 수 있다.
+샘플링 방식으로 전환될 때 클라이언트 에러 로그에 다음과 같은 NOTIFICATION 메시지를 출력하며, 이를 통해 어떤 테이블의 칼럼 통계가 추정치로 수집되었는지와 그 테이블의 힙 페이지 개수를 확인할 수 있다.
+
+::
+
+    Time: 09/04/26 11:33:46.772 - NOTIFICATION *** file ../../src/storage/statistics_cl.c, line 562  CODE = -1371, Tran = 1, EID = 3
+    WITH FULLSCAN is downgraded to sampling (class "dba.large_table", heap pages : 10965, stats_fullscan_max_pages : 10000).
 
 .. note:: 
 

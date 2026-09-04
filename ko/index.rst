@@ -55,6 +55,7 @@ CUBRID 11.4 사용자 매뉴얼
     sql/index.rst
     pl/index.rst
     admin/index.rst
+    cmt/index.rst
     ha.rst
     security.rst
     shard.rst

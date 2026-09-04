@@ -32,12 +32,14 @@ You can create a user using the CREATE USER statement. The default DBA, PUBLIC u
 
     CREATE USER user_name
     [PASSWORD password]
+    [LOGIN | NOLOGIN]
     [GROUPS user_name [{, user_name } ... ]]
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
 
 *   *user_name*: specifies the user name to create.
 *   *password*: specifies the user password to create.
+*   [**LOGIN** | **NOLOGIN**]: specifies whether the user to create can log in. If not specified, the default value is **LOGIN**. For details, see :ref:`user-login-capability`.
 *   *comment_string*: specifies the user comment to create.
 
 .. note::
@@ -96,16 +98,17 @@ To change user comment, refer to the description of the ALTER USER statement.
 ALTER USER
 ==========
 
-You can use the ALTER USER statement to change the password, members and comment of a created user. ::
+You can use the ALTER USER statement to change the password, members, login capability and comment of a created user. ::
 
     ALTER USER user_name 
-    [PASSWORD password] |
+    [PASSWORD password] [LOGIN | NOLOGIN] |
     [ADD MEMBERS user_name [{, user_name } ... ]] |
     [DROP MEMBERS user_name [{, user_name } ... ]]
     [COMMENT 'comment_string'];
 
 *   *user_name*: specifies the user name to change.
 *   *password*: specifies the user password to change.
+*   [**LOGIN** | **NOLOGIN**]: specifies whether the user to change can log in. For details, see :ref:`user-login-capability`.
 *   *comment_string*: specifies the user comment to change.
 
 .. note::
@@ -144,6 +147,57 @@ The following example deletes the members of a created user group. The *marketin
 
     ALTER USER company DROP MEMBERS marketing;
     ALTER USER marketing DROP MEMBERS smith, jones;
+
+.. _user-login-capability:
+
+User's Login Capability
+-----------------------
+
+The following example creates a user who is not allowed to log in.
+
+.. code-block:: sql
+
+    CREATE USER test_user1 PASSWORD 'password' NOLOGIN;
+
+Connecting to the database as the user test_user1 raises the following error.
+
+::
+
+    ERROR: Login is disabled for user "test_user1".
+
+The following example allows test_user1 to log in again.
+
+.. code-block:: sql
+
+    ALTER USER test_user1 LOGIN;
+
+You can see the login capability of a user with this syntax.
+
+.. code-block:: sql
+
+    SELECT name, is_loginable FROM db_user;
+
+The following example changes the password, the login capability, and the comment in a single statement. It cannot be combined with **ADD MEMBERS** or **DROP MEMBERS**.
+
+.. code-block:: sql
+
+    ALTER USER test_user1 PASSWORD '1234' NOLOGIN COMMENT 'blocked temporarily';
+
+.. note::
+
+    The login capability is checked when a user logs in. Therefore, changing a user to **NOLOGIN** does not disconnect existing connections of that user; only new connections and switching to that user with the :ref:`login( ) method <login-method>` are rejected.
+
+.. note::
+
+    Only **DBA** and **DBA** members can change the login capability of a user.
+
+    However, **DBA**, **INFORMATION_SCHEMA**, and the current user cannot be the target of the change. If they are specified, an error occurs.
+
+.. warning::
+
+    If **PUBLIC** is changed to **NOLOGIN**, connections as **PUBLIC** are rejected. A connection that does not specify a user name is made as **PUBLIC**, so it is rejected as well.
+
+    The login capability controls only logging in. Authorization and ownership are not affected, so even while **PUBLIC** is **NOLOGIN**, authorization granted with the **GRANT** statement and inheritance through the group still work.
 
 User's COMMENT Change
 ---------------------
@@ -359,6 +413,8 @@ The database administrator (**DBA**) can check and modify user authorization by 
 
     CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
     CALL method_definition ON variable [ ; ]
+
+.. _login-method:
 
 **login( ) method**
 

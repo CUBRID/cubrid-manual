@@ -1152,7 +1152,7 @@ and the query optimizer generates and executes a plan with a nested loop join (c
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>WITH FULLSCAN</strong>: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 5000 pages regardless of total pages of table. However, on a large table the column statistics are collected with sampling data even if <strong>WITH FULLSCAN</strong> is specified.</p></li>
+<li><p><strong>WITH FULLSCAN</strong>: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 5000 pages regardless of total pages of table. However, if the number of heap pages of the table exceeds the value of the <a class="reference internal" href="../admin/config.html#stats-fullscan-max-pages"><span class="std std-ref">stats_fullscan_max_pages</span></a> parameter, the column statistics are collected with sampling data even if <strong>WITH FULLSCAN</strong> is specified.</p></li>
 <li><p><strong>ALL CLASSES</strong>: If the <strong>ALL CLASSES</strong> keyword is specified, the statistics on all the tables existing in the database are updated.</p></li>
 <li><p><strong>CATALOG CLASSES</strong>: It updates the statistics of the catalog tables.</p></li>
 </ul>
@@ -1182,7 +1182,11 @@ and the query optimizer generates and executes a plan with a nested loop join (c
 <p>For a partitioned table, the heap pages of all partitions are summed for this decision, and the column statistics are also collected with sampling data when the number of heap pages cannot be determined.</p>
 <p>Index (B+tree) statistics are not affected by this change; they are collected with all the data of the table as specified by <strong>WITH FULLSCAN</strong>.</p>
 <p>To collect the column statistics with all the data of the table, set <a class="reference internal" href="../admin/config.html#stats-fullscan-max-pages"><span class="std std-ref">stats_fullscan_max_pages</span></a> to a value greater than the number of heap pages of the target table or to <strong>0</strong>, and then execute the <strong>UPDATE STATISTICS</strong> statement again.</p>
-<p>When <strong>WITH FULLSCAN</strong> is changed to sampling, NOTIFICATION message is written on the client error log. You can check which table’s column statistics were collected as estimates by this message.</p>
+<p>When <strong>WITH FULLSCAN</strong> is changed to sampling, the following NOTIFICATION message is written on the client error log. You can check which table’s column statistics were collected as estimates and the number of heap pages of that table by this message.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Time: 09/04/26 11:33:46.772 - NOTIFICATION *** file ../../src/storage/statistics_cl.c, line 562  CODE = -1371, Tran = 1, EID = 3
+</span><span id="line-2">WITH FULLSCAN is downgraded to sampling (class "dba.large_table", heap pages : 10965, stats_fullscan_max_pages : 10000).
+</span></code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>From version 10.0 of CUBRID, on the HA environment, <strong>UPDATE STATISTICS</strong> on the master node is replicated to the slave/replica node.</p>
@@ -5667,7 +5671,7 @@ A comparison of the results from the two queries reveals that subquery cache opt
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 03, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 04, 2026. </p>
 </div>
 </div>
 </footer>

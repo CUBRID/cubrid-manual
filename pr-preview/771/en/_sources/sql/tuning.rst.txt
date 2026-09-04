@@ -28,7 +28,7 @@ The user can delete plan cache using the **PLANDUMP** utility. For more informat
   
     UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
-*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 5000 pages regardless of total pages of table. However, on a large table the column statistics are collected with sampling data even if **WITH FULLSCAN** is specified.
+*   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data. The sampling data is 5000 pages regardless of total pages of table. However, if the number of heap pages of the table exceeds the value of the :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>` parameter, the column statistics are collected with sampling data even if **WITH FULLSCAN** is specified.
 
 *   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
 
@@ -67,7 +67,12 @@ Index (B+tree) statistics are not affected by this change; they are collected wi
 
 To collect the column statistics with all the data of the table, set :ref:`stats_fullscan_max_pages <stats_fullscan_max_pages>` to a value greater than the number of heap pages of the target table or to **0**, and then execute the **UPDATE STATISTICS** statement again.
 
-When **WITH FULLSCAN** is changed to sampling, NOTIFICATION message is written on the client error log. You can check which table's column statistics were collected as estimates by this message.
+When **WITH FULLSCAN** is changed to sampling, the following NOTIFICATION message is written on the client error log. You can check which table's column statistics were collected as estimates and the number of heap pages of that table by this message.
+
+::
+
+    Time: 09/04/26 11:33:46.772 - NOTIFICATION *** file ../../src/storage/statistics_cl.c, line 562  CODE = -1371, Tran = 1, EID = 3
+    WITH FULLSCAN is downgraded to sampling (class "dba.large_table", heap pages : 10965, stats_fullscan_max_pages : 10000).
 
 .. note::
 

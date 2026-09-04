@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+	  /*
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+	 */
+  (function(d){const k="_x_darkMode",q=window.matchMedia("(prefers-color-scheme: dark)"),a=v=>{d.classList.toggle("dark",v);d.style.colorScheme=v?"dark":"light"};let s=localStorage.getItem(k);a(s!==null?s==="true":q.matches);q.onchange=e=>!localStorage.getItem(k)&&a(e.matches)})(document.documentElement);
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Class Inheritance | CUBRID 11.4 User Manual</title>
+<meta content="Class Inheritance | CUBRID 11.4 User Manual" property="og:title"/>
+<meta content="Class Inheritance | CUBRID 11.4 User Manual" name="twitter:title"/>
+<link href="../_static/pygments.css?v=251d11f7" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/style.css?v=59d90775" rel="stylesheet" type="text/css"/>
+<link href="../_static/awesome-sphinx-design.css?v=c54898a4" rel="stylesheet" type="text/css"/>
+<link href="../_static/logo_only.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="db_admin.html" rel="next" title="Database Administration"/>
+<link href="dblink.html" rel="prev" title="CUBRID DBLink"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="24" src="../_static/logo.svg" width="24"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="24" src="../_static/logo.svg" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../release_note/index.html">Release Note</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href=".././genindex.html">Index</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.com/qna" rel="noopener nofollow">Q&amp;A</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<a class="hide-on-mobile sd-sphinx-override sd-btn sd-text-wrap sd-btn-outline-primary sd-shadow-sm reference external text-sm transition-colors hover:text-foreground/80 text-foreground/60" href="https://www.cubrid.org/downloads" style="font-size:0.875rem;">Downloads</a>
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.ctrl.prevent="$refs.search.focus()" @keydown.k.window.meta.prevent="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get" x-data="{ isMac: /Mac|iPhone|iPod|iPad/i.test(navigator.platform || navigator.userAgent) }">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs" x-text="isMac ? '⌘' : 'Ctrl'">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<a href="https://github.com/CUBRID" rel="noopener nofollow" title="Visit GitHub">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<div class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9"><svg fill="currentColor" height="26px" style="margin-top:-2px;display:inline" viewbox="0 0 45 44" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 14.853 20.608 1.087.2 1.483-.47 1.483-1.047 0-.516-.019-1.881-.03-3.693-6.04 1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 1.803.197-1.403.759-2.36 1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 1.822-.584 5.972 2.226 1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 4.147-2.81 5.967-2.226 5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 2.232 5.828 0 8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 2.904-.027 5.247-.027 5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 22.647c0-11.996-9.726-21.72-21.722-21.72" fill="currentColor" fill-rule="evenodd"></path></svg></div>
+</div>
+</a>
+<a href="/manual/ko/11.4/sql/oodb.html" rel="noopener nofollow" title="Switch to Korean">
+<div bis_skin_checked="1" class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
+<kbd class="h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground"><span class="text-xs">KO</span></kbd>
+</div>
+</a>
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+<div aria-label="Switch the version" class="version-switcher bg-muted inline-flex items-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 relative h-9 justify-start rounded-[0.5rem] text-sm text-muted-foreground group" id="switcherbox">
+<script type="text/javascript">
+    const switcherUrl = "https://ftp.cubrid.org/CUBRID_Docs/Manuals/switcher.json";
+  </script>
+<select class="top-2 h-5 text-muted-foreground items-center bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground" id="version-select" x-ref="switcherbox">
+<option>Loading</option>
+</select>
+</div>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 hidden dark:block" height="16" src="../_static/logo.svg" width="16"/>
+<img alt="Logo" class="mr-2 dark:hidden" height="16" src="../_static/logo.svg" width="16"/><span class="font-bold text-clip whitespace-nowrap">CUBRID 11.4 User Manual</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../release_note/index.html">Release Note</a>
+<a href=".././genindex.html">Index</a>
+<a href="https://www.cubrid.com/qna" rel="nofollow noopener">Q&amp;A</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../toc.html">Introduction to Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to CUBRID</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../install_upgrade.html">Installing and Upgrading<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../install.html">Installing and Running CUBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html">Configuring Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env.html#port-setting">Port Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html">Upgrade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../upgrade.html#database-migration-under-ha-environment">Database Migration under HA Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../uninstall.html">Uninstalling CUBRID</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../start.html">Getting Started<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../quick_start.html">Starting the CUBRID Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html">Query Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#management-tools">Management Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qrytool.html#drivers">Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../csql.html">CSQL Interpreter</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">CUBRID SQL<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="syntax.html">Writing Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatype_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schema/index.html">Data Definition Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="function/index.html">Operators and Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query/index.html">Data Manipulation Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_index.html">Query Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_index.html">Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition_index.html">Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n_index.html">Globalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transaction_index.html">Transaction and Lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trigger.html">Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dblink.html">CUBRID DBLink</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Class Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_admin.html">Database Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_schema.html">User Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">System Catalog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="information_schema.html">Information Schema</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pl/index.html">CUBRID Procedural Language<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_create.html">Create a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_call.html">Call a Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_auth.html">Stored Procedure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tcl.html">Transaction Commit and Rollback Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_tuning.html">Performance Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/pl_package.html">System Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/plcsql.html">PL/CSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/jsp.html">Java Stored Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pl/method.html">Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../admin/index.html">CUBRID Management<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html">Controlling CUBRID Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-services">CUBRID Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#database-server">Database Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#broker">Broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#gateway">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-manager-server">CUBRID Manager Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/control.html#cubrid-procedural-langauge-server">CUBRID Procedural Langauge Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/db_manage.html">Database Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/admin_utils.html">cubrid Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/config.html">System Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/systemtap.html">SystemTap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/scripts.html">cubrid scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/troubleshoot.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/ddl_audit.html">DDL Audit Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admin/error_log.html">Database Error Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ha.html">CUBRID HA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">CUBRID Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shard.html">CUBRID SHARD</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../api/index.html">API Reference<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../api/jdbc.html">JDBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cci_index.html">CCI Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/php.html">PHP Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/pdo.html">PDO Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/odbc.html">ODBC Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adodotnet.html">ADO.NET Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/perl.html">Perl Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python.html">Python Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/ruby.html">Ruby Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/node_js.html">Node.js Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../release_note/index.html">Release Notes<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../release_note/release_note_latest_ver.html">11.4 Release Notes</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">CUBRID 11.4 User Manual</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">CUBRID SQL</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Class Inheritance</span>
+</nav>
+<div id="content" role="main">
+<section id="class-inheritance">
+<h1>Class Inheritance<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#class-inheritance"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>To explain the concept of inheritance, a table is expressed as a class, a column is expressed as an attribute, and a type is expressed as a domain.</p>
+<p>Classes in CUBRID database can have class hierarchy. Attributes and methods can be inherited through such hierarchy. As shown in the previous section, you can create a <em>Manager</em> class by inheriting attributes from an <em>Employee</em> class. The <em>Manager</em> class is called the sub class of the <em>Employee</em> class, and the <em>Employee</em> class is called the super class of the <em>Manager</em> class. Inheritance can simplify class creation by reusing the existing class hierarchy.</p>
+<p>CUBRID allows multiple inheritances, which means that a class can inherit attributes and methods from more than one super class. However, inheritance can cause conflicts when an attribute or method of the super class is added or deleted.</p>
+<p>Such conflict occurs in multiple inheritance if there are attributes or methods with the same name in different super classes. For example, if it is likely that a class inherits attributes of the same name and type from more than one super class, you must specify the attributes to be inherited. In such a case, if the inherited super class is deleted, a new attribute of the same name and type must be inherited from another super class. In most cases, the database system resolves such problems automatically. However, if you don’t like the way that the system resolves a problem, you can resolve it manually by using the INHERIT clause.</p>
+<p>When attributes are inherited from more than one super class, it is possible that their names are to be the same, while their domains are different. For example, two super classes may have the same attribute, whose domain is a class. In this case, a sub class automatically inherits attributes with more specialized (a lower in the class hierarchy) domains. If such conflict occurs between basic data types (e.g. STRING or INTEGER) provided by the system, inheritance fails.</p>
+<p>Conflicts during inheritance and their resolutions will be covered in the <a class="reference external" href="#syntax_syntax_table_conflict_int_5489">Resolving Class Conflicts</a> section.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following cautions must be observed during inheritance:</p>
+<ul class="simple">
+<li><p>The class name must be unique in the database. An error occurs if you create a class that inherits another class that does not exist.</p></li>
+<li><p>The name of a method/attribute must be unique within a class. The name cannot contain spaces, and cannot be a reserved keyword of CUBRID. Alphabets as well as ‘_’, ‘#’, ‘%’ are allowed in the class name, but the first character cannot be ‘_’. Class names are not case-sensitive. A class name will be stored in the system after being converted to lowercase characters.</p></li>
+<li><p>Encryption option (TDE) of the class is not inherited. For more information, see <a class="reference internal" href="schema/table_stmt.html#create-tde-table"><span class="std std-ref">Table Encryption (TDE)</span></a>.</p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A super class name can begin with the user name so that the owner of the class can be easily identified.</p>
+</div>
+<section id="class-attribute-and-method">
+<h2>Class Attribute and Method<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#class-attribute-and-method" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#class-attribute-and-method'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You can create class attributes to store the aggregate property of all instances in the class. When you define a <strong>CLASS</strong> attribute or method, you must precede the attribute or method name with the keyword <strong>CLASS</strong>. Because a class attribute is associated with the class itself, not with an instances of the class, it has only one value. For example, a class attribute can be used to store the average value determined by a class method or the timestamp when the class was created. A class method is executed in the class object itself. It can be used to calculate the aggregate value for the instances of the class.</p>
+<p>When a sub class inherits a super class, each class has a separate storage space for class attributes, so that two classes may have different values of class attribute. Therefore, the sub class does not change even when the attributes of the super class are changed.</p>
+<p>The name of a class attribute can be the same as that of an instance attribute of the same class. Likewise, the name of a class method can be the same as that of an instance method of the same class.</p>
+</section>
+<section id="order-rule-for-inheritance">
+<h2>Order Rule for Inheritance<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#order-rule-for-inheritance" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#order-rule-for-inheritance'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The following rules apply to inheritance. The term class is generally used to describe the inheritance relationship between classes and virtual classes in the database.</p>
+<ul class="simple">
+<li><p>For an object without a super class, attributes are defined in the same order as in the <strong>CREATE</strong> statement (an ANSI standard).</p></li>
+<li><p>If there is one super class, locally created attributes are placed after the super class attributes. The order of the attributes inherited from the super class follows the one defined during the super class definition. For multiple inheritance, the order of the super class attributes is determined by the order of the super classes specified during the class definition.</p></li>
+<li><p>If more than one super class inherits the same class, the attribute that exists in both super classes is inherited to the sub class only once. At this time, if a conflict occurs, the attribute of the first super class is inherited.</p></li>
+<li><p>If a name conflict occurs in more than one super class, you can inherit only the ones you want from the super class attributes by using the <strong>INHERIT</strong> clause in order to resolve the conflict.</p></li>
+<li><p>If the name of the super class attribute is changed by the alias option of the <strong>INHERIT</strong> clause, its position is maintained.</p></li>
+</ul>
+</section>
+<section id="inherit-clause">
+<h2>INHERIT Clause<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#inherit-clause" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#inherit-clause'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>When a class is created as a sub class, the class inherits all attributes and methods of the super class. A name conflict that occurs during inheritance can be handled by either a system or a user. To resolve the name conflict directly, add the <strong>INHERIT</strong> clause to the <strong>CREATE CLASS</strong> statement.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CREATE</span> <span class="n">CLASS</span>
+</span><span id="line-2"><span class="o">.</span>
+</span><span id="line-3"><span class="o">.</span>
+</span><span id="line-4"><span class="o">.</span>
+</span><span id="line-5"><span class="n">INHERIT</span> <span class="n">resolution</span> <span class="p">[{,</span> <span class="n">resolution</span><span class="p">}]</span> <span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="n">resolution</span><span class="p">:</span>
+</span><span id="line-8"><span class="p">[</span><span class="n">column_name</span> <span class="o">|</span> <span class="n">method_name</span><span class="p">]</span> <span class="n">OF</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span> <span class="p">[</span><span class="n">AS</span> <span class="n">alias</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+<p>In the <strong>INHERIT</strong> clause, specify the name of the attribute or method of the super class to inherit. With the <strong>ALIAS</strong> clause, you can resolve a name conflict that occurs in multiple inheritance statements by inheriting a new name.</p>
+</section>
+<section id="add-superclass-clause">
+<span id="add-superclass"></span><h2>ADD SUPERCLASS Clause<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#add-superclass-clause" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#add-superclass-clause'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>To extend class inheritance, add a super class to a class. A relationship between two classes is created when a super class is added to an existing class. Adding a super class does not mean adding a new class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="n">CLASS</span>
+</span><span id="line-2"><span class="o">.</span>
+</span><span id="line-3"><span class="o">.</span>
+</span><span id="line-4"><span class="o">.</span>
+</span><span id="line-5"><span class="n">ADD</span> <span class="n">SUPERCLASS</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span> <span class="p">[{,</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span><span class="p">}]</span>
+</span><span id="line-6"><span class="p">[</span><span class="n">INHERIT</span> <span class="n">resolution</span> <span class="p">[{,</span> <span class="n">resolution</span><span class="p">}]]</span> <span class="p">;</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="n">resolution</span><span class="p">:</span>
+</span><span id="line-9"><span class="p">[</span><span class="n">column_name</span> <span class="o">|</span> <span class="n">method_name</span><span class="p">]</span> <span class="n">OF</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span> <span class="p">[</span><span class="n">AS</span> <span class="n">alias</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+<p>Specify the name of the superclass to be added in <em>superclass_name</em>. Attributes and methods of the super class can be inherited by using the syntax above.</p>
+<p>Name conflicts can occur when adding a new super class. If a name conflict cannot be resolved by the database system, attributes or methods to inherit from the super class can be specified by using the <strong>INHERIT</strong> clause. You can use aliases to inherit all attributes or methods that cause the conflict. For details on super class name conflicts, see <a class="reference internal" href="#class-conflict-resolution"><span class="std std-ref">Class Conflict Resolution</span></a>.</p>
+<p>The following example shows how to create the <em>female_event</em> class by inheriting the <em>event</em> class included in <em>demodb</em>.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">female_event</span><span class="w"> </span><span class="k">UNDER</span><span class="w"> </span><span class="n">event</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="drop-superclass-clause">
+<h2>DROP SUPERCLASS Clause<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#drop-superclass-clause" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#drop-superclass-clause'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Deleting a super class from a class means removing the relationship between two classes. If a super class is deleted from a class, it changes inheritance relationship of the classes as well as of all their sub classes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="n">CLASS</span>
+</span><span id="line-2"><span class="o">.</span>
+</span><span id="line-3"><span class="o">.</span>
+</span><span id="line-4"><span class="o">.</span>
+</span><span id="line-5"><span class="n">DROP</span> <span class="n">SUPERCLASS</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span> <span class="p">[{,</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span><span class="p">}]</span>
+</span><span id="line-6"><span class="p">[</span><span class="n">INHERIT</span> <span class="n">resolution</span> <span class="p">[{,</span> <span class="n">resolution</span><span class="p">}]]</span> <span class="p">;</span>
+</span><span id="line-7">
+</span><span id="line-8"><span class="n">resolution</span><span class="p">:</span>
+</span><span id="line-9"><span class="p">[</span><span class="n">column_name</span> <span class="o">|</span> <span class="n">method_name</span><span class="p">]</span> <span class="n">OF</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span> <span class="p">[</span><span class="n">AS</span> <span class="n">alias</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+<p>Specify the name of the superclass to be deleted in <em>superclass_name</em>. For the second <em>class_name</em>, specify the name of the super class to be deleted. If a name conflict occurs after deleting a super class, see the <a class="reference internal" href="#class-conflict-resolution"><span class="std std-ref">Class Conflict Resolution</span></a> section for the resolution.</p>
+<p>The following example shows how to inherit the <em>female_event</em> class from the <em>event</em> class.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">female_event</span><span class="w"> </span><span class="k">UNDER</span><span class="w"> </span><span class="n">event</span>
+</span></code></pre></div>
+</div>
+<p>The following example shows how to delete the super class <em>event</em> from the f <em>emale_event</em> class. Attributes that the <em>female_event</em> class inherited from the even <em>class</em> no longer exist.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">female_event</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="n">SUPERCLASS</span><span class="w"> </span><span class="n">event</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="class-conflict-resolution">
+<span id="id1"></span><h2>Class Conflict Resolution<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#class-conflict-resolution" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#class-conflict-resolution'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>If you modify the schema of the database, conflicts can occur between attributes or methods of inheritance classes. Most conflicts are resolved automatically by CUBRID otherwise, you must resolve the conflict manually. Therefore, you need to examine the possibility of conflicts before modifying the schema.</p>
+<p>Two types of conflicts can cause damage to the database schema. One is conflict with a sub class when the sub class schema is modified. The other is conflict with a super class when the super class is modified. The following are operations that may cause conflicts between classes.</p>
+<ul class="simple">
+<li><p>Adding an attribute</p></li>
+<li><p>Deleting an attribute</p></li>
+<li><p>Adding a super class</p></li>
+<li><p>Deleting a super class</p></li>
+<li><p>Deleting a class</p></li>
+</ul>
+<p>If a conflict occurs as a result of the above operations, CUBRID applies a basic resolution to the sub class where the conflict occurred. Therefore, the database schema can always maintain consistent state.</p>
+<section id="resolution-specifier">
+<h3>Resolution Specifier<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#resolution-specifier" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#resolution-specifier'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Conflicts between the existing classes or attributes, and inheritance conflicts can occur if the database schema is modified. If the system fails to resolve a conflict automatically or if you don’t like the way the system resolved the problem, you can suggest how to resolve the conflict by using the <strong>INHERIT</strong> clause of the <strong>ALTER</strong> statement (often referred to as resolution specifier).</p>
+<p>When the system resolves the conflict automatically, basically, the existing inheritance is maintained (if any). If the previous resolution becomes invalid when the schema is modified, the system will arbitrarily select another one. Therefore, you must avoid excessive reuse of attributes or methods in the schema design stage because the way the system will resolve the conflict cannot always be predictable.</p>
+<p>What will be discussed concerning conflicts is applied commonly to both attributes and methods.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">class_type</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">class_name</span> <span class="n">alter_clause</span>
+</span><span id="line-2"><span class="p">[</span><span class="n">INHERIT</span> <span class="n">resolution</span> <span class="p">[{,</span> <span class="n">resolution</span> <span class="p">}]]</span> <span class="p">;</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">resolution</span><span class="p">:</span>
+</span><span id="line-5"><span class="p">[</span><span class="n">column_name</span> <span class="o">|</span> <span class="n">method_name</span><span class="p">]</span> <span class="n">OF</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">superclass_name</span> <span class="p">[</span><span class="n">AS</span> <span class="n">alias</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="superclass-conflict">
+<h3>Superclass Conflict<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#superclass-conflict" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#superclass-conflict'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="adding-a-super-class">
+<h4>Adding a super class<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#adding-a-super-class"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>The <strong>INHERIT</strong> clause of the <strong>ALTER CLASS</strong> statement is optional, but must be used when a conflict occurs due to class changes. You can specify more than one resolution after the <strong>INHERIT</strong> clause.</p>
+<p><em>superclass_name</em> specifies the name of the super class that has the new attribute(column) or method to inherit when a conflict occurs. <em>column_name</em> or <em>method_name</em> specifies the name of the attribute or method to inherit. You can use the <strong>AS</strong> clause when you need to change the name of the attribute or method to inherit.</p>
+<p>The following example shows how to create the <em>soccer_stadium</em> class by inheriting the <em>event</em> and <em>stadium</em> classes in the <em>olympic</em> database of <em>demodb</em>. Because both <em>event</em> and <em>stadium</em> classes have the name and code attributes, you must specify the attributes to inherit using the <strong>INHERIT</strong> clause.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">soccer_stadium</span><span class="w"> </span><span class="k">UNDER</span><span class="w"> </span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">stadium</span>
+</span><span id="line-2"><span class="n">INHERIT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">stadium</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">stadium</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>When the two super classes (<em>event</em> and <em>stadium</em>) have the <em>name</em> attribute, if the <em>soccer_stadium</em> class needs to inherit both attributes, it can inherit the <em>name</em> unchanged from the <em>stadium</em> class and the <em>name</em> changed from the <em>event</em> class by using the <strong>alias</strong> clause of the <strong>INHERIT</strong>.</p>
+<p>The following example shows in which the <em>name</em> attribute of the <em>stadium</em> class is inherited as it is, and that of the <em>event</em> class is inherited as the <em>purpose</em> alias.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">soccer_stadium</span>
+</span><span id="line-2"><span class="n">INHERIT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">purpose</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="deleting-a-super-class">
+<h4>Deleting a super class<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#deleting-a-super-class"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>A name conflict may occur again if a super class that explicitly inherited an attribute or method is dropped by using the <strong>INHERIT</strong>. In this case, you must specify the attribute or method to be explicitly inherited when dropping the super class.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">a_tbl</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">b_tbl</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">c_tbl</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">a_b_c</span><span class="w"> </span><span class="k">UNDER</span><span class="w"> </span><span class="n">a_tbl</span><span class="p">,</span><span class="w"> </span><span class="n">b_tbl</span><span class="p">,</span><span class="w"> </span><span class="n">c_tbl</span><span class="w"> </span><span class="n">INHERIT</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">b_tbl</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">b_tbl</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="k">ALTER</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">a_b_c</span>
+</span><span id="line-8"><span class="k">DROP</span><span class="w"> </span><span class="n">SUPERCLASS</span><span class="w"> </span><span class="n">b_tbl</span>
+</span><span id="line-9"><span class="n">INHERIT</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">a_tbl</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>The above example shows how to create the <em>a_b_c</em> class by inheriting <em>a_tbl</em>, <em>b_tbl</em> and <em>c_tbl</em> classes, and delete the <em>b_tbl</em> class from the super class. Because <em>a</em> and <em>b</em> are explicitly inherited from the <em>b_tbl</em> class, you must resolve their name conflicts before deleting it from the super class. However, <em>a</em> does not need to be specified explicitly because it exists only in the <em>a_tbl</em> class except for the <em>b_tbl</em> class to be deleted.</p>
+</section>
+<section id="compatible-domains">
+<h4>Compatible Domains<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#compatible-domains"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>If the conflicting attributes do not have compatible domains, the class hierarchy cannot be created.</p>
+<p>For example, the class that inherits a super class with the <em>phone</em> attribute of integer type cannot have another super class with the <em>phone</em> attribute of string type. If the types of the <em>phone</em> attributes of the two super classes are both String or Integer, you can add a new super class by resolving the conflict with the <strong>INHERIT</strong> clause.</p>
+<p>Compatibility is checked when inheriting an attribute with the same name, but with the different domain. In this case, the attribute that has a lower class in the class inheritance hierarchy as the domain is automatically inherited. If the domains of the attributes to inherit are compatible, the conflict must be resolved in the class where an inheritance relationship is defined.</p>
+</section>
+</section>
+<section id="sub-class-conflict">
+<h3>Sub class Conflict<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sub-class-conflict" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sub-class-conflict'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Any changes in a class will be automatically propagated to all sub classes. If a problem occurs in the sub class due to the changes, CUBRID resolves the corresponding sub class conflict and then displays a message saying that the conflict has been resolved automatically by the system.</p>
+<p>Sub class conflicts can occur due to operations such as adding a super class, or creating/deleting a method or an attribute. Any changes in a class will affect all sub classes. Since changes are automatically propagated, harmless changes can even cause side effects in sub classes.</p>
+<section id="adding-attributes-and-methods">
+<h4>Adding Attributes and Methods<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#adding-attributes-and-methods"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>The simplest sub class conflict occurs when an attribute is added. A sub class conflict occurs if an attribute added to a super class has the same name as one already inherited by another super class. In such cases, CUBRID will automatically resolve the problem. That is, the added attribute will not be inherited to all sub classes that have already inherited the attribute with the same name.</p>
+<p>The following example shows how to add an attribute to the <em>event</em> class. The super classes of the <em>soccer_stadium</em> class are the <em>event</em> and the <em>stadium</em> classes, and the <em>nation_code</em> attribute already exists in the <em>stadium</em> class. Therefore, a conflict occurs in the <em>soccer_stadium</em> class if the <em>nation_code</em> attribute is added to the <em>event</em> class. However, CUBRID resolves this conflict automatically.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">event</span>
+</span><span id="line-2"><span class="k">ADD</span><span class="w"> </span><span class="n">ATTRIBUTE</span><span class="w"> </span><span class="n">nation_code</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<p>If the <em>event</em> class is dropped from the <em>soccer_stadium</em> super class, the <em>cost</em> attribute of the <em>stadium</em> class will be inherited automatically.</p>
+</section>
+<section id="dropping-attributes-and-methods">
+<h4>Dropping Attributes and Methods<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#dropping-attributes-and-methods"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>When an attribute is dropped from a class, any resolution specifiers which refer to the attribute by using the <strong>INHERIT</strong> clause are also removed. If a conflict occurs due to the deletion of an attribute, the system will determine a new inheritance hierarchy. If you don’t like the inheritance hierarchy determined by the system, you can determine it by using the <strong>INHERIT</strong> clause of the <strong>ALTER</strong> statement. The following example shows such conflict.</p>
+<p>Suppose there is a sub class that inherits attributes from three different super classes. If a name conflict occurs in all super classes and the explicitly inherited attribute is dropped, one of the remaining two attributes will be inherited automatically to resolve the problem.</p>
+<p>The following example shows sub class conflict. Classes <em>B</em>, <em>C</em> and <em>D</em> are super classes of class <em>E</em>, and have an attribute whose name is <em>team</em> and the domain is <em>team_event</em>. Class <em>E</em> was created with the <em>place</em> attribute inherited from class <em>C</em> as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">create</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="k">under</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="k">C</span><span class="p">,</span><span class="w"> </span><span class="n">D</span>
+</span><span id="line-2"><span class="n">inherit</span><span class="w"> </span><span class="n">place</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">C</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<p>In this case, the inheritance hierarchy is as follows:</p>
+<img alt="../_images/image6.png" src="../_images/image6.png"/>
+<p>Suppose that you decide to delete class <em>C</em> from the super class. This drop will require changes to the inheritance hierarchy. Because the domains of the remaining classes <em>B</em> and <em>D</em> with the <em>game</em> attribute are at the same level, the system will randomly choose to inherit from one of the two classes. If you don’t want the system to make a random selection, you can specify the class to inherit from by using the <strong>INHERIT</strong> clause when you change the class.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">INHERIT</span><span class="w"> </span><span class="n">game</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">D</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">CLASS</span><span class="w"> </span><span class="k">C</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="n">game</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the domain of one <em>game</em> attribute in one super class is <em>event</em> and that of another super class is <em>team_event</em>, <em>team_event</em> is more specific than event because <em>team_event</em> is the descendant of event. Therefore, a super class that has the <em>team_event</em> attribute as a domain will be inherited; a user cannot forcefully inherit a super class that has the <em>event</em> attribute as a domain.</p>
+</div>
+</section>
+</section>
+<section id="schema-invariant">
+<h3>Schema Invariant<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#schema-invariant" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#schema-invariant'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Invariants of a database schema are a property of the schema that must be preserved consistently (before and after the schema change). There are four types of invariants: invariants of class hierarchy, name, inheritance and consistency.</p>
+<section id="invariant-of-class-hierarchy">
+<h4>Invariant of class hierarchy<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#invariant-of-class-hierarchy"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>has a single root and defines a class hierarchy as a Directed Acyclic Graph (DAG) where all connected classes have a single direction. That is, all classes except the root have one or more super classes, and cannot become their own super classes. The root of DAG is “object,” a system-defined class.</p>
+</section>
+<section id="invariant-of-name">
+<h4>Invariant of name<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#invariant-of-name"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>means that all classes in the class hierarchy and all attributes in a class must have unique names. That is, attempts to create classes with the same name or to create attributes or methods with the same name in a single class are not allowed.</p>
+<p>Invariant of name is redefined by the ‘RENAME’ qualifier. The ‘RENAME’ qualifier allows the name of an attribute or method to be changed.</p>
+</section>
+<section id="invariant-of-inheritance">
+<h4>Invariant of inheritance<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#invariant-of-inheritance"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>means that a class must inherit all attributes and methods from all super classes. This invariant can be distinguished with three qualifiers: source, conflict and domain. The names of inherited attributes and methods can be modified. For default or shared value attributes, the default or shared value can be modified. Invariant of inheritance means that such changes will be propagated to all classes that inherit these attributes and methods.</p>
+<ul>
+<li><p><strong>source qualifier</strong></p>
+<p>means that if class <em>C</em> inherits sub classes of class <em>S</em>, only one of the sub class attributes (methods) inherited from class <em>S</em> can be inherited to class <em>C</em>. That is, if an attribute (method) defined in class <em>S</em> is inherited by other classes, it is in effect a single attribute (method), even though it exists in many sub classes. Therefore, if a class multiply inherits from classes that have attributes (methods) of the same source, only one appearance of the attribute (method) is inherited.</p>
+</li>
+<li><p><strong>conflict qualifier</strong></p>
+<p>means that if class <em>C</em> inherits from two or more classes that have attributes (methods) with the same name but of different sources, it can inherit more than one class. To inherit attributes (methods) with the same name, you must change their names so as not to violate the invariant of name.</p>
+</li>
+<li><p><strong>domain qualifier</strong></p>
+<p>means that a domain of an inherited attribute can be converted to the domain’s sub class.</p>
+</li>
+</ul>
+</section>
+<section id="invariant-of-consistency">
+<h4>Invariant of consistency<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#invariant-of-consistency"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>means that the database schema must always follow the invariants of a schema and all rules except when it is being changed.</p>
+</section>
+</section>
+<section id="rule-for-schema-changes">
+<h3>Rule for Schema Changes<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#rule-for-schema-changes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#rule-for-schema-changes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The Invariants of a Schema section has described the characteristics of schema that must be preserved all the time.</p>
+<p>There are some methods for changing schemas, and all these methods must be able to preserve the invariants of a schema. For example, suppose that in a class which has a single super class, the relationship with the super class is to be removed. If the relationship with the super class is removed, the class becomes a direct sub class of the object class, or the removal attempt will be rejected if the user specified that the class should have at least one super class. To have some rules for selecting one of the methods for changing schemas, even though such selection seems arbitrary, will be definitely useful to users and database designers.</p>
+<p>The following three types of rules apply: conflict-resolution rules, domain-change rule and class-hierarchy rule.</p>
+<p>Seven conflict-resolution rules reinforce the invariant of inheritance. Most schema change rules are needed because of name conflicts. A domain-change rule reinforces a domain resolution of the invariant of inheritance. A class-hierarchy rule reinforces the invariant of class hierarchy.</p>
+<section id="conflict-resolution-rules">
+<h4>Conflict-Resolution Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#conflict-resolution-rules"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<ul>
+<li><p><strong>Rule 1</strong>: If an attribute (method) name of class <em>C</em> and an attribute name of the super class <em>S</em> conflict with each other (that is, their names are same), the attribute of class <em>C</em> is used. The attribute of <em>S</em> is not inherited.</p>
+<p>If a class has one or more super classes, three aspects of the attribute (method) of each super class must be considered to determine whether the attributes are semantically equal and which attribute to inherit. The three aspects of the attribute (method) are the name, domain and source. The following table shows eight combinations of these three aspects that can happen with two super classes. In Case 1 (two different super classes have attributes with the same name, domain and source), only one of the two sub classes should be inherited because two attributes are identical. In Case 8 (two different super classes have attributes with different names, domains and sources), both classes should be inherited because two attributes are totally different ones.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Case</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Domain</p></th>
+<th class="head"><p>Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Same</p></td>
+<td><p>Same</p></td>
+<td><p>Same</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Same</p></td>
+<td><p>Same</p></td>
+<td><p>Different</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Same</p></td>
+<td><p>Different</p></td>
+<td><p>Same</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Same</p></td>
+<td><p>Different</p></td>
+<td><p>Different</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Different</p></td>
+<td><p>Same</p></td>
+<td><p>Same</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Different</p></td>
+<td><p>Same</p></td>
+<td><p>Different</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Different</p></td>
+<td><p>Different</p></td>
+<td><p>Same</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Different</p></td>
+<td><p>Different</p></td>
+<td><p>Different</p></td>
+</tr>
+</tbody>
+</table>
+<p>Five cases (1, 5, 6, 7, 8) out of eight have clear meaning. Invariant of inheritance is a guideline for resolving conflicts in such cases. In other cases (2, 3, 4), it is very difficult to resolve conflicts automatically. Rules 2 and 3 can be resolutions for these conflicts.</p>
+</li>
+<li><p><strong>Rule 2</strong>: When two or more super classes have attributes (methods) with different sources but the same name and domain, one or more attributes (methods) can be inherited if the conflict-resolution statement is used. If the conflict-resolution statement is not used, the system will select and inherit one of the two attributes.</p>
+<p>This rule is a guideline for resolving conflicts of Case 2 in the table above.</p>
+</li>
+<li><p><strong>Rule 3</strong>: If two or more super classes have attributes with different sources and domains but the same name, attributes (methods) with more detailed (lower in the inheritance hierarchy) domains are inherited. If there is no inheritance relationship between domains, schema change is not allowed.</p>
+<p>This rule is a guideline for resolving conflicts of Case 3 and 4. If Case 3 and 4 conflict with each other, Case 3 has the priority.</p>
+</li>
+<li><p><strong>Rule 4</strong>: The user can make any changes except the ones in Case 3 and 4. In addition, the resolution of sub class conflicts cannot cause changes in the super class.</p>
+<p>The philosophy of Rule 4 is that “an inheritance is a privilege that sub class has obtained from a super class, so changes in a sub class cannot affect the super class.” Rule 4 means that the name of the attribute (method) included in the super class cannot be changed to resolve conflicts between class <em>C</em> and super classes. Rule 4 has an exception in cases where the schema change causes conflicts in Case 3 and 4.</p>
+<ul class="simple">
+<li><p>For example, suppose that class <em>A</em> is the super class of class <em>B</em>, and class B has the playing_date attribute of <strong>DATE</strong> type. If an attribute of <strong>STRING</strong> type named <em>playing_date</em> is added to class <em>A</em>, it conflicts with the <em>playing_date</em> attribute in class <em>B</em>. This is what happens in Case 4. The precise way to resolve such conflict is for the user to specify that class <em>B</em> must inherit the <em>playing_date</em> attribute of class <em>A</em>. If a method refers to the attribute, the user of class <em>B</em> needs to modify the method properly so that the appropriate <em>playing_date</em> attribute will be referenced. Schema change of class <em>A</em> is not allowed because the schema falls into an inconsistent state if the user of class <em>B</em> does not describe an explicit statement to resolve the conflict occurring from the schema change.</p></li>
+</ul>
+<img alt="../_images/image7.png" src="../_images/image7.png"/>
+</li>
+<li><p><strong>Rule 5</strong>: If a conflict occurs due to a schema change of the super class, the original resolution is maintained as long as the change does not violate the rules. However, if the original resolution becomes invalid due to the schema change, the system will apply another resolution.</p>
+<p>Rule 5 is for cases where a conflict is caused to a conflict-free class or where the original resolution becomes invalid.</p>
+<p>This is the case where the name or domain of an attribute (method) is modified or a super class is deleted when the attribute (method) is added to the super class or the one inherited from the super class is deleted. The philosophy of Rule 5 coincides with that of Rule 4. That is, the user can change the class freely without considering what effects the sub class that inherits from the given class will have on the inherited attribute (method).</p>
+<p>When you change the schema of class <em>C</em>, if you decide to inherit an attribute of the class due to an earlier conflict with another class, this may cause attribute (method) loss of class <em>C</em>. Instead, you must inherit one of the attributes (methods) that caused conflicts earlier.</p>
+<p>The schema change of the super class can cause a conflict between the attribute (method) of the super class and the (locally declared or inherited) attribute (method) of class <em>C</em>. In this case, the system resolves the conflict automatically by applying Rule 2 or 3 and may inform the user.</p>
+<p>Rule 5 cannot be applied to cases where a new conflict occurs due to the addition or deletion of the relationship with the super class. The addition/deletion of a super class must be limited to within the class. That is, the user must provide an explicit resolution.</p>
+</li>
+<li><p><strong>Rule 6</strong>: Changes of attributes or methods are propagated only to sub classes without conflicts.</p>
+<p>This rule limits the application of Rule 5 and the invariant of inheritance. Conflicts can be detected and resolved by applying Rule 2 and 3.</p>
+</li>
+<li><p><strong>Rule 7</strong>: Class <em>C</em> can be dropped even when an attribute of class <em>R</em> uses class <em>C</em> as a domain. In this case, the domain of the attribute that uses class <em>C</em> as a domain can be changed to <em>object</em>.</p></li>
+</ul>
+</section>
+<section id="domain-change-rules">
+<h4>Domain-Change Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#domain-change-rules"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<ul>
+<li><p><strong>Rule 8</strong>: If the domain of an attribute of class <em>C</em> is changed from <em>D</em> to a super class of <em>D</em>, the new domain is less generic than the corresponding domain in the super class from which class <em>C</em> inherited the attribute. The following example explains the principle of this rule.</p>
+<p>Suppose that in the database there are the <em>game</em> class with the <em>player</em> attribute and the <em>female_game</em> class which inherits game. The domain of the player attribute of the <em>game</em> class is the <em>athlete</em> class, but the domain of the player attribute of the <em>female_game</em> class is changed to <em>female_athlete</em> which is a sub class of <em>athlete</em>. The following diagram shows such relationship. The domain of the <em>player</em> attribute of the <em>female_game</em> class can be changed back to <em>athlete</em>, which is the super class of <em>female_athlete</em>.</p>
+<img alt="../_images/image8.png" src="../_images/image8.png"/>
+</li>
+</ul>
+</section>
+<section id="class-hierarchy-rules">
+<h4>Class-Hierarchy Rules<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#class-hierarchy-rules"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<ul class="simple">
+<li><p><strong>Rule 9</strong>: A class without a super class becomes a direct sub class of object. The class-hierarchy rule defines characteristics of classes without super classes. If you create a class without a super class, object becomes the super class. If you delete the super class <em>S</em>, which is a unique super class of class <em>C</em>, class <em>C</em> becomes a direct sub class of object.</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="dblink.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        CUBRID DBLink
+      </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="db_admin.html">
+        Database Administration
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#class-attribute-and-method'" class="reference internal" href="#class-attribute-and-method">Class Attribute and Method</a></li>
+<li><a :data-current="activeSection === '#order-rule-for-inheritance'" class="reference internal" href="#order-rule-for-inheritance">Order Rule for Inheritance</a></li>
+<li><a :data-current="activeSection === '#inherit-clause'" class="reference internal" href="#inherit-clause">INHERIT Clause</a></li>
+<li><a :data-current="activeSection === '#add-superclass-clause'" class="reference internal" href="#add-superclass-clause">ADD SUPERCLASS Clause</a></li>
+<li><a :data-current="activeSection === '#drop-superclass-clause'" class="reference internal" href="#drop-superclass-clause">DROP SUPERCLASS Clause</a></li>
+<li><a :data-current="activeSection === '#class-conflict-resolution'" class="reference internal" href="#class-conflict-resolution">Class Conflict Resolution</a><ul>
+<li><a :data-current="activeSection === '#resolution-specifier'" class="reference internal" href="#resolution-specifier">Resolution Specifier</a></li>
+<li><a :data-current="activeSection === '#superclass-conflict'" class="reference internal" href="#superclass-conflict">Superclass Conflict</a><ul>
+<li><a :data-current="activeSection === '#adding-a-super-class'" class="reference internal" href="#adding-a-super-class">Adding a super class</a></li>
+<li><a :data-current="activeSection === '#deleting-a-super-class'" class="reference internal" href="#deleting-a-super-class">Deleting a super class</a></li>
+<li><a :data-current="activeSection === '#compatible-domains'" class="reference internal" href="#compatible-domains">Compatible Domains</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#sub-class-conflict'" class="reference internal" href="#sub-class-conflict">Sub class Conflict</a><ul>
+<li><a :data-current="activeSection === '#adding-attributes-and-methods'" class="reference internal" href="#adding-attributes-and-methods">Adding Attributes and Methods</a></li>
+<li><a :data-current="activeSection === '#dropping-attributes-and-methods'" class="reference internal" href="#dropping-attributes-and-methods">Dropping Attributes and Methods</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#schema-invariant'" class="reference internal" href="#schema-invariant">Schema Invariant</a><ul>
+<li><a :data-current="activeSection === '#invariant-of-class-hierarchy'" class="reference internal" href="#invariant-of-class-hierarchy">Invariant of class hierarchy</a></li>
+<li><a :data-current="activeSection === '#invariant-of-name'" class="reference internal" href="#invariant-of-name">Invariant of name</a></li>
+<li><a :data-current="activeSection === '#invariant-of-inheritance'" class="reference internal" href="#invariant-of-inheritance">Invariant of inheritance</a></li>
+<li><a :data-current="activeSection === '#invariant-of-consistency'" class="reference internal" href="#invariant-of-consistency">Invariant of consistency</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#rule-for-schema-changes'" class="reference internal" href="#rule-for-schema-changes">Rule for Schema Changes</a><ul>
+<li><a :data-current="activeSection === '#conflict-resolution-rules'" class="reference internal" href="#conflict-resolution-rules">Conflict-Resolution Rules</a></li>
+<li><a :data-current="activeSection === '#domain-change-rules'" class="reference internal" href="#domain-change-rules">Domain-Change Rules</a></li>
+<li><a :data-current="activeSection === '#class-hierarchy-rules'" class="reference internal" href="#class-hierarchy-rules">Class-Hierarchy Rules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 04, 2026. </p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=0bea04d9"></script>
+<script src="../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script defer="defer" src="../_static/theme.js?v=b0acb063"></script>
+<script src="../_static/design-tabs.js?v=f930bc37"></script>
+<script src="../_static/version-switcher.js?v=993d9931"></script>
+<script src="../_static/theme-toggle.js?v=fa11ca92"></script>
+</body>
+</html>

@@ -152,6 +152,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | max_subquery_cache_size             | server parameter        |         | byte     | 2,097,152(2M)                  | DBA only              |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | memoize_memory_limit                | client/server parameter | O       | byte     | 2,097,152(2M)                  | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | sort_buffer_size                    | server parameter        |         | byte     | 128 *                          | DBA only              |
 |                               |                                     |                         |         |          | :ref:`db_page_size <dpg>`      |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
@@ -700,6 +702,8 @@ The following are parameters related to the memory used by the database server o
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | max_subquery_cache_size        | byte   | 2,097,152(2M)             | 0                         | 16,777,216(16M)           |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| memoize_memory_limit           | byte   | 2,097,152(2M)             | 0                         | none                      |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
 |                                |        |                           |                           | :ref:`db_page_size <dpg>` |
@@ -746,11 +750,13 @@ The following are parameters related to the memory used by the database server o
 
     **max_parallel_workers** is a parameter that sets the maximum number of parallel query worker threads that can be executed simultaneously across the entire server. The default value is **100**, the minimum value is **0**, and the maximum value is **1000**.
 
-    If this parameter is set to **0**, the parallel query feature is disabled. When set to **2 or higher**, various parallel processing features such as Parallel Heap Scan, Parallel Subquery Execution, Parallel Hash Join, and Parallel Sort can be used.
+    If this parameter is set to **0**, the parallel query feature is disabled. When set to **2 or higher**, various parallel processing features such as Parallel Scan (heap/list/index), Parallel Subquery Execution, Parallel Hash Join, and Parallel Sort can be used.
 
     The server manages parallel query execution through a **global worker pool**. Even when multiple sessions simultaneously request parallel queries or complex parallel operations are performed within a single session, the total number of active parallel workers across the entire server cannot exceed the **max_parallel_workers** value.
 
-    Each server thread reserves the required number of workers through the **parallel query worker manager** before query execution, and releases them immediately upon task completion. If reservation fails due to insufficient available workers, the query is executed in the normal single-threaded manner.
+    Each server thread reserves the required number of workers through the **parallel query worker manager** before query execution, and releases them immediately upon task completion. If the full request cannot be reserved due to insufficient available workers, the operation runs in parallel with only the workers actually reserved; if no worker is reserved, the query is executed in the normal single-threaded manner.
+
+    This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the **SET SYSTEM PARAMETERS** statement.
 
     For more details on parallel query execution, see :ref:`parallel-query`.
 
@@ -786,6 +792,11 @@ The following are parameters related to the memory used by the database server o
 
     You can redefine the degree of parallelism for each query using the **PARALLEL** ( *degree* ) hint. For more details, see :ref:`parallel-query`.
 
+    This parameter takes effect after setting it in cubrid.conf and restarting the server; it cannot be changed with the **SET SYSTEM PARAMETERS** statement. At server startup, the value is adjusted in the following order.
+
+    *   If it is larger than the number of system CPU cores, it is lowered to the core count.
+    *   If the result is larger than the :ref:`max_parallel_workers <max_parallel_workers>` value, it is lowered again to that value.
+
     The following example sets the default degree of parallelism to 8. ::
 
         parallelism=8
@@ -808,7 +819,21 @@ The following are parameters related to the memory used by the database server o
     
     If max_subquery_cache_size is set to 0, the :ref:`NO_SUBQUERY_CACHE <correlated-subquery-cache>` hint is specified, or there is insufficient memory space, the subquery cache optimization is not enabled.
 
-**sort_buffer_size**
+.. _memoize_memory_limit:
+
+**memoize_memory_limit**
+
+    **memoize_memory_limit** is a parameter used to set the amount of memory that the :ref:`MEMOIZE <memoize>` optimization can use per cache. You can set a unit as B, K or M, which stand for bytes, kilobytes (KB), and megabytes (MB), respectively. If you omit the unit, bytes will be applied. The default value is **2,097,152** (2M) bytes, and the minimum value is **0**.
+
+    If this parameter is set to **0**, the MEMOIZE optimization is disabled. The MEMOIZE optimization has no hint, so this parameter is the only way to control it; it can also be changed per session as follows. ::
+
+        SET SYSTEM PARAMETERS 'memoize_memory_limit=0';
+
+    This value is the limit for a single cache. A separate cache is allocated for each join to which MEMOIZE is applied — and for each worker thread under parallel execution — so the total cache memory used by one query can exceed this value.
+
+    .. note::
+
+        The value of this parameter is part of the query plan cache key, so changing it causes a separate query plan to be created even for the same query.
 
     **sort_buffer_size** is a parameter to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. A sorting query includes not only SELECT sorting query, but also index-creating query.
 

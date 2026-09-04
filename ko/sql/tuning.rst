@@ -942,7 +942,8 @@ SQL 힌트
     NO_HASH_LIST_SCAN |
     NO_LOGGING |
     PARALLEL (<degree>) |
-    NO_PARALLEL_HEAP_SCAN |
+    NO_PARALLEL_SCAN |
+    NO_PARALLEL_HASH_JOIN |
     NO_PARALLEL_SUBQUERY |
     RECOMPILE
 
@@ -1015,19 +1016,28 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 .. _parallel-hint:
 
-*   **PARALLEL** ( *degree* ): 병렬 질의 실행(병렬 힙 스캔, 병렬 부질의 실행, 병렬 해시 조인, 병렬 정렬)을 활성화하고 병렬 처리 정도를 지정하는 힌트이다. *degree* 는 0 이상의 정수 값이어야 하며, 병렬로 처리할 워커 스레드의 수를 의미한다. 0이나 1로 지정할 경우 병렬 처리 기능이 비활성화된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+*   **PARALLEL** ( *degree* ): 병렬 질의 실행(병렬 스캔(힙/리스트/인덱스), 병렬 부질의 실행, 병렬 해시 조인, 병렬 정렬)을 활성화하고 병렬 처리 정도를 지정하는 힌트이다. *degree* 는 0 이상의 정수 값이어야 하며, 병렬로 처리할 워커 스레드의 수를 의미한다. 0이나 1로 지정할 경우 병렬 처리 기능이 비활성화되며, 시스템의 CPU 코어 수를 초과하는 값은 코어 수로 낮추어 적용된다. 힌트를 지정해도 대상의 페이지 수가 활성화 조건에 미달하면 병렬 실행이 적용되지 않는다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
 
     .. code-block:: sql
 
         SELECT /*+ PARALLEL(4) */ * FROM large_table WHERE condition;
 
-.. _no-parallel-heap-scan:
+.. _no-parallel-scan:
 
-*   **NO_PARALLEL_HEAP_SCAN**: 병렬 힙 스캔을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+*   **NO_PARALLEL_SCAN**: 해당 질의 블록의 모든 병렬 스캔(힙/리스트/인덱스)을 사용하지 않도록 하는 힌트이다. **PARALLEL** 힌트와 같이 사용하는 경우에는 **NO_PARALLEL_SCAN** 이 우선 적용된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
 
     .. code-block:: sql
 
-        SELECT /*+ NO_PARALLEL_HEAP_SCAN */ * FROM large_table WHERE condition;
+        SELECT /*+ NO_PARALLEL_SCAN */ * FROM large_table WHERE condition;
+
+.. _no-parallel-hash-join:
+
+*   **NO_PARALLEL_HASH_JOIN**: 해당 질의 블록에서 병렬 해시 조인을 사용하지 않도록 하는 힌트이다. 해시 조인 자체는 유지되고 병렬화만 비활성화된다. **PARALLEL** 힌트와 같이 사용하는 경우에는 **NO_PARALLEL_HASH_JOIN** 이 우선 적용된다. 자세한 내용은 :ref:`parallel-query`\를 참고한다.
+
+    .. code-block:: sql
+
+        SELECT /*+ NO_PARALLEL_HASH_JOIN */ o.order_id, t.category
+        FROM orders o JOIN large_table t ON o.order_id = t.id;
 
 .. _no-parallel-subquery:
 
@@ -4930,3 +4940,124 @@ WITH절에 포함되는 재귀 부분 중 다른 CTE를 참조하는 부질의�
                 SUBQUERY (correlated)
                     SELECT (time: 4, fetch: 1000, fetch_time: 0, ioread: 0)
                     SCAN (table: dba.t2), (heap time: 3, fetch: 1000, ioread: 0, readrows: 10000, rows: 1000)
+
+.. _memoize:
+
+MEMOIZE
+------------------------------------
+
+**MEMOIZE** 최적화는 중첩 루프 조인(nested loop join)에서 inner 테이블의 스캔 결과를 조인 키 값별로 캐시하여, 같은 조인 키 값이 반복되는 조인의 성능을 향상시킨다.
+outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이블의 스캔과 조건 평가를 생략하고 캐시된 결과를 사용하며, 캐시에 없으면 inner 테이블을 스캔한 후 그 결과를 캐시에 저장한다.
+
+MEMOIZE 최적화는 질의 실행 시점에 자동으로 적용되며, 별도의 구문이나 힌트가 없다.
+최적화를 사용하지 않으려면 :ref:`memoize_memory_limit <memoize_memory_limit>` 파라미터를 **0**\ 으로 설정해야 한다.
+
+MEMOIZE 최적화는 다음 조건을 모두 만족하는 스캔에 적용된다.
+
+*   중첩 루프 조인의 inner 테이블 스캔이다. outer 테이블에는 적용되지 않으며, 해시 조인과 정렬 병합 조인에도 적용되지 않는다.
+*   조인 조건에서 outer 테이블의 컬럼 값(조인 키)을 찾을 수 있다. 조인 조건이 없는 크로스 조인에는 적용되지 않는다.
+*   행 잠금이 필요 없는 읽기이다. **UPDATE** 문이나 **DELETE** 문의 대상 검색, **SELECT ... FOR UPDATE** 질의에는 적용되지 않는다.
+
+inner 쪽 입력이 테이블이 아니라 부질의의 임시 결과 리스트인 경우에도 적용된다.
+
+다음과 같이 캐시된 결과의 재사용이 안전하지 않거나 캐시 키를 만들 수 없는 경우에는 적용되지 않는다.
+
+*   inner 테이블에 컬렉션 타입(**SET**, **MULTISET**, **LIST**) 컬럼이 있는 경우
+*   시스템 카탈로그 클래스나 MVCC 대상이 아닌 클래스(**db_serial** 등)를 조회하는 경우
+*   inner 쪽이 DBLink 원격 테이블, **JSON_TABLE**, **SHOW** 문, 집합·메서드 표현식인 경우
+*   inner 쪽 스캔이 순차 스캔이나 인덱스 스캔이 아닌 경우(스키마 조회 등)
+*   inner 쪽에 스캔 대상이 둘 이상 있는 경우
+
+캐시가 사용하는 메모리가 :ref:`memoize_memory_limit <memoize_memory_limit>`\ 에 설정한 값을 초과하거나, 조인 키 조회가 1,000회를 넘어선 시점에 **hit** 비율이 50% 미만이면 캐시 유지 비용이 더 크다고 판단하여 캐시를 즉시 해제하고, 이후에는 캐시 없이 inner 테이블을 스캔하는 방식으로 질의 실행을 계속한다.
+이때 질의는 실패하지 않으며, 에러나 경고도 발생하지 않는다.
+
+.. note::
+
+    **hit** 비율(hit ratio)은 다음과 같이 계산한다.
+
+    :math:`\text{hit ratio} = \frac{\text{hit}}{\text{hit} + \text{miss}}`
+
+:ref:`질의 프로파일링 <query-profiling>` 요청과 함께 질의 수행시 MEMOIZE 최적화가 적용된 스캔의 하위 정보로 MEMOIZE 캐시에 대한 프로파일링 정보가 출력된다.
+
+다음은 예제 질의를 수행하기 위한 데이터를 준비하는 질의이다. *orders* 테이블의 *customer_id* 컬럼에는 100개의 값만 반복해서 등장한다.
+
+.. code-block:: sql
+
+    CREATE TABLE customers (id INT PRIMARY KEY, grade INT);
+
+    INSERT INTO customers
+    SELECT ROWNUM, MOD(ROWNUM, 5)
+    FROM db_class a, db_class b
+    LIMIT 100;
+
+    CREATE TABLE orders (id INT PRIMARY KEY, customer_id INT, amount INT);
+
+    INSERT INTO orders
+    SELECT ROWNUM, MOD(ROWNUM, 100) + 1, MOD(ROWNUM, 1000)
+    FROM db_class a, db_class b, db_class c, db_class d
+    LIMIT 1000000;
+
+    UPDATE STATISTICS ON customers, orders WITH FULLSCAN;
+
+다음은 중첩 루프 조인 수행시 MEMOIZE 프로파일링 정보가 표시되는 예시이다.
+예제 질의는 중첩 루프 조인을 유도하기 위해 **ORDERED** 와 **USE_NL** 힌트를, 병렬 스캔의 영향을 배제하기 위해 **NO_PARALLEL_SCAN** 힌트를 사용한다.
+
+.. code-block:: sql
+
+    csql> ;trace on
+
+    SELECT /*+ RECOMPILE ORDERED USE_NL NO_PARALLEL_SCAN */ SUM(o.amount)
+    FROM orders o INNER JOIN customers c ON c.id = o.customer_id
+    WHERE c.grade = 1;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 491, fetch: 5132, fetch_time: 1, ioread: 0)
+        SCAN (table: dba.orders), (heap time: 198, fetch: 4931, ioread: 0, readrows: 1000000, rows: 1000000)
+          SCAN (index: dba.customers.pk_customers_id), (btree time: 0, fetch: 200, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100) (lookup time: 0, rows: 20)
+          MEMOIZE (time: 184, hit: 999900, miss: 100, size: 18KB, enabled: true)
+
+100개의 조인 키 값이 각각 처음 조회될 때만 *customers* 테이블의 인덱스 스캔이 수행되고(**miss**: 100), 나머지 999,900회의 조회는 캐시에서 처리되었다(**hit**: 999900).
+
+MEMOIZE 캐시의 프로파일링 항목에 대한 설명은 다음과 같다.
+
+*   **time**: 캐시 조회와 저장에 사용한 누적 시간(밀리초).
+*   **hit**: inner 테이블 스캔 대신 캐시된 결과를 사용한 조인 키 조회 횟수.
+*   **miss**: 캐시에서 조인 키를 찾지 못해 inner 테이블을 스캔한 조인 키 조회 횟수.
+*   **size**: 캐시에 사용된 메모리 크기.
+*   **enabled**: 질의 종료 시 캐시의 활성화 여부.
+
+.. note::
+
+    **MEMOIZE** 항목은 **hit**\ 가 1 이상인 경우에만 출력된다. 프로파일링 결과에 **MEMOIZE** 항목이 없다고 해서 MEMOIZE 최적화가 시도되지 않았다는 뜻은 아니다.
+
+.. note::
+
+    **hit**\ 와 **miss**\ 는 결과 행 수가 아니라 조인 키 조회 수를 기준으로 집계된다.
+
+:ref:`병렬 실행 <parallel-query>`\ 과 결합되면 워커 스레드마다 캐시가 별도로 생성되며, 프로파일링 정보에는 워커들의 통계를 합산한 값이 출력된다.
+이 경우 하나의 워커에서라도 캐시가 해제되면 **MEMOIZE** 항목 전체가 출력되지 않는다.
+
+질의 #1은 MEMOIZE 최적화를 사용하여 질의를 수행했고, 질의 #2는 **memoize_memory_limit**\ 를 0으로 설정하여 MEMOIZE 최적화를 비활성화하고 질의를 수행했다.
+두 질의의 결과를 비교해보면 MEMOIZE 최적화를 사용한 것이 응답 시간이 개선된 것을 확인할 수 있다.
+
++-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| **Query #1**                                                                      | **Query #2**                                                                      |
++===================================================================================+===================================================================================+
+| ::                                                                                | ::                                                                                |
+|                                                                                   |                                                                                   |
+|     csql> SELECT /*+ RECOMPILE ORDERED USE_NL NO_PARALLEL_SCAN */ SUM(o.amount)   |     csql> SET SYSTEM PARAMETERS 'memoize_memory_limit=0';                         |
+|             FROM orders o INNER JOIN customers c ON c.id = o.customer_id          |                                                                                   |
+|            WHERE c.grade = 1;                                                     |     csql> SELECT /*+ RECOMPILE ORDERED USE_NL NO_PARALLEL_SCAN */ SUM(o.amount)   |
+|                                                                                   |             FROM orders o INNER JOIN customers c ON c.id = o.customer_id          |
+|     === <Result of SELECT Command in Line 2> ===                                  |            WHERE c.grade = 1;                                                     |
+|                                                                                   |                                                                                   |
+|       sum(o.amount)                                                               |     === <Result of SELECT Command in Line 3> ===                                  |
+|     ===============                                                               |                                                                                   |
+|            99500000                                                               |       sum(o.amount)                                                               |
+|                                                                                   |     ===============                                                               |
+|     1 row selected. (0.407000 sec) Committed. (0.000000 sec)                      |            99500000                                                               |
+|                                                                                   |                                                                                   |
+|                                                                                   |     1 row selected. (1.407000 sec) Committed. (0.000000 sec)                      |
++-----------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+

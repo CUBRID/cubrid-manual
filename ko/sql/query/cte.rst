@@ -231,6 +231,121 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
     '
     Recursive CTE 'cte1' must be referenced directly in its recursive query.
 
+.. _cte-inline-materialize:
+
+CTE 실행 방식(Materialize와 Inline)
+===================================
+
+CTE는 실행 방식에 따라 materialize 방식과 inline 방식으로 나뉜다.
+
+*   **Materialize** 방식: CTE의 부질의를 미리 수행하여 결과를 임시 파일로 저장하고, CTE를 참조하는 위치에서 저장된 결과를 공유한다. CTE가 여러 번 참조되어도 부질의는 한 번만 수행되는 장점이 있으나, 임시 파일로 저장된 결과는 참조하는 위치마다 다시 스캔되며, 저장된 결과에는 인덱스를 사용할 수 없고 :ref:`View Merging <view_merge>`, :ref:`Predicate Push <pred-push>` 등의 질의 재작성이 불가능하다.
+
+*   **Inline** 방식: CTE를 참조하는 위치에 CTE의 부질의를 인라인 뷰로 재작성하여 수행한다. :ref:`View Merging <view_merge>`, :ref:`Predicate Push <pred-push>` 등의 질의 재작성이 가능하여 인덱스를 활용할 수 있으나, CTE가 여러 번 참조되는 경우 동일한 데이터를 여러 번 스캔할 수 있다.
+
+11.5 버전부터 inline 방식을 지원하며, 이전 버전에서는 CTE가 항상 materialize 방식으로 수행된다.
+
+힌트를 지정하지 않으면 질의에서 CTE가 참조된 횟수에 따라 실행 방식이 결정된다. 참조 횟수에는 다른 CTE에서 참조된 횟수도 포함된다.
+
+*   한 번 참조된 CTE는 inline 방식으로 수행된다.
+*   두 번 이상 참조된 CTE는 materialize 방식으로 수행된다.
+*   참조되지 않은 CTE는 수행되지 않고 질의에서 제거된다.
+
+CTE의 부질의에 **INLINE** 또는 **MATERIALIZE** 힌트를 지정하여 실행 방식을 직접 결정할 수 있다. 힌트를 사용하는 방법은 :ref:`sql-hint`\를 참고한다.
+
+*   **INLINE**: 참조 횟수와 관계없이 CTE를 inline 방식으로 수행한다.
+*   **MATERIALIZE**: 참조 횟수와 관계없이 CTE를 materialize 방식으로 수행한다.
+
+단, 다음의 경우에는 **INLINE** 힌트를 지정하더라도 materialize 방식으로 수행된다.
+
+*   재귀적 CTE인 경우
+*   **WITH RECURSIVE** 절에 정의된 CTE인 경우(재귀적이지 않은 CTE도 포함)
+*   CTE의 부질의에 **QUERY_CACHE** 힌트가 지정된 경우
+
+.. note::
+
+    CTE의 부질의가 **UNION ALL** 등의 집합 연산으로 구성된 경우, 가장 왼쪽 **SELECT** 문에 지정된 힌트가 CTE 전체에 적용된다.
+
+다음은 CTE의 실행 방식에 따른 수행 차이를 보여주는 예제이다.
+
+.. code-block:: sql
+
+    -- 예제에 사용할 테이블과 데이터 생성
+    CREATE TABLE tbl (c1 INT, c2 INT, c3 INT, c4 INT, INDEX i1 (c1));
+
+    INSERT INTO tbl
+    SELECT ROWNUM, MOD (ROWNUM, 10), MOD (ROWNUM, 100), MOD (ROWNUM, 1000)
+    FROM db_class a, db_class b, db_class c LIMIT 10000;
+
+    UPDATE STATISTICS ON tbl;
+
+아래 질의에서 CTE는 한 번만 참조되었으므로 inline 방식으로 수행된다. CTE가 인라인 뷰로 재작성된 후 View Merging과 Predicate Push가 적용되어 인덱스 *i1*\을 사용할 수 있으므로 조건에 맞는 100건만 읽는다.
+
+.. code-block:: sql
+
+    -- 한 번 참조된 CTE가 inline 방식으로 수행되는 예
+    csql> ;trace on
+
+    WITH cte AS (SELECT * FROM tbl)
+    SELECT /*+ RECOMPILE */ c1 FROM cte WHERE c1 <= 100;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 0, fetch: 3, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.tbl.i1), (btree time: 0, fetch: 2, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100, covered: true)
+
+아래 질의와 같이 **MATERIALIZE** 힌트를 지정하면 CTE가 한 번만 참조되어도 materialize 방식으로 수행된다. CTE의 부질의가 테이블의 모든 행을 스캔하여 결과를 임시 파일로 저장하고, 메인 질의는 저장된 결과에서 조건에 맞는 행을 찾는다.
+
+.. code-block:: sql
+
+    -- MATERIALIZE 힌트로 materialize 방식을 강제하는 예
+    WITH cte AS (SELECT /*+ MATERIALIZE */ * FROM tbl)
+    SELECT /*+ RECOMPILE */ c1 FROM cte WHERE c1 <= 100;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 6, fetch: 155, fetch_time: 0, ioread: 0)
+        SCAN (temp time: 0, fetch: 41, ioread: 0, readrows: 10000, rows: 100)
+        SUBQUERY (uncorrelated)
+          CTE (non_recursive_part)
+            SELECT (time: 5, fetch: 114, fetch_time: 0, ioread: 0)
+              SCAN (table: dba.tbl), (heap time: 2, fetch: 30, ioread: 0, readrows: 10000, rows: 10000)
+
+아래 질의에서 CTE는 두 번 참조되었으므로 힌트가 없으면 materialize 방식으로 수행된다. CTE의 부질의는 한 번만 수행되고, 저장된 결과가 두 참조 위치에서 공유된다.
+
+.. code-block:: sql
+
+    -- 두 번 참조된 CTE가 materialize 방식으로 수행되는 예
+    WITH cte AS (SELECT * FROM tbl)
+    SELECT /*+ RECOMPILE */ a.c1 FROM cte a, cte b WHERE a.c1 <= 100 AND a.c1 = b.c1;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 56, fetch: 4255, fetch_time: 1, ioread: 0)
+        SCAN (temp time: 0, fetch: 41, ioread: 0, readrows: 10000, rows: 100)
+          SCAN (temp time: 51, fetch: 4100, ioread: 0, readrows: 1000000, rows: 100)
+        SUBQUERY (uncorrelated)
+          CTE (non_recursive_part)
+            SELECT (time: 5, fetch: 114, fetch_time: 0, ioread: 0)
+              SCAN (table: dba.tbl), (heap time: 5, fetch: 30, ioread: 0, readrows: 10000, rows: 10000)
+
+**INLINE** 힌트를 지정하면 두 번 이상 참조된 CTE도 inline 방식으로 수행된다. 각 참조 위치에서 인덱스를 활용할 수 있으나, 동일한 테이블을 여러 번 스캔한다.
+
+.. code-block:: sql
+
+    -- INLINE 힌트로 두 번 참조된 CTE를 inline 방식으로 강제하는 예
+    WITH cte AS (SELECT /*+ INLINE */ * FROM tbl)
+    SELECT /*+ RECOMPILE */ a.c1 FROM cte a, cte b WHERE a.c1 <= 100 AND a.c1 = b.c1;
+
+::
+
+    Trace Statistics:
+      SELECT (time: 0, fetch: 204, fetch_time: 0, ioread: 0)
+        SCAN (index: dba.tbl.i1), (btree time: 0, fetch: 2, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100, covered: true)
+          SCAN (index: dba.tbl.i1), (btree time: 0, fetch: 200, ioread: 0, readkeys: 100, filteredkeys: 100, rows: 100, covered: true)
+
 DML과 CREATE에서 CTE의 사용
 ============================
 

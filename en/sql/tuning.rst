@@ -932,6 +932,8 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_SUBQUERY_CACHE |
     NO_PUSH_PRED |
     NO_MERGE |
+    INLINE |
+    MATERIALIZE |
     NO_ELIMINATE_JOIN |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
@@ -983,6 +985,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_SUBQUERY_CACHE**: This is a hint not to use the SUBQUERY CACHE optimization. For more details, see :ref:`correlated-subquery-cache`.
 *   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
 *   **NO_MERGE**: This is a hint not to use the VIEW-MERGE optimization.
+*   **INLINE**: This is a hint specified in a CTE's subquery to execute the CTE in the inline method. For more details, see :ref:`cte-inline-materialize`.
+*   **MATERIALIZE**: This is a hint specified in a CTE's subquery to execute the CTE in the materialize method. For more details, see :ref:`cte-inline-materialize`.
 *   **NO_ELIMINATE_JOIN**: This is a hint not to use join elimination optimization. For more details, see :ref:`join-elimination-optimization`.
 
 .. _no-hash-aggregate:
@@ -4263,7 +4267,7 @@ In the following cases, **View Merging** is not performed:
 
 #. The view includes a **DISTINCT** clause.
 
-#. The view is **CTE** (Common Table Expressions).
+#. The view is a **CTE** (Common Table Expressions) executed in the materialize method. For more details, see :ref:`cte-inline-materialize`.
 
 #. Using **OUTER JOIN** with a view.
 
@@ -4683,6 +4687,8 @@ Since version 11.4, subqueries can also be cached, and the subqueries that can b
 
 1) CTE query
 When the QUERY_CACHE hint is specified in a non-recursive query included in the WITH clause
+
+A CTE with the QUERY_CACHE hint is executed in the materialize method. However, a CTE that is not referenced in the query is not executed and is removed from the query, so it is not cached. For more details, see :ref:`cte-inline-materialize`.
 
 .. code-block:: sql
 

@@ -44,6 +44,8 @@ CUBRID SQL
 
 *   시스템 카탈로그: CUBRID 데이터베이스의 내부 정보인 시스템 카탈로그에 대해 설명한다.
 
+*   Information Schema: 데이터베이스 메타데이터를 이식성 있게 노출하는 SQL 표준 INFORMATION_SCHEMA 뷰에 대해 설명한다.
+
 .. toctree::
     :maxdepth: 3
 
@@ -63,4 +65,5 @@ CUBRID SQL
     db_admin.rst
     user_schema.rst
     catalog.rst
-    
+    information_schema.rst
+

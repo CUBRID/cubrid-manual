@@ -322,6 +322,29 @@ If you want to get the decimal string from a hexadecimal string, use **CONV** fu
     ======================
       '14909886'
 
+COLLECTION_TO_STRING
+====================
+
+.. function:: COLLECTION_TO_STRING(collection)
+
+    The **COLLECTION_TO_STRING** function serializes a collection value into a character string. The result lists all elements separated by commas and enclosed in braces, for example ``{1, 2, 3}``; string elements are enclosed in single quotes.
+
+    :param collection: A collection value of type **SET**, **MULTISET**, or **SEQUENCE**.
+
+    :rtype: STRING
+
+Returns **NULL** if *collection* is **NULL**. An empty collection returns an empty pair of braces.
+
+.. code-block:: sql
+
+    SELECT COLLECTION_TO_STRING({1, 2, 3});
+
+::
+
+       collection_to_string({1, 2, 3})
+    ==================================
+      '{1, 2, 3}'
+
 CONCAT
 ======
 

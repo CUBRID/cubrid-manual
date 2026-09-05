@@ -1,0 +1,55 @@
+{
+  "instructions": "이 디렉터리는 CUBRID DBMS 영문 매뉴얼이며 `ko`의 번역 쌍입니다. 구성은 `ko`와 동일합니다(sql, admin, pl, api, release_note). 리뷰 코멘트는 한국어로 작성하되, 제안하는 TOBE 문구는 영문으로 제시합니다.\n\n[한국어 표기 규칙은 적용하지 않습니다]\n이 디렉터리에는 한국어 서술 문장이 없으므로 공통 규칙 ko-notation-auto, ko-notation-manual, ko-honorific-consistency를 disabledRules로 비활성화했습니다. 영문 표기 규칙(en-notation-auto, en-notation-word, en-notation-manual), 인코딩 표기 규칙(encoding-notation-context), 번역 쌍 동기화 규칙(ko-en-parallel-sync)만 적용됩니다.\n\n[이 디렉터리 고유의 제외 대상]\n- SQL 문법 정의(BNF, `<...>` 문법 요소, 대괄호 선택 표기), 예약어, 데이터 타입명, 함수명, 콜레이션 이름\n- 시스템 카탈로그·통계 정보의 테이블명과 칼럼명, 예제 데이터 값, 질의 결과 출력\n- `cubrid.conf` 계열 파라미터명과 값, `cubrid` 유틸리티 명령·하위 명령·옵션, 환경 변수명과 값\n- API 시그니처: 클래스명, 인터페이스명, 메서드명, 함수명, 상수명, 프로퍼티명, 접속 URL, 반환 타입\n- 제품이 출력하는 오류 메시지·오류 코드·로그 원문, `statdump` 등의 지표명과 출력 예시 전체\n- 릴리스 노트의 이슈 번호(CBRD-xxxxx, APIS-xxxx)와 변경 이력 원문\n- 파일명, 디렉터리 경로, URL, 이미지 경로, 포트 번호\n\n[영문 문체]\n기술 문서 영문의 기본 기준만 적용합니다. 축약형(can't, don't, won't, isn't)은 사용하지 않고 풀어 씁니다. 새로 작성된 절차 설명은 명령형 현재 시제로 통일합니다. 이미 작성된 문장의 문체를 전면 재작성하도록 요구하지는 않습니다.\n\n[번역 품질]\n영문 문장이 한국어 원문을 직역해 의미가 불명확한 경우 지적합니다. 특히 주어 누락, 관사 누락, 조건절과 주절의 관계가 어긋난 문장을 확인합니다. 다만 문장 표현 취향에 대한 지적은 하지 않습니다.",
+  "rules": [
+    {
+      "id": "en-no-contractions",
+      "rule": "영문 매뉴얼에서 축약형은 사용하지 않는다. can't → cannot, don't → do not, won't → will not, isn't → is not, doesn't → does not, it's → it is 로 수정한다. 단 제품이 출력하는 오류 메시지 원문, 코드 블록 내부, 예제 데이터 값에 포함된 축약형은 원문을 유지한다. 현재 `can't` 13건, `can not` 14건이 검출되며 `can not`은 공통 규칙 en-notation-word로 cannot 으로 수정한다.",
+      "scope": [
+        "**/*.inc",
+        "**/*.rst"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "en-sql-syntax-guard",
+      "rule": "SQL 구문 정의 블록(BNF 표기, `<expression>` 형태의 문법 요소, 대괄호 선택 표기, 중괄호 필수 표기)과 그 안의 토큰은 문법 정의이므로 표기 규칙 적용 대상이 아니다. 예약어, 데이터 타입명, 함수명, 콜레이션 이름, 시스템 카탈로그 식별자, 예제 데이터 값도 수정하지 않는다. 특히 en-notation-word의 'datatype → data type'을 SQL 데이터 타입 표기나 API 식별자에 적용하지 않는다. 다만 문법 정의와 파라미터 설명이 어긋나는 경우(정의에 없는 절이 설명에 있거나 그 반대)는 표기 문제와 별개로 반드시 지적한다.",
+      "scope": [
+        "**/sql/**/*.inc",
+        "**/sql/**/*.rst"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "en-option-name-guard",
+      "rule": "유틸리티 옵션명과 시스템 파라미터명은 하이픈·언더스코어 표기가 제품 동작을 결정하므로 절대 수정하지 않는다. 공통 규칙 en-notation-auto의 'host name → hostname', 'fail-over → failover', 'back-up → backup' 등을 옵션명(`--host-name`, `--no-auto-commit`), 파라미터명(`ha_mode`, `max_clients`), 환경 변수명, API 상수명에 적용하면 문서가 제품과 어긋난다. 서술 문장에서만 적용한다. 현재 서술 문장 기준 검출 건수는 host name 117건, user name 95건, time zone 54건, auto-commit 52건이며, 이 중 옵션명·식별자는 제외 대상이다.",
+      "scope": [
+        "**/*.inc",
+        "**/*.rst"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "en-error-message-verbatim",
+      "rule": "`admin/error_log*.rst`와 본문에 인용된 제품 오류 메시지·경고 메시지 원문, 오류 코드는 제품이 실제로 출력하는 문자열이므로 표기 규칙을 적용하지 않는다. 메시지 안에 'can't', 'file name' 같은 표기가 있어도 수정을 제안하지 않는다. 수정하면 사용자가 실제 로그와 문서를 대조할 수 없다. 반대로 메시지를 설명하는 서술 문장에 같은 표기가 쓰였다면 표준 표기로 수정하도록 지적한다. 판정이 애매하면 메시지 원문으로 간주해 유지한다.",
+      "scope": [
+        "**/*.inc",
+        "**/*.rst"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "en-translation-clarity",
+      "rule": "영문 문장이 한국어 원문을 직역해 의미가 불명확한 경우 지적한다. 확인 항목은 (1) 주어 누락 (2) 관사 누락으로 의미가 달라지는 경우 (3) 조건절과 주절의 관계가 어긋난 문장 (4) 한국어 어순을 그대로 옮겨 수식 관계가 모호해진 문장이다. 지적할 때는 ASIS/TOBE로 대안 영문을 제시한다. 단 문장 표현 취향이나 동의어 선택에 대한 지적은 하지 않으며, 이 PR에서 변경되지 않은 문장은 대상이 아니다.",
+      "scope": [
+        "**/*.inc",
+        "**/*.rst"
+      ],
+      "severity": "low"
+    }
+  ],
+  "disabledRules": [
+    "ko-notation-auto",
+    "ko-notation-manual",
+    "ko-honorific-consistency"
+  ]
+}

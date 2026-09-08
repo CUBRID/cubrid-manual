@@ -2060,8 +2060,8 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <li><p><strong>NO_SUBQUERY_CACHE</strong>: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="#correlated-subquery-cache"><span class="std std-ref">서브 쿼리 캐시 (correlated)</span></a>를 참고한다.</p></li>
 <li><p><strong>NO_PUSH_PRED</strong>: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.</p></li>
 <li><p><strong>NO_MERGE</strong>: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.</p></li>
-<li><p><strong>INLINE</strong>: CTE의 부질의에 지정하여 해당 CTE를 inline 방식으로 수행하기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE 실행 방식(Materialize와 Inline)</span></a>를 참고한다.</p></li>
-<li><p><strong>MATERIALIZE</strong>: CTE의 부질의에 지정하여 해당 CTE를 materialize 방식으로 수행하기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE 실행 방식(Materialize와 Inline)</span></a>를 참고한다.</p></li>
+<li><p><strong>INLINE</strong>: <strong>WITH</strong> 절 내부의 <strong>SELECT</strong> 문에 지정하여 해당 CTE를 inline 방식으로 수행하기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE 실행 방식(Materialize와 Inline)</span></a>를 참고한다.</p></li>
+<li><p><strong>MATERIALIZE</strong>: <strong>WITH</strong> 절 내부의 <strong>SELECT</strong> 문에 지정하여 해당 CTE를 materialize 방식으로 수행하기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE 실행 방식(Materialize와 Inline)</span></a>를 참고한다.</p></li>
 <li><p><strong>NO_ELIMINATE_JOIN</strong>: 조인 제거 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="#join-elimination-optimization"><span class="std std-ref">조인 변환 최적화</span></a>를 참고한다.</p></li>
 </ul>
 <ul id="no-hash-aggregate">
@@ -5353,7 +5353,6 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <p>11.4 버전부터는 부질의 대상으로 QUERY_CACHE 힌트를 사용할 수 있으며, 힌트를 사용할 수 있는 부질의는 아래와 같다.</p>
 <p>1) CTE 쿼리
 WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 경우</p>
-<p>QUERY_CACHE 힌트가 지정된 CTE는 materialize 방식으로 수행된다. 단, 질의에서 참조되지 않는 CTE는 수행되지 않고 질의에서 제거되므로 캐시되지 않는다. 자세한 내용은 <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE 실행 방식(Materialize와 Inline)</span></a>를 참고한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">WITH</span>
 </span><span id="line-2"><span class="w"> </span><span class="n">of_drones</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ QUERY_CACHE */</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="s1">'drones'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">parent_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span>
 </span><span id="line-3"><span class="w"> </span><span class="n">of_cars</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ QUERY_CACHE */</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="s1">'cars'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">parent_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span>
@@ -5373,6 +5372,7 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </span></code></pre></div>
 </div>
 <p>위 UNION 쿼리에서 첫 번째 쿼리는 캐시 되지만, 두 번째 쿼리는 다른 테이블을 참조하기 때문에 캐시 되지 않는다.</p>
+<p>QUERY_CACHE 힌트가 지정된 CTE는 materialize 방식으로 수행된다. 단, 질의에서 참조되지 않는 CTE는 수행되지 않고 질의에서 제거되므로 캐시되지 않는다. 자세한 내용은 <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE 실행 방식(Materialize와 Inline)</span></a>를 참고한다.</p>
 <ol class="arabic simple" start="2">
 <li><p>다른 테이블을 참조하지 않는 부질의에 QUERY_CACHE 힌트를 지정한 경우</p></li>
 </ol>
@@ -5697,7 +5697,7 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 03, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 08, 2026. </p>
 </div>
 </div>
 </footer>

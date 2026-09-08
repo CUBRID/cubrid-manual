@@ -9,14 +9,14 @@
 
 ::
 
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
     <declare_spec> ::=
-          <variable_decl>
-        | <constant_decl>
+          <variable_def>
+        | <constant_def>
         | <exception_decl>
-        | <cursor_decl>
-        | <inner_procedure_decl>
-        | <inner_function_decl>
+        | <cursor_def>
+        | <procedure_def>
+        | <function_def>
 
 선언 가능한 각 항목에 대한 설명은 아래 내용을 참고한다.
 
@@ -71,14 +71,14 @@
 .. code-block:: sql
 
     CREATE OR REPLACE PROCEDURE poo(a INT) AS
-    
+
         PROCEDURE inner AS
             i INT := a;
             a NUMERIC;
         BEGIN
             ...
         END;
-    
+
     BEGIN
         ...
     END;
@@ -88,12 +88,12 @@
 
 
 
-변수 선언
+변수 정의
 =========
 
 ::
 
-    <variable_decl> ::=
+    <variable_def> ::=
         <identifier> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
     <type_spec> ::=
@@ -106,9 +106,9 @@
 
 * *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 
-변수 선언에 선택적으로 NOT NULL 조건과 초기값을 지정할 수 있다.
+변수 정의에 선택적으로 NOT NULL 조건과 초기값을 지정할 수 있다.
 NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 함께 지정되어야 한다.
-선언할 때 초기값이 지정되지 않은 변수는 묵시적으로 NULL 값을 갖게 된다.
+정의할 때 초기값이 지정되지 않은 변수는 묵시적으로 NULL 값을 갖게 된다.
 
 .. code-block:: sql
 
@@ -121,11 +121,11 @@ NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 
         ...
     END;
 
-상수 선언
+상수 정의
 =========
 ::
 
-    <constant_decl> ::=
+    <constant_def> ::=
         <identifier> CONSTANT <type_spec> [ NOT_NULL ] <value_part> ;
 
     <type_spec> ::=
@@ -138,7 +138,7 @@ NOT NULL 조건이 지정된 경우에는 반드시 NULL이 아닌 초기값이 
 
 * *builtin_type*: :ref:`데이터 타입 <types>` 절에서 설명한 시스템 제공 타입
 
-상수 선언에는 필수적으로 값 지정이 포함되어야 한다.
+상수 정의에는 필수적으로 값 지정이 포함되어야 한다.
 NOT NULL 조건이 지정된 경우, 이 값은 NULL이 아니어야 한다.
 
 .. code-block:: sql
@@ -189,16 +189,16 @@ Exception 선언
             return -2;
     END;
 
-.. _cursor_decl:
+.. _cursor_def:
 
-커서 선언
+커서 정의
 =========
 ::
 
-    <cursor_decl> ::=
+    <cursor_def> ::=
         CURSOR <identifier> [ ( <seq_of_cursor_parameters> ) ] IS <select_statement> ;
 
-    <seq_of_cursor_parameters> ::= <cursor_parameter> [, <cursor_parameter>, ...]
+    <seq_of_cursor_parameters> ::= <cursor_parameter> { , <cursor_parameter> }...
     <cursor_parameter> ::= <identifier> [ IN ] <type_spec>
     <type_spec> ::=
           <builtin_type>
@@ -265,12 +265,12 @@ Exception 선언
 
 ::
 
-    <inner_procedure_decl> ::=
+    <procedure_def> ::=
         PROCEDURE <identifier> [ ( <seq_of_parameters> ) ] { IS | AS } [ <seq_of_declare_specs> ] <body> ;
-    <inner_function_decl> ::=
+    <function_def> ::=
         FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec> { IS | AS } [ <seq_of_declare_specs> ] <body> ;
 
-    <seq_of_parameters> ::= [ <parameter> [, <parameter> ...] ]
+    <seq_of_parameters> ::= [ <parameter> { , <parameter> }... ]
     <parameter> ::= <identifier> [ { IN | IN OUT | INOUT | OUT } ] <type_spec> [ COMMENT 'param_comment_string' ]
     <type_spec> ::=
           <builtin_type>
@@ -279,10 +279,10 @@ Exception 선언
         | <table>%ROWTYPE
         | <cursor>%ROWTYPE
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
-    <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
-    <seq_of_handlers> ::= <handler> [ <handler> ... ]
-    <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
+    <seq_of_statements> ::= <statement> ; { <statement> ; }...
+    <seq_of_handlers> ::= <handler> { <handler> }...
+    <handler> ::= WHEN <exception_name> [ OR <exception_name> OR ... ] THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
 * *parameter*: 인자는 IN, IN OUT, INOUT, OUT 네 가지 경우로 선언할 수 있다. IN OUT과 INOUT은 동일한 효과를 갖는다.

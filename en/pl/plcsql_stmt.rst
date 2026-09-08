@@ -38,10 +38,10 @@ Like procedures/functions, a BLOCK can have an exception handling structure.
         [ DECLARE <seq_of_declare_specs> ] <body>
 
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
-    <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
-    <seq_of_handlers> ::= <handler> [ <handler> ... ]
-    <handler> ::= WHEN <exception_name> [ OR <exeption_name> OR ... ] THEN <seq_of_statements>
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
+    <seq_of_statements> ::= <statement> ; { <statement> ; }...
+    <seq_of_handlers> ::= <handler> { <handler> }...
+    <handler> ::= WHEN <exception_name> [ OR <exception_name> OR ... ] THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 
 * *body*: must consist of one or more statements, optionally followed by exception handlers.

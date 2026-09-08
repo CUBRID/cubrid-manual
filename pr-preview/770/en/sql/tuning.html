@@ -2056,8 +2056,8 @@ To use query profiling, specify SQL trace with <strong>SET TRACE ON</strong> syn
 <li><p><strong>NO_SUBQUERY_CACHE</strong>: This is a hint not to use the SUBQUERY CACHE optimization. For more details, see <a class="reference internal" href="#correlated-subquery-cache"><span class="std std-ref">SUBQUERY CACHE (correlated)</span></a>.</p></li>
 <li><p><strong>NO_PUSH_PRED</strong>: This is a hint not to use the PREDICATE-PUSH optimization.</p></li>
 <li><p><strong>NO_MERGE</strong>: This is a hint not to use the VIEW-MERGE optimization.</p></li>
-<li><p><strong>INLINE</strong>: This is a hint specified in a CTE’s subquery to execute the CTE in the inline method. For more details, see <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE Execution Methods (Materialize and Inline)</span></a>.</p></li>
-<li><p><strong>MATERIALIZE</strong>: This is a hint specified in a CTE’s subquery to execute the CTE in the materialize method. For more details, see <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE Execution Methods (Materialize and Inline)</span></a>.</p></li>
+<li><p><strong>INLINE</strong>: This is a hint specified in a <strong>SELECT</strong> statement inside the <strong>WITH</strong> clause to execute the CTE in the inline method. For more details, see <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE Execution Methods (Materialize and Inline)</span></a>.</p></li>
+<li><p><strong>MATERIALIZE</strong>: This is a hint specified in a <strong>SELECT</strong> statement inside the <strong>WITH</strong> clause to execute the CTE in the materialize method. For more details, see <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE Execution Methods (Materialize and Inline)</span></a>.</p></li>
 <li><p><strong>NO_ELIMINATE_JOIN</strong>: This is a hint not to use join elimination optimization. For more details, see <a class="reference internal" href="#join-elimination-optimization"><span class="std std-ref">Join transforming Optimization</span></a>.</p></li>
 </ul>
 <ul id="no-hash-aggregate">
@@ -5351,7 +5351,6 @@ ex) SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);</p
 <p>Since version 11.4, subqueries can also be cached, and the subqueries that can be cached are as follows.</p>
 <p>1) CTE query
 When the QUERY_CACHE hint is specified in a non-recursive query included in the WITH clause</p>
-<p>A CTE with the QUERY_CACHE hint is executed in the materialize method. However, a CTE that is not referenced in the query is not executed and is removed from the query, so it is not cached. For more details, see <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE Execution Methods (Materialize and Inline)</span></a>.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">WITH</span>
 </span><span id="line-2"><span class="w"> </span><span class="n">of_drones</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ QUERY_CACHE */</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="s1">'drones'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">parent_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span>
 </span><span id="line-3"><span class="w"> </span><span class="n">of_cars</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ QUERY_CACHE */</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="s1">'cars'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">parent_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span>
@@ -5371,6 +5370,7 @@ When the QUERY_CACHE hint is specified in a non-recursive query included in the 
 </span></code></pre></div>
 </div>
 <p>In the UNION query above, the first query is cached, but the second query is not cached because it references another table.</p>
+<p>A CTE with the QUERY_CACHE hint is executed in the materialize method. However, a CTE that is not referenced in the query is not executed and is removed from the query, so it is not cached. For more details, see <a class="reference internal" href="query/cte.html#cte-inline-materialize"><span class="std std-ref">CTE Execution Methods (Materialize and Inline)</span></a>.</p>
 <ol class="arabic simple" start="2">
 <li><p>When the QUERY_CACHE hint is specified in a subquery that does not refer to another table</p></li>
 </ol>
@@ -5695,7 +5695,7 @@ A comparison of the results from the two queries reveals that subquery cache opt
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 03, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 08, 2026. </p>
 </div>
 </div>
 </footer>

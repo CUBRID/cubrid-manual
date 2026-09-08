@@ -985,8 +985,8 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 *   **NO_SUBQUERY_CACHE**: This is a hint not to use the SUBQUERY CACHE optimization. For more details, see :ref:`correlated-subquery-cache`.
 *   **NO_PUSH_PRED**: This is a hint not to use the PREDICATE-PUSH optimization.
 *   **NO_MERGE**: This is a hint not to use the VIEW-MERGE optimization.
-*   **INLINE**: This is a hint specified in a CTE's subquery to execute the CTE in the inline method. For more details, see :ref:`cte-inline-materialize`.
-*   **MATERIALIZE**: This is a hint specified in a CTE's subquery to execute the CTE in the materialize method. For more details, see :ref:`cte-inline-materialize`.
+*   **INLINE**: This is a hint specified in a **SELECT** statement inside the **WITH** clause to execute the CTE in the inline method. For more details, see :ref:`cte-inline-materialize`.
+*   **MATERIALIZE**: This is a hint specified in a **SELECT** statement inside the **WITH** clause to execute the CTE in the materialize method. For more details, see :ref:`cte-inline-materialize`.
 *   **NO_ELIMINATE_JOIN**: This is a hint not to use join elimination optimization. For more details, see :ref:`join-elimination-optimization`.
 
 .. _no-hash-aggregate:
@@ -4688,8 +4688,6 @@ Since version 11.4, subqueries can also be cached, and the subqueries that can b
 1) CTE query
 When the QUERY_CACHE hint is specified in a non-recursive query included in the WITH clause
 
-A CTE with the QUERY_CACHE hint is executed in the materialize method. However, a CTE that is not referenced in the query is not executed and is removed from the query, so it is not cached. For more details, see :ref:`cte-inline-materialize`.
-
 .. code-block:: sql
 
         WITH
@@ -4712,6 +4710,8 @@ When the QUERY_CACHE hint is specified in a recursive query included in the WITH
         SELECT item, price FROM cars ORDER BY 1;
 
 In the UNION query above, the first query is cached, but the second query is not cached because it references another table.
+
+A CTE with the QUERY_CACHE hint is executed in the materialize method. However, a CTE that is not referenced in the query is not executed and is removed from the query, so it is not cached. For more details, see :ref:`cte-inline-materialize`.
 
 2) When the QUERY_CACHE hint is specified in a subquery that does not refer to another table
 

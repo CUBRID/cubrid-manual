@@ -64,7 +64,7 @@ Regardless of the scan flavor, parallel scan is not applied and falls back to si
 
 *   Statements that do not support concurrent processing
 
-    *    Stored procedures (JavaSP, PL/CSQL) or Serial usage
+    *    Stored functions (JavaSP, PL/CSQL) without **PARALLEL_ENABLE** in predicates, or Serial usage. For constraints on declared functions, refer to :ref:`pl-parallel-enable`.
     *    References to session variables
     *    Recursive CTE or Connect By clauses
     *    CUBRID object DBMS specific features
@@ -263,7 +263,7 @@ Once parallel scan is enabled, the way the main thread collects worker results d
 Mergeable list is replaced by another mode (buildvalue or row-by-row) if any of the following hold:
 
 *   The scan carries predicates that cannot be evaluated while scanning (deferred to an upper operator).
-*   The select-list contains a stored procedure (JavaSP or PL/CSQL).
+*   The select-list contains a stored function (JavaSP or PL/CSQL) without **PARALLEL_ENABLE**.
 *   ROWNUM or LIMIT is used in a form that cannot be recomputed per worker.
 *   The scan does not output any table column directly (e.g., a query selecting only constants).
 *   result_cache is enabled.
@@ -490,7 +490,7 @@ Parallel execution of subqueries is not applied if any of the following conditio
 *   References between subqueries exist due to derived tables (inline views), etc.
 *   Object DBMS features are used (such as path expressions, etc.)
 *   **JSON_TABLE** or SET type table scans are included
-*   The subquery condition clause contains stored procedures
+*   The subquery contains a stored function without **PARALLEL_ENABLE**. This restriction applies to that subquery.
 *   When it is a correlated subquery
 
 .. code-block:: sql
@@ -527,7 +527,7 @@ Parallel execution of subqueries is not applied if any of the following conditio
         SELECT product_id FROM products WHERE category = 'Electronics'
     );
 
-    -- When stored procedure is included in condition clause
+    -- When a stored function without PARALLEL_ENABLE is included in the condition clause
     SELECT *
     FROM orders
     WHERE customer_id IN (
@@ -624,6 +624,7 @@ Parallel Hash Join improves join response time by parallelizing the build and pr
 
 *   The larger of the two input lists must satisfy the activation condition (:ref:`parallel-query-throughput-rules`) in page count. Below it, the hash join runs single-threaded even with the **PARALLEL** hint.
 *   When the **NO_PARALLEL_HASH_JOIN** hint is specified, the hash join is not parallelized. The hash join itself is kept; only its parallelization is disabled. See :ref:`NO_PARALLEL_HASH_JOIN <no-parallel-hash-join>` for details.
+*   Stored functions in predicates evaluated by a parallel hash join must be declared with **PARALLEL_ENABLE**. For details, refer to :ref:`pl-parallel-enable`.
 
 Hash Join Trace
 ^^^^^^^^^^^^^^^

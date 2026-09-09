@@ -122,9 +122,10 @@ CREATE FUNCTION
     
         <parameter_definition> ::= parameter_name [mode] sql_type [<default_arg>] [COMMENT 'param_comment_string']
             <default_arg> ::= { DEFAULT | = } <default_expr>
-        <function_properties> ::= [<authid>] [<deterministic>]
+        <function_properties> ::= <function_property> [<function_property> ...]
+            <function_property> ::= <authid> | <deterministic> | PARALLEL_ENABLE
             <authid> ::= AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
-            <deterministic> ::= [NOT DETERMINISTIC | DETERMINISTIC]
+            <deterministic> ::= NOT DETERMINISTIC | DETERMINISTIC
         <lang> ::= [PLCSQL | JAVA]
         <mode> ::= IN | OUT | IN OUT | INOUT
 
@@ -136,8 +137,11 @@ CREATE FUNCTION
 *   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
 *   *authid*: 저장 함수의 실행 권한을 지정한다. 자세한 내용은 :ref:`pl-authid`\을 참고한다.
 *   *deterministic*: 저장 함수가 결정적 함수인지 여부를 지정한다. 자세한 내용은 :ref:`pl-deterministic`\을 참고한다.
+*   **PARALLEL_ENABLE**: 저장 함수의 병렬 실행을 허용한다. 자세한 내용은 :ref:`pl-parallel-enable`\을 참고한다.
 *   *body*: 저장 함수의 본문을 지정한다.
 *   *function_comment*: 저장 함수의 커멘트 문자열을 지정한다.
+
+AUTHID, DETERMINISTIC, PARALLEL_ENABLE은 순서와 관계없이 지정할 수 있으며, 같은 속성을 두 번 이상 지정할 수 없다.
 
 저장 함수의 커멘트
 ----------------------------------
@@ -290,6 +294,45 @@ pl_csql_not_deterministic 함수는 NOT DETERMINISTIC이므로 부질의 결과�
             SUBQUERY_CACHE (hit: 2, miss: 2, size: 150808, status: enabled)
 
 pl_csql_deterministic 함수의 Trace 결과에서는 SUBQUERY_CACHE 항목이 표시되며(hit: 2, miss: 2, size: 150808, status: enabled), 첫 번째 결과 (2), (3)은 캐시에서 miss되었고, 이후 동일한 결과부터는 캐시에서 hit된 것을 확인할 수 있다.
+
+.. _create-function-parallel-enable:
+
+CREATE FUNCTION PARALLEL_ENABLE
+----------------------------------
+
+**PARALLEL_ENABLE** 속성을 지정하면 Java 및 PL/CSQL 저장 함수를 병렬 스캔, 부질의 병렬 실행, 병렬 해시 조인에서 실행할 수 있다. 생략하면 함수의 병렬 실행을 허용하지 않는다. 저장 프로시저와 PL/CSQL의 중첩 함수 및 프로시저에는 지정할 수 없다.
+
+이 속성을 변경하려면 **CREATE OR REPLACE FUNCTION** 문으로 함수를 다시 정의한다. **ALTER FUNCTION** 문으로는 변경할 수 없다. 선언을 변경한 뒤 실행 계획을 확인할 때는 **RECOMPILE** 힌트로 질의를 재컴파일한다.
+
+Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입 뒤에 속성을 지정하려면 ``SET(INTEGER)``\와 같이 원소 타입을 명시해야 한다.
+
+**unloaddb**\는 이 속성을 스키마 파일에 출력한다.
+
+다음은 순수 계산을 수행하는 PL/CSQL 저장 함수에 **PARALLEL_ENABLE**\을 지정하고, :ref:`db-stored-procedure`\에서 선언 여부를 확인하는 예이다.
+
+.. code-block:: sql
+
+    -- Declare a function that can run in parallel.
+    CREATE OR REPLACE FUNCTION parallel_inc (n INTEGER) RETURN INTEGER
+    PARALLEL_ENABLE
+    AS
+    BEGIN
+        RETURN n + 1;
+    END;
+
+    SELECT sp_name, is_parallel_enabled
+    FROM db_stored_procedure
+    WHERE sp_name = 'parallel_inc';
+
+::
+
+      sp_name               is_parallel_enabled
+    ============================================
+      'parallel_inc'        'YES'
+
+.. note::
+
+    **PARALLEL_ENABLE**\은 함수 본문의 병렬 안전성을 검사하지 않는다. 서버측 SQL 및 **DBMS_OUTPUT** 사용 제한은 직렬 호출에도 적용된다. 선언 전에 :ref:`pl-parallel-enable`\의 제약 사항을 확인해야 한다.
 
 ALTER PROCEDURE
 ================

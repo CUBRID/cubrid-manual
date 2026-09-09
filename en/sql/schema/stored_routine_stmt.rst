@@ -122,9 +122,10 @@ Create stored function using the **CREATE FUNCTION** statement.
     
         <parameter_definition> ::= parameter_name [mode] sql_type [<default_arg>] [COMMENT 'param_comment_string']
             <default_arg> ::= { DEFAULT | = } <default_expr>
-        <function_properties> ::= [<authid>] [<deterministic>]
+        <function_properties> ::= <function_property> [<function_property> ...]
+            <function_property> ::= <authid> | <deterministic> | PARALLEL_ENABLE
             <authid> ::= AUTHID {DEFINER | OWNER | CALLER | CURRENT_USER}
-            <deterministic> ::= [NOT DETERMINISTIC | DETERMINISTIC]
+            <deterministic> ::= NOT DETERMINISTIC | DETERMINISTIC
         <lang> ::= [PLCSQL | JAVA]
         <mode> ::= IN | OUT | IN OUT | INOUT
 
@@ -136,8 +137,11 @@ Create stored function using the **CREATE FUNCTION** statement.
 *   *param_comment_string*: Specifies the comment string for the parameter.
 *   *authid*: Specifies the execution authority of the stored function. For more details, refer to :ref:`pl-authid`.
 *   *deterministic*: Specifies whether the stored function is deterministic. For more details, refer to :ref:`pl-deterministic`.
+*   **PARALLEL_ENABLE**: Allows parallel execution of the stored function. For more details, refer to :ref:`pl-parallel-enable`.
 *   *body*: Specifies the body of the stored function.
 *   *function_comment*: Specifies the comment string for the stored function.
+
+AUTHID, DETERMINISTIC, and PARALLEL_ENABLE can be specified in any order. The same property cannot be specified more than once.
 
 COMMENT of Stored Function
 ----------------------------------
@@ -199,6 +203,45 @@ The **db_stored_procedure_args** system virtual table provides the information o
     =================================================
      'sp_int'                        0  'i'                   'INTEGER'             'IN'
 
+
+.. _create-function-parallel-enable:
+
+CREATE FUNCTION PARALLEL_ENABLE
+----------------------------------
+
+The **PARALLEL_ENABLE** property allows Java and PL/CSQL stored functions to run in parallel scans, parallel subquery execution, and parallel hash joins. If omitted, parallel execution of the function is not allowed. This property cannot be specified for stored procedures or nested PL/CSQL functions and procedures.
+
+To change this property, redefine the function with **CREATE OR REPLACE FUNCTION**. It cannot be changed with **ALTER FUNCTION**. When checking the execution plan after changing the declaration, recompile the query with the **RECOMPILE** hint.
+
+If a Java function returns SET, MULTISET, or SEQUENCE, specify the element type, such as ``SET(INTEGER)``, to use properties after the return type.
+
+**unloaddb** writes this property to the schema file.
+
+The following example declares a PL/CSQL stored function that performs a pure calculation with **PARALLEL_ENABLE** and checks the declaration in :ref:`db-stored-procedure`.
+
+.. code-block:: sql
+
+    -- Declare a function that can run in parallel.
+    CREATE OR REPLACE FUNCTION parallel_inc (n INTEGER) RETURN INTEGER
+    PARALLEL_ENABLE
+    AS
+    BEGIN
+        RETURN n + 1;
+    END;
+
+    SELECT sp_name, is_parallel_enabled
+    FROM db_stored_procedure
+    WHERE sp_name = 'parallel_inc';
+
+::
+
+      sp_name               is_parallel_enabled
+    ============================================
+      'parallel_inc'        'YES'
+
+.. note::
+
+    **PARALLEL_ENABLE** does not verify that the function body is safe for parallel execution. Restrictions on server-side SQL and **DBMS_OUTPUT** also apply to serial calls. Check the constraints in :ref:`pl-parallel-enable` before declaring the property.
 
 DROP PROCEDURE
 ==============

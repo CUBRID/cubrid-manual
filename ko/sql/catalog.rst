@@ -878,7 +878,9 @@ updated_time         DATETIME                              저장 프로시저 �
                         - 값이 **0** 이면 소유자 권한 (또는 정의자 권한), **1** 이면 호출자 권한이다.
                 - **Bit 1**: 저장 프로시저의 **deterministic** 속성을 나타낸다.  
                         - 값이 **1** 이면 deterministic, **0** 이면 non-deterministic이다.
-                - 나머지 비트 (**Bit 2** ~ **Bit 31**) 은 현재 사용하지 않는다.
+                - **Bit 2**: 저장 함수의 **PARALLEL_ENABLE** 속성을 나타낸다.
+                        - 값이 **1** 이면 선언된 함수, **0** 이면 선언되지 않은 함수이다.
+                - 나머지 비트 (**Bit 3** ~ **Bit 31**) 은 현재 사용하지 않는다.
 
 .. _-db-stored-procedure-args:
 
@@ -2379,6 +2381,7 @@ arg_count            INTEGER                     매개변수 개수
 lang                 VARCHAR(16)                 저장 프로시저의 구현 언어 이름
 authid               VARCHAR(16)                 저장 프로시저의 실행 권한
 is_deterministic     VARCHAR(3)                  결정적 함수 여부
+is_parallel_enabled  VARCHAR(3)                  PARALLEL_ENABLE 선언 여부
 target               VARCHAR(4096)               실행할 저장 프로시저의 대상 이름
 owner                VARCHAR(32)                 소유자
 code                 VARCHAR(1073741823)         저장 프로시저의 소스 코드
@@ -2418,6 +2421,10 @@ updated_time         DATETIME                    저장 프로시저 수정 시�
             - **is_deterministic**: 결정적 함수 여부를 나타낸다.
                 - **YES**: 결정적 함수
                 - **NO**: 비결정적 함수
+
+            - **is_parallel_enabled**: 저장 함수의 **PARALLEL_ENABLE** 선언 여부를 나타낸다. 자세한 내용은 :ref:`pl-parallel-enable`\을 참고한다.
+                - **YES**: 선언된 함수
+                - **NO**: 선언되지 않은 함수
 
 
 다음 예제에서는 현재 사용자가 소유하고 있는 저장 프로시저를 조회한다.

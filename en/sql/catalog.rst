@@ -873,7 +873,9 @@ updated_time         DATETIME                              Stored procedure modi
                         - A value of **0** indicates owner's rights (also referred to as definer's rights), and **1** indicates caller's rights (also referred to as invoker's rights).
                 - **Bit 1**: Represents the **deterministic** property of the stored procedure.  
                         - A value of **1** indicates deterministic, and **0** indicates non-deterministic.
-                - The other bits (**Bit 2** ~ **Bit 31**) are not currently used.
+                - **Bit 2**: Represents the **PARALLEL_ENABLE** property of the stored function.
+                        - A value of **1** indicates a declared function, and **0** indicates a function without the declaration.
+                - The other bits (**Bit 3** ~ **Bit 31**) are not currently used.
 
 .. _-db-stored-procedure-args:
 
@@ -2375,6 +2377,7 @@ arg_count            INTEGER                     The number of arguments
 lang                 VARCHAR(16)                 Implementation language name
 authid               VARCHAR(16)                 Execution privileges of the stored procedure
 is_deterministic     VARCHAR(3)                  Indicates whether the function is deterministic
+is_parallel_enabled  VARCHAR(3)                  Whether PARALLEL_ENABLE is declared
 target               VARCHAR(4096)               Name of the target stored procedure code to execute
 owner                VARCHAR(32)                 Owner
 code                 VARCHAR(1073741823)         Source code of the stored procedure
@@ -2414,6 +2417,10 @@ updated_time         DATETIME                    Stored procedure modification t
                 - **is_deterministic**: Indicates whether the function is deterministic.
                         - **YES**: Deterministic function
                         - **NO**: Non-deterministic function
+
+                - **is_parallel_enabled**: Indicates whether the stored function is declared with **PARALLEL_ENABLE**. For details, refer to :ref:`pl-parallel-enable`.
+                        - **YES**: Declared function
+                        - **NO**: Function without the declaration
 
 The following example shows how to retrieve Java stored procedures owned by the current user.
 

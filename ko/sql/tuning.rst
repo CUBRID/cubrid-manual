@@ -937,6 +937,8 @@ SQL 힌트
     NO_SUBQUERY_CACHE |
     NO_PUSH_PRED |
     NO_MERGE |
+    INLINE |
+    MATERIALIZE |
     NO_ELIMINATE_JOIN |
     NO_HASH_AGGREGATE |
     NO_HASH_LIST_SCAN |
@@ -990,6 +992,8 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 *   **NO_SUBQUERY_CACHE**: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`correlated-subquery-cache`\를 참고한다.
 *   **NO_PUSH_PRED**: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.
 *   **NO_MERGE**: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.
+*   **INLINE**: **WITH** 절 내부의 **SELECT** 문에 지정하여 해당 CTE를 inline 방식으로 수행하기 위한 힌트이다. 자세한 내용은 :ref:`cte-inline-materialize`\를 참고한다.
+*   **MATERIALIZE**: **WITH** 절 내부의 **SELECT** 문에 지정하여 해당 CTE를 materialize 방식으로 수행하기 위한 힌트이다. 자세한 내용은 :ref:`cte-inline-materialize`\를 참고한다.
 *   **NO_ELIMINATE_JOIN**: 조인 제거 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`join-elimination-optimization`\를 참고한다.
 
 .. _no-hash-aggregate:
@@ -4286,7 +4290,7 @@ View Merging 최적화
 
     #. 뷰가 **DISTINCT**\ 문을 포함한 경우
 
-    #. 뷰가 **CTE**\(Common Table Expressions)인 경우
+    #. 뷰가 materialize 방식으로 수행되는 **CTE**\(Common Table Expressions)인 경우. 자세한 내용은 :ref:`cte-inline-materialize`\를 참고한다.
     
     #. 뷰를 **OUTER JOIN**\ 하는 경우
 
@@ -4723,6 +4727,8 @@ WITH절에 포함되는 재귀 부분 중 다른 CTE를 참조하는 부질의�
         SELECT item, price FROM cars ORDER BY 1;
 
 위 UNION 쿼리에서 첫 번째 쿼리는 캐시 되지만, 두 번째 쿼리는 다른 테이블을 참조하기 때문에 캐시 되지 않는다.
+
+QUERY_CACHE 힌트가 지정된 CTE는 materialize 방식으로 수행된다. 단, 질의에서 참조되지 않는 CTE는 수행되지 않고 질의에서 제거되므로 캐시되지 않는다. 자세한 내용은 :ref:`cte-inline-materialize`\를 참고한다.
 
 2) 다른 테이블을 참조하지 않는 부질의에 QUERY_CACHE 힌트를 지정한 경우
 

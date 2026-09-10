@@ -1,0 +1,963 @@
+:meta-keywords: cubrid information_schema, information schema, sql standard catalog, metadata views
+:meta-description: INFORMATION_SCHEMA is a set of SQL standard read-only views that expose CUBRID metadata such as tables, columns, constraints, routines, and privileges.
+
+.. _information-schema:
+
+******************
+Information Schema
+******************
+
+**Information Schema** is a set of read-only views that expose metadata about the objects in the current database, such as tables, columns, constraints, routines, and privileges. The Information Schema is defined in the SQL standard (ISO/IEC 9075-11), so it is portable and stable. This contrasts with the CUBRID :ref:`catalog`, which is specific to CUBRID and modeled after implementation concerns.
+
+.. code-block:: sql
+
+    -- Tables owned by the user 'PUBLIC'
+    SELECT table_name, table_type
+    FROM information_schema.tables
+    WHERE table_schema = 'PUBLIC';
+
+    -- Columns of the 'game' table
+    SELECT column_name, data_type, is_nullable
+    FROM information_schema.columns
+    WHERE table_name = 'game'
+    ORDER BY ordinal_position;
+
+Information Schema Views
+========================
+
+The following table summarizes the Information Schema views. For details on each view, see its description below.
+
+================================================= ==================================
+View Name                                         Description                       
+================================================= ==================================
+:ref:`information-schema-column-privileges`       Privileges defined on columns     
+:ref:`information-schema-columns`                 Columns in each table             
+:ref:`information-schema-domains`                 User-defined domains              
+:ref:`information-schema-foreign-servers`         Foreign server information        
+:ref:`information-schema-key-column-usage`        Which key columns have constraints
+:ref:`information-schema-parameters`              Routine parameters                
+:ref:`information-schema-partitions`              Table partition information       
+:ref:`information-schema-referential-constraints` Foreign key information           
+:ref:`information-schema-routine-privileges`      Privileges defined on routines    
+:ref:`information-schema-routines`                Routine information               
+:ref:`information-schema-schemata`                Schema information                
+:ref:`information-schema-sequences`               Sequence information              
+:ref:`information-schema-statistics`              Table index statistics            
+:ref:`information-schema-synonyms`                Synonym information               
+:ref:`information-schema-table-constraints`       Which tables have constraints     
+:ref:`information-schema-table-privileges`        Privileges defined on tables      
+:ref:`information-schema-tables`                  Table information                 
+:ref:`information-schema-triggers`                Trigger information               
+:ref:`information-schema-views`                   View information                  
+================================================= ==================================
+
+.. _information-schema-column-privileges:
+
+column_privileges
+-----------------
+
+The ``column_privileges`` view identifies all privileges granted on columns to or by the current user. CUBRID does not support column-level privileges, so this view is always empty.
+
++----------------+--------------+------------------------------------------------------------------+
+| Column Name    | Data Type    | Description                                                      |
++================+==============+==================================================================+
+| grantor        | VARCHAR(32)  |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| grantee        | VARCHAR(32)  |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| table_catalog  | VARCHAR(255) |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| table_schema   | VARCHAR(32)  |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| table_name     | VARCHAR(255) |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| column_name    | VARCHAR(255) |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| privilege_type | VARCHAR(7)   |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| is_grantable   | VARCHAR(3)   |                                                                  |
++----------------+--------------+------------------------------------------------------------------+
+
+.. _information-schema-columns:
+
+columns
+-------
+
+The ``columns`` view contains information about all columns of the tables and views in the current database. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
+
++--------------------------+---------------+------------------------------------------------------------------+
+| Column Name              | Data Type     | Description                                                      |
++==========================+===============+==================================================================+
+| table_catalog            | VARCHAR(255)  | Name of the database that contains the table (always the current |
+|                          |               | database)                                                        |
++--------------------------+---------------+------------------------------------------------------------------+
+| table_schema             | VARCHAR(32)   | Name of the schema that contains the table                       |
++--------------------------+---------------+------------------------------------------------------------------+
+| table_name               | VARCHAR(255)  | Name of the table                                                |
++--------------------------+---------------+------------------------------------------------------------------+
+| column_name              | VARCHAR(255)  | Name of the column                                               |
++--------------------------+---------------+------------------------------------------------------------------+
+| ordinal_position         | INTEGER       | Ordinal position of the column within the table (count starts at |
+|                          |               | 1)                                                               |
++--------------------------+---------------+------------------------------------------------------------------+
+| column_default           | VARCHAR(2048) | Default expression of the column                                 |
++--------------------------+---------------+------------------------------------------------------------------+
+| is_nullable              | VARCHAR(3)    | 'NO' if a NOT NULL constraint is set, and 'YES' otherwise        |
++--------------------------+---------------+------------------------------------------------------------------+
+| data_type                | VARCHAR(16)   | Data type of the column                                          |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_maximum_length | BIGINT        | Declared maximum length in characters for character or bit-      |
+|                          |               | string types (NULL for other data types)                         |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_octet_length   | BIGINT        | Maximum length in bytes for character types (NULL for other data |
+|                          |               | types)                                                           |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_precision        | INTEGER       | Precision of numeric types (NULL for other data types)           |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_scale            | INTEGER       | Scale of exact numeric types (NULL for other data types)         |
++--------------------------+---------------+------------------------------------------------------------------+
+| datetime_precision       | INTEGER       | Fractional-seconds precision of date/time types (NULL for other  |
+|                          |               | data types)                                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_set_name       | VARCHAR(32)   | Name of the character set for character types (NULL for other    |
+|                          |               | data types)                                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| collation_name           | VARCHAR(32)   | Name of the collation of the column for character types (NULL    |
+|                          |               | for other data types)                                            |
++--------------------------+---------------+------------------------------------------------------------------+
+| domain_catalog           | VARCHAR(255)  | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| domain_schema            | VARCHAR(32)   | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| domain_name              | VARCHAR(255)  | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| udt_catalog              | VARCHAR(255)  | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| udt_schema               | VARCHAR(32)   | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| udt_name                 | VARCHAR(255)  | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| column_type              | STRING        | Data type of the column. Whereas data_type is the type name only,|
+|                          |               | column_type also contains information such as the precision or   |
+|                          |               | length                                                           |
++--------------------------+---------------+------------------------------------------------------------------+
+| column_key               | VARCHAR(3)    | How the column is indexed. 'PRI' means the column is a PRIMARY   |
+|                          |               | KEY or one of the columns in a multiple-column PRIMARY KEY, 'UNI'|
+|                          |               | means it is the first column of a UNIQUE index, and 'MUL' means  |
+|                          |               | it is the first column of an index in which duplicate values are |
+|                          |               | permitted. It is empty if the column is not indexed or is indexed|
+|                          |               | only as a secondary column in a multiple-column, nonunique index.|
+|                          |               | If more than one value applies, the order of priority is 'PRI',  |
+|                          |               | 'UNI', 'MUL'                                                     |
++--------------------------+---------------+------------------------------------------------------------------+
+| extra                    | VARCHAR(255)  | Space-separated flags (auto_increment, partition_key)            |
++--------------------------+---------------+------------------------------------------------------------------+
+| privileges               | VARCHAR(512)  | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| column_comment           | VARCHAR(2048) | Comment to describe the column                                   |
++--------------------------+---------------+------------------------------------------------------------------+
+| is_generated             | VARCHAR(6)    | Whether the column is a generated column (always 'NEVER')        |
++--------------------------+---------------+------------------------------------------------------------------+
+| generation_expression    | STRING        | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| is_updatable             | VARCHAR(3)    | Whether the column is updatable (always 'YES')                   |
++--------------------------+---------------+------------------------------------------------------------------+
+| is_visible               | VARCHAR(3)    | 'NO' for an invisible column, and 'YES' otherwise                |
++--------------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-domains:
+
+domains
+-------
+
+The ``domains`` view contains all user-defined domains in the current database. CUBRID does not support user-defined domains, so this view is always empty.
+
++--------------------------+---------------+------------------------------------------------------------------+
+| Column Name              | Data Type     | Description                                                      |
++==========================+===============+==================================================================+
+| domain_catalog           | VARCHAR(255)  |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| domain_schema            | VARCHAR(32)   |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| domain_name              | VARCHAR(255)  |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| data_type                | VARCHAR(16)   |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_maximum_length | BIGINT        |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_octet_length   | BIGINT        |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_set_catalog    | VARCHAR(255)  |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_set_schema     | VARCHAR(32)   |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_set_name       | VARCHAR(32)   |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| collation_catalog        | VARCHAR(255)  |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| collation_schema         | VARCHAR(32)   |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| collation_name           | VARCHAR(32)   |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_precision        | INTEGER       |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_precision_radix  | INTEGER       |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_scale            | INTEGER       |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| datetime_precision       | INTEGER       |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| domain_default           | VARCHAR(2048) |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| udt_catalog              | VARCHAR(255)  |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| udt_schema               | VARCHAR(32)   |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| udt_name                 | VARCHAR(255)  |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| domain_comment           | VARCHAR(2048) |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| create_time              | DATETIME      |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| update_time              | DATETIME      |                                                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-foreign-servers:
+
+foreign_servers
+---------------
+
+The ``foreign_servers`` view contains all foreign servers defined in the current database. Only those foreign servers are shown that the current user has access to (by way of being the owner or having some privilege).
+
++------------------------------+---------------+------------------------------------------------------------------+
+| Column Name                  | Data Type     | Description                                                      |
++==============================+===============+==================================================================+
+| foreign_server_catalog       | VARCHAR(255)  | Name of the database that contains the foreign server (always    |
+|                              |               | the current database)                                            |
++------------------------------+---------------+------------------------------------------------------------------+
+| foreign_server_name          | VARCHAR(255)  | Name of the foreign server                                       |
++------------------------------+---------------+------------------------------------------------------------------+
+| foreign_data_wrapper_catalog | VARCHAR(255)  | Not supported (always NULL)                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| foreign_data_wrapper_name    | VARCHAR(255)  | Not supported (always NULL)                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| foreign_server_type          | STRING        | Not supported (always NULL)                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| foreign_server_version       | STRING        | Not supported (always NULL)                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| authorization_identifier     | VARCHAR(32)   | Name of the owner of the foreign server                          |
++------------------------------+---------------+------------------------------------------------------------------+
+| server_host                  | VARCHAR(255)  | Target host                                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| server_port                  | INTEGER       | Target port                                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| server_database              | VARCHAR(255)  | Name of the target database                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| server_user                  | VARCHAR(255)  | Name of the connection user                                      |
++------------------------------+---------------+------------------------------------------------------------------+
+| server_properties            | VARCHAR(2048) | Connection properties                                            |
++------------------------------+---------------+------------------------------------------------------------------+
+| server_comment               | VARCHAR(1024) | Comment to describe the server                                   |
++------------------------------+---------------+------------------------------------------------------------------+
+| create_time                  | DATETIME      | Foreign server creation time                                     |
++------------------------------+---------------+------------------------------------------------------------------+
+| update_time                  | DATETIME      | Foreign server modification time                                 |
++------------------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-key-column-usage:
+
+key_column_usage
+----------------
+
+The ``key_column_usage`` view identifies all columns in the current database that are restricted by some PRIMARY KEY, UNIQUE, or FOREIGN KEY constraint. Only those columns are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
+
++-------------------------------+--------------+------------------------------------------------------------------+
+| Column Name                   | Data Type    | Description                                                      |
++===============================+==============+==================================================================+
+| constraint_catalog            | VARCHAR(255) | Name of the database that contains the constraint (always the    |
+|                               |              | current database)                                                |
++-------------------------------+--------------+------------------------------------------------------------------+
+| constraint_schema             | VARCHAR(32)  | Name of the schema that contains the constraint                  |
++-------------------------------+--------------+------------------------------------------------------------------+
+| constraint_name               | VARCHAR(255) | Name of the constraint                                           |
++-------------------------------+--------------+------------------------------------------------------------------+
+| table_catalog                 | VARCHAR(255) | Name of the database that contains the table that contains the   |
+|                               |              | column that is restricted by this constraint (always the current |
+|                               |              | database)                                                        |
++-------------------------------+--------------+------------------------------------------------------------------+
+| table_schema                  | VARCHAR(32)  | Name of the schema that contains the table that contains the     |
+|                               |              | column that is restricted by this constraint                     |
++-------------------------------+--------------+------------------------------------------------------------------+
+| table_name                    | VARCHAR(255) | Name of the table that contains the column that is restricted by |
+|                               |              | this constraint                                                  |
++-------------------------------+--------------+------------------------------------------------------------------+
+| column_name                   | VARCHAR(255) | Name of the column that is restricted by this constraint         |
++-------------------------------+--------------+------------------------------------------------------------------+
+| ordinal_position              | INTEGER      | Ordinal position of the column within the constraint key (count  |
+|                               |              | starts at 1)                                                     |
++-------------------------------+--------------+------------------------------------------------------------------+
+| position_in_unique_constraint | INTEGER      | For a foreign-key constraint, the ordinal position of the        |
+|                               |              | referenced column within its unique constraint (count starts at  |
+|                               |              | 1); otherwise NULL                                               |
++-------------------------------+--------------+------------------------------------------------------------------+
+| referenced_table_schema       | VARCHAR(32)  | Name of the schema referenced by the constraint (NULL if not a   |
+|                               |              | foreign key)                                                     |
++-------------------------------+--------------+------------------------------------------------------------------+
+| referenced_table_name         | VARCHAR(255) | Name of the table referenced by the constraint (NULL if not a    |
+|                               |              | foreign key)                                                     |
++-------------------------------+--------------+------------------------------------------------------------------+
+| referenced_column_name        | VARCHAR(255) | Name of the column referenced by the constraint (NULL if not a   |
+|                               |              | foreign key)                                                     |
++-------------------------------+--------------+------------------------------------------------------------------+
+
+.. _information-schema-parameters:
+
+parameters
+----------
+
+The ``parameters`` view contains information about the parameters of all procedures and functions in the current database. Only the parameters of routines that the current user has access to are shown (by way of being the owner or having some privilege).
+
++--------------------------+---------------+------------------------------------------------------------------+
+| Column Name              | Data Type     | Description                                                      |
++==========================+===============+==================================================================+
+| specific_catalog         | VARCHAR(255)  | Name of the database that contains the routine (always the       |
+|                          |               | current database)                                                |
++--------------------------+---------------+------------------------------------------------------------------+
+| specific_schema          | VARCHAR(32)   | Name of the schema that contains the routine                     |
++--------------------------+---------------+------------------------------------------------------------------+
+| specific_name            | VARCHAR(255)  | Unique routine name                                              |
++--------------------------+---------------+------------------------------------------------------------------+
+| ordinal_position         | INTEGER       | Ordinal position of the parameter in the argument list of the    |
+|                          |               | routine (count starts at 1)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| parameter_mode           | VARCHAR(5)    | Parameter mode (IN: input, OUT: output, INOUT: input/output)     |
++--------------------------+---------------+------------------------------------------------------------------+
+| is_result                | VARCHAR(3)    | Whether the parameter represents the function's return value     |
+|                          |               | (always 'NO')                                                    |
++--------------------------+---------------+------------------------------------------------------------------+
+| parameter_name           | VARCHAR(255)  | Name of the parameter                                            |
++--------------------------+---------------+------------------------------------------------------------------+
+| data_type                | VARCHAR(16)   | Parameter data type                                              |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_maximum_length | BIGINT        | Maximum length in characters, for a character-string parameter   |
+|                          |               | (always NULL)                                                    |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_octet_length   | BIGINT        | Maximum length in bytes, for a character-string parameter        |
+|                          |               | (always NULL)                                                    |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_set_name       | VARCHAR(32)   | Character set of a character-string parameter (always NULL)      |
++--------------------------+---------------+------------------------------------------------------------------+
+| collation_name           | VARCHAR(32)   | Collation of a character-string parameter (always NULL)          |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_precision        | INTEGER       | Numeric precision of a numeric parameter (always NULL)           |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_scale            | INTEGER       | Numeric scale of a numeric parameter (always NULL)               |
++--------------------------+---------------+------------------------------------------------------------------+
+| datetime_precision       | INTEGER       | Fractional-seconds precision of date/time types (NULL for other  |
+|                          |               | data types)                                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| dtd_identifier           | VARCHAR(1024) | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_type             | VARCHAR(9)    | Type of the routine (PROCEDURE, FUNCTION)                        |
++--------------------------+---------------+------------------------------------------------------------------+
+| parameter_default        | VARCHAR(2048) | Default expression of the parameter (NULL if none)               |
++--------------------------+---------------+------------------------------------------------------------------+
+| parameter_comment        | VARCHAR(1024) | Comment to describe the parameter                                |
++--------------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-partitions:
+
+partitions
+----------
+
+The ``partitions`` view contains all partitions of the partitioned tables in the current database. Only those partitions are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
+
++-------------------------------+---------------+------------------------------------------------------------------+
+| Column Name                   | Data Type     | Description                                                      |
++===============================+===============+==================================================================+
+| table_catalog                 | VARCHAR(255)  | Name of the database that contains the table (always the current |
+|                               |               | database)                                                        |
++-------------------------------+---------------+------------------------------------------------------------------+
+| table_schema                  | VARCHAR(32)   | Name of the schema that contains the table                       |
++-------------------------------+---------------+------------------------------------------------------------------+
+| table_name                    | VARCHAR(255)  | Partitioned (super) table name                                   |
++-------------------------------+---------------+------------------------------------------------------------------+
+| partition_name                | VARCHAR(255)  | Name of the partition                                            |
++-------------------------------+---------------+------------------------------------------------------------------+
+| partition_ordinal_position    | INTEGER       | Ordinal position of the partition within the table (always NULL) |
++-------------------------------+---------------+------------------------------------------------------------------+
+| partition_method              | VARCHAR(5)    | Partitioning method (HASH, RANGE, LIST)                          |
++-------------------------------+---------------+------------------------------------------------------------------+
+| partition_expression          | VARCHAR(2048) | Partitioning key expression                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+| partition_description         | STRING        | For RANGE/LIST partitions, the boundary values; NULL for HASH    |
+|                               |               | partitions                                                       |
++-------------------------------+---------------+------------------------------------------------------------------+
+| subpartition_name             | VARCHAR(255)  | Not supported (always NULL)                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+| subpartition_ordinal_position | INTEGER       | Not supported (always NULL)                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+| subpartition_method           | VARCHAR(5)    | Not supported (always NULL)                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+| subpartition_expression       | VARCHAR(2048) | Not supported (always NULL)                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+| table_rows                    | BIGINT        | Estimated number of rows in the partition                        |
++-------------------------------+---------------+------------------------------------------------------------------+
+| avg_row_length                | BIGINT        | Estimated average row length in bytes                            |
++-------------------------------+---------------+------------------------------------------------------------------+
+| data_length                   | BIGINT        | Estimated total data length in bytes                             |
++-------------------------------+---------------+------------------------------------------------------------------+
+| data_free                     | BIGINT        | Estimated free space in bytes                                    |
++-------------------------------+---------------+------------------------------------------------------------------+
+| tablespace_name               | VARCHAR(255)  | Not supported (always NULL)                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+| partition_comment             | VARCHAR(1024) | Comment to describe the partition                                |
++-------------------------------+---------------+------------------------------------------------------------------+
+| create_time                   | DATETIME      | Partition creation time                                          |
++-------------------------------+---------------+------------------------------------------------------------------+
+| update_time                   | DATETIME      | Partition modification time                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-referential-constraints:
+
+referential_constraints
+-----------------------
+
+The ``referential_constraints`` view contains all referential (foreign key) constraints in the current database. Only those constraints are shown for which the current user has write access to the referencing table (by way of being the owner or having some privilege other than SELECT).
+
++---------------------------+--------------+------------------------------------------------------------------+
+| Column Name               | Data Type    | Description                                                      |
++===========================+==============+==================================================================+
+| constraint_catalog        | VARCHAR(255) | Name of the database that contains the constraint (always the    |
+|                           |              | current database)                                                |
++---------------------------+--------------+------------------------------------------------------------------+
+| constraint_schema         | VARCHAR(32)  | Name of the schema that contains the constraint                  |
++---------------------------+--------------+------------------------------------------------------------------+
+| constraint_name           | VARCHAR(255) | Name of the constraint                                           |
++---------------------------+--------------+------------------------------------------------------------------+
+| unique_constraint_catalog | VARCHAR(255) | Name of the database that contains the unique or primary key     |
+|                           |              | constraint that the foreign key constraint references (always    |
+|                           |              | the current database)                                            |
++---------------------------+--------------+------------------------------------------------------------------+
+| unique_constraint_schema  | VARCHAR(32)  | Name of the schema that contains the unique or primary key       |
+|                           |              | constraint that the foreign key constraint references            |
++---------------------------+--------------+------------------------------------------------------------------+
+| unique_constraint_name    | VARCHAR(255) | Name of the unique or primary key constraint that the foreign    |
+|                           |              | key constraint references                                        |
++---------------------------+--------------+------------------------------------------------------------------+
+| match_option              | VARCHAR(7)   | Match option of the foreign key constraint (NONE, PARTIAL, FULL) |
++---------------------------+--------------+------------------------------------------------------------------+
+| update_rule               | VARCHAR(9)   | Update rule of the foreign key constraint (RESTRICT, NO ACTION,  |
+|                           |              | SET NULL)                                                        |
++---------------------------+--------------+------------------------------------------------------------------+
+| delete_rule               | VARCHAR(9)   | Delete rule of the foreign key constraint (CASCADE, RESTRICT, NO |
+|                           |              | ACTION, SET NULL)                                                |
++---------------------------+--------------+------------------------------------------------------------------+
+| table_name                | VARCHAR(255) | Referencing table                                                |
++---------------------------+--------------+------------------------------------------------------------------+
+| referenced_table_name     | VARCHAR(255) | Referenced table                                                 |
++---------------------------+--------------+------------------------------------------------------------------+
+
+.. _information-schema-routine-privileges:
+
+routine_privileges
+------------------
+
+The ``routine_privileges`` view identifies all privileges granted on procedures and functions to or by the current user. There is one row for each combination of routine, grantor, and grantee.
+
++------------------+--------------+------------------------------------------------------------------+
+| Column Name      | Data Type    | Description                                                      |
++==================+==============+==================================================================+
+| grantor          | VARCHAR(32)  | User who granted the privilege                                   |
++------------------+--------------+------------------------------------------------------------------+
+| grantee          | VARCHAR(32)  | User who received the privilege                                  |
++------------------+--------------+------------------------------------------------------------------+
+| specific_catalog | VARCHAR(255) | Name of the database that contains the routine (always the       |
+|                  |              | current database)                                                |
++------------------+--------------+------------------------------------------------------------------+
+| specific_schema  | VARCHAR(32)  | Name of the schema that contains the routine                     |
++------------------+--------------+------------------------------------------------------------------+
+| specific_name    | VARCHAR(255) | Unique routine name                                              |
++------------------+--------------+------------------------------------------------------------------+
+| routine_catalog  | VARCHAR(255) | Name of the database that contains the routine (always the       |
+|                  |              | current database)                                                |
++------------------+--------------+------------------------------------------------------------------+
+| routine_schema   | VARCHAR(32)  | Name of the schema that contains the routine                     |
++------------------+--------------+------------------------------------------------------------------+
+| routine_name     | VARCHAR(255) | Name of the routine                                              |
++------------------+--------------+------------------------------------------------------------------+
+| privilege_type   | VARCHAR(7)   | Type of the privilege; always EXECUTE (the only privilege type   |
+|                  |              | for routines)                                                    |
++------------------+--------------+------------------------------------------------------------------+
+| is_grantable     | VARCHAR(3)   | Whether the grantee may grant the privilege to others (always    |
+|                  |              | 'NO')                                                            |
++------------------+--------------+------------------------------------------------------------------+
+
+.. _information-schema-routines:
+
+routines
+--------
+
+The ``routines`` view contains all procedures and functions in the current database. Only those routines are shown that the current user has access to (by way of being the owner or having some privilege).
+
++--------------------------+---------------+------------------------------------------------------------------+
+| Column Name              | Data Type     | Description                                                      |
++==========================+===============+==================================================================+
+| specific_catalog         | VARCHAR(255)  | Name of the database that contains the routine (always the       |
+|                          |               | current database)                                                |
++--------------------------+---------------+------------------------------------------------------------------+
+| specific_schema          | VARCHAR(32)   | Name of the schema that contains the routine                     |
++--------------------------+---------------+------------------------------------------------------------------+
+| specific_name            | VARCHAR(255)  | Unique routine name                                              |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_catalog          | VARCHAR(255)  | Name of the database that contains the routine (always the       |
+|                          |               | current database)                                                |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_schema           | VARCHAR(32)   | Name of the schema that contains the routine                     |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_name             | VARCHAR(255)  | Name of the routine                                              |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_type             | VARCHAR(9)    | Type of the routine (PROCEDURE, FUNCTION)                        |
++--------------------------+---------------+------------------------------------------------------------------+
+| data_type                | VARCHAR(16)   | Return data type of the function (NULL for a procedure)          |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_maximum_length | BIGINT        | Maximum length in characters, for a character-string return      |
+|                          |               | value (always NULL)                                              |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_octet_length   | BIGINT        | Maximum length in bytes, for a character-string return value     |
+|                          |               | (always NULL)                                                    |
++--------------------------+---------------+------------------------------------------------------------------+
+| character_set_name       | VARCHAR(32)   | Character set of the return value, for string return types       |
++--------------------------+---------------+------------------------------------------------------------------+
+| collation_name           | VARCHAR(32)   | Collation of a character-string return value (always NULL)       |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_precision        | INTEGER       | Numeric precision of a numeric return value (always NULL)        |
++--------------------------+---------------+------------------------------------------------------------------+
+| numeric_scale            | INTEGER       | Numeric scale of a numeric return value (always NULL)            |
++--------------------------+---------------+------------------------------------------------------------------+
+| datetime_precision       | INTEGER       | Fractional-seconds precision of date/time types (NULL for other  |
+|                          |               | data types)                                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| dtd_identifier           | VARCHAR(255)  | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_body             | VARCHAR(8)    | Type of the routine body (always EXTERNAL)                       |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_definition       | STRING        | PL/CSQL source text                                              |
++--------------------------+---------------+------------------------------------------------------------------+
+| external_name            | STRING        | External name of the routine (NULL if none)                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| external_language        | VARCHAR(64)   | Implementation language of the routine (PLCSQL, JAVA)            |
++--------------------------+---------------+------------------------------------------------------------------+
+| parameter_style          | VARCHAR(3)    | Parameter-passing style of the routine (always SQL)              |
++--------------------------+---------------+------------------------------------------------------------------+
+| is_deterministic         | VARCHAR(3)    | 'YES' if the routine is declared DETERMINISTIC, otherwise 'NO'   |
++--------------------------+---------------+------------------------------------------------------------------+
+| sql_data_access          | VARCHAR(17)   | SQL data access level (NO SQL, CONTAINS SQL, READS SQL DATA,     |
+|                          |               | MODIFIES SQL DATA)                                               |
++--------------------------+---------------+------------------------------------------------------------------+
+| sql_path                 | STRING        | Not supported (always NULL)                                      |
++--------------------------+---------------+------------------------------------------------------------------+
+| security_type            | VARCHAR(7)    | Security context under which the routine executes (INVOKER,      |
+|                          |               | DEFINER)                                                         |
++--------------------------+---------------+------------------------------------------------------------------+
+| routine_comment          | VARCHAR(1024) | Comment to describe the routine                                  |
++--------------------------+---------------+------------------------------------------------------------------+
+| created                  | DATETIME      | Routine creation time                                            |
++--------------------------+---------------+------------------------------------------------------------------+
+| last_altered             | DATETIME      | Routine modification time                                        |
++--------------------------+---------------+------------------------------------------------------------------+
+| definer                  | VARCHAR(32)   | Owner of the routine                                             |
++--------------------------+---------------+------------------------------------------------------------------+
+
+.. note::
+
+    ``routine_definition`` exposes the PL/CSQL source code, so it is shown only to the DBA or the routine's owner. For all other users it is NULL.
+
+.. _information-schema-schemata:
+
+schemata
+--------
+
+The ``schemata`` view contains all schemas in the current database. Only those schemas are shown that the current user has access to (by way of being the owner or having some privilege).
+
++-------------------------------+---------------+------------------------------------------------------------------+
+| Column Name                   | Data Type     | Description                                                      |
++===============================+===============+==================================================================+
+| catalog_name                  | VARCHAR(255)  | Name of the database that contains the schema (always the        |
+|                               |               | current database)                                                |
++-------------------------------+---------------+------------------------------------------------------------------+
+| schema_name                   | VARCHAR(32)   | Name of the schema                                               |
++-------------------------------+---------------+------------------------------------------------------------------+
+| schema_owner                  | VARCHAR(32)   | Name of the owner of the schema                                  |
++-------------------------------+---------------+------------------------------------------------------------------+
+| default_character_set_catalog | VARCHAR(255)  | Name of the database that contains the default character set     |
+|                               |               | (always the current database)                                    |
++-------------------------------+---------------+------------------------------------------------------------------+
+| default_character_set_schema  | VARCHAR(255)  | Name of the schema that contains the default character set       |
+|                               |               | (always NULL)                                                    |
++-------------------------------+---------------+------------------------------------------------------------------+
+| default_character_set_name    | VARCHAR(32)   | Default character set of the database                            |
++-------------------------------+---------------+------------------------------------------------------------------+
+| sql_path                      | STRING        | Not supported (always NULL)                                      |
++-------------------------------+---------------+------------------------------------------------------------------+
+| schema_comment                | VARCHAR(1024) | Comment to describe the schema                                   |
++-------------------------------+---------------+------------------------------------------------------------------+
+| create_time                   | DATETIME      | Schema creation time                                             |
++-------------------------------+---------------+------------------------------------------------------------------+
+
+.. note::
+
+    In CUBRID a schema is the same as a database user.
+
+.. _information-schema-sequences:
+
+sequences
+---------
+
+The ``sequences`` view contains all sequences defined in the current database. Only those sequences are shown that the current user has access to (by way of being the owner or having some privilege).
+
++-------------------------+---------------+------------------------------------------------------------------+
+| Column Name             | Data Type     | Description                                                      |
++=========================+===============+==================================================================+
+| sequence_catalog        | VARCHAR(255)  | Name of the database that contains the sequence (always the      |
+|                         |               | current database)                                                |
++-------------------------+---------------+------------------------------------------------------------------+
+| sequence_schema         | VARCHAR(32)   | Name of the schema that contains the sequence                    |
++-------------------------+---------------+------------------------------------------------------------------+
+| sequence_name           | VARCHAR(255)  | Name of the sequence                                             |
++-------------------------+---------------+------------------------------------------------------------------+
+| data_type               | VARCHAR(16)   | Data type of the sequence (always NUMERIC)                       |
++-------------------------+---------------+------------------------------------------------------------------+
+| numeric_precision       | INTEGER       | Precision of the sequence data type (always 38)                  |
++-------------------------+---------------+------------------------------------------------------------------+
+| numeric_precision_radix | INTEGER       | Radix in which the precision is expressed (always 10)            |
++-------------------------+---------------+------------------------------------------------------------------+
+| numeric_scale           | INTEGER       | Scale of the sequence data type (always 0)                       |
++-------------------------+---------------+------------------------------------------------------------------+
+| start_value             | NUMERIC(38,0) | Start value of the sequence                                      |
++-------------------------+---------------+------------------------------------------------------------------+
+| minimum_value           | NUMERIC(38,0) | Minimum value of the sequence                                    |
++-------------------------+---------------+------------------------------------------------------------------+
+| maximum_value           | NUMERIC(38,0) | Maximum value of the sequence                                    |
++-------------------------+---------------+------------------------------------------------------------------+
+| increment               | NUMERIC(38,0) | Increment of the sequence                                        |
++-------------------------+---------------+------------------------------------------------------------------+
+| cycle_option            | VARCHAR(3)    | 'YES' if the sequence cycles, otherwise 'NO'                     |
++-------------------------+---------------+------------------------------------------------------------------+
+| is_cached               | VARCHAR(3)    | 'YES' if caching is enabled, otherwise 'NO'                      |
++-------------------------+---------------+------------------------------------------------------------------+
+| sequence_comment        | VARCHAR(1024) | Comment to describe the sequence                                 |
++-------------------------+---------------+------------------------------------------------------------------+
+| create_time             | DATETIME      | Sequence creation time                                           |
++-------------------------+---------------+------------------------------------------------------------------+
+| update_time             | DATETIME      | Sequence modification time                                       |
++-------------------------+---------------+------------------------------------------------------------------+
+
+.. note::
+
+    CUBRID :doc:`serial </sql/schema/serial_stmt>` objects appear in this view as sequences. Sequences backing AUTO_INCREMENT columns are not shown.
+
+.. _information-schema-statistics:
+
+statistics
+----------
+
+The ``statistics`` view contains information about the indexes on the tables in the current database. There is one row for each column of each index. Only those indexes are shown that the current user has access to (by way of being the owner of the table or having some privilege on it).
+
++-------------------+---------------+------------------------------------------------------------------+
+| Column Name       | Data Type     | Description                                                      |
++===================+===============+==================================================================+
+| table_catalog     | VARCHAR(255)  | Name of the database that contains the table (always the current |
+|                   |               | database)                                                        |
++-------------------+---------------+------------------------------------------------------------------+
+| table_schema      | VARCHAR(32)   | Name of the schema that contains the table                       |
++-------------------+---------------+------------------------------------------------------------------+
+| table_name        | VARCHAR(255)  | Name of the table                                                |
++-------------------+---------------+------------------------------------------------------------------+
+| non_unique        | INTEGER       | 0 if the index cannot contain duplicates, 1 if it can            |
++-------------------+---------------+------------------------------------------------------------------+
+| index_schema      | VARCHAR(32)   | Name of the schema that contains the index                       |
++-------------------+---------------+------------------------------------------------------------------+
+| index_name        | VARCHAR(255)  | Name of the index                                                |
++-------------------+---------------+------------------------------------------------------------------+
+| seq_in_index      | INTEGER       | Ordinal position of the column within the index (count starts at |
+|                   |               | 1)                                                               |
++-------------------+---------------+------------------------------------------------------------------+
+| column_name       | VARCHAR(255)  | Name of the indexed column                                       |
++-------------------+---------------+------------------------------------------------------------------+
+| collation         | VARCHAR(1)    | Sort order of the column in the index (A: ascending, D:          |
+|                   |               | descending)                                                      |
++-------------------+---------------+------------------------------------------------------------------+
+| cardinality       | INTEGER       | Estimated number of distinct values in the index                 |
++-------------------+---------------+------------------------------------------------------------------+
+| sub_part          | INTEGER       | Number of indexed characters when the column is prefix-indexed,  |
+|                   |               | NULL if the entire column is indexed                             |
++-------------------+---------------+------------------------------------------------------------------+
+| nullable          | VARCHAR(3)    | 'YES' if the indexed column is nullable, 'NO' if not             |
++-------------------+---------------+------------------------------------------------------------------+
+| index_type        | VARCHAR(32)   | Index method (always BTREE)                                      |
++-------------------+---------------+------------------------------------------------------------------+
+| comment           | VARCHAR(1024) | System-generated information about the index (always NULL in     |
+|                   |               | CUBRID)                                                          |
++-------------------+---------------+------------------------------------------------------------------+
+| index_comment     | VARCHAR(1024) | Comment to describe the index                                    |
++-------------------+---------------+------------------------------------------------------------------+
+| is_visible        | VARCHAR(3)    | 'YES' if the index is visible to the optimizer, otherwise 'NO'   |
++-------------------+---------------+------------------------------------------------------------------+
+| expression        | VARCHAR(1023) | Expression of a function-based index (NULL for a regular column) |
++-------------------+---------------+------------------------------------------------------------------+
+| filter_condition  | STRING        | Condition of the filtered index (NULL if not a filtered index)   |
++-------------------+---------------+------------------------------------------------------------------+
+| deduplicate_level | INTEGER       | Deduplication option level of the index                          |
++-------------------+---------------+------------------------------------------------------------------+
+| create_time       | DATETIME      | Index creation time                                              |
++-------------------+---------------+------------------------------------------------------------------+
+| update_time       | DATETIME      | Index modification time                                          |
++-------------------+---------------+------------------------------------------------------------------+
+| access_time       | DATETIME      | Not supported (always NULL)                                      |
++-------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-synonyms:
+
+synonyms
+--------
+
+The ``synonyms`` view contains all synonyms defined in the current database. Only those synonyms are shown that the current user has access to (by way of being the owner or for a public synonym).
+
++-------------------+---------------+------------------------------------------------------------------+
+| Column Name       | Data Type     | Description                                                      |
++===================+===============+==================================================================+
+| synonym_catalog   | VARCHAR(255)  | Name of the database that contains the synonym (always the       |
+|                   |               | current database)                                                |
++-------------------+---------------+------------------------------------------------------------------+
+| synonym_schema    | VARCHAR(32)   | Name of the schema that contains the synonym                     |
++-------------------+---------------+------------------------------------------------------------------+
+| synonym_name      | VARCHAR(255)  | Name of the synonym                                              |
++-------------------+---------------+------------------------------------------------------------------+
+| is_public_synonym | VARCHAR(3)    | 'YES' if the synonym is public, otherwise 'NO'                   |
++-------------------+---------------+------------------------------------------------------------------+
+| target_catalog    | VARCHAR(255)  | Name of the database that contains the target object (always the |
+|                   |               | current database)                                                |
++-------------------+---------------+------------------------------------------------------------------+
+| target_schema     | VARCHAR(32)   | Name of the schema that contains the target object               |
++-------------------+---------------+------------------------------------------------------------------+
+| target_name       | VARCHAR(255)  | Name of the target object                                        |
++-------------------+---------------+------------------------------------------------------------------+
+| synonym_comment   | VARCHAR(2048) | Comment to describe the synonym                                  |
++-------------------+---------------+------------------------------------------------------------------+
+| create_time       | DATETIME      | Synonym creation time                                            |
++-------------------+---------------+------------------------------------------------------------------+
+| update_time       | DATETIME      | Synonym modification time                                        |
++-------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-table-constraints:
+
+table_constraints
+-----------------
+
+The ``table_constraints`` view contains all PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints belonging to tables that the current user owns or has some privilege other than SELECT on.
+
++--------------------+--------------+------------------------------------------------------------------+
+| Column Name        | Data Type    | Description                                                      |
++====================+==============+==================================================================+
+| constraint_catalog | VARCHAR(255) | Name of the database that contains the constraint (always the    |
+|                    |              | current database)                                                |
++--------------------+--------------+------------------------------------------------------------------+
+| constraint_schema  | VARCHAR(32)  | Name of the schema that contains the constraint                  |
++--------------------+--------------+------------------------------------------------------------------+
+| constraint_name    | VARCHAR(255) | Name of the constraint                                           |
++--------------------+--------------+------------------------------------------------------------------+
+| table_catalog      | VARCHAR(255) | Name of the database that contains the table (always the current |
+|                    |              | database)                                                        |
++--------------------+--------------+------------------------------------------------------------------+
+| table_schema       | VARCHAR(32)  | Name of the schema that contains the table                       |
++--------------------+--------------+------------------------------------------------------------------+
+| table_name         | VARCHAR(255) | Name of the table                                                |
++--------------------+--------------+------------------------------------------------------------------+
+| constraint_type    | VARCHAR(11)  | Type of the constraint (PRIMARY KEY, UNIQUE, FOREIGN KEY)        |
++--------------------+--------------+------------------------------------------------------------------+
+| is_deferrable      | VARCHAR(3)   | 'YES' if the constraint is deferrable, 'NO' if not (always 'NO') |
++--------------------+--------------+------------------------------------------------------------------+
+| initially_deferred | VARCHAR(3)   | 'YES' if the constraint is initially deferred, 'NO' if not       |
+|                    |              | (always 'NO')                                                    |
++--------------------+--------------+------------------------------------------------------------------+
+| enforced           | VARCHAR(3)   | 'YES' if the constraint is enforced, 'NO' if not                 |
++--------------------+--------------+------------------------------------------------------------------+
+
+.. note::
+
+    Only PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints are listed; CHECK constraints are not included.
+
+.. _information-schema-table-privileges:
+
+table_privileges
+----------------
+
+The ``table_privileges`` view identifies all privileges granted on tables or views to or by the current user. There is one row for each combination of table, grantor, and grantee.
+
++----------------+--------------+------------------------------------------------------------------+
+| Column Name    | Data Type    | Description                                                      |
++================+==============+==================================================================+
+| grantor        | VARCHAR(32)  | User who granted the privilege                                   |
++----------------+--------------+------------------------------------------------------------------+
+| grantee        | VARCHAR(32)  | User who received the privilege                                  |
++----------------+--------------+------------------------------------------------------------------+
+| table_catalog  | VARCHAR(255) | Name of the database that contains the table (always the current |
+|                |              | database)                                                        |
++----------------+--------------+------------------------------------------------------------------+
+| table_schema   | VARCHAR(32)  | Name of the schema that contains the table                       |
++----------------+--------------+------------------------------------------------------------------+
+| table_name     | VARCHAR(255) | Name of the table                                                |
++----------------+--------------+------------------------------------------------------------------+
+| privilege_type | VARCHAR(7)   | Type of the privilege (SELECT, INSERT, UPDATE, DELETE, ALTER,    |
+|                |              | INDEX, EXECUTE)                                                  |
++----------------+--------------+------------------------------------------------------------------+
+| is_grantable   | VARCHAR(3)   | 'YES' if the grantee may grant the privilege to others,          |
+|                |              | otherwise 'NO'                                                   |
++----------------+--------------+------------------------------------------------------------------+
+
+.. _information-schema-tables:
+
+tables
+------
+
+The ``tables`` view contains all tables and views defined in the current database. Only those tables and views are shown that the current user has access to (by way of being the owner or having some privilege).
+
++---------------------+---------------+------------------------------------------------------------------+
+| Column Name         | Data Type     | Description                                                      |
++=====================+===============+==================================================================+
+| table_catalog       | VARCHAR(255)  | Name of the database that contains the table (always the current |
+|                     |               | database)                                                        |
++---------------------+---------------+------------------------------------------------------------------+
+| table_schema        | VARCHAR(32)   | Name of the schema that contains the table                       |
++---------------------+---------------+------------------------------------------------------------------+
+| table_name          | VARCHAR(255)  | Name of the table                                                |
++---------------------+---------------+------------------------------------------------------------------+
+| table_type          | VARCHAR(12)   | Type of the table (BASE TABLE, VIEW, SYSTEM TABLE, SYSTEM VIEW)  |
++---------------------+---------------+------------------------------------------------------------------+
+| table_rows          | BIGINT        | Estimated number of rows                                         |
++---------------------+---------------+------------------------------------------------------------------+
+| avg_row_length      | BIGINT        | Estimated average row length in bytes                            |
++---------------------+---------------+------------------------------------------------------------------+
+| data_length         | BIGINT        | Estimated total data length in bytes                             |
++---------------------+---------------+------------------------------------------------------------------+
+| data_free           | BIGINT        | Estimated free space in bytes                                    |
++---------------------+---------------+------------------------------------------------------------------+
+| auto_increment      | NUMERIC(38,0) | Next AUTO_INCREMENT value (NULL if not applicable)               |
++---------------------+---------------+------------------------------------------------------------------+
+| table_collation     | VARCHAR(32)   | Default collation of the table                                   |
++---------------------+---------------+------------------------------------------------------------------+
+| create_options      | VARCHAR(255)  | Table creation options as a space-separated list, including the  |
+|                     |               | OID-reuse setting (REUSE_OID or DONT_REUSE_OID) and the TDE      |
+|                     |               | setting (ENCRYPT=NONE, ENCRYPT=AES, or ENCRYPT=ARIA)             |
++---------------------+---------------+------------------------------------------------------------------+
+| is_temporary        | VARCHAR(3)    | Whether the table is temporary (always 'NO')                     |
++---------------------+---------------+------------------------------------------------------------------+
+| table_comment       | VARCHAR(2048) | Comment to describe the table                                    |
++---------------------+---------------+------------------------------------------------------------------+
+| create_time         | DATETIME      | Table creation time                                              |
++---------------------+---------------+------------------------------------------------------------------+
+| update_time         | DATETIME      | Table modification time                                          |
++---------------------+---------------+------------------------------------------------------------------+
+| statistics_strategy | VARCHAR(8)    | Strategy used to collect statistics (SAMPLING, FULLSCAN)         |
++---------------------+---------------+------------------------------------------------------------------+
+| last_analyzed       | DATETIME      | Table statistics information update time                         |
++---------------------+---------------+------------------------------------------------------------------+
+
+.. _information-schema-triggers:
+
+triggers
+--------
+
+The ``triggers`` view contains all triggers defined in the current database on tables that the current user owns or has some privilege other than SELECT on.
+
++----------------------------+---------------+------------------------------------------------------------------+
+| Column Name                | Data Type     | Description                                                      |
++============================+===============+==================================================================+
+| trigger_catalog            | VARCHAR(255)  | Name of the database that contains the trigger (always the       |
+|                            |               | current database)                                                |
++----------------------------+---------------+------------------------------------------------------------------+
+| trigger_schema             | VARCHAR(32)   | Name of the schema that contains the trigger                     |
++----------------------------+---------------+------------------------------------------------------------------+
+| trigger_name               | VARCHAR(255)  | Name of the trigger                                              |
++----------------------------+---------------+------------------------------------------------------------------+
+| event_manipulation         | VARCHAR(8)    | Event that fires the trigger (INSERT, UPDATE, DELETE)            |
++----------------------------+---------------+------------------------------------------------------------------+
+| event_object_catalog       | VARCHAR(255)  | Name of the database that contains the table that the trigger is |
+|                            |               | defined on (always the current database)                         |
++----------------------------+---------------+------------------------------------------------------------------+
+| event_object_schema        | VARCHAR(32)   | Name of the schema that contains the table that the trigger is   |
+|                            |               | defined on                                                       |
++----------------------------+---------------+------------------------------------------------------------------+
+| event_object_table         | VARCHAR(255)  | Name of the table that the trigger is defined on                 |
++----------------------------+---------------+------------------------------------------------------------------+
+| event_object_column        | VARCHAR(255)  | Target column of an UPDATE OF clause (NULL otherwise)            |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_order               | INTEGER       | Not supported (always NULL)                                      |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_condition           | STRING        | WHEN/IF condition of the trigger (NULL if none)                  |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_statement           | STRING        | Statement that is executed by the trigger                        |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_orientation         | VARCHAR(9)    | Identifies whether the trigger fires once for each processed row |
+|                            |               | or once for each statement (ROW, STATEMENT)                      |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_timing              | VARCHAR(8)    | Time at which the trigger fires (BEFORE, AFTER, DEFERRED)        |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_reference_old_table | VARCHAR(3)    | Not supported (always NULL)                                      |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_reference_new_table | VARCHAR(3)    | Not supported (always NULL)                                      |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_reference_old_row   | VARCHAR(3)    | Alias used to reference the old row (always OLD)                 |
++----------------------------+---------------+------------------------------------------------------------------+
+| action_reference_new_row   | VARCHAR(3)    | Alias used to reference the new row (always NEW)                 |
++----------------------------+---------------+------------------------------------------------------------------+
+| definer                    | VARCHAR(32)   | Owner of the trigger                                             |
++----------------------------+---------------+------------------------------------------------------------------+
+| trigger_comment            | VARCHAR(1024) | Comment to describe the trigger                                  |
++----------------------------+---------------+------------------------------------------------------------------+
+| create_time                | DATETIME      | Trigger creation time                                            |
++----------------------------+---------------+------------------------------------------------------------------+
+| update_time                | DATETIME      | Trigger modification time                                        |
++----------------------------+---------------+------------------------------------------------------------------+
+
+.. note::
+
+    Only INSERT, UPDATE, and DELETE (DML) :ref:`triggers <create-trigger>` appear in this view. CUBRID also supports COMMIT and ROLLBACK triggers, but those are not listed here.
+
+.. _information-schema-views:
+
+views
+-----
+
+The ``views`` view contains all views defined in the current database. Only those views are shown that the current user has access to (by way of being the owner or having some privilege).
+
++-----------------+---------------+------------------------------------------------------------------+
+| Column Name     | Data Type     | Description                                                      |
++=================+===============+==================================================================+
+| table_catalog   | VARCHAR(255)  | Name of the database that contains the view (always the current  |
+|                 |               | database)                                                        |
++-----------------+---------------+------------------------------------------------------------------+
+| table_schema    | VARCHAR(32)   | Name of the schema that contains the view                        |
++-----------------+---------------+------------------------------------------------------------------+
+| table_name      | VARCHAR(255)  | Name of the view                                                 |
++-----------------+---------------+------------------------------------------------------------------+
+| view_definition | STRING        | Query expression defining the view                               |
++-----------------+---------------+------------------------------------------------------------------+
+| check_option    | VARCHAR(8)    | CASCADED or LOCAL if the view has a CHECK OPTION defined on it,  |
+|                 |               | NONE if not                                                      |
++-----------------+---------------+------------------------------------------------------------------+
+| is_updatable    | VARCHAR(3)    | Whether the view is updatable (always NULL)                      |
++-----------------+---------------+------------------------------------------------------------------+
+| definer         | VARCHAR(32)   | Owner of the view                                                |
++-----------------+---------------+------------------------------------------------------------------+
+| view_comment    | VARCHAR(2048) | Comment to describe the view                                     |
++-----------------+---------------+------------------------------------------------------------------+
+| create_time     | DATETIME      | View creation time                                               |
++-----------------+---------------+------------------------------------------------------------------+
+| update_time     | DATETIME      | View modification time                                           |
++-----------------+---------------+------------------------------------------------------------------+
+
+.. note::
+
+    ``is_updatable`` is always NULL because CUBRID does not store view updatability as a fixed value.

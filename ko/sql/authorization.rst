@@ -36,12 +36,14 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 
     CREATE USER user_name
     [PASSWORD password]
+    [LOGIN | NOLOGIN]
     [GROUPS user_name [{, user_name } ... ]]
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
 
 *   *user_name*: 생성할 사용자 이름을 지정한다.
 *   *password*: 생성할 사용자의 비밀번호를 지정한다.
+*   [**LOGIN** | **NOLOGIN**]: 생성할 사용자의 로그인 허용 여부를 지정한다. 지정하지 않으면 기본값은 **LOGIN** 이 된다. 자세한 내용은 :ref:`user-login-capability` 를 참고한다.
 *   *comment_string*: 생성할 사용자에 대한 커멘트를 지정한다.
 
 .. note::
@@ -100,16 +102,17 @@ CREATE USER 문을 사용하여 사용자를 생성할 수 있다. 기본으로 
 ALTER USER
 ==========
 
-ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버 및 커멘트를 변경할 수 있다. ::
+ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버, 로그인 허용 여부 및 커멘트를 변경할 수 있다. ::
 
     ALTER USER user_name 
-    [PASSWORD password] |
+    [PASSWORD password] [LOGIN | NOLOGIN] |
     [ADD MEMBERS user_name [{, user_name } ... ]] |
     [DROP MEMBERS user_name [{, user_name } ... ]]
     [COMMENT 'comment_string'];
 
 *   *user_name*: 변경할 사용자 이름을 지정한다.
 *   *password*: 변경할 사용자의 비밀번호를 지정한다.
+*   [**LOGIN** | **NOLOGIN**]: 변경할 사용자의 로그인 허용 여부를 지정한다. 자세한 내용은 :ref:`user-login-capability` 를 참고한다.
 *   *comment_string*: 변경할 사용자에 대한 커멘트를 지정한다.
 
 .. note::
@@ -148,6 +151,57 @@ ALTER USER 문을 사용하여 사용자의 비밀번호, 멤버 및 커멘트�
 
     ALTER USER company DROP MEMBERS marketing;
     ALTER USER marketing DROP MEMBERS smith, jones;
+
+.. _user-login-capability:
+
+사용자의 로그인 허용 여부
+-------------------------
+
+다음은 로그인을 허용하지 않는 사용자를 생성하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE USER test_user1 PASSWORD 'password' NOLOGIN;
+
+test_user1 사용자로 데이터베이스에 접속하면 다음과 같은 에러가 발생한다.
+
+::
+
+    ERROR: Login is disabled for user "test_user1".
+
+다음은 test_user1 사용자의 로그인을 다시 허용하는 예제이다.
+
+.. code-block:: sql
+
+    ALTER USER test_user1 LOGIN;
+
+사용자의 로그인 허용 여부를 확인하려면 다음의 구문을 실행한다.
+
+.. code-block:: sql
+
+    SELECT name, is_loginable FROM db_user;
+
+다음은 비밀번호와 로그인 허용 여부, 커멘트를 한 문장으로 함께 변경하는 예제이다. **ADD MEMBERS**, **DROP MEMBERS** 와는 함께 사용할 수 없다.
+
+.. code-block:: sql
+
+    ALTER USER test_user1 PASSWORD '1234' NOLOGIN COMMENT 'blocked temporarily';
+
+.. note::
+
+    로그인 허용 여부는 로그인할 때 확인한다. 따라서 사용자를 **NOLOGIN**\으로 변경해도 그 사용자의 기존 연결은 끊어지지 않으며, 이후의 신규 접속과 :ref:`login () 메서드 <login-method>`\를 통한 사용자 전환만 거부된다.
+
+.. note::
+
+    **DBA** 와 **DBA** 의 멤버만 사용자의 로그인 허용 여부를 변경할 수 있다.
+
+    단, **DBA**, **INFORMATION_SCHEMA**, 현재 사용자는 변경 대상이 될 수 없으며, 대상으로 지정하면 에러가 발생한다.
+
+.. warning::
+
+    **PUBLIC**\을 **NOLOGIN**\으로 변경하면 **PUBLIC** 사용자의 접속이 거부된다. 사용자 이름을 지정하지 않은 접속도 **PUBLIC**\으로 처리되므로 함께 거부된다.
+
+    로그인 허용 여부는 로그인만 제어한다. 권한과 소유권은 영향받지 않으므로, **PUBLIC**\이 **NOLOGIN**\인 상태에서도 **GRANT** 문으로 부여한 권한과 그룹을 통한 권한 상속은 그대로 동작한다.
 
 사용자의 커멘트 변경
 --------------------
@@ -425,6 +479,8 @@ ALTER ... OWNER
 
     CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
     CALL method_definition ON variable [ ; ]
+
+.. _login-method:
 
 **login() 메서드**
 

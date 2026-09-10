@@ -1416,7 +1416,7 @@ This message occurs when you try to change the value of an auto increment (AUTO_
 
 **ERROR CODE: -1056, 'To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.'**
 
-- This message is displayed in the CUBRID database when, during table creation or alteration, there are two or more auto_increment columns and you try to specify an auto_increment=seed value, because it is difficult to determine which auto_increment column to apply it to. For reference, you can set multiple auto_increment columns within a single table.
+- This message is displayed in the CUBRID database when, during table creation or alteration, a table-level `AUTO_INCREMENT = seed` option is specified together with a column-level seed/increment (as in `AUTO_INCREMENT(seed, increment)`), because it is difficult to determine which auto_increment value to apply. As of CUBRID 11.5, a table can have only one auto_increment column.
 
 
 .. _ERROR-1057:

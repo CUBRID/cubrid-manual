@@ -800,6 +800,7 @@ CUBRID Constraints
 ------------------
 *   ENUM, BLOB, CLOB, and SET types are not supported in the select statement.
 *   If the system parameters of the local DB and remote DB are different, undesirable results may occur.
+*   If the remote table has an :ref:`invisible-column`, querying it through DBLINK does not work correctly; therefore, it is recommended not to define INVISIBLE columns on a table used with DBLINK.
 
 .. _heterogen-restrict:
 

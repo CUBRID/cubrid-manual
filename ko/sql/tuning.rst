@@ -4298,7 +4298,7 @@ View Merging 최적화
 
     #. 뷰가 메소드를 포함한 경우
 
-    #. 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 경우
+    #. 뷰가 **RAND (), RANDOM (), DRAND (), DRANDOM (), SYS_GUID (), UUID ()**\를 포함한 경우
 
 다음은 뷰에 **NO_MERGE** 힌트가 사용된 예시이다.
 
@@ -4411,7 +4411,7 @@ View Merging 최적화
 
 **Correlated Subquery**\를 사용한 질의문의 경우 **View Merging**\이 불가능하다.
 
-다음은 뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 예시이다.
+다음은 뷰가 **RAND (), RANDOM (), DRAND (), DRANDOM (), SYS_GUID (), UUID ()**\를 포함한 예시이다.
 
 .. code-block:: sql
 
@@ -4420,7 +4420,7 @@ View Merging 최적화
                 (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-뷰가 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
+뷰가 **RAND (), RANDOM (), DRAND (), DRANDOM (), SYS_GUID (), UUID ()**\를 포함한 질의문의 경우 **View Merging**\이 불가능하다.
 
 **View Merging** 최적화를 수행할 수 없는 경우, **CUBRID**\는 부질의의 **SELECT-LIST** 항목을 최적화 한다. 다음은 부질의의 **SELECT-LIST**\가 어떻게 최적화 되는지 보여주는 예제이다.
 
@@ -4515,7 +4515,7 @@ Predicate Push
 
     #. 뷰가 메소드를 포함한 경우
 
-    #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **RANDOM (), DRANDOM (), SYS_GUID ()**\를 사용하는 경우
+    #. 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 **RAND (), RANDOM (), DRAND (), DRANDOM (), SYS_GUID (), UUID ()**\를 사용하는 경우
 
     #. **OUTER JOIN**\을 수행할 때 푸시될 조건절이나 뷰 내부의 **Predicate Push** 대상에 다음을 사용하는 경우:
     
@@ -4633,7 +4633,7 @@ Predicate Push
 * 메서드가 포함된 경우.
 * 저장 프로 시저 또는 저장 함수가 포함된 경우.
 * dual, _db_attribute 등과 같은 시스템 테이블이 포함된 경우.
-* sys_guid ()와 같은 시스템 함수가 포함된 경우.
+* rand (), random (), drand (), drandom (), sys_guid (), uuid ()와 같이 실행 시마다 결과가 달라지는 함수가 포함된 경우.
 
 힌트가 설정되고 새 SELECT 질의가 처리될 때 질의가 캐시에서 발견되면 쿼리 캐시를 사용한다. 동일한 데이터베이스에서 동일한 질의 텍스트와 동일한 바인딩 값을 사용하는 경우 질의는 동일한 것으로 간주된다. 캐시된 질의를 찾을 수 없는 경우 질의가 처리된 다음 결과와 함께 캐시가 생성된다. 질의가 캐시에서 발견되면 캐시된 영역에서 결과를 가져온다. CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반복적으로 실행할 때 개선된 성능을 쉽게 측정 할 수 있다. 첫번째 질의에 대한 결과는 캐시가 되어 있지 않아서 느리지만, 두 번째 질의의 결과는 캐시 된 영역에서 가져오므로 응답 시간이 이전 질의보다 훨씬 빠르다. ::
 
@@ -4887,7 +4887,7 @@ WITH절에 포함되는 재귀 부분 중 다른 CTE를 참조하는 부질의�
 * 부질의에 OID 관련 기능이 포함된 경우.
 * 부질의가 **NO_SUBQUERY_CACHE** 힌트를 포함한 경우.
 * 새로운 결과를 저장할 때 설정한 서브 쿼리 캐시 크기(기본값: 2MB)를 초과하는 경우.
-* random (), sys_guid ()와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우.
+* rand (), random (), drand (), drandom (), sys_guid (), uuid ()와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우.
 
 다음 예시는 상관 부질의가 상관 부질의를 포함한 경우, 최하단의 상관부질의만 서브 쿼리 캐시가 사용되고, 상단의 상관 부질의에는 서브 쿼리 캐시가 적용되지 않는 예시이다. 
 

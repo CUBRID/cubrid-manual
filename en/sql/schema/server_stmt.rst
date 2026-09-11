@@ -35,7 +35,7 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
                 | PROPERTIES = [properties_string] 
                 | COMMENT = [server_comment_string]
       
-*   *owner_name*: Specifies the name of the owner of the server to be created.
+*   *owner_name*: Specifies the name of the owner of the server to be created. See the note below for who can be named as the owner.
 *   *server_name*: Specifies the name of the server to be created. (up to 254 bytes)
 *   <*connect_info*>: **HOST**, **PORT**, **DBNAME**, and **USER** are mandatory items in the <connect_item> list of access information.
 *   <*connect_item*>: It consists of HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, and COMMENT items, and the same item cannot be duplicated.
@@ -47,6 +47,13 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
     *   *password_string*: Password string for *user_name* used to connect to the database to be accessed remotely.
     *   *properties_string*: A string of property information (up to 2047 bytes) used when connecting to a broker (or gateway) for remote database usage. For detailed attribute information, see :ref:`cci_connect_with_url`\
     *   *server_comment_string*: Specifies comments about server information. (up to 1023 bytes)
+
+.. note::
+
+    The owner must be the current user, or a group that the current user belongs to.
+    In particular, **DBA** or **DBA** members can specify any user as the owner.
+    Naming an owner that the current user is not authorized for fails with
+    ``DBA, members of DBA group, and owner can perform CREATE SERVER.``
 
 .. note::
 
@@ -215,6 +222,19 @@ Existing servers can be removed using **DROP SERVER** syntax. If the **IF EXISTS
 *   *owner_name*: Specify the owner name of the server to be removed..
 *   *server_name*: Specify the name of the server to be removed.
 
+.. note::
+
+    Only the owner of the server or members of the ownership group can remove the server.
+    In particular, **DBA** or **DBA** members can remove any server.
+
+    When *owner_name* is given and the current user is not authorized for that owner, an error
+    occurs regardless of the **IF EXISTS** clause. Whether the server exists is not consulted,
+    so naming a server that does not exist under that owner fails in the same way.
+
+    When *owner_name* is omitted, only a server owned by the current user is considered. A server
+    of the same name owned by another user is treated as not existing, so the **IF EXISTS** clause
+    ignores it.
+
 
 .. code-block:: sql
 
@@ -319,6 +339,11 @@ You can change the owner of the server using the **OWNER TO** clause.
 *   *server_name*: Specifies the name of the target server whose owner is to be changed.
 *   *new_owner_name*: Specifies the new owner name.
 
+.. note::
+
+    The new owner must be the current user, or a group that the current user belongs to.
+    In particular, **DBA** or **DBA** members can specify any user as the new owner.
+
 .. warning::
     
     *   There is no OWNER TO clause in an ALTER SERVER clause, or it must be specified only once.
@@ -326,6 +351,7 @@ You can change the owner of the server using the **OWNER TO** clause.
 
 .. code-block:: sql
     
+    -- When the current account is dba
     CREATE SERVER srv1 (HOST='broker-server-name', PORT=3300, DBNAME=demodb, USER=dev1);
     ALTER SERVER srv1 OWNER TO usr1;    
     ALTER SERVER usr1.srv1 OWNER TO usr2;    

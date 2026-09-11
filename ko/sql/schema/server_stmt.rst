@@ -35,7 +35,7 @@ CREATE SERVER
                 | PROPERTIES = [properties_string] 
                 | COMMENT = [server_comment_string]
       
-*   *owner_name*: 생성할 서버의 소유자 이름을 지정한다.
+*   *owner_name*: 생성할 서버의 소유자 이름을 지정한다. 지정할 수 있는 소유자는 아래 note 를 참고한다.
 *   *server_name*: 생성할 서버의 이름을 지정한다(최대 254바이트).
 *   <*connect_info*>: 접속 정보 리스트로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER**\는 필수 항목이다.
 *   <*connect_item*>: HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, COMMENT 항목으로 구성되며, 동일한 항목이 중복될 수 없다.
@@ -47,6 +47,13 @@ CREATE SERVER
     *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*\에 대한 패스워드 문자열.
     *   *properties_string*: 원격 데이터베이스 사용을 위해 broker(또는 gateway)에 접속시 사용하는 property 정보 문자열 (최대 2047 바이트).  상세한 정보는 :ref:`cci_connect_with_url`\를 참고한다.	
     *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
+
+.. note::
+
+    소유자는 현재 사용자 자신이거나 현재 사용자가 속한 그룹이어야 한다.
+    특별히 **DBA** 또는 **DBA** 의 멤버는 임의의 사용자를 소유자로 지정할 수 있다.
+    인가되지 않은 소유자를 지정하면 ``DBA, members of DBA group, and owner can perform CREATE SERVER.``
+    에러가 발생한다.
 
 .. note::
 
@@ -213,6 +220,18 @@ DROP SERVER
 *   *owner_name*: 제거할 서버의 소유자 이름을 지정한다.
 *   *server_name*: 제거할 서버의 이름을 지정한다.
 
+.. note::
+
+    서버의 소유자 또는 소유 그룹의 멤버만 서버를 제거할 수 있다.
+    특별히 **DBA** 또는 **DBA** 의 멤버는 모든 서버를 제거할 수 있다.
+
+    *owner_name* 을 지정한 경우, 그 소유자에 대해 현재 사용자가 인가되어 있지 않으면 **IF EXISTS**
+    절과 무관하게 에러가 발생한다. 이때 서버의 존재 여부는 보지 않으므로 존재하지 않는 이름을 적어도
+    마찬가지로 에러가 된다.
+
+    *owner_name* 을 생략한 경우에는 현재 사용자가 소유한 서버만 대상이 되며, 같은 이름의 서버가 다른
+    사용자 소유로 존재하더라도 존재하지 않는 것으로 취급되어 **IF EXISTS** 절이 이를 무시한다.
+
 
 .. code-block:: sql
 
@@ -317,6 +336,11 @@ OWNER TO 절
 *   *server_name*: 소유자를 변경할 대상 서버의 이름을 지정한다.
 *   *new_owner_name*: 새로운 소유자 이름을 지정한다.
 
+.. note::
+
+    새로운 소유자는 현재 사용자 자신이거나 현재 사용자가 속한 그룹이어야 한다.
+    특별히 **DBA** 또는 **DBA** 의 멤버는 임의의 사용자를 새로운 소유자로 지정할 수 있다.
+
 .. warning::
     
     *   하나의 ALTER SERVER 구문에 OWNER TO 절은 오직 한번만  지정되어야 한다.
@@ -324,6 +348,7 @@ OWNER TO 절
 
 .. code-block:: sql
     
+    -- When the current account is dba
     CREATE SERVER srv1 (HOST='broker-server-name', PORT=3300, DBNAME=demodb, USER=dev1);
     ALTER SERVER srv1 OWNER TO usr1;    
     ALTER SERVER usr1.srv1 OWNER TO usr2;    

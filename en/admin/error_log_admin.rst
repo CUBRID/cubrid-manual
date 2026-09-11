@@ -1922,6 +1922,8 @@ This error code occurs when there is already a COMPACTDB process running and you
 **ERROR CODE: -1305, 'dblink server "%1$s" not found.'**
 
 - This message occurs when, in CUBRID, when trying to reference (e.g., connect, modify, delete, etc.) a DBLink server object, a server object with the specified name does not exist in the database; that is, the server name was entered incorrectly, has already been deleted, or has not yet been created.
+- The same message also occurs when a server object with the specified name does exist, but the current user is neither its owner, nor a member of the owning group, nor a DBA; a server that the user is not authorized for and a server that does not exist are not distinguished.
+- This happens when a dblink query refers to a server as table_name@owner_name.server_name, and in a server statement (ALTER, DROP, RENAME SERVER) that omits the owner name. A server statement that names the owner is refused with "DBA, members of DBA group, and owner can perform ..." instead of this code.
 
 
 .. _ERROR-1306:
@@ -2001,6 +2003,7 @@ This error code occurs when there is already a COMPACTDB process running and you
 
 - This message occurs when, in CUBRID, when attempting an operation (ALTER, etc.) that is not allowed on a DBLink server object; depending on certain system policies, privileges, or the attributes of the DBLink server, changes (ALTER, DROP, etc.) to that server may be prohibited.
   For example, it can occur when the server is protected by the system, or when the current session/user does not have the authority to change that server.
+- From 11.4 on, an operation on a server the user is not authorized for is reported as :ref:`-1305 <ERROR-1305>` instead of this code, so that a server the user is not authorized for and a server that does not exist are not distinguished. This code is kept for backward compatibility.
 
 
 .. _ERROR-1318:

@@ -1922,6 +1922,7 @@ This error code occurs when there is already a COMPACTDB process running and you
 **ERROR CODE: -1305, 'dblink server "%1$s" not found.'**
 
 - This message occurs when, in CUBRID, when trying to reference (e.g., connect, modify, delete, etc.) a DBLink server object, a server object with the specified name does not exist in the database; that is, the server name was entered incorrectly, has already been deleted, or has not yet been created.
+- The same message also occurs when a server object with the specified name does exist, but the current user is neither its owner, nor a member of the owning group, nor a DBA; a server that the user is not authorized for and a server that does not exist are not distinguished.
 
 
 .. _ERROR-1306:

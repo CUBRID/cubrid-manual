@@ -50,6 +50,11 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
 
 .. note::
 
+    The owner must be the current user, or a group that the current user belongs to.
+    In particular, **DBA** or **DBA** members can specify any user as the owner.
+
+.. note::
+
     db_name and user_name can be written in the form of identifier or string literal.
 
     
@@ -215,6 +220,13 @@ Existing servers can be removed using **DROP SERVER** syntax. If the **IF EXISTS
 *   *owner_name*: Specify the owner name of the server to be removed..
 *   *server_name*: Specify the name of the server to be removed.
 
+.. note::
+
+    Only the owner of the server or members of the ownership group can remove the server.
+    In particular, **DBA** or **DBA** members can remove any server.
+    The **IF EXISTS** clause only ignores a server that does not exist; if the server exists
+    but the current user is not authorized for it, an error occurs.
+
 
 .. code-block:: sql
 
@@ -319,6 +331,11 @@ You can change the owner of the server using the **OWNER TO** clause.
 *   *server_name*: Specifies the name of the target server whose owner is to be changed.
 *   *new_owner_name*: Specifies the new owner name.
 
+.. note::
+
+    The new owner must be the current user, or a group that the current user belongs to.
+    In particular, **DBA** or **DBA** members can specify any user as the new owner.
+
 .. warning::
     
     *   There is no OWNER TO clause in an ALTER SERVER clause, or it must be specified only once.
@@ -326,6 +343,7 @@ You can change the owner of the server using the **OWNER TO** clause.
 
 .. code-block:: sql
     
+    -- When the current account is dba
     CREATE SERVER srv1 (HOST='broker-server-name', PORT=3300, DBNAME=demodb, USER=dev1);
     ALTER SERVER srv1 OWNER TO usr1;    
     ALTER SERVER usr1.srv1 OWNER TO usr2;    

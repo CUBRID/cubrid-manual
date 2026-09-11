@@ -50,6 +50,11 @@ CREATE SERVER
 
 .. note::
 
+    소유자는 현재 사용자 자신이거나 현재 사용자가 속한 그룹이어야 한다.
+    특별히 **DBA** 또는 **DBA** 의 멤버는 임의의 사용자를 소유자로 지정할 수 있다.
+
+.. note::
+
     db_name과 user_name은 식별자 형식과 문자열 리터럴 형식으로 모두 기술할 수 있다.
     
     * 식별자 형식의 예  
@@ -213,6 +218,13 @@ DROP SERVER
 *   *owner_name*: 제거할 서버의 소유자 이름을 지정한다.
 *   *server_name*: 제거할 서버의 이름을 지정한다.
 
+.. note::
+
+    서버의 소유자 또는 소유 그룹의 멤버만 서버를 제거할 수 있다.
+    특별히 **DBA** 또는 **DBA** 의 멤버는 모든 서버를 제거할 수 있다.
+    **IF EXISTS** 절은 존재하지 않는 서버를 무시할 뿐이며, 서버가 존재하지만 현재
+    사용자가 그 서버에 대해 권한이 없으면 에러가 발생한다.
+
 
 .. code-block:: sql
 
@@ -317,6 +329,11 @@ OWNER TO 절
 *   *server_name*: 소유자를 변경할 대상 서버의 이름을 지정한다.
 *   *new_owner_name*: 새로운 소유자 이름을 지정한다.
 
+.. note::
+
+    새로운 소유자는 현재 사용자 자신이거나 현재 사용자가 속한 그룹이어야 한다.
+    특별히 **DBA** 또는 **DBA** 의 멤버는 임의의 사용자를 새로운 소유자로 지정할 수 있다.
+
 .. warning::
     
     *   하나의 ALTER SERVER 구문에 OWNER TO 절은 오직 한번만  지정되어야 한다.
@@ -324,6 +341,7 @@ OWNER TO 절
 
 .. code-block:: sql
     
+    -- When the current account is dba
     CREATE SERVER srv1 (HOST='broker-server-name', PORT=3300, DBNAME=demodb, USER=dev1);
     ALTER SERVER srv1 OWNER TO usr1;    
     ALTER SERVER usr1.srv1 OWNER TO usr2;    

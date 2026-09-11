@@ -2422,47 +2422,57 @@ updated_time         DATETIME                    Stored procedure modification t
                         - **YES**: Declared function
                         - **NO**: Function without the declaration
 
-The following example shows how to retrieve Java stored procedures owned by the current user.
+The following example retrieves the two stored functions owned by the current user.
 
 .. code-block:: sql
 
+    -- Show the two stored functions owned by the current user.
     CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END;
 
     CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END;
 
-    -- csql 
     ;line on
+    SELECT * FROM db_stored_procedure
+    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER
+      AND sp_name IN ('hello', 'sp_int')
+    ORDER BY sp_name;
 
-    /* CURRENT_USER: PUBLIC */
-    SELECT * from db_stored_procedure
-    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER; 
+::
 
-        ::
-
-                <00001> sp_name         : 'hello'
-                        pkg_name        : NULL
-                        sp_type         : 'FUNCTION'
-                        return_type     : 'STRING'
-                        arg_count       : 0
-                        lang            : 'PLCSQL'
-                        authid          : 'DEFINER'
-                        is_deterministic: 'NO'
-                        target          : 'Func_HELLO_9.HELLO() return java.lang.String'
-                        owner           : 'DBA'
-                        code            : 'CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END'
-                        comment         : NULL
-                <00002> sp_name         : 'sp_int'
-                        pkg_name        : NULL
-                        sp_type         : 'FUNCTION'
-                        return_type     : 'INTEGER'
-                        arg_count       : 1
-                        lang            : 'PLCSQL'
-                        authid          : 'DEFINER'
-                        is_deterministic: 'NO'
-                        target          : 'Func_SP_INT_10.SP_INT(java.lang.Integer) return java.lang.Integer'
-                        owner           : 'DBA'
-                        code            : 'CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END'
-                        comment         : NULL
+    <00001> sp_name            : 'hello'
+            pkg_name           : NULL
+            sp_type            : 'FUNCTION'
+            return_type        : 'STRING'
+            arg_count          : 0
+            lang               : 'PLCSQL'
+            authid             : 'DEFINER'
+            is_deterministic   : 'NO'
+            is_parallel_enabled: 'NO'
+            target             : NULL
+            owner              : 'DBA'
+            code               : 'CREATE OR REPLACE FUNCTION hello() RETURN character varying AUTHID OWNER AS
+    BEGIN RETURN 'Hello'; END'
+            sql_data_access    : 'NO SQL'
+            comment            : NULL
+            created_time       : 10:10:06.113 AM 09/11/2026
+            updated_time       : 10:10:06.113 AM 09/11/2026
+    <00002> sp_name            : 'sp_int'
+            pkg_name           : NULL
+            sp_type            : 'FUNCTION'
+            return_type        : 'INTEGER'
+            arg_count          : 1
+            lang               : 'PLCSQL'
+            authid             : 'DEFINER'
+            is_deterministic   : 'NO'
+            is_parallel_enabled: 'NO'
+            target             : NULL
+            owner              : 'DBA'
+            code               : 'CREATE OR REPLACE FUNCTION sp_int(p_int IN integer) RETURN integer AUTHID OWNER AS
+    BEGIN RETURN p_int; END'
+            sql_data_access    : 'NO SQL'
+            comment            : NULL
+            created_time       : 10:10:06.158 AM 09/11/2026
+            updated_time       : 10:10:06.158 AM 09/11/2026
 
 .. _db-stored-procedure-args:
 

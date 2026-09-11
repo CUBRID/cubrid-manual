@@ -236,12 +236,19 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><ul class="simple">
-<li><p>Windows 64 Bit Windows 7 or higher</p></li>
+<li><p>Windows 64 Bit Windows 7 or higher (native Windows)</p></li>
+<li><p>Windows 64 Bit Windows 10 2004 (Build 19041) or Higher or Windows 11 (with WSL)</p></li>
 <li><p>Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)</p></li>
 </ul>
 </td>
-<td><p>1GB or more</p></td>
-<td><p>2GB or more(*)</p></td>
+<td><p>1GB or more</p>
+<p>2GB or more</p>
+<p>1GB or more</p>
+</td>
+<td><p>2GB or more(*)</p>
+<p>2GB or more(*)</p>
+<p>2GB or more(*)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -409,8 +416,8 @@ Additionally, to automatically set these variables upon login, you need to manua
 <p>You can download various tools including CUBRID Admin and CUBRID Migration Toolkit from <a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a>.</p>
 </section>
 <section id="installing-and-running-cubrid-on-windows-with-wsl-windows-subsystem-for-linux">
-<h2>Installing and Running CUBRID on Windows with WSL (Windows Subsystem for Linux)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-and-running-cubrid-on-windows-with-wsl-windows-subsystem-for-linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-and-running-cubrid-on-windows-with-wsl-windows-subsystem-for-linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>CUBRID provides an installer that can install and run CUBRID in a WSL (Windows Subsystem for Linux) environment on Windows.
+<span id="installing-and-running-on-windows-with-wsl"></span><h2>Installing and Running CUBRID on Windows with WSL (Windows Subsystem for Linux)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#installing-and-running-cubrid-on-windows-with-wsl-windows-subsystem-for-linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#installing-and-running-cubrid-on-windows-with-wsl-windows-subsystem-for-linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CUBRID provides an installer that can install and run CUBRID in a WSL (Windows Subsystem for Linux) environment on Windows. (<a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a>)
 To install and run CUBRID in a WSL environment, WSL must already be installed. For information on how to install WSL, see <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">https://learn.microsoft.com/en-us/windows/wsl/install</a>.</p>
 <p><strong>Checklist before Installing</strong></p>
 <p>You should check the below before installing CUBRID for Windows.</p>
@@ -446,7 +453,9 @@ If WSL is enabled, the installer installs a Linux distribution that includes CUB
 <blockquote>
 <div><ul class="simple">
 <li><p>After installation completes, you can choose whether to run the tray application.</p></li>
-<li><p>The installer only provides install and uninstall functions.</p></li>
+<li><p>The installer only provides install and uninstall functions. Uninstalling removes the WSL distribution
+and the tray application, which also deletes all databases and configuration files inside the distribution;
+back up your databases before uninstalling.</p></li>
 <li><p>Upgrading and other usage are the same as on Linux.</p></li>
 </ul>
 </div></blockquote>

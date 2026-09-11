@@ -12,13 +12,15 @@ Supported Platforms and System Requirements
 
 The platforms supported by CUBRID and hardware/software requirements for the installation are as follows:
 
-+---------------------------------------------------------------------+------------------+---------------------+
-| Supported Platforms                                                 | Required Memory  | Required Disk Space |
-+=====================================================================+==================+=====================+
-| * Windows 64 Bit Windows 7 or higher                                | 1GB or more      | 2GB or more(\*)     |
-|                                                                     |                  |                     |
-| * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)      |                  |                     |
-+---------------------------------------------------------------------+------------------+---------------------+
++------------------------------------------------------------------------------------+------------------+---------------------+
+| Supported Platforms                                                                | Required Memory  | Required Disk Space |
++====================================================================================+==================+=====================+
+| * Windows 64 Bit Windows 7 or higher (native Windows)                              | 1GB or more      | 2GB or more(\*)     |
+|                                                                                    |                  |                     |
+| * Windows 64 Bit Windows 10 2004 (Build 19041) or Higher or Windows 11 (with WSL)  | 2GB or more      | 2GB or more(\*)     |
+|                                                                                    |                  |                     |
+| * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)                     | 1GB or more      | 2GB or more(\*)     |
++------------------------------------------------------------------------------------+------------------+---------------------+
 
 (\*): Requires a 500MB of free disk space on the initial installation; requires approximately 1.5GB of free disk space with a database creating with default options.
 
@@ -212,10 +214,12 @@ You can download various tools including CUBRID Admin and CUBRID Migration Toolk
 
 .. FIXME You can see the latest information on tools such as CUBRID Admin and install them by downloading files from http://www.cubrid.org/downloads.
 
+.. _Installing-and-Running-on-Windows-With-WSL:
+
 Installing and Running CUBRID on Windows with WSL (Windows Subsystem for Linux)
 --------------------------------------------------------------------------------
 
-CUBRID provides an installer that can install and run CUBRID in a WSL (Windows Subsystem for Linux) environment on Windows.
+CUBRID provides an installer that can install and run CUBRID in a WSL (Windows Subsystem for Linux) environment on Windows. (https://www.cubrid.org/downloads)
 To install and run CUBRID in a WSL environment, WSL must already be installed. For information on how to install WSL, see https://learn.microsoft.com/en-us/windows/wsl/install.
 
 **Checklist before Installing**
@@ -256,7 +260,9 @@ If WSL is enabled, the installer installs a Linux distribution that includes CUB
 **Step 3: Completing the installation**
 
     *   After installation completes, you can choose whether to run the tray application.
-    *   The installer only provides install and uninstall functions.
+    *   The installer only provides install and uninstall functions. Uninstalling removes the WSL distribution
+        and the tray application, which also deletes all databases and configuration files inside the distribution;
+        back up your databases before uninstalling.
     *   Upgrading and other usage are the same as on Linux.
 
 .. note::

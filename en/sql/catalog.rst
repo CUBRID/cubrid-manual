@@ -873,7 +873,9 @@ updated_time         DATETIME                              Stored procedure modi
                         - A value of **0** indicates owner's rights (also referred to as definer's rights), and **1** indicates caller's rights (also referred to as invoker's rights).
                 - **Bit 1**: Represents the **deterministic** property of the stored procedure.  
                         - A value of **1** indicates deterministic, and **0** indicates non-deterministic.
-                - The other bits (**Bit 2** ~ **Bit 31**) are not currently used.
+                - **Bit 2**: Represents the **PARALLEL_ENABLE** property of the stored function.
+                        - A value of **1** indicates a declared function, and **0** indicates a function without the declaration.
+                - The other bits (**Bit 3** ~ **Bit 31**) are not currently used.
 
 .. _-db-stored-procedure-args:
 
@@ -2375,6 +2377,7 @@ arg_count            INTEGER                     The number of arguments
 lang                 VARCHAR(16)                 Implementation language name
 authid               VARCHAR(16)                 Execution privileges of the stored procedure
 is_deterministic     VARCHAR(3)                  Indicates whether the function is deterministic
+is_parallel_enabled  VARCHAR(3)                  Whether PARALLEL_ENABLE is declared
 target               VARCHAR(4096)               Name of the target stored procedure code to execute
 owner                VARCHAR(32)                 Owner
 code                 VARCHAR(1073741823)         Source code of the stored procedure
@@ -2415,47 +2418,61 @@ updated_time         DATETIME                    Stored procedure modification t
                         - **YES**: Deterministic function
                         - **NO**: Non-deterministic function
 
-The following example shows how to retrieve Java stored procedures owned by the current user.
+                - **is_parallel_enabled**: Indicates whether the stored function is declared with **PARALLEL_ENABLE**. For details, refer to :ref:`pl-parallel-enable`.
+                        - **YES**: Declared function
+                        - **NO**: Function without the declaration
+
+The following example retrieves the two stored functions owned by the current user.
 
 .. code-block:: sql
 
+    -- Show the two stored functions owned by the current user.
     CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END;
 
     CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END;
 
-    -- csql 
     ;line on
+    SELECT * FROM db_stored_procedure
+    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER
+      AND sp_name IN ('hello', 'sp_int')
+    ORDER BY sp_name;
 
-    /* CURRENT_USER: PUBLIC */
-    SELECT * from db_stored_procedure
-    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER; 
+::
 
-        ::
-
-                <00001> sp_name         : 'hello'
-                        pkg_name        : NULL
-                        sp_type         : 'FUNCTION'
-                        return_type     : 'STRING'
-                        arg_count       : 0
-                        lang            : 'PLCSQL'
-                        authid          : 'DEFINER'
-                        is_deterministic: 'NO'
-                        target          : 'Func_HELLO_9.HELLO() return java.lang.String'
-                        owner           : 'DBA'
-                        code            : 'CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END'
-                        comment         : NULL
-                <00002> sp_name         : 'sp_int'
-                        pkg_name        : NULL
-                        sp_type         : 'FUNCTION'
-                        return_type     : 'INTEGER'
-                        arg_count       : 1
-                        lang            : 'PLCSQL'
-                        authid          : 'DEFINER'
-                        is_deterministic: 'NO'
-                        target          : 'Func_SP_INT_10.SP_INT(java.lang.Integer) return java.lang.Integer'
-                        owner           : 'DBA'
-                        code            : 'CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END'
-                        comment         : NULL
+    <00001> sp_name            : 'hello'
+            pkg_name           : NULL
+            sp_type            : 'FUNCTION'
+            return_type        : 'STRING'
+            arg_count          : 0
+            lang               : 'PLCSQL'
+            authid             : 'DEFINER'
+            is_deterministic   : 'NO'
+            is_parallel_enabled: 'NO'
+            target             : NULL
+            owner              : 'DBA'
+            code               : 'CREATE OR REPLACE FUNCTION hello() RETURN character varying AUTHID OWNER AS
+    BEGIN RETURN 'Hello'; END'
+            sql_data_access    : 'NO SQL'
+            comment            : NULL
+            created_time       : 10:10:06.113 AM 09/11/2026
+            updated_time       : 10:10:06.113 AM 09/11/2026
+    <00002> sp_name            : 'sp_int'
+            pkg_name           : NULL
+            sp_type            : 'FUNCTION'
+            return_type        : 'INTEGER'
+            arg_count          : 1
+            lang               : 'PLCSQL'
+            authid             : 'DEFINER'
+            is_deterministic   : 'NO'
+            is_parallel_enabled: 'NO'
+            target             : NULL
+            owner              : 'DBA'
+            code               : 'CREATE OR REPLACE FUNCTION sp_int(p_int IN integer) RETURN integer AUTHID OWNER AS
+    BEGIN RETURN p_int; END'
+            sql_data_access    : 'NO SQL'
+            comment            : NULL
+            created_time       : 10:10:06.158 AM 09/11/2026
+            updated_time       : 10:10:06.158 AM 09/11/2026
 
 .. _db-stored-procedure-args:
 

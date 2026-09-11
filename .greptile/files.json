@@ -1,0 +1,23 @@
+{
+  "files": [
+    {
+      "path": "docs/STYLE_GUIDE.ko.md",
+      "description": "CUBRID 매뉴얼 표기 표준 정본(CUBRIDMAN-343). 한국어 33개·영문 34개 표기 규칙, 문자 인코딩 표기 기준, 예외 조건, reStructuredText 작성 규칙, ko/en 번역 쌍 동기화 기준을 포함한다. 표기 관련 판단이 갈릴 때 최종 근거로 사용한다.",
+      "scope": ["ko/**/*.rst", "ko/**/*.inc", "en/**/*.rst", "en/**/*.inc"]
+    },
+    {
+      "path": "README.md",
+      "description": "저장소 구성(ko=한국어 매뉴얼, en=영문 매뉴얼)과 Sphinx 빌드 절차."
+    },
+    {
+      "path": "ko/toc.rst",
+      "description": "한국어 매뉴얼 전체 목차. 새 문서를 추가했는데 이 파일의 toctree에 등록되지 않았다면 빌드 경고가 발생한다.",
+      "scope": ["ko/**/*.rst"]
+    },
+    {
+      "path": "en/toc.rst",
+      "description": "영문 매뉴얼 전체 목차. 새 문서를 추가했는데 이 파일의 toctree에 등록되지 않았다면 빌드 경고가 발생한다.",
+      "scope": ["en/**/*.rst"]
+    }
+  ]
+}

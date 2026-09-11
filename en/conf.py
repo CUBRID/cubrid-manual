@@ -53,7 +53,7 @@ html_context = {
     "show_version_switcher": True,
 }
 
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '.greptile']
 
 pygments_style = "nord"
 pygments_style_dark = "github-dark"

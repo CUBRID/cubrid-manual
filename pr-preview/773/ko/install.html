@@ -229,6 +229,28 @@
 <section id="supported">
 <span id="id2"></span><h2>지원 플랫폼 및 설치 최소 사양<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#supported" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#supported'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>CUBRID가 지원하는 플랫폼과 설치를 위한 하드웨어/소프트웨어 요구 사항은 아래 표와 같다.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>지원 플랫폼</p></th>
+<th class="head"><p>요구되는 메모리</p></th>
+<th class="head"><p>요구되는 디스크 공간</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Windows 10 버전 2004 (빌드 19041) 이상 또는 Windows 11(with WSL)</p></td>
+<td><p>2G 이상</p></td>
+<td><p>2G 이상(*)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Windows 64 Bit Windows 7 이상 (native Windows)</p></td>
+<td><p>1G 이상</p></td>
+<td><p>2G 이상(*)</p></td>
+</tr>
+<tr class="row-even"><td><p>Linux 계열 64 Bit(Linux kernel 2.4 및 glibc 2.3.4 이상)</p></td>
+<td><p>1G 이상</p></td>
+<td><p>2G 이상(*)</p></td>
+</tr>
+</tbody>
+</table>
 <p>(*): 처음 설치 시 약 500MB의 디스크 공간이 필요하며, 하나의 DB를 기본 옵션으로 생성할 경우 약 1.5GB의 디스크 공간이 필요하다.</p>
 <p>CUBRID 패키지 설치 시 CUBRID Admin 클라이언트가 같이 설치되지 않는다. 따라서 CUBRID Admin 사용하려면 이를 추가로 설치해야 한다. CUBRID 설치 패키지는 <a class="reference external" href="http://ftp.cubrid.org">http://ftp.cubrid.org</a> 에서 받을 수 있다.</p>
 <p>JDBC, ODBC, PHP 등의 드라이버들도 <a class="reference external" href="http://ftp.cubrid.org">http://ftp.cubrid.org</a> 에서 받을 수 있다.</p>
@@ -385,7 +407,7 @@ glibc 버전은 다음과 같은 방법으로 확인한다.</p>
 </div>
 <p>과거 버전에서 새 버전으로 데이터베이스를 업그레이드하는 방법에 대한 보다 자세한 내용은 <a class="reference internal" href="upgrade.html"><span class="doc">업그레이드</span></a> 를 참고한다.</p>
 <p><strong>환경 설정</strong></p>
-<p>서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 <strong>$CUBRID/conf</strong> 디렉터리에서 설정 파일의 파라미터를 수정한다.  자세한 내용은 <a class="reference internal" href="#installing-and-running-on-windows"><span class="std std-ref">Windows에서 WSL(Windows Subsystem for Linux) 환경을 이용한 설치와 실행</span></a>의 환경 설정을 참고한다.</p>
+<p>서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 <strong>$CUBRID/conf</strong> 디렉터리에서 설정 파일의 파라미터를 수정한다.  자세한 내용은 <a class="reference internal" href="#installing-and-running-on-windows"><span class="std std-ref">Windows에서의 설치와 실행</span></a>의 환경 설정을 참고한다.</p>
 <p><strong>CUBRID 인터페이스 설치</strong></p>
 <p>CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python, Node.js 등의 인터페이스 모듈은 <a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a> 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.</p>
 <p>각 드라이버에 대한 간단한 설명은 <a class="reference internal" href="api/index.html"><span class="doc">API 레퍼런스</span></a> 를 참고한다.</p>
@@ -393,12 +415,10 @@ glibc 버전은 다음과 같은 방법으로 확인한다.</p>
 <p>CUBRID Admin, CUBRID Migration ToolKit 등의 도구는 <a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a> 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.</p>
 </section>
 <section id="windows-wsl-windows-subsystem-for-linux">
-<span id="installing-and-running-on-windows"></span><h2>Windows에서 WSL(Windows Subsystem for Linux) 환경을 이용한 설치와 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#windows-wsl-windows-subsystem-for-linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#windows-wsl-windows-subsystem-for-linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>Windows의 WSL(Windows Subsystem for Linux) 환경에서 CUBRID를 설치하고 실행할 수 있는 설치 프로그램을 제공한다.
+<span id="installing-and-running-on-windows-with-wsl"></span><h2>Windows에서 WSL(Windows Subsystem for Linux) 환경을 이용한 설치와 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#windows-wsl-windows-subsystem-for-linux" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#windows-wsl-windows-subsystem-for-linux'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Windows의 WSL(Windows Subsystem for Linux) 환경에서 CUBRID를 설치하고 실행할 수 있는 설치 프로그램을 제공한다. (<a class="reference external" href="https://www.cubrid.com/downloads">https://www.cubrid.com/downloads</a>)
 WSL 환경에서 CUBRID를 설치하고 실행하려면, WSL이 설치되어 있어야 한다. WSL 설치 방법은 <a class="reference external" href="https://learn.microsoft.com/ko-kr/windows/wsl/install">https://learn.microsoft.com/ko-kr/windows/wsl/install</a> 에서 확인할 수 있다.</p>
-</section>
-<section id="id4">
-<h2><strong>설치 전 확인 사항</strong><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>설치 전 확인 사항</strong></p>
 <p>Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.</p>
 <ul>
 <li><p>Windows 버전 호환성 확인</p>
@@ -432,7 +452,8 @@ WSL이 활성화 되어 있으면, 설치 프로그램은 CUBRID가 포함되어
 <blockquote>
 <div><ul class="simple">
 <li><p>설치 완료 후 Tray 애플리케이션을 실행할 지 선택 할 수 있다.</p></li>
-<li><p>설치 프로그램은 설치와 제거 기능만 제공된다.</p></li>
+<li><p>설치 프로그램은 설치와 제거 기능만 제공된다. 제거 시에는 WSL 배포판과 Tray 애플리케이션을 제거되어,
+배포판 내부의 데이터베이스 및 설정 파일은 모두 삭제되므로, 제거 전에 데이터베이스를 백업해야 한다.</p></li>
 <li><p>업그레이드 및 기타 사용 방법은 Linux 와 동일하게 진행하면 된다.</p></li>
 </ul>
 </div></blockquote>
@@ -459,7 +480,7 @@ WSL이 활성화 되어 있으면, 설치 프로그램은 CUBRID가 포함되어
 </div></blockquote>
 </section>
 <section id="windows">
-<h2>Windows에서의 설치와 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#windows" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#windows'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<span id="installing-and-running-on-windows"></span><h2>Windows에서의 설치와 실행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#windows" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#windows'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p><strong>설치 전 확인 사항</strong></p>
 <p>Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.</p>
 <ul>
@@ -520,8 +541,8 @@ WSL이 활성화 되어 있으면, 설치 프로그램은 CUBRID가 포함되어
 <p><strong>CUBRID 도구 설치</strong></p>
 <p><a class="reference external" href="https://www.cubrid.org/downloads">https://www.cubrid.org/downloads</a> 에서 CUBRID Manager 및 CUBRID Migration Toolkit을 비롯한 다양한 도구를 다운로드할 수 있다.</p>
 </section>
-<section id="id5">
-<h2>압축 파일로 설치하기<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id5'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="id4">
+<h2>압축 파일로 설치하기<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id4'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <section id="linux-tar-gz-cubrid">
 <h3>Linux에서 tar.gz 파일로 CUBRID 설치<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#linux-tar-gz-cubrid" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#linux-tar-gz-cubrid'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>설치 전 확인 사항</strong></p>
@@ -756,7 +777,7 @@ C:\CUBRID\shard\windows_scripts\cubrid_env.bat</p>
 </ul>
 </li>
 </ul>
-<p>CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은 <a class="reference internal" href="#installing-and-running-on-windows"><span class="std std-ref">Windows에서 WSL(Windows Subsystem for Linux) 환경을 이용한 설치와 실행</span></a>을 확인하도록 한다.</p>
+<p>CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은 <a class="reference internal" href="#installing-and-running-on-windows"><span class="std std-ref">Windows에서의 설치와 실행</span></a>을 확인하도록 한다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>zip 파일로 CUBRID를 설치한 경우, CUBRID 실행에 필요한 DLL 이 없어 실행이 되지 않을 수 있다.
@@ -794,9 +815,8 @@ C:\CUBRID\shard\windows_scripts\cubrid_env.bat</p>
 <li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">버전 호환성</a></li>
 <li><a :data-current="activeSection === '#linux'" class="reference internal" href="#linux">Linux에서의 설치와 실행</a></li>
 <li><a :data-current="activeSection === '#windows-wsl-windows-subsystem-for-linux'" class="reference internal" href="#windows-wsl-windows-subsystem-for-linux">Windows에서 WSL(Windows Subsystem for Linux) 환경을 이용한 설치와 실행</a></li>
-<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4"><strong>설치 전 확인 사항</strong></a></li>
 <li><a :data-current="activeSection === '#windows'" class="reference internal" href="#windows">Windows에서의 설치와 실행</a></li>
-<li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">압축 파일로 설치하기</a><ul>
+<li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">압축 파일로 설치하기</a><ul>
 <li><a :data-current="activeSection === '#linux-tar-gz-cubrid'" class="reference internal" href="#linux-tar-gz-cubrid">Linux에서 tar.gz 파일로 CUBRID 설치</a></li>
 <li><a :data-current="activeSection === '#windows-zip-cubrid'" class="reference internal" href="#windows-zip-cubrid">Windows에서 zip 파일로 CUBRID 설치</a></li>
 </ul>

@@ -35,7 +35,7 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
                 | PROPERTIES = [properties_string] 
                 | COMMENT = [server_comment_string]
       
-*   *owner_name*: Specifies the name of the owner of the server to be created.
+*   *owner_name*: Specifies the name of the owner of the server to be created. See the note below for who can be named as the owner.
 *   *server_name*: Specifies the name of the server to be created. (up to 254 bytes)
 *   <*connect_info*>: **HOST**, **PORT**, **DBNAME**, and **USER** are mandatory items in the <connect_item> list of access information.
 *   <*connect_item*>: It consists of HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, and COMMENT items, and the same item cannot be duplicated.
@@ -52,6 +52,8 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
 
     The owner must be the current user, or a group that the current user belongs to.
     In particular, **DBA** or **DBA** members can specify any user as the owner.
+    Naming an owner that the current user is not authorized for fails with
+    ``DBA, members of DBA group, and owner can perform CREATE SERVER.``
 
 .. note::
 
@@ -224,8 +226,14 @@ Existing servers can be removed using **DROP SERVER** syntax. If the **IF EXISTS
 
     Only the owner of the server or members of the ownership group can remove the server.
     In particular, **DBA** or **DBA** members can remove any server.
-    The **IF EXISTS** clause only ignores a server that does not exist; if the server exists
-    but the current user is not authorized for it, an error occurs.
+
+    When *owner_name* is given and the current user is not authorized for that owner, an error
+    occurs regardless of the **IF EXISTS** clause. Whether the server exists is not consulted,
+    so naming a server that does not exist under that owner fails in the same way.
+
+    When *owner_name* is omitted, only a server owned by the current user is considered. A server
+    of the same name owned by another user is treated as not existing, so the **IF EXISTS** clause
+    ignores it.
 
 
 .. code-block:: sql

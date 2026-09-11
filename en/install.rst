@@ -212,6 +212,70 @@ You can download various tools including CUBRID Admin and CUBRID Migration Toolk
 
 .. FIXME You can see the latest information on tools such as CUBRID Admin and install them by downloading files from http://www.cubrid.org/downloads.
 
+Installing and Running CUBRID on Windows with WSL (Windows Subsystem for Linux)
+--------------------------------------------------------------------------------
+
+CUBRID provides an installer that can install and run CUBRID in a WSL (Windows Subsystem for Linux) environment on Windows.
+To install and run CUBRID in a WSL environment, WSL must already be installed. For information on how to install WSL, see https://learn.microsoft.com/en-us/windows/wsl/install.
+
+**Checklist before Installing**
+
+You should check the below before installing CUBRID for Windows.
+
+*   Check Windows version compatibility
+
+    Windows 10 version 2004 (Build 19041) or later, or Windows 11
+
+*   Check virtualization technology support (Intel VT-x, AMD-V)
+
+    Check whether virtualization technology is enabled in the BIOS/UEFI.
+
+*   Install and enable WSL (Windows Subsystem for Linux)
+
+    Install the latest WSL2 from https://github.com/microsoft/WSL/releases and enable WSL in Windows Features.
+    The CUBRID installer does not automatically install WSL; it only checks whether WSL is enabled and provides a way to enable it.
+    If WSL needs to be installed and enabled, a reboot is required, and you must run the installer again after rebooting.
+
+*   The installer requires administrator privileges.
+
+**Installation Process**
+
+When you run the provided EXE installer, it checks the WSL environment. If the requirements are not met, it displays a message and stops the installation.
+If WSL is enabled, the installer installs a Linux distribution that includes CUBRID and a tray application for managing the CUBRID server.
+
+**Step 1: Selecting installation options**
+
+    *   Set the distribution name
+    *   Choose whether to register the tray application in the startup list
+    *   Choose whether to create a desktop shortcut
+    *   Choose whether to create a sample database
+    *   Select WSL2 mode (checked installs in WSL2 mode; unchecked installs in WSL1 mode)
+
+**Step 2: Specifying the installation directory**
+
+**Step 3: Completing the installation**
+
+    *   After installation completes, you can choose whether to run the tray application.
+    *   The installer only provides install and uninstall functions.
+    *   Upgrading and other usage are the same as on Linux.
+
+.. note::
+
+    Once installation is complete, the CUBRID WSL distribution and the CUBRID server are set to start automatically whenever the system reboots.
+    To stop this automatic startup on reboot, turn it off at "Settings > Apps > Startup > **cubrid_starter.exe**".
+    Likewise, if the tray application was registered in the startup list, turn it off at "Settings > Apps > Startup > **cubrid_tray_app.exe**" to stop it from starting automatically.
+
+**About the Distribution**
+
+    *   The installer lets you set the distribution name, which you can check with the ``wsl -l`` command in the Windows Command Prompt.
+    *   CUBRID in the distribution is installed under the **cubrid** user account, whose home directory is /home/cubrid.
+    *   CUBRID is installed at /home/cubrid/CUBRID in the distribution, and the CUBRID environment variables are set in /home/cubrid/.cubrid.sh.
+    *   To access the distribution, run ``wsl -d <distribution name> -u cubrid`` in the Windows Command Prompt.
+
+**About WSL**
+
+    *   For more information about WSL, see https://learn.microsoft.com/en-us/windows/wsl/.
+
 .. _Installing-and-Running-on-Windows:
 
 Installing and Running CUBRID on Windows

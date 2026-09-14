@@ -143,6 +143,8 @@ Create stored function using the **CREATE FUNCTION** statement.
 
 AUTHID, DETERMINISTIC, and PARALLEL_ENABLE can be specified in any order. The same property cannot be specified more than once.
 
+If a Java function returns SET, MULTISET, or SEQUENCE, specify the element type, such as ``SET(INTEGER)``, to use properties after the return type.
+
 COMMENT of Stored Function
 ----------------------------------
 
@@ -209,11 +211,9 @@ The **db_stored_procedure_args** system virtual table provides the information o
 CREATE FUNCTION PARALLEL_ENABLE
 ----------------------------------
 
-The **PARALLEL_ENABLE** property allows Java and PL/CSQL stored functions to run in parallel scans, parallel subquery execution, and parallel hash joins. If omitted, parallel execution of the function is not allowed. This property cannot be specified for stored procedures or nested PL/CSQL functions and procedures.
+The **PARALLEL_ENABLE** property allows Java and PL/CSQL stored functions to run in parallel scans, parallel subquery execution, and parallel hash joins. If omitted, parallel execution of the function is not allowed. Specifying this property for a stored procedure is rejected with the error ``PARALLEL_ENABLE can be specified only for FUNCTION``. It also cannot be specified for nested (local) functions and procedures defined in a PL/CSQL body; these declarations are rejected with the compilation error ``illegal keyword PARALLEL_ENABLE for a local procedure/function``.
 
 To change this property, redefine the function with **CREATE OR REPLACE FUNCTION**. It cannot be changed with **ALTER FUNCTION**. When checking the execution plan after changing the declaration, recompile the query with the **RECOMPILE** hint.
-
-If a Java function returns SET, MULTISET, or SEQUENCE, specify the element type, such as ``SET(INTEGER)``, to use properties after the return type.
 
 **unloaddb** writes this property to the schema file.
 

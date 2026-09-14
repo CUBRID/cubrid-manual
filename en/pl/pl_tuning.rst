@@ -212,7 +212,7 @@ It is recommended to specify the **DETERMINISTIC** option considering the implem
 .. _pl-parallel-enable:
 
 Use Functions That Can Run in Parallel
------------------------------------------
+========================================
 
 **PARALLEL_ENABLE** is a property that allows parallel execution of Java and PL/CSQL stored functions. For the declaration syntax, refer to :ref:`create-function-parallel-enable`.
 
@@ -234,6 +234,74 @@ Functions declared with this property cannot use server-side SQL or **DBMS_OUTPU
 Java functions can pass OIDs as arguments or return values and obtain their string representations with ``getOidString()``. However, server access to read or modify the objects referenced by OIDs is not allowed.
 
 External JDBC connections (``jdbc:cubrid://...``) from Java functions are allowed because they use separate sessions and transactions. These connections do not share uncommitted changes or SQL session variables with the query that calls the function.
+
+**Server Access Restriction Example**
+
+The following example shows the different rejection points for Java and PL/CSQL functions that use server-side SQL.
+
+Save the following code as ``ParallelSql.java``, compile it, and load the compiled class into the target database as described in :ref:`jsp-loadjava`.
+
+.. code-block:: java
+
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.ResultSet;
+    import java.sql.SQLException;
+    import java.sql.Statement;
+
+    public class ParallelSql {
+        public static int readValue() throws SQLException {
+            Connection conn = DriverManager.getConnection("jdbc:default:connection");
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT 1")) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        }
+    }
+
+The Java function can be registered with **PARALLEL_ENABLE**.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION parallel_java_sql() RETURN INTEGER
+    PARALLEL_ENABLE
+    AS LANGUAGE JAVA NAME 'ParallelSql.readValue() return int';
+
+::
+
+    Execute OK. (0.003000 sec) Committed. (0.000000 sec)
+
+However, calling the function fails with the **SQLException** raised when accessing ``jdbc:default:connection``. This restriction also applies to a serial **CALL**.
+
+.. code-block:: sql
+
+    CALL parallel_java_sql();
+
+::
+
+    In the command from line 1,
+
+    ERROR: Stored procedure execute error: cannot execute SQL on the server-side connection: the stored procedure is declared PARALLEL_ENABLE
+
+In PL/CSQL, declaring a function that uses server-side SQL with the same property is rejected at compilation time during **CREATE FUNCTION**, before the function can be called.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION parallel_pl_sql() RETURN INTEGER
+    PARALLEL_ENABLE
+    AS
+        n INTEGER;
+    BEGIN
+        SELECT 1 INTO n;
+        RETURN n;
+    END;
+
+::
+
+    In line 6, column 5,
+
+    ERROR: Stored procedure compile error: Stored functions declared with PARALLEL_ENABLE cannot use a feature that calls DB server
 
 **Checking the Declaration and Execution**
 
@@ -274,10 +342,10 @@ The following query specifies a parallelism degree of 2 with the **PARALLEL(2)**
 ::
 
     Trace Statistics:
-      SELECT (time: 4135, fetch: 3286, fetch_time: 7, ioread: 0)
-        FUNC (time: 7502, fetch: 1, ioread: 0, calls: 200000)
-        SCAN (table: dba.parallel_data), (heap time: 4134, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
-             (parallel workers: 2, heap time: 4038..4134, readrows: 98496..101504, rows: 98496..101504, gather: buildvalue)
+      SELECT (time: 3956, fetch: 3286, fetch_time: 6, ioread: 0)
+        FUNC (time: 7228, fetch: 1, ioread: 0, calls: 200000)
+        SCAN (table: dba.parallel_data), (heap time: 3956, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
+             (parallel workers: 2, heap time: 3853..3955, readrows: 98496..101504, rows: 98496..101504, gather: buildvalue)
 
 Running the same query serially with the **PARALLEL(1)** hint produces the following trace.
 
@@ -292,8 +360,8 @@ Running the same query serially with the **PARALLEL(1)** hint produces the follo
 ::
 
     Trace Statistics:
-      SELECT (time: 6619, fetch: 3285, fetch_time: 3, ioread: 0)
-        FUNC (time: 6140, fetch: 1, ioread: 0, calls: 200000)
-        SCAN (table: dba.parallel_data), (heap time: 6560, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
+      SELECT (time: 6520, fetch: 3285, fetch_time: 2, ioread: 0)
+        FUNC (time: 6107, fetch: 1, ioread: 0, calls: 200000)
+        SCAN (table: dba.parallel_data), (heap time: 6484, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
 
-Both queries return **200000**. The parallel trace shows **parallel workers: 2**, and **calls: 200000** in **FUNC** includes the function calls executed by both workers.
+Both queries return **200000**. The parallel trace shows **parallel workers: 2**, and **calls: 200000** in **FUNC** includes the function calls executed by both workers. **time** in **FUNC** sums the time spent on function calls across concurrently executing workers, so it can exceed **time** in **SELECT**. In this example, **time** in **FUNC** is **6107** for serial execution and **7228** for parallel execution. Compare **time** in **SELECT** to assess the elapsed time of the entire query. In this example, it decreases from **6520** for serial execution to **3956** for parallel execution.

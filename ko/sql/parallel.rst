@@ -64,7 +64,8 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 질�
 
 *   동시성 처리를 지원하지 않는 구문이 포함된 경우
 
-    *    조건절에서 **PARALLEL_ENABLE**\을 지정하지 않은 저장 함수(JavaSP, PL/CSQL)를 사용하거나 Serial을 사용하는 경우. 선언된 함수의 제약은 :ref:`pl-parallel-enable`\을 참고한다.
+    *    조건절에서 **PARALLEL_ENABLE**\을 지정하지 않은 저장 함수(JavaSP, PL/CSQL)를 평가하는 경우. 부질의(인라인 뷰 포함)에서도 적용 여부는 각 스캔별로 판단한다. 선언된 함수의 제약은 :ref:`pl-parallel-enable`\을 참고한다.
+    *    Serial을 사용하는 경우
     *    세션 변수를 참조시
     *    Recursive CTE 또는 Connect By 구문 사용시
     *    CUBRID 오브젝트 DBMS 전용 기능 사용시
@@ -487,7 +488,7 @@ BUILDVALUE 최적화가 적용되면 **gather: buildvalue** 가 표시된다.
 *   derived table(인라인 뷰) 등에 의해 부질의 간 참조가 존재하는 경우
 *   Object DBMS 기능을 사용하는 경우 (path expression 등)
 *   JSON_TABLE이나 SET 타입 테이블의 스캔이 포함된 경우
-*   부질의에 **PARALLEL_ENABLE**\을 지정하지 않은 저장 함수가 포함된 경우. 이 제한은 해당 부질의에 적용된다.
+*   부질의에 **PARALLEL_ENABLE**\을 지정하지 않은 저장 함수가 포함된 경우. 저장 함수를 포함한 부질의는 병렬 실행 대상에서 제외되며, 같은 질의의 독립적인 다른 부질의는 별도로 판단한다.
 *   상관 부질의인 경우
 
 .. code-block:: sql
@@ -524,7 +525,7 @@ BUILDVALUE 최적화가 적용되면 **gather: buildvalue** 가 표시된다.
         SELECT product_id FROM products WHERE category = 'Electronics'
     );
 
-    -- PARALLEL_ENABLE을 지정하지 않은 저장 함수가 조건절에 포함된 경우
+    -- PARALLEL_ENABLE을 지정하지 않은 저장 함수가 부질의에 포함된 경우
     SELECT *
     FROM orders
     WHERE customer_id IN (

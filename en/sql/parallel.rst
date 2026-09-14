@@ -64,7 +64,8 @@ Regardless of the scan flavor, parallel scan is not applied and falls back to si
 
 *   Statements that do not support concurrent processing
 
-    *    Stored functions (JavaSP, PL/CSQL) without **PARALLEL_ENABLE** in predicates, or Serial usage. For constraints on declared functions, refer to :ref:`pl-parallel-enable`.
+    *    Stored functions (JavaSP, PL/CSQL) without **PARALLEL_ENABLE** are evaluated in predicates. Applicability is determined for each scan, including scans in subqueries and inline views. For constraints on declared functions, refer to :ref:`pl-parallel-enable`.
+    *    Serial usage
     *    References to session variables
     *    Recursive CTE or Connect By clauses
     *    CUBRID object DBMS specific features
@@ -490,7 +491,7 @@ Parallel execution of subqueries is not applied if any of the following conditio
 *   References between subqueries exist due to derived tables (inline views), etc.
 *   Object DBMS features are used (such as path expressions, etc.)
 *   **JSON_TABLE** or SET type table scans are included
-*   The subquery contains a stored function without **PARALLEL_ENABLE**. This restriction applies to that subquery.
+*   The subquery contains a stored function without **PARALLEL_ENABLE**. The subquery containing the stored function is excluded from parallel subquery execution. Other independent subqueries in the same query are evaluated separately for eligibility.
 *   When it is a correlated subquery
 
 .. code-block:: sql
@@ -527,7 +528,7 @@ Parallel execution of subqueries is not applied if any of the following conditio
         SELECT product_id FROM products WHERE category = 'Electronics'
     );
 
-    -- When a stored function without PARALLEL_ENABLE is included in the condition clause
+    -- When a stored function without PARALLEL_ENABLE is included in a subquery
     SELECT *
     FROM orders
     WHERE customer_id IN (

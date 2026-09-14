@@ -338,6 +338,7 @@
 <li><p><em>function_comment</em>: 저장 함수의 커멘트 문자열을 지정한다.</p></li>
 </ul>
 <p>AUTHID, DETERMINISTIC, PARALLEL_ENABLE은 순서와 관계없이 지정할 수 있으며, 같은 속성을 두 번 이상 지정할 수 없다.</p>
+<p>Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입 뒤에 속성을 지정하려면 <code class="docutils literal notranslate"><span class="pre">SET(INTEGER)</span></code>와 같이 원소 타입을 명시해야 한다.</p>
 <section id="id6">
 <h3>저장 함수의 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>저장 함수의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다.</p>
@@ -465,12 +466,11 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 </section>
 <section id="create-function-parallel-enable">
 <span id="id8"></span><h3>CREATE FUNCTION PARALLEL_ENABLE<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#create-function-parallel-enable" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#create-function-parallel-enable'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><strong>PARALLEL_ENABLE</strong> 속성을 지정하면 Java 및 PL/CSQL 저장 함수를 병렬 스캔, 부질의 병렬 실행, 병렬 해시 조인에서 실행할 수 있다. 생략하면 함수의 병렬 실행을 허용하지 않는다. 저장 프로시저와 PL/CSQL의 중첩 함수 및 프로시저에는 지정할 수 없다.</p>
+<p><strong>PARALLEL_ENABLE</strong> 속성을 지정하면 Java 및 PL/CSQL 저장 함수를 병렬 스캔, 부질의 병렬 실행, 병렬 해시 조인에서 실행할 수 있다. 생략하면 함수의 병렬 실행을 허용하지 않는다. 저장 프로시저에는 지정할 수 없으며, <code class="docutils literal notranslate"><span class="pre">PARALLEL_ENABLE</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">specified</span> <span class="pre">only</span> <span class="pre">for</span> <span class="pre">FUNCTION</span></code> 오류로 거절된다. PL/CSQL 본문에 정의한 중첩(local) 함수 및 프로시저에도 지정할 수 없으며, <code class="docutils literal notranslate"><span class="pre">illegal</span> <span class="pre">keyword</span> <span class="pre">PARALLEL_ENABLE</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">local</span> <span class="pre">procedure/function</span></code> 컴파일 오류로 거절된다.</p>
 <p>이 속성을 변경하려면 <strong>CREATE OR REPLACE FUNCTION</strong> 문으로 함수를 다시 정의한다. <strong>ALTER FUNCTION</strong> 문으로는 변경할 수 없다. 선언을 변경한 뒤 실행 계획을 확인할 때는 <strong>RECOMPILE</strong> 힌트로 질의를 재컴파일한다.</p>
-<p>Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입 뒤에 속성을 지정하려면 <code class="docutils literal notranslate"><span class="pre">SET(INTEGER)</span></code>와 같이 원소 타입을 명시해야 한다.</p>
 <p><strong>unloaddb</strong>는 이 속성을 스키마 파일에 출력한다.</p>
 <p>다음은 순수 계산을 수행하는 PL/CSQL 저장 함수에 <strong>PARALLEL_ENABLE</strong>을 지정하고, <a class="reference internal" href="../catalog.html#id66"><span class="std std-ref">DB_STORED_PROCEDURE</span></a>에서 선언 여부를 확인하는 예이다.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Declare a function that can run in parallel.</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 병렬 실행이 가능한 함수를 선언한다.</span>
 </span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">parallel_inc</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INTEGER</span>
 </span><span id="line-3"><span class="n">PARALLEL_ENABLE</span>
 </span><span id="line-4"><span class="k">AS</span>
@@ -692,7 +692,7 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
 </div>
 </div>
 </footer>

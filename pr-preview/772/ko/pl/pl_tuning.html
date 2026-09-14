@@ -236,11 +236,8 @@
 <li><p><a class="reference internal" href="#sql" id="id8">SQL 질의 최적화</a></p></li>
 <li><p><a class="reference internal" href="#id3" id="id9">질의에서의 저장 함수 호출 최적화</a></p></li>
 <li><p><a class="reference internal" href="#pl-use-builtin" id="id10">내장 함수 사용</a></p></li>
-<li><p><a class="reference internal" href="#pl-deterministic" id="id11">결정적 함수 사용</a></p>
-<ul>
+<li><p><a class="reference internal" href="#pl-deterministic" id="id11">결정적 함수 사용</a></p></li>
 <li><p><a class="reference internal" href="#pl-parallel-enable" id="id12">병렬 실행이 가능한 함수 사용</a></p></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -428,8 +425,9 @@
 </div>
 <p>위 예시에서 cnt_name 함수 내부의 my_serial.NEXT_VALUE는 결정적이지 않은 결과를 반환하므로 상관 부질의 캐시에 의해 기대하지 않은 결과를 반환한다.
 저장 함수의 구현을 고려하여 <strong>DETERMINISTIC</strong> 속성을 지정 할 것을 권장한다.</p>
+</section>
 <section id="pl-parallel-enable">
-<span id="id6"></span><h3><a class="toc-backref" href="#id12" role="doc-backlink">병렬 실행이 가능한 함수 사용</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-parallel-enable" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-parallel-enable'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span id="id6"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink">병렬 실행이 가능한 함수 사용</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pl-parallel-enable" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#pl-parallel-enable'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p><strong>PARALLEL_ENABLE</strong>은 Java 및 PL/CSQL 저장 함수의 병렬 실행을 허용하는 속성이다. 선언 방법은 <a class="reference internal" href="../sql/schema/stored_routine_stmt.html#create-function-parallel-enable"><span class="std std-ref">CREATE FUNCTION PARALLEL_ENABLE</span></a>을 참고한다.</p>
 <p>이 속성을 지정한 함수는 <a class="reference internal" href="../sql/parallel.html#parallel-scan"><span class="std std-ref">병렬 스캔</span></a>, <a class="reference internal" href="../sql/parallel.html#parallel-subquery-execution"><span class="std std-ref">부질의 병렬 실행</span></a>, <a class="reference internal" href="../sql/parallel.html#parallel-hash-join"><span class="std std-ref">병렬 해시 조인</span></a>에서 병렬로 실행할 수 있다. 선언만으로 병렬 실행이 보장되지는 않으며, 각 기능의 적용 조건과 <a class="reference internal" href="../sql/parallel.html#parallel-query-throughput-rules"><span class="std std-ref">병렬 질의 처리량 규칙</span></a>을 만족해야 한다. 병렬로 실행할 부분에 이 속성이 없는 저장 함수나 병렬 실행을 지원하지 않는 메서드가 함께 있으면 해당 부분의 병렬 실행이 제한된다.</p>
 <p><strong>PARALLEL_ENABLE</strong>과 <a class="reference internal" href="#pl-deterministic"><span class="std std-ref">DETERMINISTIC</span></a>은 독립적인 속성이며 함께 지정할 수 있다. <strong>DETERMINISTIC</strong>만 지정한 함수는 병렬 실행을 허용하지 않으며, <strong>PARALLEL_ENABLE</strong>만 지정해도 결정적 함수로 취급하지 않는다.</p>
@@ -443,12 +441,67 @@
 </ul>
 <p>Java 함수에서 OID를 인자나 반환값으로 전달하거나 <code class="docutils literal notranslate"><span class="pre">getOidString()</span></code>으로 문자열을 얻는 것은 허용한다. 그러나 OID가 가리키는 객체를 조회하거나 변경하는 서버 접근은 허용하지 않는다.</p>
 <p>Java 함수의 외부 JDBC 연결(<code class="docutils literal notranslate"><span class="pre">jdbc:cubrid://...</span></code>)은 별도 세션과 트랜잭션을 사용하므로 허용한다. 이 연결은 함수를 호출한 질의의 커밋되지 않은 변경이나 SQL 세션 변수를 공유하지 않는다.</p>
+<p><strong>서버 접근 제한 예제</strong></p>
+<p>다음은 서버측 SQL을 사용하는 함수를 Java와 PL/CSQL로 작성했을 때 거절 시점의 차이를 보여주는 예이다.</p>
+<p>다음 코드를 <code class="docutils literal notranslate"><span class="pre">ParallelSql.java</span></code> 파일로 저장하여 컴파일한 뒤, <a class="reference internal" href="jsp.html#jsp-loadjava"><span class="std std-ref">Java 클래스 로드</span></a>에 따라 컴파일된 클래스를 대상 데이터베이스에 로드한다.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Connection</span><span class="p">;</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.DriverManager</span><span class="p">;</span>
+</span><span id="line-3"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.ResultSet</span><span class="p">;</span>
+</span><span id="line-4"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.SQLException</span><span class="p">;</span>
+</span><span id="line-5"><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.Statement</span><span class="p">;</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ParallelSql</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-8"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">readValue</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">SQLException</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-9"><span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:default:connection"</span><span class="p">);</span>
+</span><span id="line-10"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Statement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">createStatement</span><span class="p">();</span>
+</span><span id="line-11"><span class="w">             </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">(</span><span class="s">"SELECT 1"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="line-12"><span class="w">            </span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">();</span>
+</span><span id="line-13"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getInt</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="line-14"><span class="w">        </span><span class="p">}</span>
+</span><span id="line-15"><span class="w">    </span><span class="p">}</span>
+</span><span id="line-16"><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<p>Java 함수는 <strong>PARALLEL_ENABLE</strong>을 지정해도 등록할 수 있다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">parallel_java_sql</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INTEGER</span>
+</span><span id="line-2"><span class="n">PARALLEL_ENABLE</span>
+</span><span id="line-3"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span><span class="w"> </span><span class="n">NAME</span><span class="w"> </span><span class="s1">'ParallelSql.readValue() return int'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Execute</span> <span class="n">OK</span><span class="o">.</span> <span class="p">(</span><span class="mf">0.003000</span> <span class="n">sec</span><span class="p">)</span> <span class="n">Committed</span><span class="o">.</span> <span class="p">(</span><span class="mf">0.000000</span> <span class="n">sec</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>그러나 함수를 호출하면 <code class="docutils literal notranslate"><span class="pre">jdbc:default:connection</span></code> 접근 시 발생한 <strong>SQLException</strong>으로 호출이 실패한다. 이 제한은 직렬 <strong>CALL</strong>에도 적용된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">parallel_java_sql</span><span class="p">();</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">In</span> <span class="n">the</span> <span class="n">command</span> <span class="kn">from</span><span class="w"> </span><span class="nn">line</span> <span class="mi">1</span><span class="p">,</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Stored</span> <span class="n">procedure</span> <span class="n">execute</span> <span class="n">error</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">execute</span> <span class="n">SQL</span> <span class="n">on</span> <span class="n">the</span> <span class="n">server</span><span class="o">-</span><span class="n">side</span> <span class="n">connection</span><span class="p">:</span> <span class="n">the</span> <span class="n">stored</span> <span class="n">procedure</span> <span class="ow">is</span> <span class="n">declared</span> <span class="n">PARALLEL_ENABLE</span>
+</span></code></pre></div>
+</div>
+<p>PL/CSQL에서 서버측 SQL을 사용하는 함수를 같은 속성으로 선언하면, 함수 호출 전인 <strong>CREATE FUNCTION</strong> 컴파일 시점에 거절된다.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">parallel_pl_sql</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INTEGER</span>
+</span><span id="line-2"><span class="n">PARALLEL_ENABLE</span>
+</span><span id="line-3"><span class="k">AS</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+</span><span id="line-5"><span class="k">BEGIN</span>
+</span><span id="line-6"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+</span><span id="line-7"><span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+</span><span id="line-8"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">In</span> <span class="n">line</span> <span class="mi">6</span><span class="p">,</span> <span class="n">column</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Stored</span> <span class="n">procedure</span> <span class="nb">compile</span> <span class="n">error</span><span class="p">:</span> <span class="n">Stored</span> <span class="n">functions</span> <span class="n">declared</span> <span class="k">with</span> <span class="n">PARALLEL_ENABLE</span> <span class="n">cannot</span> <span class="n">use</span> <span class="n">a</span> <span class="n">feature</span> <span class="n">that</span> <span class="n">calls</span> <span class="n">DB</span> <span class="n">server</span>
+</span></code></pre></div>
+</div>
 <p><strong>선언 및 실행 확인</strong></p>
 <p><a class="reference internal" href="../sql/catalog.html#id66"><span class="std std-ref">DB_STORED_PROCEDURE</span></a>와 <a class="reference internal" href="../sql/information_schema.html#information-schema-routines"><span class="std std-ref">routines</span></a>의 <strong>is_parallel_enabled</strong> 값이 <strong>YES</strong>이면 선언된 함수이고, <strong>NO</strong>이면 선언되지 않은 함수이다. 이 값은 선언 여부이며 실제 실행 계획의 병렬 여부를 나타내지 않는다.</p>
 <p>실제 병렬 실행 여부는 <a class="reference internal" href="../sql/tuning.html#query-profiling"><span class="std std-ref">질의 프로파일링</span></a>으로 확인한다. <strong>FUNC</strong> 통계에는 병렬 워커가 실행한 저장 함수 호출도 합산된다.</p>
 <p><strong>예제</strong></p>
 <p>다음은 순수 계산을 수행하는 저장 함수를 병렬 스캔에서 호출하는 예이다. 병렬 워커를 2개 사용할 수 있는 환경에서 실행했으며, 이 실행에서 생성한 테이블의 힙 페이지 수는 3,281개이다.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Prepare data for a parallel scan.</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 병렬 스캔을 위한 데이터를 준비한다.</span>
 </span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">parallel_inc</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INTEGER</span>
 </span><span id="line-3"><span class="n">PARALLEL_ENABLE</span>
 </span><span id="line-4"><span class="k">AS</span>
@@ -472,10 +525,10 @@
 </span></code></pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Trace</span> <span class="n">Statistics</span><span class="p">:</span>
-</span><span id="line-2">  <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">4135</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3286</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-3">    <span class="n">FUNC</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">7502</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">calls</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
-</span><span id="line-4">    <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">parallel_data</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">4134</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3283</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
-</span><span id="line-5">         <span class="p">(</span><span class="n">parallel</span> <span class="n">workers</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mf">4038..4134</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mf">98496..101504</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mf">98496..101504</span><span class="p">,</span> <span class="n">gather</span><span class="p">:</span> <span class="n">buildvalue</span><span class="p">)</span>
+</span><span id="line-2">  <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">3956</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3286</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-3">    <span class="n">FUNC</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">7228</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">calls</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
+</span><span id="line-4">    <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">parallel_data</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">3956</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3283</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
+</span><span id="line-5">         <span class="p">(</span><span class="n">parallel</span> <span class="n">workers</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mf">3853..3955</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mf">98496..101504</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mf">98496..101504</span><span class="p">,</span> <span class="n">gather</span><span class="p">:</span> <span class="n">buildvalue</span><span class="p">)</span>
 </span></code></pre></div>
 </div>
 <p>같은 질의를 <strong>PARALLEL(1)</strong> 힌트로 직렬 실행하면 다음과 같다.</p>
@@ -487,13 +540,12 @@
 </span></code></pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Trace</span> <span class="n">Statistics</span><span class="p">:</span>
-</span><span id="line-2">  <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">6619</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3285</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-3">    <span class="n">FUNC</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">6140</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">calls</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
-</span><span id="line-4">    <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">parallel_data</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">6560</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3283</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
+</span><span id="line-2">  <span class="n">SELECT</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">6520</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3285</span><span class="p">,</span> <span class="n">fetch_time</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-3">    <span class="n">FUNC</span> <span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="mi">6107</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">calls</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
+</span><span id="line-4">    <span class="n">SCAN</span> <span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">dba</span><span class="o">.</span><span class="n">parallel_data</span><span class="p">),</span> <span class="p">(</span><span class="n">heap</span> <span class="n">time</span><span class="p">:</span> <span class="mi">6484</span><span class="p">,</span> <span class="n">fetch</span><span class="p">:</span> <span class="mi">3283</span><span class="p">,</span> <span class="n">ioread</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">readrows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">200000</span><span class="p">)</span>
 </span></code></pre></div>
 </div>
-<p>두 질의의 결과는 모두 <strong>200000</strong>이다. 병렬 실행에서는 <strong>parallel workers: 2</strong>가 표시되고, <strong>FUNC</strong>의 <strong>calls: 200000</strong>에는 두 워커가 실행한 함수 호출이 합산된다.</p>
-</section>
+<p>두 질의의 결과는 모두 <strong>200000</strong>이다. 병렬 실행에서는 <strong>parallel workers: 2</strong>가 표시되고, <strong>FUNC</strong>의 <strong>calls: 200000</strong>에는 두 워커가 실행한 함수 호출이 합산된다. <strong>FUNC</strong>의 <strong>time</strong>에는 동시에 실행된 워커별 함수 호출 시간이 합산되므로 <strong>SELECT</strong>의 <strong>time</strong>보다 클 수 있다. 이 예에서 <strong>FUNC</strong>의 <strong>time</strong>은 직렬 <strong>6107</strong>, 병렬 <strong>7228</strong>이다. 질의 전체의 경과 시간은 <strong>SELECT</strong>의 <strong>time</strong>으로 비교한다. 이 예에서는 직렬 실행의 <strong>6520</strong>에서 병렬 실행의 <strong>3956</strong>으로 줄었다.</p>
 </section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
@@ -519,10 +571,8 @@
 <li><a :data-current="activeSection === '#sql'" class="reference internal" href="#sql">SQL 질의 최적화</a></li>
 <li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">질의에서의 저장 함수 호출 최적화</a></li>
 <li><a :data-current="activeSection === '#pl-use-builtin'" class="reference internal" href="#pl-use-builtin">내장 함수 사용</a></li>
-<li><a :data-current="activeSection === '#pl-deterministic'" class="reference internal" href="#pl-deterministic">결정적 함수 사용</a><ul>
+<li><a :data-current="activeSection === '#pl-deterministic'" class="reference internal" href="#pl-deterministic">결정적 함수 사용</a></li>
 <li><a :data-current="activeSection === '#pl-parallel-enable'" class="reference internal" href="#pl-parallel-enable">병렬 실행이 가능한 함수 사용</a></li>
-</ul>
-</li>
 </ul>
 </div>
 </aside>
@@ -531,7 +581,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
 </div>
 </div>
 </footer>

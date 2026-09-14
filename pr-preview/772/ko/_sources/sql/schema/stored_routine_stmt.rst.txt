@@ -143,6 +143,8 @@ CREATE FUNCTION
 
 AUTHID, DETERMINISTIC, PARALLEL_ENABLE은 순서와 관계없이 지정할 수 있으며, 같은 속성을 두 번 이상 지정할 수 없다.
 
+Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입 뒤에 속성을 지정하려면 ``SET(INTEGER)``\와 같이 원소 타입을 명시해야 한다.
+
 저장 함수의 커멘트
 ----------------------------------
 
@@ -300,11 +302,9 @@ pl_csql_deterministic 함수의 Trace 결과에서는 SUBQUERY_CACHE 항목이 �
 CREATE FUNCTION PARALLEL_ENABLE
 ----------------------------------
 
-**PARALLEL_ENABLE** 속성을 지정하면 Java 및 PL/CSQL 저장 함수를 병렬 스캔, 부질의 병렬 실행, 병렬 해시 조인에서 실행할 수 있다. 생략하면 함수의 병렬 실행을 허용하지 않는다. 저장 프로시저와 PL/CSQL의 중첩 함수 및 프로시저에는 지정할 수 없다.
+**PARALLEL_ENABLE** 속성을 지정하면 Java 및 PL/CSQL 저장 함수를 병렬 스캔, 부질의 병렬 실행, 병렬 해시 조인에서 실행할 수 있다. 생략하면 함수의 병렬 실행을 허용하지 않는다. 저장 프로시저에는 지정할 수 없으며, ``PARALLEL_ENABLE can be specified only for FUNCTION`` 오류로 거절된다. PL/CSQL 본문에 정의한 중첩(local) 함수 및 프로시저에도 지정할 수 없으며, ``illegal keyword PARALLEL_ENABLE for a local procedure/function`` 컴파일 오류로 거절된다.
 
 이 속성을 변경하려면 **CREATE OR REPLACE FUNCTION** 문으로 함수를 다시 정의한다. **ALTER FUNCTION** 문으로는 변경할 수 없다. 선언을 변경한 뒤 실행 계획을 확인할 때는 **RECOMPILE** 힌트로 질의를 재컴파일한다.
-
-Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입 뒤에 속성을 지정하려면 ``SET(INTEGER)``\와 같이 원소 타입을 명시해야 한다.
 
 **unloaddb**\는 이 속성을 스키마 파일에 출력한다.
 
@@ -312,7 +312,7 @@ Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입
 
 .. code-block:: sql
 
-    -- Declare a function that can run in parallel.
+    -- 병렬 실행이 가능한 함수를 선언한다.
     CREATE OR REPLACE FUNCTION parallel_inc (n INTEGER) RETURN INTEGER
     PARALLEL_ENABLE
     AS

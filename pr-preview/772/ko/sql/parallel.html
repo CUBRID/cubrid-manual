@@ -282,7 +282,8 @@
 <ul class="simple">
 <li><p>동시성 처리를 지원하지 않는 구문이 포함된 경우</p>
 <ul>
-<li><p>조건절에서 <strong>PARALLEL_ENABLE</strong>을 지정하지 않은 저장 함수(JavaSP, PL/CSQL)를 사용하거나 Serial을 사용하는 경우. 선언된 함수의 제약은 <a class="reference internal" href="../pl/pl_tuning.html#pl-parallel-enable"><span class="std std-ref">병렬 실행이 가능한 함수 사용</span></a>을 참고한다.</p></li>
+<li><p>조건절에서 <strong>PARALLEL_ENABLE</strong>을 지정하지 않은 저장 함수(JavaSP, PL/CSQL)를 평가하는 경우. 부질의(인라인 뷰 포함)에서도 적용 여부는 각 스캔별로 판단한다. 선언된 함수의 제약은 <a class="reference internal" href="../pl/pl_tuning.html#pl-parallel-enable"><span class="std std-ref">병렬 실행이 가능한 함수 사용</span></a>을 참고한다.</p></li>
+<li><p>Serial을 사용하는 경우</p></li>
 <li><p>세션 변수를 참조시</p></li>
 <li><p>Recursive CTE 또는 Connect By 구문 사용시</p></li>
 <li><p>CUBRID 오브젝트 DBMS 전용 기능 사용시</p></li>
@@ -659,7 +660,7 @@
 <li><p>derived table(인라인 뷰) 등에 의해 부질의 간 참조가 존재하는 경우</p></li>
 <li><p>Object DBMS 기능을 사용하는 경우 (path expression 등)</p></li>
 <li><p>JSON_TABLE이나 SET 타입 테이블의 스캔이 포함된 경우</p></li>
-<li><p>부질의에 <strong>PARALLEL_ENABLE</strong>을 지정하지 않은 저장 함수가 포함된 경우. 이 제한은 해당 부질의에 적용된다.</p></li>
+<li><p>부질의에 <strong>PARALLEL_ENABLE</strong>을 지정하지 않은 저장 함수가 포함된 경우. 저장 함수를 포함한 부질의는 병렬 실행 대상에서 제외되며, 같은 질의의 독립적인 다른 부질의는 별도로 판단한다.</p></li>
 <li><p>상관 부질의인 경우</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 병렬 실행이 적용되지 않는 예</span>
@@ -694,7 +695,7 @@
 </span><span id="line-30"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
 </span><span id="line-31"><span class="p">);</span>
 </span><span id="line-32">
-</span><span id="line-33"><span class="c1">-- PARALLEL_ENABLE을 지정하지 않은 저장 함수가 조건절에 포함된 경우</span>
+</span><span id="line-33"><span class="c1">-- PARALLEL_ENABLE을 지정하지 않은 저장 함수가 부질의에 포함된 경우</span>
 </span><span id="line-34"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
 </span><span id="line-35"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
 </span><span id="line-36"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
@@ -1234,7 +1235,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
 </div>
 </div>
 </footer>

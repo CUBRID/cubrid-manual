@@ -3909,7 +3909,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </tr>
 <tr class="row-odd"><td><p>target</p></td>
 <td><p>VARCHAR(4096)</p></td>
-<td><p>실행할 저장 프로시저의 대상 이름</p></td>
+<td><p>실행할 저장 프로시저의 대상 이름 (PL/CSQL 저장 프로시저와 함수는 NULL)</p></td>
 </tr>
 <tr class="row-even"><td><p>owner</p></td>
 <td><p>VARCHAR(32)</p></td>
@@ -4004,7 +4004,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </div>
 </div></blockquote>
 <p>다음 예제에서는 현재 사용자가 소유한 두 저장 함수를 조회한다.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Show the two stored functions owned by the current user.</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 현재 사용자가 소유한 두 저장 함수를 조회한다.</span>
 </span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">hello</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="s1">'Hello'</span><span class="p">;</span><span class="w"> </span><span class="k">END</span><span class="p">;</span>
 </span><span id="line-3">
 </span><span id="line-4"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sp_int</span><span class="p">(</span><span class="n">p_int</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="n">p_int</span><span class="p">;</span><span class="w"> </span><span class="k">END</span><span class="p">;</span>
@@ -4392,7 +4392,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
 </div>
 </div>
 </footer>

@@ -211,7 +211,7 @@ pl_csql_deterministic 함수의 Trace 결과에서는 **SUBQUERY_CACHE** 항목�
 .. _pl-parallel-enable:
 
 병렬 실행이 가능한 함수 사용
-----------------------------------
+========================================
 
 **PARALLEL_ENABLE**\은 Java 및 PL/CSQL 저장 함수의 병렬 실행을 허용하는 속성이다. 선언 방법은 :ref:`create-function-parallel-enable`\을 참고한다.
 
@@ -234,6 +234,74 @@ Java 함수에서 OID를 인자나 반환값으로 전달하거나 ``getOidStrin
 
 Java 함수의 외부 JDBC 연결(``jdbc:cubrid://...``)은 별도 세션과 트랜잭션을 사용하므로 허용한다. 이 연결은 함수를 호출한 질의의 커밋되지 않은 변경이나 SQL 세션 변수를 공유하지 않는다.
 
+**서버 접근 제한 예제**
+
+다음은 서버측 SQL을 사용하는 함수를 Java와 PL/CSQL로 작성했을 때 거절 시점의 차이를 보여주는 예이다.
+
+다음 코드를 ``ParallelSql.java`` 파일로 저장하여 컴파일한 뒤, :ref:`jsp-loadjava`\에 따라 컴파일된 클래스를 대상 데이터베이스에 로드한다.
+
+.. code-block:: java
+
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.ResultSet;
+    import java.sql.SQLException;
+    import java.sql.Statement;
+
+    public class ParallelSql {
+        public static int readValue() throws SQLException {
+            Connection conn = DriverManager.getConnection("jdbc:default:connection");
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT 1")) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        }
+    }
+
+Java 함수는 **PARALLEL_ENABLE**\을 지정해도 등록할 수 있다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION parallel_java_sql() RETURN INTEGER
+    PARALLEL_ENABLE
+    AS LANGUAGE JAVA NAME 'ParallelSql.readValue() return int';
+
+::
+
+    Execute OK. (0.003000 sec) Committed. (0.000000 sec)
+
+그러나 함수를 호출하면 ``jdbc:default:connection`` 접근 시 발생한 **SQLException**\으로 호출이 실패한다. 이 제한은 직렬 **CALL**\에도 적용된다.
+
+.. code-block:: sql
+
+    CALL parallel_java_sql();
+
+::
+
+    In the command from line 1,
+
+    ERROR: Stored procedure execute error: cannot execute SQL on the server-side connection: the stored procedure is declared PARALLEL_ENABLE
+
+PL/CSQL에서 서버측 SQL을 사용하는 함수를 같은 속성으로 선언하면, 함수 호출 전인 **CREATE FUNCTION** 컴파일 시점에 거절된다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE FUNCTION parallel_pl_sql() RETURN INTEGER
+    PARALLEL_ENABLE
+    AS
+        n INTEGER;
+    BEGIN
+        SELECT 1 INTO n;
+        RETURN n;
+    END;
+
+::
+
+    In line 6, column 5,
+
+    ERROR: Stored procedure compile error: Stored functions declared with PARALLEL_ENABLE cannot use a feature that calls DB server
+
 **선언 및 실행 확인**
 
 :ref:`db-stored-procedure`\와 :ref:`information-schema-routines`\의 **is_parallel_enabled** 값이 **YES**\이면 선언된 함수이고, **NO**\이면 선언되지 않은 함수이다. 이 값은 선언 여부이며 실제 실행 계획의 병렬 여부를 나타내지 않는다.
@@ -246,7 +314,7 @@ Java 함수의 외부 JDBC 연결(``jdbc:cubrid://...``)은 별도 세션과 트
 
 .. code-block:: sql
 
-    -- Prepare data for a parallel scan.
+    -- 병렬 스캔을 위한 데이터를 준비한다.
     CREATE OR REPLACE FUNCTION parallel_inc (n INTEGER) RETURN INTEGER
     PARALLEL_ENABLE
     AS
@@ -273,10 +341,10 @@ Java 함수의 외부 JDBC 연결(``jdbc:cubrid://...``)은 별도 세션과 트
 ::
 
     Trace Statistics:
-      SELECT (time: 4135, fetch: 3286, fetch_time: 7, ioread: 0)
-        FUNC (time: 7502, fetch: 1, ioread: 0, calls: 200000)
-        SCAN (table: dba.parallel_data), (heap time: 4134, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
-             (parallel workers: 2, heap time: 4038..4134, readrows: 98496..101504, rows: 98496..101504, gather: buildvalue)
+      SELECT (time: 3956, fetch: 3286, fetch_time: 6, ioread: 0)
+        FUNC (time: 7228, fetch: 1, ioread: 0, calls: 200000)
+        SCAN (table: dba.parallel_data), (heap time: 3956, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
+             (parallel workers: 2, heap time: 3853..3955, readrows: 98496..101504, rows: 98496..101504, gather: buildvalue)
 
 같은 질의를 **PARALLEL(1)** 힌트로 직렬 실행하면 다음과 같다.
 
@@ -291,8 +359,8 @@ Java 함수의 외부 JDBC 연결(``jdbc:cubrid://...``)은 별도 세션과 트
 ::
 
     Trace Statistics:
-      SELECT (time: 6619, fetch: 3285, fetch_time: 3, ioread: 0)
-        FUNC (time: 6140, fetch: 1, ioread: 0, calls: 200000)
-        SCAN (table: dba.parallel_data), (heap time: 6560, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
+      SELECT (time: 6520, fetch: 3285, fetch_time: 2, ioread: 0)
+        FUNC (time: 6107, fetch: 1, ioread: 0, calls: 200000)
+        SCAN (table: dba.parallel_data), (heap time: 6484, fetch: 3283, ioread: 0, readrows: 200000, rows: 200000)
 
-두 질의의 결과는 모두 **200000**\이다. 병렬 실행에서는 **parallel workers: 2**\가 표시되고, **FUNC**\의 **calls: 200000**\에는 두 워커가 실행한 함수 호출이 합산된다.
+두 질의의 결과는 모두 **200000**\이다. 병렬 실행에서는 **parallel workers: 2**\가 표시되고, **FUNC**\의 **calls: 200000**\에는 두 워커가 실행한 함수 호출이 합산된다. **FUNC**\의 **time**\에는 동시에 실행된 워커별 함수 호출 시간이 합산되므로 **SELECT**\의 **time**\보다 클 수 있다. 이 예에서 **FUNC**\의 **time**\은 직렬 **6107**, 병렬 **7228**\이다. 질의 전체의 경과 시간은 **SELECT**\의 **time**\으로 비교한다. 이 예에서는 직렬 실행의 **6520**\에서 병렬 실행의 **3956**\으로 줄었다.

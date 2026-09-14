@@ -2382,7 +2382,7 @@ lang                 VARCHAR(16)                 저장 프로시저의 구현 �
 authid               VARCHAR(16)                 저장 프로시저의 실행 권한
 is_deterministic     VARCHAR(3)                  결정적 함수 여부
 is_parallel_enabled  VARCHAR(3)                  PARALLEL_ENABLE 선언 여부
-target               VARCHAR(4096)               실행할 저장 프로시저의 대상 이름
+target               VARCHAR(4096)               실행할 저장 프로시저의 대상 이름 (PL/CSQL 저장 프로시저와 함수는 NULL)
 owner                VARCHAR(32)                 소유자
 code                 VARCHAR(1073741823)         저장 프로시저의 소스 코드
 sql_data_access      VARCHAR(17)                 SQL 데이터 접근 모드 (NO SQL, CONTAINS SQL, READS SQL DATA, MODIFIES SQL DATA)
@@ -2431,7 +2431,7 @@ updated_time         DATETIME                    저장 프로시저 수정 시�
 
 .. code-block:: sql
 
-    -- Show the two stored functions owned by the current user.
+    -- 현재 사용자가 소유한 두 저장 함수를 조회한다.
     CREATE OR REPLACE FUNCTION hello RETURN VARCHAR AS BEGIN RETURN 'Hello'; END;
 
     CREATE OR REPLACE FUNCTION sp_int(p_int INTEGER) RETURN INTEGER AS BEGIN RETURN p_int; END;

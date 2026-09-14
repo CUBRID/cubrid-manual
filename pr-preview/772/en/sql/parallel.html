@@ -280,7 +280,8 @@
 <ul class="simple">
 <li><p>Statements that do not support concurrent processing</p>
 <ul>
-<li><p>Stored functions (JavaSP, PL/CSQL) without <strong>PARALLEL_ENABLE</strong> in predicates, or Serial usage. For constraints on declared functions, refer to <a class="reference internal" href="../pl/pl_tuning.html#pl-parallel-enable"><span class="std std-ref">Use Functions That Can Run in Parallel</span></a>.</p></li>
+<li><p>Stored functions (JavaSP, PL/CSQL) without <strong>PARALLEL_ENABLE</strong> are evaluated in predicates. Applicability is determined for each scan, including scans in subqueries and inline views. For constraints on declared functions, refer to <a class="reference internal" href="../pl/pl_tuning.html#pl-parallel-enable"><span class="std std-ref">Use Functions That Can Run in Parallel</span></a>.</p></li>
+<li><p>Serial usage</p></li>
 <li><p>References to session variables</p></li>
 <li><p>Recursive CTE or Connect By clauses</p></li>
 <li><p>CUBRID object DBMS specific features</p></li>
@@ -660,7 +661,7 @@ forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 <li><p>References between subqueries exist due to derived tables (inline views), etc.</p></li>
 <li><p>Object DBMS features are used (such as path expressions, etc.)</p></li>
 <li><p><strong>JSON_TABLE</strong> or SET type table scans are included</p></li>
-<li><p>The subquery contains a stored function without <strong>PARALLEL_ENABLE</strong>. This restriction applies to that subquery.</p></li>
+<li><p>The subquery contains a stored function without <strong>PARALLEL_ENABLE</strong>. The subquery containing the stored function is excluded from parallel subquery execution. Other independent subqueries in the same query are evaluated separately for eligibility.</p></li>
 <li><p>When it is a correlated subquery</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Examples where parallel execution is not applied</span>
@@ -695,7 +696,7 @@ forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 </span><span id="line-30"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Electronics'</span>
 </span><span id="line-31"><span class="p">);</span>
 </span><span id="line-32">
-</span><span id="line-33"><span class="c1">-- When a stored function without PARALLEL_ENABLE is included in the condition clause</span>
+</span><span id="line-33"><span class="c1">-- When a stored function without PARALLEL_ENABLE is included in a subquery</span>
 </span><span id="line-34"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
 </span><span id="line-35"><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
 </span><span id="line-36"><span class="k">WHERE</span><span class="w"> </span><span class="n">customer_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
@@ -1235,7 +1236,7 @@ forcing a hash join (the <strong>USE_HASH</strong> hint).</p></li>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 14, 2026. </p>
 </div>
 </div>
 </footer>

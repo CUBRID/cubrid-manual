@@ -2378,7 +2378,7 @@ lang                 VARCHAR(16)                 Implementation language name
 authid               VARCHAR(16)                 Execution privileges of the stored procedure
 is_deterministic     VARCHAR(3)                  Indicates whether the function is deterministic
 is_parallel_enabled  VARCHAR(3)                  Whether PARALLEL_ENABLE is declared
-target               VARCHAR(4096)               Name of the target stored procedure code to execute
+target               VARCHAR(4096)               Name of the target stored procedure code to execute (NULL for PL/CSQL procedures and functions)
 owner                VARCHAR(32)                 Owner
 code                 VARCHAR(1073741823)         Source code of the stored procedure
 sql_data_access      VARCHAR(17)                 SQL data-access mode (NO SQL, CONTAINS SQL, READS SQL DATA, MODIFIES SQL DATA)

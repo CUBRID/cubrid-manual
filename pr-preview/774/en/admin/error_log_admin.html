@@ -1325,8 +1325,8 @@ Level 2 (Small Incremental): Incremental backup based on level 1 backup</p>
 </ul>
 <p id="error-1305"><strong>ERROR CODE: -1305, ‘dblink server “%1$s” not found.’</strong></p>
 <ul class="simple">
-<li><p>This message occurs when, in CUBRID, when trying to reference (e.g., connect, modify, delete, etc.) a DBLink server object, a server object with the specified name does not exist in the database; that is, the server name was entered incorrectly, has already been deleted, or has not yet been created.</p></li>
-<li><p>The same message also occurs when a server object with the specified name does exist, but the current user is neither its owner, nor a member of the owning group, nor a DBA; a server that the user is not authorized for and a server that does not exist are not distinguished.</p></li>
+<li><p>This message occurs when, in CUBRID, when trying to reference (e.g., connect, modify, delete, etc.) a DBLink server object, a server object with the specified name does not exist in the database; that is, the server name was entered incorrectly, has already been deleted, or has not yet been created. A server statement (ALTER, DROP, RENAME SERVER) that omits the owner name looks only at servers the current user owns, so it falls here even when a server of that name exists under another user.</p></li>
+<li><p>The same message also occurs when a server object with the specified name does exist, but the current user is neither its owner, nor a member of the owning group, nor a DBA; a server that the user is not authorized for and a server that does not exist are not distinguished. This happens when a dblink query refers to a server as <a class="reference external" href="mailto:table_name%40owner_name.server_name">table_name<span>@</span>owner_name<span>.</span>server_name</a>; a server statement that names the owner is refused with “DBA, members of DBA group, and owner can perform …” instead of this code.</p></li>
 </ul>
 <p id="error-1306"><strong>ERROR CODE: -1306, ‘dblink server “%1$s” already exists.’</strong></p>
 <ul class="simple">
@@ -1373,6 +1373,7 @@ For example, it can occur when the number of parameters does not match, the type
 <ul class="simple">
 <li><p>This message occurs when, in CUBRID, when attempting an operation (ALTER, etc.) that is not allowed on a DBLink server object; depending on certain system policies, privileges, or the attributes of the DBLink server, changes (ALTER, DROP, etc.) to that server may be prohibited.
 For example, it can occur when the server is protected by the system, or when the current session/user does not have the authority to change that server.</p></li>
+<li><p>From version 11.4, an operation on a server the user is not authorized for is reported as <a class="reference internal" href="#error-1305"><span class="std std-ref">-1305</span></a> instead of this code, so that a server the user is not authorized for and a server that does not exist are not distinguished. This code is kept for backward compatibility.</p></li>
 </ul>
 <p id="error-1318"><strong>ERROR CODE: -1318, ‘[%1$5.5s][%2$d] %3$s’</strong></p>
 <ul class="simple">
@@ -1507,7 +1508,7 @@ For example, it can occur when the server is protected by the system, or when th
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 15, 2026. </p>
 </div>
 </div>
 </footer>

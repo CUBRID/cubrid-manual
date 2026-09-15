@@ -250,7 +250,7 @@ For how to use the prepared server, refer to <a class="reference internal" href=
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><em>owner_name</em>: Specifies the name of the owner of the server to be created.</p></li>
+<li><p><em>owner_name</em>: Specifies the name of the owner of the server to be created. See the note below for who can be named as the owner.</p></li>
 <li><p><em>server_name</em>: Specifies the name of the server to be created. (up to 254 bytes)</p></li>
 <li><p>&lt;<em>connect_info</em>&gt;: <strong>HOST</strong>, <strong>PORT</strong>, <strong>DBNAME</strong>, and <strong>USER</strong> are mandatory items in the &lt;connect_item&gt; list of access information.</p></li>
 <li><p>&lt;<em>connect_item</em>&gt;: It consists of HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, and COMMENT items, and the same item cannot be duplicated.</p>
@@ -268,7 +268,9 @@ For how to use the prepared server, refer to <a class="reference internal" href=
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The owner must be the current user, or a group that the current user belongs to.
-In particular, <strong>DBA</strong> or <strong>DBA</strong> members can specify any user as the owner.</p>
+In particular, <strong>DBA</strong> or <strong>DBA</strong> members can specify any user as the owner.
+Naming an owner that the current user is not authorized for fails with
+<code class="docutils literal notranslate"><span class="pre">DBA,</span> <span class="pre">members</span> <span class="pre">of</span> <span class="pre">DBA</span> <span class="pre">group,</span> <span class="pre">and</span> <span class="pre">owner</span> <span class="pre">can</span> <span class="pre">perform</span> <span class="pre">CREATE</span> <span class="pre">SERVER.</span></code></p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -423,9 +425,13 @@ Also, the owner of the <em>srv3</em> server remains <em>dev1</em>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Only the owner of the server or members of the ownership group can remove the server.
-In particular, <strong>DBA</strong> or <strong>DBA</strong> members can remove any server.
-The <strong>IF EXISTS</strong> clause only ignores a server that does not exist; if the server exists
-but the current user is not authorized for it, an error occurs.</p>
+In particular, <strong>DBA</strong> or <strong>DBA</strong> members can remove any server.</p>
+<p>When <em>owner_name</em> is given and the current user is not authorized for that owner, an error
+occurs regardless of the <strong>IF EXISTS</strong> clause. Whether the server exists is not consulted,
+so naming a server that does not exist under that owner fails in the same way.</p>
+<p>When <em>owner_name</em> is omitted, only a server owned by the current user is considered. A server
+of the same name owned by another user is treated as not existing, so the <strong>IF EXISTS</strong> clause
+ignores it.</p>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="n">SERVER</span><span class="w"> </span><span class="n">srv1</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">DROP</span><span class="w"> </span><span class="n">SERVER</span><span class="w"> </span><span class="n">cub</span><span class="p">.</span><span class="n">srv1</span><span class="p">;</span>
@@ -630,7 +636,7 @@ In particular, <strong>DBA</strong> or <strong>DBA</strong> members can specify 
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 15, 2026. </p>
 </div>
 </div>
 </footer>

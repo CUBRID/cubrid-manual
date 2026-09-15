@@ -2003,7 +2003,7 @@ This error code occurs when there is already a COMPACTDB process running and you
 
 - This message occurs when, in CUBRID, when attempting an operation (ALTER, etc.) that is not allowed on a DBLink server object; depending on certain system policies, privileges, or the attributes of the DBLink server, changes (ALTER, DROP, etc.) to that server may be prohibited.
   For example, it can occur when the server is protected by the system, or when the current session/user does not have the authority to change that server.
-- From 11.4 on, an operation on a server the user is not authorized for is reported as :ref:`-1305 <ERROR-1305>` instead of this code, so that a server the user is not authorized for and a server that does not exist are not distinguished. This code is kept for backward compatibility.
+- From version 11.4, an operation on a server the user is not authorized for is reported as :ref:`-1305 <ERROR-1305>` instead of this code, so that a server the user is not authorized for and a server that does not exist are not distinguished. This code is kept for backward compatibility.
 
 
 .. _ERROR-1318:

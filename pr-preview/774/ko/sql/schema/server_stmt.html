@@ -252,7 +252,7 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><em>owner_name</em>: 생성할 서버의 소유자 이름을 지정한다.</p></li>
+<li><p><em>owner_name</em>: 생성할 서버의 소유자 이름을 지정한다. 지정할 수 있는 소유자는 아래 note 를 참고한다.</p></li>
 <li><p><em>server_name</em>: 생성할 서버의 이름을 지정한다(최대 254바이트).</p></li>
 <li><p>&lt;<em>connect_info</em>&gt;: 접속 정보 리스트로 &lt;connect_item&gt; 항목 중 <strong>HOST</strong>, <strong>PORT</strong>, <strong>DBNAME</strong>, <strong>USER</strong>는 필수 항목이다.</p></li>
 <li><p>&lt;<em>connect_item</em>&gt;: HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, COMMENT 항목으로 구성되며, 동일한 항목이 중복될 수 없다.</p>
@@ -270,7 +270,9 @@
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>소유자는 현재 사용자 자신이거나 현재 사용자가 속한 그룹이어야 한다.
-특별히 <strong>DBA</strong> 또는 <strong>DBA</strong> 의 멤버는 임의의 사용자를 소유자로 지정할 수 있다.</p>
+특별히 <strong>DBA</strong> 또는 <strong>DBA</strong> 의 멤버는 임의의 사용자를 소유자로 지정할 수 있다.
+인가되지 않은 소유자를 지정하면 <code class="docutils literal notranslate"><span class="pre">DBA,</span> <span class="pre">members</span> <span class="pre">of</span> <span class="pre">DBA</span> <span class="pre">group,</span> <span class="pre">and</span> <span class="pre">owner</span> <span class="pre">can</span> <span class="pre">perform</span> <span class="pre">CREATE</span> <span class="pre">SERVER.</span></code>
+에러가 발생한다.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
@@ -424,9 +426,12 @@ srv1, srv2, srv3는 동일한 의미이다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>서버의 소유자 또는 소유 그룹의 멤버만 서버를 제거할 수 있다.
-특별히 <strong>DBA</strong> 또는 <strong>DBA</strong> 의 멤버는 모든 서버를 제거할 수 있다.
-<strong>IF EXISTS</strong> 절은 존재하지 않는 서버를 무시할 뿐이며, 서버가 존재하지만 현재
-사용자가 그 서버에 대해 권한이 없으면 에러가 발생한다.</p>
+특별히 <strong>DBA</strong> 또는 <strong>DBA</strong> 의 멤버는 모든 서버를 제거할 수 있다.</p>
+<p><em>owner_name</em> 을 지정한 경우, 그 소유자에 대해 현재 사용자가 인가되어 있지 않으면 <strong>IF EXISTS</strong>
+절과 무관하게 에러가 발생한다. 이때 서버의 존재 여부는 보지 않으므로 존재하지 않는 이름을 적어도
+마찬가지로 에러가 된다.</p>
+<p><em>owner_name</em> 을 생략한 경우에는 현재 사용자가 소유한 서버만 대상이 되며, 같은 이름의 서버가 다른
+사용자 소유로 존재하더라도 존재하지 않는 것으로 취급되어 <strong>IF EXISTS</strong> 절이 이를 무시한다.</p>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DROP</span><span class="w"> </span><span class="n">SERVER</span><span class="w"> </span><span class="n">srv1</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">DROP</span><span class="w"> </span><span class="n">SERVER</span><span class="w"> </span><span class="n">cub</span><span class="p">.</span><span class="n">srv1</span><span class="p">;</span>
@@ -631,7 +636,7 @@ srv1, srv2, srv3는 동일한 의미이다.</p>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 15, 2026. </p>
 </div>
 </div>
 </footer>

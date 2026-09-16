@@ -29,13 +29,13 @@ Linux
 
 **기본 환경**
 
-*   운영체제: Linux: 32 비트 또는 64비트
+*   운영 체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
 *   PHP: 5.6.x, 7.1.x, 또는 7.4.x (https://www.php.net/downloads.php)
 
 **PECL을 이용한 설치**
 
-**PECL**\ 이 설치되어 있다면, **PECL**\ 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PDO 드라이버를 설치할 수 있다. 
+**PECL**\ 이 설치되어 있다면, **PECL**\ 이 소스 코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PDO 드라이버를 설치할 수 있다. 
 
 .. FIXME: **PECL**\ 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl\ 을 참고하여 PECL을 설치한다.
 
@@ -53,7 +53,7 @@ Linux
     
     * CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 **pdo_cubrid.ini** 파일을 생성하고 내용에 **extension=pdo_cubrid.so** 를 입력하여 **/etc/php.d** 디렉터리에 저장한다.
     
-    * 다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. ::
+    * 다른 운영 체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. ::
     
         [CUBRID]
         extension=pdo_cubrid.so
@@ -65,14 +65,14 @@ Windows
 
 **기본 환경**
 
-*   운영체제: Windows 32 비트 또는 64비트
+*   운영 체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
 *   PHP: 5.6.x, 7.1.x 또는 7.4.x(https://windows.php.net/download/)
 *   PHP 7.1.x 또는 7.4.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
 
 **빌드된 드라이버 다운로드 및 설치**
 
-운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 https://www.cubrid.org/downloads#pdo 에서 다운로드한다.
+운영 체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 https://www.cubrid.org/downloads#pdo 에서 다운로드한다.
 
 PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
@@ -143,7 +143,7 @@ CUBRID PDO 드라이버에 의해 정의되는 상수(predefined constants)는 C
 +------------------------------------+---------+---------------------------------------------------------------------------------------------------+
 | PDO::CUBRID_SCH_VIEW               | integer | CUBRID 뷰의 이름과 타입을 얻는다.                                                                 |
 +------------------------------------+---------+---------------------------------------------------------------------------------------------------+
-| PDO::CUBRID_SCH_QUERY_SPEC         | integer | 뷰의 쿼리 정의를 얻는다.                                                                          |
+| PDO::CUBRID_SCH_QUERY_SPEC         | integer | 뷰의 질의 정의를 얻는다.                                                                          |
 +------------------------------------+---------+---------------------------------------------------------------------------------------------------+
 | PDO::CUBRID_SCH_ATTRIBUTE          | integer | 테이블 칼럼의 속성을 얻는다.                                                                      |
 +------------------------------------+---------+---------------------------------------------------------------------------------------------------+
@@ -256,7 +256,7 @@ PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격�
 *   prepared statements( `prepare <https://www.php.net/manual/en/pdo.prepare.php>`_ ()/ `execute <https://www.php.net/manual/en/pdostatement.execute.php>`_ ()) 함수 사용
 *   `exec <https://www.php.net/manual/en/pdo.exec.php>`_ () 함수 사용
 
-다음 예제에서는 가장 간단한 `query <https://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용한다. 리턴 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
+다음 예제에서는 가장 간단한 `query <https://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용한다. 반환 값은 PDOStatement 객체인 resultset에서 $rs["column_name"]와 같이 칼럼 이름을 이용하여 얻을 수 있다.
 
 `query <https://www.php.net/manual/en/pdo.query.php>`_ () 함수를 사용할 때에는 질의 코드가 제대로 이스케이프되었는지 확인해야 한다. 이스케이프에 대한 내용은 `PDO::quote <https://www.php.net/manual/en/pdo.quote.php>`_ ()를 참고한다.
 

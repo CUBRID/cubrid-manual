@@ -84,7 +84,7 @@ CREATE TABLE
 
       <index_with_option> ::= {DEDUPLICATE ‘=‘ deduplicate_level }
 
-*   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다.
+*   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 오류 없이 테이블을 생성하지 않는다.
 *   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 생성할 테이블의 이름을 지정한다(최대 222바이트).
 *   *column_name*: 생성할 칼럼의 이름을 지정한다(최대 254바이트).
@@ -94,9 +94,9 @@ CREATE TABLE
 *   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
-*   *table_comment_string*: 테이블의 커멘트를 지정한다.
-*   *column_comment_string*: 칼럼의 커멘트를 지정한다.
-*   *index_comment_string*: 인덱스의 커멘트를 지정한다.
+*   *table_comment_string*: 테이블의 주석을 지정한다.
+*   *column_comment_string*: 칼럼의 주석을 지정한다.
+*   *index_comment_string*: 인덱스의 주석을 지정한다.
 *   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 .. note::
@@ -120,13 +120,13 @@ CREATE TABLE
         introduction     VARCHAR(1500)
     );
 
-다음은 ALTER 문을 사용하여 테이블 커멘트를 추가하는 예제이다.
+다음은 ALTER 문을 사용하여 테이블 주석을 추가하는 예제이다.
 
 .. code-block:: sql
     
     ALTER TABLE olympic2 COMMENT = 'this is new comment for olympic2';
 
-다음은 테이블 생성 시 인덱스 커멘트를 포함하는 예제이다.
+다음은 테이블 생성 시 인덱스 주석을 포함하는 예제이다.
 
 .. code-block:: sql
 
@@ -411,7 +411,7 @@ CREATE TABLE
     *   초기값 및 자동 증가 특성에 의해 증가된 최종 값은 해당 타입에서 허용되는 최소/최대값을 넘을 수 없다.
     *   자동 증가 특성은 순환되지 않으므로 타입의 최대값을 넘어갈 경우 오류가 발생하며, 이에 대한 롤백이 일어나지 않는다. 따라서 이와 같은 경우 해당 칼럼을 삭제 후 다시 생성해야 한다. 
 
-        예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
+        예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 오류가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
 
         .. code-block:: sql
           
@@ -422,7 +422,7 @@ CREATE TABLE
 ON UPDATE
 ---------
 
-특정 테이블의 해당 열의 다른 속성값이 변경되면 자동으로 변경되는 속성을 추가할 수있다. **ON UPDATE** 의 값은 **ALTER** 문을 통해 변경할 수있다. 의사 컬럼은 다음과 같은 방법으로 **ON UPDATE** 의 값을 허용한다. 갱신되는 필드의 목록에 의사 컬럼이 포함되는 경우, 정해진 **ON UPDATE** 값으로의 수정되지 않는다.
+특정 테이블의 해당 열의 다른 속성값이 변경되면 자동으로 변경되는 속성을 추가할 수있다. **ON UPDATE** 의 값은 **ALTER** 문을 통해 변경할 수있다. 의사 칼럼은 다음과 같은 방법으로 **ON UPDATE** 의 값을 허용한다. 갱신되는 필드의 목록에 의사 칼럼이 포함되는 경우, 정해진 **ON UPDATE** 값으로의 수정되지 않는다.
 
 +-------------------------------+---------------+
 | 기본값                        | 데이터 타입   |
@@ -492,7 +492,7 @@ ON UPDATE
 NOT NULL 제약
 ^^^^^^^^^^^^^
 
-**NOT NULL** 제약 조건이 정의된 칼럼은 반드시 **NULL** 이 아닌 값을 가져야 한다. 모든 칼럼에 대해 **NOT NULL** 제약 조건을 정의할 수 있다. **INSERT**, **UPDATE** 구문을 통해 **NOT NULL** 속성 칼럼에 **NULL** 값을 입력하거나 갱신하면 에러가 발생한다.
+**NOT NULL** 제약 조건이 정의된 칼럼은 반드시 **NULL** 이 아닌 값을 가져야 한다. 모든 칼럼에 대해 **NOT NULL** 제약 조건을 정의할 수 있다. **INSERT**, **UPDATE** 구문을 통해 **NOT NULL** 속성 칼럼에 **NULL** 값을 입력하거나 갱신하면 오류가 발생한다.
 
 아래 예에서 *id* 칼럼은 NULL 값을 가질 수 없으므로, INSERT 문에서 *id* 칼럼에 NULL을 입력하면 오류가 발생한다.
 
@@ -510,7 +510,7 @@ NOT NULL 제약
 UNIQUE 제약
 ^^^^^^^^^^^
 
-**UNIQUE** 제약 조건은 정의된 칼럼이 고유한 값을 갖도록 하는 제약 조건이다. 기존 레코드와 동일한 칼럼 값을 갖는 레코드가 추가되면 에러가 발생한다.
+**UNIQUE** 제약 조건은 정의된 칼럼이 고유한 값을 갖도록 하는 제약 조건이다. 기존 레코드와 동일한 칼럼 값을 갖는 레코드가 추가되면 오류가 발생한다.
 
 **UNIQUE** 제약 조건은 단일 칼럼뿐만 아니라 하나 이상의 다중 칼럼에 대해서도 정의가 가능하다. **UNIQUE** 제약 조건이 다중 칼럼에 대해 정의되면 각 칼럼 값에 대해 고유성이 보장되는 것이 아니라, 다중 칼럼 값의 조합에 대해 고유성이 보장된다.
 
@@ -628,7 +628,7 @@ FOREIGN KEY 제약
 
 *   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
-참조하는 테이블의 각 R1 행에 대해 참조되는 테이블의 R2 행이 있어야 하며, R1의 참조하는 각 컬럼의 값이 **NULL** 이거나 R2의 참조되는 해당 컬럼의 값과 동일해야 한다.
+참조하는 테이블의 각 R1 행에 대해 참조되는 테이블의 R2 행이 있어야 하며, R1의 참조하는 각 칼럼의 값이 **NULL** 이거나 R2의 참조되는 해당 칼럼의 값과 동일해야 한다.
 
 .. code-block:: sql
 
@@ -815,7 +815,7 @@ DONT_REUSE_OID
 문자셋과 콜레이션
 ^^^^^^^^^^^^^^^^^
 
-해당 테이블과 컬럼에 적용할 문자셋과 콜레이션을 **CREATE TABLE** 문에 명시할 수 있다.
+해당 테이블과 칼럼에 적용할 문자셋과 콜레이션을 **CREATE TABLE** 문에 명시할 수 있다.
 다음 예시는 CREATE TABLE시 문자셋과 콜레이션을 지정하는 예문이다.
  
 .. code-block:: sql
@@ -831,16 +831,16 @@ DONT_REUSE_OID
 
 이에 관한 자세한 내용은 :ref:`collation-charset-table` 또는 :ref:`collation-charset-string` 절을 참조하면 된다.
 
-테이블의 커멘트
+테이블의 주석
 ^^^^^^^^^^^^^^^
 
-테이블의 커멘트를 다음과 같이 명시할 수 있다. 
+테이블의 주석을 다음과 같이 명시할 수 있다. 
 
 .. code-block:: sql
 
     CREATE TABLE tbl (a INT, b INT) COMMENT = 'this is comment for table tbl';
 
-테이블의 커멘트는 다음 구문에서 확인할 수 있다.
+테이블의 주석은 다음 구문에서 확인할 수 있다.
 
 .. code-block:: sql
 
@@ -848,7 +848,7 @@ DONT_REUSE_OID
     SELECT class_name, comment from db_class;
     SELECT class_name, comment from _db_class;
 
-또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 테이블의 커멘트를 확인할 수 있다.
+또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 테이블의 주석을 확인할 수 있다.
 
 .. code-block:: sql
 
@@ -953,13 +953,13 @@ CREATE TABLE AS SELECT
 
 *   새로운 테이블에 칼럼 *col_1* 이 정의되고, *select_statement* 에 동일한 칼럼 *col_1* 이 명시된 경우, **SELECT** 결과 레코드가 새로운 테이블 *col_1* 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
 
-*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 리스트에 *col_1*, *col_2*, *col_3* 이 명시되어 모두 포함 관계가 성립하는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, **SELECT** 결과 데이터가 모든 칼럼 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
+*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 목록에 *col_1*, *col_2*, *col_3* 이 명시되어 모두 포함 관계가 성립하는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, **SELECT** 결과 데이터가 모든 칼럼 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
 
-*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 리스트에 *col_1*, *col_3* 이 명시되어 포함 관계가 성립하지 않는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, *select_statement* 에 명시된 칼럼 *col_1*, *col_3* 에 대해서만 **SELECT** 결과 데이터가 저장되고, *col_2* 에는 NULL이 저장된다.
+*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 목록에 *col_1*, *col_3* 이 명시되어 포함 관계가 성립하지 않는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, *select_statement* 에 명시된 칼럼 *col_1*, *col_3* 에 대해서만 **SELECT** 결과 데이터가 저장되고, *col_2* 에는 NULL이 저장된다.
 
-*   *select_statement* 의 칼럼 리스트에는 칼럼 별칭(alias)이 포함될 수 있으며, 이 경우 칼럼 별칭이 새로운 테이블 칼럼 이름으로 사용된다. 함수 호출이나 표현식이 사용된 경우 별칭이 없으면 유효하지 않은 칼럼 이름이 생성되므로, 이 경우에는 별칭을 사용하는 것이 좋다.
+*   *select_statement* 의 칼럼 목록에는 칼럼 별칭(alias)이 포함될 수 있으며, 이 경우 칼럼 별칭이 새로운 테이블 칼럼 이름으로 사용된다. 함수 호출이나 표현식이 사용된 경우 별칭이 없으면 유효하지 않은 칼럼 이름이 생성되므로, 이 경우에는 별칭을 사용하는 것이 좋다.
 
-*   **REPLACE** 옵션은 새로운 테이블의 칼럼(*col_1*)에 **UNIQUE** 제약 조건이 정의된 경우에만 유효하다. *select_statement* 의 결과 레코드에 중복된 값이 존재하는 경우, **REPLACE** 옵션이 명시되면 칼럼 *col_1* 에는 고유한 값이 저장되고, **REPLACE** 옵션이 생략되면 **UNIQUE** 제약 조건에 위배되므로 에러 메시지가 출력된다.
+*   **REPLACE** 옵션은 새로운 테이블의 칼럼(*col_1*)에 **UNIQUE** 제약 조건이 정의된 경우에만 유효하다. *select_statement* 의 결과 레코드에 중복된 값이 존재하는 경우, **REPLACE** 옵션이 명시되면 칼럼 *col_1* 에는 고유한 값이 저장되고, **REPLACE** 옵션이 생략되면 **UNIQUE** 제약 조건에 위배되므로 오류 메시지가 출력된다.
 
 ::
 
@@ -967,7 +967,7 @@ CREATE TABLE AS SELECT
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 새로 생성할 테이블 이름이다.
-*   <*column_definition*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성, 테이블/칼럼의 커멘트는 복제되지 않는다.
+*   <*column_definition*>: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성, 테이블/칼럼의 주석은 복제되지 않는다.
 *   <*table_constraint*>: 테이블 제약 조건을 정의한다.
 *   <*select_statement*>: 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
 *   <*select statement*>은 tbl@srver1처럼 원격 테이블을 포함할 수 있다.
@@ -1163,7 +1163,7 @@ ALTER TABLE
 
 .. note::
 
-    칼럼의 커멘트는 <column_definition>에서 지정하거나 <column_comment_definition>에서 지정한다. <column_definition>은 위의 :ref:`CREATE TABLE 문법<column-definition>`\을 참고한다.
+    칼럼의 주석은 <column_definition>에서 지정하거나 <column_comment_definition>에서 지정한다. <column_definition>은 위의 :ref:`CREATE TABLE 문법<column-definition>`\을 참고한다.
 
 .. warning::
 
@@ -1212,7 +1212,7 @@ ADD COLUMN 절
 *   *table_name*: 칼럼을 추가할 테이블의 이름을 지정한다.
 *   <*column_definition*>: 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name*: 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
-*   *comment_string*: 칼럼의 커멘트를 지정한다.
+*   *comment_string*: 칼럼의 주석을 지정한다.
 *   *deduplicate_level*: deduplicate 레벨을 지정한다(0 ~ 14). 자세한 내용은 :ref:`deduplicate_overview`\를 참고한다.
 
 .. code-block:: sql
@@ -1242,14 +1242,14 @@ ADD COLUMN 절
 새로 추가되는 칼럼에 어떤 제약 조건이 오느냐에 따라 다른 결과를 보여준다.
 
 *   새로 추가되는 칼럼에 **DEFAULT** 제약 조건이 있으면 **DEFAULT** 값이 입력된다.
-*   새로 추가되는 칼럼에 **DEFAULT** 제약 조건이 없고 **NOT NULL** 제약 조건이 있는 경우, 시스템 파라미터 **add_column_update_hard_default** 가 **yes** 이면 고정 기본값(hard default)을 갖게 되고, **no** 이면 에러를 반환한다. 
+*   새로 추가되는 칼럼에 **DEFAULT** 제약 조건이 없고 **NOT NULL** 제약 조건이 있는 경우, 시스템 파라미터 **add_column_update_hard_default** 가 **yes** 이면 고정 기본값(hard default)을 갖게 되고, **no** 이면 오류를 반환한다. 
  
 **add_column_update_hard_default** 의 기본값은 **no** 이다.
  
 **DEFAULT** 제약 조건 및 **add_column_update_hard_default** 값의 설정에 따라 해당 제약 조건을 위배하지 않는 한도 내에서 **PRIMARY KEY** 혹은 **UNIQUE** 제약 조건의 추가가 가능하다.
  
 *   테이블에 데이터가 없거나 **NOT NULL** 이고 **UNIQUE** 인 값을 가지는 기존 칼럼에 **PRIMARY KEY** 제약 조건을 지정할 수 있다.
-*   테이블에 데이터가 있고 새로 추가되는 칼럼에 **PRIMARY KEY** 제약 조건을 지정하는 경우, 에러를 반환한다. 
+*   테이블에 데이터가 있고 새로 추가되는 칼럼에 **PRIMARY KEY** 제약 조건을 지정하는 경우, 오류를 반환한다. 
  
     .. code-block:: sql
     
@@ -1275,7 +1275,7 @@ ADD COLUMN 절
             1         NULL
             2         NULL
  
-*   테이블에 데이터가 있고 새로 추가되는 칼럼에 UNIQUE 제약 조건을 지정하는 경우, DEFAULT 제약 조건이 있으면 고유 키 위반 에러를 반환한다.
+*   테이블에 데이터가 있고 새로 추가되는 칼럼에 UNIQUE 제약 조건을 지정하는 경우, DEFAULT 제약 조건이 있으면 고유 키 위반 오류를 반환한다.
  
     .. code-block:: sql
     
@@ -1285,7 +1285,7 @@ ADD COLUMN 절
     
         ERROR: Operation would have caused one or more unique constraint violations.
  
-*   테이블에 데이터가 있고 새로 추가되는 칼럼에 UNIQUE 제약 조건을 지정하는 경우, NOT NULL 제약 조건이 있고 add_column_update_hard_default가 yes이면 고유 키 위반 에러를 반환한다.
+*   테이블에 데이터가 있고 새로 추가되는 칼럼에 UNIQUE 제약 조건을 지정하는 경우, NOT NULL 제약 조건이 있고 add_column_update_hard_default가 yes이면 고유 키 위반 오류를 반환한다.
  
     .. code-block:: sql
  
@@ -1384,7 +1384,7 @@ ADD INDEX 절
          INDEX i1 ON a_tbl (age)
          INDEX i2 ON a_tbl (phone DESC)
 
-다음은 ALTER 문으로 인덱스 추가 시 인덱스 커멘트를 포함하는 예제이다.
+다음은 ALTER 문으로 인덱스 추가 시 인덱스 주석을 포함하는 예제이다.
 
 .. code-block:: sql
 
@@ -1517,9 +1517,9 @@ CHANGE/MODIFY 절
 
 **CHANGE** 절이나 **MODIFY** 절로 새 칼럼에 적용할 타입, 크기 및 속성을 설정할 때 기존에 정의된 속성은 새 칼럼의 속성에 전달되지 않는다.
 
-**CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다. 단, **alter_table_change_type_strict** 설정 값이 **yes** 인 경우 에러가 발생한다. 마찬가지로 **allow_truncated_string** 설정 값이 **no** 인 경우에도 에러가 발생한다.
+**CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다. 단, **alter_table_change_type_strict** 설정 값이 **yes** 인 경우 오류가 발생한다. 마찬가지로 **allow_truncated_string** 설정 값이 **no** 인 경우에도 오류가 발생한다.
 
-AUTO_INCREMENT 속성의 컬럼 타입을 변경할 경우, AUTO_INCREMENT 속성으로 사용할 수 없는 타입으로 변경할 수 없다. 예를 들면 아래와 같이 ALTER 구문으로 AUTO_INCREMENT 속성 컬럼인 a를 int에서 varchar 타입으로 변경시 에러가 발생한다.
+AUTO_INCREMENT 속성의 칼럼 타입을 변경할 경우, AUTO_INCREMENT 속성으로 사용할 수 없는 타입으로 변경할 수 없다. 예를 들면 아래와 같이 ALTER 구문으로 AUTO_INCREMENT 속성 칼럼인 a를 int에서 varchar 타입으로 변경시 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -1531,7 +1531,7 @@ AUTO_INCREMENT 속성의 컬럼 타입을 변경할 경우, AUTO_INCREMENT 속�
     ERROR: before '  varchar; '
     The domain of the attribute 'a' having an auto increment constraint is invalid.
 
-default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값이 변경된 타입으로 형변환이 불가능한 경우 아래의 예처럼 에러가 발생한다. 
+default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값이 변경된 타입으로 형변환이 불가능한 경우 아래의 예처럼 오류가 발생한다. 
 
 .. code-block:: sql
 
@@ -1565,7 +1565,7 @@ default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값�
 *   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name*: 기존 칼럼의 이름을 지정한다.
 *   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
-*   <*column_definition*>: 변경할 칼럼의 타입, 크기 및 속성, 커멘트를 지정한다.
+*   <*column_definition*>: 변경할 칼럼의 타입, 크기 및 속성, 주석을 지정한다.
 *   *col_name*: 변경할 칼럼이 어느 칼럼 뒤에 위치할지를 지정한다.
 *   **SKIP_UPDATE_NULL**: 이 힌트가 추가되면 NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. :ref:`SKIP_UPDATE_NULL <skip-update-null>` 을 참고한다.
 
@@ -1791,13 +1791,13 @@ default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값�
 
 **alter_table_change_type_strict** 파라미터의 값이 no이면 상황에 따라 다음과 같이 동작한다. 
 
-*   숫자 또는 문자열을 숫자로 변환 중 오버플로우 발생: 결과 타입의 부호에 따라 음수면 최소값, 양수면 최대값으로 정해지고 오버플로우가 발생한 레코드에 대한 경고 메시지가 로그에 기록된다. 문자열은 **DOUBLE** 타입으로 변환한 후 같은 법칙을 따른다. 다만, **allow_truncated_string** 설정 값이 **no** 인 경우 오버플로우 에러가 반환될 수 있다.
+*   숫자 또는 문자열을 숫자로 변환 중 오버플로우 발생: 결과 타입의 부호에 따라 음수면 최소값, 양수면 최대값으로 정해지고 오버플로우가 발생한 레코드에 대한 경고 메시지가 로그에 기록된다. 문자열은 **DOUBLE** 타입으로 변환한 후 같은 법칙을 따른다. 다만, **allow_truncated_string** 설정 값이 **no** 인 경우 오버플로우 오류가 반환될 수 있다.
 
 *   문자열을 더 짧은 문자열로 변환: 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다. 단, **allow_truncated_string** 설정 값이 **no**\인 경우 허용되지 않을 수 있다.
 
 *   그 밖의 이유로 인한 변환 실패: 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다.
 
-**alter_table_change_type_strict** 파라미터의 값이 **yes** 혹은 **allow_truncated_string** 파라미터 값이 **no**\이면 에러 메시지를 출력하고 변경 내용이 롤백될 수 있다.
+**alter_table_change_type_strict** 파라미터의 값이 **yes** 혹은 **allow_truncated_string** 파라미터 값이 **no**\이면 오류 메시지를 출력하고 변경 내용이 롤백될 수 있다.
 
 **ALTER CHANGE** 문은 레코드를 업데이트하기 전에 해당 타입 변환이 가능한지 검사하지만, 특정 값은 타입 변환에 실패할 수도 있다. 예를 들어, **VARCHAR** 를 **DATE** 로 변환할 때 값의 형식이 올바르지 않으면 변환에 실패할 수 있으며, 이때에는 **DATE** 타입의 고정 기본값(hard default value)이 지정된다.
 
@@ -1849,20 +1849,20 @@ default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값�
 | CLOB      | 무               |                                         |
 +-----------+------------------+-----------------------------------------+
 
-칼럼의 커멘트
+칼럼의 주석
 -------------
 
-칼럼의 커멘트는 ADD/MODIFY/CHANGE 구문 뒤에 위치하는 <*column_definition*> 에서 지정하거나 COMMENT ON COLUMN 구문 뒤에 위치하는 <column_comment_definition> 에서 지정한다. <*column_definition*>은 위의 :ref:`CREATE TABLE 문법<column-definition>`\을 참고한다.
+칼럼의 주석은 ADD/MODIFY/CHANGE 구문 뒤에 위치하는 <*column_definition*> 에서 지정하거나 COMMENT ON COLUMN 구문 뒤에 위치하는 <column_comment_definition> 에서 지정한다. <*column_definition*>은 위의 :ref:`CREATE TABLE 문법<column-definition>`\을 참고한다.
 
-COMMENT ON COLUMN 구문에서는 하나 이상의 칼럼을 지정하여 칼럼 커멘트를 변경할 수 있다.
-다음은 COMMENT ON COLUMN 구문을 이용해서 칼럼의 커멘트를 변경하는 예제이다.
+COMMENT ON COLUMN 구문에서는 하나 이상의 칼럼을 지정하여 칼럼 주석을 변경할 수 있다.
+다음은 COMMENT ON COLUMN 구문을 이용해서 칼럼의 주석을 변경하는 예제이다.
 
 .. code-block:: sql
 
     ALTER TABLE t1 COMMENT ON COLUMN c1 = 'changed table column c1 comment';
     ALTER TABLE t1 COMMENT ON COLUMN c2 = 'changed table column c2 comment', c3 = 'changed table column c3 comment';
 
-다음은 칼럼의 커멘트를 확인하는 예제이다.
+다음은 칼럼의 주석을 확인하는 예제이다.
 
 .. code-block:: sql
 
@@ -2001,7 +2001,7 @@ DROP FOREIGN KEY 절
 DROP TABLE
 ==========
 
-**DROP** 구문을 이용하여 기존의 테이블을 삭제할 수 있다. 하나의 **DROP** 구문으로 여러 개의 테이블을 삭제할 수 있으며 테이블이 삭제되면 포함된 행도 모두 삭제된다. **IF EXISTS** 절을 함께 사용하면 해당 테이블이 존재하지 않더라도 에러가 발생하지 않는다. 
+**DROP** 구문을 이용하여 기존의 테이블을 삭제할 수 있다. 하나의 **DROP** 구문으로 여러 개의 테이블을 삭제할 수 있으며 테이블이 삭제되면 포함된 행도 모두 삭제된다. **IF EXISTS** 절을 함께 사용하면 해당 테이블이 존재하지 않더라도 오류가 발생하지 않는다. 
 
 ::
 
@@ -2018,7 +2018,7 @@ DROP TABLE
 *   *table_name*: 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
 *   **ALL** 키워드 뒤에 수퍼클래스 이름이 지정되면, 해당 수퍼클래스 및 이를 상속받는 서브클래스를 모두 삭제한다.
-*   **EXCEPT** 키워드 뒤에 삭제하지 않을 서브클래스 리스트를 명시할 수 있다.
+*   **EXCEPT** 키워드 뒤에 삭제하지 않을 서브클래스 목록을 명시할 수 있다.
 *	**CASCADE CONSTRAINTS**: 테이블이 DROP되고 이 테이블을 참조하는 다른 테이블들의 외래 키도 DROP된다.
 
 .. code-block:: sql
@@ -2056,7 +2056,7 @@ DROP TABLE
 RENAME TABLE
 ============
 
-**RENAME TABLE** 구문을 사용하여 테이블 이름을 변경할 수 있으며, 여러 개의 테이블 이름을 변경하는 경우 테이블 이름 리스트를 명시할 수 있다. ::
+**RENAME TABLE** 구문을 사용하여 테이블 이름을 변경할 수 있으며, 여러 개의 테이블 이름을 변경하는 경우 테이블 이름 목록을 명시할 수 있다. ::
 
     RENAME  [TABLE | CLASS] [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name [{, [schema_name.]old_table_name {AS | TO} [schema_name.]new_table_name}];
 

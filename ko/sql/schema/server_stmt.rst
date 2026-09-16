@@ -37,7 +37,7 @@ CREATE SERVER
       
 *   *owner_name*: 생성할 서버의 소유자 이름을 지정한다.
 *   *server_name*: 생성할 서버의 이름을 지정한다(최대 254바이트).
-*   <*connect_info*>: 접속 정보 리스트로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER**\는 필수 항목이다.
+*   <*connect_info*>: 접속 정보 목록으로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER**\는 필수 항목이다.
 *   <*connect_item*>: HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, COMMENT 항목으로 구성되며, 동일한 항목이 중복될 수 없다.
 	
     *   *host_string*: 원격 접속할 DBMS 정보를 가지고 있는 Broker 서버의 호스명 또는 IP 주소이다.
@@ -46,7 +46,7 @@ CREATE SERVER
     *   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
     *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name*\에 대한 패스워드 문자열.
     *   *properties_string*: 원격 데이터베이스 사용을 위해 broker(또는 gateway)에 접속시 사용하는 property 정보 문자열 (최대 2047 바이트).  상세한 정보는 :ref:`cci_connect_with_url`\를 참고한다.	
-    *   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)
+    *   *server_comment_string*: 서버 정보에 대한 주석을 지정한다.(최대 1023바이트)
 
 .. note::
 
@@ -204,7 +204,7 @@ RENAME SERVER
 DROP SERVER
 ===========
 
-**DROP SERVER** 구문을 이용하여 기존의 서버를 제거할 수 있다. **IF EXISTS** 절을 함께 사용하면 해당 서버가 존재하지 않더라도 에러가 발생하지 않는다.
+**DROP SERVER** 구문을 이용하여 기존의 서버를 제거할 수 있다. **IF EXISTS** 절을 함께 사용하면 해당 서버가 존재하지 않더라도 오류가 발생하지 않는다.
 
 ::
 
@@ -224,7 +224,7 @@ DROP SERVER
 
 .. Warning::
 
-    DROP USER 구문으로 사용자를 삭제 할 때 해당 사용자가 소유하고 있는 서버가 있다면 에러 처리되고 사용자는 삭제되지 않는다.
+    DROP USER 구문으로 사용자를 삭제 할 때 해당 사용자가 소유하고 있는 서버가 있다면 오류 처리되고 사용자는 삭제되지 않는다.
     먼저 사용자가 소유하고 있는 서버를 DROP SERVER 구문으로 제거한 후에 사용자 계정을 삭제해야 한다.
         
 ::
@@ -362,7 +362,7 @@ CHANGE 절
 *   *user_name*: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.
 *   *password_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 *user_name* 에 대한 패스워드 문자열.
 *   *properties_string*: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.	
-*   *server_comment_string*: 서버 정보에 대한 커멘트를 지정한다.
+*   *server_comment_string*: 서버 정보에 대한 주석을 지정한다.
 
 
 

@@ -16,9 +16,9 @@
 
 집계/분석 함수는 데이터를 분석하여 어떤 결과를 추출하고자 할 때 사용하는 함수이다. 
 
-*   집계 함수는 그룹 별로 그룹핑된 결과를 리턴하며, 그룹핑 대상이 되는 칼럼만 출력한다.
+*   집계 함수는 그룹 별로 그룹핑된 결과를 반환하며, 그룹핑 대상이 되는 칼럼만 출력한다.
 
-*   분석 함수는 그룹 별로 그룹핑된 결과를 리턴하되, 그룹핑되지 않은 칼럼을 포함하여 하나의 그룹에 대해 여러 개의 행을 출력할 수 있다.
+*   분석 함수는 그룹 별로 그룹핑된 결과를 반환하되, 그룹핑되지 않은 칼럼을 포함하여 하나의 그룹에 대해 여러 개의 행을 출력할 수 있다.
 
 예를 들어 집계/분석 함수는 다음과 같은 질문에 대한 답을 구하기 위해 사용될 수 있다.
 
@@ -193,7 +193,7 @@
 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
 
 * ORDER BY/PARTITION BY <상수가 아닌 표현식> (예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.
-* ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 간주됨.
+* ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 목록의 칼럼 위치로 간주됨.
 * ORDER BY/PARTITION BY <상수 표현식> (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
 
 OVER 함수 내에 "ORDER BY" 절을 명시해야 하는 분석 함수
@@ -653,13 +653,13 @@ GROUP_CONCAT
     :param SEPARATOR: 결과 값 사이에 구분할 구분자를 지정한다. 생략하면 기본값인 쉼표(,)를 구분자로 사용한다.
     :rtype: STRING
 
-리턴 값의 최대 크기는 시스템 파라미터 **group_concat_max_len** 의 설정을 따른다. 기본값은 **1024** 바이트이며, 최소값은 4바이트, 최대값은 INT_MAX(약2G)바이트이다.
+반환 값의 최대 크기는 시스템 파라미터 **group_concat_max_len** 의 설정을 따른다. 기본값은 **1024** 바이트이며, 최소값은 4바이트, 최대값은 INT_MAX(약2G)바이트이다.
 
 이 함수는 **string_max_size_bytes** 파라미터의 영향을 받으며,  **group_concat_max_len**\의 값을 **string_max_size_bytes** 보다 크게 설정한 경우 **GROUP_CONCAT** 결과가 **string_max_size_bytes** 값을 초과하면 오류가 발생한다.
 
 중복되는 값을 제거하려면 **DISTINCT** 절을 사용하면 된다. 그룹 결과의 값 사이에 사용되는 기본 구분자는 쉼표(,)이며, 구분자를 명시적으로 표현하려면 **SEPARATOR** 절과 그 뒤에 구분자로 사용할 문자열을 추가한다. 구분자를 제거하려면 **SEPARATOR** 절 뒤에 빈 문자열(empty string)을 입력한다.
 
-결과 문자열에 문자형 데이터 타입이 아닌 다른 타입이 전달되면, 에러를 반환한다.
+결과 문자열에 문자형 데이터 타입이 아닌 다른 타입이 전달되면, 오류를 반환한다.
 
 **GROUP_CONCAT** 함수를 사용하려면 다음의 조건을 만족해야 한다.
 
@@ -1713,7 +1713,7 @@ STDDEV, STDDEV_POP
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 표준 편차를 구하기 위해 사용된다.
     :rtype: DOUBLE
 
-리턴 값은 :func:`VAR_POP` 리턴 값의 제곱근과 같으며 **DOUBLE** 타입이다. 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
+반환 값은 :func:`VAR_POP` 반환 값의 제곱근과 같으며 **DOUBLE** 타입이다. 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
 
@@ -1786,7 +1786,7 @@ STDDEV_SAMP
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 표준 편차를 구하기 위해 사용된다.
     :rtype: DOUBLE
 
-리턴 값은 :func:`VAR_SAMP` 리턴 값의 제곱근과 같으며 **DOUBLE** 타입이다. 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
+반환 값은 :func:`VAR_SAMP` 반환 값의 제곱근과 같으며 **DOUBLE** 타입이다. 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
 
@@ -1946,7 +1946,7 @@ VARIANCE, VAR_POP
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 모분산을 구하기 위해 사용된다.
     :rtype: DOUBLE
 
-리턴 값은 **DOUBLE** 타입이며, 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
+반환 값은 **DOUBLE** 타입이며, 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
 
@@ -2016,7 +2016,7 @@ VAR_SAMP
     :param DISTINCT,DISTINCTROW,UNIQUE: 중복이 제거된 유일한 값에 대해서만 표본 분산을 구하기 위해 사용된다.
     :rtype: DOUBLE
 
-리턴 값은 **DOUBLE** 타입이며, 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
+반환 값은 **DOUBLE** 타입이며, 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
 

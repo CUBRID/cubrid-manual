@@ -34,7 +34,7 @@ EXPLAIN
 SHOW TABLES
 ===========
 
-데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *owner* 칼럼과 *table_type* 칼럼을 함께 출력한다. *owner* 컬럼은 소유자 이름을 값으로 가진다. *table_type* 칼럼은 테이블이면 **BASE TABLE**, 뷰이면 **VIEW**\를 값으로 가진다.
+데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *owner* 칼럼과 *table_type* 칼럼을 함께 출력한다. *owner* 칼럼은 소유자 이름을 값으로 가진다. *table_type* 칼럼은 테이블이면 **BASE TABLE**, 뷰이면 **VIEW**\를 값으로 가진다.
 
 ::
 
@@ -262,7 +262,7 @@ Visible                             VARCHAR         인덱스의 가시성을 �
 SHOW COLLATION
 ==============
 
-데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
+데이터베이스에서 지원하는 콜레이션 목록을 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
 
 ::
 
@@ -466,7 +466,7 @@ SHOW CREATE TABLE
     ============================================
       'public.nation'       'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30), CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) DONT_REUSE_OID, COLLATE iso88591_bin'
 
-**SHOW CREATE TABLE** 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 커멘트를 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다.
+**SHOW CREATE TABLE** 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 주석을 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다.
     
 .. _show-create-view-statement:
 
@@ -743,7 +743,7 @@ Release                             VARCHAR(32)     CUBRID 릴리즈 버전
 Compatibility_disk_version          VARCHAR(32)     현재 릴리즈 버전에 대한 DB의 호환성
 Db_page_size                        INT             DB 페이지의 크기
 Log_page_size                       INT             로그 페이지의 크기
-Shutdown                            INT             로그 셧다운의 여부
+Shutdown                            INT             로그 종료의 여부
 Next_trans_id                       INT             다음 트랜잭션 ID
 Num_avg_trans                       INT             평균 트랜잭션 개수
 Num_avg_locks                       INT             평균 객체 잠금 개수
@@ -1385,7 +1385,7 @@ Topclass_oid                        VARCHAR(64)     최상위 클래스의 oid �
 Unique                              INT             고유값 유무 
 Overflow_vfid                       VARCHAR(32)     VFID (volid|fileid)
 Key_type                            VARCHAR(256)    타입명
-Columns                             VARCHAR(256)    인덱스를 구성하는 칼럼 리스트 
+Columns                             VARCHAR(256)    인덱스를 구성하는 칼럼 목록 
 =================================== =============== ======================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -1591,11 +1591,11 @@ Name                                VARCHAR(32)     CS 이름
 Num_holders                         VARCHAR(16)     해당 CS 보유자의 개수. 다음 값 중 하나: 'N readers', '1 writer', 'none'
 Num_waiting_readers                 INT             읽기 대기자의 개수
 Num_waiting_writers                 INT             쓰기 대기자의 개수
-Owner_thread_index                  INT             CS 쓰기 소유자의 쓰레드 인덱스. 소유자 없으면 NULL
+Owner_thread_index                  INT             CS 쓰기 소유자의 스레드 인덱스. 소유자 없으면 NULL
 Owner_tran_index                    INT             CS 쓰기 소유자의 트랜잭션 인덱스. 소유자 없으면 NULL
 Total_enter_count                   BIGINT          진입자의 전체 개수
 Total_waiter_count                  BIGINT          대기자의 전체 개수     
-Waiting_promoter_thread_index       INT             승격 대기자의 쓰레드 인덱스. 승격 대기자 없으면 NULL
+Waiting_promoter_thread_index       INT             승격 대기자의 스레드 인덱스. 승격 대기자 없으면 NULL
 Max_waiting_msecs                   NUMERIC(10,3)   최대 대기 시간(밀리 초)
 Total_waiting_msecs                 NUMERIC(10,3)   전체 대기 시간(밀리초)
 =================================== =============== ======================================================================================================================================
@@ -1695,7 +1695,7 @@ First_save_entry         VARCHAR(20)     트랜잭션의 처음 세이브 포인
 Tran_unique_stats        VARCHAR(20)     다중 열에 대한 로컬 통계 정보. 주소 포인터를 0x12345678 처럼 나타냄, NULL은 0x00000000 을 의미함
 Modified_class_list      VARCHAR(20)     더티 클래쓰의 목록, 주소 포인터를 0x12345678 처럼 나타냄, NULL은 0x00000000 을 의미함
 Num_temp_files           INT             임시 파일의 개수 
-Waiting_for_res          VARCHAR(20)     대기 리소스, 주소 포인터를 0x12345678 처럼 나타냄, NULL은 0x00000000 을 의미함
+Waiting_for_res          VARCHAR(20)     대기 자원, 주소 포인터를 0x12345678 처럼 나타냄, NULL은 0x00000000 을 의미함
 Has_deadlock_priority    INT             데드락 우선순위 유무,  0 : 무, 1 : 유
 Suppress_replication     INT             플래그가 세팅 될 때 복제 로그 쓰기를 생략 
 Query_timeout            DATETIME        query_timeout 시간 내에 퀴리는 수행되어야 함. NULL일 경우 질의가 끝날 때 까지 기다림.
@@ -1781,37 +1781,37 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.
 =========================== =============== ==============================================================================================================================================================
 칼럼명                      타입            설명
 =========================== =============== ==============================================================================================================================================================
-Index                       INT             쓰레드 시작 인덱스
-Jobq_index                  INT             워커 쓰레드의 작업 큐 인덱스.  워커 쓰레드가 아닌 경우 NULL 
-Thread_id                   BIGINT          쓰레드 식별자
-Tran_index                  INT             쓰레드가 속한 트랜잭션 인덱스. 관련 쓰레드가 없을 경우 NULL
-Type                        VARCHAR(8)      쓰레드 종류. 다음 중 하나 'MASTER', 'SERVER', 'WORKER', 'DAEMON', 'VACUUM_MASTER', 'VACUUM_WORKER', 'NONE', 'UNKNOWN'.
-Status                      VARCHAR(8)      쓰레드 상태. 다음 중 하나 'FREE', 'RUN', 'WAIT', 'CHECK'.
+Index                       INT             스레드 시작 인덱스
+Jobq_index                  INT             워커 스레드의 작업 큐 인덱스.  워커 스레드가 아닌 경우 NULL 
+Thread_id                   BIGINT          스레드 식별자
+Tran_index                  INT             스레드가 속한 트랜잭션 인덱스. 관련 스레드가 없을 경우 NULL
+Type                        VARCHAR(8)      스레드 종류. 다음 중 하나 'MASTER', 'SERVER', 'WORKER', 'DAEMON', 'VACUUM_MASTER', 'VACUUM_WORKER', 'NONE', 'UNKNOWN'.
+Status                      VARCHAR(8)      스레드 상태. 다음 중 하나 'FREE', 'RUN', 'WAIT', 'CHECK'.
 Resume_status               VARCHAR(32)     재시작 상태. 다음 중 하나 'RESUME_NONE', 'RESUME_DUE_TO_INTERRUPT', 'RESUME_DUE_TO_SHUTDOWN', 'PGBUF_SUSPENDED', 'PGBUF_RESUMED', 
                                             'JOB_QUEUE_SUSPENDED', 'JOB_QUEUE_RESUMED', 'CSECT_READER_SUSPENDED', 'CSECT_READER_RESUMED', 'CSECT_WRITER_SUSPENDED', 'CSECT_WRITER_RESUMED',
                                             'CSECT_PROMOTER_SUSPENDED', 'CSECT_PROMOTER_RESUMED', 'CSS_QUEUE_SUSPENDED', 'CSS_QUEUE_RESUMED', 'QMGR_ACTIVE_QRY_SUSPENDED', 'QMGR_ACTIVE_QRY_RESUMED',
                                             'QMGR_MEMBUF_PAGE_SUSPENDED', 'QMGR_MEMBUF_PAGE_RESUMED', 'HEAP_CLSREPR_SUSPENDED', 'HEAP_CLSREPR_RESUMED', 'LOCK_SUSPENDED', 'LOCK_RESUMED', 
                                             'LOGWR_SUSPENDED', 'LOGWR_RESUMED'
 Net_request                 VARCHAR(64)     net_requests 배열의 요청 이름, 예: 'LC_ASSIGN_OID'. 요청 이름이 없을 경우  NULL  
-Conn_client_id              INT             쓰레드에 응답하는 클라이언트의 식별자, 클라이언트의 식별자가 없을 경우 NULL 
-Conn_request_id             INT             쓰레드가 처리하고 있는 요청의 식별자, 요청 식별자가 없을 경우 NULL 
+Conn_client_id              INT             스레드에 응답하는 클라이언트의 식별자, 클라이언트의 식별자가 없을 경우 NULL 
+Conn_request_id             INT             스레드가 처리하고 있는 요청의 식별자, 요청 식별자가 없을 경우 NULL 
 Conn_index                  INT             연결 인덱스, 없을 경우 NULL
-Last_error_code             INT             마지막 에러 코드 
-Last_error_msg              VARCHAR(256)    마지막 에러 메세지, 메세지가 256 자 보다 클 경우 일부만 보인다. 에러 메세지가 없을 경우 NULL
-Private_heap_id             VARCHAR(20)     쓰레드 내부 메모리 할당자의 주소, 예: 0x12345678. 관련 힙 id 가 없을 경우 NULL
+Last_error_code             INT             마지막 오류 코드 
+Last_error_msg              VARCHAR(256)    마지막 오류 메시지, 메시지가 256 자 보다 클 경우 일부만 보인다. 오류 메시지가 없을 경우 NULL
+Private_heap_id             VARCHAR(20)     스레드 내부 메모리 할당자의 주소, 예: 0x12345678. 관련 힙 id 가 없을 경우 NULL
 Query_entry                 VARCHAR(20)     QMGR_QUERY_ENTRY의 주소 , 예: 0x12345678,  연관된 QMGR_QUERY_ENTRY 가 없을 경우 NULL.
 Interrupted                 INT             요청/트랜잭션의 인터럽트 유/무 0 또는 1
 Shutdown                    INT             서버의 중지 진행 여/부, 0 또는 1
 Check_interrupt             INT             0 또는 1
-Wait_for_latch_promote      INT             0 또는 1, 쓰레드가 래치 프로모션(latch promotion)을 대기하는 여/부 
+Wait_for_latch_promote      INT             0 또는 1, 스레드가 래치 프로모션(latch promotion)을 대기하는 여/부 
 Lockwait_blocked_mode       VARCHAR(24)     잠금대기 블록 모드, 다음 중 하나. 'NULL_LOCK', 'IS_LOCK', 'S_LOCK', 'IS_LOCK', 'IX_LOCK', 'SIX_LOCK', 'X_LOCK', 'SCH_M_LOCK', 'UNKNOWN'
 Lockwait_start_time         DATETIME        차단이 시작된 시간, 차단 상태 아닌 경우 NULL
 Lockwait_msecs              INT             차단되었던 시간(milliseconds), 차단된 상태가 아닌 경우 NULL
 Lockwait_state              VARCHAR(24)     잠금 대기 상태 예: 'SUSPENDED', 'RESUMED', 'RESUMED_ABORTED_FIRST', 'RESUMED_ABORTED_OTHER', 'RESUMED_DEADLOCK_TIMEOUT', 'RESUMED_TIMEOUT', 
                                             'RESUMED_INTERRUPT'. 블록 된 상태가 없을 경우  NULL
-Next_wait_thread_index      INT             다음 대기 쓰레드 인덱스, 없을 경우 NULL
-Next_tran_wait_thread_index INT             잠금 매니저의 다음 대기 쓰레드 인덱스, 없을 경우 NULL
-Next_worker_thread_index    INT             css_Job_queue.worker_thrd_list 의 다음 워커 쓰레드 인덱스, 없을 경우 NULL
+Next_wait_thread_index      INT             다음 대기 스레드 인덱스, 없을 경우 NULL
+Next_tran_wait_thread_index INT             잠금 매니저의 다음 대기 스레드 인덱스, 없을 경우 NULL
+Next_worker_thread_index    INT             css_Job_queue.worker_thrd_list 의 다음 워커 스레드 인덱스, 없을 경우 NULL
 =========================== =============== ==============================================================================================================================================================
 
 다음은 이 구문을 수행한 예이다.
@@ -1891,9 +1891,9 @@ SHOW JOB QUEUES
 칼럼명                      타입            설명
 =========================== =============== =======================================================
 Jobq_index                  INT             작업 큐의 인덱스
-Num_total_workers           INT             큐의 워커 쓰레드 총 개수 
-Num_busy_workers            INT             큐의 활성 워커 쓰레드의 개수 
-Num_connection_workers      INT             큐의 연결(connection) 워커 쓰레드의 수
+Num_total_workers           INT             큐의 워커 스레드 총 개수 
+Num_busy_workers            INT             큐의 활성 워커 스레드의 개수 
+Num_connection_workers      INT             큐의 연결(connection) 워커 스레드의 수
 =========================== =============== =======================================================
 
 SHOW PAGE BUFFER STATUS
@@ -1928,7 +1928,7 @@ Num_pages_written           BIGINT          데이터 버퍼에서 디스크로 
 Pages_written_rate          NUMERIC(20,10)  데이터 버퍼에서 디스크로 초당 쓰여진 페이지 수 (사용 중단(deprecated), 항상 NULL)
 Num_pages_read              BIGINT          데이터 버퍼로 디스크에서 읽은 페이지 수 (사용 중단(deprecated), 항상 NULL)
 Pages_read_rate             NUMERIC(20,10)  데이터 버퍼로 디스크에서 초당 읽은 페이지 수 (사용 중단(deprecated), 항상 NULL)
-Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당을 대기하는 쓰레드 수 (사용 중단(deprecated), 항상 NULL)
+Num_flusher_waiting_threads INT             데이터 버퍼의 페이지 할당을 대기하는 스레드 수 (사용 중단(deprecated), 항상 NULL)
 =========================== =============== ===============================================================
 
 .. note::

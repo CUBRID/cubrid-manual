@@ -658,7 +658,7 @@ The following log is created in the file of a server error log if an IP address 
     Time: 10/29/10 17:32:42.360 - ERROR *** ERROR CODE = -1022, Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 2
     Address(10.24.18.66) is not authorized.
 
-An error log of the database server is saved into **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.err*. The extension is ".err".
+An error log of the database server is saved into **$CUBRID/log/server** directory, and the format of the filename is *<db_name>_<yyyymmdd>_<hhmi>.err*. The extension is ".err".
  
 ::
  
@@ -677,7 +677,7 @@ If an event which affects on the query performance occurs, this is saved into th
 
 The events which are saved on the event log are *SLOW_QUERY*, *MANY_IOREADS*, *LOCK_TIMEOUT*, *DEADLOCK* and *TEMP_VOLUME_EXPAND*.
 
-This log file is saved into the **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
+This log file is saved into the **$CUBRID/log/server** directory, and the format of the filename is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
  
 ::
  
@@ -698,7 +698,7 @@ If a slow query occurs, this event is written. If **sql_trace_slow** parameter v
       buffer: fetch=48, ioread=2, iowrite=0
       wait: cs=1, lock=1010, latch=0
  
-*   client: <DB user>@<application client host name>|<program name>(<process ID>)
+*   client: <DB user>@<application client hostname>|<program name>(<process ID>)
 *   sql: slow query
 *   bind: binding value. it is printed out as the number of <num> in the sql item, "?:<num>". The value of "?:0" is 5, and the value of "?:1" is 200.
 *   time: execution time(ms)
@@ -730,7 +730,7 @@ Queries which brought many I/O reads are written on the event log. If I/O reads 
       time: 528
       ioreads: 15648 
  
-*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+*   client: <DB user>@<application client hostname>|<process name>(<process ID>)
 *   sql: an SQL which brought many I/O reads
 *   bind: binding value. it is printed out as the number of <num> in the sql item, "?:<num>". The value of "?:0" is 8, and the value of "?:1" is 100.
 *   time: execution time(ms)
@@ -808,14 +808,14 @@ When a deadlock occurs, lock information of that transaction is written into the
 
 *   hold: an object which is acquiring a lock
 
-    *   client: <DB user>@<application client host name>|<process name>(<process ID>)
+    *   client: <DB user>@<application client hostname>|<process name>(<process ID>)
     *   lock: lock type, table name
     *   sql: SQL which is acquiring locks
     *   bind: binding value
 
 *   wait: an object which is waiting a lock
 
-    *   client: <DB user>@<application client host name>|<process name>(<process ID>)
+    *   client: <DB user>@<application client hostname>|<process name>(<process ID>)
     *   lock: lock type, table name
     *   sql: SQL which is waiting a lock
     *   bind: binding value
@@ -837,7 +837,7 @@ When a temporary volumes are expanded, this time is written to the event log. By
       time: 44
       pages: 24399
  
-*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+*   client: <DB user>@<application client hostname>|<process name>(<process ID>)
 *   sql: SQL which requires a more space for temporary data. All INSERT statement except for INSERT ... SELECT syntax, and DDL statement are not delivered to the DB server, so it is shown as EMPTY
     SELECT, UPDATE and DELETE statements are shown on this item
 *   bind: binding value
@@ -1837,7 +1837,7 @@ The following options are available with the **cubrid broker test** utility.
      
 .. option:: -o FILE_NAME 
 
-    Specifies the file name to save the execution result to be displayed to the console. If this is omitted, the execution result is output only to the console.
+    Specifies the filename to save the execution result to be displayed to the console. If this is omitted, the execution result is output only to the console.
      
 .. option:: -s 
 
@@ -2138,7 +2138,7 @@ The following example and description show an access log file created in the log
 *   192.168.56.4: IP address of the application client
 *   2020/11/10 14:41:55: Time when the client's request processing started
 *   testdb: The name of the database that the client requested to connect to
-*   dba: The user name of the database that the client requested to connect to
+*   dba: The username of the database that the client requested to connect to
 *   NEW: Connection type
 
     *   NEW: New connection
@@ -2287,7 +2287,7 @@ The part where the time format is omitted is set to 0 by default. This means tha
 
     broker_log_top -F "13-01-19" -T "13-01-20" log1.log
 
-The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th 2013, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows. 
+The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th 2013, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a whitespace on Windows. 
 
 ::
 
@@ -2344,7 +2344,7 @@ This utility can be used to compare the performance between two different hosts;
   
     cubrid_replay -I <broker_host> -P <broker_port> -d <db_name> [options] <sql_log_file> <output_file> 
      
-*   *broker_host*: IP address or host name of the CUBRID broker
+*   *broker_host*: IP address or hostname of the CUBRID broker
 *   *broker_port*: Port number of the CUBRID broker
 *   *db_name*: The name of database to run the query
 *   *sql_log_file*: SQL log file of the CUBRID broker($CUBRID/log/broker/sql_log/\*.log, \*.log.bak) 
@@ -2804,7 +2804,7 @@ The logs of CUBRID Manager server are stored in the log/manager directory under 
 Configuring CUBRID Manager Server
 ---------------------------------
 
-The configuration file name for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
+The configuration filename for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
 In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). 
     
 This page describes parameters that are specified in the **cm.conf** file.
@@ -2819,7 +2819,7 @@ This page describes parameters that are specified in the **cm.conf** file.
 
 **allow_user_multi_connection**
 
-    **allow_user_multi_connection** is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is **YES** . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same user name.
+    **allow_user_multi_connection** is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is **YES** . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same username.
 
 **server_long_query_time**
 
@@ -2960,7 +2960,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **viewuser**: A command to display the CM user information
-    *   *cmuser-name*: A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
+    *   *cmuser-name*: A CM username. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
 
     The following example shows how to display information of a CM user named *testcm* . 
     
@@ -3076,7 +3076,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **adddbinfo**: A command to add database information to a CM user
-    *   *cmuser-name*: CM user name
+    *   *cmuser-name*: CM username
     *   *database-name*: The name of a database to be added
 
     The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* . 
@@ -3119,7 +3119,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **deldbinfo**: A command to delete database information of a CM user
-    *   *cmuser-name*: CM user name
+    *   *cmuser-name*: CM username
     *   *database-name*: The name of a database to be deleted
 
     The following example shows how to delete database information whose name is *testdb* from a CM user named *testcm*.
@@ -3138,7 +3138,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **changedbinfo**: A command to change database information of a CM user
-    *   *cmuser-name*: CM user name
+    *   *cmuser-name*: CM username
     *   *database-name*: The name of a database to be changed
 
     The following is [options] of **cm_admin changedbinfo**.
@@ -3306,7 +3306,7 @@ The logs of the CUBRID Procedural Langauge Server are stored in the **log/** dir
 Error Log
 ^^^^^^^^^
 
-The error log of the Procedural Langauge Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.err**. The extension is **.err**.
+The error log of the Procedural Langauge Server for each database is stored in the **$CUBRID/log** directory, and the filename is in the format **<db_name>_pl.err**. The extension is **.err**.
 
 ::
 
@@ -3332,7 +3332,7 @@ Exception Log
 ^^^^^^^^^^^^^^
 
 The JVM exception messages that occur during the execution of procedures are saved.
-The exception log of the Procedural Langauge Server for each database is stored in the **$CUBRID/log** directory, and the file name is in the format **<db_name>_pl.log**. The extension is **.log**.
+The exception log of the Procedural Langauge Server for each database is stored in the **$CUBRID/log** directory, and the filename is in the format **<db_name>_pl.log**. The extension is **.log**.
 
 ::
 

@@ -570,7 +570,7 @@ The following are parameters related to the database server. The type and value 
 
 **db_hosts**
 
-    **db_hosts** is a parameter to configure a list of the database server hosts to which clients can connect, and the connection order. The server host list consists of multiple server host names, and host names are separated by spaces or colons (:). Duplicate or non-existent names are ignored.
+    **db_hosts** is a parameter to configure a list of the database server hosts to which clients can connect, and the connection order. The server host list consists of multiple server hostnames, and hostnames are separated by spaces or colons (:). Duplicate or non-existent names are ignored.
 
     The following example shows the values of the **db_hosts** parameter. In this example, connections are attempted in the order of **host1** > **host2** > **host3**. ::
 
@@ -607,17 +607,17 @@ The following are parameters related to the database server. The type and value 
 
     **use_user_hosts** is a system parameter that is used to select the host look up between **hostname** and **IP address**, required by the CUBRID service from the services below. The default value is **OFF**.
 
-    * The host/IP address look-up library that **OS** provides. (**glibc**, Linux)
-    * **The host/IP address look-up library** that **CUBRID** provides.
+    * The host/IP address lookup library that **OS** provides. (**glibc**, Linux)
+    * **The host/IP address lookup library** that **CUBRID** provides.
 
     use_user_hosts=off (default)
 
     * Looks up between IP address and hostname using the system library.
-    * In general, provides /etc/hosts host look-up, DNS Query commonly
+    * In general, provides /etc/hosts host lookup, DNS Query commonly
 
     use_user_hosts=on
 
-    * Looks up between IP address and hostname using CUBRID host look-up library.
+    * Looks up between IP address and hostname using CUBRID host lookup library.
     * Uses **$CUBRID/conf/cubrid_hosts.conf** file to look up between IP address and hostname.
     * executes regardless of the read permission of /etc/hosts, /etc/nsswitch.conf file.
 
@@ -1349,7 +1349,7 @@ The following are parameters related to logs used for database backup and restor
 
 **ddl_audit_log**
 	**ddl_audit_log** is a parameter to turn on/off DDL logging facility. The default value is no.
-	If this value is set to yes, all DDL executed will be logged into the logfile. The path of log files is $CUBRID/log/ddl_audit, and refer to :doc:/admin/ddl_audit for each DDL AUDIT log file name and description of log files in detail.
+	If this value is set to yes, all DDL executed will be logged into the logfile. The path of log files is $CUBRID/log/ddl_audit, and refer to :doc:/admin/ddl_audit for each DDL AUDIT log filename and description of log files in detail.
 
 **ddl_audit_log_size**
 	**ddl_audit_log_size** specifies the maximum size of the DDL AUDIT log file. If the ddl audit log file is larger than the specified size, that ddl audit log file is backed up with the name of .bak appended to the ddl audit log file, and new recording will be started with the file from the beginning of the file. You can set the size with a size unit as B, K, M, or G, which stand for bytes, kilobytes (KB), megabytes (MB), and gigabytes (GB) respectively. If you omit the size unit, bytes will be applied. The default is 10M, and it can be set up to 2G.
@@ -2372,7 +2372,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **access_ip_control_file**
 
-    **access_ip_control_file** is a parameter to configure the file name in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
+    **access_ip_control_file** is a parameter to configure the filename in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
 
 .. _agg_hash_respect_order:
     
@@ -2855,7 +2855,7 @@ Access
 
 **ACCESS_LIST**
 
-    **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access  192.168.10.* and  192.168.20.* store them to a file (ip_lists.txt) and then assign the file name with the value of this parameter.
+    **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access  192.168.10.* and  192.168.20.* store them to a file (ip_lists.txt) and then assign the filename with the value of this parameter.
 
 **ACCESS_MODE**
 
@@ -3002,7 +3002,7 @@ Transaction & Query
 
     .. note::
 
-        The **CCI_DEFAULT_AUTOCOMMIT** parameter has been supported from 2008 R4.0, and the default value is **OFF** for the version. Therefore, if you use CUBRID 2008 R4.1 or later versions and want to keep the configuration **OFF**, you should manually change it to **OFF** to avoid auto-commit of unexpected transaction.
+        The **CCI_DEFAULT_AUTOCOMMIT** parameter has been supported from 2008 R4.0, and the default value is **OFF** for the version. Therefore, if you use CUBRID 2008 R4.1 or later versions and want to keep the configuration **OFF**, you should manually change it to **OFF** to avoid autocommit of unexpected transaction.
 
     .. warning::
 
@@ -3111,11 +3111,11 @@ Logging
 
 **ERROR_LOG_DIR**
 
-    **ERROR_LOG_DIR** is a parameter to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id.err*.
+    **ERROR_LOG_DIR** is a parameter to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log filename for the broker error is *broker_ name_id.err*.
 
 **LOG_DIR**
 
-    **LOG_DIR** is a parameter to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The file name of the SQL logs is *broker_name_id.sql.log*.
+    **LOG_DIR** is a parameter to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The filename of the SQL logs is *broker_name_id.sql.log*.
 
 .. _slow-log:
 
@@ -3131,7 +3131,7 @@ Logging
 
 **SQL_LOG**
 
-    **SQL_LOG** is a parameter to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log file name becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
+    **SQL_LOG** is a parameter to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log filename becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
 
     *   **OFF** : Does not leave any logs.
     *   **ERROR** : Stores logs for queries which occur an error. only queries where an error occurs.

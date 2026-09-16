@@ -151,7 +151,7 @@ The **getConnection** method returns the **Connection** object and it is used to
         <unit_size> ::= multiple of mega byte
         <balance_mode> ::= true | false | rr | sh
 
-*   *host*: IP address or host name where the CUBRID broker is running
+*   *host*: IP address or hostname where the CUBRID broker is running
 *   *port*: The CUBRID broker port number (default value: 33,000)
 *   *db-name*: The name of the database to connect
 
@@ -273,7 +273,7 @@ The **getConnection** method returns the **Connection** object and it is used to
 
 .. note::
 
-    *   Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
+    *   Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a username (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
     *   The database connection in thread-based programming must be used independently each other.
     *   The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
     *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
@@ -353,7 +353,7 @@ To create a DataSource object, call as follows.
 
 **Setting Connection Properties**
 
-**Connection properties** are used to configure connections between datasource and CUBRID DBMS. General properties are a DB name, a host name, a port number, a user name and a password.
+**Connection properties** are used to configure connections between datasource and CUBRID DBMS. General properties are a DB name, a hostname, a port number, a username and a password.
 
 To set or get the values of properties, use below methods which is implemented in cubrid.jdbc.driver.CUBRIDDataSource.
 
@@ -1274,7 +1274,7 @@ To connect to CUBRID, load the JDBC driver by using the **forName** () method of
 **Connecting to Database**
 
 After loading the JDBC driver, use the **getConnection** () method of the **DriverManager** to connect to the database. 
-To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see :ref:`jdbc-connection-conf`.
+To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, username, password, etc. For more information, see :ref:`jdbc-connection-conf`.
 
 .. code-block:: java
 
@@ -1452,7 +1452,7 @@ You can use the **next** () method to process the next row from the **ResultSet*
 
 .. note::
 
-    In the version of 2008 R4.x or before, if you execute commit after query execution, **ResultSet** will be automatically closed. Therefore, you must not use **ResultSet** after commit. Generally CUBRID is executed in auto-commit mode; if you do not want for CUBRID being executed in auto-commit mode, you should specify **conn.setAutocommit(false);** in the code.
+    In the version of 2008 R4.x or before, if you execute commit after query execution, **ResultSet** will be automatically closed. Therefore, you must not use **ResultSet** after commit. Generally CUBRID is executed in autocommit mode; if you do not want for CUBRID being executed in autocommit mode, you should specify **conn.setAutocommit(false);** in the code.
     
     From 9.1, :ref:`Cursor holdability <cursor-holding>` is supported; therefore, you can use **ResultSet** after commit.
 

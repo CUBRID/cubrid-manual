@@ -578,7 +578,7 @@ All CUBRID-related processes should be started in an identical environmental set
 
 There is no check on the compatibility of the locale used by server and CAS (client) process, so the user should make sure the LDML files used are the same.
 
-Locale library loading is one of the first steps in CUBRID start-up. Locale (collation) information is required for initializing databases structures (indexes depends on collation). This process is performed by each CUBRID process which requires locale information: server, CAS, CSQL, createdb, copydb, unload, load DB.
+Locale library loading is one of the first steps in CUBRID startup. Locale (collation) information is required for initializing databases structures (indexes depends on collation). This process is performed by each CUBRID process which requires locale information: server, CAS, CSQL, createdb, copydb, unload, load DB.
 
 The process of loading a locale library is as follows.
 
@@ -977,7 +977,7 @@ Regarding an expression which has arguments with only host variables, (e.g. UPPE
       'utf8_bin'                     -1
 
 
-For expressions having all arguments with coercibility 11 and with different collations, the common collation is resolved at run-time (this is an exception from the coercibility value-based rule for inference which would require to raise an error).
+For expressions having all arguments with coercibility 11 and with different collations, the common collation is resolved at runtime (this is an exception from the coercibility value-based rule for inference which would require to raise an error).
 
 .. code-block:: sql
 
@@ -1320,7 +1320,7 @@ The locale specified when creating DB affects the following.
 Casing and identifiers
 ^^^^^^^^^^^^^^^^^^^^^^
 
-In CUBRID, identifiers are cases insensitive. Tables, columns, session variables, triggers, stored procedures are stored in lower case. Authentication identifiers (user and group names) are stored in upper case.
+In CUBRID, identifiers are cases insensitive. Tables, columns, session variables, triggers, stored procedures are stored in lower case. Authentication identifiers (user and group names) are stored in uppercase.
 
 The ISO-8859-1 charset contains only 255 characters, so the primitives are able to use built-in data. Also the EUC-KR charset, from which only the ASCII compatible characters are considered for casing (and are handled in the code), is built-in.
 
@@ -1923,7 +1923,7 @@ Locale
 *   If localized (non-ASCII) characters will be used for identifiers, then use an .utf8 locale
 *   Once established the UTF-8 charset for DB, it is best to use a LDML locale (this ensures that identifier names containing most Unicode characters are correctly cased) than a system locale.
 *   Setting a locale affects also conversion functions(intl_date_lang, intl_number_lang).
-*   When you set the locale during creating DB, there should be no concern on charset and collation of string-literals or user tables columns; all of them can be changed at run-time (with :func:`CAST` in queries) or ALTER .. CHANGE for a permanent change.
+*   When you set the locale during creating DB, there should be no concern on charset and collation of string-literals or user tables columns; all of them can be changed at runtime (with :func:`CAST` in queries) or ALTER .. CHANGE for a permanent change.
 
 CHAR and VARCHAR
 ----------------
@@ -1986,7 +1986,7 @@ The best approach to add a new locale is to copy existing LDML file and tweak va
 The filename must be formatted like cubrid_<*language*>.xml and be placed in the folder **$CUBRID/locales/data/ldml**.
 The <*language*> part should be a ASCII string (normally five characters) in IETF format (https://en.wikipedia.org/wiki/BCP_47).
 After creating the LDML file, the <*language*> part string must be added into CUBRID configuration file **$CUBRID/conf/cubrid_locales.txt**.
-Note that the order in this file is the order of generating (compiling) locale library and loading locales at start-up.
+Note that the order in this file is the order of generating (compiling) locale library and loading locales at startup.
 
 The **make_locale** script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in **$CUBRID/lib/**).
 
@@ -2012,7 +2012,7 @@ LDML Calendar Information
 
     *   The <dayperiods> sub-tree requires to define the string for AM/PM format variants (according to type attribute). The allowed size is 10 characters (or 40 bytes).
 
-The months and week-days names (in both long and abbreviated form) must be specified in Camel case format (first letter upper case, the rest in lower case).
+The months and week-days names (in both long and abbreviated form) must be specified in Camel case format (first letter uppercase, the rest in lower case).
 CUBRID checks only the maximum allowed size in bytes; the size in characters is computed only for full-width UTF-8 characters (4 bytes), so it would be possible to set a month name having 100 ASCII-only characters (the 25 characters limit is when each character from month name is encoded on 4 bytes in UTF-8).
 
 .. LDML Numbers and currency information
@@ -2089,7 +2089,7 @@ These allow to define casing rules for alphabet of the locale.
 The 'CUBRIDAlphabetMode' attribute defines the primary source of data for characters. Normally, this should be set to "UNICODEDATAFILE", values which instructs CUBRID to use the Unicode data file (**$CUBRID/locales/data/unicodedata.txt**).
 
 This file must not be modified, any customization on certain characters should be done in LDML file. If such value is configured, all Unicode characters up to codepoint 65535 are loaded with casing information.
-The other allowed value for `CUBRIDAlphabetMode` is "ASCII" which will lead to only ASCII character can be lower case, upper case or case-insensitive compare in matching functions.
+The other allowed value for `CUBRIDAlphabetMode` is "ASCII" which will lead to only ASCII character can be lower case, uppercase or case-insensitive compare in matching functions.
 
 This does not affect CUBRID's ability to support all UTF-8 4 bytes encoded Unicode characters, it just limits the casing ability for characters not included.
 
@@ -2146,7 +2146,7 @@ The 'settings' tag defines the properties of the collation:
     *   "primary": accents are ignored, all characters compare as the base character.
 
 *   'caseLevel': special setting to enable case sensitive compare for collations having strength < tertiary. Valid values are "on" or "off".
-*   'caseFirst': order of casing. Valid values are "lower", "upper" and "off". The "upper" values means upper case letters are ordered before the corresponding lower case letter.
+*   'caseFirst': order of casing. Valid values are "lower", "upper" and "off". The "upper" values means uppercase letters are ordered before the corresponding lower case letter.
 *   'CUBRIDMaxWeights': it is the number of codepoints (or last codepoint + 1) which are customized in the collation. Maximum value is 65536. Increasing this value increases the size of collation data.
 *   'DUCETContractions': valid values are "use" or "ignore". When "use" - enable CUBRID to use in the collation the contractions defined by DUCET file ($CUBRID/locales/data/ducet.txt) or ignoring them.
 *   'TailoringContractions': same as previous but refers to the contractions defined or derived from explicit collation rules. Enabling contractions leads to a more complex collation (slower string compares).

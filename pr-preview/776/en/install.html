@@ -308,8 +308,8 @@ The glibc version can be checked as follows:</p>
 <li><p>stdc++ Library (rpm -q libstdc++)</p></li>
 </ul>
 </li>
-<li><p>Check if the mapping between host names and IP addresses are correct in the /etc/hosts file.</p>
-<p>If host names and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.</p>
+<li><p>Check if the mapping between hostnames and IP addresses are correct in the /etc/hosts file.</p>
+<p>If hostnames and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.</p>
 </li>
 </ul>
 <p><strong>Installing CUBRID</strong></p>
@@ -382,8 +382,8 @@ Additionally, to automatically set these variables upon login, you need to manua
 <p>When you use SH package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, <strong>CUBRID_USER</strong>. You should change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.</p>
 <p>When you use RPM package to install CUBRID, the cubrid script will be included in /etc/init.d. But you still need to change the environment variable, $CUBRID_USER from “cubrid” script file.</p>
 </li>
-<li><p><strong>In /etc/hosts file, check if a host name and an IP address mapping is normal</strong></p>
-<p>If a host name and an IP address is abnormally mapped, you cannot start DB server. Therefore, you should check if they are normally mapped.</p>
+<li><p><strong>In /etc/hosts file, check if a hostname and an IP address mapping is normal</strong></p>
+<p>If a hostname and an IP address is abnormally mapped, you cannot start DB server. Therefore, you should check if they are normally mapped.</p>
 </li>
 </ul>
 </div>
@@ -461,7 +461,7 @@ Additionally, to automatically set these variables upon login, you need to manua
 <p>A configuration file for broker. You can use it to configure the following values: broker port, the number of application servers (CAS), SQL LOG, etc. The port that a broker uses is called <strong>BROKER_PORT</strong>. A port you see in the drivers such as JDBC is its corresponding broker’s port. <strong>APPL_SERVER_PORT</strong> is a port that a broker application server (CAS) uses and it is added only in Windows. The default value is  <strong>BROKER_PORT</strong> +1. The number of ports used is the same as the number of CAS, starting from the specified port’s number plus 1. For details, see <a class="reference internal" href="admin/config.html#parameter-by-broker"><span class="std std-ref">Parameter by Broker</span></a>.
 For example, if the value of <strong>APPL_SERVER_PORT</strong> is 35000 and the maximum number of CASes by <strong>MAX_NUM_APPL_SERVER</strong> is 50, then listening ports on CASes are 35000, 35001, …, 35049.
 For more details, see <a class="reference internal" href="admin/config.html#parameter-by-broker"><span class="std std-ref">Parameter by Broker</span></a>.</p>
-<p>The <strong>CCI_DEFAULT_AUTOCOMMIT</strong> broker parameter is supported since 2008 R4.0. The default value in the version is <strong>OFF</strong> and it is later changed to <strong>ON</strong>.  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to <strong>OFF</strong> or configure the auto-commit mode to <strong>OFF</strong>.</p>
+<p>The <strong>CCI_DEFAULT_AUTOCOMMIT</strong> broker parameter is supported since 2008 R4.0. The default value in the version is <strong>OFF</strong> and it is later changed to <strong>ON</strong>.  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to <strong>OFF</strong> or configure the autocommit mode to <strong>OFF</strong>.</p>
 </li>
 </ul>
 <p><strong>Installing CUBRID Interfaces</strong></p>
@@ -501,8 +501,8 @@ The glibc version can be checked as follows:</p>
 <li><p>stdc++ Library (rpm -q libstdc++)</p></li>
 </ul>
 </li>
-<li><p>Check if the mapping between host names and IP addresses are correct in the /etc/hosts file.</p>
-<p>If host names and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.</p>
+<li><p>Check if the mapping between hostnames and IP addresses are correct in the /etc/hosts file.</p>
+<p>If hostnames and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.</p>
 </li>
 </ul>
 <p><strong>Installation Process</strong></p>
@@ -526,7 +526,7 @@ The glibc version can be checked as follows:</p>
 </span></code></pre></div>
 </div>
 </li>
-<li><p>Add CUBRID JDBC library file name to the <strong>CLASSPATH</strong> environment variable.</p>
+<li><p>Add CUBRID JDBC library filename to the <strong>CLASSPATH</strong> environment variable.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">export CLASSPATH=$CUBRID/jdbc/cubrid_jdbc.jar:$CLASSPATH
 </span></code></pre></div>
 </div>

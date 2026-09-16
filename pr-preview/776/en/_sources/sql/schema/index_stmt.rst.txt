@@ -300,8 +300,8 @@ Allowing multiple indexes on the same column in the same order
         
 .. note::
 
-    * If an FK already exists with the same index column that differs only in *deduplication level*, it can't be duplicated.
-    * If columns of index includes a primary key or unique index, indexes that differ only in the deduplicate level can't be created. (Even if duplicate indexes are allowed.)
+    * If an FK already exists with the same index column that differs only in *deduplication level*, it cannot be duplicated.
+    * If columns of index includes a primary key or unique index, indexes that differ only in the deduplicate level cannot be created. (Even if duplicate indexes are allowed.)
     * You cannot change the *deduplicate level* of an index with the ALTER INDEX REBUILD statement. If necessary, delete the index and recreate it.
 
 
@@ -313,7 +313,7 @@ OVERFLOW PAGE
     * What is the overflow page?
        An index consists of non-leaf nodes and leaf nodes, and a leaf node is composed of a set of index key information.
        At this time, one index key information is a pair of a key value and a set of record's OIDs corresponding to the key value.
-       If there are many records with a specific key value, the OIDs of all the records can't be stored in the leaf node, so they are separated and managed in a separate page, which is called an overflow page.
+       If there are many records with a specific key value, the OIDs of all the records cannot be stored in the leaf node, so they are separated and managed in a separate page, which is called an overflow page.
        Also, when even overflow pages are full, new overflow pages are created and these pages are maintained as a linked list.
 
 .. _alter-index:

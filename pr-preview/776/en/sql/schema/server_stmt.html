@@ -258,7 +258,7 @@ For how to use the prepared server, refer to <a class="reference internal" href=
 <li><p><em>host_string</em>: It is the hose name or IP address of the broker server that has DBMS information to be accessed remotely.</p></li>
 <li><p><em>port_number</em>: The port number of the broker server that has DBMS information to be accessed remotely.</p></li>
 <li><p><em>db_name</em>: The database name to connect to remotely.</p></li>
-<li><p><em>user_name</em>: The user name to use when connecting to the database to be accessed remotely.</p></li>
+<li><p><em>user_name</em>: The username to use when connecting to the database to be accessed remotely.</p></li>
 <li><p><em>password_string</em>: Password string for <em>user_name</em> used to connect to the database to be accessed remotely.</p></li>
 <li><p><em>properties_string</em>: A string of property information (up to 2047 bytes) used when connecting to a broker (or gateway) for remote database usage. For detailed attribute information, see <a class="reference internal" href="../../api/cciapi.html#cci-connect-with-url"><span class="std std-ref">cci_connect_with_url</span></a></p></li>
 <li><p><em>server_comment_string</em>: Specifies comments about server information. (up to 1023 bytes)</p></li>
@@ -373,7 +373,7 @@ The following is an example of a poor use of the server name (&lt;dblink_server_
 </span></code></pre></div>
 </div>
 <p>In the above example, creation with <em>“srv.1”</em> and <em>[cub].[srv.2]</em> names fails.
-In the case of <em>cub.srv1</em>, <em>cub</em> will be recognized as the user name and the server name will be recognized as <em>srv1</em>.</p>
+In the case of <em>cub.srv1</em>, <em>cub</em> will be recognized as the username and the server name will be recognized as <em>srv1</em>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A dot (.’.) cannot be used for the server name. You cannot use a dot (‘.’) in the server name, even if it is enclosed in quotation marks or [].</p>
@@ -533,12 +533,12 @@ In particular, <strong>DBA</strong> or <strong>DBA</strong> members can change a
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><em>owner_name</em>: Specifies the user name of the server to be created.</p></li>
+<li><p><em>owner_name</em>: Specifies the username of the server to be created.</p></li>
 <li><p><em>server_name</em>: Specifies the name of the server to be created. (up to 254 bytes)</p></li>
 <li><p><em>host_string</em>: It is the hose name or IP address of the broker server that has DBMS information to be accessed remotely.</p></li>
 <li><p><em>port_number</em>: The port number of the broker server that has DBMS information to be accessed remotely.</p></li>
 <li><p><em>db_name</em>: The database name to connect to remotely.</p></li>
-<li><p><em>user_name</em>: he user name to use when connecting to the database to be accessed remotely.</p></li>
+<li><p><em>user_name</em>: he username to use when connecting to the database to be accessed remotely.</p></li>
 <li><p><em>password_string</em>: Password string for <em>user_name</em> used to connect to the database to be accessed remotely.</p></li>
 <li><p><em>properties_string</em>: Property information string used when connecting to the database to be accessed remotely. (up to 2047 bytes)</p></li>
 <li><p><em>server_comment_string</em>: Specifies comments about server information. (up to 1023 bytes)</p></li>

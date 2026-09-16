@@ -317,7 +317,7 @@
 <p>When the broker temporarily establishes a connection to a standby server, it will disconnect itself from the standby server at the end of every transaction so that it can attempt to find an active server at the beginning of the next transaction. When it is connected to the standby server, only read service is available. Any write requests will result in a server error.</p>
 <p>The following picture shows how a broker connects to the host through the <strong>db-host</strong> configuration.</p>
 <img alt="_images/image20.png" src="_images/image20.png"/>
-<p>The broker tries to connect as the order of <em>B</em>, <em>C</em>, <em>A</em> because db-host in databases.txt is “node B:node C:node A”. At this time, “node B:node C:node A” specified in db-host is the real host names defined in the /etc/hosts file.</p>
+<p>The broker tries to connect as the order of <em>B</em>, <em>C</em>, <em>A</em> because db-host in databases.txt is “node B:node C:node A”. At this time, “node B:node C:node A” specified in db-host is the real hostnames defined in the /etc/hosts file.</p>
 <ul class="simple">
 <li><p>Example 1.  <em>node B</em> is crashed, <em>node C</em> is in standby status, and <em>node A</em> is in active status. Therefore, at last, the broker connects to <em>node A</em>.</p></li>
 <li><p>Example 2.  <em>node B</em> is crashed, and <em>node C</em> is in active status. Therefore, at last, the broker connects to <em>node C</em>.</p></li>
@@ -328,7 +328,7 @@
 <p>Once it establishes a connection with an active server, it will maintain that connection until the time specified by <a class="reference internal" href="admin/config.html#reconnect-time"><span class="std std-ref">RECONNECT_TIME</span></a>. After RECONNECT_TIME, the broker tries to reconnect as disconnecting the old connection. Or you can reconnect to the standby server by running <strong>cubrid broker reset</strong>. If a write request is delivered to the Read Only broker, an error occurs in the broker; therefore, only the read service will be available even if it is connected to an active server.</p>
 <p>The following picture shows how a broker connects to the host through the <strong>db-host</strong> configuration.</p>
 <img alt="_images/image21.png" src="_images/image21.png"/>
-<p>The broker tries to connect as the order of <em>A</em>, <em>B</em>, <em>C</em> because db-host in databases.txt is “node A:node B:node C”. At this time, “node A:node B:node C” specified in db-host is the real host names defined in the /etc/hosts file.</p>
+<p>The broker tries to connect as the order of <em>A</em>, <em>B</em>, <em>C</em> because db-host in databases.txt is “node A:node B:node C”. At this time, “node A:node B:node C” specified in db-host is the real hostnames defined in the /etc/hosts file.</p>
 <ul class="simple">
 <li><p>Example 1.  <em>node A</em> is in active status, <em>node B</em> is in standby status. Therefore, at last, the broker connects to <em>node B</em>.</p></li>
 <li><p>Example 2.  <em>node A</em> is in active status, <em>node B</em> is crashed, and <em>node C</em> is in standby status. Therefore, at last, the broker connects to <em>node C</em>.</p></li>
@@ -339,7 +339,7 @@
 <p>A broker that provides the read service. This broker can only be connected to a standby server. If no standby server exists, no service will be provided.</p>
 <p>The following picture shows how a broker connects to the host through the <strong>db-host</strong> configuration.</p>
 <img alt="_images/image22.png" src="_images/image22.png"/>
-<p>The broker tries to connect as the order of <em>A</em>, <em>B</em>, <em>C</em> because db-host in databases.txt is “node A:node B:node C”. At this time, “node A:node B:node C” specified in db-host is the real host names defined in the /etc/hosts file.</p>
+<p>The broker tries to connect as the order of <em>A</em>, <em>B</em>, <em>C</em> because db-host in databases.txt is “node A:node B:node C”. At this time, “node A:node B:node C” specified in db-host is the real hostnames defined in the /etc/hosts file.</p>
 <ul class="simple">
 <li><p>Example 1.  <em>node A</em> is in active status, <em>node B</em> is in standby status. Therefore, at last, the broker connects to <em>node B</em>.</p></li>
 <li><p>Example 2.  <em>node A</em> is in active status, <em>node B</em> is crashed, and <em>node C</em> is in standby status. Therefore, at last, the broker connects to <em>node C</em>.</p></li>
@@ -471,7 +471,7 @@
 </span></code></pre></div>
 </div>
 <p><strong>cubrid_ha.conf</strong></p>
-<p>Ensure <strong>ha_port_id</strong>, <strong>ha_node_list</strong>, <strong>ha_db_list</strong> of <strong>$CUBRID/conf/cubrid_ha.conf</strong> in every CUBRID HA node has the same value. In the example below, we assume that the host name of a master node is <em>nodeA</em> and that of a slave node is <em>nodeB</em>.</p>
+<p>Ensure <strong>ha_port_id</strong>, <strong>ha_node_list</strong>, <strong>ha_db_list</strong> of <strong>$CUBRID/conf/cubrid_ha.conf</strong> in every CUBRID HA node has the same value. In the example below, we assume that the hostname of a master node is <em>nodeA</em> and that of a slave node is <em>nodeB</em>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">common</span><span class="p">]</span>
 </span><span id="line-2"><span class="n">ha_port_id</span><span class="o">=</span><span class="mi">59901</span>
 </span><span id="line-3"><span class="n">ha_node_list</span><span class="o">=</span><span class="n">cubrid</span><span class="nd">@nodeA</span><span class="p">:</span><span class="n">nodeB</span>
@@ -481,7 +481,7 @@
 </span></code></pre></div>
 </div>
 <p><strong>databases.txt</strong></p>
-<p>Ensure that you must configure the host names (<em>nodeA:nodeB</em>) of master and slave nodes in db-host of <strong>$CUBRID_DATABASES/databases.txt</strong>; if <strong>$CUBRID_DATABASES</strong> is not configured, do it in <strong>$CUBRID/databases/databases.txt</strong>).</p>
+<p>Ensure that you must configure the hostnames (<em>nodeA:nodeB</em>) of master and slave nodes in db-host of <strong>$CUBRID_DATABASES/databases.txt</strong>; if <strong>$CUBRID_DATABASES</strong> is not configured, do it in <strong>$CUBRID/databases/databases.txt</strong>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">#db-name vol-path db-host log-path lob-base-path</span>
 </span><span id="line-2"><span class="n">testdb</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">DB</span><span class="o">/</span><span class="n">testdb</span> <span class="n">nodeA</span><span class="p">:</span><span class="n">nodeB</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">DB</span><span class="o">/</span><span class="n">testdb</span><span class="o">/</span><span class="n">log</span> <span class="n">file</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">cubrid</span><span class="o">/</span><span class="n">DB</span><span class="o">/</span><span class="n">testdb</span><span class="o">/</span><span class="n">lob</span>
 </span></code></pre></div>
@@ -490,7 +490,7 @@
 <section id="starting-and-verifying-cubrid-ha">
 <h3>Starting and Verifying CUBRID HA<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#starting-and-verifying-cubrid-ha" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#starting-and-verifying-cubrid-ha'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Starting CUBRID HA</strong></p>
-<p>Execute the <strong>cubrid heartbeat</strong> <strong>start</strong> at each node in the CUBRID HA group. Note that the node executing <strong>cubrid heartbeat start</strong> first will become a master node. In the example below, we assume that the host name of a master node is <em>nodeA</em> and that of a slave node is <em>nodeB</em>.</p>
+<p>Execute the <strong>cubrid heartbeat</strong> <strong>start</strong> at each node in the CUBRID HA group. Note that the node executing <strong>cubrid heartbeat start</strong> first will become a master node. In the example below, we assume that the hostname of a master node is <em>nodeA</em> and that of a slave node is <em>nodeB</em>.</p>
 <ul>
 <li><p>Master node</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">[nodeA]$ cubrid heartbeat start
@@ -534,7 +534,7 @@
 </li>
 </ul>
 <p><strong>Verifying the CUBRID HA Operation</strong></p>
-<p>Verify that action is properly applied to standby server of the slave node after performing write in an active server of the master node. To make a success connection via the CSQL Interpreter in HA environment, you must specify the host name to be connected after the database name like “@&lt;<em>host_name</em>&gt;”). If you specify a host name as localhost, it is connected to local node.</p>
+<p>Verify that action is properly applied to standby server of the slave node after performing write in an active server of the master node. To make a success connection via the CSQL Interpreter in HA environment, you must specify the hostname to be connected after the database name like “@&lt;<em>host_name</em>&gt;”). If you specify a hostname as localhost, it is connected to local node.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Ensure that primary key must exist when creating a table to have replication successfully processed.</p>
@@ -607,7 +607,7 @@
 </span></code></pre></div>
 </div>
 <p><strong>Configuring Applications</strong></p>
-<p>Specifies the host name (<em>nodeA_broker</em>, <em>nodeB_broker</em>) and port for an application to connect in the connection URL. The <strong>altHosts</strong> attribute defines the broker where the next connection will be made when the connection to a broker fails. The following is an example of a JDBC program. For more information on CCI and PHP, see <a class="reference internal" href="#ha-cci-conf"><span class="std std-ref">CCI Configuration</span></a> and <a class="reference internal" href="#ha-php-conf"><span class="std std-ref">PHP Configuration</span></a>.</p>
+<p>Specifies the hostname (<em>nodeA_broker</em>, <em>nodeB_broker</em>) and port for an application to connect in the connection URL. The <strong>altHosts</strong> attribute defines the broker where the next connection will be made when the connection to a broker fails. The following is an example of a JDBC program. For more information on CCI and PHP, see <a class="reference internal" href="#ha-cci-conf"><span class="std std-ref">CCI Configuration</span></a> and <a class="reference internal" href="#ha-php-conf"><span class="std std-ref">PHP Configuration</span></a>.</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="s">"jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&amp;altHosts=nodeB_broker:33000"</span><span class="p">,</span><span class="w"> </span><span class="s">"dba"</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
@@ -702,11 +702,11 @@
 <section id="node">
 <h4>Node<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#node"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
 <p><strong>ha_node_list</strong></p>
-<p><strong>ha_node_list</strong> is a parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is <strong>localhost@localhost</strong>.</p>
+<p><strong>ha_node_list</strong> is a parameter used to configure the group name to be used in the CUBRID HA group and the hostname of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for hostnames of member nodes. A comma(,) or colon(:) is used to separate individual hostnames. The default is <strong>localhost@localhost</strong>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in <strong>/etc/hosts</strong>.</p>
-<p>If the host name is not specified properly, the below message is written into the server.err error log file.</p>
+<p>The hostname of the member nodes specified in this parameter cannot be replaced with the IP. You should use the hostnames which are registered in <strong>/etc/hosts</strong>.</p>
+<p>If the hostname is not specified properly, the below message is written into the server.err error log file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Time</span><span class="p">:</span> <span class="mi">04</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">12</span> <span class="mi">17</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mf">45.030</span> <span class="o">-</span> <span class="n">ERROR</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">connection</span><span class="o">/</span><span class="n">tcp</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">121</span> <span class="n">ERROR</span> <span class="n">CODE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">353</span> <span class="n">Tran</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CLIENT</span> <span class="o">=</span> <span class="p">(</span><span class="n">unknown</span><span class="p">):(</span><span class="n">unknown</span><span class="p">)(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">EID</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">Cannot</span> <span class="n">make</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">master</span> <span class="n">server</span> <span class="n">on</span> <span class="n">host</span> <span class="s2">"Wrong_HOST_NAME"</span><span class="o">....</span> <span class="n">Connection</span> <span class="n">timed</span> <span class="n">out</span>
 </span></code></pre></div>
 </div>
@@ -714,12 +714,12 @@
 <p>A node in which the <strong>ha_mode</strong> value is set to <strong>on</strong> must be specified in <strong>ha_node_list</strong>. The value of the <strong>ha_node_list</strong> of all nodes in the CUBRID HA group must be identical. When a failover occurs, a node becomes a master node in the order specified in the parameter.</p>
 <p>This parameter can be modified dynamically. If you modify the value of this parameter, you must execute <a class="reference internal" href="#cubrid-heartbeat"><span class="std std-ref">cubrid heartbeat reload</span></a> to apply the changes.</p>
 <p><strong>ha_replica_list</strong></p>
-<p><strong>ha_replica_list</strong> is a parameter used to configure the group name, which is used in the CUBRID HA group, and the replica nodes, which are host names of member nodes in which failover is not supported. There is no need to specify this if you do not construct replica nodes. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is <strong>NULL</strong>.</p>
-<p>The group name must be identical to the name specified in <strong>ha_replica_list</strong>. The host names of member nodes and the host names of nodes specified in this parameter must be registered in <strong>/etc/hosts</strong>. A node in which the <strong>ha_mode</strong> value is set to <strong>replica</strong> must be specified in <strong>ha_replica_list</strong>. The <strong>ha_replica_list</strong> values of all nodes in the CUBRID HA group must be identical.</p>
+<p><strong>ha_replica_list</strong> is a parameter used to configure the group name, which is used in the CUBRID HA group, and the replica nodes, which are hostnames of member nodes in which failover is not supported. There is no need to specify this if you do not construct replica nodes. The group name is separated by @. The name before @ is for the group, and the names after @ are for hostnames of member nodes. A comma(,) or colon(:) is used to separate individual hostnames. The default is <strong>NULL</strong>.</p>
+<p>The group name must be identical to the name specified in <strong>ha_replica_list</strong>. The hostnames of member nodes and the hostnames of nodes specified in this parameter must be registered in <strong>/etc/hosts</strong>. A node in which the <strong>ha_mode</strong> value is set to <strong>replica</strong> must be specified in <strong>ha_replica_list</strong>. The <strong>ha_replica_list</strong> values of all nodes in the CUBRID HA group must be identical.</p>
 <p>This parameter can be modified dynamically. If you modify the value of this parameter, you must execute <a class="reference internal" href="#cubrid-heartbeat"><span class="std std-ref">cubrid heartbeat reload</span></a> to apply the changes.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in <strong>/etc/hosts</strong>.</p>
+<p>The hostname of the member nodes specified in this parameter cannot be replaced with the IP. You should use the hostnames which are registered in <strong>/etc/hosts</strong>.</p>
 </div>
 <p><strong>ha_db_list</strong></p>
 <p><strong>ha_db_list</strong> is a parameter used to configure the name of the database that will run in CUBRID HA mode. The default is <strong>NULL</strong>. You can specify multiple databases by using a comma (,).</p>
@@ -730,14 +730,14 @@
 <p><strong>ha_port_id</strong> is a parameter used to configure the UDP port number; the UDP port is used to detect failure when exchanging heartbeat messages. The default is <strong>59,901</strong>.</p>
 <p>If a firewall exists in the service environment, the firewall must be configured to allow the configured port to pass through it.</p>
 <p><strong>ha_ping_hosts</strong></p>
-<p><strong>ha_ping_hosts</strong> is a parameter used to configure the host which verifies whether or not a failover occurs due to unstable network when a failover has started in a slave node. The default is <strong>NULL</strong>. A comma(,) or colon(:) is used to separate individual host names.</p>
-<p>The host name of the member nodes specified in this parameter can be replaced with the IP. When a host name is used, the name must be registered in <strong>/etc/hosts</strong>.</p>
+<p><strong>ha_ping_hosts</strong> is a parameter used to configure the host which verifies whether or not a failover occurs due to unstable network when a failover has started in a slave node. The default is <strong>NULL</strong>. A comma(,) or colon(:) is used to separate individual hostnames.</p>
+<p>The hostname of the member nodes specified in this parameter can be replaced with the IP. When a hostname is used, the name must be registered in <strong>/etc/hosts</strong>.</p>
 <p>CUBRID checks hosts specified in <strong>ha_ping_hosts</strong> every hour; if there is a problem on a host, “ping check” is paused temporarily and checks every 5 minutes if the host is normalized or not.</p>
 <p>Configuring this parameter can prevent split-brain, a phenomenon in which two master nodes simultaneously exist as a result of the slave node erroneously detecting an abnormal termination of the master node due to unstable network status and then promoting itself as the new master.</p>
 <p>However, the “ping check” does not work if the ICMP protocol is disabled. CUBRID provides <strong>ha_tcp_ping_hosts</strong> as an alternative to address this.</p>
 <p>This parameter can be modified dynamically. If you modify the value of this parameter, you must execute <a class="reference internal" href="#cubrid-heartbeat"><span class="std std-ref">cubrid heartbeat reload</span></a> to apply the changes.</p>
 <p><strong>ha_tcp_ping_hosts</strong></p>
-<p><strong>ha_tcp_ping_hosts</strong> is a parameter that can be used as an alternative to <strong>ha_ping_hosts</strong> when the ICMP protocol is disabled. <strong>ha_tcp_ping_hosts</strong> works like <strong>ha_ping_hosts</strong> except that the TCP layer is used instead of the IP layer for the “ping check”. The default is <strong>NULL</strong>. A comma(,) is used to separate individual host names, and a colon(:) is used to separate a host name and a port number. So, the format of this parameter is like “ha_tcp_ping_hosts=host1:port1,host2:port2”. In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in <strong>ha_tcp_ping_hosts</strong> and the firewall must not block the requests. <strong>ha_tcp_ping_hosts</strong> is ignored if the <strong>ha_ping_hosts</strong> is also set.</p>
+<p><strong>ha_tcp_ping_hosts</strong> is a parameter that can be used as an alternative to <strong>ha_ping_hosts</strong> when the ICMP protocol is disabled. <strong>ha_tcp_ping_hosts</strong> works like <strong>ha_ping_hosts</strong> except that the TCP layer is used instead of the IP layer for the “ping check”. The default is <strong>NULL</strong>. A comma(,) is used to separate individual hostnames, and a colon(:) is used to separate a hostname and a port number. So, the format of this parameter is like “ha_tcp_ping_hosts=host1:port1,host2:port2”. In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in <strong>ha_tcp_ping_hosts</strong> and the firewall must not block the requests. <strong>ha_tcp_ping_hosts</strong> is ignored if the <strong>ha_ping_hosts</strong> is also set.</p>
 <p>This parameter can be modified dynamically. If you modify the value of this parameter, you must execute <a class="reference internal" href="#cubrid-heartbeat"><span class="std std-ref">cubrid heartbeat reload</span></a> to apply the changes.</p>
 </section>
 <section id="replication">
@@ -824,7 +824,7 @@ ex2) ha_copy_log_base=/log/copy_log: Saves replication logs in /log/copy_log as 
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The following example shows how to configure the value of /etc/hosts (a host name of a member node: nodeA, IP: 192.168.0.1).</p>
+<p>The following example shows how to configure the value of /etc/hosts (a hostname of a member node: nodeA, IP: 192.168.0.1).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mf">127.0.0.1</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">localhost</span>
 </span><span id="line-2"><span class="mf">192.168.0.1</span> <span class="n">nodeA</span>
 </span></code></pre></div>
@@ -855,7 +855,7 @@ The default is 2min. If the unit is omitted, it is specified as milliseconds(mse
 <p><strong>ha_enable_sql_logging</strong></p>
 <p>If the value of this parameter is <strong>yes</strong>, CUBRID generates the log file of SQL which <strong>applylogdb</strong> process applies to the DB volume. The log file is located under the sql_log of the replication log directory(<strong>ha_copy_log_base</strong>).
 The default is <strong>no</strong>.</p>
-<p>The format of this log file name is <em>&lt;db name&gt;_&lt;master hostname&gt;</em><strong>.sql.log.</strong><em>&lt;id&gt;</em>, and <em>&lt;id&gt;</em> starts from 0.
+<p>The format of this log filename is <em>&lt;db name&gt;_&lt;master hostname&gt;</em><strong>.sql.log.</strong><em>&lt;id&gt;</em>, and <em>&lt;id&gt;</em> starts from 0.
 If this size is over <strong>ha_sql_log_max_size_in_mbytes</strong>, a new file with “<em>&lt;id&gt;</em> + 1” is created.
 For example, if “ha_sql_log_max_size_in_mbytes=100”, demodb_nodeA.sql.log.1 is newly created as the size of demodb_nodeA.sql.log.0 file becomes 100MB.
 <em>&lt;id&gt;</em> will wrap around to 0 once it exceeds the maximum value (4,294,967,295).</p>
@@ -924,7 +924,7 @@ For example, if “ha_sql_log_max_size_in_mbytes=100”, demodb_nodeA.sql.log.1 
 If <strong>PREFERRED_HOSTS</strong> parameter is given, CAS tries to connect to the hosts configured in <strong>PREFERRED_HOSTS</strong> with the order, then uses the value of <strong>db-host</strong> only when the connection by <strong>PREFERRED_HOSTS</strong> fails; and <strong>CONNECT_ORDER</strong> does not affects on the order of <strong>PREFERRED_HOSTS</strong>.</p>
 <p>If you concern that the connections are centralized into one DB, set this value as <strong>RANDOM</strong>.</p>
 <p><strong>PREFERRED_HOSTS</strong></p>
-<p>Specify the order to connect by listing host names. The default value is <strong>NULL</strong>.</p>
+<p>Specify the order to connect by listing hostnames. The default value is <strong>NULL</strong>.</p>
 <p>You can specify multiple nodes by using a colon (:). First, it tries to connect to host in the following order: host specified in the <strong>PREFERRED_HOSTS</strong> parameter first and then host specified in <strong>$CUBRID_DATABASES/databases.txt</strong>.</p>
 <p>The following example shows how to configure <strong>cubrid_broker.conf</strong>. To access localhost in a first priority, set <strong>PREFERRED_HOSTS</strong> as <em>localhost</em>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="o">%</span><span class="n">PHRO_broker</span><span class="p">]</span>
@@ -2151,7 +2151,7 @@ comparing to a multiple-slave node structure. Note that replica nodes do not fai
 <p><strong>cubrid backupdb -r</strong></p>
 <p>This command is used to back up a specified database. If the <strong>-r</strong> option is used, logs that are not required for recovery will be deleted. This deletion may result in data inconsistency among nodes within CUBRID HA groups. Therefore, you must not use the <strong>-r</strong> option.</p>
 <p><strong>On-line backup</strong></p>
-<p>If you want to perform on-line backup in HA environment, add @<em>hostname</em>after the database name. <em>hostname</em>is a name defined in $CUBRID_DATABASES/databases.txt. Specify “@localhost” because you generally perform on-line backup on the local database.</p>
+<p>If you want to perform online backup in HA environment, add @<em>hostname</em>after the database name. <em>hostname</em>is a name defined in $CUBRID_DATABASES/databases.txt. Specify “@localhost” because you generally perform online backup on the local database.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">D</span> <span class="o">./</span> <span class="o">-</span><span class="n">l</span> <span class="mi">0</span> <span class="o">-</span><span class="n">z</span> <span class="n">testdb</span><span class="nd">@localhost</span>
 </span></code></pre></div>
 </div>
@@ -2333,10 +2333,10 @@ operation task, and then execute the node.</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Changing the host name and IP of a DB server</p></td>
+<tr class="row-even"><td><p>Changing the hostname and IP of a DB server</p></td>
 <td><p>Stop all nodes in the CUBRID HA group, and restart
 them after the operation task.</p></td>
-<td><p>When a host name has been changed, change the <strong>databases.txt</strong> file of each broker and reset the broker
+<td><p>When a hostname has been changed, change the <strong>databases.txt</strong> file of each broker and reset the broker
 connection with <strong>cubrid broker reset</strong>.</p></td>
 </tr>
 </tbody>
@@ -2457,8 +2457,8 @@ Replication information is saved on the _db_ha_apply_info table, and it has othe
 <p>Now let’s see the case of building a new slave node with a single master node - making a 1:1 master-slave composition.</p>
 <img alt="_images/build_slave.png" src="_images/build_slave.png"/>
 <ul class="simple">
-<li><p>nodeA: a master node’s host name</p></li>
-<li><p>nodeB: a slave node’s host name to be added newly</p></li>
+<li><p>nodeA: a master node’s hostname</p></li>
+<li><p>nodeB: a slave node’s hostname to be added newly</p></li>
 </ul>
 <p>This scenario assumes that the database has been created by below commands. When you run createdb, a locale name and a charset should be the same between a master node and a slave node.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">export CUBRID_DATABASES=/home/cubrid/DB
@@ -2604,9 +2604,9 @@ Replication information is saved on the _db_ha_apply_info table, and it has othe
 <p>The following is a scenario to add a new slave from an existing slave during a HA service. “Master:Slave” will be from 1:1 to 1:2.</p>
 <img alt="_images/build_another_slave.png" src="_images/build_another_slave.png"/>
 <ul class="simple">
-<li><p>nodeA: a master node’s host name</p></li>
-<li><p>nodeB: a slave node’s host name</p></li>
-<li><p>nodeC: a slave node’s host name to be added</p></li>
+<li><p>nodeA: a master node’s hostname</p></li>
+<li><p>nodeB: a slave node’s hostname</p></li>
+<li><p>nodeC: a slave node’s hostname to be added</p></li>
 </ul>
 <p>You can use an existing master or slave if you want to add a new slave during HA service. In this scenario, let’s add a new slave by using an existing slave because we assume that slave’s disk I/O is less than master’s.</p>
 <div class="admonition note" id="build-using-slave-why">
@@ -2860,8 +2860,8 @@ therefore, the user just needs to manually copy archive logs which has been crea
 </li>
 </ul>
 </li>
-<li><p>Add a broker and add this broker’s host name into altHosts of application URL</p>
-<p>Add a broker if needed, and add this broker’s host name into altHosts, the property of application URL to access this broker.</p>
+<li><p>Add a broker and add this broker’s hostname into altHosts of application URL</p>
+<p>Add a broker if needed, and add this broker’s hostname into altHosts, the property of application URL to access this broker.</p>
 <p>If you are not considering to add a broker, you do not need to do this job.</p>
 <ul class="simple">
 <li><p>From all of <em>nodeA</em> and <em>nodeB</em>, add <em>nodeC</em> into db-host of  <strong>$CUBRID_DATABASES/databases.txt</strong>.</p></li>
@@ -2879,9 +2879,9 @@ therefore, the user just needs to manually copy archive logs which has been crea
 <p>Let’s remove a slave when the HA environment is composed of “master:slave = 1:2”.</p>
 <img alt="_images/remove_slave.png" src="_images/remove_slave.png"/>
 <ul class="simple">
-<li><p>nodeA: a master node’s host name</p></li>
-<li><p>nodeB: a slave node’s host name</p></li>
-<li><p>nodeC: a slave node’s host name to be removed</p></li>
+<li><p>nodeA: a master node’s hostname</p></li>
+<li><p>nodeB: a slave node’s hostname</p></li>
+<li><p>nodeC: a slave node’s hostname to be removed</p></li>
 </ul>
 <img alt="_images/remove_slave_process.png" src="_images/remove_slave_process.png"/>
 <ol class="arabic">
@@ -2968,9 +2968,9 @@ therefore, the user just needs to manually copy archive logs which has been crea
 <p>Now let’s add a replica when HA environment is set as “master:slave=1:1”. The beginning database setting is the same as the setting in <a class="reference internal" href="#build-initial-database"><span class="std std-ref">Build an initial database</span></a> of <a class="reference internal" href="#build-another-slave"><span class="std std-ref">Build Another Slave during HA Service</span></a>.</p>
 <img alt="_images/add_replica.png" src="_images/add_replica.png"/>
 <ul class="simple">
-<li><p>nodeA: a master node’s host name</p></li>
-<li><p>nodeB: a slave node’s host name</p></li>
-<li><p>nodeC: a replica node’s host name to be added newly</p></li>
+<li><p>nodeA: a master node’s hostname</p></li>
+<li><p>nodeB: a slave node’s hostname</p></li>
+<li><p>nodeC: a replica node’s hostname to be added newly</p></li>
 </ul>
 <img alt="_images/add_replica_process.png" src="_images/add_replica_process.png"/>
 <ol class="arabic" start="0">
@@ -3177,8 +3177,8 @@ therefore, the user just needs to manually copy archive logs which has been crea
 </li>
 </ul>
 </li>
-<li><p>Add a broker and add this broker’s host name into altHosts of application URL</p>
-<p>Add a broker if needed, and add this broker’s host name into altHosts, the property of application URL to access this broker.</p>
+<li><p>Add a broker and add this broker’s hostname into altHosts of application URL</p>
+<p>Add a broker if needed, and add this broker’s hostname into altHosts, the property of application URL to access this broker.</p>
 <p>If you are not considering to add a broker, you do not need to do this job.</p>
 <ul class="simple">
 <li><p>From all of <em>nodeA</em> and <em>nodeB</em>, add <em>nodeC</em> into db-host of  <strong>$CUBRID_DATABASES/databases.txt</strong>.</p></li>
@@ -3196,9 +3196,9 @@ therefore, the user just needs to manually copy archive logs which has been crea
 <p>Now let’s see the case of rebuilding a existing slave node during a service in a composition of “master:slave:relica = 1:1:1”. The beginning database setting is the same as the setting in <a class="reference internal" href="#build-initial-database"><span class="std std-ref">Build an initial database</span></a> of <a class="reference internal" href="#build-another-slave"><span class="std std-ref">Build Another Slave during HA Service</span></a>.</p>
 <img alt="_images/rebuild_slave.png" src="_images/rebuild_slave.png"/>
 <ul class="simple">
-<li><p>nodeA: a host name of a master node</p></li>
-<li><p>nodeB: a host name of a slave node to be rebuilt</p></li>
-<li><p>nodeC: a host name of a replica node</p></li>
+<li><p>nodeA: a hostname of a master node</p></li>
+<li><p>nodeB: a hostname of a slave node to be rebuilt</p></li>
+<li><p>nodeC: a hostname of a replica node</p></li>
 </ul>
 <img alt="_images/rebuild_slave_process.png" src="_images/rebuild_slave_process.png"/>
 <ol class="arabic">
@@ -3298,7 +3298,7 @@ therefore, the user just needs to manually copy archive logs which has been crea
 </span><span id="line-19">...
 </span></code></pre></div>
 </div>
-<p>Make the below script and run. At “HA apply info” on the above output, put the first number, 1426495463 into $db_creation, the second number, 12922 into $pageid, and the third number, 16192 into $offset; put testdb into db_name, the database name and <em>nodeA</em> into master_host, the master node’s host name.</p>
+<p>Make the below script and run. At “HA apply info” on the above output, put the first number, 1426495463 into $db_creation, the second number, 12922 into $pageid, and the third number, 16192 into $offset; put testdb into db_name, the database name and <em>nodeA</em> into master_host, the master node’s hostname.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">[nodeB]$ vi update.sh
 </span><span id="line-2">
 </span><span id="line-3">#!/bin/sh
@@ -4219,14 +4219,14 @@ terminated by a specified signal.</p></td>
 <section id="determine-the-cause-of-failover">
 <span id="failover-messages"></span><h2>Determine the Cause of Failover<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#determine-the-cause-of-failover" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#determine-the-cause-of-failover'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p><strong>Fail-over, Fail-back messages</strong></p>
-<p>In an HA enviroment, messages for fail-over and fail-back are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when fail-over or fail-back is determined, and result messages, which are logged when fail-over or fail-back is either canceled or successfully completed.</p>
-<p>Diagnosis messages indicate the reason why the fail-over or fail-back was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if fail-over or fail-back is canceled, and the prefix [Success] along with the result if fail-over or fail-back is successfully completed.</p>
-<p>Fail-over and fail-back messages enable to determine the cause of fail-over. Below is a list of situations in which fail-over occurs and the corresponding fail-over and fail-back messages that may be logged. Fail-over messages are logged on the slave node, while fail-back messages are logged on the master node.</p>
+<p>In an HA enviroment, messages for failover and fail-back are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or fail-back is determined, and result messages, which are logged when failover or fail-back is either canceled or successfully completed.</p>
+<p>Diagnosis messages indicate the reason why the failover or fail-back was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if failover or fail-back is canceled, and the prefix [Success] along with the result if failover or fail-back is successfully completed.</p>
+<p>Fail-over and fail-back messages enable to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and fail-back messages that may be logged. Fail-over messages are logged on the slave node, while fail-back messages are logged on the master node.</p>
 <section id="isolation-of-master-node">
 <h3>Isolation of master node<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#isolation-of-master-node" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#isolation-of-master-node'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Isolation of master node</strong></p>
-<p>When the master node determines that it is isolated from the network due to failing to receive heartbeat messages from all slave nodes, the fail-back of the master node and the fail-over of the slave nodes are decided. The <strong>ha_ping_hosts</strong> are used to verify whether the network of the master node is truly partitioned. Fail-back is successfully completed only if the master node’s network partition is confirmed through this verification.</p>
-<p>Similarly, for slave nodes, fail-over is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of fail-over and fail-back messages that could be logged when the master node is isolated.</p>
+<p>When the master node determines that it is isolated from the network due to failing to receive heartbeat messages from all slave nodes, the fail-back of the master node and the failover of the slave nodes are decided. The <strong>ha_ping_hosts</strong> are used to verify whether the network of the master node is truly partitioned. Fail-back is successfully completed only if the master node’s network partition is confirmed through this verification.</p>
+<p>Similarly, for slave nodes, failover is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of failover and fail-back messages that could be logged when the master node is isolated.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Diagnosis Messages</p></th>
@@ -4270,8 +4270,8 @@ terminated by a specified signal.</p></td>
 <section id="loss-of-the-master-node-s-role">
 <h3>Loss of the master node’s role<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#loss-of-the-master-node-s-role" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#loss-of-the-master-node-s-role'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Loss of the master node’s role</strong></p>
-<p>When the master node loses its role due to reasons such as the failure to restart cub_server or disk errors, a fail-back of the master node and a fail-over of the slave node are initiated. If a disk failure has been detected, an error message like “Disk failure has occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)” is logged in the server error log.</p>
-<p>For the slave node, fail-over is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of fail-over and fail-back messages that could be logged when the master node loses its role.</p>
+<p>When the master node loses its role due to reasons such as the failure to restart cub_server or disk errors, a fail-back of the master node and a failover of the slave node are initiated. If a disk failure has been detected, an error message like “Disk failure has occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)” is logged in the server error log.</p>
+<p>For the slave node, failover is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of failover and fail-back messages that could be logged when the master node loses its role.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Diagnosis Messages</p></th>
@@ -4372,7 +4372,7 @@ terminated by a specified signal.</p></td>
 <h3>ha_make_slavedb.sh Script<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ha-make-slavedb-sh-script" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ha-make-slavedb-sh-script'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>To rebuild replications, use the <strong>ha_make_slavedb.sh</strong> script. This script is located in <strong>$CUBRID/share/scripts/ha</strong>. Before rebuilding replications, the following items must be configured for the environment of the user. This script is supported since the version 2008 R2.2 Patch 9 and its configuration is different from 2008 R4.1 Patch 2 or earlier. This document describes it in CUBRID 2008 R4.1 Patch 2 or later.</p>
 <ul class="simple">
-<li><p><strong>target_host</strong> : The host name of the source node (master node in general) for rebuilding replication. It should be registered in <strong>/etc/hosts</strong>. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source.</p></li>
+<li><p><strong>target_host</strong> : The hostname of the source node (master node in general) for rebuilding replication. It should be registered in <strong>/etc/hosts</strong>. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source.</p></li>
 <li><p><strong>repl_log_home</strong> : Specifies the home directory of the replication log of the master node. It is usually the same as <strong>$CUBRID_DATABASES</strong>. You must enter an absolute path and should not use a symbolic link. You also cannot use a slash (/) after the path.</p></li>
 </ul>
 <p>The following are optional items:</p>

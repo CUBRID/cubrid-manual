@@ -94,9 +94,9 @@ Check the following before installing CUBRID for Linux.
     *   gcrypt Library (rpm -q libgcrypt)
     *   stdc++ Library (rpm -q libstdc++)
     
-*   Check if the mapping between host names and IP addresses are correct in the /etc/hosts file.
+*   Check if the mapping between hostnames and IP addresses are correct in the /etc/hosts file.
 
-    If host names and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.
+    If hostnames and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.
     
 **Installing CUBRID**
 
@@ -175,9 +175,9 @@ When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/c
 
         When you use RPM package to install CUBRID, the cubrid script will be included in /etc/init.d. But you still need to change the environment variable, $CUBRID_USER from "cubrid" script file.
 
-    *   **In /etc/hosts file, check if a host name and an IP address mapping is normal**
+    *   **In /etc/hosts file, check if a hostname and an IP address mapping is normal**
 
-        If a host name and an IP address is abnormally mapped, you cannot start DB server. Therefore, you should check if they are normally mapped.
+        If a hostname and an IP address is abnormally mapped, you cannot start DB server. Therefore, you should check if they are normally mapped.
 
 **Upgrading CUBRID**
 
@@ -278,7 +278,7 @@ You can change configuration such as service ports to meet the user environment 
     For example, if the value of **APPL_SERVER_PORT** is 35000 and the maximum number of CASes by **MAX_NUM_APPL_SERVER** is 50, then listening ports on CASes are 35000, 35001, ..., 35049.
     For more details, see :ref:`parameter-by-broker`. 
 
-    The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON**.  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the auto-commit mode to **OFF**.
+    The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON**.  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the autocommit mode to **OFF**.
 
 **Installing CUBRID Interfaces**
 
@@ -329,9 +329,9 @@ Check the following before installing CUBRID for Linux.
     *   gcrypt Library (rpm -q libgcrypt)
     *   stdc++ Library (rpm -q libstdc++)
     
-*   Check if the mapping between host names and IP addresses are correct in the /etc/hosts file.
+*   Check if the mapping between hostnames and IP addresses are correct in the /etc/hosts file.
 
-    If host names and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.
+    If hostnames and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.
 
 **Installation Process**
 
@@ -358,7 +358,7 @@ Check the following before installing CUBRID for Linux.
             export CUBRID=/home1/cub_user/CUBRID
             export CUBRID_DATABASES=$CUBRID/databases
             
-    #.  Add CUBRID JDBC library file name to the **CLASSPATH** environment variable.
+    #.  Add CUBRID JDBC library filename to the **CLASSPATH** environment variable.
     
         ::
         

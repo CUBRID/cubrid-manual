@@ -928,7 +928,7 @@ CUBRID SHARD feature can be used only in Linux.
 One transaction should be performed within only one shard DB, so the following constraints exist.
 
 *   It is unavailable to change data in several shard DBs through changing the shard key (**UPDATE**). If necessary, use **DELETE** / **INSERT**.
-*   A query about more than one shard DB, such as join, sub-query, or, union, group by, between, like, in, exist, or any/some/all, is not supported.
+*   A query about more than one shard DB, such as join, subquery, or, union, group by, between, like, in, exist, or any/some/all, is not supported.
 
 **Session information is valid only in each shard DB**
 

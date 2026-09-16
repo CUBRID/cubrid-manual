@@ -1063,7 +1063,7 @@ For more details, see <a class="reference internal" href="admin/control.html#bro
 <p>One transaction should be performed within only one shard DB, so the following constraints exist.</p>
 <ul class="simple">
 <li><p>It is unavailable to change data in several shard DBs through changing the shard key (<strong>UPDATE</strong>). If necessary, use <strong>DELETE</strong> / <strong>INSERT</strong>.</p></li>
-<li><p>A query about more than one shard DB, such as join, sub-query, or, union, group by, between, like, in, exist, or any/some/all, is not supported.</p></li>
+<li><p>A query about more than one shard DB, such as join, subquery, or, union, group by, between, like, in, exist, or any/some/all, is not supported.</p></li>
 </ul>
 <p><strong>Session information is valid only in each shard DB</strong></p>
 <p>Session information is valid within each shard DB only. Therefore, the results from session-related functions such as <a class="reference internal" href="sql/function/information_fn.html#LAST_INSERT_ID" title="LAST_INSERT_ID"><code class="xref py py-func docutils literal notranslate"><span class="pre">LAST_INSERT_ID()</span></code></a> may be different from the intended result.</p>

@@ -234,14 +234,14 @@ DDLs issued through CAS, csql, and loaddb could be recorded in log files in addi
 <p>If you use a method from the <a class="reference internal" href="../sql/catalog.html#catalog"><span class="std std-ref">System Catalog</span></a> , the DDL Audit Log will not be created.</p>
 </div>
 </section>
-<section id="ddl-audit-log-file-name-convention">
-<h2>DDL Audit Log file name convention<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ddl-audit-log-file-name-convention" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ddl-audit-log-file-name-convention'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="ddl-audit-log-filename-convention">
+<h2>DDL Audit Log filename convention<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ddl-audit-log-filename-convention" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ddl-audit-log-filename-convention'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <ul class="simple">
 <li><p>cas: {broker_name}_{app_server_num}_ddl.log</p></li>
 <li><p>csql interactive: csql_{db_name}_ddl.log</p></li>
 <li><p>loaddb: loaddb_{db_name}_ddl.log</p></li>
 </ul>
-<p><strong>Additional file name convention:</strong></p>
+<p><strong>Additional filename convention:</strong></p>
 <ul class="simple">
 <li><p>csql from file: csql/{csql_file}_{YYYYMMDD}_{HHMMSS}_{pid}</p></li>
 <li><p>loaddb: loaddb/{loaddb_file}_{YYYYMMDD}_{HHMMSS}_{pid}</p></li>
@@ -257,7 +257,7 @@ DDLs issued through CAS, csql, and loaddb could be recorded in log files in addi
 <li><p>[Time]: Time starting execution of the DDL (e.g. 20-12-18 12:08:32.327)</p></li>
 <li><p>[db_name]: Database name where DDL was executed</p></li>
 <li><p>[ip_addr]: An IP address of an application client (e.g. 172.31.0.70)</p></li>
-<li><p>[user_name]: the database user name who issued DDL</p></li>
+<li><p>[user_name]: the database username who issued DDL</p></li>
 <li><p>[result]: statement execution result. OK if successful, otherwise error code (e.g. ERROR:-494)</p></li>
 <li><p>[elapsed time]: Elapsed time of statement execution</p></li>
 <li><p>[auto commit/rollback]: Automatically committed or rolled back, with the error code of it</p></li>
@@ -276,7 +276,7 @@ DDLs issued through CAS, csql, and loaddb could be recorded in log files in addi
 <ul class="simple">
 <li><p>[Time]: Time starting execution of the DDL (e.g. 20-11-20 13:26:51.765)</p></li>
 <li><p>[pid]: csql process id</p></li>
-<li><p>[user_name]: the database user name who issued DDL</p></li>
+<li><p>[user_name]: the database username who issued DDL</p></li>
 <li><p>[result]: statement execution result. OK if successful, otherwise error code  (e.g. ERROR:-272)</p></li>
 <li><p>[elapsed time]: Elapsed time of statement execution</p></li>
 <li><p>[auto commit/rollback]: Automatically committed or rolled back, with the error code</p></li>
@@ -289,16 +289,16 @@ DDLs issued through CAS, csql, and loaddb could be recorded in log files in addi
 <section id="ddl-audit-log-format-of-loaddb">
 <h2>DDL Audit Log format of LOADDB<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ddl-audit-log-format-of-loaddb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ddl-audit-log-format-of-loaddb'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <ul>
-<li><p>[Time] [pid]|[user_name]|[result]|[log contents]|[file name]</p>
+<li><p>[Time] [pid]|[user_name]|[result]|[log contents]|[filename]</p>
 <blockquote>
 <div><p>Description:</p>
 <ul class="simple">
 <li><p>[Time]: Time starting execution of the DDL (e.g. 20-12-18 12:08:32.327)</p></li>
 <li><p>[pid]: loaddb process id</p></li>
-<li><p>[user_name]: the database user name who issued DDL</p></li>
+<li><p>[user_name]: the database username who issued DDL</p></li>
 <li><p>[result]: Result of loaddb execution, OK if successful, otherwise error code (e.g. ERROR:-494)</p></li>
 <li><p>[log contents]: The number of total statements, or the number of commit in case of error and error line</p></li>
-<li><p>[file name]: Copy the file loaded from loaddb. At this time, it is the name of the copied file</p></li>
+<li><p>[filename]: Copy the file loaded from loaddb. At this time, it is the name of the copied file</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -326,7 +326,7 @@ DDLs issued through CAS, csql, and loaddb could be recorded in log files in addi
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#overview'" class="reference internal" href="#overview">Overview</a></li>
-<li><a :data-current="activeSection === '#ddl-audit-log-file-name-convention'" class="reference internal" href="#ddl-audit-log-file-name-convention">DDL Audit Log file name convention</a></li>
+<li><a :data-current="activeSection === '#ddl-audit-log-filename-convention'" class="reference internal" href="#ddl-audit-log-filename-convention">DDL Audit Log filename convention</a></li>
 <li><a :data-current="activeSection === '#ddl-audit-logfile-format-of-cas'" class="reference internal" href="#ddl-audit-logfile-format-of-cas">DDL Audit Logfile format of CAS</a></li>
 <li><a :data-current="activeSection === '#ddl-audit-logfile-format-of-csql'" class="reference internal" href="#ddl-audit-logfile-format-of-csql">DDL Audit Logfile format of CSQL</a></li>
 <li><a :data-current="activeSection === '#ddl-audit-log-format-of-loaddb'" class="reference internal" href="#ddl-audit-log-format-of-loaddb">DDL Audit Log format of LOADDB</a></li>

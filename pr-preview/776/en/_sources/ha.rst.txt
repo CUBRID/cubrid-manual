@@ -134,7 +134,7 @@ The following picture shows how a broker connects to the host through the **db-h
 
 .. image:: /images/image20.png
 
-The broker tries to connect as the order of *B*, *C*, *A* because db-host in databases.txt is "node B:node C:node A". At this time, "node B:node C:node A" specified in db-host is the real host names defined in the /etc/hosts file.
+The broker tries to connect as the order of *B*, *C*, *A* because db-host in databases.txt is "node B:node C:node A". At this time, "node B:node C:node A" specified in db-host is the real hostnames defined in the /etc/hosts file.
 
 *   Example 1.  *node B* is crashed, *node C* is in standby status, and *node A* is in active status. Therefore, at last, the broker connects to *node A*.
 *   Example 2.  *node B* is crashed, and *node C* is in active status. Therefore, at last, the broker connects to *node C*.
@@ -151,7 +151,7 @@ The following picture shows how a broker connects to the host through the **db-h
 
 .. image:: /images/image21.png
 
-The broker tries to connect as the order of *A*, *B*, *C* because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
+The broker tries to connect as the order of *A*, *B*, *C* because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real hostnames defined in the /etc/hosts file.
 
 *   Example 1.  *node A* is in active status, *node B* is in standby status. Therefore, at last, the broker connects to *node B*.
 *   Example 2.  *node A* is in active status, *node B* is crashed, and *node C* is in standby status. Therefore, at last, the broker connects to *node C*.
@@ -167,7 +167,7 @@ The following picture shows how a broker connects to the host through the **db-h
 
 .. image:: /images/image22.png
 
-The broker tries to connect as the order of *A*, *B*, *C* because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
+The broker tries to connect as the order of *A*, *B*, *C* because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real hostnames defined in the /etc/hosts file.
 
 *   Example 1.  *node A* is in active status, *node B* is in standby status. Therefore, at last, the broker connects to *node B*.
 *   Example 2.  *node A* is in active status, *node B* is crashed, and *node C* is in standby status. Therefore, at last, the broker connects to *node C*.
@@ -334,7 +334,7 @@ Ensure **ha_mode** of **$CUBRID/conf/cubrid.conf** in every CUBRID HA node has t
 
 **cubrid_ha.conf**
 
-Ensure **ha_port_id**, **ha_node_list**, **ha_db_list** of **$CUBRID/conf/cubrid_ha.conf** in every CUBRID HA node has the same value. In the example below, we assume that the host name of a master node is *nodeA* and that of a slave node is *nodeB*. ::
+Ensure **ha_port_id**, **ha_node_list**, **ha_db_list** of **$CUBRID/conf/cubrid_ha.conf** in every CUBRID HA node has the same value. In the example below, we assume that the hostname of a master node is *nodeA* and that of a slave node is *nodeB*. ::
 
     [common]
     ha_port_id=59901
@@ -345,7 +345,7 @@ Ensure **ha_port_id**, **ha_node_list**, **ha_db_list** of **$CUBRID/conf/cubrid
 
 **databases.txt**
 
-Ensure that you must configure the host names (*nodeA:nodeB*) of master and slave nodes in db-host of **$CUBRID_DATABASES/databases.txt**; if **$CUBRID_DATABASES** is not configured, do it in **$CUBRID/databases/databases.txt**). ::
+Ensure that you must configure the hostnames (*nodeA:nodeB*) of master and slave nodes in db-host of **$CUBRID_DATABASES/databases.txt**; if **$CUBRID_DATABASES** is not configured, do it in **$CUBRID/databases/databases.txt**). ::
 
     #db-name vol-path db-host log-path lob-base-path
     testdb /home/cubrid/DB/testdb nodeA:nodeB /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
@@ -355,7 +355,7 @@ Starting and Verifying CUBRID HA
 
 **Starting CUBRID HA**
 
-Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. Note that the node executing **cubrid heartbeat start** first will become a master node. In the example below, we assume that the host name of a master node is *nodeA* and that of a slave node is *nodeB*.
+Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. Note that the node executing **cubrid heartbeat start** first will become a master node. In the example below, we assume that the hostname of a master node is *nodeA* and that of a slave node is *nodeB*.
 
 *   Master node ::
 
@@ -395,7 +395,7 @@ Use the **cubrid changemode** utility at each node in the CUBRID HA group to ver
 
 **Verifying the CUBRID HA Operation**
 
-Verify that action is properly applied to standby server of the slave node after performing write in an active server of the master node. To make a success connection via the CSQL Interpreter in HA environment, you must specify the host name to be connected after the database name like "@<*host_name*>"). If you specify a host name as localhost, it is connected to local node.
+Verify that action is properly applied to standby server of the slave node after performing write in an active server of the master node. To make a success connection via the CSQL Interpreter in HA environment, you must specify the hostname to be connected after the database name like "@<*host_name*>"). If you specify a hostname as localhost, it is connected to local node.
 
 .. warning:: Ensure that primary key must exist when creating a table to have replication successfully processed.
 
@@ -468,7 +468,7 @@ The following example shows how to execute a broker from the master node.
 
 **Configuring Applications**
 
-Specifies the host name (*nodeA_broker*, *nodeB_broker*) and port for an application to connect in the connection URL. The **altHosts** attribute defines the broker where the next connection will be made when the connection to a broker fails. The following is an example of a JDBC program. For more information on CCI and PHP, see :ref:`ha-cci-conf` and :ref:`ha-php-conf`.
+Specifies the hostname (*nodeA_broker*, *nodeB_broker*) and port for an application to connect in the connection URL. The **altHosts** attribute defines the broker where the next connection will be made when the connection to a broker fails. The following is an example of a JDBC program. For more information on CCI and PHP, see :ref:`ha-cci-conf` and :ref:`ha-php-conf`.
 
 .. code-block:: java
 
@@ -596,13 +596,13 @@ Node
 
 **ha_node_list**
 
-**ha_node_list** is a parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is **localhost@localhost**.
+**ha_node_list** is a parameter used to configure the group name to be used in the CUBRID HA group and the hostname of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for hostnames of member nodes. A comma(,) or colon(:) is used to separate individual hostnames. The default is **localhost@localhost**.
 
 .. note::
 
-    The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. 
+    The hostname of the member nodes specified in this parameter cannot be replaced with the IP. You should use the hostnames which are registered in **/etc/hosts**. 
 
-    If the host name is not specified properly, the below message is written into the server.err error log file.
+    If the hostname is not specified properly, the below message is written into the server.err error log file.
     
     ::
     
@@ -614,15 +614,15 @@ This parameter can be modified dynamically. If you modify the value of this para
 
 **ha_replica_list**
 
-**ha_replica_list** is a parameter used to configure the group name, which is used in the CUBRID HA group, and the replica nodes, which are host names of member nodes in which failover is not supported. There is no need to specify this if you do not construct replica nodes. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is **NULL**.
+**ha_replica_list** is a parameter used to configure the group name, which is used in the CUBRID HA group, and the replica nodes, which are hostnames of member nodes in which failover is not supported. There is no need to specify this if you do not construct replica nodes. The group name is separated by @. The name before @ is for the group, and the names after @ are for hostnames of member nodes. A comma(,) or colon(:) is used to separate individual hostnames. The default is **NULL**.
 
-The group name must be identical to the name specified in **ha_replica_list**. The host names of member nodes and the host names of nodes specified in this parameter must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **replica** must be specified in **ha_replica_list**. The **ha_replica_list** values of all nodes in the CUBRID HA group must be identical.
+The group name must be identical to the name specified in **ha_replica_list**. The hostnames of member nodes and the hostnames of nodes specified in this parameter must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **replica** must be specified in **ha_replica_list**. The **ha_replica_list** values of all nodes in the CUBRID HA group must be identical.
 
 This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
 .. note::
 
-    The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. 
+    The hostname of the member nodes specified in this parameter cannot be replaced with the IP. You should use the hostnames which are registered in **/etc/hosts**. 
 
 **ha_db_list**
 
@@ -639,9 +639,9 @@ If a firewall exists in the service environment, the firewall must be configured
 
 **ha_ping_hosts**
 
-**ha_ping_hosts** is a parameter used to configure the host which verifies whether or not a failover occurs due to unstable network when a failover has started in a slave node. The default is **NULL**. A comma(,) or colon(:) is used to separate individual host names.
+**ha_ping_hosts** is a parameter used to configure the host which verifies whether or not a failover occurs due to unstable network when a failover has started in a slave node. The default is **NULL**. A comma(,) or colon(:) is used to separate individual hostnames.
 
-The host name of the member nodes specified in this parameter can be replaced with the IP. When a host name is used, the name must be registered in **/etc/hosts**.
+The hostname of the member nodes specified in this parameter can be replaced with the IP. When a hostname is used, the name must be registered in **/etc/hosts**.
 
 CUBRID checks hosts specified in **ha_ping_hosts** every hour; if there is a problem on a host, "ping check" is paused temporarily and checks every 5 minutes if the host is normalized or not.
 
@@ -653,7 +653,7 @@ This parameter can be modified dynamically. If you modify the value of this para
 
 **ha_tcp_ping_hosts**
 
-**ha_tcp_ping_hosts** is a parameter that can be used as an alternative to **ha_ping_hosts** when the ICMP protocol is disabled. **ha_tcp_ping_hosts** works like **ha_ping_hosts** except that the TCP layer is used instead of the IP layer for the "ping check". The default is **NULL**. A comma(,) is used to separate individual host names, and a colon(:) is used to separate a host name and a port number. So, the format of this parameter is like "ha_tcp_ping_hosts=host1:port1,host2:port2". In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in **ha_tcp_ping_hosts** and the firewall must not block the requests. **ha_tcp_ping_hosts** is ignored if the **ha_ping_hosts** is also set.
+**ha_tcp_ping_hosts** is a parameter that can be used as an alternative to **ha_ping_hosts** when the ICMP protocol is disabled. **ha_tcp_ping_hosts** works like **ha_ping_hosts** except that the TCP layer is used instead of the IP layer for the "ping check". The default is **NULL**. A comma(,) is used to separate individual hostnames, and a colon(:) is used to separate a hostname and a port number. So, the format of this parameter is like "ha_tcp_ping_hosts=host1:port1,host2:port2". In order to use the TCP ping properly, a TCP socket that can receive the requests must be opened in advance with the port number on the host specified in **ha_tcp_ping_hosts** and the firewall must not block the requests. **ha_tcp_ping_hosts** is ignored if the **ha_ping_hosts** is also set.
 
 This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
@@ -749,7 +749,7 @@ In a master node, only the transactions which have been run on the specified tim
 
 .. note::
 
-    The following example shows how to configure the value of /etc/hosts (a host name of a member node: nodeA, IP: 192.168.0.1). 
+    The following example shows how to configure the value of /etc/hosts (a hostname of a member node: nodeA, IP: 192.168.0.1). 
     
     ::
 
@@ -797,7 +797,7 @@ SQL Logging
 If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **applylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**).
 The default is **no**.
 
-The format of this log file name is *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*, and *<id>* starts from 0.
+The format of this log filename is *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*, and *<id>* starts from 0.
 If this size is over **ha_sql_log_max_size_in_mbytes**, a new file with "*<id>* + 1" is created.
 For example, if "ha_sql_log_max_size_in_mbytes=100", demodb_nodeA.sql.log.1 is newly created as the size of demodb_nodeA.sql.log.0 file becomes 100MB.
 *<id>* will wrap around to 0 once it exceeds the maximum value (4,294,967,295).
@@ -892,7 +892,7 @@ If you concern that the connections are centralized into one DB, set this value 
 
 **PREFERRED_HOSTS**
 
-Specify the order to connect by listing host names. The default value is **NULL**.
+Specify the order to connect by listing hostnames. The default value is **NULL**.
 
 You can specify multiple nodes by using a colon (:). First, it tries to connect to host in the following order: host specified in the **PREFERRED_HOSTS** parameter first and then host specified in **$CUBRID_DATABASES/databases.txt**.
 
@@ -2128,7 +2128,7 @@ This command is used to back up a specified database. If the **-r** option is us
 
 **On-line backup**
 
-If you want to perform on-line backup in HA environment, add @\ *hostname*\ after the database name. *hostname*\ is a name defined in $CUBRID_DATABASES/databases.txt. Specify "@localhost" because you generally perform on-line backup on the local database.
+If you want to perform online backup in HA environment, add @\ *hostname*\ after the database name. *hostname*\ is a name defined in $CUBRID_DATABASES/databases.txt. Specify "@localhost" because you generally perform online backup on the local database.
 
 ::
 
@@ -2265,7 +2265,7 @@ You must stop all nodes in CUBRID HA group before performing the following opera
 |   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
 |                                              |                                                         |                                                                                                                    |
 +==============================================+=========================================================+====================================================================================================================+
-| Changing the host name and IP of a DB server | Stop all nodes in the CUBRID HA group, and restart      | When a host name has been changed, change the **databases.txt** file of each broker and reset the broker           |
+| Changing the hostname and IP of a DB server  | Stop all nodes in the CUBRID HA group, and restart      | When a hostname has been changed, change the **databases.txt** file of each broker and reset the broker            |
 |                                              | them after the operation task.                          | connection with **cubrid broker reset**.                                                                           |
 +----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
@@ -2388,8 +2388,8 @@ Now let's see the case of building a new slave node with a single master node - 
 
 .. image:: /images/build_slave.png
 
-*   nodeA: a master node's host name
-*   nodeB: a slave node's host name to be added newly 
+*   nodeA: a master node's hostname
+*   nodeB: a slave node's hostname to be added newly 
 
 This scenario assumes that the database has been created by below commands. When you run createdb, a locale name and a charset should be the same between a master node and a slave node.
 
@@ -2561,9 +2561,9 @@ The following is a scenario to add a new slave from an existing slave during a H
 
 .. image:: /images/build_another_slave.png
 
-*   nodeA: a master node's host name
-*   nodeB: a slave node's host name
-*   nodeC: a slave node's host name to be added
+*   nodeA: a master node's hostname
+*   nodeB: a slave node's hostname
+*   nodeC: a slave node's hostname to be added
 
 You can use an existing master or slave if you want to add a new slave during HA service. In this scenario, let's add a new slave by using an existing slave because we assume that slave's disk I/O is less than master's.
 
@@ -2865,9 +2865,9 @@ You can use an existing master or slave if you want to add a new slave during HA
             [nodeA]$ cubrid heartbeat repl start nodeC
             [nodeB]$ cubrid heartbeat repl start nodeC
 
-7.  Add a broker and add this broker's host name into altHosts of application URL
+7.  Add a broker and add this broker's hostname into altHosts of application URL
 
-    Add a broker if needed, and add this broker's host name into altHosts, the property of application URL to access this broker.
+    Add a broker if needed, and add this broker's hostname into altHosts, the property of application URL to access this broker.
     
     If you are not considering to add a broker, you do not need to do this job.
 
@@ -2889,9 +2889,9 @@ Let's remove a slave when the HA environment is composed of "master:slave = 1:2"
 
 .. image:: /images/remove_slave.png
 
-*   nodeA: a master node's host name
-*   nodeB: a slave node's host name
-*   nodeC: a slave node's host name to be removed
+*   nodeA: a master node's hostname
+*   nodeB: a slave node's hostname
+*   nodeC: a slave node's hostname to be removed
 
 .. image:: /images/remove_slave_process.png
 
@@ -2987,9 +2987,9 @@ Now let's add a replica when HA environment is set as "master:slave=1:1". The be
 
 .. image:: /images/add_replica.png
 
-*   nodeA: a master node's host name
-*   nodeB: a slave node's host name
-*   nodeC: a replica node's host name to be added newly
+*   nodeA: a master node's hostname
+*   nodeB: a slave node's hostname
+*   nodeC: a replica node's hostname to be added newly
 
 .. image:: /images/add_replica_process.png
 
@@ -3224,9 +3224,9 @@ Now let's add a replica when HA environment is set as "master:slave=1:1". The be
 
         At this time, coplylogdb and applylogdb processes for *nodeC* on *nodeA* and *nodeB* are needless to start because *nodeC* is a replica node.
 
-7.  Add a broker and add this broker's host name into altHosts of application URL
+7.  Add a broker and add this broker's hostname into altHosts of application URL
 
-    Add a broker if needed, and add this broker's host name into altHosts, the property of application URL to access this broker.
+    Add a broker if needed, and add this broker's hostname into altHosts, the property of application URL to access this broker.
     
     If you are not considering to add a broker, you do not need to do this job.
 
@@ -3248,9 +3248,9 @@ Now let's see the case of rebuilding a existing slave node during a service in a
 
 .. image:: /images/rebuild_slave.png
 
-*   nodeA: a host name of a master node
-*   nodeB: a host name of a slave node to be rebuilt
-*   nodeC: a host name of a replica node
+*   nodeA: a hostname of a master node
+*   nodeB: a hostname of a slave node to be rebuilt
+*   nodeC: a hostname of a replica node
 
 .. image:: /images/rebuild_slave_process.png
 
@@ -3359,7 +3359,7 @@ Now let's see the case of rebuilding a existing slave node during a service in a
 
             ...
                 
-        Make the below script and run. At "HA apply info" on the above output, put the first number, 1426495463 into $db_creation, the second number, 12922 into $pageid, and the third number, 16192 into $offset; put testdb into db_name, the database name and *nodeA* into master_host, the master node's host name.
+        Make the below script and run. At "HA apply info" on the above output, put the first number, 1426495463 into $db_creation, the second number, 12922 into $pageid, and the third number, 16192 into $offset; put testdb into db_name, the database name and *nodeA* into master_host, the master node's hostname.
         
         ::
         
@@ -4017,20 +4017,20 @@ Determine the Cause of Failover
 
 **Fail-over, Fail-back messages**
 
-In an HA enviroment, messages for fail-over and fail-back are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when fail-over or fail-back is determined, and result messages, which are logged when fail-over or fail-back is either canceled or successfully completed.
+In an HA enviroment, messages for failover and fail-back are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or fail-back is determined, and result messages, which are logged when failover or fail-back is either canceled or successfully completed.
 
-Diagnosis messages indicate the reason why the fail-over or fail-back was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if fail-over or fail-back is canceled, and the prefix [Success] along with the result if fail-over or fail-back is successfully completed.
+Diagnosis messages indicate the reason why the failover or fail-back was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if failover or fail-back is canceled, and the prefix [Success] along with the result if failover or fail-back is successfully completed.
 
-Fail-over and fail-back messages enable to determine the cause of fail-over. Below is a list of situations in which fail-over occurs and the corresponding fail-over and fail-back messages that may be logged. Fail-over messages are logged on the slave node, while fail-back messages are logged on the master node.
+Fail-over and fail-back messages enable to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and fail-back messages that may be logged. Fail-over messages are logged on the slave node, while fail-back messages are logged on the master node.
 
 Isolation of master node
 -----------------------------
 
 **Isolation of master node**
 
-When the master node determines that it is isolated from the network due to failing to receive heartbeat messages from all slave nodes, the fail-back of the master node and the fail-over of the slave nodes are decided. The **ha_ping_hosts** are used to verify whether the network of the master node is truly partitioned. Fail-back is successfully completed only if the master node’s network partition is confirmed through this verification.
+When the master node determines that it is isolated from the network due to failing to receive heartbeat messages from all slave nodes, the fail-back of the master node and the failover of the slave nodes are decided. The **ha_ping_hosts** are used to verify whether the network of the master node is truly partitioned. Fail-back is successfully completed only if the master node’s network partition is confirmed through this verification.
   
-Similarly, for slave nodes, fail-over is successfully completed only when a ping check using **ha_ping_hosts** confirms that there is no current network partition. Below is a list of fail-over and fail-back messages that could be logged when the master node is isolated.
+Similarly, for slave nodes, failover is successfully completed only when a ping check using **ha_ping_hosts** confirms that there is no current network partition. Below is a list of failover and fail-back messages that could be logged when the master node is isolated.
 
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | Diagnosis Messages                                                                                                                                              | Description                                                                                                    |
@@ -4061,9 +4061,9 @@ Loss of the master node's role
 
 **Loss of the master node's role**
 
-When the master node loses its role due to reasons such as the failure to restart cub_server or disk errors, a fail-back of the master node and a fail-over of the slave node are initiated. If a disk failure has been detected, an error message like "Disk failure has occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)" is logged in the server error log.
+When the master node loses its role due to reasons such as the failure to restart cub_server or disk errors, a fail-back of the master node and a failover of the slave node are initiated. If a disk failure has been detected, an error message like "Disk failure has occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)" is logged in the server error log.
 
-For the slave node, fail-over is successfully completed only when a ping check using **ha_ping_hosts** confirms that there is no current network partition. Below is a list of fail-over and fail-back messages that could be logged when the master node loses its role.
+For the slave node, failover is successfully completed only when a ping check using **ha_ping_hosts** confirms that there is no current network partition. Below is a list of failover and fail-back messages that could be logged when the master node loses its role.
 
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
 | Diagnosis Messages                                                                                                                                              | Description                                                                                                                                |
@@ -4147,7 +4147,7 @@ ha_make_slavedb.sh Script
 
 To rebuild replications, use the **ha_make_slavedb.sh** script. This script is located in **$CUBRID/share/scripts/ha**. Before rebuilding replications, the following items must be configured for the environment of the user. This script is supported since the version 2008 R2.2 Patch 9 and its configuration is different from 2008 R4.1 Patch 2 or earlier. This document describes it in CUBRID 2008 R4.1 Patch 2 or later.
 
-*   **target_host** : The host name of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source.
+*   **target_host** : The hostname of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source.
 
 *   **repl_log_home** : Specifies the home directory of the replication log of the master node. It is usually the same as **$CUBRID_DATABASES**. You must enter an absolute path and should not use a symbolic link. You also cannot use a slash (/) after the path.
 

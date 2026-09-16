@@ -1372,10 +1372,10 @@ If you run <a class="reference internal" href="#c.cci_prepare" title="cci_prepar
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ip</strong> – (IN) A string that represents the IP address of the server (host name)</p></li>
+<li><p><strong>ip</strong> – (IN) A string that represents the IP address of the server (hostname)</p></li>
 <li><p><strong>port</strong> – (IN) Broker port (The port configured in the <strong>$CUBRID/conf/cubrid_broker.conf</strong> file)</p></li>
 <li><p><strong>db_name</strong> – (IN) Database name</p></li>
-<li><p><strong>db_user</strong> – (IN) Database user name</p></li>
+<li><p><strong>db_user</strong> – (IN) Database username</p></li>
 <li><p><strong>db_passwd</strong> – (IN) Database user password</p></li>
 </ul>
 </dd>
@@ -1403,10 +1403,10 @@ If you run <a class="reference internal" href="#c.cci_prepare" title="cci_prepar
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ip</strong> – (IN) A string that represents the IP address of the server (host name)</p></li>
+<li><p><strong>ip</strong> – (IN) A string that represents the IP address of the server (hostname)</p></li>
 <li><p><strong>port</strong> – (IN) Broker port (The port configured in the <strong>$CUBRID/conf/cubrid_broker.conf</strong> file)</p></li>
 <li><p><strong>db_name</strong> – (IN) Database name</p></li>
-<li><p><strong>db_user</strong> – (IN) Database user name</p></li>
+<li><p><strong>db_user</strong> – (IN) Database username</p></li>
 <li><p><strong>db_passwd</strong> – (IN) Database user password</p></li>
 <li><p><strong>err_buf</strong> – Database error buffer</p></li>
 </ul>
@@ -1436,7 +1436,7 @@ If you run <a class="reference internal" href="#c.cci_prepare" title="cci_prepar
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> – (IN) A string that contains server connection information.</p></li>
-<li><p><strong>db_user</strong> – (IN) Database user name. If this is NULL, it becomes &lt;<em>db_user</em>&gt; in <em>url</em>. If this is an empty string (“”) or &lt;<em>db_user</em>&gt; in <em>url</em> is not specified, DB user name becomes <strong>PUBLIC</strong>.</p></li>
+<li><p><strong>db_user</strong> – (IN) Database username. If this is NULL, it becomes &lt;<em>db_user</em>&gt; in <em>url</em>. If this is an empty string (“”) or &lt;<em>db_user</em>&gt; in <em>url</em> is not specified, DB username becomes <strong>PUBLIC</strong>.</p></li>
 <li><p><strong>db_passwd</strong> – (IN) Database user password. If this is NULL, &lt;<em>db_password</em>&gt; in <em>url</em> is used. If &lt;<em>db_password</em>&gt; in <em>url</em> is not specified, DB password becomes an empty string (“”).</p></li>
 </ul>
 </dd>
@@ -1478,7 +1478,7 @@ If you run <a class="reference internal" href="#c.cci_prepare" title="cci_prepar
 </div>
 <p><strong>altHosts</strong> is the property related to connection target and <strong>loginTimeout</strong>, <strong>queryTimeout</strong>, and <strong>disconnectOnQueryTimeout</strong> are the properties related to timeout; <strong>logSlowQueries</strong>, <strong>logTraceApi</strong>, and <strong>logTraceNetwork</strong> are the properties related to log information configuration for debugging. Note that a property name which is a value to be entered in the <em>url</em> argument is not case sensitive.</p>
 <ul>
-<li><p><em>host</em>: A host name or IP address of the master database</p></li>
+<li><p><em>host</em>: A hostname or IP address of the master database</p></li>
 <li><p><em>port</em>: A port number</p></li>
 <li><p><em>db_name</em>: A name of the database</p></li>
 <li><p><em>db_user</em>: A name of the database user</p></li>
@@ -1499,8 +1499,8 @@ If you run <a class="reference internal" href="#c.cci_prepare" title="cci_prepar
 </div>
 </li>
 <li><p><strong>disconnect_on_query_timeout</strong> | <strong>disconnectOnQueryTimeout</strong>: Whether to disconnect socket immediately after time for query request has expired. It determines whether to terminate a socket connection immediately or wait for server response after sending cancellation message for query request to a server when calling <a class="reference internal" href="#c.cci_prepare" title="cci_prepare"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_prepare()</span></code></a>, <a class="reference internal" href="#c.cci_execute" title="cci_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_execute()</span></code></a>, etc. The default value is <strong>false</strong>, meaning that it will wait for server response. It this value is true, a socket will be closed immediately after sending a cancellation message to a server upon timeout and returns the <strong>CCI_ER_QUERY_TIMEOUT</strong> (-39) error. (If an error occurs on database server side, not on broker side, it returns -1. If you want to view error details, see error codes in “database error buffer.” You can get information how to check error codes in <a class="reference internal" href="cci.html#cci-error-codes"><span class="std std-ref">CCI Error Codes and Error Messages</span></a>.) Please note that there is a possibility that a database server does not get a cancellation message and execute a query even after an error is returned.</p></li>
-<li><p><strong>logFile</strong>: A log file name for debugging (default value: <strong>cci_</strong> &lt;<em>handle_id</em>&gt; <strong>.log</strong>). &lt;<em>handle_id</em>&gt; indicates the ID of a connection handle returned by this function.</p></li>
-<li><p><strong>logBaseDir</strong>: A directory where a debug log file is created. The file name including the path will be logBaseDir/logFile, and the relative path is possible.</p></li>
+<li><p><strong>logFile</strong>: A log filename for debugging (default value: <strong>cci_</strong> &lt;<em>handle_id</em>&gt; <strong>.log</strong>). &lt;<em>handle_id</em>&gt; indicates the ID of a connection handle returned by this function.</p></li>
+<li><p><strong>logBaseDir</strong>: A directory where a debug log file is created. The filename including the path will be logBaseDir/logFile, and the relative path is possible.</p></li>
 <li><p><strong>logSlowQueries</strong>: Whether to log slow query for debugging (default value: <strong>false</strong>)</p></li>
 <li><p><strong>slowQueryThresholdMillis</strong>: Timeout for slow query logging if slow query logging is enabled (default value: <strong>60000</strong>, unit: milliseconds)</p></li>
 <li><p><strong>logTraceApi</strong>: Whether to log the start and end of CCI functions</p></li>
@@ -1732,7 +1732,7 @@ If you run <a class="reference internal" href="#c.cci_prepare" title="cci_prepar
 <tr class="row-even"><td><p>default_autocommit</p></td>
 <td><p>bool</p></td>
 <td><p>true/false</p></td>
-<td><p>Whether auto-commit or not. The default is CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf; the default of this is ON(true)</p></td>
+<td><p>Whether autocommit or not. The default is CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf; the default of this is ON(true)</p></td>
 </tr>
 <tr class="row-odd"><td><p>default_lock_timeout</p></td>
 <td><p>msec</p></td>
@@ -1919,7 +1919,7 @@ at this time reconnection can happen.</p></td>
 </p>
 </dd>
 </dl>
-<p>You can configure the default value of auto-commit mode by using <a class="reference internal" href="../admin/config.html#cci-default-autocommit"><span class="std std-ref">CCI_DEFAULT_AUTOCOMMIT</span></a> broker parameter upon startup of an application. If configuration on broker parameter is omitted, the default value is <strong>ON</strong>; use the <a class="reference internal" href="#c.cci_set_autocommit" title="cci_set_autocommit"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_set_autocommit()</span></code></a> function to change auto-commit mode within an application. If auto-commit mode is <strong>OFF</strong>, you must explicitly commit or roll back transaction by using the <a class="reference internal" href="#c.cci_end_tran" title="cci_end_tran"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_end_tran()</span></code></a> function.</p>
+<p>You can configure the default value of autocommit mode by using <a class="reference internal" href="../admin/config.html#cci-default-autocommit"><span class="std std-ref">CCI_DEFAULT_AUTOCOMMIT</span></a> broker parameter upon startup of an application. If configuration on broker parameter is omitted, the default value is <strong>ON</strong>; use the <a class="reference internal" href="#c.cci_set_autocommit" title="cci_set_autocommit"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_set_autocommit()</span></code></a> function to change autocommit mode within an application. If autocommit mode is <strong>OFF</strong>, you must explicitly commit or roll back transaction by using the <a class="reference internal" href="#c.cci_end_tran" title="cci_end_tran"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_end_tran()</span></code></a> function.</p>
 </dd></dl>
 </section>
 <section id="cci-escape-string">
@@ -2390,7 +2390,7 @@ or error identifier
 <dl class="c function">
 <dt class="sig sig-object c" id="c.cci_get_autocommit">
 <span class="n"><span class="pre">CCI_AUTOCOMMIT_MODE</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cci_get_autocommit</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">conn_handle</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#c.cci_get_autocommit" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#c.cci_get_autocommit'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a><br/></dt>
-<dd><p>The <strong>cci_get_autocommit</strong> function returns the auto-commit mode currently configured.</p>
+<dd><p>The <strong>cci_get_autocommit</strong> function returns the autocommit mode currently configured.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3846,7 +3846,7 @@ If you want to call the Java Stored Procedure, specify <strong>CCI_PREPARE_CALL<
 <tr class="row-even"><td><p>user</p></td>
 <td><p>string</p></td>
 <td></td>
-<td><p>DB user name.</p></td>
+<td><p>DB username.</p></td>
 </tr>
 <tr class="row-odd"><td><p>password</p></td>
 <td><p>string</p></td>
@@ -5187,7 +5187,7 @@ attr_name.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.cci_set_autocommit">
 <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cci_set_autocommit</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">conn_handle</span></span>, <span class="n"><span class="pre">CCI_AUTOCOMMIT_MODE</span></span><span class="w"> </span><span class="n"><span class="pre">autocommit_mode</span></span><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#c.cci_set_autocommit" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#c.cci_set_autocommit'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a><br/></dt>
-<dd><p>The <strong>cci_set_autocommit</strong> function configures the auto-commit mode of current database connection. It is only used to turn ON/OFF of auto-commit mode. When this function is called, every transaction being processed is committed regardless of configured mode.</p>
+<dd><p>The <strong>cci_set_autocommit</strong> function configures the autocommit mode of current database connection. It is only used to turn ON/OFF of autocommit mode. When this function is called, every transaction being processed is committed regardless of configured mode.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="../admin/config.html#cci-default-autocommit"><span class="std std-ref">CCI_DEFAULT_AUTOCOMMIT</span></a> in <strong>cubrid_broker.conf</strong> determines the default autocommit mode upon program startup.</p>
@@ -5196,7 +5196,7 @@ attr_name.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>conn_handle</strong> – (IN) Connection handle</p></li>
-<li><p><strong>autocommit_mode</strong> – (IN) Configures the auto-commit mode. It has one of the following value: CCI_AUTOCOMMIT_FALSE or CCI_AUTOCOMMIT_TRUE</p></li>
+<li><p><strong>autocommit_mode</strong> – (IN) Configures the autocommit mode. It has one of the following value: CCI_AUTOCOMMIT_FALSE or CCI_AUTOCOMMIT_TRUE</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -5205,7 +5205,7 @@ attr_name.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>CCI_DEFAULT_AUTOCOMMIT</strong>, a broker parameter configured in the <strong>cubrid_broker.conf</strong> file, determines whether it is in auto-commit mode upon program startup.</p>
+<p><strong>CCI_DEFAULT_AUTOCOMMIT</strong>, a broker parameter configured in the <strong>cubrid_broker.conf</strong> file, determines whether it is in autocommit mode upon program startup.</p>
 </div>
 </dd></dl>
 </section>

@@ -2067,7 +2067,7 @@ To use query profiling, specify SQL trace with <strong>SET TRACE ON</strong> syn
 </li>
 </ul>
 <ul id="no-hash-list-scan">
-<li><p><strong>NO_HASH_LIST_SCAN</strong>: This is a hint not to use hash list scan for scanning sub-query’s result. Instead, list scan is used to scan temp file. By building and probing hash table, we can reduce the amount of data that needs to be searched. However, in some scenarios, the user may know beforehand that outer cardinality is very small and can use the hint to skip hash list scan entirely. For setting the memory size of hash scan, see <a class="reference internal" href="../admin/config.html#max-hash-list-scan-size"><span class="std std-ref">max_hash_list_scan_size</span></a>.</p>
+<li><p><strong>NO_HASH_LIST_SCAN</strong>: This is a hint not to use hash list scan for scanning subquery’s result. Instead, list scan is used to scan temp file. By building and probing hash table, we can reduce the amount of data that needs to be searched. However, in some scenarios, the user may know beforehand that outer cardinality is very small and can use the hint to skip hash list scan entirely. For setting the memory size of hash scan, see <a class="reference internal" href="../admin/config.html#max-hash-list-scan-size"><span class="std std-ref">max_hash_list_scan_size</span></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Hash List scan only works for predicates having a equal operation and does NOT work for predicates having OID type.</p>

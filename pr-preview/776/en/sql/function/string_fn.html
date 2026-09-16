@@ -968,7 +968,7 @@ See <a class="reference internal" href="#TO_BASE64" title="TO_BASE64"><code clas
 </dd></dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In the earlier versions of CUBRID 9.0, position value is returned in byte unit, not character unit. When a multi-byte character set is used, the number of bytes representing one character is different; so the return value may not the same.</p>
+<p>In the earlier versions of CUBRID 9.0, position value is returned in byte unit, not character unit. When a multibyte character set is used, the number of bytes representing one character is different; so the return value may not the same.</p>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--character set is UTF-8 for Korean characters</span>
 </span><span id="line-2"><span class="c1">--it returns position of the first 'b'</span>
@@ -1202,7 +1202,7 @@ See <a class="reference internal" href="#TO_BASE64" title="TO_BASE64"><code clas
 </dd></dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multi-byte character set environment. If <em>n</em> is truncated up to the first byte representing a character according to a value of <em>char1</em>, the last byte is removed and a space character (1 byte) is added to the left because the last character cannot be represented normally. When the value is <strong>NULL</strong>, <strong>NULL</strong> is returned as its result.</p>
+<p>In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multibyte character set environment. If <em>n</em> is truncated up to the first byte representing a character according to a value of <em>char1</em>, the last byte is removed and a space character (1 byte) is added to the left because the last character cannot be represented normally. When the value is <strong>NULL</strong>, <strong>NULL</strong> is returned as its result.</p>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--character set is UTF-8 for Korean characters</span>
 </span><span id="line-2">
@@ -1442,7 +1442,7 @@ See <a class="reference internal" href="#TO_BASE64" title="TO_BASE64"><code clas
 <p>The <strong>POSITION</strong> function is occasionally used in combination with other functions. For example, if you want to extract a certain string from another string, you can use the result of the <strong>POSITION</strong> function as an input to the <strong>SUBSTRING</strong> function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The location is returned in the unit of byte, not the character, in version lower than CUBRID 9.0. The multi-byte charset uses different numbers of bytes to express one character, so the result value may differ.</p>
+<p>The location is returned in the unit of byte, not the character, in version lower than CUBRID 9.0. The multibyte charset uses different numbers of bytes to express one character, so the result value may differ.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1693,7 +1693,7 @@ See <a class="reference internal" href="#TO_BASE64" title="TO_BASE64"><code clas
 </dd></dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multi-byte character set environment. If <em>n</em> is truncated up to the first byte representing a character according to a value of <em>char1</em>, the last byte is removed and a space character (1 byte) is added to the right because the last character cannot be represented normally. When the value is <strong>NULL</strong>, <strong>NULL</strong> is returned as its result.</p>
+<p>In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multibyte character set environment. If <em>n</em> is truncated up to the first byte representing a character according to a value of <em>char1</em>, the last byte is removed and a space character (1 byte) is added to the right because the last character cannot be represented normally. When the value is <strong>NULL</strong>, <strong>NULL</strong> is returned as its result.</p>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--character set is UTF-8 for Korean characters</span>
 </span><span id="line-2">
@@ -1805,7 +1805,7 @@ See <a class="reference internal" href="#TO_BASE64" title="TO_BASE64"><code clas
 <dd><p>The <strong>SPACE</strong> function returns as many empty strings as the number specified. The return value is a <strong>VARCHAR</strong> type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>N</strong> – Space count. It cannot be greater than the value specified in the system parameter, <strong>string_max_size_bytes</strong> (default 1048576). If it exceeds the specified value, <strong>NULL</strong> will be returned. The maximum value is 33,554,432; if this length is exceeded, <strong>NULL</strong> will be returned. If you enter 0 or a negative number, an empty string will be returned; if you enter a type that can’t be converted to a numeric value, an error will be returned.</p>
+<dd class="field-odd"><p><strong>N</strong> – Space count. It cannot be greater than the value specified in the system parameter, <strong>string_max_size_bytes</strong> (default 1048576). If it exceeds the specified value, <strong>NULL</strong> will be returned. The maximum value is 33,554,432; if this length is exceeded, <strong>NULL</strong> will be returned. If you enter 0 or a negative number, an empty string will be returned; if you enter a type that cannot be converted to a numeric value, an error will be returned.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>STRING</p>
@@ -1921,7 +1921,7 @@ To make STRCMP case-insensitive, you should use case-insensitive collation(e.g.:
 <dd><p>The <strong>SUBSTR</strong> function extracts a character string with the length of <em>substring_length</em> from a position, <em>position</em>, within character string, <em>string</em>, and then returns it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In the previous versions of CUBRID 9.0, the starting position and string length are calculated in byte unit, not in character unit; therefore, in a multi-byte character set, you must specify the parameter in consideration of the number of bytes representing a single character.</p>
+<p>In the previous versions of CUBRID 9.0, the starting position and string length are calculated in byte unit, not in character unit; therefore, in a multibyte character set, you must specify the parameter in consideration of the number of bytes representing a single character.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

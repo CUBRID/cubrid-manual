@@ -40,7 +40,7 @@ Writing CCI Applications
 
 The applications using CCI interact with CUBRID in the process of connecting to CAS, preparing queries, executing queries, handling response, and disconnecting. In each process, CCI communicates with applications through connection handle, query handle, and response handle.
 
-The default value of auto-commit mode can be configured by using :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` which is a broker parameter. If it is omitted, the default value is set to **ON**. To change auto-commit mode within applications, you should use the :c:func:`cci_set_autocommit` function. If auto-commit mode is **OFF**, you should explicitly commit or roll back transactions by using the :c:func:`cci_end_tran` function.
+The default value of autocommit mode can be configured by using :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` which is a broker parameter. If it is omitted, the default value is set to **ON**. To change autocommit mode within applications, you should use the :c:func:`cci_set_autocommit` function. If autocommit mode is **OFF**, you should explicitly commit or roll back transactions by using the :c:func:`cci_end_tran` function.
 
 General process for writing applications is as follows. For using the prepared statement, additional step binding data to a variable is required; the examples 1 and 2 show the way to implement this.
 
@@ -751,7 +751,7 @@ The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_CAS (-20021)                      |                                                               | Not available                                                                                           |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| CCI_ER_HOSTNAME (-20022)                 | Unknown host name                                             |                                                                                                         |
+| CCI_ER_HOSTNAME (-20022)                 | Unknown hostname                                              |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | CCI_ER_OID_CMD (-20023)                  | Invalid T_CCI_OID_CMD value                                   |                                                                                                         |
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+

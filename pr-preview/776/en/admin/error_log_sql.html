@@ -307,7 +307,7 @@
 </ul>
 <p id="error-234"><strong>ERROR CODE: -234, ‘Method file “%1$s” not found.’</strong></p>
 <ul class="simple">
-<li><p>This message is a schema definition error that occurs when, in the CUBRID database, a method file with a specific name cannot be found in the schema template; it can appear when an incorrect method file name is used, when the method file has already been deleted, or when the schema template has not been initialized correctly.</p></li>
+<li><p>This message is a schema definition error that occurs when, in the CUBRID database, a method file with a specific name cannot be found in the schema template; it can appear when an incorrect method filename is used, when the method file has already been deleted, or when the schema template has not been initialized correctly.</p></li>
 </ul>
 <p id="error-235"><strong>ERROR CODE: -235, ‘%1$d unresolved method functions after linking.’</strong></p>
 <ul class="simple">
@@ -755,7 +755,7 @@
 </ul>
 <p id="error-787"><strong>ERROR CODE: -787, ‘Conversion error in time format.’</strong></p>
 <ul class="simple">
-<li><p>This message is displayed in the time processing module of the CUBRID database during time format conversion, that is, the error is set when a problem occurs during converting time data to another format, converting time zones, or validating time values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of time data.</p></li>
+<li><p>This message is displayed in the time processing module of the CUBRID database during time format conversion, that is, the error is set when a problem occurs during converting time data to another format, converting timezones, or validating time values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of time data.</p></li>
 </ul>
 <p id="error-788"><strong>ERROR CODE: -788, ‘Conversion error in timestamp format.’</strong></p>
 <ul class="simple">
@@ -833,7 +833,7 @@
 <ul class="simple">
 <li><p>This message occurs when the CUBRID database system fails to find or load the JVM (Java Virtual Machine) library required to start the JVM, that is, the CUBRID server process attempted to create a JVM process to execute Java-based stored procedures (Stored Procedure) or user-defined functions (User Defined Function), but could not load it because system environment variables (e.g., JAVA_HOME, JVM_PATH) are not correctly set for the JVM library path, the library file itself does not exist, or due to access permission issues. (From version 11.4, it occurs when the JVM library used by pl_server cannot be found)</p></li>
 </ul>
-<p id="error-901"><strong>ERROR CODE: -901, ‘Java VM can not be started: %1$s.’</strong></p>
+<p id="error-901"><strong>ERROR CODE: -901, ‘Java VM cannot be started: %1$s.’</strong></p>
 <ul class="simple">
 <li><p>This message occurs when the CUBRID database system tried to start a JVM (Java Virtual Machine) process but failed, that is, the CUBRID server process attempted to create and initialize a JVM process to execute Java-based stored procedures (Stored Procedure) or user-defined functions (User Defined Function), but the JVM process could not be started normally due to various problems such as JVM library loading failure, JVM creation failure, failure to find required Java tables, memory allocation failure, or issues during JVM initialization. (From version 11.4, it occurs when pl_server for SP processing cannot be started)</p></li>
 </ul>
@@ -861,11 +861,11 @@
 <ul class="simple">
 <li><p>This message occurs when defining or calling a stored procedure (Stored Procedure) or a function (Function) in the CUBRID database system and the number of arguments specified for the procedure exceeds the maximum number allowed by CUBRID, it means that, while processing a <cite>CREATE PROCEDURE</cite> or <cite>CREATE FUNCTION</cite> statement, the CUBRID server has exceeded the number of arguments of the user-defined stored procedure, this is a protective error that occurs during validation of argument count validity in CUBRID’s stored procedure management system.</p></li>
 </ul>
-<p id="error-911"><strong>ERROR CODE: -911, ‘Invalid call: it can not return ResultSet.’</strong></p>
+<p id="error-911"><strong>ERROR CODE: -911, ‘Invalid call: it cannot return ResultSet.’</strong></p>
 <ul class="simple">
 <li><p>This message occurs when calling a stored procedure (Stored Procedure) in the CUBRID database and the stored procedure is defined in a way that cannot return a ResultSet (query result set), or it is called in a context where returning a ResultSet is not allowed, that is, this error occurs when a specific stored procedure in CUBRID is not designed to return a ResultSet directly, or when the current execution environment (e.g., calling from inside another stored procedure, etc.) does not support returning a ResultSet, this situation generally occurs when calling a stored procedure using a <cite>CALL</cite> statement and the procedure definition or invocation method violates ResultSet return rules, this is a protective error to protect execution rules of stored procedures and the consistency of the database system.</p></li>
 </ul>
-<p id="error-912"><strong>ERROR CODE: -912, ‘ResultSet can not be used input parameter.’</strong></p>
+<p id="error-912"><strong>ERROR CODE: -912, ‘ResultSet cannot be used input parameter.’</strong></p>
 <ul class="simple">
 <li><p>This message occurs when trying to use the ‘RESULTSET’ type as an input parameter while defining a stored procedure (Stored Procedure) or a function (Function) in the CUBRID database system, because in CUBRID’s stored procedure system, the <cite>RESULTSET</cite> type is restricted to be used only as an output parameter. This is a constraint to protect system stability in terms of data flow and memory management.</p></li>
 </ul>
@@ -1105,7 +1105,7 @@
 <ul class="simple">
 <li><p>This message occurs when, in the CUBRID database, a partition table’s partition key value does not match the partition definition. That is, when trying to insert or update data into a specific partition, if the partition key value of the data does not belong to any partition range or does not match the partition definition, this error occurs. This is a protective error to ensure data integrity for partition tables. It mainly occurs when the partition key value is outside the ranges defined by the partition definition during INSERT or UPDATE operations, or when the partition definition is incorrect and the data cannot be placed into an appropriate partition.</p></li>
 </ul>
-<p id="error-1118"><strong>ERROR CODE: -1118, ‘The argument of “%1$s” can not be coerced to desired domain “%2$s”.’</strong></p>
+<p id="error-1118"><strong>ERROR CODE: -1118, ‘The argument of “%1$s” cannot be coerced to desired domain “%2$s”.’</strong></p>
 <ul class="simple">
 <li><p>This message occurs when, in the CUBRID database, the argument of a function or operation cannot be converted to the desired domain type. That is, it means that an incompatible data type conversion (type casting) was attempted. This mainly occurs when performing operations between different data types in aggregate functions (MEDIAN, AVG, SUM, etc.) or arithmetic operations. The system attempts automatic conversion to compatible types such as DOUBLE, DATETIME, TIME, etc., but if conversion is not possible, it raises this error.</p></li>
 </ul>

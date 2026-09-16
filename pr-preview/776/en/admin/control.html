@@ -778,7 +778,7 @@
 </span><span id="line-2"><span class="n">Address</span><span class="p">(</span><span class="mf">10.24.18.66</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">authorized</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>An error log of the database server is saved into <strong>$CUBRID/log/server</strong> directory, and the format of the file name is <em>&lt;db_name&gt;_&lt;yyyymmdd&gt;_&lt;hhmi&gt;.err</em>. The extension is “.err”.</p>
+<p>An error log of the database server is saved into <strong>$CUBRID/log/server</strong> directory, and the format of the filename is <em>&lt;db_name&gt;_&lt;yyyymmdd&gt;_&lt;hhmi&gt;.err</em>. The extension is “.err”.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_20130618_1655</span><span class="o">.</span><span class="n">err</span>
 </span></code></pre></div>
 </div>
@@ -791,7 +791,7 @@
 <span id="server-event-log"></span><h3>Event Log<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#event-log" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#event-log'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>If an event which affects on the query performance occurs, this is saved into the event log.</p>
 <p>The events which are saved on the event log are <em>SLOW_QUERY</em>, <em>MANY_IOREADS</em>, <em>LOCK_TIMEOUT</em>, <em>DEADLOCK</em> and <em>TEMP_VOLUME_EXPAND</em>.</p>
-<p>This log file is saved into the <strong>$CUBRID/log/server</strong> directory, and the format of the file name is <em>&lt;db_name&gt;_&lt;yyyymmdd&gt;_&lt;hhmi&gt;.event</em>. The extension is “.event”.</p>
+<p>This log file is saved into the <strong>$CUBRID/log/server</strong> directory, and the format of the filename is <em>&lt;db_name&gt;_&lt;yyyymmdd&gt;_&lt;hhmi&gt;.event</em>. The extension is “.event”.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_20130618_1655</span><span class="o">.</span><span class="n">event</span>
 </span></code></pre></div>
 </div>
@@ -808,7 +808,7 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p>client: &lt;DB user&gt;@&lt;application client host name&gt;|&lt;program name&gt;(&lt;process ID&gt;)</p></li>
+<li><p>client: &lt;DB user&gt;@&lt;application client hostname&gt;|&lt;program name&gt;(&lt;process ID&gt;)</p></li>
 <li><p>sql: slow query</p></li>
 <li><p>bind: binding value. it is printed out as the number of &lt;num&gt; in the sql item, “?:&lt;num&gt;”. The value of “?:0” is 5, and the value of “?:1” is 200.</p></li>
 <li><p>time: execution time(ms)</p></li>
@@ -840,7 +840,7 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p>client: &lt;DB user&gt;@&lt;application client host name&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
+<li><p>client: &lt;DB user&gt;@&lt;application client hostname&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
 <li><p>sql: an SQL which brought many I/O reads</p></li>
 <li><p>bind: binding value. it is printed out as the number of &lt;num&gt; in the sql item, “?:&lt;num&gt;”. The value of “?:0” is 8, and the value of “?:1” is 100.</p></li>
 <li><p>time: execution time(ms)</p></li>
@@ -916,7 +916,7 @@
 <ul class="simple">
 <li><p>hold: an object which is acquiring a lock</p>
 <ul>
-<li><p>client: &lt;DB user&gt;@&lt;application client host name&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
+<li><p>client: &lt;DB user&gt;@&lt;application client hostname&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
 <li><p>lock: lock type, table name</p></li>
 <li><p>sql: SQL which is acquiring locks</p></li>
 <li><p>bind: binding value</p></li>
@@ -924,7 +924,7 @@
 </li>
 <li><p>wait: an object which is waiting a lock</p>
 <ul>
-<li><p>client: &lt;DB user&gt;@&lt;application client host name&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
+<li><p>client: &lt;DB user&gt;@&lt;application client hostname&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
 <li><p>lock: lock type, table name</p></li>
 <li><p>sql: SQL which is waiting a lock</p></li>
 <li><p>bind: binding value</p></li>
@@ -944,7 +944,7 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p>client: &lt;DB user&gt;@&lt;application client host name&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
+<li><p>client: &lt;DB user&gt;@&lt;application client hostname&gt;|&lt;process name&gt;(&lt;process ID&gt;)</p></li>
 <li><p>sql: SQL which requires a more space for temporary data. All INSERT statement except for INSERT … SELECT syntax, and DDL statement are not delivered to the DB server, so it is shown as EMPTY
 SELECT, UPDATE and DELETE statements are shown on this item</p></li>
 <li><p>bind: binding value</p></li>
@@ -1867,7 +1867,7 @@ List of IPs can be written up to the maximum of 256 lines per &lt;<em>db_name</e
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-broker_test-o">
 <span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">FILE_NAME</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-broker_test-o" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-broker_test-o'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Specifies the file name to save the execution result to be displayed to the console. If this is omitted, the execution result is output only to the console.</p>
+<dd><p>Specifies the filename to save the execution result to be displayed to the console. If this is omitted, the execution result is output only to the console.</p>
 </dd></dl>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-broker_test-s">
@@ -2136,7 +2136,7 @@ List of IPs can be written up to the maximum of 256 lines per &lt;<em>db_name</e
 <li><p>192.168.56.4: IP address of the application client</p></li>
 <li><p>2020/11/10 14:41:55: Time when the client’s request processing started</p></li>
 <li><p>testdb: The name of the database that the client requested to connect to</p></li>
-<li><p>dba: The user name of the database that the client requested to connect to</p></li>
+<li><p>dba: The username of the database that the client requested to connect to</p></li>
 <li><p>NEW: Connection type</p>
 <ul>
 <li><p>NEW: New connection</p></li>
@@ -2265,7 +2265,7 @@ List of IPs can be written up to the maximum of 256 lines per &lt;<em>db_name</e
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">broker_log_top</span> <span class="o">-</span><span class="n">F</span> <span class="s2">"13-01-19"</span> <span class="o">-</span><span class="n">T</span> <span class="s2">"13-01-20"</span> <span class="n">log1</span><span class="o">.</span><span class="n">log</span>
 </span></code></pre></div>
 </div>
-<p>The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th 2013, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that “*.sql.log” is not recognized so the SQL logs should be separated by a white space on Windows.</p>
+<p>The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th 2013, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that “*.sql.log” is not recognized so the SQL logs should be separated by a whitespace on Windows.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">--</span><span class="n">Execution</span> <span class="n">broker_log_top</span> <span class="n">on</span> <span class="n">Linux</span>
 </span><span id="line-2"><span class="o">%</span> <span class="n">broker_log_top</span> <span class="o">-</span><span class="n">F</span> <span class="s2">"13-11-11"</span> <span class="o">-</span><span class="n">T</span> <span class="s2">"13-11-12"</span> <span class="o">-</span><span class="n">t</span> <span class="o">*.</span><span class="n">sql</span><span class="o">.</span><span class="n">log</span>
 </span><span id="line-3">
@@ -2313,7 +2313,7 @@ In the <strong>log.top.q</strong> file, you can see each SQL statement, and its 
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><em>broker_host</em>: IP address or host name of the CUBRID broker</p></li>
+<li><p><em>broker_host</em>: IP address or hostname of the CUBRID broker</p></li>
 <li><p><em>broker_port</em>: Port number of the CUBRID broker</p></li>
 <li><p><em>db_name</em>: The name of database to run the query</p></li>
 <li><p><em>sql_log_file</em>: SQL log file of the CUBRID broker($CUBRID/log/broker/sql_log/*.log, *.log.bak)</p></li>
@@ -2803,7 +2803,7 @@ The domain of a set must be the same data type</p></td>
 </section>
 <section id="configuring-cubrid-manager-server">
 <h2>Configuring CUBRID Manager Server<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#configuring-cubrid-manager-server" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#configuring-cubrid-manager-server'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>The configuration file name for the CUBRID Manager server is <strong>cm.conf</strong> and located in the <strong>$CUBRID/conf</strong> directory.
+<p>The configuration filename for the CUBRID Manager server is <strong>cm.conf</strong> and located in the <strong>$CUBRID/conf</strong> directory.
 In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by “#.” Parameter names and values are separated by spaces or an equal sign (=).</p>
 <p>This page describes parameters that are specified in the <strong>cm.conf</strong> file.</p>
 <p><strong>cm_port</strong></p>
@@ -2816,7 +2816,7 @@ In the CUBRID Manager server configuration file, where parameter names and value
 </div></blockquote>
 <p><strong>allow_user_multi_connection</strong></p>
 <blockquote>
-<div><p><strong>allow_user_multi_connection</strong> is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is <strong>YES</strong> . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same user name.</p>
+<div><p><strong>allow_user_multi_connection</strong> is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is <strong>YES</strong> . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same username.</p>
 </div></blockquote>
 <p><strong>server_long_query_time</strong></p>
 <blockquote>
@@ -2952,7 +2952,7 @@ The following example shows how to add database information “testdb;dba;localh
 <ul class="simple">
 <li><p><strong>cm_admin</strong>: An integrated utility to manage CUBRID Manager</p></li>
 <li><p><strong>viewuser</strong>: A command to display the CM user information</p></li>
-<li><p><em>cmuser-name</em>: A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.</p></li>
+<li><p><em>cmuser-name</em>: A CM username. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.</p></li>
 </ul>
 <p>The following example shows how to display information of a CM user named <em>testcm</em> .</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cm_admin</span> <span class="n">viewuser</span> <span class="n">testcm</span>
@@ -3060,7 +3060,7 @@ You can use <strong>admin</strong>, <strong>none</strong>, and <strong>monitor</
 <ul class="simple">
 <li><p><strong>cm_admin</strong>: An integrated utility to manage CUBRID Manager</p></li>
 <li><p><strong>adddbinfo</strong>: A command to add database information to a CM user</p></li>
-<li><p><em>cmuser-name</em>: CM user name</p></li>
+<li><p><em>cmuser-name</em>: CM username</p></li>
 <li><p><em>database-name</em>: The name of a database to be added</p></li>
 </ul>
 <p>The following example shows how to add a database without specifying any user-defined values to a CM user named <em>testcm</em> .</p>
@@ -3101,7 +3101,7 @@ You can use <strong>admin</strong>, <strong>none</strong>, and <strong>monitor</
 <ul class="simple">
 <li><p><strong>cm_admin</strong>: An integrated utility to manage CUBRID Manager</p></li>
 <li><p><strong>deldbinfo</strong>: A command to delete database information of a CM user</p></li>
-<li><p><em>cmuser-name</em>: CM user name</p></li>
+<li><p><em>cmuser-name</em>: CM username</p></li>
 <li><p><em>database-name</em>: The name of a database to be deleted</p></li>
 </ul>
 <p>The following example shows how to delete database information whose name is <em>testdb</em> from a CM user named <em>testcm</em>.</p>
@@ -3118,7 +3118,7 @@ You can use <strong>admin</strong>, <strong>none</strong>, and <strong>monitor</
 <ul class="simple">
 <li><p><strong>cm_admin</strong>: An integrated utility to manage CUBRID Manager</p></li>
 <li><p><strong>changedbinfo</strong>: A command to change database information of a CM user</p></li>
-<li><p><em>cmuser-name</em>: CM user name</p></li>
+<li><p><em>cmuser-name</em>: CM username</p></li>
 <li><p><em>database-name</em>: The name of a database to be changed</p></li>
 </ul>
 <p>The following is [options] of <strong>cm_admin changedbinfo</strong>.</p>
@@ -3277,7 +3277,7 @@ The path of <strong>CUBRID_JAVA_HOME</strong> must include the JDK environment a
 </ul>
 <section id="id10">
 <h3>Error Log<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id10" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id10'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The error log of the Procedural Langauge Server for each database is stored in the <strong>$CUBRID/log</strong> directory, and the file name is in the format <strong>&lt;db_name&gt;_pl.err</strong>. The extension is <strong>.err</strong>.</p>
+<p>The error log of the Procedural Langauge Server for each database is stored in the <strong>$CUBRID/log</strong> directory, and the filename is in the format <strong>&lt;db_name&gt;_pl.err</strong>. The extension is <strong>.err</strong>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_pl</span><span class="o">.</span><span class="n">err</span>
 </span></code></pre></div>
 </div>
@@ -3298,7 +3298,7 @@ The path of <strong>CUBRID_JAVA_HOME</strong> must include the JDK environment a
 <section id="exception-log">
 <h3>Exception Log<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#exception-log" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#exception-log'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>The JVM exception messages that occur during the execution of procedures are saved.
-The exception log of the Procedural Langauge Server for each database is stored in the <strong>$CUBRID/log</strong> directory, and the file name is in the format <strong>&lt;db_name&gt;_pl.log</strong>. The extension is <strong>.log</strong>.</p>
+The exception log of the Procedural Langauge Server for each database is stored in the <strong>$CUBRID/log</strong> directory, and the filename is in the format <strong>&lt;db_name&gt;_pl.log</strong>. The extension is <strong>.log</strong>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">demodb_pl</span><span class="o">.</span><span class="n">log</span>
 </span></code></pre></div>
 </div>
@@ -3335,7 +3335,7 @@ CUBRID_JAVA_HOME</p></td>
 Refer to <a class="reference internal" href="#cubrid-pl-environment-configuration"><span class="std std-ref">Procedural Language Environment: Using Bundled JDK</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p>-901</p></td>
-<td><p>PL server can not be started: %1$s.</p></td>
+<td><p>PL server cannot be started: %1$s.</p></td>
 <td><p>An unexpected error occurred within the JVM library
 or in $CUBRID/java/jspserver.jar.</p></td>
 <td><p>Try reinstalling the JRE, and if the same error occurs,

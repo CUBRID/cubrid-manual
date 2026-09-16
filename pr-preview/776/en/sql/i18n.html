@@ -846,7 +846,7 @@ Execute <strong>cubrid dumplocale -h</strong> to output the usage. The used synt
 <h2>Step 6: Starting CUBRID-Related Processes<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#step-6-starting-cubrid-related-processes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#step-6-starting-cubrid-related-processes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>All CUBRID-related processes should be started in an identical environmental setting. The CUBRID server, the broker, CAS, and CSQL should use the locale binary file of an identical version. Also CUBRID HA should use the same setting. For example, in the CUBRID HA, master server, slave server and replica server should use the same environmental variable setting.</p>
 <p>There is no check on the compatibility of the locale used by server and CAS (client) process, so the user should make sure the LDML files used are the same.</p>
-<p>Locale library loading is one of the first steps in CUBRID start-up. Locale (collation) information is required for initializing databases structures (indexes depends on collation). This process is performed by each CUBRID process which requires locale information: server, CAS, CSQL, createdb, copydb, unload, load DB.</p>
+<p>Locale library loading is one of the first steps in CUBRID startup. Locale (collation) information is required for initializing databases structures (indexes depends on collation). This process is performed by each CUBRID process which requires locale information: server, CAS, CSQL, createdb, copydb, unload, load DB.</p>
 <p>The process of loading a locale library is as follows.</p>
 <ul class="simple">
 <li><p>If no lib path is provided, CUBRID will try to load $CUBRID/lib/libcubrid_&lt;<em>lang_name</em>&gt;.so  file; if this file is not found, then CUBRID assumes all locales are found in a single library: <strong>$CUBRID/lib/libcubrid_all_locales.so</strong>.</p></li>
@@ -1238,7 +1238,7 @@ determined before the execution step.</p></td>
 </span><span id="line-3">  <span class="s1">'utf8_bin'</span>                     <span class="o">-</span><span class="mi">1</span>
 </span></code></pre></div>
 </div>
-<p>For expressions having all arguments with coercibility 11 and with different collations, the common collation is resolved at run-time (this is an exception from the coercibility value-based rule for inference which would require to raise an error).</p>
+<p>For expressions having all arguments with coercibility 11 and with different collations, the common collation is resolved at runtime (this is an exception from the coercibility value-based rule for inference which would require to raise an error).</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">PREPARE</span><span class="w"> </span><span class="n">st1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT INSERT(?,2,2,?)'</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st1</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="n">_utf8</span><span class="s1">'abcd'</span><span class="p">,</span><span class="w"> </span><span class="n">_binary</span><span class="s1">'ef'</span><span class="p">;</span>
 </span></code></pre></div>
@@ -1511,7 +1511,7 @@ determined before the execution step.</p></td>
 </ul>
 <section id="casing-and-identifiers">
 <span id="id7"></span><h3>Casing and identifiers<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#casing-and-identifiers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#casing-and-identifiers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>In CUBRID, identifiers are cases insensitive. Tables, columns, session variables, triggers, stored procedures are stored in lower case. Authentication identifiers (user and group names) are stored in upper case.</p>
+<p>In CUBRID, identifiers are cases insensitive. Tables, columns, session variables, triggers, stored procedures are stored in lower case. Authentication identifiers (user and group names) are stored in uppercase.</p>
 <p>The ISO-8859-1 charset contains only 255 characters, so the primitives are able to use built-in data. Also the EUC-KR charset, from which only the ASCII compatible characters are considered for casing (and are handled in the code), is built-in.</p>
 <p>The UTF-8 charset is a special case: There are built-in variants of UTF-8 locales (like en_US.utf8, tr_TR.utf8 and ko_KR.utf8) and LDML locales.</p>
 <p>The built-in variant implement only the characters specific to the locale (ASCII characters for en_US.utf8 and ko_KR.utf8, ASCII + Turkish glyphs <a class="footnote-reference brackets" href="#f1" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> for tr_TR.utf8). This means that while all UTF-8 characters encoded on maximum 4 bytes are still supported and accepted as identifiers, most of them are not handled as letters, and treated as any normal Unicode character by casing primitives. For instance, character “È” (Unicode codepoint 00C8) is allowed, but an identifier containing it will not be normalized to “è” (lower case).</p>
@@ -2067,7 +2067,7 @@ The internal encoding is performed in UTC time reference, which is different fro
 <li><p>If localized (non-ASCII) characters will be used for identifiers, then use an .utf8 locale</p></li>
 <li><p>Once established the UTF-8 charset for DB, it is best to use a LDML locale (this ensures that identifier names containing most Unicode characters are correctly cased) than a system locale.</p></li>
 <li><p>Setting a locale affects also conversion functions(intl_date_lang, intl_number_lang).</p></li>
-<li><p>When you set the locale during creating DB, there should be no concern on charset and collation of string-literals or user tables columns; all of them can be changed at run-time (with <a class="reference internal" href="function/typecast_fn.html#CAST" title="CAST"><code class="xref py py-func docutils literal notranslate"><span class="pre">CAST()</span></code></a> in queries) or ALTER .. CHANGE for a permanent change.</p></li>
+<li><p>When you set the locale during creating DB, there should be no concern on charset and collation of string-literals or user tables columns; all of them can be changed at runtime (with <a class="reference internal" href="function/typecast_fn.html#CAST" title="CAST"><code class="xref py py-func docutils literal notranslate"><span class="pre">CAST()</span></code></a> in queries) or ALTER .. CHANGE for a permanent change.</p></li>
 </ul>
 </section>
 <section id="char-and-varchar">
@@ -2138,7 +2138,7 @@ The tags and attributes which are specific only to CUBRID can be easily identifi
 The filename must be formatted like cubrid_&lt;<em>language</em>&gt;.xml and be placed in the folder <strong>$CUBRID/locales/data/ldml</strong>.
 The &lt;<em>language</em>&gt; part should be a ASCII string (normally five characters) in IETF format (<a class="reference external" href="https://en.wikipedia.org/wiki/BCP_47">https://en.wikipedia.org/wiki/BCP_47</a>).
 After creating the LDML file, the &lt;<em>language</em>&gt; part string must be added into CUBRID configuration file <strong>$CUBRID/conf/cubrid_locales.txt</strong>.
-Note that the order in this file is the order of generating (compiling) locale library and loading locales at start-up.</p>
+Note that the order in this file is the order of generating (compiling) locale library and loading locales at startup.</p>
 <p>The <strong>make_locale</strong> script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in <strong>$CUBRID/lib/</strong>).</p>
 <p>The LDML file is expected in UTF-8 encoding, and it is not possible to add more than one locale into the same LDML file.</p>
 <p>Adding a new locale in LDML file requires:</p>
@@ -2163,7 +2163,7 @@ Note that the order in this file is the order of generating (compiling) locale l
 </ul>
 </li>
 </ul>
-<p>The months and week-days names (in both long and abbreviated form) must be specified in Camel case format (first letter upper case, the rest in lower case).
+<p>The months and week-days names (in both long and abbreviated form) must be specified in Camel case format (first letter uppercase, the rest in lower case).
 CUBRID checks only the maximum allowed size in bytes; the size in characters is computed only for full-width UTF-8 characters (4 bytes), so it would be possible to set a month name having 100 ASCII-only characters (the 25 characters limit is when each character from month name is encoded on 4 bytes in UTF-8).</p>
 </section>
 <section id="ldml-numbers-information">
@@ -2177,7 +2177,7 @@ CUBRID checks only the maximum allowed size in bytes; the size in characters is 
 <p>These allow to define casing rules for alphabet of the locale.
 The ‘CUBRIDAlphabetMode’ attribute defines the primary source of data for characters. Normally, this should be set to “UNICODEDATAFILE”, values which instructs CUBRID to use the Unicode data file (<strong>$CUBRID/locales/data/unicodedata.txt</strong>).</p>
 <p>This file must not be modified, any customization on certain characters should be done in LDML file. If such value is configured, all Unicode characters up to codepoint 65535 are loaded with casing information.
-The other allowed value for <cite>CUBRIDAlphabetMode</cite> is “ASCII” which will lead to only ASCII character can be lower case, upper case or case-insensitive compare in matching functions.</p>
+The other allowed value for <cite>CUBRIDAlphabetMode</cite> is “ASCII” which will lead to only ASCII character can be lower case, uppercase or case-insensitive compare in matching functions.</p>
 <p>This does not affect CUBRID’s ability to support all UTF-8 4 bytes encoded Unicode characters, it just limits the casing ability for characters not included.</p>
 <p>The casing rules are optional and apply on top of the primary source of character information (UNICODEDATAFILE or ASCII).</p>
 <p>CUBRID allows to define upper casing rules (&lt;u&gt; tag) and lower casing rules (&lt;l&gt; tag).Each of upper and lower casing rules set consists for pairs of source-destination (&lt;s&gt; = source, &lt;d&gt; = destination).
@@ -2227,7 +2227,7 @@ The ‘settings’ tag defines the properties of the collation:</p>
 </ul>
 </li>
 <li><p>‘caseLevel’: special setting to enable case sensitive compare for collations having strength &lt; tertiary. Valid values are “on” or “off”.</p></li>
-<li><p>‘caseFirst’: order of casing. Valid values are “lower”, “upper” and “off”. The “upper” values means upper case letters are ordered before the corresponding lower case letter.</p></li>
+<li><p>‘caseFirst’: order of casing. Valid values are “lower”, “upper” and “off”. The “upper” values means uppercase letters are ordered before the corresponding lower case letter.</p></li>
 <li><p>‘CUBRIDMaxWeights’: it is the number of codepoints (or last codepoint + 1) which are customized in the collation. Maximum value is 65536. Increasing this value increases the size of collation data.</p></li>
 <li><p>‘DUCETContractions’: valid values are “use” or “ignore”. When “use” - enable CUBRID to use in the collation the contractions defined by DUCET file ($CUBRID/locales/data/ducet.txt) or ignoring them.</p></li>
 <li><p>‘TailoringContractions’: same as previous but refers to the contractions defined or derived from explicit collation rules. Enabling contractions leads to a more complex collation (slower string compares).</p></li>

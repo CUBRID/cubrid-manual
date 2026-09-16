@@ -1636,7 +1636,7 @@ the configuration parameter allow_truncated_string also affect the similar as al
 </span><span id="line-2"><span class="n">The</span> <span class="n">domain</span> <span class="n">of</span> <span class="n">the</span> <span class="n">attribute</span> <span class="s1">'a'</span> <span class="n">having</span> <span class="n">an</span> <span class="n">auto</span> <span class="n">increment</span> <span class="n">constraint</span> <span class="ow">is</span> <span class="n">invalid</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>When changing the type of a column specified  a default value, if the default value can’t be coerced to the changed type, an error occurs as shown in the example below.</p>
+<p>When changing the type of a column specified  a default value, if the default value cannot be coerced to the changed type, an error occurs as shown in the example below.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t_def</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">bigint</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="mi">123456789012</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span>
 </span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t_def</span><span class="w"> </span><span class="k">MODIFY</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nb">int</span><span class="p">;</span>
 </span></code></pre></div>
@@ -1835,14 +1835,14 @@ the configuration parameter allow_truncated_string also affect the similar as al
 <li><p><strong>COMMENT</strong> : Even though the <strong>COMMENT</strong> attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table. If you want to remove the attribute <strong>COMMENT</strong>, specify the <strong>COMMENT ‘’</strong> in the statement.</p></li>
 <li><dl>
 <dt><strong>AUTO_INCREMENT</strong><span class="classifier">Even though the <strong>AUTO_INCREMENT</strong> attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.</span></dt><dd><ul class="simple">
-<li><p>caution) The <strong>AUTO_INCREMENT</strong> attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.</p></li>
+<li><p>caution) The <strong>AUTO_INCREMENT</strong> attribute cannot be removed from a new table once the attribute is set by CREATE or ALTER.</p></li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl>
 <dt><strong>ON UPDATE</strong><span class="classifier">Even though the <strong>ON UPDATE</strong> attribute is not specified in the column to change, it will not be removed from a new table if the attribute is present in the existing table.</span></dt><dd><ul class="simple">
-<li><p>caution) The <strong>ON UPDATE</strong> attribute can not be removed from a new table once the attribute is set by CREATE or ALTER.</p></li>
+<li><p>caution) The <strong>ON UPDATE</strong> attribute cannot be removed from a new table once the attribute is set by CREATE or ALTER.</p></li>
 </ul>
 </dd>
 </dl>

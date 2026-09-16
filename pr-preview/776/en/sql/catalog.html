@@ -487,7 +487,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>All examples of system catalog classes have been written in the csql utility. In this example, <strong>--no-auto-commit</strong> (inactive mode of auto-commit) and <strong>-u</strong> (specifying user DBA) options are used.</p>
+<p>All examples of system catalog classes have been written in the csql utility. In this example, <strong>--no-autocommit</strong> (inactive mode of autocommit) and <strong>-u</strong> (specifying user DBA) options are used.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">csql</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">auto</span><span class="o">-</span><span class="n">commit</span> <span class="o">-</span><span class="n">u</span> <span class="n">dba</span> <span class="n">demodb</span>
 </span></code></pre></div>
 </div>
@@ -1712,7 +1712,7 @@ partition table that stores data</p></li>
 </tr>
 <tr class="row-even"><td><p>user_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>Database user name of a server</p></td>
+<td><p>Database username of a server</p></td>
 </tr>
 <tr class="row-odd"><td><p>password</p></td>
 <td><p>VARCHAR(1073741823)</p></td>
@@ -4149,7 +4149,7 @@ If the partition type is LIST, List of values</p></td>
 </tr>
 <tr class="row-even"><td><p>user_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>Database user name of a server</p></td>
+<td><p>Database username of a server</p></td>
 </tr>
 <tr class="row-odd"><td><p>properties</p></td>
 <td><p>VARCHAR(2048)</p></td>
@@ -4237,7 +4237,7 @@ If the partition type is LIST, List of values</p></td>
 </section>
 <section id="querying-on-catalog">
 <h2>Querying on Catalog<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#querying-on-catalog" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#querying-on-catalog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes. But, DB user name is changed as uppercases and stored into _db_user system catalog table.</p>
+<p>To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes. But, DB username is changed as uppercases and stored into _db_user system catalog table.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">));</span>
 </span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">class_name</span><span class="p">,</span><span class="w"> </span><span class="n">partitioned</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_class</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">class_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Foo'</span><span class="p">;</span>
 </span></code></pre></div>

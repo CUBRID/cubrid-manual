@@ -343,7 +343,7 @@
 </span></code></pre></div>
 </div>
 <ul>
-<li><p><em>host</em>: IP address or host name where the CUBRID broker is running</p></li>
+<li><p><em>host</em>: IP address or hostname where the CUBRID broker is running</p></li>
 <li><p><em>port</em>: The CUBRID broker port number (default value: 33,000)</p></li>
 <li><p><em>db-name</em>: The name of the database to connect</p></li>
 <li><p><em>user-id</em>: The user ID which is connected to a database. There are two types of users in a database by default: <strong>dba</strong> and <strong>public</strong>. If this is NULL, it becomes &lt;<em>db_user</em>&gt; in <em>db-url</em>. If this is an empty string (“”),  it becomes a <strong>public</strong> user.</p></li>
@@ -471,7 +471,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (<em>user-id</em>) and a password (<em>password</em>) as a separate argument in the <strong>getConnection</strong> method.</p></li>
+<li><p>Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a username (<em>user-id</em>) and a password (<em>password</em>) as a separate argument in the <strong>getConnection</strong> method.</p></li>
 <li><p>The database connection in thread-based programming must be used independently each other.</p></li>
 <li><p>The rollback method requesting transaction rollback will be ended after a server completes the rollback job.</p></li>
 <li><p>In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.</p></li>
@@ -551,7 +551,7 @@
 </span></code></pre></div>
 </div>
 <p><strong>Setting Connection Properties</strong></p>
-<p><strong>Connection properties</strong> are used to configure connections between datasource and CUBRID DBMS. General properties are a DB name, a host name, a port number, a user name and a password.</p>
+<p><strong>Connection properties</strong> are used to configure connections between datasource and CUBRID DBMS. General properties are a DB name, a hostname, a port number, a username and a password.</p>
 <p>To set or get the values of properties, use below methods which is implemented in cubrid.jdbc.driver.CUBRIDDataSource.</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kd">public</span><span class="w"> </span><span class="n">PrintWriter</span><span class="w"> </span><span class="nf">getLogWriter</span><span class="p">();</span>
 </span><span id="line-2"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setLogWriter</span><span class="p">(</span><span class="n">PrintWriter</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
@@ -1477,7 +1477,7 @@ Note that the data type of the automatically created keys in <strong>ResultSet</
 <td><p>The query is not applicable to the executeInsert().</p></td>
 </tr>
 <tr class="row-odd"><td><p>-21128</p></td>
-<td><p>The argument row can not be zero.</p></td>
+<td><p>The argument row cannot be zero.</p></td>
 </tr>
 <tr class="row-even"><td><p>-21129</p></td>
 <td><p>Given InputStream object has no data.</p></td>
@@ -1532,7 +1532,7 @@ Note that the data type of the automatically created keys in <strong>ResultSet</
 </div>
 <p><strong>Connecting to Database</strong></p>
 <p>After loading the JDBC driver, use the <strong>getConnection</strong> () method of the <strong>DriverManager</strong> to connect to the database.
-To create a <strong>Connection</strong> object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see <a class="reference internal" href="#jdbc-connection-conf"><span class="std std-ref">Configuration Connection</span></a>.</p>
+To create a <strong>Connection</strong> object, you must specify information such as the URL which indicates the location of a database, username, password, etc. For more information, see <a class="reference internal" href="#jdbc-connection-conf"><span class="std std-ref">Configuration Connection</span></a>.</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"jdbc:cubrid:localhost:33000:demodb:::"</span><span class="p">;</span>
 </span><span id="line-2"><span class="n">String</span><span class="w"> </span><span class="n">userid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dba"</span><span class="p">;</span>
 </span><span id="line-3"><span class="n">String</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
@@ -1697,7 +1697,7 @@ After the <strong>Statement</strong> object is created, execute the query statem
 You can use the <strong>next</strong> () method to process the next row from the <strong>ResultSet</strong> that has been returned as a result of executing the <strong>executeQuery</strong> () method.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In the version of 2008 R4.x or before, if you execute commit after query execution, <strong>ResultSet</strong> will be automatically closed. Therefore, you must not use <strong>ResultSet</strong> after commit. Generally CUBRID is executed in auto-commit mode; if you do not want for CUBRID being executed in auto-commit mode, you should specify <strong>conn.setAutocommit(false);</strong> in the code.</p>
+<p>In the version of 2008 R4.x or before, if you execute commit after query execution, <strong>ResultSet</strong> will be automatically closed. Therefore, you must not use <strong>ResultSet</strong> after commit. Generally CUBRID is executed in autocommit mode; if you do not want for CUBRID being executed in autocommit mode, you should specify <strong>conn.setAutocommit(false);</strong> in the code.</p>
 <p>From 9.1, <a class="reference internal" href="../sql/transaction.html#cursor-holding"><span class="std std-ref">Cursor holdability</span></a> is supported; therefore, you can use <strong>ResultSet</strong> after commit.</p>
 </div>
 <p><strong>Disconnecting from Database</strong></p>

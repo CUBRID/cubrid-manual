@@ -700,7 +700,7 @@ The installed driver must register driver information in odbcinst.ini. For setti
 </section>
 </section>
 <section id="how-to-use-cubrid-dblink">
-<h2>How to use Cubrid DBLink<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#how-to-use-cubrid-dblink" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#how-to-use-cubrid-dblink'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<h2>How to use CUBRID DBLink<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#how-to-use-cubrid-dblink" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#how-to-use-cubrid-dblink'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>If the information on brokers of CUBRID to be connected to use DBLink has been completed or gateway settings for heterogeneous databases have been completed, let’s learn how to write a query statement using DBLink.</p>
 <p>There are two ways to write DBLINK Query statement for data inquiry.</p>
 <p><strong>First</strong>, how to query information from other databases by writing DBLINK syntax in the FROM clause</p>
@@ -730,7 +730,7 @@ The installed driver must register driver information in odbcinst.ini. For setti
 <section id="notice">
 <h2>Notice<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#notice" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#notice'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <ul class="simple">
-<li><p>Synonym creation: Local synonyms can be created for remote tables and remote synonyms. In the case of DBMSs other than CUBRID, the user name or db name must be added to the original table name.</p></li>
+<li><p>Synonym creation: Local synonyms can be created for remote tables and remote synonyms. In the case of DBMSs other than CUBRID, the username or db name must be added to the original table name.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- for CUBRID</span>
 </span><span id="line-2"><span class="k">create</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">synonym_1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">t1</span><span class="o">@</span><span class="n">srv1</span><span class="p">;</span>
@@ -801,7 +801,7 @@ For example, when the select query for remote table is requested and the optimiz
 </div>
 <ul class="simple">
 <li><p>All functions, serial-related functions, and system constants of INSERT/UPDATE/DELETE/MERGE queries are all executed on the remote server, so be careful when using built-in functions (i.e., CUBRID’s built-in functions may not be supported by the remote DBMS or have different usage instructions)</p></li>
-<li><p>Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE) queries in the remote DB are excuted as auto commits separately from transactions in the local DB.
+<li><p>Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE) queries in the remote DB are excuted as autocommits separately from transactions in the local DB.
 As in the example below, when performing a transaction, data is inserted into the remote DB, but no data is entered into the local DB, because doing rollback.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- local input</span>
@@ -1016,9 +1016,9 @@ As in the example below, when performing a transaction, data is inserted into th
 <ul class="simple">
 <li><p>LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, and CLOB types are not supported in the select statement. For more information, refer to <a class="reference internal" href="#heterogen-restrict"><span class="std std-ref">Unsupported Types of Common constraints of Heterogeneous DBMS</span></a></p></li>
 <li><p>The INTERVAL DAY TO SECOND and INTERVAL YEAR TO MONTH types are not supported by Oracle ODBC. For more information, see “Using the Oracle ODBC Driver” (<a class="reference external" href="https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028">https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028</a>).</p></li>
-<li><p>Oracle ODBC does not support the time zone type, so when SELECTing time zone data, the time zone is calculated as a local time, converted to timestamp type, and returned.</p></li>
+<li><p>Oracle ODBC does not support the timezone type, so when SELECTing timezone data, the timezone is calculated as a local time, converted to timestamp type, and returned.</p></li>
 </ul>
-<p>Below is an example of converting Oracle DB’s time zone data to a local time zone when querying it with ODBC. The entered time zone is “+02:00”, converted to local time zone “+09:00”, and output as “PM 08:00”.</p>
+<p>Below is an example of converting Oracle DB’s timezone data to a local timezone when querying it with ODBC. The entered timezone is “+02:00”, converted to local timezone “+09:00”, and output as “PM 08:00”.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- oracle input</span>
 </span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">to_timestamp_tz</span><span class="p">(</span><span class="s1">'2021-07-25 12:34:56 +02:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'yyyy-mm-dd hh24:mi:ss tzh:tzm'</span><span class="p">));</span>
 </span><span id="line-3">
@@ -1103,7 +1103,7 @@ As in the example below, when performing a transaction, data is inserted into th
 <li><a :data-current="activeSection === '#mariadb-environment-configuration'" class="reference internal" href="#mariadb-environment-configuration">MariaDB Environment Configuration</a></li>
 </ul>
 </li>
-<li><a :data-current="activeSection === '#how-to-use-cubrid-dblink'" class="reference internal" href="#how-to-use-cubrid-dblink">How to use Cubrid DBLink</a></li>
+<li><a :data-current="activeSection === '#how-to-use-cubrid-dblink'" class="reference internal" href="#how-to-use-cubrid-dblink">How to use CUBRID DBLink</a></li>
 <li><a :data-current="activeSection === '#notice'" class="reference internal" href="#notice">Notice</a></li>
 <li><a :data-current="activeSection === '#constraints'" class="reference internal" href="#constraints">Constraints</a><ul>
 <li><a :data-current="activeSection === '#common-constraints'" class="reference internal" href="#common-constraints">Common Constraints</a></li>

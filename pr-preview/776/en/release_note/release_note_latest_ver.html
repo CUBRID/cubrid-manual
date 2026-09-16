@@ -1411,9 +1411,9 @@ h5 { font-size: 100%; }
 <blockquote>
 <div><ul class="simple">
 <li><p>“.” (dot) is not allowed in the object name.</p></li>
-<li><p>When using a query or utility command, it must be used as “[user name].object name”. (However, the user name can be omitted when querying the object of the logged-in user) (see <a class="reference internal" href="../sql/user_schema.html"><span class="doc">User Schema</span></a>)</p></li>
-<li><p>Changed to include user name in info schema and show full tables results. (see <a class="reference internal" href="../sql/query/show.html"><span class="doc">SHOW</span></a>)</p></li>
-<li><p>The loaddb file prior to 11.2 must be modified to “user name.table name” so that it can be executed in 11.2, or loaddb can be executed by setting the --no-user-specified-name option. (see <a class="reference internal" href="../admin/migration.html#loaddb"><span class="std std-ref">loaddb</span></a>)</p></li>
+<li><p>When using a query or utility command, it must be used as “[username].object name”. (However, the username can be omitted when querying the object of the logged-in user) (see <a class="reference internal" href="../sql/user_schema.html"><span class="doc">User Schema</span></a>)</p></li>
+<li><p>Changed to include username in info schema and show full tables results. (see <a class="reference internal" href="../sql/query/show.html"><span class="doc">SHOW</span></a>)</p></li>
+<li><p>The loaddb file prior to 11.2 must be modified to “username.table name” so that it can be executed in 11.2, or loaddb can be executed by setting the --no-user-specified-name option. (see <a class="reference internal" href="../admin/migration.html#loaddb"><span class="std std-ref">loaddb</span></a>)</p></li>
 </ul>
 </div></blockquote>
 </section>
@@ -1635,7 +1635,7 @@ h5 { font-size: 100%; }
 <section id="since-the-2008-r4-1-version-the-default-value-of-cci-default-autocommit-has-been-on-cubridsus-5879">
 <h5><a class="toc-backref" href="#id211" role="doc-backlink">Since the 2008 R4.1 version, the Default value of CCI_DEFAULT_AUTOCOMMIT has been ON(CUBRIDSUS-5879)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#since-the-2008-r4-1-version-the-default-value-of-cci-default-autocommit-has-been-on-cubridsus-5879"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h5>
 <ul class="simple">
-<li><p>The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application’s auto commit mode is suitable for this.</p></li>
+<li><p>The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the autocommit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application’s autocommit mode is suitable for this.</p></li>
 </ul>
 </section>
 <section id="from-the-2008-r4-0-version-the-options-and-parameters-that-use-the-unit-of-pages-were-changed-to-use-the-unit-of-volume-size-cubridsus-5136">
@@ -1808,7 +1808,7 @@ Value (unit: byte)</p></th>
 <section id="not-allowed-to-include-in-a-database-name-cubridsus-2828">
 <h5><a class="toc-backref" href="#id222" role="doc-backlink">Not allowed to include @ in a database name(CUBRIDSUS-2828)</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#not-allowed-to-include-in-a-database-name-cubridsus-2828"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h5>
 <ul class="simple">
-<li><p>If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.</p></li>
+<li><p>If @ is included in a database name, it can be interpreted that a hostname has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.</p></li>
 </ul>
 </section>
 </section>

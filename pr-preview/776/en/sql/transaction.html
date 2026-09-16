@@ -272,9 +272,9 @@
 <p class="admonition-title">Note</p>
 <p>In CUBRID, an auto-commit mode is set by default for transaction management.</p>
 </div>
-<p>An auto-commit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs. Such auto commit modes are supported in any interfaces.</p>
-<p>In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using <strong>CCI_DEFAULT_AUTOCOMMIT</strong> upon startup of an application. If configuration on broker parameter is omitted, the default value is set to <strong>ON</strong>. To change auto-commit mode, use the following functions by interface: <strong>cci_set_autocommit</strong> () for CCI interface and <strong>cubrid_set_autocommit</strong> () for PHP interface.</p>
-<p>For session command (<strong>;AUtocommit</strong>) which enables auto-commit configuration in CSQL Interpreter, see <a class="reference internal" href="../csql.html#csql-session-commands"><span class="std std-ref">Session Commands</span></a>.</p>
+<p>An autocommit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs. Such autocommit modes are supported in any interfaces.</p>
+<p>In CCI, PHP, ODBC and OLE DB interfaces, you can configure autocommit mode by using <strong>CCI_DEFAULT_AUTOCOMMIT</strong> upon startup of an application. If configuration on broker parameter is omitted, the default value is set to <strong>ON</strong>. To change autocommit mode, use the following functions by interface: <strong>cci_set_autocommit</strong> () for CCI interface and <strong>cubrid_set_autocommit</strong> () for PHP interface.</p>
+<p>For session command (<strong>;AUtocommit</strong>) which enables autocommit configuration in CSQL Interpreter, see <a class="reference internal" href="../csql.html#csql-session-commands"><span class="std std-ref">Session Commands</span></a>.</p>
 </section>
 <section id="transaction-rollback">
 <h2>Transaction Rollback<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#transaction-rollback" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#transaction-rollback'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
@@ -407,7 +407,7 @@ The following example shows how to roll back to <em>SP1</em>.</p>
 <li><p>Driver closes the result set, i.e. rs.close()</p></li>
 <li><p>Driver closes the statement, i.e. stmt.close()</p></li>
 <li><p>Driver disconnects the connection.</p></li>
-<li><p>Transaction aborts, for instance, application explicitly calls rollback(), auto rollback due to a query failure under auto-commit mode.</p></li>
+<li><p>Transaction aborts, for instance, application explicitly calls rollback(), auto rollback due to a query failure under autocommit mode.</p></li>
 </ul>
 <p><strong>Relationship with CAS</strong></p>
 <p>When the connection between an application and the CAS is closed, all result sets are automatically closed even if you have set cursor holdability in the application. The setting value of
@@ -491,7 +491,7 @@ Table Being Retrieved</p></th>
 <section id="versioning-visibility-and-snapshot">
 <h2>Versioning, visibility and snapshot<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#versioning-visibility-and-snapshot" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#versioning-visibility-and-snapshot'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>MVCC maintains multiple versions for each database row. Each version is marked by its inserter and deleter with MVCCID’s - unique identifiers for writer transactions. These markers are useful to identify the author of a change and to place the change on a timeline.</p>
-<p>When a transaction <em>T1</em> inserts a new row, it creates its first version and sets its unique identifier <em>MVCCID1</em> as insert id. The MVCCID is stored as meta-data in record header:</p>
+<p>When a transaction <em>T1</em> inserts a new row, it creates its first version and sets its unique identifier <em>MVCCID1</em> as insert id. The MVCCID is stored as metadata in record header:</p>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>OTHER META-DATA</p></td>
@@ -671,7 +671,7 @@ Table Being Retrieved</p></th>
 <td></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- even though inserter did commit, this snapshot still can't see the row</span>
+<td><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- even though inserter did commit, this snapshot still cannot see the row</span>
 </span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span><span class="p">;</span>
 </span><span id="line-3">
 </span><span id="line-4"><span class="n">There</span><span class="w"> </span><span class="k">are</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">results</span><span class="p">.</span>

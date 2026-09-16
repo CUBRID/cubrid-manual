@@ -701,7 +701,7 @@ INSTR
     
 .. note::
 
-    In the earlier versions of CUBRID 9.0, position value is returned in byte unit, not character unit. When a multi-byte character set is used, the number of bytes representing one character is different; so the return value may not the same.
+    In the earlier versions of CUBRID 9.0, position value is returned in byte unit, not character unit. When a multibyte character set is used, the number of bytes representing one character is different; so the return value may not the same.
 
 .. code-block:: sql
 
@@ -938,7 +938,7 @@ LPAD
 
 .. note::
 
-    In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multi-byte character set environment. If *n* is truncated up to the first byte representing a character according to a value of *char1*, the last byte is removed and a space character (1 byte) is added to the left because the last character cannot be represented normally. When the value is **NULL**, **NULL** is returned as its result.
+    In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multibyte character set environment. If *n* is truncated up to the first byte representing a character according to a value of *char1*, the last byte is removed and a space character (1 byte) is added to the left because the last character cannot be represented normally. When the value is **NULL**, **NULL** is returned as its result.
 
 .. code-block:: sql
 
@@ -1196,7 +1196,7 @@ POSITION
 
     .. note::
     
-        The location is returned in the unit of byte, not the character, in version lower than CUBRID 9.0. The multi-byte charset uses different numbers of bytes to express one character, so the result value may differ.
+        The location is returned in the unit of byte, not the character, in version lower than CUBRID 9.0. The multibyte charset uses different numbers of bytes to express one character, so the result value may differ.
 
     :param substring: Specifies the character string whose position is to be returned. If the value is an empty character, 1 is returned. If the value is **NULL**, **NULL** is returned.
     :rtype: INT
@@ -1436,7 +1436,7 @@ RPAD
 
 .. note::
 
-    In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multi-byte character set environment. If *n* is truncated up to the first byte representing a character according to a value of *char1*, the last byte is removed and a space character (1 byte) is added to the right because the last character cannot be represented normally. When the value is **NULL**, **NULL** is returned as its result.
+    In versions lower than CUBRID 9.0, a single character is processed as 2 or 3 bytes in a multibyte character set environment. If *n* is truncated up to the first byte representing a character according to a value of *char1*, the last byte is removed and a space character (1 byte) is added to the right because the last character cannot be represented normally. When the value is **NULL**, **NULL** is returned as its result.
 
 .. code-block:: sql
 
@@ -1556,7 +1556,7 @@ SPACE
 
     The **SPACE** function returns as many empty strings as the number specified. The return value is a **VARCHAR** type.
 
-    :param N: Space count. It cannot be greater than the value specified in the system parameter, **string_max_size_bytes** (default 1048576). If it exceeds the specified value, **NULL** will be returned. The maximum value is 33,554,432; if this length is exceeded, **NULL** will be returned. If you enter 0 or a negative number, an empty string will be returned; if you enter a type that can't be converted to a numeric value, an error will be returned.
+    :param N: Space count. It cannot be greater than the value specified in the system parameter, **string_max_size_bytes** (default 1048576). If it exceeds the specified value, **NULL** will be returned. The maximum value is 33,554,432; if this length is exceeded, **NULL** will be returned. If you enter 0 or a negative number, an empty string will be returned; if you enter a type that cannot be converted to a numeric value, an error will be returned.
     :rtype: STRING
 
 .. code-block:: sql
@@ -1680,7 +1680,7 @@ SUBSTR
 
     .. note::
     
-        In the previous versions of CUBRID 9.0, the starting position and string length are calculated in byte unit, not in character unit; therefore, in a multi-byte character set, you must specify the parameter in consideration of the number of bytes representing a single character.
+        In the previous versions of CUBRID 9.0, the starting position and string length are calculated in byte unit, not in character unit; therefore, in a multibyte character set, you must specify the parameter in consideration of the number of bytes representing a single character.
 
     :param string: Specifies the input character string. If the input value is **NULL**, **NULL** is returned.
     :param position: Specifies the position from where the string is to be extracted in bytes. Even though the position of the first character is specified as 1 or a negative number, it is considered as 1. If a value greater than the string length or **NULL** is specified, **NULL** is returned.

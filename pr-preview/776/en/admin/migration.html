@@ -362,7 +362,7 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-unloaddb-output-prefix">
 <span class="sig-name descname"><span class="pre">--output-prefix</span></span><span class="sig-prename descclassname"><span class="pre">=PREFIX</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-output-prefix" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-output-prefix'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes <em>abcd_schema</em> and the object file name becomes <em>abcd_objects</em>. If the <strong>--output-prefix</strong> option is not specified, the name of the database to be unloaded is used as the prefix.</p>
+<dd><p>This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema filename becomes <em>abcd_schema</em> and the object filename becomes <em>abcd_objects</em>. If the <strong>--output-prefix</strong> option is not specified, the name of the database to be unloaded is used as the prefix.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">prefix</span> <span class="n">abcd</span> <span class="n">demodb</span>
 </span></code></pre></div>
 </div>
@@ -428,7 +428,7 @@ When determining the number of records in the target table, this option obtains 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-unloaddb-datafile-per-class">
 <span class="sig-name descname"><span class="pre">--datafile-per-class</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-datafile-per-class" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-datafile-per-class'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as <em>&lt;Database Name&gt;_&lt;Table Name&gt;</em>_ <strong>objects</strong> for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see <a class="reference internal" href="#howtowrite-loadfile"><span class="std std-ref">How to Write Files to Load Database</span></a>).</p>
+<dd><p>This option specifies that the output file generated through unload operation creates a data file per each table. The filename is generated as <em>&lt;Database Name&gt;_&lt;Table Name&gt;</em>_ <strong>objects</strong> for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see <a class="reference internal" href="#howtowrite-loadfile"><span class="std std-ref">How to Write Files to Load Database</span></a>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">--</span><span class="n">datafile</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="k">class</span><span class="w"> </span><span class="nc">demodb</span>
 </span></code></pre></div>
 </div>
@@ -792,7 +792,7 @@ If this option is not specified, a single schema file containing all objects is 
 </dd></dl>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>You can change the order of schema files written in this file, but loading errors may occur if the order is wrong. For example, an error may occur if the PK file is loaded first while the file with CLASS information is not loaded. Therefore, in the list, the file name for loading CLASS information must be higher than the file for loading PK.</p>
+<p>You can change the order of schema files written in this file, but loading errors may occur if the order is wrong. For example, an error may occur if the PK file is loaded first while the file with CLASS information is not loaded. Therefore, in the list, the filename for loading CLASS information must be higher than the file for loading PK.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -828,7 +828,7 @@ If this option is not specified, a single schema file containing all objects is 
 </span></code></pre></div>
 </div>
 <p>The <em>class_name</em> specified by the <strong>%id</strong> command is the class name defined in the database, and <em>class_id</em> is the numeric identifier which is assigned for object reference. The <em>class_name</em> uses the <em>schema_name</em> as a prefix and the <em>schema_name</em> is the name of the schema in which the class is defined.
-The <em>schema_name</em> can be omitted, and if the <em>schema_name</em> is omitted, the user name of the database specified with the -u option is used as the schema name.</p>
+The <em>schema_name</em> can be omitted, and if the <em>schema_name</em> is omitted, the username of the database specified with the -u option is used as the schema name.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">employee</span><span class="p">]</span> <span class="mi">21</span>
 </span><span id="line-2"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">office</span><span class="p">]</span> <span class="mi">22</span>
 </span><span id="line-3"><span class="o">%</span><span class="nb">id</span> <span class="p">[</span><span class="n">project</span><span class="p">]</span> <span class="mi">23</span>

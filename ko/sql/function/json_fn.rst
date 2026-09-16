@@ -489,7 +489,7 @@ JSON_EXTRACT
   해당 경로로 지정된 *json_doc* 로부터 json 요소를 반환한다.
   json 경로 인자가 와일드카드를 포함하는 경우 와일드카드에 의해 포함될 수 있는 모든 경로의 지정된 json 요소가 json 배열 결과로 반환된다.
   와일드카드를 사용하지 않고 json 경로에서 하나의 요소만 발견된 경우 하나의 json 요소만 반환되며, 그렇지 않은 경우 발견된 json 요소는 json 배열로 구성하여 반환된다.
-  json 경로가 **NULL** 이거나 유효하지 않은 경우 혹은 *json_doc* 인자가 유효하지 않은 경우 에러가 반환된다.
+  json 경로가 **NULL** 이거나 유효하지 않은 경우 혹은 *json_doc* 인자가 유효하지 않은 경우 오류가 반환된다.
   json 요소가 발견되지 않거나 json_doc이 **NULL** 인 경우 **NULL** 을 반환한다.
 
 .. code-block:: sql
@@ -512,7 +512,7 @@ JSON_EXTRACT
     ======================
       "["a","b"]" -- '$.a[0]'와 '$.a[1]'는 json 배열로 구성하여, ["a","b"]를 형성한다.
 
-와일드 카드'.*'를 포함한 이전의 쿼리를 '.a'로 바꾸면 '$.c[0]'가 일치할 것인데, 이것은 정확히 객체 키(key) 식별자와 배열 인덱스가 있는 모든 json 경로와 일치할 것이다.
+와일드 카드'.*'를 포함한 이전의 질의를 '.a'로 바꾸면 '$.c[0]'가 일치할 것인데, 이것은 정확히 객체 키(key) 식별자와 배열 인덱스가 있는 모든 json 경로와 일치할 것이다.
 
 .. code-block:: sql
 
@@ -553,7 +553,7 @@ JSON_EXTRACT
 
 .. function:: json_doc -> json path
 
-  *json_doc* 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT** 의 별칭 연산자.
+  *json_doc* 인자가 하나의 칼럼으로 제한된 두 개의 인자를 가지는 **JSON_EXTRACT** 의 별칭 연산자.
   json 경로가 **NULL** 이거나 유효하지 않은 경우 오류를 반환한다.
   **NULL** *json_doc* 인자가 적용된 경우에는 **NULL** 을 반환한다.
 
@@ -580,7 +580,7 @@ JSON_EXTRACT
 
 .. function:: json_doc ->> json path
 
-   **JSON_UNQUOTE** 의 별칭 (json_doc->json 경로). 본 연산자는 컬럼인 *json_doc* 인자에만 적용 할 수 있다.
+   **JSON_UNQUOTE** 의 별칭 (json_doc->json 경로). 본 연산자는 칼럼인 *json_doc* 인자에만 적용 할 수 있다.
    json 경로가 **NULL** 이거나 유효하지 않은 경우 오류가 발생한다.
    **NULL** *json_doc* 인자에 적용된 경우 **NULL** 을 반환한다.
 

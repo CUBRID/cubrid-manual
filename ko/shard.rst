@@ -9,9 +9,9 @@ Database Sharding
 
 **수평 분할(Horizontal Partitioning)**\이란, 동일한 스키마를 가진 데이터를 행(row) 단위로 나누어 두 개 이상의 테이블에 분산 저장하는 방식을 말한다.
 
-예를 들어, 하나의 ‘User Table’을 나이 기준으로 분할하여 13세 미만의 유저는 ‘User Table #0’, 13세 이상의 유저는 ‘User Table #1’에 저장하도록 설계할 수 있다.
+예를 들어, 하나의 ‘User Table’을 나이 기준으로 분할하여 13세 미만의 사용자는 ‘User Table #0’, 13세 이상의 사용자는 ‘User Table #1’에 저장하도록 설계할 수 있다.
 
-수평 분할을 적용하면 각 테이블의 데이터 및 인덱스 크기가 작아져 쿼리 성능이 향상되며, 작업의 동시성도 높아져 전체적인 성능 개선을 기대할 수 있다.
+수평 분할을 적용하면 각 테이블의 데이터 및 인덱스 크기가 작아져 질의 성능이 향상되며, 작업의 동시성도 높아져 전체적인 성능 개선을 기대할 수 있다.
 
 수평 분할은 일반적으로 하나의 데이터베이스 내에서 이루어지며, 대용량 데이터를 효과적으로 관리하고 시스템 부하를 분산시키는 데 유용하다.
 
@@ -19,7 +19,7 @@ Database Sharding
 
 **database sharding**
 
-database sharding은 물리적으로 다른 데이터베이스에 데이터를 수평 분할(horizontal partitioning) 방식으로 분산 저장하고 조회하는 방법을 말한다. 예를 들어 'User Table'이 여러 데이터베이스에 있을 때 13세 미만의 유저를 0번 데이터베이스에 13세 이상의 유저를 1번 데이터베이스에 저장되도록 하는 방식이다. database sharding은 성능상 이유뿐 아니라 하나의 데이터베이스 인스턴스에 넣을 수 없는 큰 데이터를 분산하여 처리하기 위해 사용된다.
+database sharding은 물리적으로 다른 데이터베이스에 데이터를 수평 분할(horizontal partitioning) 방식으로 분산 저장하고 조회하는 방법을 말한다. 예를 들어 'User Table'이 여러 데이터베이스에 있을 때 13세 미만의 사용자를 0번 데이터베이스에 13세 이상의 사용자를 1번 데이터베이스에 저장되도록 하는 방식이다. database sharding은 성능상 이유뿐 아니라 하나의 데이터베이스 인스턴스에 넣을 수 없는 큰 데이터를 분산하여 처리하기 위해 사용된다.
 
 분할된 각 데이터베이스를 shard 또는 database shard라고 부른다.
 
@@ -230,7 +230,7 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
 
 **제약 사항**
 
-    2PC(2 Phase commit)는 불가능하며, 이 때문에 하나의 트랜잭션 중 여러 개의 shard DB로 질의를 수행하는 경우 에러 처리된다.
+    2PC(2 Phase commit)는 불가능하며, 이 때문에 하나의 트랜잭션 중 여러 개의 shard DB로 질의를 수행하는 경우 오류 처리된다.
 
 빠른 시작
 =========
@@ -687,7 +687,7 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
                                            const void *val, int val_size);
 
     *   해시 함수의 반환 값은 **shard_key.txt** 설정 파일의 해시 결과 범위에 반드시 포함되어야 한다.
-    *   라이브러리를 빌드하기 위해서는 반드시 **$CUBRID/include/shard_key.h** 파일을 include해야 한다. 이 파일에서 반환 가능한 에러 코드 등 자세한 내용도 확인할 수 있다.
+    *   라이브러리를 빌드하기 위해서는 반드시 **$CUBRID/include/shard_key.h** 파일을 include해야 한다. 이 파일에서 반환 가능한 오류 코드 등 자세한 내용도 확인할 수 있다.
 
     **cubrid_broker.conf 설정 파일 변경**
 
@@ -834,7 +834,7 @@ cubrid broker test 명령을 이용하여 설정이 정상 동작하는지 테�
 CUBRID SHARD 로그
 =================
 
-SHARD 구동과 관련된 로그에는 접속 로그, 프록시 로그, SQL 로그, 에러 로그가 있다. 각각 로그의 저장 디렉터리 변경은 SHARD 환경 설정 파일(**cubrid_broker.conf**) 의 **LOG_DIR**, **ERROR_LOG_DIR**, **PROXY_LOG_DIR** 파라미터를 통해 설정할 수 있다.
+SHARD 구동과 관련된 로그에는 접속 로그, 프록시 로그, SQL 로그, 오류 로그가 있다. 각각 로그의 저장 디렉터리 변경은 SHARD 환경 설정 파일(**cubrid_broker.conf**) 의 **LOG_DIR**, **ERROR_LOG_DIR**, **PROXY_LOG_DIR** 파라미터를 통해 설정할 수 있다.
 
 SHARD PROXY 로그
 ----------------
@@ -878,9 +878,9 @@ SHARD PROXY 로그
 *   프록시 로그 레벨 항목
 
     *   NONE or OFF: 로그를 남기지 않는다.
-    *   ERROR(default): 내부적으로 에러가 발생하여 정상적으로 처리되지 못하는 경우
+    *   ERROR(default): 내부적으로 오류가 발생하여 정상적으로 처리되지 못하는 경우
     *   TIMEOUT: session timeout이나 query timeout 등의 timeout
-    *   NOTICE: 힌트 없는 query 및 기타 에러는 아닌 경우
+    *   NOTICE: 힌트 없는 query 및 기타 오류는 아닌 경우
     *   SHARD: client 의 request가 어떤 shard의 어떤 CAS로 갔는지, 그것이 다시 client response 되었는지 등의 scheduling
     *   SCHEDULE: 힌트 parsing 및 hash를 통해 shard key id 가져오는 것 등의 shard processing
     *   ALL: 모든 로그
@@ -906,7 +906,7 @@ SHARD CAS 로그
     13-06-21 10:50:28.259 (0) auto_rollback
     13-06-21 10:50:28.259 (0) auto_rollback 0
 
-**에러 로그**
+**오류 로그**
 
 *   파라미터 : **ERROR_LOG_DIR**
 *   설명 : CUBRID의 경우 cs library에서 EID 및 error string을 해당 파일에 logging한다.
@@ -950,7 +950,7 @@ auto increment 속성 또는 SERIAL 등의 값이 각 shard DB 내에서만 유�
 
 **SHARD 힌트 구문이 작성된 DDL 구문은 지원 안함**
 
-SHARD 구성 환경에서 스키마 생성 및 변경 등의 DDL구문은 SHARD 힌트가 지원 되지 않으므로 각각의 SHARD DB에 접속하여 스키마 생성 및 변경을 처리하여야 한다. shard_id(0)은 정상적으로 처리되며, shard_id(1)부터는 에러를 발생시킨다. 
+SHARD 구성 환경에서 스키마 생성 및 변경 등의 DDL구문은 SHARD 힌트가 지원 되지 않으므로 각각의 SHARD DB에 접속하여 스키마 생성 및 변경을 처리하여야 한다. shard_id(0)은 정상적으로 처리되며, shard_id(1)부터는 오류를 발생시킨다. 
 
 오류 예시)
 

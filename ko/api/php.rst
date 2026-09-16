@@ -26,7 +26,7 @@ Linux
 
 **기본 환경**
 
-*   운영체제: Linux: 32 비트 또는 64비트
+*   운영 체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
 *   PHP: 5.2 또는 5.3( https://www.php.net/downloads.php )
 *   PHP: 5.x, 또는 7.x (https://www.php.net/downloads.php)
@@ -34,7 +34,7 @@ Linux
 
 **PECL을 이용한 설치**
 
-**PECL** 이 설치되어 있다면, **PECL** 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PHP 드라이버를 설치할 수 있다.
+**PECL** 이 설치되어 있다면, **PECL** 이 소스 코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PHP 드라이버를 설치할 수 있다.
 
 .. FIXME: **PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl\ 을 참고하여 PECL을 설치한다.
 
@@ -54,7 +54,7 @@ Linux
 
     CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 **cubrid.ini** 파일을 생성하고 내용에 **extension=cubrid.so** 를 입력하여 **/etc/php.d** 디렉터리에 저장한다.
 
-    다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. 
+    다른 운영 체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. 
     
     ::
 
@@ -102,7 +102,7 @@ Windows
 **기본 환경**
 
 *   CUBRID: 9.3.x 이상
-*   운영체제: Windows 32 비트 또는 64비트
+*   운영 체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
 *   PHP: 5.6.x, 7.1.x 또는 7.4.x(https://windows.php.net/download/)
 *   PHP 7.1.x 또는 7.4.x 의 경우 32bit 또는 64bit용 Microsoft Visual C ++ 2015 재배포 가능 패키지를 설치해야 한다.
@@ -171,7 +171,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 **빌드된 드라이버 다운로드 및 설치**
 
-운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 https://www.cubrid.org/downloads#php 에서 다운로드한다.
+운영 체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 https://www.cubrid.org/downloads#php 에서 다운로드한다.
 
 PHP 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
@@ -204,14 +204,14 @@ Linux
 **환경 설정**
 
 *   CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 **%CUBRID%** 가 정의되어 있는지 확인한다.
-*   PHP 5.6.x , 7.1.x 또는 7.4.x 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. https://www.php.net/downloads.php
+*   PHP 5.6.x , 7.1.x 또는 7.4.x 소스 코드: PHP 5.3 소스 코드를 다음 주소에서 다운로드한다. https://www.php.net/downloads.php
 *   Apache 2: PHP 테스트에 Apache 2를 사용할 수 있다.
-*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스 코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스 코드를 다운로드한다.
 *   Linux 또는 Mac 에서는 CCI 드라이버 빌드를 하려면 GNU Developer Toolset 8 또는 그 이상이 필요하다.
 
 **CUBRID PHP 드라이브 빌드**
 
-#.  PHP 소스코드를 압축 해제하여 해당 디렉터리로 이동한다. ::
+#.  PHP 소스 코드를 압축 해제하여 해당 디렉터리로 이동한다. ::
     
         $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
         $> cd php-<version>/ext 
@@ -261,7 +261,7 @@ Linux
 
 phpize는 PHP 확장의 컴파일을 준비하는 셸 스크립트로, 일반적으로 PHP를 설치할 때 자동으로 설치된다. 만약 phpize가 설치되어 있지 않으면 다음과 같은 방법으로 설치할 수 있다.
 
-#.  PHP 소스코드를 다운로드한다. PHP 확장을 사용할 버전과 일치하는 버전을 다운로드해야 한다. 다운로드한 PHP 소스코드를 압축 해제하고 소스코드의 최상위 디렉터리로 이동한다. ::
+#.  PHP 소스 코드를 다운로드한다. PHP 확장을 사용할 버전과 일치하는 버전을 다운로드해야 한다. 다운로드한 PHP 소스 코드를 압축 해제하고 소스 코드의 최상위 디렉터리로 이동한다. ::
     
         $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
         $> cd php-<version>
@@ -302,19 +302,19 @@ PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파
 
     .. image:: /images/image57.png
 
-*   PHP 5.6.x 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 5.6.x 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP5_SRC%** 를 추가하여 PHP 5.6.x 소스코드의 경로를 값으로 설정한다. VC11 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP5_SRC)** 가 사용되는 것을 볼 수 있다.
+*   PHP 5.6.x 소스 코드: 바이너리 버전에 맞는 소스 코드를 다운로드해야 한다. PHP 5.6.x 소스 코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP5_SRC%** 를 추가하여 PHP 5.6.x 소스 코드의 경로를 값으로 설정한다. VC11 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP5_SRC)** 가 사용되는 것을 볼 수 있다.
 
     .. image:: /images/image58.png
 
-*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스 코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스 코드를 다운로드한다.
 
 .. note::
 
-    PHP 5.6.x을 소스코드에서 빌드할 필요는 없지만 PHP 5.6.x 프로젝트를 설정해야 한다. PHP 5.6.x 프로젝트를 설정하지 않으면 VC11에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild 
+    PHP 5.6.x을 소스 코드에서 빌드할 필요는 없지만 PHP 5.6.x 프로젝트를 설정해야 한다. PHP 5.6.x 프로젝트를 설정하지 않으면 VC11에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild 
 
 **CUBRID PHP 드라이버 빌드**
 
-#.  다운로드한 CUBRID PHP 드라이버 소스코드의 **\\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
+#.  다운로드한 CUBRID PHP 드라이버 소스 코드의 **\\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
     
     .. image:: /images/image59.png
     
@@ -341,19 +341,19 @@ PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파
 
     .. image:: /images/image61.png
 
-*   PHP 7.1.x 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP7_SRC%** 를 추가하여 PHP 소스코드의 경로를 값으로 설정한다. VC11 프로젝트의 [Project Settings]을 열면 [C/C++] 탭의 [Additional include directories]에서 **$(PHP7_SRC)** 가 사용되는 것을 볼 수 있다.
+*   PHP 7.1.x 소스 코드: 바이너리 버전에 맞는 소스 코드를 다운로드해야 한다. PHP 소스 코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP7_SRC%** 를 추가하여 PHP 소스 코드의 경로를 값으로 설정한다. VC11 프로젝트의 [Project Settings]을 열면 [C/C++] 탭의 [Additional include directories]에서 **$(PHP7_SRC)** 가 사용되는 것을 볼 수 있다.
 
     .. image:: /images/image62.png
 
-*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스 코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스 코드를 다운로드한다.
 
 .. note::
 
-    PHP 7.1.x 소스코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에서 PHP 7.1.x를 설정해야 한다. PHP 7.1.x 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
+    PHP 7.1.x 소스 코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에서 PHP 7.1.x를 설정해야 한다. PHP 7.1.x 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
 
 **CUBRID PHP 드라이버 빌드**
 
-#.  다운로드한 CUBRID PHP 드라이버 소스코드에서 **php_cubrid.dsp** 파일을 열고, 메뉴에서 [Build] > [Set Active Configuration]를 선택한다. There are four configurations (Win32 Release_TS, Win32 Release, Win32 Debug_TS and Win32 Debug). Choose what you want, then close the [Set Active Project Configuration].
+#.  다운로드한 CUBRID PHP 드라이버 소스 코드에서 **php_cubrid.dsp** 파일을 열고, 메뉴에서 [Build] > [Set Active Configuration]를 선택한다. There are four configurations (Win32 Release_TS, Win32 Release, Win32 Debug_TS and Win32 Debug). Choose what you want, then close the [Set Active Project Configuration].
     
     .. image:: /images/image63.png
     
@@ -361,7 +361,7 @@ PHP의 최신 버전은 VC11, VC14 (각각 Visual Studio 2012 또는 2015 컴파
     
     .. image:: /images/image64.png
     
-#.  <F7> 키를 눌러 소스코드를 컴파일한다.
+#.  <F7> 키를 눌러 소스 코드를 컴파일한다.
     
 #.  **php_cubrid.dll** 파일을 빌드한 후에는 PHP가 **php_cubrid.dll** 파일을 PHP 확장으로 인식하도록 다음 작업을 수행한다.
 
@@ -407,15 +407,15 @@ Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php
 
 *   64-bit Windows 용 PHP 5.6.x 또는 7.1.x 바이너리 : VC11 또는 VC14 x64 이용하여 PHP를 빌드 할 수 있다. x64 Non Thread Safe와 x64 Thread Safe를 모두 사용할 수 있다. 설치 한 후 시스템 환경 변수 **%PHPRC%** 의 값이 올바르게 설정되어 있는지 확인 한다.
 
-*   PHP 5.6.x 소스: 바이너리 버전에 맞는 소스코드를  소스코드를 다운로드해야 한다. PHP 5.6.x 소스를 압축 해제한 후 시스템 환경 변수에 **%PHP5_SRC%** 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정해야 한다. VC11 [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Include Directories]에서 **$(PHP5_SRC)** 를 볼 수 있다.
+*   PHP 5.6.x 소스: 바이너리 버전에 맞는 소스 코드를  소스 코드를 다운로드해야 한다. PHP 5.6.x 소스를 압축 해제한 후 시스템 환경 변수에 **%PHP5_SRC%** 를 추가하고 해당 값에 PHP 5.6.x 소스 코드의 경로로 설정해야 한다. VC11 [Property Pages] 대화 상자의 [C/C++] 에서 [General]을 선택한다. [Additional Include Directories]에서 **$(PHP5_SRC)** 를 볼 수 있다.
 
-*   PHP 7.1.x 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 7.1.x 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP7_SRC%** 를 추가하여 PHP 7.1.x 소스코드의 경로를 값으로 설정한다. VC14 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP7_SRC)** 가 사용되는 것을 볼 수 있다.
+*   PHP 7.1.x 소스 코드: 바이너리 버전에 맞는 소스 코드를 다운로드해야 한다. PHP 7.1.x 소스 코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP7_SRC%** 를 추가하여 PHP 7.1.x 소스 코드의 경로를 값으로 설정한다. VC14 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP7_SRC)** 가 사용되는 것을 볼 수 있다.
 
-*   CUBRID PHP 드라이버 소스코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스 코드: https://www.cubrid.org/downloads#php 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스 코드를 다운로드한다.
 
 .. note::
 
-    PHP 7.1.x을 소스코드에서 빌드할 필요는 없지만 PHP 7.1.x 프로젝트를 설정해야 한다.PHP 7.1.x 프로젝트를 설정하지 않으면 VC14에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
+    PHP 7.1.x을 소스 코드에서 빌드할 필요는 없지만 PHP 7.1.x 프로젝트를 설정해야 한다.PHP 7.1.x 프로젝트를 설정하지 않으면 VC14에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
 
 **PHP 5.6.x 또는 7.1.x 설정**
 
@@ -427,11 +427,11 @@ Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php
     
     .. image:: /images/image66.png
     
-#.  PHP 5.3 소스코드 디렉터리로 이동한 후 **buildconf** 을 실행하여 **configure.js** 파일을 생성한다.
+#.  PHP 5.3 소스 코드 디렉터리로 이동한 후 **buildconf** 을 실행하여 **configure.js** 파일을 생성한다.
     
     .. image:: /images/image67.png
     
-    또는 PHP 5.3 소스코드에서 **buildconf.bat** 파일을 실행해도 같은 동작을 수행한다.
+    또는 PHP 5.3 소스 코드에서 **buildconf.bat** 파일을 실행해도 같은 동작을 수행한다.
     
     .. image:: /images/image68.png
     
@@ -443,7 +443,7 @@ Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php
 
 **CUBRID PHP 드라이버 빌드**
 
-#.  다운로드한 CUBRID PHP 드라이버 소스코드의 **\\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
+#.  다운로드한 CUBRID PHP 드라이버 소스 코드의 **\\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
     
 #.  [Property Page] 대화 상자에서 [Configuration Manager]을 클릭한다.
     
@@ -469,7 +469,7 @@ Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php
     
     .. image:: /images/image76.png
     
-#.  <F7> 키를 눌러 소스코드를 컴파일하면 x64 PHP 드라이버 파일이 생성된다.
+#.  <F7> 키를 눌러 소스 코드를 컴파일하면 x64 PHP 드라이버 파일이 생성된다.
 
 PHP 프로그래밍
 ==============
@@ -579,7 +579,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **카탈로그 연산**
 
-클래스, 가상 클래스, 속성, 메서드, 트리거, 제약 조건 등 데이터베이스의 스키마 정보는 `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수를 호출하여 얻을 수 있다. `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수의 리턴 값은 2차원 배열이다.
+클래스, 가상 클래스, 속성, 메서드, 트리거, 제약 조건 등 데이터베이스의 스키마 정보는 `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수를 호출하여 얻을 수 있다. `cubrid_schema <https://www.php.net/manual/en/function.cubrid-schema.php>`_ () 함수의 반환 값은 2차원 배열이다.
 
 .. code-block:: php
 
@@ -593,11 +593,11 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
         print_r($fk);
     }
 
-**에러 처리**
+**오류 처리**
 
-에러가 발생하면 대부분의 PHP 인터페이스 함수는 에러 메시지를 출력하고 false나 -1을 반환한다. `cubrid_error_msg <https://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <https://www.php.net/manual/en/function.cubrid-error-code.php>`_ () 그리고 `cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수를 사용하면 각각 에러 메시지, 에러 코드, 에러 기능 코드를 확인할 수 있다.
+오류가 발생하면 대부분의 PHP 인터페이스 함수는 오류 메시지를 출력하고 false나 -1을 반환한다. `cubrid_error_msg <https://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <https://www.php.net/manual/en/function.cubrid-error-code.php>`_ () 그리고 `cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수를 사용하면 각각 오류 메시지, 오류 코드, 오류 기능 코드를 확인할 수 있다.
 
-`cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수의 결과 값은 **CUBRID_FACILITY_DBMS** (DBMS 에러), **CUBRID_FACILITY_CAS** (CAS 서버 에러), **CUBRID_FACILITY_CCI** (CCI 에러), **CUBRID_FACILITY_CLIENT** (PHP 모듈 에러) 중 하나이다.
+`cubrid_error_code_facility <https://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수의 결과 값은 **CUBRID_FACILITY_DBMS** (DBMS 오류), **CUBRID_FACILITY_CAS** (CAS 서버 오류), **CUBRID_FACILITY_CCI** (CCI 오류), **CUBRID_FACILITY_CLIENT** (PHP 모듈 오류) 중 하나이다.
 
 **OID 사용**
 

@@ -17,7 +17,7 @@ CAST
 
 .. function:: CAST (cast_operand AS cast_target)
 
-    **CAST** 연산자를 **SELECT** 문에서 어떤 값의 데이터 타입을 다른 데이터 타입으로 명시적으로 변환하는 데 사용할 수 있다. 조회 목록 또는 **WHERE** 절의 값 수식을 다른 데이터 타입으로 변환할 수 있다.
+    **CAST** 연산자를 **SELECT** 문에서 어떤 값의 데이터 타입을 다른 데이터 타입으로 명시적으로 변환하는 데 사용할 수 있다. 조회 리스트 또는 **WHERE** 절의 값 수식을 다른 데이터 타입으로 변환할 수 있다.
     
     :param cast_operand: 다른 타입으로 변환할 값을 선언한다.
     :param cast_target: 변환할 타입을 지정한다.

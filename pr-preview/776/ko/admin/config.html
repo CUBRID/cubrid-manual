@@ -1727,7 +1727,7 @@ INT_MAX *
 </div></blockquote>
 <p><strong>index_scan_oid_buffer_size</strong></p>
 <blockquote>
-<div><p><strong>index_scan_oid_buffer_size</strong>는 인덱스 스캔을 수행할 때 OID 목록의 임시 저장을 위한 버퍼의 크기를 설정하기 위한 파라미터이다. K 단위를 설정할 수 있으며, KB(kilobytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 4 * <a class="reference internal" href="#dpg"><span class="std std-ref">db_page_size</span></a> (db_page_size가 16K일 때 <strong>64K</strong>)이다. 최소값은 0.05 * <a class="reference internal" href="#dpg"><span class="std std-ref">db_page_size</span></a> (db_page_size가 16K일 때 약 <strong>1K</strong>)이고, 최대값은 16 * <a class="reference internal" href="#dpg"><span class="std std-ref">db_page_size</span></a> (db_page_size가 16K일 때 <strong>256K</strong>)이다.</p>
+<div><p><strong>index_scan_oid_buffer_size</strong>는 인덱스 스캔을 수행할 때 OID 리스트의 임시 저장을 위한 버퍼의 크기를 설정하기 위한 파라미터이다. K 단위를 설정할 수 있으며, KB(kilobytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 4 * <a class="reference internal" href="#dpg"><span class="std std-ref">db_page_size</span></a> (db_page_size가 16K일 때 <strong>64K</strong>)이다. 최소값은 0.05 * <a class="reference internal" href="#dpg"><span class="std std-ref">db_page_size</span></a> (db_page_size가 16K일 때 약 <strong>1K</strong>)이고, 최대값은 16 * <a class="reference internal" href="#dpg"><span class="std std-ref">db_page_size</span></a> (db_page_size가 16K일 때 <strong>256K</strong>)이다.</p>
 <p><strong>index_scan_oid_buffer_size</strong> 파라미터 값과 데이터베이스 생성 시 설정한 단위 페이지의 크기에 비례하여 OID 버퍼의 크기가 결정되고, 이러한 OID버퍼의 크기가 클수록 인덱스 스캔 비용이 증가하는 경향을 보인다. 이를 고려하여 <strong>index_scan_oid_buffer_size</strong> 파라미터 값을 조정할 수 있다.</p>
 </div></blockquote>
 <p id="max-agg-hash-size"><strong>max_agg_hash_size</strong></p>
@@ -1743,7 +1743,7 @@ INT_MAX *
 <p id="max-parallel-workers"><strong>max_parallel_workers</strong></p>
 <blockquote>
 <div><p><strong>max_parallel_workers</strong>는 서버 전체에서 동시에 실행할 수 있는 병렬 질의 워커(parallel query worker) 스레드의 최대 개수를 설정하는 파라미터이다. 기본값은 <strong>100</strong>이며, 최소값은 <strong>0</strong>, 최대값은 <strong>1000</strong>이다.</p>
-<p>이 파라미터가 <strong>0</strong>으로 설정되면 병렬 질의 기능이 비활성화된다. <strong>2 이상</strong>으로 설정하면 병렬 스캔(Parallel Scan; 힙/목록/인덱스), 병렬 부질의 실행(Parallel Subquery Execution), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort) 등 다양한 병렬 처리 기능을 사용할 수 있다.</p>
+<p>이 파라미터가 <strong>0</strong>으로 설정되면 병렬 질의 기능이 비활성화된다. <strong>2 이상</strong>으로 설정하면 병렬 스캔(Parallel Scan; 힙/리스트/인덱스), 병렬 부질의 실행(Parallel Subquery Execution), 병렬 해시 조인(Parallel Hash Join), 병렬 정렬(Parallel Sort) 등 다양한 병렬 처리 기능을 사용할 수 있다.</p>
 <p>서버는 <strong>전역 워커 풀(worker pool)</strong>을 통해 병렬 질의 실행 작업을 관리한다. 다수의 세션이 동시에 병렬 질의를 요청하거나 단일 세션 내에서 복합적인 병렬 연산이 수행되더라도 서버 전체에서 활성화된 병렬 워커의 총합은 <strong>max_parallel_workers</strong> 값을 초과할 수 없다.</p>
 <p>각 서버 스레드는 질의 실행 전에 <strong>병렬 질의 워커 매니저(parallel query worker manager)</strong>를 통해 필요한 워커 수를 미리 예약(reserve)하며, 작업 완료되면 즉시 해제(release)한다. 가용 워커가 부족하여 요청한 수를 모두 예약하지 못하면 실제 예약된 워커 수만큼만 병렬로 실행되며, 예약된 워커가 하나도 없으면 해당 질의는 일반적인 단일 스레드 실행 방식으로 수행된다.</p>
 <p>이 파라미터는 cubrid.conf에 설정한 후 서버를 재시작해야 적용되며, <strong>SET SYSTEM PARAMETERS</strong> 문으로는 변경할 수 없다.</p>
@@ -1762,7 +1762,7 @@ INT_MAX *
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>모든 질의를 병렬로 실행할 경우 서버 자원의 과도한 점유로 인해 시스템 전체의 성능 저하가 발생할 수 있습니다. 이를 방지하기 위해 옵티마이저는 병렬 처리 효율이 높은 질의를 선별 허용하는 <strong>처리량 규칙</strong>을 적용한다.</p>
+<p>모든 질의를 병렬로 실행할 경우 서버 자원의 과도한 점유로 인해 시스템 전체의 성능 저하가 발생할 수 있다. 이를 방지하기 위해 옵티마이저는 병렬 처리 효율이 높은 질의를 선별 허용하는 <strong>처리량 규칙</strong>을 적용한다.</p>
 </div>
 </div></blockquote>
 <p id="parallelism"><strong>parallelism</strong></p>
@@ -2963,7 +2963,7 @@ JSON 문서는 많은 메모리와 디스크 공간을 차지할 것이다.
 <p><strong>only_full_group_by</strong></p>
 <blockquote>
 <div><p><strong>only_full_group_by</strong>는 <strong>GROUP BY</strong> 절 사용에 관한 확장된 문법의 사용 여부를 설정하는 파라미터이다.</p>
-<p>이 파라미터 값이 no이면 확장된 문법이 적용되므로 <strong>GROUP BY</strong> 절에 명시되지 않은 칼럼을 <strong>SELECT</strong> 칼럼 목록에 명시할 수 있고, 이 값이 yes이면 <strong>GROUP BY</strong> 절에 명시된 칼럼만 <strong>SELECT</strong> 칼럼 목록에 명시할 수 있다.</p>
+<p>이 파라미터 값이 no이면 확장된 문법이 적용되므로 <strong>GROUP BY</strong> 절에 명시되지 않은 칼럼을 <strong>SELECT</strong> 칼럼 리스트에 명시할 수 있고, 이 값이 yes이면 <strong>GROUP BY</strong> 절에 명시된 칼럼만 <strong>SELECT</strong> 칼럼 리스트에 명시할 수 있다.</p>
 <p>기본값은 <strong>no</strong> 이므로, SQL 표준에 따라 질의를 수행하려면 <strong>only_full_group_by</strong> 파라미터 값을 yes로 설정한다. 이 경우에는 확장된 문법이 적용되지 않으므로 실행 결과로 아래와 같은 오류가 출력된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Attributes</span> <span class="n">exposed</span> <span class="ow">in</span> <span class="n">aggregate</span> <span class="n">queries</span> <span class="n">must</span> <span class="n">also</span> <span class="n">appear</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">group</span> <span class="n">by</span> <span class="n">clause</span><span class="o">.</span>
 </span></code></pre></div>
@@ -3239,7 +3239,7 @@ JSON 문서는 많은 메모리와 디스크 공간을 차지할 것이다.
 <p><strong>stored_procedure_return_numeric_size</strong></p>
 <blockquote>
 <div><p><strong>stored_procedure_return_numeric_size</strong> 는 저장 프로시저에서 NUMERIC타입으로 반환되는 값의 정밀도와 스케일을 설정하는 파라미터이다.
-설정 방식은 양의 정수 목록으로, 정밀도와 스케일을 각각 지정할 수 있다. 예를 들면, 정밀도를 15, 스케일을 10으로 설정하는 경우 15,10 으로 지정하면 된다. 기본 값은 38,15 이며, 값의 지정 범위는 정밀도의 경우 1 ~ 38, 스케일은 0 ~ 38이다. 그리고 정밀도 보다 큰 스케일 값은 지정할 수 없다.</p>
+설정 방식은 양의 정수 리스트로, 정밀도와 스케일을 각각 지정할 수 있다. 예를 들면, 정밀도를 15, 스케일을 10으로 설정하는 경우 15,10 으로 지정하면 된다. 기본 값은 38,15 이며, 값의 지정 범위는 정밀도의 경우 1 ~ 38, 스케일은 0 ~ 38이다. 그리고 정밀도 보다 큰 스케일 값은 지정할 수 없다.</p>
 </div></blockquote>
 <p><strong>string_max_size_bytes</strong></p>
 <blockquote>
@@ -3896,7 +3896,7 @@ JSON 문서는 많은 메모리와 디스크 공간을 차지할 것이다.
 </div></blockquote>
 <p id="enable-string-compression"><strong>enable_string_compression</strong></p>
 <blockquote>
-<div><p><strong>enable_string_compression</strong> 은 문자열 타입 값을 힙, 인덱스 또는 목록에 저장할 때 문자열 압축 사용 여부를 설정하는 파라미터이다. <strong>enable_string_compression</strong> 값을 <strong>yes</strong> 로 설정하면 문자열 크기가 255바이트 이상이고, 압축된 문자열이 원래 문자열의 크기보다 작을 경우 압축된 문자열로 저장된다.</p>
+<div><p><strong>enable_string_compression</strong> 은 문자열 타입 값을 힙, 인덱스 또는 리스트에 저장할 때 문자열 압축 사용 여부를 설정하는 파라미터이다. <strong>enable_string_compression</strong> 값을 <strong>yes</strong> 로 설정하면 문자열 크기가 255바이트 이상이고, 압축된 문자열이 원래 문자열의 크기보다 작을 경우 압축된 문자열로 저장된다.</p>
 </div></blockquote>
 <p><strong>index_scan_in_oid_order</strong></p>
 <blockquote>
@@ -4553,7 +4553,7 @@ Linux: 0 (최대값: 2,097,151)</p></td>
 <h4>접속<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id34"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
 <p><strong>ACCESS_LIST</strong></p>
 <blockquote>
-<div><p><strong>ACCESS_LIST</strong> 는 CUBRID 브로커로 접근을 허용하는 응용 클라이언트의 IP 주소 목록을 저장할 파일 이름을 지정하는 파라미터이다. 192.168.10.*와 192.168.20.*인 IP 주소의 접근을 허용하려면 이를 임의의 파일(ip_lists.txt)에 저장하여 이 파라미터의 값으로 파일명을 설정한다.</p>
+<div><p><strong>ACCESS_LIST</strong> 는 CUBRID 브로커로 접근을 허용하는 응용 클라이언트의 IP 주소 리스트를 저장할 파일 이름을 지정하는 파라미터이다. 192.168.10.*와 192.168.20.*인 IP 주소의 접근을 허용하려면 이를 임의의 파일(ip_lists.txt)에 저장하여 이 파라미터의 값으로 파일명을 설정한다.</p>
 </div></blockquote>
 <p><strong>ACCESS_MODE</strong></p>
 <blockquote>

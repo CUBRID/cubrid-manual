@@ -1214,7 +1214,7 @@ CUBRID는 특수 문자를 이스케이프(escape)하는 방법을 두 가지 �
     *   \\' : 작은따옴표(')
     *   \\" : 큰따옴표(")
     *   \\n : 뉴라인(newline, linefeed) 문자
-    *   \\r : 캐리지 반환(carriage return) 문자
+    *   \\r : 캐리지 리턴(carriage return) 문자
     *   \\t : 탭(tab) 문자
     *   \\\\ : 백슬래시(backslash)
     *   \\% : 퍼센트 기호(%). 자세한 내용은 아래 설명을 참고한다.

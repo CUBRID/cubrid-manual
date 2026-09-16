@@ -249,7 +249,7 @@
 <li><p><em>table_name</em>: 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.</p></li>
 <li><p><em>server_name</em>: 대상 테이블의 원격지 서버 이름을 지정한다. 로컬 테이블의 경우 <em>server_name</em>을 지정하지 않는다.</p></li>
 <li><p><em>column_name</em>: 값을 삽입할 칼럼 이름을 지정한다. 이 값을 생략하면, 테이블에 정의된 모든 칼럼이 명시된 것으로 간주되므로 모든 칼럼에 대한 값을 <strong>VALUES</strong> 뒤에 명시해야 한다. 테이블에 정의된 칼럼 중 일부 칼럼만 명시하면 나머지 칼럼에는 <strong>DEFAULT</strong>로 정의된 값이 할당되며, 정의된 기본값이 없는 경우 <strong>NULL</strong> 값이 할당된다.</p></li>
-<li><p><em>expr</em> | <strong>DEFAULT</strong>: <strong>VALUES</strong> 뒤에는 칼럼에 대응하는 칼럼 값을 명시하며, 표현식 또는 <strong>DEFAULT</strong> 키워드를 값으로 지정할 수 있다. 명시된 칼럼 목록의 순서와 개수는 칼럼 값 목록과 대응되어야 하며, 하나의 레코드에 대해 칼럼 값 목록은 괄호로 처리된다.</p></li>
+<li><p><em>expr</em> | <strong>DEFAULT</strong>: <strong>VALUES</strong> 뒤에는 칼럼에 대응하는 칼럼 값을 명시하며, 표현식 또는 <strong>DEFAULT</strong> 키워드를 값으로 지정할 수 있다. 명시된 칼럼 리스트의 순서와 개수는 칼럼 값 리스트와 대응되어야 하며, 하나의 레코드에 대해 칼럼 값 리스트는 괄호로 처리된다.</p></li>
 </ul>
 <p><strong>REPLACE</strong> 문은 새로운 레코드에 의한 <strong>PRIMARY KEY</strong> 또는 <strong>UNIQUE</strong> 인덱스 칼럼 값의 중복을 판단하므로, <strong>PRIMARY KEY</strong> 또는 <strong>UNIQUE</strong> 인덱스가 정의되지 않은 테이블에 대해서는 <strong>INSERT</strong> 문을 사용하는 것이 성능 상 유리하다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--creating a new table having the same schema as a_tbl1</span>

@@ -232,7 +232,7 @@
 <h2>개요<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>병렬 질의는 다음과 같은 주요 기능을 제공한다:</p>
 <ul class="simple">
-<li><p><strong>병렬 스캔(Parallel Scan)</strong>: 여러 워커 스레드가 입력 데이터(힙, 임시 목록, 인덱스)를 나누어 스캔하여 대용량 탐색의 성능을 향상시킨다. 스캔 종류에 따라 다음 세 가지로 세분화된다.</p>
+<li><p><strong>병렬 스캔(Parallel Scan)</strong>: 여러 워커 스레드가 입력 데이터(힙, 임시 리스트, 인덱스)를 나누어 스캔하여 대용량 탐색의 성능을 향상시킨다. 스캔 종류에 따라 다음 세 가지로 세분화된다.</p>
 <ul>
 <li><p><strong>병렬 힙 스캔(Parallel Heap Scan)</strong>: 테이블의 힙 페이지를 섹터(sector) 단위로 분할하여 워커들이 동시에 스캔한다.</p></li>
 <li><p><strong>병렬 리스트 스캔(Parallel List Scan)</strong>: 부질의 등으로 생성된 임시 결과 리스트(list file)를 섹터(sector) 단위로 분할하여 워커들이 동시에 스캔한다.</p></li>
@@ -250,7 +250,7 @@
 <li><p><a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> 파라미터를 2 이상으로 설정하면, 옵티마이저가 질의 수행시 병렬 질의 실행 여부를 판단할 수 있게 활성화된다.</p></li>
 <li><p><strong>PARALLEL</strong> ( <em>degree</em> ) 힌트를 사용하여 질의별로 병렬 처리 수준을 명시적으로 지정할 수 있다. <em>degree</em> 는 사용할 워커 수이며 0 이상의 정수이다. <strong>0</strong> 또는 <strong>1</strong>로 지정하면 병렬 실행이 비활성화되고, <strong>2 이상</strong>으로 지정하면 힌트 값이 parallelism 파라미터 설정보다 우선한다. 시스템의 CPU 코어 수를 초과하는 값은 코어 수로 낮추어 적용된다.</p></li>
 <li><p><a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> 파라미터는 서버 전체에서 동시에 실행 가능한 병렬 워커 스레드의 최대 개수를 설정한다(기본값: 100).</p></li>
-<li><p><strong>NO_PARALLEL_SCAN</strong> 힌트는 해당 질의 블록의 모든 병렬 스캔(힙/목록/인덱스)을 비활성화한다. <strong>PARALLEL</strong> 힌트와 같이 사용하는 경우에는 <strong>NO_PARALLEL_SCAN</strong> 이 우선 적용된다.</p></li>
+<li><p><strong>NO_PARALLEL_SCAN</strong> 힌트는 해당 질의 블록의 모든 병렬 스캔(힙/리스트/인덱스)을 비활성화한다. <strong>PARALLEL</strong> 힌트와 같이 사용하는 경우에는 <strong>NO_PARALLEL_SCAN</strong> 이 우선 적용된다.</p></li>
 <li><p>병렬 해시 조인과 부질의 병렬 실행은 각각 <strong>NO_PARALLEL_HASH_JOIN</strong>, <strong>NO_PARALLEL_SUBQUERY</strong> 힌트로 비활성화할 수 있다. 자세한 내용은 각 절을 참고한다.</p></li>
 </ul>
 <div class="admonition note">
@@ -268,7 +268,7 @@
 <p>병렬 스캔(Parallel Scan)은 단일 스캔 입력을 여러 워커 스레드가 분할하여 동시에 처리하는 기능이다. CUBRID는 다음 세 가지 입력에 대해 병렬 스캔을 지원하며, 모두 동일한 병렬 실행 프레임워크를 공유한다.</p>
 <ul class="simple">
 <li><p><strong>힙(Heap)</strong>: 테이블의 힙 페이지 — <strong>섹터</strong> 단위로 워커들에게 사전 분할</p></li>
-<li><p><strong>목록(List)</strong>: 임시 결과 리스트 파일 — <strong>섹터</strong> 단위로 워커들에게 사전 분할</p></li>
+<li><p><strong>리스트(List)</strong>: 임시 결과 리스트 파일 — <strong>섹터</strong> 단위로 워커들에게 사전 분할</p></li>
 <li><p><strong>인덱스(Index)</strong>: B+트리 리프 페이지 — 공유 <strong>커서</strong>를 통해 워커들이 협력적으로 좌→우(또는 우→좌) 진행</p></li>
 </ul>
 <p>각 워커 스레드는 할당된 영역을 독립적으로 스캔하면서 필터링 조건(predicate)을 평가하고, 처리한 결과는 결과 큐를 통해 메인 스레드에 전달되어 최종 결과로 통합된다.</p>
@@ -363,7 +363,7 @@
 <p><strong>리스트 스캔 추가 제약</strong></p>
 <p>다음 조건 중 하나라도 해당되면 병렬 리스트 스캔이 적용되지 않으며, 단일 스레드 리스트 스캔으로 실행된다.</p>
 <ul class="simple">
-<li><p>임시 목록이 메모리 버퍼에만 존재하고 디스크 임시 파일로 저장되지 않은 경우 (분할할 섹터가 없어 작은 목록은 자동으로 단일 스레드로 실행)</p></li>
+<li><p>임시 리스트가 메모리 버퍼에만 존재하고 디스크 임시 파일로 저장되지 않은 경우 (분할할 섹터가 없어 작은 리스트는 자동으로 단일 스레드로 실행)</p></li>
 <li><p>상위 연산이 결과를 한 행씩 받아가는 row-by-row 모드로 동작하는 경우 (mergeable list 와 BUILDVALUE 모두 적용 불가한 형태의 질의 — <a class="reference internal" href="#result-collection-modes"><span class="std std-ref">스캔 결과 수집 모드</span></a> 참고)</p></li>
 <li><p>ROWNUM 또는 LIMIT 조건절이 리스트 스캔에 걸려 있는 경우</p></li>
 <li><p>소트 머지 조인의 보조 입력 트리(부질의/CTE 등) 안에 위치한 리스트 스캔</p></li>
@@ -376,7 +376,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>단순 프로젝션만 있는 derived table은 <strong>View Merging</strong> 최적화에 의해 상위 질의로 머지(merge)되므로 임시 결과 리스트 자체가 만들어지지 않는다. 임시 결과 리스트는 DISTINCT, GROUP BY, UNION 등이 포함되어 <strong>View Merging</strong>을 수행할 수 없는 derived table에서 생성되며, <strong>NO_MERGE</strong> 힌트로 <strong>View Merging</strong>을 막아 강제로 생성할 수도 있다. 해시 조인의 입력 목록을 상위에서 다시 스캔하는 경우도 대표적인 병렬 리스트 스캔 대상이다. <strong>View Merging</strong>에 대한 자세한 내용은 <a class="reference internal" href="tuning.html#view-merge"><span class="std std-ref">View Merging 최적화</span></a>를 참고한다.</p>
+<p>단순 프로젝션만 있는 derived table은 <strong>View Merging</strong> 최적화에 의해 상위 질의로 머지(merge)되므로 임시 결과 리스트 자체가 만들어지지 않는다. 임시 결과 리스트는 DISTINCT, GROUP BY, UNION 등이 포함되어 <strong>View Merging</strong>을 수행할 수 없는 derived table에서 생성되며, <strong>NO_MERGE</strong> 힌트로 <strong>View Merging</strong>을 막아 강제로 생성할 수도 있다. 해시 조인의 입력 리스트를 상위에서 다시 스캔하는 경우도 대표적인 병렬 리스트 스캔 대상이다. <strong>View Merging</strong>에 대한 자세한 내용은 <a class="reference internal" href="tuning.html#view-merge"><span class="std std-ref">View Merging 최적화</span></a>를 참고한다.</p>
 </div>
 </section>
 <section id="parallel-index-scan">
@@ -431,7 +431,7 @@
 <h3>성능 고려사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id9" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id9'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>병렬 스캔은 다음과 같은 경우에 성능 향상 효과가 크다.</p>
 <ul class="simple">
-<li><p>대용량 입력(테이블/목록/인덱스)을 스캔해야 하는 경우 (페이지 수가 많을수록 효과적)</p></li>
+<li><p>대용량 입력(테이블/리스트/인덱스)을 스캔해야 하는 경우 (페이지 수가 많을수록 효과적)</p></li>
 <li><p>힙/인덱스 스캔에서 선택도가 낮은 경우 (약 0.05 이하)</p></li>
 <li><p>CPU 코어가 충분히 사용 가능한 경우</p></li>
 <li><p>디스크 I/O보다 CPU 처리가 병목인 경우</p></li>
@@ -440,7 +440,7 @@
 <ul class="simple">
 <li><p>소량의 입력만 스캔하는 경우</p></li>
 <li><p>인덱스 스캔이 단일 스레드로 충분히 효율적인 경우(예: 짧은 범위 점 조회)</p></li>
-<li><p>시스템 자원(CPU, 메모리)가 부족한 경우</p></li>
+<li><p>시스템 자원(CPU, 메모리)이 부족한 경우</p></li>
 </ul>
 <p>병렬 질의 사용 시에는 <a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> 파라미터를 적절히 설정하여 시스템 자원 경쟁을 방지해야 한다. 일반적으로 실제 물리 CPU 코어 수 수준으로 설정하는 것을 권장한다.</p>
 </section>
@@ -448,7 +448,7 @@
 <span id="id10"></span><h3>스캔 결과 수집 모드<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#result-collection-modes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#result-collection-modes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>병렬 스캔이 활성화된 경우, 워커가 처리한 결과를 메인 스레드가 수집하는 방식은 질의 형태에 따라 다음 세 가지 중 하나로 결정된다. 모드는 SQL 트레이스의 <strong>gather</strong> 항목으로 확인할 수 있다.</p>
 <ul class="simple">
-<li><p><strong>mergeable list</strong>: 각 워커가 자신의 임시 결과 리스트를 만들고, 메인 스레드는 워커별 목록을 병합 없이 그대로 출력에 사용한다. 워커 간 동기화 비용이 가장 적어 일반적으로 가장 빠르다.</p></li>
+<li><p><strong>mergeable list</strong>: 각 워커가 자신의 임시 결과 리스트를 만들고, 메인 스레드는 워커별 리스트를 병합 없이 그대로 출력에 사용한다. 워커 간 동기화 비용이 가장 적어 일반적으로 가장 빠르다.</p></li>
 <li><p><strong>buildvalue</strong>: 워커들이 부분 집계값을 계산하여 메인 스레드에 전달하면, 메인 스레드가 최종 집계값을 결합하여 반환한다. 단순 집계 질의에 특화된 모드이다(<a class="reference internal" href="#buildvalue-optimization"><span class="std std-ref">BUILDVALUE 최적화</span></a> 참고).</p></li>
 <li><p><strong>row-by-row</strong>: 메인 스레드가 한 행씩 순서대로 받아 처리한다. 다른 두 모드를 적용할 수 없는 경우에 사용된다. 적용 가능 범위가 가장 넓지만 동기화 비용이 가장 크다.</p></li>
 </ul>
@@ -474,7 +474,7 @@
 <span id="buildvalue-optimization"></span><h3>BUILDVALUE 최적화<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#buildvalue" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#buildvalue'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>GROUP BY 없이 집계 함수를 계산하는 질의에서 사용된 집계 함수가 모두 지원 목록에 포함되면, 병렬 스캔은 <strong>BUILDVALUE 최적화</strong>를 적용한다. 이 모드에서는 각 워커가 자신이 스캔한 범위의 부분 집계값을 계산하여 메인 스레드에 전달하고, 메인 스레드는 부분 집계들을 결합하여 최종값을 만든다. 워커 간 데이터 전달량이 가장 적어 집계 질의에서 가장 빠른 동작 모드이다.</p>
 <p><strong>지원 집계 함수</strong></p>
-<p>다음 집계 함수를 사용한 질의에 BUILDVALUE 최적화가 적용된다. SELECT 목록에서 집계 함수들을 산술식 등으로 조합하는 것도 가능하다.</p>
+<p>다음 집계 함수를 사용한 질의에 BUILDVALUE 최적화가 적용된다. SELECT 리스트에서 집계 함수들을 산술식 등으로 조합하는 것도 가능하다.</p>
 <ul class="simple">
 <li><p><strong>COUNT(*)</strong>, <strong>COUNT(column)</strong>, <strong>COUNT(DISTINCT column)</strong></p></li>
 <li><p><strong>MIN</strong>, <strong>MAX</strong></p></li>
@@ -550,7 +550,7 @@
 <li><p><strong>rows</strong>: 각 워커가 반환한 행 수 범위 (최소..최대)</p></li>
 <li><p><strong>gather</strong>: 결과 수집 방식</p>
 <ul>
-<li><p><strong>mergeable list</strong>: 워커별 목록을 병합 없이 직접 사용</p></li>
+<li><p><strong>mergeable list</strong>: 워커별 리스트를 병합 없이 직접 사용</p></li>
 <li><p><strong>buildvalue</strong>: 워커별 부분 집계를 결합 (구 <code class="docutils literal notranslate"><span class="pre">count</span></code> 표시를 대체)</p></li>
 <li><p><strong>row by row</strong>: 한 건씩 수집하여 병합 (힙 스캔에서만 나타남)</p></li>
 </ul>
@@ -718,7 +718,7 @@
 <ul class="simple">
 <li><p>부질의의 실행 시간이 매우 짧은 경우 (병렬 처리 오버헤드가 더 클 수 있음)</p></li>
 <li><p>부질의가 하나만 존재하는 경우</p></li>
-<li><p>시스템 자원(CPU, 메모리)가 부족한 경우</p></li>
+<li><p>시스템 자원(CPU, 메모리)이 부족한 경우</p></li>
 <li><p><a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> 설정이 부적절한 경우</p></li>
 </ul>
 </section>
@@ -784,7 +784,7 @@
 </ul>
 <p><strong>활성화 조건</strong></p>
 <ul class="simple">
-<li><p>두 입력 목록 중 큰 쪽의 페이지 수가 활성화 조건(<a class="reference internal" href="#parallel-query-throughput-rules"><span class="std std-ref">병렬 질의 처리량 규칙</span></a>)을 만족해야 한다. 미달이면 <strong>PARALLEL</strong> 힌트가 있어도 단일 스레드 해시 조인으로 실행된다.</p></li>
+<li><p>두 입력 리스트 중 큰 쪽의 페이지 수가 활성화 조건(<a class="reference internal" href="#parallel-query-throughput-rules"><span class="std std-ref">병렬 질의 처리량 규칙</span></a>)을 만족해야 한다. 미달이면 <strong>PARALLEL</strong> 힌트가 있어도 단일 스레드 해시 조인으로 실행된다.</p></li>
 <li><p><strong>NO_PARALLEL_HASH_JOIN</strong> 힌트가 지정되면 병렬화되지 않는다. 이때 해시 조인 자체는 유지되고 병렬화만 비활성화된다. 자세한 내용은 <a class="reference internal" href="tuning.html#no-parallel-hash-join"><span class="std std-ref">NO_PARALLEL_HASH_JOIN</span></a>을 참고한다.</p></li>
 </ul>
 <section id="id19">
@@ -965,7 +965,7 @@
 <p>병렬 질의 실행은 질의 응답 시간을 획기적으로 단축하지만, 동시에 서버 자원(CPU, 메모리, I/O 등)을 많이 소모한다. 소수의 질의가 병렬 실행으로 서버 자원을 과도하게 선점하면 다른 다수의 질의 성능이 저하될 수 있다. 이를 방지하기 위해 CUBRID는 병렬 실행의 효과가 큰 질의만을 선별하기 위한 <strong>처리량 규칙</strong>을 적용한다.</p>
 <p>각 병렬 연산의 실제 병렬 처리 수준은 다음 요인에 따라 결정된다:</p>
 <ul class="simple">
-<li><p>테이블/목록/인덱스 크기 등의 처리량 규칙</p></li>
+<li><p>테이블/리스트/인덱스 크기 등의 처리량 규칙</p></li>
 <li><p><strong>PARALLEL</strong> 힌트로 명시적으로 지정된 값</p></li>
 <li><p><a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> 파라미터로 설정된 상한값</p></li>
 <li><p><a class="reference internal" href="../admin/config.html#max-parallel-workers"><span class="std std-ref">max_parallel_workers</span></a> 파라미터로 설정된 전역 워커 풀 크기</p></li>
@@ -974,7 +974,7 @@
 </section>
 <section id="id24">
 <h3>스캔 처리량 규칙<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id24" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id24'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>병렬 힙 스캔과 병렬 리스트 스캔의 병렬 처리 수준은 스캔 대상의 페이지 수(힙 스캔은 테이블 힙 페이지 수, 리스트 스캔은 임시 목록 페이지 수)에 따라 동일한 규칙으로 결정된다. 인덱스 스캔은 별도 규칙을 따른다(아래 참고).</p>
+<p>병렬 힙 스캔과 병렬 리스트 스캔의 병렬 처리 수준은 스캔 대상의 페이지 수(힙 스캔은 테이블 힙 페이지 수, 리스트 스캔은 임시 리스트 페이지 수)에 따라 동일한 규칙으로 결정된다. 인덱스 스캔은 별도 규칙을 따른다(아래 참고).</p>
 <p><strong>활성화 조건</strong></p>
 <ul class="simple">
 <li><p>스캔 대상의 페이지 수가 2,048개 이상일 때 활성화된다 (약 32MB, db_page_size가 16K일 때)</p></li>
@@ -1093,7 +1093,7 @@
 </section>
 <section id="id25">
 <h3>해시 조인 처리량 규칙<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id25" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id25'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>병렬 해시 조인은 두 입력 목록 중 <strong>큰 쪽의 페이지 수</strong>를 기준으로 스캔과 같은 형태의 규칙(활성화 조건 2,048페이지, 페이지 수가 2배가 될 때마다 병렬 처리 수준 1 증가, <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> 상한)에 따라 병렬 처리 수준이 계산된다.</p>
+<p>병렬 해시 조인은 두 입력 리스트 중 <strong>큰 쪽의 페이지 수</strong>를 기준으로 스캔과 같은 형태의 규칙(활성화 조건 2,048페이지, 페이지 수가 2배가 될 때마다 병렬 처리 수준 1 증가, <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> 상한)에 따라 병렬 처리 수준이 계산된다.</p>
 <ul class="simple">
 <li><p>계산된 병렬 처리 수준은 파티션 개수를 초과할 수 없다.</p></li>
 <li><p>활성화 조건 미달이면 <strong>PARALLEL</strong> 힌트가 있어도 단일 스레드 해시 조인으로 실행된다.</p></li>
@@ -1101,7 +1101,7 @@
 </section>
 <section id="id26">
 <h3>정렬 처리량 규칙<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id26" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id26'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>병렬 정렬은 정렬 입력 목록의 페이지 수를 기준으로 스캔과 같은 형태의 규칙(활성화 조건 2,048페이지, 페이지 수가 2배가 될 때마다 병렬 처리 수준 1 증가, <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> 상한)에 따라 병렬 처리 수준이 계산된다.</p>
+<p>병렬 정렬은 정렬 입력 리스트의 페이지 수를 기준으로 스캔과 같은 형태의 규칙(활성화 조건 2,048페이지, 페이지 수가 2배가 될 때마다 병렬 처리 수준 1 증가, <a class="reference internal" href="../admin/config.html#parallelism"><span class="std std-ref">parallelism</span></a> 상한)에 따라 병렬 처리 수준이 계산된다.</p>
 <ul class="simple">
 <li><p>입력의 행 수가 계산된 병렬 처리 수준 이하이면 단일 스레드로 정렬된다.</p></li>
 <li><p>ORDER BY와 LIMIT을 함께 사용하는 정렬은 입력의 행 수가 500행 미만이면 단일 스레드로 정렬된다.</p></li>

@@ -651,7 +651,7 @@ LIST_DBS
 
 .. function:: LIST_DBS()
 
-    **LIST_DBS** 함수는 디렉터리 파일(**$CUBRID_DATABASES/databases.txt**)에 존재하는 모든 데이터베이스 목록을 공백 문자로 구분하여 출력한다.
+    **LIST_DBS** 함수는 디렉터리 파일(**$CUBRID_DATABASES/databases.txt**)에 존재하는 모든 데이터베이스 리스트를 공백 문자로 구분하여 출력한다.
 
     :rtype: STRING
         

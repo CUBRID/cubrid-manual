@@ -831,7 +831,7 @@ sp_name              VARCHAR(255)                          저장 프로시저 �
 sp_type              INTEGER                               저장 프로시저 종류 (프로시저 또는 함수)
 return_type          INTEGER                               반환 값 타입
 arg_count            INTEGER                               파라미터 개수
-args                 SEQUENCE OF _db_stored_procedure_args 파라미터 목록
+args                 SEQUENCE OF _db_stored_procedure_args 파라미터 리스트
 lang                 INTEGER                               구현 언어
 pkg_name             VARCHAR(255)                          저장 프로시저가 속한 패키지 이름
 is_system_generated  INTEGER                               시스템이 생성한 저장 프로시저 여부

@@ -254,8 +254,8 @@
 <li><p><em>table_name</em>: 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.</p></li>
 <li><p><em>server_name</em>: dblink로 연결할 원격 서버 이름을 지정한다.</p></li>
 <li><p><em>column_name</em>: 값을 삽입할 칼럼 이름을 지정한다. 이 값을 생략하면, 테이블에 정의된 모든 칼럼이 명시된 것으로 간주되므로 모든 칼럼에 대한 값을 <strong>VALUES</strong> 뒤에 명시해야 한다. 테이블에 정의된 칼럼 중 일부 칼럼만 명시하면 나머지 칼럼에는 <strong>DEFAULT</strong> 로 정의된 값이 할당되며, 정의된 기본값이 없는 경우 <strong>NULL</strong> 값이 할당된다.</p></li>
-<li><p><em>expr</em> | <strong>DEFAULT</strong>: <strong>VALUES</strong> 뒤에는 칼럼에 대응하는 칼럼 값을 명시하며, 표현식 또는 <strong>DEFAULT</strong> 키워드를 값으로 지정할 수 있다. 명시된 칼럼 목록의 순서와 개수는 칼럼 값 목록과 대응되어야 하며, 하나의 레코드에 대해 칼럼 값 목록은 괄호로 처리된다.</p></li>
-<li><p><strong>DEFAULT</strong>: 기본값을 칼럼 값으로 명시하기 위하여 <strong>DEFAULT</strong> 키워드를 사용할 수 있다. <strong>VALUES</strong> 키워드 뒤의 칼럼 값 목록 내에 <strong>DEFAULT</strong> 를 명시하면 해당 칼럼에 기본값을 저장하고, <strong>VALUES</strong> 키워드 앞에 <strong>DEFAULT</strong> 를 명시하면 테이블 내 모든 칼럼에 대해 기본값을 저장한다. 기본값이 정의되지 않은 칼럼에 대해서는 <strong>NULL</strong> 을 저장한다.</p></li>
+<li><p><em>expr</em> | <strong>DEFAULT</strong>: <strong>VALUES</strong> 뒤에는 칼럼에 대응하는 칼럼 값을 명시하며, 표현식 또는 <strong>DEFAULT</strong> 키워드를 값으로 지정할 수 있다. 명시된 칼럼 리스트의 순서와 개수는 칼럼 값 리스트와 대응되어야 하며, 하나의 레코드에 대해 칼럼 값 리스트는 괄호로 처리된다.</p></li>
+<li><p><strong>DEFAULT</strong>: 기본값을 칼럼 값으로 명시하기 위하여 <strong>DEFAULT</strong> 키워드를 사용할 수 있다. <strong>VALUES</strong> 키워드 뒤의 칼럼 값 리스트 내에 <strong>DEFAULT</strong> 를 명시하면 해당 칼럼에 기본값을 저장하고, <strong>VALUES</strong> 키워드 앞에 <strong>DEFAULT</strong> 를 명시하면 테이블 내 모든 칼럼에 대해 기본값을 저장한다. 기본값이 정의되지 않은 칼럼에 대해서는 <strong>NULL</strong> 을 저장한다.</p></li>
 <li><p><strong>ON DUPLICATE KEY UPDATE</strong>: <strong>PRIMARY KEY</strong> 또는 <strong>UNIQUE</strong> 속성이 정의된 칼럼에 중복 값이 삽입되어 제약 조건 위반이 발생하면, <strong>ON DUPLICATE KEY UPDATE</strong> 절에 명시된 액션을 수행하면서 제약 조건 위반을 발생시킨 값을 특정 값으로 변경한다.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">a_tbl1</span><span class="p">(</span>
@@ -360,7 +360,7 @@
 </span><span id="line-3">    <span class="p">[</span><span class="n">ON</span> <span class="n">DUPLICATE</span> <span class="n">KEY</span> <span class="n">UPDATE</span> <span class="n">column_name</span> <span class="o">=</span> <span class="n">expr</span><span class="p">,</span> <span class="o">...</span> <span class="p">]</span>
 </span></code></pre></div>
 </div>
-<p><strong>SELECT</strong> 문은 <strong>VALUES</strong> 키워드 대신 사용하거나 <strong>VALUES</strong> 뒤의 칼럼 값 목록 내에 부질의로서 포함될 수 있다. <strong>VALUES</strong> 키워드를 대신하여 <strong>SELECT</strong> 문을 명시하면, 질의 결과로 얻은 다수의 레코드를 한 번에 대상 테이블 칼럼에 삽입할 수 있다. 그러나, <strong>SELECT</strong> 문을 칼럼 값 목록 내에 부질의로 사용하려면 질의 결과 레코드가 하나여야 한다.</p>
+<p><strong>SELECT</strong> 문은 <strong>VALUES</strong> 키워드 대신 사용하거나 <strong>VALUES</strong> 뒤의 칼럼 값 리스트 내에 부질의로서 포함될 수 있다. <strong>VALUES</strong> 키워드를 대신하여 <strong>SELECT</strong> 문을 명시하면, 질의 결과로 얻은 다수의 레코드를 한 번에 대상 테이블 칼럼에 삽입할 수 있다. 그러나, <strong>SELECT</strong> 문을 칼럼 값 리스트 내에 부질의로 사용하려면 질의 결과 레코드가 하나여야 한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--creating an empty table which schema replicated from a_tbl1</span>
 </span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">a_tbl2</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="n">a_tbl1</span><span class="p">;</span>
 </span><span id="line-3">

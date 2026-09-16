@@ -960,7 +960,7 @@ SELECT, UPDATE, DELETE 문은 SQL 구문이 표시된다.</p></li>
 <p><strong>데이터베이스 서버 오류 코드의 확인</strong></p>
 <ul class="simple">
 <li><p><strong>$CUBRID/include/error_code.h</strong> 파일의 <strong>#define ER_</strong>로 시작하는 정의문은 모두 서버 오류 코드를 나타낸다.</p></li>
-<li><p><strong>$CUBRID/msg/en_US</strong> (한글은 ko_KR.eucKR 혹은 ko_KR.utf8) <strong>/cubrid.msg</strong> 파일의 “$set 5 MSGCAT_SET_ERROR” 이하 메시지 그룹은 모두 서버 오류 메시지를 나타낸다.</p></li>
+<li><p><strong>$CUBRID/msg/en_US</strong> (한글은 ko_KR.euckr 혹은 ko_KR.utf8) <strong>/cubrid.msg</strong> 파일의 “$set 5 MSGCAT_SET_ERROR” 이하 메시지 그룹은 모두 서버 오류 메시지를 나타낸다.</p></li>
 </ul>
 <p>CCI 드라이버를 사용하여 C로 프로그램을 작성할 때는 오류 코드 번호를 직접 사용하는 것보다는 오류 코드 이름을 사용할 것을 권장한다. 예를 들어, 고유 키 위반 시 오류 코드 번호는 -670 혹은 -886이지만 이 번호보다는 <strong>ER_BTREE_UNIQUE_FAILED</strong> 혹은 <strong>ER_UNIQUE_VIOLATION_WITHKEY</strong>을 사용하는 것이 프로그램 가독성을 높이기 때문이다.</p>
 <p>하지만 JDBC 드라이버를 사용하여 JAVA로 프로그램을 작성할 때는 dbi.h 파일을 포함할 수 없으므로 오류 코드 번호를 직접 사용하도록 한다. JDBC의 경우 SQLException 클래스의 getErrorCode() 메서드를 통해 오류 번호를 얻을 수 있다.</p>
@@ -1232,7 +1232,7 @@ cubrid_broker.conf의 SHARD 브로커 파라미터가 ON으로 설정된 경우 
 <li><p>#CONNECT: 브로커 시작 후 응용 클라이언트가 CAS에 접속한 회수</p></li>
 <li><p>#REJECT: 브로커 시작 후 ACL에 포함되지 않은 IP로부터 접속하는 응용 클라이언트가 CAS에 접속하는 것을 거부당한 회수. ACL 설정과 관련하여 <a class="reference internal" href="#limiting-broker-access"><span class="std std-ref">브로커 서버 접속 제한</span></a>를 참고한다.</p></li>
 </ul>
-<p>다음은 <strong>-q</strong> 옵션을 이용하여, broker1을 포함하는 이름을 가진 브로커의 상태 정보를 확인하고 해당 브로커의 작업 큐에 대기 중인 작업 상태를 확인한다. 인자로 broker1을 입력하지 않으면 모든 브로커에 대하여 작업 큐에 대기 중인 작업 목록이 출력된다.</p>
+<p>다음은 <strong>-q</strong> 옵션을 이용하여, broker1을 포함하는 이름을 가진 브로커의 상태 정보를 확인하고 해당 브로커의 작업 큐에 대기 중인 작업 상태를 확인한다. 인자로 broker1을 입력하지 않으면 모든 브로커에 대하여 작업 큐에 대기 중인 작업 리스트가 출력된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">status</span> <span class="o">-</span><span class="n">q</span> <span class="n">broker1</span>
 </span><span id="line-2"><span class="o">@</span> <span class="n">cubrid</span> <span class="n">broker</span> <span class="n">status</span>
 </span><span id="line-3"><span class="o">%</span> <span class="n">broker1</span>
@@ -2676,7 +2676,7 @@ The domain of a set must be the same data type</p></td>
 <li><p>#CONNECT: 게이트웨이 시작 후 응용 클라이언트가 CAS에 접속한 회수</p></li>
 <li><p>#REJECT: 게이트웨이 시작 후 ACL에 포함되지 않은 IP로부터 접속하는 응용 클라이언트가 CAS에 접속하는 것을 거부당한 회수. ACL 설정과 관련하여 <a class="reference internal" href="#limiting-broker-access"><span class="std std-ref">브로커 서버 접속 제한</span></a>를 참고한다.</p></li>
 </ul>
-<p>다음은 <strong>-q</strong> 옵션을 이용하여, oracle_gateway을 포함하는 이름을 가진 게이트웨이의 상태 정보를 확인하고 해당 게이트웨이의 작업 큐에 대기 중인 작업 상태를 확인한다. 인자로 oracle_gateway을 입력하지 않으면 모든 게이트웨이에 대하여 작업 큐에 대기 중인 작업 목록이 출력된다.</p>
+<p>다음은 <strong>-q</strong> 옵션을 이용하여, oracle_gateway을 포함하는 이름을 가진 게이트웨이의 상태 정보를 확인하고 해당 게이트웨이의 작업 큐에 대기 중인 작업 상태를 확인한다. 인자로 oracle_gateway을 입력하지 않으면 모든 게이트웨이에 대하여 작업 큐에 대기 중인 작업 리스트가 출력된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">%</span> <span class="n">cubrid</span> <span class="n">gateway</span> <span class="n">status</span> <span class="o">-</span><span class="n">q</span> <span class="n">oracle_gateway</span>
 </span><span id="line-2"><span class="o">@</span> <span class="n">cubrid</span> <span class="n">gateway</span> <span class="n">status</span>
 </span><span id="line-3"><span class="o">%</span> <span class="n">oracle_gateway</span>

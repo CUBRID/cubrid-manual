@@ -79,7 +79,7 @@ JSON_ARRAY
 
 .. function:: JSON_ARRAY ([val1 [ , val2] ...])
 
-  **JSON_ARRAY** 함수는 해당 값들(val, val2, ..)을 가진 목록(텅빈 목록도 가능)가 포함된 json 배열을 반환한다.
+  **JSON_ARRAY** 함수는 해당 값들(val, val2, ..)을 가진 리스트(텅빈 리스트도 가능)가 포함된 json 배열을 반환한다.
 
 .. code-block:: sql
 
@@ -108,7 +108,7 @@ JSON_OBJECT
 
 .. function:: JSON_OBJECT ([key1, val1 [ , key2, val2] ...])
 
-  **JSON_OBJECT** 함수는 해당 키/값(key, val1, key, val2,...)쌍을 가진 목록(텅빈 목록도 가능)가 포함된 json 객체를 반환한다.
+  **JSON_OBJECT** 함수는 해당 키/값(key, val1, key, val2,...)쌍을 가진 리스트(텅빈 리스트도 가능)가 포함된 json 객체를 반환한다.
 
 .. code-block:: sql
 

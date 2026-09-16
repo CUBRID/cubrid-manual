@@ -37,7 +37,7 @@ CREATE SERVER
       
 *   *owner_name*: 생성할 서버의 소유자 이름을 지정한다.
 *   *server_name*: 생성할 서버의 이름을 지정한다(최대 254바이트).
-*   <*connect_info*>: 접속 정보 목록으로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER**\는 필수 항목이다.
+*   <*connect_info*>: 접속 정보 리스트로 <connect_item> 항목 중 **HOST**, **PORT**, **DBNAME**, **USER**\는 필수 항목이다.
 *   <*connect_item*>: HOST, PORT, DBNAME, USER, PASSWOED, PROPERTIES, COMMENT 항목으로 구성되며, 동일한 항목이 중복될 수 없다.
 	
     *   *host_string*: 원격 접속할 DBMS 정보를 가지고 있는 Broker 서버의 호스명 또는 IP 주소이다.

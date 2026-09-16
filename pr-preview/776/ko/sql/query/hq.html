@@ -362,7 +362,7 @@
 </span></code></pre></div>
 </div>
 <p>다음은 상사와 그의 부하 직원을 출력하되, 출생 연도가 앞서는 사람부터 출력하는 예제이다.</p>
-<p>계층 질의 결과는 기본적으로 <strong>ORDER SIBLINGS BY</strong> 절에 명시된 칼럼 목록에 따라 정렬된 부모와 그 부모의 자식 노드들이 연속으로 출력된다. 부모가 같은 형제 노드는 명시된 정렬 순서에 따라 정렬되어 출력된다.</p>
+<p>계층 질의 결과는 기본적으로 <strong>ORDER SIBLINGS BY</strong> 절에 명시된 칼럼 리스트에 따라 정렬된 부모와 그 부모의 자식 노드들이 연속으로 출력된다. 부모가 같은 형제 노드는 명시된 정렬 순서에 따라 정렬되어 출력된다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- Outputting a parent node and its child nodes, which sibling nodes that share the same parent are sorted in the order of birthyear.</span>
 </span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">mgrid</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">birthyear</span><span class="p">,</span><span class="w"> </span><span class="k">level</span>
 </span><span id="line-3"><span class="k">FROM</span><span class="w"> </span><span class="n">tree</span>

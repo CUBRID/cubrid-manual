@@ -2333,7 +2333,7 @@ demodb</p></td>
 <li><p><strong>cubrid</strong>: 큐브리드 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.</p></li>
 <li><p><strong>compactdb</strong>: 대상 데이터베이스에 대하여 삭제된 데이터에 할당되었던 OID가 재사용될 수 있도록 공간을 정리하는 명령입니다.</p></li>
 <li><p><em>database_name</em>: 공간을 정리할 데이터베이스의 이름이며, 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않는다.</p></li>
-<li><p><em>class_name_list</em>: 공간을 정리할 테이블 이름 목록을 데이터베이스 이름 뒤에 직접 명시할 수 있으며, <strong>-i</strong> 옵션과 함께 사용할 수 없다. 테이블 이름에는 스키마 이름이 접두사로 붙어야 한다. 클라이언트/서버 모드에서 사용한 경우 catalog, delete files 그리고 tracker와 같은 객체에 대한 정리 작업을 수행하지 않는다.</p></li>
+<li><p><em>class_name_list</em>: 공간을 정리할 테이블 이름 리스트를 데이터베이스 이름 뒤에 직접 명시할 수 있으며, <strong>-i</strong> 옵션과 함께 사용할 수 없다. 테이블 이름에는 스키마 이름이 접두사로 붙어야 한다. 클라이언트/서버 모드에서 사용한 경우 catalog, delete files 그리고 tracker와 같은 객체에 대한 정리 작업을 수행하지 않는다.</p></li>
 </ul>
 <p>클라이언트/서버 모드에서만 <strong>-I</strong>, <strong>-c</strong>, <strong>-d</strong>, <strong>-p</strong> 옵션을 사용할 수 있다.</p>
 <p>다음은 <strong>cubrid compactdb</strong>에 대한 [options]이다.</p>
@@ -2372,7 +2372,7 @@ demodb</p></td>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-compactdb-i">
 <span id="cmdoption-compactdb-input-class-file"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input-class-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-compactdb-i" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-compactdb-i'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>대상 테이블 이름을 포함하는 입력 파일 이름을 지정할 수 있다. 라인 당 하나의 테이블 이름을 명시하며, 유효하지 않은 테이블 이름은 무시된다. 테이블 이름에는 스키마 이름이 접두사로 붙어야 한다. 이 옵션을 지정하는 경우, 데이터베이스 이름 뒤에 대상 테이블 이름 목록을 직접 명시할 수 없으므로 주의한다. 클라이언트/서버 모드에서 사용한 경우 catalog, delete files 그리고 tracker와 같은 객체에 대한 정리 작업을 수행하지 않는다.</p>
+<dd><p>대상 테이블 이름을 포함하는 입력 파일 이름을 지정할 수 있다. 라인 당 하나의 테이블 이름을 명시하며, 유효하지 않은 테이블 이름은 무시된다. 테이블 이름에는 스키마 이름이 접두사로 붙어야 한다. 이 옵션을 지정하는 경우, 데이터베이스 이름 뒤에 대상 테이블 이름 리스트를 직접 명시할 수 없으므로 주의한다. 클라이언트/서버 모드에서 사용한 경우 catalog, delete files 그리고 tracker와 같은 객체에 대한 정리 작업을 수행하지 않는다.</p>
 </dd></dl>
 <p>다음은 클라이언트/서버 모드에서만 사용할 수 있는 옵션이다.</p>
 <dl class="std option">
@@ -3334,11 +3334,11 @@ demodb</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_data_page_private_quota</p></td>
 <td><p>Snapshot</p></td>
-<td><p>전용 LRU 목록의 대상 페이지 개수</p></td>
+<td><p>전용 LRU 리스트의 대상 페이지 개수</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_data_page_private_count</p></td>
 <td><p>Snapshot</p></td>
-<td><p>전용 LRU 목록에 대한 실제 페이지 개수</p></td>
+<td><p>전용 LRU 리스트에 대한 실제 페이지 개수</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_data_page_fixed</p></td>
 <td><p>Snapshot</p></td>
@@ -4688,15 +4688,15 @@ demodb</p></td>
 </tr>
 <tr class="row-odd"><td><p>..alloc_bcb_get_victim_search_own_private_list</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>자체 전용 목록에서 희생자(Victim)을 가져오는 횟수 및 시간</p></td>
+<td><p>자체 전용 리스트에서 희생자(Victim)을 가져오는 횟수 및 시간</p></td>
 </tr>
 <tr class="row-even"><td><p>..alloc_bcb_get_victim_search_others_private_list</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>다른 전용 목록에서 희생자(Victim)을 가져오는 횟수 및 시간</p></td>
+<td><p>다른 전용 리스트에서 희생자(Victim)을 가져오는 횟수 및 시간</p></td>
 </tr>
 <tr class="row-odd"><td><p>..alloc_bcb_get_victim_searchshared_list</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>공유 목록에서 희생자(Victim)을 가져오는 횟수 및 시간</p></td>
+<td><p>공유 리스트에서 희생자(Victim)을 가져오는 횟수 및 시간</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_data_page_avoid_victim</p></td>
 <td><p>Accumulator</p></td>
@@ -5063,7 +5063,7 @@ demodb</p></td>
 <td><p>데이터 내보내기 비율을 조정하는 백그라운드 스레드</p></td>
 </tr>
 <tr class="row-odd"><td><p>Page_maintenance_daemon_thread</p></td>
-<td><p>개인 LRU 목록의 할당량을 재계산하는 백그라운드 스레드</p></td>
+<td><p>개인 LRU 리스트의 할당량을 재계산하는 백그라운드 스레드</p></td>
 </tr>
 <tr class="row-even"><td><p>Deadlock_detect_daemon_thread</p></td>
 <td><p>교착 상태를 찾고 시스템 정지를 막기 위해 희생자(victim)를 선택하는 백그라운드 스레드</p></td>
@@ -5429,7 +5429,7 @@ demodb</p></td>
 <li><p>Program name: 클라이언트 프로그램 이름</p></li>
 <li><p>Query time: 수행중인 질의의 총 수행 시간(단위: 초)</p></li>
 <li><p>Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)</p></li>
-<li><p>Wait for lock holder: 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 목록</p></li>
+<li><p>Wait for lock holder: 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 리스트</p></li>
 <li><p>SQL_ID: SQL Text에 대한 ID. cubrid killtran 명령의 <strong>--kill-sql-id</strong> 옵션에서 사용될 수 있다.</p></li>
 <li><p>SQL Text: 수행중인 질의문(최대 30자)</p></li>
 </ul>
@@ -5551,7 +5551,7 @@ demodb</p></td>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-killtran-i">
 <span id="cmdoption-killtran-kill-transaction-index"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--kill-transaction-index</span></span><span class="sig-prename descclassname"><span class="pre">=ID1,ID2,ID3</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-killtran-i" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-killtran-i'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>지정한 인덱스에 해당하는 트랜잭션을 제거한다.  쉼표(,)로 구분하여 제거하고자 하는 트랜잭션 ID 여러 개를 지정할 수 있다. 제거할 트랜잭션 목록에 유효하지 않은 트랜잭션 ID가 지정되면 무시된다.:</p>
+<dd><p>지정한 인덱스에 해당하는 트랜잭션을 제거한다.  쉼표(,)로 구분하여 제거하고자 하는 트랜잭션 ID 여러 개를 지정할 수 있다. 제거할 트랜잭션 리스트에 유효하지 않은 트랜잭션 ID가 지정되면 무시된다.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ cubrid killtran -i 1,2 demodb
 </span><span id="line-2">Ready to kill the following transactions:
 </span><span id="line-3">
@@ -6048,7 +6048,7 @@ demodb</p></td>
 <li><p><strong>cubrid</strong>: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티</p></li>
 <li><p><strong>flashback</strong>: 커밋된 특정 트랜잭션을 되돌릴 수 있도록 SQL 구문을 제공하는 도구</p></li>
 <li><p><em>database_name</em>: 되돌리고자 하는 트랜잭션이 수행된 데이터베이스 이름</p></li>
-<li><p><em>owner_name.class_name</em>: 되돌리고자 하는 테이블명 목록. 테이블명을 명시할 때는 해당 테이블의 소유자명도 함께 명시해야 한다.</p></li>
+<li><p><em>owner_name.class_name</em>: 되돌리고자 하는 테이블명 리스트. 테이블명을 명시할 때는 해당 테이블의 소유자명도 함께 명시해야 한다.</p></li>
 </ul>
 <p>다음 예제에서는 사용자가 “cubrid flashback demodb dba.tbl”를 수행했을 때 출력되는 결과를 보여준다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$ csql -u dba demodb
@@ -6080,7 +6080,7 @@ demodb</p></td>
 <li><p>Num_insert : 트랜잭션 내에서 수행된 삽입(insert) 연산 횟수</p></li>
 <li><p>Num_update : 트랜잭션 내에서 수행된 수정(update) 연산 횟수</p></li>
 <li><p>Num_delete : 트랜잭션 내에서 수행된 삭제(delete) 연산 횟수</p></li>
-<li><p>Table : 트랜잭션 내에서 DML이 수행된 테이블명 목록</p></li>
+<li><p>Table : 트랜잭션 내에서 DML이 수행된 테이블명 리스트</p></li>
 </ul>
 </div></blockquote>
 <div class="admonition note">

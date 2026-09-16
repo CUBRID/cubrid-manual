@@ -760,11 +760,11 @@
 <p><strong>ha_apply_max_mem_size</strong></p>
 <p>CUBRID HA의 복제 로그 반영 프로세스가 사용할 수 있는 최대 메모리를 설정한다. 기본값은 <strong>500</strong> (단위: MB)이며, 최대값은 <strong>INT_MAX</strong> (2147483647)이다. 이 값을 시스템이 허용하는 크기보다 너무 크게 설정하면 메모리 할당에 실패하면서 HA 복제 반영 프로세스가 오동작을 일으킬 수 있으므로, 메모리 자원이 설정한 값을 충분히 사용할 수 있는지 확인한 후 설정하도록 한다.</p>
 <p><strong>ha_applylogdb_ignore_error_list</strong></p>
-<p>CUBRID HA의 복제 로그 반영 프로세스에서 오류가 발생해도 이를 무시하고 계속 복제를 진행하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 무시할 오류 코드를 나열한다. 이 설정 값은 높은 우선순위를 가지므로, <strong>ha_applylogdb_retry_error_list</strong> 파라미터나 “재시도 오류 목록”에 의해 설정된 오류 코드와 값이 겹치면 이들을 무시하고 해당 오류를 유발한 작업을 재시도하지 않는다. “재시도 오류 목록”는 아래 <strong>ha_applylogdb_retry_error_list</strong> 의 설명을 참고한다.</p>
+<p>CUBRID HA의 복제 로그 반영 프로세스에서 오류가 발생해도 이를 무시하고 계속 복제를 진행하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 무시할 오류 코드를 나열한다. 이 설정 값은 높은 우선순위를 가지므로, <strong>ha_applylogdb_retry_error_list</strong> 파라미터나 “재시도 오류 리스트”에 의해 설정된 오류 코드와 값이 겹치면 이들을 무시하고 해당 오류를 유발한 작업을 재시도하지 않는다. “재시도 오류 리스트”는 아래 <strong>ha_applylogdb_retry_error_list</strong> 의 설명을 참고한다.</p>
 <p><strong>ha_applylogdb_retry_error_list</strong></p>
-<p>CUBRID HA의 복제 로그 반영 프로세스에서 오류가 발생하면 해당 오류를 유발한 작업이 성공할 때까지 반복적으로 재시도하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 재시도할 오류 코드를 나열한다. 이 값을 설정하지 않아도 기본으로 설정된 “재시도 오류 목록”는 다음 표와 같다. 하지만 이 값들이 <strong>ha_applylogdb_ignore_error_list</strong> 에 존재하면 오류를 무시하고 계속 복제를 진행한다.</p>
+<p>CUBRID HA의 복제 로그 반영 프로세스에서 오류가 발생하면 해당 오류를 유발한 작업이 성공할 때까지 반복적으로 재시도하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 재시도할 오류 코드를 나열한다. 이 값을 설정하지 않아도 기본으로 설정된 “재시도 오류 리스트”는 다음 표와 같다. 하지만 이 값들이 <strong>ha_applylogdb_ignore_error_list</strong> 에 존재하면 오류를 무시하고 계속 복제를 진행한다.</p>
 <blockquote>
-<div><p><strong>재시도 오류 목록</strong></p>
+<div><p><strong>재시도 오류 리스트</strong></p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>오류 코드 이름</p></th>
@@ -961,7 +961,7 @@
 <li><p><em>host5</em> : standby 상태, 복제 지연 없음</p></li>
 </ul>
 <p>이면 브로커는 먼저 복제 지연 상태인 2개의 호스트 <em>host2</em> , <em>host4</em> 까지 접속을 시도하고, <em>host4</em> 에 접속하는 것으로 결정한다.</p>
-<p>이렇게 동작하는 이유는 <strong>MAX_NUM_DELAYED_HOSTS_LOOKUP</strong>에서 명시한 개수까지만 복제 지연이 있다면 이후의 호스트들에도 복제 지연이 있을 것이라는 가정을 하기 때문이며, 따라서 더 이상 뒤의 호스트에 대해 접속 시도를 하지 않고 복제 지연이 있지만 가장 마지막에 접속을 시도했던 호스트에 접속하기로 결정하는 것이다. 단, <strong>PREFERRED_HOSTS</strong>가 같이 명시되는 경우 <strong>PREFERRED_HOSTS</strong>에 명시된 모든 호스트들에 대해 접속을 먼저 시도한 후 다시 db-host 목록의 처음부터 접속을 시도한다.</p>
+<p>이렇게 동작하는 이유는 <strong>MAX_NUM_DELAYED_HOSTS_LOOKUP</strong>에서 명시한 개수까지만 복제 지연이 있다면 이후의 호스트들에도 복제 지연이 있을 것이라는 가정을 하기 때문이며, 따라서 더 이상 뒤의 호스트에 대해 접속 시도를 하지 않고 복제 지연이 있지만 가장 마지막에 접속을 시도했던 호스트에 접속하기로 결정하는 것이다. 단, <strong>PREFERRED_HOSTS</strong>가 같이 명시되는 경우 <strong>PREFERRED_HOSTS</strong>에 명시된 모든 호스트들에 대해 접속을 먼저 시도한 후 다시 db-host 리스트의 처음부터 접속을 시도한다.</p>
 <p>브로커가 DB에 접속하기 위한 단계는 1차 연결과 2차 연결로 나뉜다.</p>
 <ul>
 <li><p>1차 연결: 브로커가 DB에 접속하기 위해 최초에 접속을 시도하는 단계. DB 상태(active/standby)와 복제 지연 여부를 확인.</p>

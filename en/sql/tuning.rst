@@ -4285,7 +4285,7 @@ In the following cases, **View Merging** is not performed:
 
 #. The view includes methods.
 
-#. The view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
+#. The view includes **RAND(), RANDOM(), DRAND(), DRANDOM(), SYS_GUID(), UUID()**.
 
 The following is an example that uses **NO_MERGE** hint on a view.
 
@@ -4395,7 +4395,7 @@ The following is an example using **Correlated Subquery**.
 
 When using **Correlated Subquery** as above, **View Merging** optimization cannot be performed.
 
-The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUID()**.
+The following is an example where a view includes **RAND(), RANDOM(), DRAND(), DRANDOM(), SYS_GUID(), UUID()**.
 
 .. code-block:: sql
 
@@ -4404,7 +4404,7 @@ The following is an example where a view includes **RANDOM(), DRANDOM(), SYS_GUI
                 (SELECT SYS_GUID (), athlete_code FROM record WHERE medal = 'G') b
         WHERE a.code = b.athlete_code;
 
-When using **RANDOM(), DRANDOM(), SYS_GUID()** in views as above, **View Merging** optimization cannot be performed.
+When using **RAND(), RANDOM(), DRAND(), DRANDOM(), SYS_GUID(), UUID()** in views as above, **View Merging** optimization cannot be performed.
 
 If **View Merging** optimization cannot be performed, **CUBRID** optimizes the **SELECT-LIST** item of the subquery. The following example shows how the **SELECT-LIST** of the subquery is optimized.
 
@@ -4494,7 +4494,7 @@ In the following cases, **Predicate Push** is not performed:
 
 #. The view includes methods.
 
-#. When the predicate to be pushed or the target for **Predicate Push** within the view uses **RANDOM (), DRANDOM (), SYS_GUID ()**\.
+#. When the predicate to be pushed or the target for **Predicate Push** within the view uses **RAND (), RANDOM (), DRAND (), DRANDOM (), SYS_GUID (), UUID ()**\.
 
 #. When performing an **OUTER JOIN** and either the predicate to be pushed or the target for **Predicate Push** within the view uses:
 
@@ -4626,7 +4626,7 @@ The **QUERY_CACHE** hint can be used to enhance the performance for the query wh
 *   a method is in the query
 *   a stored procedure or a stored function is in the query
 *   a system tables like dual, _db_attribute, and so on, is in the query
-*   a system function like sys_guid() is in the query
+*   a function that produces a different result on each execution, such as rand(), random(), drand(), drandom(), sys_guid(), or uuid(), is in the query
 
 When the hint is set and a new SELECT query is processed, the query cache is looked up if the query appears in the query cache. The queries are considered identical in case they use the same query text and the same bind values under the same database. If the cached query is not found, the query will be processed and then cached newly with its result. If the query is found from the cache, the results will be fetched from the cached area. AT the CSQL, we can measure the enhancement easily to execute the query repeatedly using the COUNT function as below example. The query and its results will be cached at the first appearance, so the response time is slower than the next same query. The second query's result is fetched from the cached area, so the response time is much faster than the prior same query's one. ::
 
@@ -4880,7 +4880,7 @@ Subquery cache optimization does not work in the following scenarios:
 * When the subquery includes OID-related features.
 * When the subquery includes the **NO_SUBQUERY_CACHE** hint.
 * When the subquery cache memory size exceeds the configured size (default: 2MB).
-* When the subquery contains functions that produce different results with each execution, such as random() or sys_guid().
+* When the subquery contains functions that produce different results with each execution, such as rand(), random(), drand(), drandom(), sys_guid(), or uuid().
 
 The following example shows that subquery caching is enabled only for the innermost correlated subquery and disabled for the outer correlated subquery.
 

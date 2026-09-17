@@ -28,7 +28,7 @@ CREATE TABLE
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} [schema_name.]superclass_name, ...
         
         <column_definition> ::= 
-            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint>}] [COMMENT 'column_comment_string']
+            column_name <data_type> [{<default_or_shared_or_ai> | <on_update> | <column_constraint> | <visibility>}] [COMMENT 'column_comment_string']
         
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
@@ -44,6 +44,8 @@ CREATE TABLE
                 <on_update> ::= [ON UPDATE <value_specification>]
          
             <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition> }
+
+            <visibility> ::= [{VISIBLE|INVISIBLE}]
                         
         <table_constraint> ::=             
             { 
@@ -94,6 +96,7 @@ CREATE TABLE
 *   <*column_constraint*>: 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다.
 *   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
+*   <*visibility*>: 칼럼을 감출지 여부를 지정하며, 기본값은 **VISIBLE** 이다. **CLASS ATTRIBUTE** 및 **SHARED ATTRIBUTE** 는 **INVISIBLE** 로 정의할 수 없다. 자세한 내용은 :ref:`invisible-column`\ 을 참고한다.
 *   *table_comment_string*: 테이블의 커멘트를 지정한다.
 *   *column_comment_string*: 칼럼의 커멘트를 지정한다.
 *   *index_comment_string*: 인덱스의 커멘트를 지정한다.
@@ -152,23 +155,25 @@ CREATE TABLE
 
 ::
 
-    <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] ... [COMMENT 'comment_string']
-    
+    <column_definition> ::=
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>] | [<visibility>]] ... [COMMENT 'comment_string']
+
         <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
             <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
             <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-        
+
         <default_or_shared_or_ai> ::=
-            SHARED <value_specification> | 
+            SHARED <value_specification> |
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
 
         <on_update> ::= [ON UPDATE <value_specification>]
 
         <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
+
+        <visibility> ::= [{VISIBLE | INVISIBLE}]
 
 칼럼 이름
 ^^^^^^^^^
@@ -223,6 +228,14 @@ CREATE TABLE
 +-------------------------------+---------------+
 | TO_CHAR(number[, format])     | STRING        |
 +-------------------------------+---------------+
+| UUID([version])               | BIT(128)      |
++-------------------------------+---------------+
+| SYS_GUID()                    | STRING        |
++-------------------------------+---------------+
+
+.. note::
+
+    **UUID** 는 **BIT** 타입을 반환하므로 **TO_CHAR** 로 감쌀 수 없다.
 
 .. note::
 
@@ -340,6 +353,16 @@ CREATE TABLE
 
 동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
+**AUTO_INCREMENT** 속성은 한 테이블 내에서 하나의 칼럼에만 정의할 수 있다. CREATE TABLE, ALTER TABLE ... ADD, ALTER TABLE ... CHANGE/MODIFY 등으로 한 테이블에 둘 이상의 **AUTO_INCREMENT** 칼럼을 정의하려고 하면 오류가 발생한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t (a INT AUTO_INCREMENT, b INT AUTO_INCREMENT);
+
+::
+
+    ERROR: A class can have only one AUTO_INCREMENT attribute.
+
 **AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 :ref:`alter-auto-increment` 을 참고한다.
 
 ::
@@ -388,7 +411,7 @@ CREATE TABLE
      
 .. code-block:: sql
 
-    CREATE TABLE t (id INT AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
+    CREATE TABLE t (id INT, id2 int) AUTO_INCREMENT = 5;
     
 ::
     
@@ -414,8 +437,128 @@ CREATE TABLE
         예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
 
         .. code-block:: sql
-          
+
             CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
+
+.. _invisible-column:
+
+INVISIBLE 칼럼
+^^^^^^^^^^^^^^
+
+칼럼을 **INVISIBLE** 로 정의하면, 질의문에 칼럼 이름을 직접 명시하지 않는 한 해당 칼럼은 존재하지 않는 것처럼 동작한다. 칼럼의 기본값은 **VISIBLE** 이며, **INVISIBLE** 로 정의한 칼럼만 감춰진다.
+
+::
+
+    column_name <data_type> ... [VISIBLE | INVISIBLE]
+
+칼럼 이름이 명시되지 않는 다음과 같은 상황에서 **INVISIBLE** 칼럼은 결과나 대상에서 제외된다.
+
+*   **SELECT** \* 와 같이 select 리스트에 칼럼 이름을 명시하지 않은 경우
+*   **NATURAL JOIN**, **JOIN ... USING** 과 같이 조인에 사용할 칼럼이 이름으로 자동 결정되는 경우(**INVISIBLE** 칼럼은 조인 대상 칼럼으로 사용되지 않는다.)
+*   **INSERT** 시 칼럼 목록을 생략한 경우
+
+질의문에 **INVISIBLE** 칼럼의 이름을 직접 명시하면 일반 칼럼과 동일하게 조회 및 입력할 수 있다.
+
+이 기능은 의도치 않은 데이터의 노출을 1차적으로 방지하거나, 기존 질의문을 변경하지 않고 새로운 칼럼을 추가하려는 경우 등에 유용하게 사용할 수 있다.
+
+.. note::
+
+    *   테이블에는 한 개 이상의 칼럼이 **VISIBLE** 로 정의되어야 한다. 모든 칼럼을 **INVISIBLE** 로 정의하면 에러가 발생한다.
+    *   **CLASS ATTRIBUTE**, **SHARED ATTRIBUTE**, 뷰(**VCLASS**)의 칼럼은 **INVISIBLE** 로 정의할 수 없다.
+    *   칼럼의 **INVISIBLE** 속성과 인덱스의 **INVISIBLE** 속성(:ref:`alter-index` 참고)은 서로 다른 개념이다.
+    *   **DBLINK** 로 원격 테이블을 조회하는 경우 **INVISIBLE** 칼럼이 정상적으로 동작하지 않으므로, **DBLINK** 대상 테이블에는 **INVISIBLE** 칼럼을 설정하지 않을 것을 권장한다.
+
+**PRIMARY KEY**, **FOREIGN KEY**, **UNIQUE**, **NOT NULL** 등 **INVISIBLE** 칼럼에 정의된 제약 조건은 일반 칼럼과 동일하게 정상적으로 동작한다. 예를 들어 **NOT NULL** 제약 조건이 정의된 **INVISIBLE** 칼럼에 값을 입력하지 않으면 **INSERT** 가 거부되며, **DEFAULT** 값이 정의되어 있으면 **DEFAULT** 값이 저장된다.
+
+다음은 **INVISIBLE** 칼럼에 **PRIMARY KEY** 와 **FOREIGN KEY** 를 정의하는 예제이다. 제약 조건을 위반하면 일반 칼럼과 동일하게 에러가 발생한다.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_pk_tbl (
+        id   INT PRIMARY KEY INVISIBLE,
+        name VARCHAR(20)
+    );
+    INSERT INTO inv_pk_tbl (id, name) VALUES (1, 'aaa');
+
+    -- 기본키 중복으로 에러가 발생한다.
+    INSERT INTO inv_pk_tbl (id, name) VALUES (1, 'bbb');
+
+::
+
+    ERROR: Operation would have caused one or more unique constraint violations.
+
+.. code-block:: sql
+
+    -- 기본키인 INVISIBLE 칼럼을 생략하면 NOT NULL 제약 조건으로 에러가 발생한다.
+    INSERT INTO inv_pk_tbl (name) VALUES ('ccc');
+
+::
+
+    ERROR: Missing value for attribute "id" with the NOT NULL constraint.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_fk_tbl (
+        ref_id INT INVISIBLE,
+        memo   VARCHAR(20),
+        CONSTRAINT fk_ref_id FOREIGN KEY (ref_id) REFERENCES inv_pk_tbl (id)
+    );
+    INSERT INTO inv_fk_tbl (ref_id, memo) VALUES (1, 'ok');
+
+    -- 참조하는 기본키 값이 존재하지 않으므로 에러가 발생한다.
+    INSERT INTO inv_fk_tbl (ref_id, memo) VALUES (99, 'no parent');
+
+::
+
+    ERROR: The constraint of the foreign key 'fk_ref_id' is invalid, due to value '99'.
+
+칼럼의 **INVISIBLE** 여부는 CSQL의 **;schema** 및 **DESC** 명령어, **SHOW CREATE TABLE** 구문, 시스템 카탈로그 :ref:`db_attribute <db-attribute>` (또는 :ref:`_db_attribute <-db-attribute>`)를 통해 확인할 수 있다.
+
+다음은 **INVISIBLE** 칼럼을 포함하는 테이블을 생성하고 조회하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE TABLE inv_tbl (
+        id     INT PRIMARY KEY,
+        name   VARCHAR(20),
+        secret VARCHAR(20) INVISIBLE,
+        note   VARCHAR(20) DEFAULT 'n/a' INVISIBLE,
+        req    VARCHAR(20) NOT NULL INVISIBLE
+    );
+    INSERT INTO inv_tbl (id, name, secret, req) VALUES (1, 'aaa', 'topsecret', 'must');
+    INSERT INTO inv_tbl (id, name, req) VALUES (2, 'bbb', 'must2');
+
+    -- SELECT * 는 INVISIBLE 칼럼(secret, note, req)을 제외한다.
+    SELECT * FROM inv_tbl;
+
+::
+
+               id  name
+    ===================================
+                1  'aaa'
+                2  'bbb'
+
+.. code-block:: sql
+
+    -- 칼럼 이름을 직접 명시하면 INVISIBLE 칼럼도 조회된다.
+    SELECT id, name, secret, note, req FROM inv_tbl;
+
+::
+
+               id  name                  secret                note                  req
+    =====================================================================================================
+                1  'aaa'                 'topsecret'           'n/a'                 'must'
+                2  'bbb'                 NULL                  'n/a'                 'must2'
+
+칼럼의 **VISIBLE**/**INVISIBLE** 상태는 **ALTER TABLE** 문의 :ref:`add-column` 또는 :ref:`change-column`\ 로 추가하거나 변경할 수 있다.
+
+.. code-block:: sql
+
+    -- INVISIBLE 칼럼 추가
+    ALTER TABLE inv_tbl ADD COLUMN extra VARCHAR(10) INVISIBLE;
+
+    -- secret 칼럼을 VISIBLE 로 변경
+    ALTER TABLE inv_tbl MODIFY secret VARCHAR(20) VISIBLE;
 
 .. _constraint-definition:
 
@@ -1169,6 +1312,8 @@ ALTER TABLE
 
     테이블의 소유자, **DBA**, **DBA** 의 멤버만이 테이블 스키마를 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 :ref:`granting-authorization` 참조)
 
+.. _add-column:
+
 ADD COLUMN 절
 -------------
 
@@ -1179,23 +1324,25 @@ ADD COLUMN 절
     ALTER [TABLE | CLASS] [schema_name.]table_name
     ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [FIRST | AFTER old_column_name] [)];
 
-        <column_definition> ::= 
-            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>]] [COMMENT 'comment_string']
-        
+        <column_definition> ::=
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<on_update>] | [<column_constraint>] | [<visibility>]] [COMMENT 'comment_string']
+
             <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
                 <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
                 <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-            
+
             <default_or_shared_or_ai> ::=
-                SHARED <value_specification> | 
+                SHARED <value_specification> |
                 DEFAULT <value_specification>  |
                 AUTO_INCREMENT [(seed, increment)]
 
             <on_update> ::= [ON UPDATE <value_specification>]
-            
+
             <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | [FOREIGN KEY] [WITH <index_with_option>] <referential_definition>}
+
+            <visibility> ::= [{VISIBLE | INVISIBLE}]
 
                 <referential_definition> ::=
                     REFERENCES [schema_name.]referenced_table_name (column_name, ...) [<referential_triggered_action> ...]
@@ -1224,7 +1371,8 @@ ADD COLUMN 절
     INSERT INTO a_tbl(age) VALUES(20),(30),(40);
 
     ALTER TABLE a_tbl ADD COLUMN phone VARCHAR(13) DEFAULT '000-0000-0000' AFTER name;
-    ALTER TABLE a_tbl ADD COLUMN birthday VARCHAR(20) DEFAULT TO_CHAR(SYSDATE,'YYYY-MM-DD'); 
+    ALTER TABLE a_tbl ADD COLUMN birthday VARCHAR(20) DEFAULT TO_CHAR(SYSDATE,'YYYY-MM-DD');
+    ALTER TABLE a_tbl ADD COLUMN memo VARCHAR(100) INVISIBLE;
     SELECT * FROM a_tbl;
      
 ::
@@ -1480,7 +1628,7 @@ ALTER COLUMN ... SET DEFAULT 절
 AUTO_INCREMENT 절
 -----------------
 
-**AUTO_INCREMENT** 절은 기존에 정의한 자동 증가값의 초기값을 변경할 수 있다. 단, 테이블 내에 **AUTO_INCREMENT** 칼럼이 한 개만 정의되어 있어야 한다. ::
+**AUTO_INCREMENT** 절은 기존에 정의한 자동 증가값의 초기값을 변경할 수 있다. 단, 테이블 내에 **AUTO_INCREMENT** 칼럼이 정의되어 있어야 한다. ::
 
     ALTER TABLE [schema_name.]table_name AUTO_INCREMENT = initial_value ;
 
@@ -1492,15 +1640,6 @@ AUTO_INCREMENT 절
 
     CREATE TABLE t (i int AUTO_INCREMENT);
     ALTER TABLE t AUTO_INCREMENT = 5;
-     
-    CREATE TABLE t (i int AUTO_INCREMENT, j int AUTO_INCREMENT);
-    
-    -- when 2 AUTO_INCREMENT constraints are defined on one table, below query returns an error.
-    ALTER TABLE t AUTO_INCREMENT = 5;
-
-::
-    
-    ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.
 
 .. warning:: **AUTO_INCREMENT**\의 초기값 변경으로 인해 **PRIMARY KEY**\나 **UNIQUE**\와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
 
@@ -1516,6 +1655,24 @@ CHANGE/MODIFY 절
 **MODIFY** 절은 칼럼의 타입, 크기 및 속성을 변경할 수 있으며, 칼럼의 이름은 변경할 수 없다.
 
 **CHANGE** 절이나 **MODIFY** 절로 새 칼럼에 적용할 타입, 크기 및 속성을 설정할 때 기존에 정의된 속성은 새 칼럼의 속성에 전달되지 않는다.
+
+**CHANGE** 절이나 **MODIFY** 절의 <*column_definition*>\에는 타입과 크기 외에 **NOT NULL**, **UNIQUE** 등의 칼럼 제약 조건과 **VISIBLE**/**INVISIBLE**\ (:ref:`invisible-column` 참고)을 함께 지정할 수 있다. 지정한 제약 조건은 **INVISIBLE** 칼럼에도 일반 칼럼과 동일하게 적용된다.
+
+다음은 **MODIFY** 절로 칼럼에 **UNIQUE** 제약 조건과 **INVISIBLE** 을 함께 지정하는 예제이다. 변경 이후 제약 조건을 위반하면 에러가 발생한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_mod (id INT PRIMARY KEY, code VARCHAR(20));
+
+    -- code 칼럼에 UNIQUE 제약 조건과 INVISIBLE 을 함께 지정한다.
+    ALTER TABLE t_mod MODIFY code VARCHAR(20) UNIQUE INVISIBLE;
+
+    INSERT INTO t_mod (id, code) VALUES (1, 'A');
+    INSERT INTO t_mod (id, code) VALUES (2, 'A');
+
+::
+
+    ERROR: Operation would have caused one or more unique constraint violations.
 
 **CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다. 단, **alter_table_change_type_strict** 설정 값이 **yes** 인 경우 에러가 발생한다. 마찬가지로 **allow_truncated_string** 설정 값이 **no** 인 경우에도 에러가 발생한다.
 
@@ -1565,7 +1722,7 @@ default값이 지정된 칼럼의 타입을 변경할 때, 지정된 default값�
 *   *tbl_name*: 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name*: 기존 칼럼의 이름을 지정한다.
 *   *new_col_name*: 변경할 칼럼의 이름을 지정한다.
-*   <*column_definition*>: 변경할 칼럼의 타입, 크기 및 속성, 커멘트를 지정한다.
+*   <*column_definition*>: 변경할 칼럼의 타입, 크기, 속성, 제약 조건 및 커멘트를 지정한다.
 *   *col_name*: 변경할 칼럼이 어느 칼럼 뒤에 위치할지를 지정한다.
 *   **SKIP_UPDATE_NULL**: 이 힌트가 추가되면 NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. :ref:`SKIP_UPDATE_NULL <skip-update-null>` 을 참고한다.
 

@@ -132,7 +132,7 @@ Key                                 VARCHAR         Whether a column has an inde
                                                         *   If the value is UNI, it is a unique index. (The unique index allows multiple NULL values but you can also set a NOT NULL constraint.)
                                                         *   If the value is MUL, it is the first column of the non-unique index that allows the given value to be displayed in the column several times. If the column composes a composite unique index, the value will be MUL. The combination of column values can be unique but the value of each column can appear several times.
 Default                             VARCHAR         Default value defined in the column
-Extra                               VARCHAR         Additional information available on the given column. For the column with **AUTO_INCREMENT** constraint, it shows the 'auto_increment'.
+Extra                               VARCHAR         Additional information available on the given column. A column with the **AUTO_INCREMENT** constraint shows 'auto_increment', and an **INVISIBLE** column shows 'invisible' (see :ref:`invisible-column`).
 =================================== =============== ======================================================================================================================================
 
 The following shows the examples of this syntax.
@@ -465,7 +465,7 @@ When a table name is specified, It shows the **CREATE TABLE** statement of the t
     ============================================
       'public.nation'       'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30), CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) DONT_REUSE_OID, COLLATE iso88591_bin'
 
-**SHOW CREATE TABLE** statement does not display as the user's written syntax. For example, the comment that user wrote is not displayed, and table names and column names are always displayed as lower case letters.
+**SHOW CREATE TABLE** statement does not display as the user's written syntax. For example, the comment that user wrote is not displayed, and table names and column names are always displayed as lower case letters. An **INVISIBLE** column is displayed with the **INVISIBLE** keyword in its column definition (see :ref:`invisible-column`).
 
 .. _show-create-view-statement:
 

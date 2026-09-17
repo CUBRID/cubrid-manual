@@ -440,7 +440,7 @@
 <td><p>속성의 데이터 타입. 아래의 ‘CUBRID가 지원하는 데이터 타입’ 표에서 명시하는 value 중 하나이다.</p></td>
 </tr>
 <tr class="row-odd"><td><p>default_value</p></td>
-<td><p>VARCHAR (255)</p></td>
+<td><p>VARCHAR (2048)</p></td>
 <td><p>기본값. 데이터 타입에 관계없이 모두 문자열로 저장된다. 기본값이 없으면
 <strong>NULL</strong> , 기본값이 <strong>NULL</strong> 이면 ‘NULL’로 표현된다.</p>
 <p>데이터 타입이 객체 타입이면 ‘volume id | page id | slot id’, 집합 타입이면
@@ -1389,7 +1389,7 @@ LIST - value list</p></td>
 <td><p>매개변수 모드 (IN, OUT, INOUT)</p></td>
 </tr>
 <tr class="row-even"><td><p>default_value</p></td>
-<td><p>CHARACTER VARYING(255)</p></td>
+<td><p>CHARACTER VARYING(2048)</p></td>
 <td><p>매개변수의 기본값</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_optional</p></td>
@@ -2396,21 +2396,26 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 <td><p>데이터 타입이 객체 타입인 경우 그 도메인 클래스 소유자명. 객체 타입이 아닌 경우 <strong>NULL</strong></p></td>
 </tr>
 <tr class="row-odd"><td><p>default_value</p></td>
-<td><p>VARCHAR (255)</p></td>
+<td><p>VARCHAR(2048)</p></td>
 <td><p>기본값으로서 그 데이터 타입에 관계없이 모두 문자열로 저장. 기본값이 없으면
 <strong>NULL</strong> , 기본값이 <strong>NULL</strong> 이면 ‘NULL’로 표현됨.
+속성이 AUTO_INCREMENT이면 ‘AUTO_INCREMENT’로 표현됨.
 데이터 타입이 객체 타입이면 ‘volume id | page id | slot id ‘, 컬렉션 타입이면
 ‘ {element 1, element 2, …}’로 표현됨.</p></td>
 </tr>
-<tr class="row-even"><td><p>is_nullable</p></td>
+<tr class="row-even"><td><p>is_partition_key</p></td>
+<td><p>VARCHAR (3)</p></td>
+<td><p>파티션 키 칼럼이면 ‘YES’, 그렇지 않으면 ‘NO’</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_nullable</p></td>
 <td><p>VARCHAR (3)</p></td>
 <td><p>not null 제약이 설정되어 있으면 ‘NO’, 그렇지 않으면 ‘YES’</p></td>
 </tr>
-<tr class="row-odd"><td><p>is_invisible</p></td>
+<tr class="row-even"><td><p>is_invisible</p></td>
 <td><p>VARCHAR (3)</p></td>
 <td><p>INVISIBLE 칼럼이면 ‘YES’, 그렇지 않으면 ‘NO’</p></td>
 </tr>
-<tr class="row-even"><td><p>comment</p></td>
+<tr class="row-odd"><td><p>comment</p></td>
 <td><p>VARCHAR(1024)</p></td>
 <td><p>속성 설명.</p></td>
 </tr>
@@ -3425,7 +3430,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 <td><p>선택적 매개변수 여부</p></td>
 </tr>
 <tr class="row-even"><td><p>default_value</p></td>
-<td><p>VARCHAR(255)</p></td>
+<td><p>VARCHAR(2048)</p></td>
 <td><p>매개변수의 기본값</p></td>
 </tr>
 <tr class="row-odd"><td><p>comment</p></td>
@@ -3696,7 +3701,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corporation Last updated: 7월 27, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corporation Last updated: 9월 17, 2026. </p>
 </div>
 </div>
 </footer>

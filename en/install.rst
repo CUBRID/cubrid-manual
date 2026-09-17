@@ -326,7 +326,7 @@ If WSL is enabled, the installer installs a Linux distribution that includes CUB
         In mirrored mode, Since Windows and WSL2 share the same network space, running a port that is already in use on Windows (e.g. 30000) inside WSL2 as well can cause a port conflict.
 
     *   In WSL1 mode, Windows and WSL are host-integrated, sharing the Windows host's IP address and network stack as-is (Windows firewall rules apply).
-    *   For networking configuration, see https://learn.microsoft.com/en-us/windows/wsl/wsl-config#networking.
+    *   For networking configuration, see https://learn.microsoft.com/ko-kr/windows/wsl/networking.
 
 .. _Installing-and-Running-on-Windows:
 

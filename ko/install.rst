@@ -329,7 +329,7 @@ WSL이 활성화 되어 있으면, 설치 프로그램은 CUBRID가 포함되어
         mirrored에 경우 윈도우와 WSL2가 동일한 네트워크 공간을 공유하므로, 윈도우에서 사용 중인 포트(예: 30000)를 WSL2 내부에서 중복으로 띄우면 포트 충돌발생 할 수 있습니다.
 
     *   WSL1 모드에서는 Windows와 WSL이 호스트 통합형으로 윈도우의 호스트의 IP와 네트워크 스택을 그대로 공유합니다. (윈도우 방화벽 규칙 적용)
-    *   네트워크 설정은 https://learn.microsoft.com/ko-kr/windows/wsl/wsl-config#networking 을 참고할 수 있다.
+    *   네트워크 설정은 https://learn.microsoft.com/ko-kr/windows/wsl/networking 을 참고할 수 있다.
 
 .. _Installing-and-Running-on-Windows:
 

@@ -440,12 +440,15 @@ If WSL needs to be installed and enabled, a reboot is required, and you must run
 If WSL is enabled, the installer installs a Linux distribution that includes CUBRID and a tray application for managing the CUBRID server.</p>
 <p><strong>Step 1: Selecting installation options</strong></p>
 <blockquote>
-<div><ul class="simple">
+<div><ul>
 <li><p>Set the distribution name</p></li>
 <li><p>Choose whether to register the tray application in the startup list</p></li>
 <li><p>Choose whether to create a desktop shortcut</p></li>
 <li><p>Choose whether to create a sample database</p></li>
-<li><p>Select WSL2 mode (checked installs in WSL2 mode; unchecked installs in WSL1 mode)</p></li>
+<li><p>Select WSL2 mode (checked by default). When checked, CUBRID is installed in WSL2 mode; when unchecked, it is installed in WSL1 mode.</p>
+<p>The supported platform requirements and verified behavior described above are based on WSL2 mode.
+WSL1 mode does not use the Linux kernel directly, so some features may be limited.</p>
+</li>
 </ul>
 </div></blockquote>
 <p><strong>Step 2: Specifying the installation directory</strong></p>
@@ -454,9 +457,18 @@ If WSL is enabled, the installer installs a Linux distribution that includes CUB
 <div><ul class="simple">
 <li><p>After installation completes, you can choose whether to run the tray application.</p></li>
 <li><p>The installer only provides install and uninstall functions. Uninstalling removes the WSL distribution
-and the tray application, which also deletes all databases and configuration files inside the distribution;
+and the tray application, and all databases and configuration files inside the distribution are also deleted;
 back up your databases before uninstalling.</p></li>
-<li><p>Upgrading and other usage are the same as on Linux.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Copy any files backed up with backupdb or other methods to the Windows filesystem (the /mnt/c/… path) and keep them outside the distribution.
+Files kept inside the distribution are deleted when it is removed.</p>
+</div>
+<ul class="simple">
+<li><p>To upgrade CUBRID, do not run the installer again. Instead, connect to the distribution and follow the same
+procedure as on Linux using the Linux installation file.
+For details, see the CUBRID upgrade section in <a class="reference internal" href="#installing-and-running-on-linux"><span class="std std-ref">Installing and Running CUBRID on Linux</span></a>.</p></li>
 </ul>
 </div></blockquote>
 <div class="admonition note">
@@ -465,6 +477,15 @@ back up your databases before uninstalling.</p></li>
 To stop this automatic startup on reboot, turn it off at “Settings &gt; Apps &gt; Startup &gt; <strong>cubrid_starter.exe</strong>”.
 Likewise, if the tray application was registered in the startup list, turn it off at “Settings &gt; Apps &gt; Startup &gt; <strong>cubrid_tray_app.exe</strong>” to stop it from starting automatically.</p>
 </div>
+<p><strong>Step 4: Verifying the installation</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>After installation, check that the distribution was installed by running <code class="docutils literal notranslate"><span class="pre">wsl</span> <span class="pre">-l</span> <span class="pre">-v</span></code> in the Windows Command Prompt.</p></li>
+<li><p>After installation, check that the CUBRID server is running by running
+<code class="docutils literal notranslate"><span class="pre">wsl</span> <span class="pre">-d</span> <span class="pre">&lt;distribution</span> <span class="pre">name&gt;</span> <span class="pre">-u</span> <span class="pre">cubrid</span> <span class="pre">--</span> <span class="pre">bash</span> <span class="pre">-l</span> <span class="pre">-c</span> <span class="pre">'cubrid</span> <span class="pre">service</span> <span class="pre">status'</span></code> in the Windows Command Prompt.</p></li>
+<li><p>Run the tray application and select the About menu to check the installed distribution name, CUBRID version, and status.</p></li>
+</ul>
+</div></blockquote>
 <p><strong>About the Distribution</strong></p>
 <blockquote>
 <div><ul class="simple">
@@ -474,10 +495,44 @@ Likewise, if the tray application was registered in the startup list, turn it of
 <li><p>To access the distribution, run <code class="docutils literal notranslate"><span class="pre">wsl</span> <span class="pre">-d</span> <span class="pre">&lt;distribution</span> <span class="pre">name&gt;</span> <span class="pre">-u</span> <span class="pre">cubrid</span></code> in the Windows Command Prompt.</p></li>
 </ul>
 </div></blockquote>
+<p><strong>Tray Application</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The tray application can start, stop, and restart the CUBRID server, and provides the following menu:</p>
+<ul>
+<li><p>About: Check the installed distribution name, CUBRID version, and status</p></li>
+<li><p>CUBRID Start: Start the CUBRID server</p></li>
+<li><p>CUBRID Stop: Stop the CUBRID server</p></li>
+<li><p>Guide: Network configuration and upgrade guide</p></li>
+<li><p>Exit: Exit the tray application</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
 <p><strong>About WSL</strong></p>
 <blockquote>
 <div><ul class="simple">
+<li><p>WSL2 offers improved performance over WSL1 and uses the Linux kernel directly, so you can use the latest Linux features.</p></li>
+<li><p>CUBRID can be installed and run on both WSL2 and WSL1, but WSL2 is recommended whenever your environment can use it.</p></li>
 <li><p>For more information about WSL, see <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/">https://learn.microsoft.com/en-us/windows/wsl/</a>.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>About Networking</strong></p>
+<blockquote>
+<div><ul>
+<li><p>In WSL2 mode, Windows and WSL communicate over a virtual NAT network, so port forwarding may need to be configured.</p>
+<p>Most versions support port forwarding automatically, so the server can be reached at localhost:&lt;port&gt;.
+To resolve the port forwarding and distribution IP address changes caused by the NAT mode, WSL2 supports a networking option called mirrored mode.
+Setting the following in the %USERPROFILE%\.wslconfig file makes WSL2 directly mirror the Windows network interface, the same way WSL1 does.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="p">[</span><span class="n">wsl2</span><span class="p">]</span>
+</span><span id="line-2"><span class="n">networkingMode</span><span class="o">=</span><span class="n">mirrored</span>
+</span></code></pre></div>
+</div>
+<p>Note:
+In mirrored mode, Since Windows and WSL2 share the same network space, running a port that is already in use on Windows (e.g. 30000) inside WSL2 as well can cause a port conflict.</p>
+</li>
+<li><p>In WSL1 mode, Windows and WSL are host-integrated, sharing the Windows host’s IP address and network stack as-is (Windows firewall rules apply).</p></li>
+<li><p>For networking configuration, see <a class="reference external" href="https://learn.microsoft.com/ko-kr/windows/wsl/networking">https://learn.microsoft.com/ko-kr/windows/wsl/networking</a>.</p></li>
 </ul>
 </div></blockquote>
 </section>
@@ -831,7 +886,7 @@ In this case, you need to install Microsoft Visual C++ Redistributable.</p>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 11, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 17, 2026. </p>
 </div>
 </div>
 </footer>

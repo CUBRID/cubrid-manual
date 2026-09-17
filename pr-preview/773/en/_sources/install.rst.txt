@@ -253,7 +253,10 @@ If WSL is enabled, the installer installs a Linux distribution that includes CUB
     *   Choose whether to register the tray application in the startup list
     *   Choose whether to create a desktop shortcut
     *   Choose whether to create a sample database
-    *   Select WSL2 mode (checked installs in WSL2 mode; unchecked installs in WSL1 mode)
+    *   Select WSL2 mode (checked by default). When checked, CUBRID is installed in WSL2 mode; when unchecked, it is installed in WSL1 mode.
+
+        The supported platform requirements and verified behavior described above are based on WSL2 mode.
+        WSL1 mode does not use the Linux kernel directly, so some features may be limited.
 
 **Step 2: Specifying the installation directory**
 
@@ -261,15 +264,29 @@ If WSL is enabled, the installer installs a Linux distribution that includes CUB
 
     *   After installation completes, you can choose whether to run the tray application.
     *   The installer only provides install and uninstall functions. Uninstalling removes the WSL distribution
-        and the tray application, which also deletes all databases and configuration files inside the distribution;
+        and the tray application, and all databases and configuration files inside the distribution are also deleted;
         back up your databases before uninstalling.
-    *   Upgrading and other usage are the same as on Linux.
+
+    .. warning::
+        Copy any files backed up with backupdb or other methods to the Windows filesystem (the /mnt/c/... path) and keep them outside the distribution.
+        Files kept inside the distribution are deleted when it is removed.
+
+    *   To upgrade CUBRID, do not run the installer again. Instead, connect to the distribution and follow the same
+        procedure as on Linux using the Linux installation file.
+        For details, see the CUBRID upgrade section in :ref:`Installing-and-Running-on-Linux`.
 
 .. note::
 
     Once installation is complete, the CUBRID WSL distribution and the CUBRID server are set to start automatically whenever the system reboots.
     To stop this automatic startup on reboot, turn it off at "Settings > Apps > Startup > **cubrid_starter.exe**".
     Likewise, if the tray application was registered in the startup list, turn it off at "Settings > Apps > Startup > **cubrid_tray_app.exe**" to stop it from starting automatically.
+
+**Step 4: Verifying the installation**
+
+    *   After installation, check that the distribution was installed by running ``wsl -l -v`` in the Windows Command Prompt.
+    *   After installation, check that the CUBRID server is running by running
+        ``wsl -d <distribution name> -u cubrid -- bash -l -c 'cubrid service status'`` in the Windows Command Prompt.
+    *   Run the tray application and select the About menu to check the installed distribution name, CUBRID version, and status.
 
 **About the Distribution**
 
@@ -278,9 +295,38 @@ If WSL is enabled, the installer installs a Linux distribution that includes CUB
     *   CUBRID is installed at /home/cubrid/CUBRID in the distribution, and the CUBRID environment variables are set in /home/cubrid/.cubrid.sh.
     *   To access the distribution, run ``wsl -d <distribution name> -u cubrid`` in the Windows Command Prompt.
 
+**Tray Application**
+
+    *   The tray application can start, stop, and restart the CUBRID server, and provides the following menu:
+
+        *   About: Check the installed distribution name, CUBRID version, and status
+        *   CUBRID Start: Start the CUBRID server
+        *   CUBRID Stop: Stop the CUBRID server
+        *   Guide: Network configuration and upgrade guide
+        *   Exit: Exit the tray application
+
 **About WSL**
 
+    *   WSL2 offers improved performance over WSL1 and uses the Linux kernel directly, so you can use the latest Linux features.
+    *   CUBRID can be installed and run on both WSL2 and WSL1, but WSL2 is recommended whenever your environment can use it.
     *   For more information about WSL, see https://learn.microsoft.com/en-us/windows/wsl/.
+
+**About Networking**
+
+    *   In WSL2 mode, Windows and WSL communicate over a virtual NAT network, so port forwarding may need to be configured.
+
+        Most versions support port forwarding automatically, so the server can be reached at localhost:<port>.
+        To resolve the port forwarding and distribution IP address changes caused by the NAT mode, WSL2 supports a networking option called mirrored mode.
+        Setting the following in the %USERPROFILE%\\.wslconfig file makes WSL2 directly mirror the Windows network interface, the same way WSL1 does. ::
+
+            [wsl2]
+            networkingMode=mirrored
+
+        Note:
+        In mirrored mode, Since Windows and WSL2 share the same network space, running a port that is already in use on Windows (e.g. 30000) inside WSL2 as well can cause a port conflict.
+
+    *   In WSL1 mode, Windows and WSL are host-integrated, sharing the Windows host's IP address and network stack as-is (Windows firewall rules apply).
+    *   For networking configuration, see https://learn.microsoft.com/ko-kr/windows/wsl/networking.
 
 .. _Installing-and-Running-on-Windows:
 

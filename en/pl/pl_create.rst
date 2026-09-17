@@ -233,7 +233,7 @@ You can specify default values for the arguments of stored procedures and stored
 
 * You can specify default values using the **:=** or **DEFAULT** keywords.
 * When a default value is specified, you can omit the argument when calling the stored procedure or function. The omitted argument will be replaced with the default value.
-* Default values can be specified as literal values and are stored as string values up to 255 bytes. An error will occur if this size is exceeded.
+* Default values can be specified as literal values and are stored as string values up to 2048 bytes. An error will occur if this size is exceeded.
 * The following functions are allowed as default values in addition to literal values:
 
 +-------------------------------+---------------+

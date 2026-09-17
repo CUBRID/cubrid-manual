@@ -53,7 +53,7 @@ CREATE SERIAL
 
 *   **NOCACHE**: 시리얼 캐시 기능을 사용하지 않으며, 매번 시리얼 값을 업데이트한다. 기본값은 **NOCACHE** 이다.
 
-*   *comment_string*: 시리얼의 커멘트를 지정한다.
+*   *comment_string*: 시리얼의 주석을 지정한다.
 
 .. code-block:: sql
 
@@ -97,10 +97,10 @@ CREATE SERIAL
             10004  'Choo'
             10004  'Lee'
 
-시리얼의 커멘트
+시리얼의 주석
 ---------------
 
-다음은 시리얼 생성 시 커멘트를 추가한다.
+다음은 시리얼 생성 시 주석을 추가한다.
 
 .. code-block:: sql
 
@@ -108,13 +108,13 @@ CREATE SERIAL
     START WITH 100 INCREMENT BY 2 MAXVALUE 200 
     COMMENT 'from 100 to 200 by 2';
 
-시리얼의 커멘트를 확인하려면 다음의 구문을 실행한다.
+시리얼의 주석을 확인하려면 다음의 구문을 실행한다.
 
 .. code-block:: sql
 
     SELECT name, comment FROM db_serial;
 
-시리얼 커멘트의 변경은 ALTER SERIAL 문의 설명을 참고한다.
+시리얼 주석의 변경은 ALTER SERIAL 문의 설명을 참고한다.
 
 ALTER SERIAL
 ============
@@ -155,7 +155,7 @@ ALTER SERIAL
 
 *   **NOCACHE**: 시리얼 캐시 기능을 사용하지 않으며, 매번 시리얼 값이 업데이트된다. 기본값은 **NOCACHE** 이다.
 
-*   *comment_string*: 시리얼의 커멘트를 지정한다.
+*   *comment_string*: 시리얼의 주석을 지정한다.
 
 .. code-block:: sql
 
@@ -187,7 +187,7 @@ ALTER SERIAL
         -- From 9.0, above query returns 10
         -- In the version less than 9.0, above query returns 11
 
-다음은 시리얼의 커멘트를 변경한다.
+다음은 시리얼의 주석을 변경한다.
 
 .. code-block:: sql
 
@@ -197,7 +197,7 @@ DROP SERIAL
 ===========
 
 **DROP SERIAL** 문으로 시리얼 객체를 데이터베이스에서 삭제할 수 있다. 
-**IF EXISTS** 절을 함께 지정하는 경우, 대상 시리얼이 없어도 에러가 발생하지 않는다.
+**IF EXISTS** 절을 함께 지정하는 경우, 대상 시리얼이 없어도 오류가 발생하지 않는다.
 
 ::
 

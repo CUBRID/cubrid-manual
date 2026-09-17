@@ -18,16 +18,16 @@ Python 설치 및 설정
 Linux/Unix
 ----------
 
-Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법으로 CUBRID Python 드라이버를 설치할 수 있다.
+Linux, Unix 및 유사 운영 체제에서는 다음과 같은 세 가지 방법으로 CUBRID Python 드라이버를 설치할 수 있다.
 
 **기본 환경**
 
-*   운영체제: Linux: 32 비트/64비트 또는 유사 Unix 운영체제
+*   운영 체제: Linux: 32 비트/64비트 또는 유사 Unix 운영 체제
 *   Python: 2.4 이상(https://www.python.org/downloads/)
 
-**소스코드로 설치(Linux)**
+**소스 코드로 설치(Linux)**
 
-소스코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. 
+소스 코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. 
 
 .. FIXME: Python Development Package가 설치되어 있지 않다면 http://www.cubrid.org/wiki_apis/entry/install-python-development-package\ 를 참고하여 설치한다.
 
@@ -64,7 +64,7 @@ Windows
 
 Windows에 CUBRID Python 드라이버를 설치하려면 다음과 같이 CUBRID Python 드라이버를 다운로드하여 설치한다.
 
-*   다음 주소에서 운영체제와 Python의 버전에 맞는 드라이버를 다운로드한다.
+*   다음 주소에서 운영 체제와 Python의 버전에 맞는 드라이버를 다운로드한다.
 
     https://www.cubrid.org/downloads#python
 

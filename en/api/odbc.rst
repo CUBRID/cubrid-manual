@@ -134,7 +134,7 @@ When you are programming CUBRID ODBC, write the connection strings as follows:
 +--------------+-----------------------+-----------------------------------------------------------+
 | PORT         | 33000                 | The broker port number                                    |
 +--------------+-----------------------+-----------------------------------------------------------+
-| SERVER       | 127.0.0.1             | The IP address or the host name of a CUBRID broker server |
+| SERVER       | 127.0.0.1             | The IP address or the hostname of a CUBRID broker server  |
 +--------------+-----------------------+-----------------------------------------------------------+
 | DB_NAME      | demodb                | Database name                                             |
 +--------------+-----------------------+-----------------------------------------------------------+

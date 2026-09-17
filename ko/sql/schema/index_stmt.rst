@@ -45,13 +45,13 @@ CREATE INDEX
     *deduplicate_level*\은 0부터 14까지의 정수이다. 0은 **DEDUPLICATE** 옵션이 없었던 CUBRID 11.2 또는 이하 버전과 동일한 구성의 인덱스를 의미한다.
     
 
-*   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 컬럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 :ref:`filtered-index` 를 참고한다.
+*   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 칼럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 :ref:`filtered-index` 를 참고한다.
 
 *   *function_name* (*argument_list*): 함수 기반 인덱스를 만드는 조건을 명시한다. 이와 관련하여 :ref:`function-index`\ 를 반드시 참고한다.
 *   **WITH ONLINE**: 다른 트랜잭션들에 의해 테이블 데이터가 변경중에 인덱스의 생성을 허용한다. **PARALLEL** 이 선언되지 않은 경우, 인덱스는 동일 트랜잭션 스레드에서 생성된다. <parallel_count>는 인덱스를 생성하기 위해 사용되는 스레드의 개수이며 1부터 16사이의 정수이다.
 *   **INVISIBLE**: 인덱스를 생성할 때 인덱스의 상태를 **INVISIBLE** 로 설정하면, 질의 실행시 해당 인덱스를 사용하지 않는다는 것을 의미한다. **INVISIBLE** 이 생략된 경우 생성되는 인덱스의 상태는 **NORMAL_INDEX** 로 설정된다.
 
-*   *index_comment_string*: 인덱스의 커멘트를 지정한다.
+*   *index_comment_string*: 인덱스의 주석을 지정한다.
 
 ..  note::
 
@@ -59,9 +59,9 @@ CREATE INDEX
 
     *   prefix 인덱스 기능은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.
 
-    *   데이터베이스의 TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE 또는 DATETIME WITH LOCAL TIME ZONE 타입 컬럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 세션 및 서버 타임존(:ref:`timezone-parameters`)을 변경하면 안 된다.
+    *   데이터베이스의 TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE 또는 DATETIME WITH LOCAL TIME ZONE 타입 칼럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 세션 및 서버 타임존(:ref:`timezone-parameters`)을 변경하면 안 된다.
     
-    *   데이터베이스의 TIMESTAMP 또는 TIMESTAMP WITH LOCAL TIME ZONE 타입 컬럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 윤초를 지원하는 파라미터(:ref:`timezone-parameters`)를 변경하면 안 된다.
+    *   데이터베이스의 TIMESTAMP 또는 TIMESTAMP WITH LOCAL TIME ZONE 타입 칼럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 윤초를 지원하는 파라미터(:ref:`timezone-parameters`)를 변경하면 안 된다.
 
     *   **PARALLEL** 옵션에 설정된 스레드의 개수는 인덱스 로드 과정에서만 적용된다. 수집 과정은 해당 트랜잭션에서 단일 스레드로 실행된다. 이 과정에서 레코드들은 특정 단위의 묶음으로 수집되고, 묶음들의 크기가 16M에 도달한 경우 인덱스 로딩 스레드에 전달하고 (또는 큐에 입력한다), 수집 프로세스는 계속 진행한다. 한 묶음의 크기는 인덱스 키 길이와 열의 식별자 길이(8 bytes)로 결정한다.
     
@@ -91,10 +91,10 @@ CREATE INDEX
 
     CREATE INDEX name_nation_idx ON athlete(name, nation_code) COMMENT 'index comment';
 
-인덱스의 커멘트
+인덱스의 주석
 ---------------
 
-인덱스의 커멘트를 다음과 같이 지정할 수 있다. 
+인덱스의 주석을 다음과 같이 지정할 수 있다. 
 
 .. code-block:: sql
 
@@ -106,7 +106,7 @@ CREATE INDEX
 
     ALTER TABLE tbl2 ADD INDEX i_tbl2_b (b) COMMENT 'index comment b';
 
-지정된 인덱스의 커멘트는 다음 구문에서 확인할 수 있다.
+지정된 인덱스의 주석은 다음 구문에서 확인할 수 있다.
 
 .. code-block:: sql
 
@@ -114,7 +114,7 @@ CREATE INDEX
     SELECT index_name, class_name, comment from db_index WHERE class_name ='classname';
     SHOW INDEX FROM table_name;
 
-또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.
+또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 주석을 확인할 수 있다.
 
 .. code-block:: shell
 
@@ -254,7 +254,7 @@ DEDUPLICATE
  
 묵시적인 방법
 
-    SQL 구문에 명시적인 DEDUPLICATE 옵션 지정이 없는 경우에 *deduplicate level*\를 자동으로 지정해 주는 방식이다. 이 방식은 시스템 파라메터 **deduplicate_key_level** 설정값의 영향을 받는다.
+    SQL 구문에 명시적인 DEDUPLICATE 옵션 지정이 없는 경우에 *deduplicate level*\를 자동으로 지정해 주는 방식이다. 이 방식은 시스템 파라미터 **deduplicate_key_level** 설정값의 영향을 받는다.
     **deduplicate_key_level**\이 1 이상이면 *deduplicate level*\은 자동으로  **deduplicate_key_level**\값으로 지정된다.    
 
 명시적인 방법
@@ -271,13 +271,13 @@ DEDUPLICATE
 .. warning::
 
     * **deduplicate_key_level**\이 **\-1**\인 경우는 명시적인 방법으로 지정을 해도 내부적으로 무시되어 적용되지 않는다. 즉 이 경우에는 모든 인덱스는 *deduplicate level*\이 **0**\으로 생성된다.
-    * "**_dedup_**"\로 시작되는 컬럼명을 생성할 수 없다.
+    * "**_dedup_**"\로 시작되는 칼럼명을 생성할 수 없다.
 
 .. note::
     
     * 인덱스 생성시 키 필드의 구성이 UNIQUE를 보장 받는다면 사용자가 설정한 DEDUPLICATE 설정이 무시되며  *deduplicate level*\은 **0**\으로 생성된다.
         * 키 필드가 특정한 Primary Key 또는 Unique Index를 구성하는 키필드를 모두 포함하고 있는 경우
-        * 단, 인덱스의 함수 인수로 Primary Key 또는 Unique Index의 컬럼이 사용된 경우는 제외
+        * 단, 인덱스의 함수 인수로 Primary Key 또는 Unique Index의 칼럼이 사용된 경우는 제외
 
 동일한 구성을 갖는 복수의 인덱스 허용
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -292,7 +292,7 @@ DEDUPLICATE
         CREATE UNIQUE INDEX idx_uk ON tbl(b); 
         CREATE INDEX idx3 ON tbl(b, c) WITH DEDUPLICATE=7;
 
-    위 예시에서 idx1과 idx2는 지정된 *deduplicate level*\을 갖는다. 그렇지만 idx3는 b 컬럼이 idx_uk에 의해 Unique 할 것을 보장 받기 때문에 사용자의 지정을 무시하고 *deduplicate level*\이 **0**\으로 생성된다.
+    위 예시에서 idx1과 idx2는 지정된 *deduplicate level*\을 갖는다. 그렇지만 idx3는 b 칼럼이 idx_uk에 의해 Unique 할 것을 보장 받기 때문에 사용자의 지정을 무시하고 *deduplicate level*\이 **0**\으로 생성된다.
 
 .. note::
 
@@ -327,7 +327,7 @@ ALTER INDEX
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *table_name*: 인덱스를 재구성할 테이블의 이름을 명시한다.
 *   **REBUILD**: 기존과 동일한 구조의 인덱스로 재구성한다.
-*   *index_comment_string*: 인덱스의 커멘트를 지정한다.
+*   *index_comment_string*: 인덱스의 주석을 지정한다.
 
 .. note::
 
@@ -337,7 +337,7 @@ ALTER INDEX
     
     *   CUBRID 10.0 버전부터는 테이블 이름 뒤에 칼럼 이름을 추가하더라도 이는 무시되며, 예전 인덱스와 동일한 칼럼으로 재생성된다.
 
-    *   CUBRID 11.4 버전부터는 테이블 이름 뒤에 칼럼 이름을 추가하면 에러가 발생한다.
+    *   CUBRID 11.4 버전부터는 테이블 이름 뒤에 칼럼 이름을 추가하면 오류가 발생한다.
     
 
 다음은 인덱스를 재생성하는 구문이다.
@@ -347,13 +347,13 @@ ALTER INDEX
     CREATE INDEX i_game_medal ON game(medal);
     ALTER INDEX i_game_medal ON game COMMENT 'rebuild index comment' REBUILD ;
 
-인덱스를 재구성하지 않고 인덱스의 커멘트를 추가하거나 변경하려는 경우 다음과 같이 **COMMENT** 절을 추가하고 **REBUILD** 키워드를 제거한다.
+인덱스를 재구성하지 않고 인덱스의 주석을 추가하거나 변경하려는 경우 다음과 같이 **COMMENT** 절을 추가하고 **REBUILD** 키워드를 제거한다.
 
 .. code-block:: sql
 
     ALTER INDEX index_name ON table_name COMMENT 'index_comment_string' ;
     
-다음은 인덱스 재구성 없이 커멘트만 추가 또는 변경하는 구문이다.
+다음은 인덱스 재구성 없이 주석만 추가 또는 변경하는 구문이다.
 
 .. code-block:: sql
     

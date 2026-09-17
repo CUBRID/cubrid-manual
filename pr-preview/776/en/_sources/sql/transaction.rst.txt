@@ -420,7 +420,7 @@ Let's see how snapshot works (**REPEATABLE READ** isolation will be used to keep
 +-------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 |                                                                   | .. code-block:: sql                                                               |
 |                                                                   |                                                                                   |
-|                                                                   |   -- even though inserter did commit, this snapshot still cannot see the row      |
+|                                                                   |   -- even though inserter did commit, this snapshot still can't see the row       |
 |                                                                   |   csql> SELECT * FROM tbl;                                                        |
 |                                                                   |                                                                                   |
 |                                                                   |   There are no results.                                                           |

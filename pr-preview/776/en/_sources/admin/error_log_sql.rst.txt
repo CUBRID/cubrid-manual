@@ -1071,7 +1071,7 @@ Query (SQL) Related Errors
 
 .. _ERROR-901:
 
-**ERROR CODE: -901, 'Java VM cannot be started: %1$s.'**
+**ERROR CODE: -901, 'Java VM can not be started: %1$s.'**
 
 - This message occurs when the CUBRID database system tried to start a JVM (Java Virtual Machine) process but failed, that is, the CUBRID server process attempted to create and initialize a JVM process to execute Java-based stored procedures (Stored Procedure) or user-defined functions (User Defined Function), but the JVM process could not be started normally due to various problems such as JVM library loading failure, JVM creation failure, failure to find required Java tables, memory allocation failure, or issues during JVM initialization. (From version 11.4, it occurs when pl_server for SP processing cannot be started)
 
@@ -1120,14 +1120,14 @@ Query (SQL) Related Errors
 
 .. _ERROR-911:
 
-**ERROR CODE: -911, 'Invalid call: it cannot return ResultSet.'**
+**ERROR CODE: -911, 'Invalid call: it can not return ResultSet.'**
 
 - This message occurs when calling a stored procedure (Stored Procedure) in the CUBRID database and the stored procedure is defined in a way that cannot return a ResultSet (query result set), or it is called in a context where returning a ResultSet is not allowed, that is, this error occurs when a specific stored procedure in CUBRID is not designed to return a ResultSet directly, or when the current execution environment (e.g., calling from inside another stored procedure, etc.) does not support returning a ResultSet, this situation generally occurs when calling a stored procedure using a `CALL` statement and the procedure definition or invocation method violates ResultSet return rules, this is a protective error to protect execution rules of stored procedures and the consistency of the database system.
 
 
 .. _ERROR-912:
 
-**ERROR CODE: -912, 'ResultSet cannot be used input parameter.'**
+**ERROR CODE: -912, 'ResultSet can not be used input parameter.'**
 
 - This message occurs when trying to use the 'RESULTSET' type as an input parameter while defining a stored procedure (Stored Procedure) or a function (Function) in the CUBRID database system, because in CUBRID's stored procedure system, the `RESULTSET` type is restricted to be used only as an output parameter. This is a constraint to protect system stability in terms of data flow and memory management.
 
@@ -1568,7 +1568,7 @@ This message occurs when you try to change the value of an auto increment (AUTO_
 
 .. _ERROR-1118:
 
-**ERROR CODE: -1118, 'The argument of "%1$s" cannot be coerced to desired domain "%2$s".'**
+**ERROR CODE: -1118, 'The argument of "%1$s" can not be coerced to desired domain "%2$s".'**
 
 - This message occurs when, in the CUBRID database, the argument of a function or operation cannot be converted to the desired domain type. That is, it means that an incompatible data type conversion (type casting) was attempted. This mainly occurs when performing operations between different data types in aggregate functions (MEDIAN, AVG, SUM, etc.) or arithmetic operations. The system attempts automatic conversion to compatible types such as DOUBLE, DATETIME, TIME, etc., but if conversion is not possible, it raises this error.
 

@@ -3364,7 +3364,7 @@ The error messages are stored in **$CUBRID/log**/\ *<db_name>_pl*\ **.err**.
 | -900  | VM library is not found: %1$s.                   | CUBRID cannot find the JVM library from the         | Check if the CUBRID_JAVA_HOME is set correctly.                                   |
 |       |                                                  | CUBRID_JAVA_HOME                                    | Refer to :ref:`cubrid-pl-environment-configuration`.                              |
 +-------+--------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
-| -901  | PL server cannot be started: %1$s.               | An unexpected error occurred within the JVM library | Try reinstalling the JRE, and if the same error occurs,                           |
+| -901  | PL server can not be started: %1$s.              | An unexpected error occurred within the JVM library | Try reinstalling the JRE, and if the same error occurs,                           |
 |       |                                                  | or in $CUBRID/java/jspserver.jar.                   | try installing a different version of the JRE.                                    |
 |       |                                                  |                                                     | Also, replace the $CUBRID/java/jspserver.jar file with the one from the same      |
 |       |                                                  |                                                     | version of CUBRID.                                                                |

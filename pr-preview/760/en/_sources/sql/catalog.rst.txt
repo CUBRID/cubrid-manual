@@ -199,7 +199,7 @@ Represents attribute information. An index for class_of, attr_name and attr_type
 +--------------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | data_type          | INTEGER                | Data type of the attribute. One of the values specified in the "Data Types Supported by CUBRID" table below.                                                |
 +--------------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| default_value      | VARCHAR(255)           | Default value. Stores as a character string regardless of data types. If there is no default value, NULL. If the default value is                           |
+| default_value      | VARCHAR(2048)          | Default value. Stores as a character string regardless of data types. If there is no default value, NULL. If the default value is                           |
 |                    |                        | **NULL**, **NULL** is used.                                                                                                                                 |
 |                    |                        |                                                                                                                                                             |
 |                    |                        | If the data type is an object, 'volume id | page id | slot id' is used. If the data type is a collection, '{element 1, element 2, ... is used.              |
@@ -835,7 +835,7 @@ is_system_generated  INTEGER                     Indicates whether the stored pr
 arg_name             CHARACTER VARYING(255)      Argument name
 data_type            INTEGER                     Argument data type
 mode                 INTEGER                     Arguemnt mode (IN, OUT, INOUT)
-default_value        CHARACTER VARYING(255)      Default value of the argument
+default_value        CHARACTER VARYING(2048)     Default value of the argument
 is_optional          INTEGER                     Whether the parameter is optional
 comment              CHARACTER VARYING(1024)     Comment to describe the argument
 ==================== =========================== =========================================================
@@ -1483,14 +1483,17 @@ Represents the attribute information of a class for which the current user has a
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | domain_owner_name | VARCHAR(255)  | Owner name of the domain class if the data type is an object.  **NULL** otherwise.                            |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-| default_value     | VARCHAR(255)  | Saved as a character string by default, regardless of data types. If no default value is specified,           |
+| default_value     | VARCHAR(2048) | Saved as a character string by default, regardless of data types. If no default value is specified,           |
 |                   |               | **NULL** is stored. If a default value is  **NULL**, it is displayed as 'NULL'.                               |
+|                   |               | If the attribute is AUTO_INCREMENT, it is displayed as 'AUTO_INCREMENT'.                                      |
 |                   |               | An object data type is represented as 'volume id | page id | slot id' while a set data type is represented    |
 |                   |               | as '{element 1, element 2, ... }'.                                                                            |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| is_partition_key  | VARCHAR(3)    | 'YES' if the column is a partition key, and 'NO' otherwise.                                                   |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | is_nullable       | VARCHAR(3)    | 'NO' if a not null constraint is set, and 'YES' otherwise.                                                    |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-| is_invisible      | VARCHAR(3)    | 'YES' if the column is INVISIBLE, and 'NO' otherwise.                                                          |
+| is_invisible      | VARCHAR(3)    | 'YES' if the column is INVISIBLE, and 'NO' otherwise.                                                         |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | comment           | VARCHAR(1024) | Comment to describe the attribute.                                                                            |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
@@ -2162,7 +2165,7 @@ arg_name             VARCHAR(255)                Argument name
 data_type            VARCHAR(16)                 Data type of the argument
 mode                 VARCHAR(6)                  Mode (IN, OUT, INOUT)
 is_optional          VARCHAR(3)                  Whether the parameter is optional
-default_value        VARCHAR(255)                Default value of the argument
+default_value        VARCHAR(2048)               Default value of the argument
 comment              VARCHAR(1024)               Comment to describe the argument
 ==================== =========================== =========================================================
 

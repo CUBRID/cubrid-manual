@@ -136,13 +136,13 @@ PL/CSQL 실행문으로 직접 사용할 수 있는 SQL구문은 다음과 같�
 위 목록에 포함되지 않는 다른 SQL 문들은 직접 사용할 수는 없으나,
 아래에서 설명하는 Dynamic SQL 문을 써서 실행할 수 있다.
 
-SELECT 문은 실행문으로 사용될 뿐만 아니라 :ref:`커서를 선언 <cursor_decl>`\할 때나
+SELECT 문은 실행문으로 사용될 뿐만 아니라 :ref:`커서를 정의 <cursor_def>`\할 때나
 :ref:`OPEN-FOR <cursor_manipulation>` 문에도 사용된다.
 SELECT 문의 INTO 절에 프로그램의 변수나 OUT 인자를 사용하여 조회 결과를 담을 수 있다.
 이 때 조회 결과 값들의 개수는 INTO 절 안의 변수나 OUT 인자의 개수와 일치해야 하며
 값들은 대응되는 변수나 OUT 인자에 대입 가능한 타입을 가져야 한다.
 SELECT 문을 실행문으로 사용할 때는 INTO 절을 반드시 포함해야 하는 반면
-SELECT 문을 :ref:`커서 선언 <cursor_decl>`\이나 :ref:`OPEN-FOR <cursor_manipulation>` 문에서
+SELECT 문을 :ref:`커서 정의 <cursor_def>`\이나 :ref:`OPEN-FOR <cursor_manipulation>` 문에서
 사용할 때는 INTO 절을 포함하지 않아야 한다.
 
 .. code-block:: sql
@@ -274,6 +274,8 @@ Dynamic SQL은 주로 다음 두 가지 경우에 필요하다.
         EXECUTE IMMEDIATE 'insert into ' || new_table || ' select * from history where athlete = ?'
         USING p_name;
     END;
+
+.. _plcsql_identifier:
 
 작성 규칙
 ==================

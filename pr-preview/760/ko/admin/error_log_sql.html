@@ -949,7 +949,7 @@
 </ul>
 <p id="error-1056"><strong>ERROR CODE: -1056, ‘To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.’</strong></p>
 <ul class="simple">
-<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블 생성 또는 변경 시, 테이블 수준의 <cite>AUTO_INCREMENT = seed</cite> 옵션과 함께 <a href="#id13"><span class="problematic" id="id14">`</span></a>AUTO_INCREMENT(seed, increment)`처럼 칼럼에 seed/increment를 지정하여 어떤 auto_increment 값을 적용할지 판단하기 어려울 때 발생하는 오류입니다. CUBRID 11.5 버전부터 한 테이블에는 한 개의 auto_increment 칼럼만 설정할 수 있습니다.</p></li>
+<li><p>이 메시지는 CUBRID 데이터베이스에서 테이블 생성 또는 변경 시, 테이블 수준의 <cite>AUTO_INCREMENT = seed</cite> 옵션을 지정했으나 테이블에 auto_increment 칼럼이 없거나, <a href="#id13"><span class="problematic" id="id14">`</span></a>AUTO_INCREMENT(seed, increment)`처럼 칼럼에 seed/increment를 함께 지정하여 어떤 auto_increment 값을 적용할지 판단하기 어려울 때 발생하는 오류입니다. CUBRID 11.5 버전부터 한 테이블에는 한 개의 auto_increment 칼럼만 설정할 수 있습니다.</p></li>
 </ul>
 <p id="error-1057"><strong>ERROR CODE: -1057, ‘Cannot add a NOT NULL ‘%1$s’ typed attribute without a DEFAULT value.’</strong></p>
 <ul class="simple">
@@ -1195,7 +1195,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corporation Last updated: 9월 17, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corporation Last updated: 9월 29, 2026. </p>
 </div>
 </div>
 </footer>

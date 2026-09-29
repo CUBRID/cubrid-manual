@@ -1416,7 +1416,7 @@
 
 **ERROR CODE: -1056, 'To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.'**
 
-- 이 메시지는 CUBRID 데이터베이스에서 테이블 생성 또는 변경 시, 테이블 수준의 `AUTO_INCREMENT = seed` 옵션과 함께 `AUTO_INCREMENT(seed, increment)`처럼 칼럼에 seed/increment를 지정하여 어떤 auto_increment 값을 적용할지 판단하기 어려울 때 발생하는 오류입니다. CUBRID 11.5 버전부터 한 테이블에는 한 개의 auto_increment 칼럼만 설정할 수 있습니다.
+- 이 메시지는 CUBRID 데이터베이스에서 테이블 생성 또는 변경 시, 테이블 수준의 `AUTO_INCREMENT = seed` 옵션을 지정했으나 테이블에 auto_increment 칼럼이 없거나, `AUTO_INCREMENT(seed, increment)`처럼 칼럼에 seed/increment를 함께 지정하여 어떤 auto_increment 값을 적용할지 판단하기 어려울 때 발생하는 오류입니다. CUBRID 11.5 버전부터 한 테이블에는 한 개의 auto_increment 칼럼만 설정할 수 있습니다.
 
 
 .. _ERROR-1057:

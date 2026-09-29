@@ -949,7 +949,7 @@
 </ul>
 <p id="error-1056"><strong>ERROR CODE: -1056, ‘To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.’</strong></p>
 <ul class="simple">
-<li><p>This message is displayed in the CUBRID database when, during table creation or alteration, a table-level <cite>AUTO_INCREMENT = seed</cite> option is specified together with a column-level seed/increment (as in <cite>AUTO_INCREMENT(seed, increment)</cite>), because it is difficult to determine which auto_increment value to apply. As of CUBRID 11.5, a table can have only one auto_increment column.</p></li>
+<li><p>This message is displayed in the CUBRID database when, during table creation or alteration, a table-level <cite>AUTO_INCREMENT = seed</cite> option is specified but the table has no auto_increment column, or is specified together with a column-level seed/increment (as in <cite>AUTO_INCREMENT(seed, increment)</cite>), because it is difficult to determine which auto_increment value to apply. As of CUBRID 11.5, a table can have only one auto_increment column.</p></li>
 </ul>
 <p id="error-1057"><strong>ERROR CODE: -1057, ‘Cannot add a NOT NULL ‘%1$s’ typed attribute without a DEFAULT value.’</strong></p>
 <ul class="simple">
@@ -1195,7 +1195,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corporation Last updated: Sep 17, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corporation Last updated: Sep 29, 2026. </p>
 </div>
 </div>
 </footer>

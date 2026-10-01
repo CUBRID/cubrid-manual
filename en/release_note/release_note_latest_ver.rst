@@ -856,9 +856,9 @@ By introducing the concept of user schema, the same object name can be used for 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
  * "." (dot) is not allowed in the object name.
- * When using a query or utility command, it must be used as "[username].object name". (However, the username can be omitted when querying the object of the logged-in user) (see :doc:`/sql/user_schema`)
- * Changed to include username in info schema and show full tables results. (see :doc:`/sql/query/show`)
- * The loaddb file prior to 11.2 must be modified to "username.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the \-\-no-user-specified-name option. (see :ref:`loaddb`)
+ * When using a query or utility command, it must be used as "[user name].object name". (However, the user name can be omitted when querying the object of the logged-in user) (see :doc:`/sql/user_schema`)
+ * Changed to include user name in info schema and show full tables results. (see :doc:`/sql/query/show`)
+ * The loaddb file prior to 11.2 must be modified to "user name.table name" so that it can be executed in 11.2, or loaddb can be executed by setting the \-\-no-user-specified-name option. (see :ref:`loaddb`)
 
 The following functions and behavior changed when using "jdbc\:default\:connection\:" or calling getDefaultConnection() in JavaSP. (see :ref:`JavaSP Caution <jsp-caution>`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

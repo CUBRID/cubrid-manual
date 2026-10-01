@@ -356,7 +356,7 @@ The syntax to use the <a class="reference external" href="https://pythonhosted.o
 </span><span id="line-3"><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 </span></code></pre></div>
 </div>
-<p>The auto-commit in CUBRID Python driver is disabled by default. Therefore, you have to manually perform commit by using the <a class="reference external" href="https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#commit">commit</a> () function after executing any SQL statement. This is equivalent to executing <strong>cur.execute(“COMMIT”)</strong> . The opposite to executing commit() is executing <a class="reference external" href="https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#rollback">rollback</a> (), which aborts the current transaction.</p>
+<p>The autocommit in CUBRID Python driver is disabled by default. Therefore, you have to manually perform commit by using the <a class="reference external" href="https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#commit">commit</a> () function after executing any SQL statement. This is equivalent to executing <strong>cur.execute(“COMMIT”)</strong> . The opposite to executing commit() is executing <a class="reference external" href="https://pythonhosted.org/CUBRID-Python/_cubrid.connection-class.html#rollback">rollback</a> (), which aborts the current transaction.</p>
 <p>Another way to insert data is to use prepared statements. You can safely insert data into the database by defining a row that contains the parameters and passing it to the <a class="reference external" href="https://pythonhosted.org/CUBRID-Python/CUBRIDdb.cursors.BaseCursor-class.html#execute">execute</a> () function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Title 2'</span><span class="p">,</span> <span class="s1">'Test body #2'</span><span class="p">)</span>
 </span><span id="line-2"><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)"</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
@@ -474,7 +474,7 @@ The syntax to use the <a class="reference external" href="https://pythonhosted.o
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Sep 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -996,7 +996,7 @@ The following hints can be specified in **UPDATE**, **DELETE** and **SELECT** st
 
 .. _no-hash-list-scan:
 
-*   **NO_HASH_LIST_SCAN**: This is a hint not to use hash list scan for scanning sub-query's result. Instead, list scan is used to scan temp file. By building and probing hash table, we can reduce the amount of data that needs to be searched. However, in some scenarios, the user may know beforehand that outer cardinality is very small and can use the hint to skip hash list scan entirely. For setting the memory size of hash scan, see :ref:`max_hash_list_scan_size <max_hash_list_scan_size>`.
+*   **NO_HASH_LIST_SCAN**: This is a hint not to use hash list scan for scanning subquery's result. Instead, list scan is used to scan temp file. By building and probing hash table, we can reduce the amount of data that needs to be searched. However, in some scenarios, the user may know beforehand that outer cardinality is very small and can use the hint to skip hash list scan entirely. For setting the memory size of hash scan, see :ref:`max_hash_list_scan_size <max_hash_list_scan_size>`.
 
     .. note::
     

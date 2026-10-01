@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid fail-over, cubrid fail-back
+:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid failover, cubrid fail-back
 :meta-description: Troubleshoot CUBRID database and High Availability nodes by consulting logs.
 
 ***************
@@ -16,7 +16,7 @@ SQL log of CAS
 
 When a specific error occurs, generally you can check SQL logs of broker application server(CAS)
 
-One SQL log file is generated per each CAS; it is hard to find an SQL log in which an error occurred because SQL log files are many when CAS processes are many. However, SQL log file name includes CAS ID in the end part, you can find easily if you know the CAS ID in which an error occurred.
+One SQL log file is generated per each CAS; it is hard to find an SQL log in which an error occurred because SQL log files are many when CAS processes are many. However, SQL log filename includes CAS ID in the end part, you can find easily if you know the CAS ID in which an error occurred.
 
 .. note:: SQL log file name in a CAS is <broker_name>_<app_server_num>.sql.log(see :ref:`broker-logs`); <app_server_num> is CAS ID.
 
@@ -203,15 +203,15 @@ Above example is the information to print out into the cub_master log when testh
 Detecting Fail-over, Fail-back
 ------------------------------
   
-If fail-over or fail-back occurs, a node changes its role.
+If failover or fail-back occurs, a node changes its role.
   
-The following is the log file of the cub_master that changes to a slave node after fail-back or to a master node after fail-over; log messages for fail-over and fail-back are prefixed with [Failover] or [Failback].
+The following is the log file of the cub_master that changes to a slave node after fail-back or to a master node after failover; log messages for failover and fail-back are prefixed with [Failover] or [Failback].
 
-The log messages for fail-over and fail-back include both diagnosis and result messages.
+The log messages for failover and fail-back include both diagnosis and result messages.
 
-A diagnosis message is logged when a fail-over or fail-back is triggered for a specific reason. These messages indicate the reason why the fail-over or fail-back was initiated and are prefixed with [Diagnosis].
+A diagnosis message is logged when a failover or fail-back is triggered for a specific reason. These messages indicate the reason why the failover or fail-back was initiated and are prefixed with [Diagnosis].
 
-A result message is logged when a fail-over or fail-back is either canceled or successfully completed. If the fail-over or fail-back is canceled, the result message logs the reason for the cancellation and is prefixed with [Canceled]. If the fail-over or fail-back is completed successfully, the result message logs the outcome and is prefixed with [Success]. For details, see :ref:`failover-messages`.
+A result message is logged when a failover or fail-back is either canceled or successfully completed. If the failover or fail-back is canceled, the result message logs the reason for the cancellation and is prefixed with [Canceled]. If the failover or fail-back is completed successfully, the result message logs the outcome and is prefixed with [Success]. For details, see :ref:`failover-messages`.
   
 :: 
   
@@ -232,7 +232,7 @@ A result message is logged when a fail-over or fail-back is either canceled or s
     testhost01           1          unknown         32767      1
     ================================================================================
 
-The above example shows information which is printed in the cub_master log; it describes the process where the 'testhost02' host changes its role from slave to master during a fail-over because the master node 'testhost01' has lost its role due to server process issue.
+The above example shows information which is printed in the cub_master log; it describes the process where the 'testhost02' host changes its role from slave to master during a failover because the master node 'testhost01' has lost its role due to server process issue.
 
 Failure on HA Start
 ===================

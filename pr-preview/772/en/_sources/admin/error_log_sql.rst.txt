@@ -148,7 +148,7 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -234, 'Method file "%1$s" not found.'**
 
-- This message is a schema definition error that occurs when, in the CUBRID database, a method file with a specific name cannot be found in the schema template; it can appear when an incorrect method file name is used, when the method file has already been deleted, or when the schema template has not been initialized correctly.
+- This message is a schema definition error that occurs when, in the CUBRID database, a method file with a specific name cannot be found in the schema template; it can appear when an incorrect method filename is used, when the method file has already been deleted, or when the schema template has not been initialized correctly.
 
 
 .. _ERROR-235:
@@ -933,7 +933,7 @@ Query (SQL) Related Errors
 
 **ERROR CODE: -787, 'Conversion error in time format.'**
 
-- This message is displayed in the time processing module of the CUBRID database during time format conversion, that is, the error is set when a problem occurs during converting time data to another format, converting time zones, or validating time values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of time data.
+- This message is displayed in the time processing module of the CUBRID database during time format conversion, that is, the error is set when a problem occurs during converting time data to another format, converting timezones, or validating time values, this message can occur in multiple modules, and it mainly occurs during the validation process to ensure the integrity and consistency of time data.
 
 
 .. _ERROR-788:

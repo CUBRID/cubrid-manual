@@ -244,14 +244,14 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>OR REPLACE</strong>: <strong>CREATE</strong> 뒤에 <strong>OR REPLACE</strong> 키워드가 명시되면, <em>view_name</em>이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.</p></li>
+<li><p><strong>OR REPLACE</strong>: <strong>CREATE</strong> 뒤에 <strong>OR REPLACE</strong> 키워드가 명시되면, <em>view_name</em>이 기존의 뷰와 이름이 중복되더라도 오류를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.</p></li>
 <li><p><em>schema_name</em>: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
 <li><p><em>view_name</em>: 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.</p></li>
 <li><p><em>view_column_name</em>: 생성하려는 뷰의 칼럼 이름을 지정한다.</p></li>
 <li><p><strong>AS</strong> &lt;<em>select_statement</em>&gt;: 유효한 <strong>SELECT</strong> 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.</p></li>
 <li><p><strong>WITH CHECK OPTION</strong>: 이 옵션이 명시되면 &lt;<em>select_statement</em>&gt; 내 <strong>WHERE</strong> 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.</p></li>
-<li><p><em>view_comment_string</em>: 뷰의 커멘트를 지정한다.</p></li>
-<li><p><em>column_comment_string</em>: 칼럼의 커멘트를 지정한다.</p></li>
+<li><p><em>view_comment_string</em>: 뷰의 주석을 지정한다.</p></li>
+<li><p><em>column_comment_string</em>: 칼럼의 주석을 지정한다.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">a_tbl</span><span class="w"> </span><span class="p">(</span>
 </span><span id="line-2"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
@@ -278,7 +278,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Check</span> <span class="n">option</span> <span class="n">exception</span> <span class="n">on</span> <span class="n">view</span> <span class="n">b_view</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>다음은 기존 뷰의 정의를 갱신한다. 이와 함께 뷰에 커멘트를 추가하고 있다.</p>
+<p>다음은 기존 뷰의 정의를 갱신한다. 이와 함께 뷰에 주석을 추가하고 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--creating view which name is as same as existing view name</span>
 </span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">b_view</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">a_tbl</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'changed view'</span><span class="p">;</span>
 </span><span id="line-3">
@@ -295,7 +295,7 @@
 </span><span id="line-7">            <span class="mi">1</span>  <span class="s1">'111-1111'</span>
 </span></code></pre></div>
 </div>
-<p>다음은 뷰의 칼럼에 커멘트를 추가한다.</p>
+<p>다음은 뷰의 칼럼에 주석을 추가한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">b_view</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'column id'</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'column phone'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">a_tbl</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -326,28 +326,28 @@
 <p>뷰에 정의된 칼럼이 업데이트 가능하더라도 <strong>FROM</strong> 구문에 포함된 테이블에 대해 업데이트를 위한 적절한 권한이 있어야 하며 뷰에 대한 접근 권한이 있어야 한다. 뷰에 접근 권한을 부여하는 방법은 테이블에 접근 권한을 부여하는 방식과 동일하다. 권한 부여에 대한 자세한 내용은 <a class="reference internal" href="../authorization.html#granting-authorization"><span class="std std-ref">GRANT</span></a> 를 참조한다.</p>
 </section>
 <section id="id2">
-<h3>뷰의 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>뷰의 커멘트를 다음과 같이 명시할 수 있다.</p>
+<h3>뷰의 주석<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>뷰의 주석을 다음과 같이 명시할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">b_view</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">a_tbl</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'changed view'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>명시된 뷰의 커멘트는 다음 구문에서 확인할 수 있다.</p>
+<p>명시된 뷰의 주석은 다음 구문에서 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">view_name</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">vclass_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">db_vclass</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 뷰의 커멘트를 확인할 수 있다.</p>
+<p>또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 뷰의 주석을 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="err">$</span><span class="w"> </span><span class="n">csql</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="n">dba</span><span class="w"> </span><span class="n">demodb</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="n">csql</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span><span class="n">sc</span><span class="w"> </span><span class="n">b_view</span>
 </span></code></pre></div>
 </div>
-<p>뷰의 각 칼럼에도 커멘트 추가가 가능하다.</p>
+<p>뷰의 각 칼럼에도 주석 추가가 가능하다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">b_view</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'a comment'</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'b comment'</span><span class="p">)</span>
 </span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">a_tbl</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'view comment'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>뷰 커멘트의 변경은 아래의 ALTER VIEW 구문을 참고한다.</p>
+<p>뷰 주석의 변경은 아래의 ALTER VIEW 구문을 참고한다.</p>
 </section>
 </section>
 <section id="alter-view">
@@ -486,7 +486,7 @@
 </section>
 <section id="comment">
 <h3>COMMENT 절<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#comment" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#comment'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><strong>ALTER VIEW</strong> 문의 <strong>COMMENT</strong> 절을 이용하여 뷰와 칼럼들, 어트리뷰트들의 커멘트를 변경할 수 있다.</p>
+<p><strong>ALTER VIEW</strong> 문의 <strong>COMMENT</strong> 절을 이용하여 뷰와 칼럼들, 어트리뷰트들의 주석을 변경할 수 있다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">VIEW</span> <span class="o">|</span> <span class="n">VCLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">view_name</span>
 </span><span id="line-2"><span class="n">COMMENT</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="s1">'view_comment_string'</span> <span class="o">|</span>
 </span><span id="line-3"><span class="n">COMMENT</span> <span class="n">ON</span> <span class="p">{</span><span class="n">COLUMN</span> <span class="o">|</span> <span class="n">CLASS</span> <span class="n">ATTRIBUTE</span><span class="p">}</span> <span class="o">&lt;</span><span class="n">column_comment_definition</span><span class="o">&gt;</span> <span class="p">[,</span> <span class="o">&lt;</span><span class="n">column_comment_definition</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">;</span>
@@ -498,21 +498,21 @@
 <li><p><em>schema_name</em>: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
 <li><p><em>view_name</em>: 변경할 뷰의 이름을 명시한다.</p></li>
 <li><p><em>column_name</em>: 변경할 칼럼의 이름을 명시한다.</p></li>
-<li><p><em>view_comment_string</em>: 뷰의 커멘트를 지정한다.</p></li>
-<li><p><em>column_comment_string</em>: 칼럼의 커멘트를 지정한다.</p></li>
+<li><p><em>view_comment_string</em>: 뷰의 주석을 지정한다.</p></li>
+<li><p><em>column_comment_string</em>: 칼럼의 주석을 지정한다.</p></li>
 </ul>
-<p>다음은 뷰의 커멘트를 변경하는 예제이다.</p>
+<p>다음은 뷰의 주석을 변경하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'changed view v1 comment'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>ON COLUMN 키워드 뒤에 하나 이상의 칼럼을 지정하여 칼럼의 커멘트를 변경할 수 있다.
-다음은 칼럼의 커멘트를 변경하는 예제이다.</p>
+<p>ON COLUMN 키워드 뒤에 하나 이상의 칼럼을 지정하여 칼럼의 주석을 변경할 수 있다.
+다음은 칼럼의 주석을 변경하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'changed view column c1 comment'</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'changed view column c2 comment'</span><span class="p">,</span><span class="w"> </span><span class="n">c3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'changed view column c3 comment'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>다음은 뷰와 칼럼의 커멘트를 확인하는 예제이다.
-하지만 SHOW CREATE VIEW 구문에서는 뷰 커멘트만 확인할 수 있다.</p>
+<p>다음은 뷰와 칼럼의 주석을 확인하는 예제이다.
+하지만 SHOW CREATE VIEW 구문에서는 뷰 주석만 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="cm">/* view_name */</span><span class="w"> </span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">attr_name</span><span class="p">,</span><span class="w"> </span><span class="n">class_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span>
@@ -532,7 +532,7 @@
 </section>
 <section id="drop-view">
 <h2>DROP VIEW<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#drop-view" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#drop-view'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>뷰는 <strong>DROP VIEW</strong> 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을 삭제하는 방법과 동일하다. IF EXISTS 절을 함께 사용하면 해당 뷰가 존재하지 않더라도 에러가 발생하지 않는다.</p>
+<p>뷰는 <strong>DROP VIEW</strong> 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을 삭제하는 방법과 동일하다. IF EXISTS 절을 함께 사용하면 해당 뷰가 존재하지 않더라도 오류가 발생하지 않는다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">DROP</span> <span class="p">[</span><span class="n">VIEW</span> <span class="o">|</span> <span class="n">VCLASS</span><span class="p">]</span> <span class="p">[</span><span class="n">IF</span> <span class="n">EXISTS</span><span class="p">]</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">view_name</span> <span class="p">[{,</span> <span class="p">[</span><span class="n">schema_name</span><span class="o">.</span><span class="p">]</span><span class="n">view_name</span><span class="p">}]</span> <span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -583,7 +583,7 @@
 <ul>
 <li><a :data-current="activeSection === '#create-view'" class="reference internal" href="#create-view">CREATE VIEW</a><ul>
 <li><a :data-current="activeSection === '#view'" class="reference internal" href="#view">업데이트 가능한 VIEW의 생성 조건</a></li>
-<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">뷰의 커멘트</a></li>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">뷰의 주석</a></li>
 </ul>
 </li>
 <li><a :data-current="activeSection === '#alter-view'" class="reference internal" href="#alter-view">ALTER VIEW</a><ul>
@@ -604,7 +604,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

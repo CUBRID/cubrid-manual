@@ -388,7 +388,7 @@
 </section>
 <section id="insert-into-remote-table-spec-select">
 <h2>INSERT INTO &lt;remote-table-spec&gt;… SELECT 문<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#insert-into-remote-table-spec-select" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#insert-into-remote-table-spec-select'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>INSERT 문에 SELECT 질의에서 사용한 동일 원격 서버의 원격 테이블을 사용하면 하나 이상의 원격 테이블로부터 특정 검색 조건에 만족하는 질의 결과를 원격 테이블에 삽입할 수 있다. 단, SELECT문에 명시된 테이블 중 INSERT 구문의 원격 테이블과 다른 서버의 테이블 (로컬 테이블 또는 다른 원격 서버의 테이블)을 사용시 에러가 발생한다.</p>
+<p>INSERT 문에 SELECT 질의에서 사용한 동일 원격 서버의 원격 테이블을 사용하면 하나 이상의 원격 테이블로부터 특정 검색 조건에 만족하는 질의 결과를 원격 테이블에 삽입할 수 있다. 단, SELECT문에 명시된 테이블 중 INSERT 구문의 원격 테이블과 다른 서버의 테이블 (로컬 테이블 또는 다른 원격 서버의 테이블)을 사용시 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--at remote-side</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="c1">--creating an empty table which schema replicated from a_tbl1</span>
@@ -417,14 +417,14 @@
 </span><span id="line-10">            <span class="mi">8</span>  <span class="s1">'aaa'</span>                 <span class="s1">'000-0000'</span>
 </span></code></pre></div>
 </div>
-<p>원격 테이블의 데이터는 로컬 테이블로 삽입 가능하나 로컬 테이블의 데이터를 원격 테이블에 삽입하는 질의는 사용할 수 없으므로 사용시 주의해야 한다. 아래의 질의는 에러가 발생한다.</p>
+<p>원격 테이블의 데이터는 로컬 테이블로 삽입 가능하나 로컬 테이블의 데이터를 원격 테이블에 삽입하는 질의는 사용할 수 없으므로 사용시 주의해야 한다. 아래의 질의는 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--inserting multiple rows from SELECT query results</span>
 </span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">a_tbl2</span><span class="o">@</span><span class="n">server1</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">a_tbl1</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
 </span><span id="line-3">
 </span><span id="line-4"><span class="n">dblink</span><span class="p">:</span><span class="w"> </span><span class="k">local</span><span class="w"> </span><span class="n">mixed</span><span class="w"> </span><span class="n">remote</span><span class="w"> </span><span class="n">DML</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">allowed</span>
 </span></code></pre></div>
 </div>
-<p>또한 INSERT 구문과 SELECT 구문에서 사용한 원격 테이블의 서버가 다른 경우 질의 수행이 허용되지 않는다. 아래의 질의는 에러가 발생한다.</p>
+<p>또한 INSERT 구문과 SELECT 구문에서 사용한 원격 테이블의 서버가 다른 경우 질의 수행이 허용되지 않는다. 아래의 질의는 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--inserting multiple rows from SELECT query results</span>
 </span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">a_tbl2</span><span class="o">@</span><span class="n">server1</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">a_tbl1</span><span class="o">@</span><span class="n">server2</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
 </span><span id="line-3">
@@ -434,7 +434,7 @@
 </section>
 <section id="on-duplicate-key-update">
 <h2>ON DUPLICATE KEY UPDATE 절<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#on-duplicate-key-update" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#on-duplicate-key-update'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p><strong>INSERT</strong> 문에 <strong>ON DUPLICATE KEY UPDATE</strong> 절을 명시하여 <strong>UNIQUE</strong> 인덱스 또는 <strong>PRIMARY KEY</strong> 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다.</p>
+<p><strong>INSERT</strong> 문에 <strong>ON DUPLICATE KEY UPDATE</strong> 절을 명시하여 <strong>UNIQUE</strong> 인덱스 또는 <strong>PRIMARY KEY</strong> 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 오류를 출력하지 않고 새로운 값으로 갱신할 수 있다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <ul class="simple">
@@ -521,7 +521,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

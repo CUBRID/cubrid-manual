@@ -278,7 +278,7 @@
 <li><p><strong>to-be-active</strong> : 스탠바이 서버가 failover 등의 이유로 인해 액티브 서버가 되기 전의 상태이다. 기존의 마스터 노드로부터 받은 트랜잭션 로그를 자신의 서버에 반영하는 등 액티브 서버가 되기 위한 준비를 한다. 해당 상태의 노드에는 SELECT 질의만 수행할 수 있다.</p></li>
 <li><p>기타: 내부적으로 사용하는 상태이다.</p></li>
 </ul>
-<p>노드 상태가 변경되면 cub_master 프로세스 로그와 cub_server 프로세스 로그에 각각 다음과 같은 에러 메시지가 저장된다. 단, <strong>cubrid.conf</strong>에서 <strong>error_log_level</strong>의 값이 <strong>error</strong> 이하인 경우에 저장된다.</p>
+<p>노드 상태가 변경되면 cub_master 프로세스 로그와 cub_server 프로세스 로그에 각각 다음과 같은 오류 메시지가 저장된다. 단, <strong>cubrid.conf</strong>에서 <strong>error_log_level</strong>의 값이 <strong>error</strong> 이하인 경우에 저장된다.</p>
 <ul>
 <li><p>cub_master 프로세스의 로그 정보는 <strong>$CUBRID/log/</strong><em>&lt;hostname&gt;</em><strong>_master.err</strong> 파일에 저장되며 다음의 내용이 기록된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">HA</span> <span class="n">generic</span><span class="p">:</span> <span class="n">Send</span> <span class="n">changemode</span> <span class="n">request</span> <span class="n">to</span> <span class="n">the</span> <span class="n">server</span><span class="o">.</span> <span class="p">(</span><span class="n">state</span><span class="p">:</span><span class="mi">1</span><span class="p">[</span><span class="n">active</span><span class="p">],</span> <span class="n">args</span><span class="p">:[</span><span class="n">cub_server</span> <span class="n">demodb</span> <span class="p">],</span> <span class="n">pid</span><span class="p">:</span><span class="mi">25728</span><span class="p">)</span><span class="o">.</span>
@@ -708,7 +708,7 @@
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>이 파라미터에서 명시한 멤버 노드들의 호스트 이름은 IP로 대체할 수 없으며, 사용자는 반드시 <strong>/etc/hosts</strong> 에 등록되어 있는 것을 사용해야 한다.</p>
-<p>호스트 이름이 제대로 설정되지 않은 경우 server.err 에러 로그 파일에 다음과 같은 메시지가 출력된다.</p>
+<p>호스트 이름이 제대로 설정되지 않은 경우 server.err 오류 로그 파일에 다음과 같은 메시지가 출력된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Time</span><span class="p">:</span> <span class="mi">04</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">12</span> <span class="mi">17</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mf">45.030</span> <span class="o">-</span> <span class="n">ERROR</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">connection</span><span class="o">/</span><span class="n">tcp</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">121</span> <span class="n">ERROR</span> <span class="n">CODE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">353</span> <span class="n">Tran</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CLIENT</span> <span class="o">=</span> <span class="p">(</span><span class="n">unknown</span><span class="p">):(</span><span class="n">unknown</span><span class="p">)(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">EID</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">Cannot</span> <span class="n">make</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">master</span> <span class="n">server</span> <span class="n">on</span> <span class="n">host</span> <span class="s2">"Wrong_HOST_NAME"</span><span class="o">....</span> <span class="n">Connection</span> <span class="n">timed</span> <span class="n">out</span>
 </span></code></pre></div>
 </div>
@@ -749,7 +749,7 @@
 <p><strong>SYNC</strong>, <strong>ASYNC</strong>를 값으로 설정할 수 있다. <strong>ha_node_list</strong>에 지정한 노드의 수만큼 설정해야 하고 순서가 같아야 한다. 쉼표(,) 또는 콜론(:)으로 구분한다. 레플리카 노드는 이 값의 설정과 관계없이 항상 ASNYC 모드로 동작한다.</p>
 <p>자세한 내용은 <a class="reference internal" href="#log-multiplexing"><span class="std std-ref">로그 다중화</span></a> 를 참고한다.</p>
 <p><strong>ha_copy_log_base</strong></p>
-<p>복제 로그를 저장할 상위 경로를 지정한다. 기본값은 $CUBRID_DATABASES 환경 변수에 설정된 디렉토리 경로이다.  복제 로그들은 서버와 데이터베이스명에 따라  &lt;db_name&gt;_&lt;host_name&gt;의 하위 디렉토리에 저장된다.</p>
+<p>복제 로그를 저장할 상위 경로를 지정한다. 기본값은 $CUBRID_DATABASES 환경 변수에 설정된 디렉터리 경로이다.  복제 로그들은 서버와 데이터베이스명에 따라  &lt;db_name&gt;_&lt;host_name&gt;의 하위 디렉터리에 저장된다.</p>
 <p>복제 로그 경로는 상대 경로 또는 절대 경로 설정이 가능하다.
 다음은 각각의 설정 예제이다.</p>
 <p>예1) ha_copy_log_base=copylog : 상대 경로로 간주되어, 복제 로그 경로로 $CUBRID_DATABASES/copylog가 설정된다.
@@ -760,15 +760,15 @@
 <p><strong>ha_apply_max_mem_size</strong></p>
 <p>CUBRID HA의 복제 로그 반영 프로세스가 사용할 수 있는 최대 메모리를 설정한다. 기본값은 <strong>500</strong> (단위: MB)이며, 최대값은 <strong>INT_MAX</strong> (2147483647)이다. 이 값을 시스템이 허용하는 크기보다 너무 크게 설정하면 메모리 할당에 실패하면서 HA 복제 반영 프로세스가 오동작을 일으킬 수 있으므로, 메모리 자원이 설정한 값을 충분히 사용할 수 있는지 확인한 후 설정하도록 한다.</p>
 <p><strong>ha_applylogdb_ignore_error_list</strong></p>
-<p>CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생해도 이를 무시하고 계속 복제를 진행하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 무시할 에러 코드를 나열한다. 이 설정 값은 높은 우선순위를 가지므로, <strong>ha_applylogdb_retry_error_list</strong> 파라미터나 “재시도 에러 리스트”에 의해 설정된 에러 코드와 값이 겹치면 이들을 무시하고 해당 에러를 유발한 작업을 재시도하지 않는다. “재시도 에러 리스트”는 아래 <strong>ha_applylogdb_retry_error_list</strong> 의 설명을 참고한다.</p>
+<p>CUBRID HA의 복제 로그 반영 프로세스에서 오류가 발생해도 이를 무시하고 계속 복제를 진행하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 무시할 오류 코드를 나열한다. 이 설정 값은 높은 우선순위를 가지므로, <strong>ha_applylogdb_retry_error_list</strong> 파라미터나 “재시도 오류 리스트”에 의해 설정된 오류 코드와 값이 겹치면 이들을 무시하고 해당 오류를 유발한 작업을 재시도하지 않는다. “재시도 오류 리스트”는 아래 <strong>ha_applylogdb_retry_error_list</strong> 의 설명을 참고한다.</p>
 <p><strong>ha_applylogdb_retry_error_list</strong></p>
-<p>CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해당 에러를 유발한 작업이 성공할 때까지 반복적으로 재시도하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 재시도할 에러 코드를 나열한다. 이 값을 설정하지 않아도 기본으로 설정된 “재시도 에러 리스트”는 다음 표와 같다. 하지만 이 값들이 <strong>ha_applylogdb_ignore_error_list</strong> 에 존재하면 에러를 무시하고 계속 복제를 진행한다.</p>
+<p>CUBRID HA의 복제 로그 반영 프로세스에서 오류가 발생하면 해당 오류를 유발한 작업이 성공할 때까지 반복적으로 재시도하기 위해 이 값을 설정한다. 쉼표(,)로 구분하여 재시도할 오류 코드를 나열한다. 이 값을 설정하지 않아도 기본으로 설정된 “재시도 오류 리스트”는 다음 표와 같다. 하지만 이 값들이 <strong>ha_applylogdb_ignore_error_list</strong> 에 존재하면 오류를 무시하고 계속 복제를 진행한다.</p>
 <blockquote>
-<div><p><strong>재시도 에러 리스트</strong></p>
+<div><p><strong>재시도 오류 리스트</strong></p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>에러 코드 이름</p></th>
-<th class="head"><p>에러 코드</p></th>
+<tr class="row-odd"><th class="head"><p>오류 코드 이름</p></th>
+<th class="head"><p>오류 코드</p></th>
 </tr>
 </thead>
 <tbody>
@@ -968,7 +968,7 @@
 <p>먼저 <strong>PREFERRED_HOSTS</strong>의 호스트들에 접속을 시도한 후, databases.txt의 호스트들에 접속을 시도한다. 이때는 <strong>ACCESS_MODE</strong>에 따라 DB의 상태가 active인지, standby인지도 검사하여 접속을 결정한다.</p>
 </li>
 <li><p>2차 연결: 1차 연결 실패 후 실패한 위치에서부터 두번째로 접속을 시도하는 단계. DB 상태(active/standby)와 복제 지연 여부를 무시. 단, <strong>SO</strong> 브로커는 항상 standby DB에만 접속 허용.</p>
-<p>이때는 DB의 상태(active/standby) 및 복제 지연 여부와 무관하게 접속이 가능하면 접속을 결정한다. 하지만 질의 수행 단계에서 에러가 발생할 수 있다. 예를 들어 <strong>ACCESS_MODE</strong> 가 <strong>RW</strong>인데 standby 상태의 서버에 접속하면 INSERT 질의 수행 시 에러가 발생한다. 에러 발생과는 무관하게, standby로 연결되어 트랜잭션이 수행된 이후에는 1차 연결을 다시 시도한다. 단, <strong>SO</strong>브로커는 절대로 active DB에 연결될 수 없다.</p>
+<p>이때는 DB의 상태(active/standby) 및 복제 지연 여부와 무관하게 접속이 가능하면 접속을 결정한다. 하지만 질의 수행 단계에서 오류가 발생할 수 있다. 예를 들어 <strong>ACCESS_MODE</strong> 가 <strong>RW</strong>인데 standby 상태의 서버에 접속하면 INSERT 질의 수행 시 오류가 발생한다. 오류 발생과는 무관하게, standby로 연결되어 트랜잭션이 수행된 이후에는 1차 연결을 다시 시도한다. 단, <strong>SO</strong>브로커는 절대로 active DB에 연결될 수 없다.</p>
 </li>
 </ul>
 <p><strong>MAX_NUM_DELAYED_HOSTS_LOOKUP</strong>의 값에 따라 접속을 시도하는 호스트의 개수가 제한되는 방법은 다음과 같다:</p>
@@ -1638,9 +1638,9 @@ RECONNECT_TIME 시간이 지나면 재접속을 시도한다.</p>
 <li><p>Applied Info.</p>
 <ul>
 <li><p>Committed page : 복제 로그 반영 프로세스에 의해 마지막으로 반영된 트랜잭션의 커밋된 pageid와 offset 정보. 이 값과 “Copied Active Info.”의 EOF LSA 값의 차이만큼 복제 반영의 지연이 있다.</p></li>
-<li><p>Insert Count : 복제 로그 반영 프로세스가 반영한 Insert 쿼리의 개수</p></li>
-<li><p>Update Count : 복제 로그 반영 프로세스가 반영한 Update 쿼리의 개수</p></li>
-<li><p>Delete Count : 복제 로그 반영 프로세스가 반영한 Delete 쿼리의 개수</p></li>
+<li><p>Insert Count : 복제 로그 반영 프로세스가 반영한 Insert 질의의 개수</p></li>
+<li><p>Update Count : 복제 로그 반영 프로세스가 반영한 Update 질의의 개수</p></li>
+<li><p>Delete Count : 복제 로그 반영 프로세스가 반영한 Delete 질의의 개수</p></li>
 <li><p>Schema Count : 복제 로그 반영 프로세스가 반영한 DDL 문의 개수</p></li>
 <li><p>Commit Count : 복제 로그 반영 프로세스가 반영한 트랜잭션의 개수</p></li>
 <li><p>Fail Count : 복제 로그 반영 프로세스가 반영에 실패한 DML 및 DDL 문의 개수</p></li>
@@ -1719,7 +1719,7 @@ RECONNECT_TIME 시간이 지나면 재접속을 시도한다.</p>
 </ul>
 </li>
 </ul>
-<p>ha_replica_time_bound 시간이 되어 applylogdb가 복제 반영을 완전히 멈춘 경우  <strong>$CUBRID/log/</strong><em>db-name</em><strong>@</strong><em>local-node-name</em><strong>_applylogdb_</strong><em>db-name</em><strong>_</strong><em>remote-node-name</em><strong>.err</strong> 에 출력되는 에러 메시지는 다음과 같다.</p>
+<p>ha_replica_time_bound 시간이 되어 applylogdb가 복제 반영을 완전히 멈춘 경우  <strong>$CUBRID/log/</strong><em>db-name</em><strong>@</strong><em>local-node-name</em><strong>_applylogdb_</strong><em>db-name</em><strong>_</strong><em>remote-node-name</em><strong>.err</strong> 에 출력되는 오류 메시지는 다음과 같다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">20</span><span class="o">/</span><span class="mi">13</span> <span class="mi">11</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mf">05.549</span> <span class="o">-</span> <span class="n">ERROR</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">log_applier</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">7913</span> <span class="n">ERROR</span> <span class="n">CODE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1040</span> <span class="n">Tran</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">EID</span> <span class="o">=</span> <span class="mi">3</span>
 </span><span id="line-2"><span class="n">HA</span> <span class="n">generic</span><span class="p">:</span> <span class="n">applylogdb</span> <span class="n">paused</span> <span class="n">since</span> <span class="n">it</span> <span class="n">reached</span> <span class="n">a</span> <span class="n">log</span> <span class="n">record</span> <span class="n">committed</span> <span class="n">on</span> <span class="n">master</span> <span class="n">at</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">20</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">00</span> <span class="ow">or</span> <span class="n">later</span><span class="o">.</span>
 </span><span id="line-3"><span class="n">Adjust</span> <span class="ow">or</span> <span class="n">remove</span> <span class="n">ha_replica_time_bound</span> <span class="ow">and</span> <span class="n">restart</span> <span class="n">applylogdb</span> <span class="n">to</span> <span class="n">resume</span><span class="o">.</span>
@@ -1854,7 +1854,7 @@ HA로 인한 부담이 적다. 레플리카 노드는 failover되지 않으므�
 <section id="id33">
 <h3>HA 기본 구성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id33" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id33'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>CUBRID HA의 가장 기본적인 구성으로, 하나의 마스터 노드와 하나의 슬레이브 노드로 구성된다.</p>
-<p>CUBRID HA 고유의 기능인 장애 시 무중단(nonstop) 서비스 기능에 초점을 맞춘 구성으로, 작은 서비스에서 적은 리소스를 투입하여 구성할 수 있다. HA 기본 구성은 하나의 마스터 노드와 하나의 슬레이브 노드로 서비스를 제공하므로, 읽기 부하를 분산하려면 다중 슬레이브 노드 구성 또는 부하 분산 구성이 좋다. 또한, 슬레이브 노드 또는 레플리카 노드 등의 특정 노드에 읽기 전용으로 접속하려면 Read Only 브로커 또는 Preferred Host Read Only 브로커를 구성한다. 브로커 구성에 대한 설명은 <a class="reference internal" href="#duplexing-brokers"><span class="std std-ref">브로커 이중화</span></a> 를 참고한다.</p>
+<p>CUBRID HA 고유의 기능인 장애 시 무중단(nonstop) 서비스 기능에 초점을 맞춘 구성으로, 작은 서비스에서 적은 자원을 투입하여 구성할 수 있다. HA 기본 구성은 하나의 마스터 노드와 하나의 슬레이브 노드로 서비스를 제공하므로, 읽기 부하를 분산하려면 다중 슬레이브 노드 구성 또는 부하 분산 구성이 좋다. 또한, 슬레이브 노드 또는 레플리카 노드 등의 특정 노드에 읽기 전용으로 접속하려면 Read Only 브로커 또는 Preferred Host Read Only 브로커를 구성한다. 브로커 구성에 대한 설명은 <a class="reference internal" href="#duplexing-brokers"><span class="std std-ref">브로커 이중화</span></a> 를 참고한다.</p>
 <p><strong>노드 설정 예시</strong></p>
 <img alt="_images/image30.png" src="_images/image30.png"/>
 <p>HA 기본 구성의 각 노드는 다음과 같이 설정한다.</p>
@@ -2397,7 +2397,7 @@ ha_replica_time_bound를 지정한다.</p></td>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-restoreslave-o">
 <span id="cmdoption-restoreslave-output-file"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-restoreslave-o" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-restoreslave-o'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>출력된 메세지들을 저장할 파일명을 지정할 수 있다. 더 많은 정보는 <a class="reference internal" href="admin/backup.html#restoredb"><span class="std std-ref">restoredb</span></a> 의 -o 옵션을 참고한다.</p>
+<dd><p>출력된 메시지들을 저장할 파일명을 지정할 수 있다. 더 많은 정보는 <a class="reference internal" href="admin/backup.html#restoredb"><span class="std std-ref">restoredb</span></a> 의 -o 옵션을 참고한다.</p>
 </dd></dl>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-restoreslave-u">
@@ -3569,7 +3569,7 @@ ha_replica_time_bound를 지정한다.</p></td>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-checksumdb-cont-on-error">
 <span class="sig-name descname"><span class="pre">--cont-on-error</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-checksumdb-cont-on-error" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-checksumdb-cont-on-error'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>이 옵션이 없으면 에러 발생시 checksumdb가 중지된다.</p>
+<dd><p>이 옵션이 없으면 오류 발생시 checksumdb가 중지된다.</p>
 </dd></dl>
 <p>다음은 checksumdb를 실행하는 예제이다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">checksumdb</span> <span class="o">-</span><span class="n">c</span> <span class="mi">100</span> <span class="o">-</span><span class="n">s</span> <span class="mi">10</span> <span class="n">testdb</span><span class="nd">@master</span>
@@ -4172,7 +4172,7 @@ HA 복제 재구성을 실행한다.</p></td>
 <td><p>notification</p></td>
 <td><p>아카이브 로그의 마지막 레코드를 반영하거나 복제
 반영 상태 변경</p></td>
-<td><p>이 에러 메시지는 일반적인 정보를 위해
+<td><p>이 오류 메시지는 일반적인 정보를 위해
 기록되는 로그로 조치 사항은 없다.</p></td>
 </tr>
 </tbody>
@@ -4267,7 +4267,7 @@ committed LSA: ?|?.</p></td>
 <section id="id57">
 <h3>마스터 노드의 기능 상실<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id57" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id57'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>마스터 노드의 기능 상실</strong></p>
-<p>마스터 노드가 <strong>cub_server</strong> 재구동의 실패나, 디스크 이상 등의 이유로 인해 마스터 노드로서의 기능을 상실할 때, 마스터 노드의 fail-back과 슬레이브 노드의 fail-over가 결정된다. 디스크 이상이라고 판단된 경우, 서버 에러 로그에 “Disk failure has been occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)”와 같은 에러 메시지를 남긴다.</p>
+<p>마스터 노드가 <strong>cub_server</strong> 재구동의 실패나, 디스크 이상 등의 이유로 인해 마스터 노드로서의 기능을 상실할 때, 마스터 노드의 fail-back과 슬레이브 노드의 fail-over가 결정된다. 디스크 이상이라고 판단된 경우, 서버 오류 로그에 “Disk failure has been occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)”와 같은 오류 메시지를 남긴다.</p>
 <p>슬레이브 노드는 <strong>ha_ping_hosts</strong> 를 통해 ping 체크를 한 결과, 현재 네트워크 파티션이 없는 경우에만 fail-over가 성공적으로 완료된다. 아래는 마스터 노드의 기능 상실 상황에서 로깅될 수 있는 fail-over, fail-back 메시지의 목록이다.</p>
 <table class="docutils align-default">
 <thead>
@@ -4557,7 +4557,7 @@ committed LSA: ?|?.</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

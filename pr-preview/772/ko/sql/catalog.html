@@ -688,7 +688,7 @@
 </section>
 <section id="db-domain">
 <span id="id5"></span><h3>_db_domain<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#db-domain" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#db-domain'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>도메인에 대한 정보이며, object_of와 data_type 컬럼에 각각(개별적인) 인덱스가 생성되어 있다.</p>
+<p>도메인에 대한 정보이며, object_of와 data_type 칼럼에 각각(개별적인) 인덱스가 생성되어 있다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>속성명</p></th>
@@ -911,7 +911,7 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>return_value</p></td>
 <td><p>SEQUENCE OF _db_meth_arg</p></td>
-<td><p>함수의 리턴 값</p></td>
+<td><p>함수의 반환 값</p></td>
 </tr>
 <tr class="row-even"><td><p>arguments</p></td>
 <td><p>SEQUENCE OF _db_meth_arg</p></td>
@@ -942,7 +942,7 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 </tr>
 <tr class="row-even"><td><p>index_of</p></td>
 <td><p>INTEGER</p></td>
-<td><p>함수정의에 인자가 나열된 순서. 리턴 값이면 0,
+<td><p>함수정의에 인자가 나열된 순서. 반환 값이면 0,
 입력인자이면 1부터 시작함.</p></td>
 </tr>
 <tr class="row-odd"><td><p>domains</p></td>
@@ -1007,7 +1007,7 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>invalidated_time</p></td>
 <td><p>DATETIME</p></td>
-<td><p>뷰 쿼리가 무효화된 시각</p></td>
+<td><p>뷰 질의가 무효화된 시각</p></td>
 <td></td>
 </tr>
 </tbody>
@@ -1429,15 +1429,15 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>return_type</p></td>
 <td><p>INTEGER</p></td>
-<td><p>리턴 값 타입</p></td>
+<td><p>반환 값 타입</p></td>
 </tr>
 <tr class="row-even"><td><p>arg_count</p></td>
 <td><p>INTEGER</p></td>
-<td><p>매개변수 개수</p></td>
+<td><p>파라미터 개수</p></td>
 </tr>
 <tr class="row-odd"><td><p>args</p></td>
 <td><p>SEQUENCE OF _db_stored_procedure_args</p></td>
-<td><p>매개변수 리스트</p></td>
+<td><p>파라미터 리스트</p></td>
 </tr>
 <tr class="row-even"><td><p>lang</p></td>
 <td><p>INTEGER</p></td>
@@ -1559,7 +1559,7 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>index_of</p></td>
 <td><p>INTEGER</p></td>
-<td><p>매개변수의 순서</p></td>
+<td><p>파라미터의 순서</p></td>
 </tr>
 <tr class="row-even"><td><p>is_system_generated</p></td>
 <td><p>INTEGER</p></td>
@@ -1567,23 +1567,23 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>arg_name</p></td>
 <td><p>CHARACTER VARYING(255)</p></td>
-<td><p>매개변수의 이름</p></td>
+<td><p>파라미터의 이름</p></td>
 </tr>
 <tr class="row-even"><td><p>data_type</p></td>
 <td><p>INTEGER</p></td>
-<td><p>매개변수의 데이터 타입</p></td>
+<td><p>파라미터의 데이터 타입</p></td>
 </tr>
 <tr class="row-odd"><td><p>mode</p></td>
 <td><p>INTEGER</p></td>
-<td><p>매개변수 모드 (IN, OUT, INOUT)</p></td>
+<td><p>파라미터 모드 (IN, OUT, INOUT)</p></td>
 </tr>
 <tr class="row-even"><td><p>default_value</p></td>
 <td><p>CHARACTER VARYING(255)</p></td>
-<td><p>매개변수의 기본값</p></td>
+<td><p>파라미터의 기본값</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_optional</p></td>
 <td><p>INTEGER</p></td>
-<td><p>선택적 매개변수 여부</p></td>
+<td><p>선택적 파라미터 여부</p></td>
 </tr>
 <tr class="row-even"><td><p>comment</p></td>
 <td><p>CHARACTER VARYING(1024)</p></td>
@@ -1595,9 +1595,9 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 <div><div class="admonition note">
 <p class="admonition-title">참고</p>
 <ul>
-<li><p><strong>index_of</strong>: 매개변수의 순서는 0부터 시작한다.</p></li>
+<li><p><strong>index_of</strong>: 파라미터의 순서는 0부터 시작한다.</p></li>
 <li><p><strong>is_system_generated</strong>: 값이 <strong>1</strong> 이면 시스템이 생성한 저장 프로시저 인수이며, <strong>0</strong> 이면 사용자가 생성한 저장 프로시저 인수이다.</p></li>
-<li><p><strong>data_type</strong>: 매개변수의 데이터 타입은 아래 값 중 하나이다</p>
+<li><p><strong>data_type</strong>: 파라미터의 데이터 타입은 아래 값 중 하나이다</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">NULL</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">INTEGER</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">FLOAT</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">DOUBLE</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">STRING</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="line-2"><span class="n">SET</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">MULTISET</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="n">SEQUENCE</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">TIME</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
@@ -1612,15 +1612,15 @@ JSON 타입이 아닌 경우 <strong>NULL</strong> 이 설정됨</p></td>
 </ul>
 </div></blockquote>
 </li>
-<li><p><strong>mode</strong>: 매개변수 모드는 아래 값 중 하나이다</p>
+<li><p><strong>mode</strong>: 파라미터 모드는 아래 값 중 하나이다</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">IN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">OUT</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">INOUT</span> <span class="o">=</span> <span class="mi">2</span>
 </span></code></pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p><strong>default_value</strong>: 매개변수의 기본값이다. 자세한 내용은 <a class="reference internal" href="../pl/pl_create.html#pl-arg-default"><span class="std std-ref">기본값 인자 지정</span></a> 을 참고한다.</p></li>
-<li><p><strong>is_optional</strong>: 매개변수가 선택 가능하면 <strong>1</strong>,  필수이면 <strong>0</strong> 이다.</p></li>
+<li><p><strong>default_value</strong>: 파라미터의 기본값이다. 자세한 내용은 <a class="reference internal" href="../pl/pl_create.html#pl-arg-default"><span class="std std-ref">기본값 인자 지정</span></a> 을 참고한다.</p></li>
+<li><p><strong>is_optional</strong>: 파라미터가 선택 가능하면 <strong>1</strong>,  필수이면 <strong>0</strong> 이다.</p></li>
 </ul>
 </div>
 </div></blockquote>
@@ -2310,7 +2310,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 <td><p>컬렉션 타입(SET, MULTISET, SEQUENCE) 인자의 원소에 대한 데이터 타입</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#id46"><span class="std std-ref">DB_METH_FILE</span></a></p></td>
-<td><p>메소드가 정의된 파일 정보</p></td>
+<td><p>메서드가 정의된 파일 정보</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#id48"><span class="std std-ref">DB_INDEX</span></a></p></td>
 <td><p>인덱스에 대한 정보</p></td>
@@ -2580,7 +2580,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </tr>
 <tr class="row-odd"><td><p>invalidated_time</p></td>
 <td><p>DATETIME</p></td>
-<td><p>뷰 쿼리가 무효화된 시각</p></td>
+<td><p>뷰 질의가 무효화된 시각</p></td>
 <td></td>
 </tr>
 </tbody>
@@ -3019,7 +3019,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </tr>
 <tr class="row-even"><td><p>index_of</p></td>
 <td><p>INTEGER</p></td>
-<td><p>인자가 함수 정의에 나열된 순서. 리턴 값이면 0, 입력인자이면 1부터 시작함</p></td>
+<td><p>인자가 함수 정의에 나열된 순서. 반환 값이면 0, 입력인자이면 1부터 시작함</p></td>
 </tr>
 <tr class="row-odd"><td><p>data_type</p></td>
 <td><p>VARCHAR(9)</p></td>
@@ -3088,7 +3088,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </tr>
 <tr class="row-even"><td><p>index_of</p></td>
 <td><p>INTEGER</p></td>
-<td><p>인자가 함수 정의에 나열된 순서. 리턴 값이면 0, 입력인자이면 1부터 시작함</p></td>
+<td><p>인자가 함수 정의에 나열된 순서. 반환 값이면 0, 입력인자이면 1부터 시작함</p></td>
 </tr>
 <tr class="row-odd"><td><p>data_type</p></td>
 <td><p>VARCHAR(9)</p></td>
@@ -3885,11 +3885,11 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </tr>
 <tr class="row-odd"><td><p>return_type</p></td>
 <td><p>VARCHAR(16)</p></td>
-<td><p>저장 프로시저의 리턴 타입 이름</p></td>
+<td><p>저장 프로시저의 반환 타입 이름</p></td>
 </tr>
 <tr class="row-even"><td><p>arg_count</p></td>
 <td><p>INTEGER</p></td>
-<td><p>매개변수 개수</p></td>
+<td><p>파라미터 개수</p></td>
 </tr>
 <tr class="row-odd"><td><p>lang</p></td>
 <td><p>VARCHAR(16)</p></td>
@@ -4078,31 +4078,31 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </tr>
 <tr class="row-odd"><td><p>index_of</p></td>
 <td><p>INTEGER</p></td>
-<td><p>매개변수의 순서</p></td>
+<td><p>파라미터의 순서</p></td>
 </tr>
 <tr class="row-even"><td><p>arg_name</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>매개변수의 이름</p></td>
+<td><p>파라미터의 이름</p></td>
 </tr>
 <tr class="row-odd"><td><p>data_type</p></td>
 <td><p>VARCHAR(16)</p></td>
-<td><p>매개변수의 데이터 타입</p></td>
+<td><p>파라미터의 데이터 타입</p></td>
 </tr>
 <tr class="row-even"><td><p>mode</p></td>
 <td><p>VARCHAR(6)</p></td>
-<td><p>매개변수 모드 (IN, OUT, INOUT)</p></td>
+<td><p>파라미터 모드 (IN, OUT, INOUT)</p></td>
 </tr>
 <tr class="row-odd"><td><p>is_optional</p></td>
 <td><p>VARCHAR(3)</p></td>
-<td><p>선택적 매개변수 여부</p></td>
+<td><p>선택적 파라미터 여부</p></td>
 </tr>
 <tr class="row-even"><td><p>default_value</p></td>
 <td><p>VARCHAR(255)</p></td>
-<td><p>매개변수의 기본값</p></td>
+<td><p>파라미터의 기본값</p></td>
 </tr>
 <tr class="row-odd"><td><p>comment</p></td>
 <td><p>VARCHAR(1024)</p></td>
-<td><p>매개변수에 대한 설명</p></td>
+<td><p>파라미터에 대한 설명</p></td>
 </tr>
 </tbody>
 </table>
@@ -4110,8 +4110,8 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 <div><div class="admonition note">
 <p class="admonition-title">참고</p>
 <ul>
-<li><p><strong>index_of</strong>: 매개변수의 순서는 0부터 시작하고 63을 최대값으로 가질 수 있다.</p></li>
-<li><p><strong>data_type</strong>: 매개변수의 데이터 타입은 아래 값 중 하나이다</p>
+<li><p><strong>index_of</strong>: 파라미터의 순서는 0부터 시작하고 63을 최대값으로 가질 수 있다.</p></li>
+<li><p><strong>data_type</strong>: 파라미터의 데이터 타입은 아래 값 중 하나이다</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">NULL</span><span class="p">,</span> <span class="n">INTEGER</span><span class="p">,</span> <span class="n">FLOAT</span><span class="p">,</span> <span class="n">DOUBLE</span><span class="p">,</span> <span class="n">STRING</span><span class="p">,</span>
 </span><span id="line-2"><span class="n">SET</span><span class="p">,</span> <span class="n">MULTISET</span><span class="p">,</span> <span class="n">SEQUENCE</span><span class="p">,</span> <span class="n">TIME</span><span class="p">,</span>
@@ -4124,15 +4124,15 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </ul>
 </div></blockquote>
 </li>
-<li><p><strong>mode</strong>: 매개변수 모드는 아래 값 중 하나이다</p>
+<li><p><strong>mode</strong>: 파라미터 모드는 아래 값 중 하나이다</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">IN</span><span class="p">,</span> <span class="n">OUT</span><span class="p">,</span> <span class="n">INOUT</span>
 </span></code></pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p><strong>is_optional</strong>: 매개변수가 선택 가능하면 <strong>YES</strong>,  필수이면 <strong>NO</strong> 이다.</p></li>
-<li><p><strong>default_value</strong>: 매개변수의 기본값이다. 자세한 내용은 <a class="reference internal" href="../pl/pl_create.html#pl-arg-default"><span class="std std-ref">기본값 인자 지정</span></a> 을 참고한다.</p></li>
+<li><p><strong>is_optional</strong>: 파라미터가 선택 가능하면 <strong>YES</strong>,  필수이면 <strong>NO</strong> 이다.</p></li>
+<li><p><strong>default_value</strong>: 파라미터의 기본값이다. 자세한 내용은 <a class="reference internal" href="../pl/pl_create.html#pl-arg-default"><span class="std std-ref">기본값 인자 지정</span></a> 을 참고한다.</p></li>
 </ul>
 </div>
 </div></blockquote>
@@ -4271,7 +4271,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </section>
 <section id="id74">
 <h2>카탈로그 클래스/가상 클래스 사용 권한<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id74" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id74'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>카탈로그 클래스들은 <strong>dba</strong> 소유로 생성된다. 그러나, <strong>dba</strong> 가 <strong>SELECT</strong> 연산만 수행할 수 있을 뿐이며, <strong>UPDATE</strong> / <strong>DELETE</strong> 등의 연산을 수행할 경우에는 authorization failure 에러가 발생한다. 일반 사용자는 시스템 카탈로그 클래스에 대해서 질의를 수행할 수 없다.</p>
+<p>카탈로그 클래스들은 <strong>dba</strong> 소유로 생성된다. 그러나, <strong>dba</strong> 가 <strong>SELECT</strong> 연산만 수행할 수 있을 뿐이며, <strong>UPDATE</strong> / <strong>DELETE</strong> 등의 연산을 수행할 경우에는 authorization failure 오류가 발생한다. 일반 사용자는 시스템 카탈로그 클래스에 대해서 질의를 수행할 수 없다.</p>
 <p>카탈로그 가상 클래스는 <strong>dba</strong> 소유로 생성되지만 모든 사용자가 카탈로그 가상 클래스에 대해 <strong>SELECT</strong> 문을 수행할 수 있다. 물론 카탈로그 가상 클래스에 대한 <strong>UPDATE</strong> / <strong>DELETE</strong> 연산은 수행이 불가능하다.</p>
 <p>카탈로그 클래스/가상 클래스에 대한 갱신은 사용자가 클래스/속성/인덱스/사용자/권한을 생성/변경/삭제하는 DDL 문을 수행할 경우 시스템에 의해 자동으로 수행된다.</p>
 </section>
@@ -4392,7 +4392,7 @@ applylogdb가 재시작해도 last_committed_lsa 보다 앞선 로그는 재반�
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

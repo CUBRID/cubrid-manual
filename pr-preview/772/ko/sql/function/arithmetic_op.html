@@ -279,14 +279,14 @@
 </ul>
 </li>
 </ul>
-<p>다음은 CUBRID가 지원하는 산술 연산자의 설명 및 리턴 값을 나타낸 표이다.</p>
+<p>다음은 CUBRID가 지원하는 산술 연산자의 설명 및 반환 값을 나타낸 표이다.</p>
 <p><strong>산술 연산자</strong></p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>산술 연산자</p></th>
 <th class="head"><p><strong>설명</strong></p></th>
 <th class="head"><p>연산식</p></th>
-<th class="head"><p>리턴 값</p></th>
+<th class="head"><p>반환 값</p></th>
 </tr>
 </thead>
 <tbody>
@@ -370,7 +370,7 @@ BIGINT</p></td>
 </tr>
 </tbody>
 </table>
-<p>피연산자가 모두 동일한 데이터 타입이면 연산 결과의 타입이 변환되지 않으나, 나누기 연산의 경우 예외적으로 타입이 변환되므로 주의해야 한다. 분모, 즉 제수(divisor)가 0이면 에러가 발생한다.</p>
+<p>피연산자가 모두 동일한 데이터 타입이면 연산 결과의 타입이 변환되지 않으나, 나누기 연산의 경우 예외적으로 타입이 변환되므로 주의해야 한다. 분모, 즉 제수(divisor)가 0이면 오류가 발생한다.</p>
 <p>아래는 피연산자가 모두 <strong>NUMERIC</strong> 타입인 경우, 연산 결과의 전체 자릿수(<em>p</em>)와 소수점 아래 자릿수(<em>s</em>)를 정리한 표이다.</p>
 <p><strong>NUMERIC 타입의 연산 결과</strong></p>
 <table class="docutils align-default">
@@ -552,7 +552,7 @@ BIGINT</p></td>
 </section>
 <section id="arithmetic-op-type-casting">
 <span id="id4"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">날짜/시간 데이터 타입의 산술 연산과 타입 변환</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#arithmetic-op-type-casting" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#arithmetic-op-type-casting'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>피연산자가 모두 날짜/시간 데이터 타입이면 뺄셈 연산이 가능하며, 리턴 값의 타입은 <strong>BIGINT</strong> 이다. 이때 피연산자의 타입에 따라 연산 단위가 다르므로 주의한다. 날짜/시간 데이터 타입과 정수는 덧셈 및 뺄셈 연산이 가능하며, 이때 연산 단위와 리턴 값의 타입은 날짜/시간 데이터 타입을 따른다.</p>
+<p>피연산자가 모두 날짜/시간 데이터 타입이면 뺄셈 연산이 가능하며, 반환 값의 타입은 <strong>BIGINT</strong> 이다. 이때 피연산자의 타입에 따라 연산 단위가 다르므로 주의한다. 날짜/시간 데이터 타입과 정수는 덧셈 및 뺄셈 연산이 가능하며, 이때 연산 단위와 반환 값의 타입은 날짜/시간 데이터 타입을 따른다.</p>
 <p>아래는 피연산자의 타입별로 허용하는 연산과 연산 결과의 데이터 타입을 정리한 표이다.</p>
 <p><strong>피연산자의 타입별 허용 연산과 결과 데이터 타입</strong></p>
 <table class="docutils align-default">
@@ -774,7 +774,7 @@ BIGINT</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

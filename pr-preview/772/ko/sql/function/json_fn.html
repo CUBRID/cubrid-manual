@@ -670,7 +670,7 @@ json 경로는 객체 키 식별자로 시작하는 것만 허용된다.</p>
 <dd><p>해당 경로로 지정된 <em>json_doc</em> 로부터 json 요소를 반환한다.
 json 경로 인자가 와일드카드를 포함하는 경우 와일드카드에 의해 포함될 수 있는 모든 경로의 지정된 json 요소가 json 배열 결과로 반환된다.
 와일드카드를 사용하지 않고 json 경로에서 하나의 요소만 발견된 경우 하나의 json 요소만 반환되며, 그렇지 않은 경우 발견된 json 요소는 json 배열로 구성하여 반환된다.
-json 경로가 <strong>NULL</strong> 이거나 유효하지 않은 경우 혹은 <em>json_doc</em> 인자가 유효하지 않은 경우 에러가 반환된다.
+json 경로가 <strong>NULL</strong> 이거나 유효하지 않은 경우 혹은 <em>json_doc</em> 인자가 유효하지 않은 경우 오류가 반환된다.
 json 요소가 발견되지 않거나 json_doc이 <strong>NULL</strong> 인 경우 <strong>NULL</strong> 을 반환한다.</p>
 </dd></dl>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">JSON_EXTRACT</span><span class="p">(</span><span class="s1">'{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}'</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.a'</span><span class="p">);</span>
@@ -689,7 +689,7 @@ json 요소가 발견되지 않거나 json_doc이 <strong>NULL</strong> 인 경�
 </span><span id="line-3">  <span class="s2">"["</span><span class="n">a</span><span class="s2">","</span><span class="sa">b</span><span class="s2">"]"</span> <span class="o">--</span> <span class="s1">'$.a[0]'</span><span class="n">와</span> <span class="s1">'$.a[1]'</span><span class="n">는</span> <span class="n">json</span> <span class="n">배열로</span> <span class="n">구성하여</span><span class="p">,</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span><span class="s2">"b"</span><span class="p">]</span><span class="n">를</span> <span class="n">형성한다</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>와일드 카드’.*’를 포함한 이전의 쿼리를 ‘.a’로 바꾸면 ‘$.c[0]’가 일치할 것인데, 이것은 정확히 객체 키(key) 식별자와 배열 인덱스가 있는 모든 json 경로와 일치할 것이다.</p>
+<p>와일드 카드’.*’를 포함한 이전의 질의를 ‘.a’로 바꾸면 ‘$.c[0]’가 일치할 것인데, 이것은 정확히 객체 키(key) 식별자와 배열 인덱스가 있는 모든 json 경로와 일치할 것이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">JSON_EXTRACT</span><span class="p">(</span><span class="s1">'{"a":["a","b"],"b":"a","c":["a"], "d":{"e":["a"]}}'</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.*[*]'</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
@@ -721,7 +721,7 @@ json 요소가 발견되지 않거나 json_doc이 <strong>NULL</strong> 인 경�
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">json_doc</span> <span class="pre">-&gt;</span> <span class="pre">json</span> <span class="pre">path</span></span></dt>
-<dd><p><em>json_doc</em> 인자가 하나의 컬럼으로 제한된 두 개의 인자를 가지는 <strong>JSON_EXTRACT</strong> 의 별칭 연산자.
+<dd><p><em>json_doc</em> 인자가 하나의 칼럼으로 제한된 두 개의 인자를 가지는 <strong>JSON_EXTRACT</strong> 의 별칭 연산자.
 json 경로가 <strong>NULL</strong> 이거나 유효하지 않은 경우 오류를 반환한다.
 <strong>NULL</strong> <em>json_doc</em> 인자가 적용된 경우에는 <strong>NULL</strong> 을 반환한다.</p>
 </dd></dl>
@@ -745,7 +745,7 @@ json 경로가 <strong>NULL</strong> 이거나 유효하지 않은 경우 오류
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">json_doc</span> <span class="pre">-&gt;&gt;</span> <span class="pre">json</span> <span class="pre">path</span></span></dt>
-<dd><p><strong>JSON_UNQUOTE</strong> 의 별칭 (json_doc-&gt;json 경로). 본 연산자는 컬럼인 <em>json_doc</em> 인자에만 적용 할 수 있다.
+<dd><p><strong>JSON_UNQUOTE</strong> 의 별칭 (json_doc-&gt;json 경로). 본 연산자는 칼럼인 <em>json_doc</em> 인자에만 적용 할 수 있다.
 json 경로가 <strong>NULL</strong> 이거나 유효하지 않은 경우 오류가 발생한다.
 <strong>NULL</strong> <em>json_doc</em> 인자에 적용된 경우 <strong>NULL</strong> 을 반환한다.</p>
 </dd></dl>
@@ -1503,7 +1503,7 @@ json 경로가 <em>json_doc</em> 내부에서 아래의 json 값 중 하나를 �
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

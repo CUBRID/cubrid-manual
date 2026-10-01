@@ -318,7 +318,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mf">1.550000e+01</span>
 </span></code></pre></div>
 </div>
-<p>다음은 두 개의 정수 값을 더하는 경우 결과 값도 <strong>INTEGER</strong> 타입이 되기 때문에 오버플로우(overflow) 에러가 발생하는 예이다.</p>
+<p>다음은 두 개의 정수 값을 더하는 경우 결과 값도 <strong>INTEGER</strong> 타입이 되기 때문에 오버플로우(overflow) 오류가 발생하는 예이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="mi">100000000</span><span class="o">*</span><span class="mi">1000000</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -579,7 +579,7 @@
 </div></blockquote>
 <p><strong>DATE</strong>, <strong>DATETIME</strong>, <strong>TIMESTAMP</strong> 타입의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값은 허용한다. 해당 타입의 칼럼에 대한 질의 수행 시 인덱스가 있으면 이 값을 사용할 수 있다는 점에서 <strong>NULL</strong> 대신 사용하면 유용하다.</p>
 <ul class="simple">
-<li><p><strong>DATE</strong>, <strong>DATETIME</strong>, <strong>TIMESTAMP</strong> 타입이 인자인 일부 함수는 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 <strong>return_null_on_function_errors</strong> 의 값에 따라 다른 값을 반환한다. <strong>return_null_on_function_errors</strong> 가 yes이면 <strong>NULL</strong> 을 반환하고 no이면 에러를 반환하며, 기본값은 <strong>no</strong> 이다.</p></li>
+<li><p><strong>DATE</strong>, <strong>DATETIME</strong>, <strong>TIMESTAMP</strong> 타입이 인자인 일부 함수는 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 <strong>return_null_on_function_errors</strong> 의 값에 따라 다른 값을 반환한다. <strong>return_null_on_function_errors</strong> 가 yes이면 <strong>NULL</strong> 을 반환하고 no이면 오류를 반환하며, 기본값은 <strong>no</strong> 이다.</p></li>
 <li><p><strong>DATE</strong>, <strong>DATETIME</strong>, <strong>TIMESTAMP</strong> 타입을 반환하는 함수들은 날짜와 시간 값이 모두 0인 값을 반환할 수 있지만 JAVA 응용 프로그램에서는 이러한 값을 Date 객체에 저장할 수 없다. 따라서 연결 URL 문자열의 zeroDateTimeBehavior 속성(Property) 설정에 따라서 예외로 처리하거나 <strong>NULL</strong>을 반환하거나 또는 최소값을 반환한다(이에 관한 자세한 내용은 <a class="reference internal" href="../api/jdbc.html#jdbc-connection-conf"><span class="std std-ref">연결 설정</span></a> 참고).</p></li>
 <li><p>시스템 파라미터 <strong>intl_date_lang</strong>을 설정하면 <a class="reference internal" href="function/typecast_fn.html#TO_DATE" title="TO_DATE"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_DATE()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">TO_TIIME()</span></code>, <a class="reference internal" href="function/typecast_fn.html#TO_DATETIME" title="TO_DATETIME"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_DATETIME()</span></code></a>, <a class="reference internal" href="function/typecast_fn.html#TO_TIMESTAMP" title="TO_TIMESTAMP"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_TIMESTAMP()</span></code></a>, <a class="reference internal" href="function/typecast_fn.html#DATE_FORMAT" title="DATE_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">DATE_FORMAT()</span></code></a>, <a class="reference internal" href="function/typecast_fn.html#TIME_FORMAT" title="TIME_FORMAT"><code class="xref py py-func docutils literal notranslate"><span class="pre">TIME_FORMAT()</span></code></a>, <a class="reference internal" href="function/typecast_fn.html#TO_CHAR" title="TO_CHAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_CHAR()</span></code></a>, <a class="reference internal" href="function/typecast_fn.html#STR_TO_DATE" title="STR_TO_DATE"><code class="xref py py-func docutils literal notranslate"><span class="pre">STR_TO_DATE()</span></code></a> 함수의 입력 문자열 형식이 해당 로캘의 날짜 형식을 따른다. 자세한 내용은 <a class="reference internal" href="../admin/config.html#stmt-type-parameters"><span class="std std-ref">구문/타입 관련 파라미터</span></a>과 각 함수의 설명을 참고한다.</p></li>
 <li><p>타임존이 포함된 타입은 상위 타입과 동일한 변환 규칙을 따른다.</p></li>
@@ -920,7 +920,7 @@
 <li><p>날짜 부분의 연도가 4자리 이상이거나(0으로 시작할 수 있음), 시간 부분이 최소한 시와 분([H]H:[M]M)을 포함해야 한다. 그렇지 않으면 날짜 부분이 [MM]SS 포맷의 <strong>TIME</strong> 타입으로 인식되고, 뒤이어 나오는 문자열은 무시된다.</p></li>
 </ul>
 </li>
-<li><p><strong>DATETIME</strong> 문자열의 각 단위(년, 월, 일, 시, 분, 초) 중 하나가 999999보다 크면, 숫자가 아닌 것으로 인식하여 해당 단위가 포함된 문자열이 무시된다. 예를 들어 ‘2009-10-21 20:9943:10’은 분 단위의 값이 범위를 벗어나므로 에러가 발생한다. 그러나 ‘2009-10-21 20:1000123:10’이 입력되면 ‘2009’를 MMSS 포맷의 <strong>TIME</strong> 타입으로 인식하여 <strong>TIME</strong>’00:20:09’를 반환한다.</p></li>
+<li><p><strong>DATETIME</strong> 문자열의 각 단위(년, 월, 일, 시, 분, 초) 중 하나가 999999보다 크면, 숫자가 아닌 것으로 인식하여 해당 단위가 포함된 문자열이 무시된다. 예를 들어 ‘2009-10-21 20:9943:10’은 분 단위의 값이 범위를 벗어나므로 오류가 발생한다. 그러나 ‘2009-10-21 20:1000123:10’이 입력되면 ‘2009’를 MMSS 포맷의 <strong>TIME</strong> 타입으로 인식하여 <strong>TIME</strong>’00:20:09’를 반환한다.</p></li>
 <li><p>시간-날짜 순서의 문자열을 <strong>TIME</strong> 타입으로 변환하면 문자열의 날짜 부분은 무시되지만, 날짜 부분의 형식은 유효해야 한다.</p></li>
 <li><p>시간 부분이 있는 모든 입력 문자열은 변환 시 [<em>msec</em>] 을 허용하지만, <strong>DATETIME</strong> 타입만 그 값을 유지한다. <strong>DATE</strong>, <strong>TIMESTAMP</strong>, <strong>TIME</strong> 와 같은 타입으로 변환하면 <em>msec</em> 값을 버린다.</p></li>
 <li><p><strong>DATETIME</strong>, <strong>TIME</strong> 문자열에서의 모든 변환은 시간 값 뒤에 나오는 영문 로캘(locale) 또는 서버의 현재 로캘로 쓰여진 am/pm 지정자를 허용한다.</p></li>
@@ -1493,7 +1493,7 @@ Unix 시간과 세션의 TZ_ID로
 <section id="char-n">
 <h3>CHAR(n)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#char-n" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#char-n'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>고정길이 문자열은 <strong>CHAR</strong> (<em>n</em>)로 표현하며, 여기서 <em>n</em> 은 문자의 개수를 나타낸다. <em>n</em> 이 생략되면 길이는 기본값인 1로 지정된다.</p>
-<p>문자열의 길이가 <em>n</em> 을 초과하면 <strong>allow_truncated_string</strong> 설정 값이 <strong>yes</strong> 인 경우 초과 부분을 절삭하지만, 설정 값이 <strong>no</strong>인경우 에러가 발생한다. <em>n</em> 보다 작은 문자열이 저장되면 나머지 부분은 공백 문자로 채워진다.</p>
+<p>문자열의 길이가 <em>n</em> 을 초과하면 <strong>allow_truncated_string</strong> 설정 값이 <strong>yes</strong> 인 경우 초과 부분을 절삭하지만, 설정 값이 <strong>no</strong>인경우 오류가 발생한다. <em>n</em> 보다 작은 문자열이 저장되면 나머지 부분은 공백 문자로 채워진다.</p>
 <p><strong>CHAR</strong> (<em>n</em>)와 <strong>CHARACTER</strong> (<em>n</em>)는 같은 의미로 사용된다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
@@ -1501,7 +1501,7 @@ Unix 시간과 세션의 TZ_ID로
 </div>
 <ul class="simple">
 <li><p><em>n</em> 은 1 이상 2048 이하의 바이트 수를 지정하며, 고정 길이 문자형으로 해당 크기만큼 공간을 확보한다.</p></li>
-<li><p>공백 값은 빈 따옴표(‘’)로 처리하며, 이 경우 <strong>LENGTH</strong> 함수의 리턴 값은 0이 아니라 <strong>CHAR</strong> (<em>n</em>)에서 정의한 고정길이이다. 즉, <strong>CHAR</strong> (10)인 칼럼에 공백 값을 넣더라도 리턴 값은 10이며, <em>n</em> 이 생략되면 기본값이 <strong>1</strong> 이므로 <strong>CHAR</strong> (1)로 간주된다.</p></li>
+<li><p>공백 값은 빈 따옴표(‘’)로 처리하며, 이 경우 <strong>LENGTH</strong> 함수의 반환 값은 0이 아니라 <strong>CHAR</strong> (<em>n</em>)에서 정의한 고정길이이다. 즉, <strong>CHAR</strong> (10)인 칼럼에 공백 값을 넣더라도 반환 값은 10이며, <em>n</em> 이 생략되면 기본값이 <strong>1</strong> 이므로 <strong>CHAR</strong> (1)로 간주된다.</p></li>
 <li><p>채우는(padding) 문자로 사용되는 공백은 특수 문자를 비롯한 어느 문자보다도 작은 것으로 간주된다.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CHAR</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="n">에</span> <span class="s1">'pacesetter'</span><span class="n">를</span> <span class="n">저장하면</span> <span class="s1">'pacesetter  '</span><span class="n">가</span> <span class="n">된다</span><span class="p">(</span><span class="mi">10</span><span class="n">자리</span> <span class="n">문자열과</span> <span class="n">공백</span> <span class="n">문자</span> <span class="mi">2</span><span class="n">개로</span> <span class="n">구성됨</span><span class="p">)</span><span class="o">.</span>
@@ -1517,7 +1517,7 @@ Unix 시간과 세션의 TZ_ID로
 <section id="varchar-n-char-varying-n">
 <h3>VARCHAR(n) 또는 CHAR VARYING(n)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#varchar-n-char-varying-n" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#varchar-n-char-varying-n'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>가변길이 문자열은 <strong>VARCHAR</strong> (<em>n</em>)로 표현하며, 여기서 <em>n</em> 은 문자의 개수를 나타낸다. <em>n</em> 이 생략되면 길이는 최대 길이인 1,073,741,823로 지정된다.</p>
-<p>문자열의 길이가 <em>n</em> 을 초과하면 <strong>allow_truncated_string</strong> 설정 값이 <strong>yes</strong>인 경우 초과 부분을 절삭하지만, 설정 값이 <strong>no</strong>인경우 에러가 발생한다. <em>n</em> 보다 작은 문자열이 저장되면 <strong>CHAR</strong> (<em>n</em>)는 나머지 부분을 공백 문자로 채우지만 <strong>VARCHAR</strong> (<em>n</em>)에는 해당 문자열 길이만큼만 저장한다.</p>
+<p>문자열의 길이가 <em>n</em> 을 초과하면 <strong>allow_truncated_string</strong> 설정 값이 <strong>yes</strong>인 경우 초과 부분을 절삭하지만, 설정 값이 <strong>no</strong>인경우 오류가 발생한다. <em>n</em> 보다 작은 문자열이 저장되면 <strong>CHAR</strong> (<em>n</em>)는 나머지 부분을 공백 문자로 채우지만 <strong>VARCHAR</strong> (<em>n</em>)에는 해당 문자열 길이만큼만 저장한다.</p>
 <p><strong>VARCHAR</strong> (<em>n</em>)와 <strong>CHARACTER VARYING</strong> (<em>n</em>), <strong>CHAR VARYING</strong> (<em>n</em>)은 같은 의미로 사용된다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
@@ -1526,7 +1526,7 @@ Unix 시간과 세션의 TZ_ID로
 <ul class="simple">
 <li><p><strong>STRING</strong> 은 <strong>VARCHAR</strong> (최대 길이)와 같다.</p></li>
 <li><p><em>n</em> 은 1부터 1,073,741,823(1G) 사이의 정수이다.</p></li>
-<li><p>공백 값은 빈 따옴표(‘’)로 처리하며, 이 경우 <strong>LENGTH</strong> 함수의 리턴 값은 0이다.</p></li>
+<li><p>공백 값은 빈 따옴표(‘’)로 처리하며, 이 경우 <strong>LENGTH</strong> 함수의 반환 값은 0이다.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">VARCHAR</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="n">에</span> <span class="s1">'pacesetter'</span><span class="n">를</span> <span class="n">저장하면</span> <span class="s1">'pace'</span><span class="n">가</span> <span class="n">된다</span><span class="p">(</span><span class="n">문자열의</span> <span class="n">크기가</span> <span class="mi">4</span><span class="n">보다</span> <span class="n">크므로</span> <span class="n">절삭함</span><span class="o">.</span> <span class="n">단</span><span class="p">,</span> <span class="o">**</span><span class="n">allow_truncated_string</span><span class="o">**</span> <span class="n">설정</span> <span class="n">값이</span> <span class="o">**</span><span class="n">no</span><span class="o">**</span>\<span class="n">인</span> <span class="n">경우</span> <span class="n">에러가</span> <span class="n">발생</span><span class="p">)</span><span class="o">.</span>
 </span><span id="line-2"><span class="n">VARCHAR</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="n">에</span> <span class="s1">'pacesetter'</span><span class="n">를</span> <span class="n">저장하면</span> <span class="s1">'pacesetter'</span><span class="n">가</span> <span class="n">된다</span><span class="p">(</span><span class="mi">10</span><span class="n">자리</span> <span class="n">문자열로</span> <span class="n">구성됨</span><span class="p">)</span><span class="o">.</span>
@@ -1610,7 +1610,7 @@ Unix 시간과 세션의 TZ_ID로
 </span><span id="line-3"><span class="k">SELECT</span><span class="w"> </span><span class="n">STRCMP</span><span class="p">(</span><span class="s1">'single quotes test('')'</span><span class="p">,</span><span class="w"> </span><span class="s1">'single quotes test(\'</span><span class="p">)</span><span class="err">'</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
-<p>위의 구문을 실행하면, 아직 따옴표가 열린 것으로 간주하여 아래와 같은 에러가 발생한다.
+<p>위의 구문을 실행하면, 아직 따옴표가 열린 것으로 간주하여 아래와 같은 오류가 발생한다.
 CSQL 인터프리터의 SQL 입력 화면에서 위의 구문을 입력하면 다음 따옴표가 입력되기를 대기한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">syntax</span> <span class="n">error</span><span class="p">,</span> <span class="n">unexpected</span> <span class="n">UNTERMINATED_STRING</span><span class="p">,</span> <span class="n">expecting</span> <span class="n">SELECT</span> <span class="ow">or</span> <span class="n">VALUE</span> <span class="ow">or</span> <span class="n">VALUES</span> <span class="ow">or</span> <span class="s1">'('</span>
 </span></code></pre></div>
@@ -1647,7 +1647,7 @@ CSQL 인터프리터의 SQL 입력 화면에서 위의 구문을 입력하면 �
 </span><span id="line-3">  <span class="s1">'aaa%'</span>
 </span></code></pre></div>
 </div>
-<p>‘%’가 패턴 매칭 문자가 아닌 일반 문자로 인식되기 때문에, 질의를 수행하면 1개의 행만 리턴한다.</p>
+<p>‘%’가 패턴 매칭 문자가 아닌 일반 문자로 인식되기 때문에, 질의를 수행하면 1개의 행만 반환한다.</p>
 <p>LIKE 절의 문자열에서는 백슬래시가 항상 일반 문자로 간주되기 때문에, ‘%’를 패턴 매칭 문자가 아닌 일반 문자로 인식시키려면 ESCAPE 절을 지정하여 백슬래시가 이스케이프 문자임을 명시해야 한다.
 ESCAPE 절에서는 백슬래시가 이스케이프 문자로 간주되기 때문에, 두 개의 백슬래시 문자를 사용했다.</p>
 <p>위의 SELECT 질의에서 이스케이프 문자를 백슬래시가 아닌 다른 문자로 쓰려면 아래와 같이 사용할 수 있다.</p>
@@ -2184,7 +2184,7 @@ ESCAPE 절에서는 백슬래시가 이스케이프 문자로 간주되기 때�
 </section>
 <section id="lob-storage">
 <span id="id23"></span><h3>저장소 생성 및 관리<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#lob-storage" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#lob-storage'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><strong>LOB</strong> 데이터 파일은 기본적으로 데이터베이스 볼륨이 생성되는 &lt;db-volume-path&gt;/lob 디렉터리에 저장된다. 데이터베이스 생성 시 <a class="reference internal" href="../admin/admin_utils.html#cmdoption-createdb-B"><code class="xref std std-option docutils literal notranslate"><span class="pre">createdb</span> <span class="pre">-B</span></code></a> 옵션을 통해서 <strong>LOB</strong> 데이터 파일을 저장할 디렉터리를 지정할 수 있다. 지정된 디렉터리가 존재하지 않으면 디렉터리 생성을 시도하며, 생성 실패 시에는 에러를 출력한다. 자세한 내용은 <a class="reference internal" href="../admin/admin_utils.html#cmdoption-createdb-B"><code class="xref std std-option docutils literal notranslate"><span class="pre">createdb</span> <span class="pre">-B</span></code></a> 옵션을 참고한다.</p>
+<p><strong>LOB</strong> 데이터 파일은 기본적으로 데이터베이스 볼륨이 생성되는 &lt;db-volume-path&gt;/lob 디렉터리에 저장된다. 데이터베이스 생성 시 <a class="reference internal" href="../admin/admin_utils.html#cmdoption-createdb-B"><code class="xref std std-option docutils literal notranslate"><span class="pre">createdb</span> <span class="pre">-B</span></code></a> 옵션을 통해서 <strong>LOB</strong> 데이터 파일을 저장할 디렉터리를 지정할 수 있다. 지정된 디렉터리가 존재하지 않으면 디렉터리 생성을 시도하며, 생성 실패 시에는 오류를 출력한다. 자세한 내용은 <a class="reference internal" href="../admin/admin_utils.html#cmdoption-createdb-B"><code class="xref std std-option docutils literal notranslate"><span class="pre">createdb</span> <span class="pre">-B</span></code></a> 옵션을 참고한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># 현재 작업 디렉터리에 image_db 볼륨이 생성되고 LOB 데이터 파일이 저장된다.</span>
 </span><span id="line-2"><span class="o">%</span> <span class="n">cubrid</span> <span class="n">createdb</span> <span class="n">image_db</span> <span class="n">en_US</span>
 </span><span id="line-3">
@@ -2221,7 +2221,7 @@ ESCAPE 절에서는 백슬래시가 이스케이프 문자로 간주되기 때�
 </section>
 <section id="id24">
 <h3>트랜잭션 지원 및 복구<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id24" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id24'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><strong>LOB</strong> 데이터 변경에 대한 커밋/롤백을 지원한다. 즉, 트랜잭션 내에서 <strong>LOB</strong> Locator와 실제 <strong>LOB</strong> 데이터의 매핑(mapping)에 대한 유효성을 보장하고, 데이터베이스 장애 시 회복(recovery)을 지원한다. 트랜잭션 수행 도중 데이터베이스가 종료되어 해당 트랜잭션이 롤백 처리됨에 따라 <strong>LOB</strong> Locator와 <strong>LOB</strong> 데이터 간 매핑이 일치하지 않으면 에러를 출력한다. 아래의 예를 참고한다.</p>
+<p><strong>LOB</strong> 데이터 변경에 대한 커밋/롤백을 지원한다. 즉, 트랜잭션 내에서 <strong>LOB</strong> Locator와 실제 <strong>LOB</strong> 데이터의 매핑(mapping)에 대한 유효성을 보장하고, 데이터베이스 장애 시 회복(recovery)을 지원한다. 트랜잭션 수행 도중 데이터베이스가 종료되어 해당 트랜잭션이 롤백 처리됨에 따라 <strong>LOB</strong> Locator와 <strong>LOB</strong> 데이터 간 매핑이 일치하지 않으면 오류를 출력한다. 아래의 예를 참고한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- csql&gt; ;AUTOCOMMIT OFF</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">doc_t</span><span class="w"> </span><span class="p">(</span><span class="n">doc_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="k">CLOB</span><span class="p">);</span>
@@ -2253,8 +2253,8 @@ ESCAPE 절에서는 백슬래시가 이스케이프 문자로 간주되기 때�
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <ul class="simple">
-<li><p>JDBC와 같은 드라이버를 통해 애플리케이션에서 <strong>LOB</strong> 데이터를 조회하는 경우, JDBC는 데이터베이스 서버로부터 ResultSet을 가져온 후 Resultset에 대해 커서(cursor) 위치를 변경하면서 레코드를 인출할 수 있다. 즉, ResultSet을 가져온 시점에는 <strong>LOB</strong> 칼럼의 메타 데이터인 Locator만 저장되어 있고, 레코드를 인출하는 시점에 Locator가 참조하는 파일로부터 <strong>LOB</strong> 데이터가 실제로 인출된다. 따라서, 두 시점 사이에 <strong>LOB</strong> 데이터가 업데이트되는 경우, <strong>LOB</strong> Locator와 실제 <strong>LOB</strong> 데이터의 매핑(mapping)이 유효하지 않아 에러가 발생할 수 있다.</p></li>
-<li><p><strong>LOB</strong> 타입 칼럼의 메타 데이터(Locator)에 대해서만 백업/복구를 지원한다. 따라서, 장애가 발생해서 특정 시점으로 복구할 때 <strong>LOB</strong> Locator와 <strong>LOB</strong> 데이터의 매핑이 유효하지 않아 에러가 발생할 수 있다.</p></li>
+<li><p>JDBC와 같은 드라이버를 통해 애플리케이션에서 <strong>LOB</strong> 데이터를 조회하는 경우, JDBC는 데이터베이스 서버로부터 ResultSet을 가져온 후 Resultset에 대해 커서(cursor) 위치를 변경하면서 레코드를 인출할 수 있다. 즉, ResultSet을 가져온 시점에는 <strong>LOB</strong> 칼럼의 메타 데이터인 Locator만 저장되어 있고, 레코드를 인출하는 시점에 Locator가 참조하는 파일로부터 <strong>LOB</strong> 데이터가 실제로 인출된다. 따라서, 두 시점 사이에 <strong>LOB</strong> 데이터가 업데이트되는 경우, <strong>LOB</strong> Locator와 실제 <strong>LOB</strong> 데이터의 매핑(mapping)이 유효하지 않아 오류가 발생할 수 있다.</p></li>
+<li><p><strong>LOB</strong> 타입 칼럼의 메타 데이터(Locator)에 대해서만 백업/복구를 지원한다. 따라서, 장애가 발생해서 특정 시점으로 복구할 때 <strong>LOB</strong> Locator와 <strong>LOB</strong> 데이터의 매핑이 유효하지 않아 오류가 발생할 수 있다.</p></li>
 <li><p><strong>LOB</strong> 데이터를 다른 장비에 <strong>INSERT</strong> 하려면 반드시 <strong>LOB</strong> 칼럼 메타 데이터(Locator)가 참조하는 <strong>LOB</strong> 데이터를 읽어서 <strong>INSERT</strong> 해야 한다.</p></li>
 <li><p>CUBRID HA에서 <strong>LOB</strong> 칼럼 메타 데이터(Locator)는 복제되고, <strong>LOB</strong> 데이터는 복제되지 않는다. 따라서 <strong>LOB</strong> 타입 저장소가 로컬에 위치할 경우, 슬레이브 노드 또는 failover 이후 마스터 노드에서 해당 칼럼에 대한 작업을 허용하지 않는다.</p></li>
 </ul>
@@ -2428,11 +2428,11 @@ JSON 데이터에 대해 자동 검증을 제공하며,
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>10.2 서버에 연결하는 그 이전 버전의 드라이버는
-JSON 타입 컬럼을 Varchar 타입으로 인식한다.</p>
+JSON 타입 칼럼을 Varchar 타입으로 인식한다.</p>
 </div>
 <section id="id26">
 <h3>JSON 데이터 생성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id26" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id26'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>JSON 포맷의 문자열 형식이 JSON 데이터 타입 컬럼에 입력되면
+<p>JSON 포맷의 문자열 형식이 JSON 데이터 타입 칼럼에 입력되면
 JSON 값으로 자동으로 변환된다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">-- 문자열을 JSON 타입 컬럼에 입력</span>
 </span><span id="line-2"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="n">JSON</span><span class="p">);</span>
@@ -2480,7 +2480,7 @@ JSON 값으로 자동으로 변환된다.</p>
 </span><span id="line-4"><span class="n">유효하지</span> <span class="n">않은</span> <span class="n">JSON</span><span class="p">:</span> <span class="s1">'abc'</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>더 엄격한 유효성 검사 규칙을 가진 JSON 타입 컬럼은
+<p>더 엄격한 유효성 검사 규칙을 가진 JSON 타입 칼럼은
 <a class="reference external" href="https://json-schema.org/specification">JSON 스키마 표준 초안 (draft JSON Schema standard)</a> 를 사용하여 정의할 수 있다.
 만약 JSON 스키마를 다루어본 적이 없다면
 <a class="reference external" href="https://json-schema.org/understanding-json-schema/reference">JSON 스키마의 이해 (Understanding JSON Schema)</a> 를 참고하면 된다.</p>
@@ -3657,7 +3657,7 @@ json_array의 끝부분을 가리키는 데 사용할 수 있다.</p>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

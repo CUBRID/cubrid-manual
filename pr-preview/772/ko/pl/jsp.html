@@ -305,7 +305,7 @@ Java 저장 함수/프로시저는 Java 가상머신을 사용하므로 뛰어�
 <section id="java-call-specification">
 <span id="call-specification"></span><h3>Java Call Specification<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#java-call-specification" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#java-call-specification'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>Java 클래스가 로딩될 때 SQL 문이나 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Call Specification을 사용하여 Java 클래스를 등록해야 한다.</p>
-<p>Call Specification을 사용하면 SQL 문이나 응용 프로그램에서 Java 함수 이름, 인자 타입, 리턴 값 및 리턴 값의 타입에 접근할 수 있다.
+<p>Call Specification을 사용하면 SQL 문이나 응용 프로그램에서 Java 함수 이름, 인자 타입, 반환 값 및 반환 값의 타입에 접근할 수 있다.
 Call Specification을 작성하려면 <a class="reference internal" href="../sql/schema/stored_routine_stmt.html#create-function"><span class="std std-ref">CREATE FUNCTION</span></a> 또는 <a class="reference internal" href="../sql/schema/stored_routine_stmt.html#create-procedure"><span class="std std-ref">CREATE PROCEDURE</span></a> 문을 사용한다.</p>
 <ul class="simple">
 <li><p>Java 저장 함수/프로시저 이름은 대소문자를 구분하지 않는다.</p></li>
@@ -455,7 +455,7 @@ JDBC 연결 URL로 “<strong>jdbc:default:connection:</strong>” 을 사용한
 </section>
 <section id="jsp-execute-statement">
 <span id="id9"></span><h3>질의문 수행<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#jsp-execute-statement" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#jsp-execute-statement'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>자바 저장/프로시저를 구현할 때 자바 어플리케이션을 개발하는 것과 동일하게 다음의 JDBC 인터페이스를 이용하여 질의문을 수행할 수 있다.</p>
+<p>자바 저장/프로시저를 구현할 때 자바 애플리케이션을 개발하는 것과 동일하게 다음의 JDBC 인터페이스를 이용하여 질의문을 수행할 수 있다.</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><strong>java.sql.Statement</strong></p></li>
@@ -471,7 +471,7 @@ JDBC 연결 URL로 “<strong>jdbc:default:connection:</strong>” 을 사용한
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>질의를 수행할 때 생성하는 JDBC 객체는 하나의 SQL 구문만 포함해야한다.
-따라서 다음의 경우에 에러가 발생한다.</p>
+따라서 다음의 경우에 오류가 발생한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">stmt</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Statement</span> <span class="p">(</span><span class="s2">"select * from t1;select * from t2;"</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
@@ -746,8 +746,8 @@ JDBC 연결 URL로 “<strong>jdbc:default:connection:</strong>” 을 사용한
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <ul class="simple">
-<li><p><strong>java.sql.ResultSet</strong> 은 함수의 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 에러가 발생한다.</p></li>
-<li><p>Java가 아닌 환경에서 <strong>ResultSet</strong> 을 반환하는 함수를 호출할 경우에도 에러가 발생한다.</p></li>
+<li><p><strong>java.sql.ResultSet</strong> 은 함수의 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 오류가 발생한다.</p></li>
+<li><p>Java가 아닌 환경에서 <strong>ResultSet</strong> 을 반환하는 함수를 호출할 경우에도 오류가 발생한다.</p></li>
 </ul>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">rset</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="k">CURSOR</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
@@ -1091,12 +1091,12 @@ CUBRID의 Java SP에서는 JNI 기능을 사용할 수 있도록 제공하고 �
 <li><p>질의 수행과 관련 없고 클라이언트 측 JDBC에서만 사용하는 기능은 지원하지 않는다. 자세한 내용은 <a class="reference internal" href="#jsp-appendix"><span class="std std-ref">부록</span></a>를 참조한다.</p></li>
 <li><p>하나의 JDBC 객체로 질의 수행 시 여러 SQL 구문을 지원하지 않는다.</p></li>
 <li><p>질의 수행으로 만들어지는 ResultSet은 non-updatable, non-scrollable, non-sensitive이다.</p></li>
-<li><p>리턴 값 및 IN/OUT 파라미터의 타입 자릿수는 Java에서 무시하고 타입만 맞추어 그대로 데이터베이스에 전달한다.</p></li>
+<li><p>반환 값 및 IN/OUT 파라미터의 타입 자릿수는 Java에서 무시하고 타입만 맞추어 그대로 데이터베이스에 전달한다.</p></li>
 <li><p>저장 프로시저는 다른 저장 프로시저를 호출하거나 재귀적으로 자신을 호출할 수 있다. 최대 중첩 깊이는 16이다.</p></li>
 </ul>
 <section id="in-out">
-<h3>리턴 값 및 IN/OUT 파라미터에 대한 타입 자릿수 제한사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#in-out" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#in-out'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>리턴 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우,
+<h3>반환 값 및 IN/OUT 파라미터에 대한 타입 자릿수 제한사항<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#in-out" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#in-out'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>반환 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우,
 Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 타입만 맞추어 Java에서 반환하는 값을 그대로 데이터베이스에 전달한다.
 전달한 데이터에 대한 조작은 사용자가 데이터베이스에서 직접 처리하는 것을 원칙으로 한다.</p>
 <p>다음과 같은 <strong>typestring</strong> () Java 저장 함수를 살펴보자.</p>
@@ -1130,7 +1130,7 @@ Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 �
 <span id="id17"></span><h3>데이터 타입 매핑<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#jsp-type-mapping" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#jsp-type-mapping'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>Java 저장 함수/프로시저를 등록할 때, Java 저장 함수/프로시저의 반환 정의와 Java 파일의 선언부의 반환 정의가 일치하는지에 대해서는 검사하지 않는다.
 따라서, Java 저장 함수/프로시저의 경우 등록할 때의 반환 정의를 따르고, Java 파일 선언부의 반환 정의는 사용자 정의 정보로서만 의미를 가지게 된다.</p>
-<p>Call Specification에서는 SQL의 데이터 타입과 Java의 매개변수, 리턴 값의 데이터 타입이 맞게 대응되어야 한다.
+<p>Call Specification에서는 SQL의 데이터 타입과 Java의 파라미터, 반환 값의 데이터 타입이 맞게 대응되어야 한다.
 또한 Java 저장함수/프로시저 구현 시, 질의 결과 (ResultSet)의 데이터 타입과 Java의 데이터 타입이 맞게 대응되어야 한다.
 CUBRID에서 허용되는 SQL과 Java의 데이터 타입의 관계는 다음의 표와 같다.</p>
 <p><strong>데이터 타입 매핑</strong></p>
@@ -2143,7 +2143,7 @@ java.lang.Double</p></th>
 </ul>
 </li>
 <li><a :data-current="activeSection === '#jsp-caution'" class="reference internal" href="#jsp-caution">주의 사항</a><ul>
-<li><a :data-current="activeSection === '#in-out'" class="reference internal" href="#in-out">리턴 값 및 IN/OUT 파라미터에 대한 타입 자릿수 제한사항</a></li>
+<li><a :data-current="activeSection === '#in-out'" class="reference internal" href="#in-out">반환 값 및 IN/OUT 파라미터에 대한 타입 자릿수 제한사항</a></li>
 </ul>
 </li>
 <li><a :data-current="activeSection === '#jsp-appendix'" class="reference internal" href="#jsp-appendix">부록</a><ul>
@@ -2167,7 +2167,7 @@ java.lang.Double</p></th>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

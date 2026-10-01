@@ -233,7 +233,7 @@
 <li><p>데이터 조회 시 접근 범위를 줄임으로써 성능 향상</p></li>
 <li><p>디스크 I/O를 분산함으로써 성능 향상 및 물리적 부하 감소</p></li>
 <li><p>여러 분할로 나눔으로써 전체 데이터의 훼손 가능성 감소 및 가용성 향상</p></li>
-<li><p>스토리지 비용의 최적화</p></li>
+<li><p>저장소 비용의 최적화</p></li>
 </ul>
 <p>분할된 데이터는 시스템에 의해 자동으로 관리된다. 분할 테이블에서 실행되는 <a class="reference internal" href="query/insert.html"><span class="doc">INSERT</span></a> 문과 <a class="reference internal" href="query/update.html"><span class="doc">UPDATE</span></a> 문은 실행하는 동안 레코드가 어느 분할에 위치해야 하는지 확인하기 위한 과정을 수행하게 된다. 시스템은 UPDATE 문이 수행되는 동안 수정된 레코드가 어떤 분할로 이동해야 할지를 확인하고 이동시켜줌으로써 분할 정의를 일관되게 유지한다. 유효하지 않은 분할에 레코드를 삽입하려고 하면 오류를 반환한다.</p>
 <p><a class="reference internal" href="query/select.html"><span class="doc">SELECT</span></a> 문을 수행할 때 시스템은 검색 조건에 해당하는 결과를 보유하고 있는 분할만을 대상으로 하여 검색 공간을 좁히기 위해 <a class="reference internal" href="partition.html#partition-pruning"><span class="std std-ref">분할 프루닝</span></a> 작업을 적용한다. SELECT 문 수행 중에 대부분의 분할을 프루닝(제거)하는 작업은 성능을 크게 향상시킨다.</p>
@@ -277,7 +277,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

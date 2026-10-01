@@ -283,7 +283,7 @@
 </section>
 <section id="show-tables">
 <span id="show-tables-statement"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">SHOW TABLES</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#show-tables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#show-tables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 <em>tables_in_&lt;데이터베이스 이름&gt;</em> 이 되며 하나의 칼럼을 지닌다. <strong>LIKE</strong> 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, <strong>WHERE</strong> 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. <strong>SHOW FULL TABLES</strong> 는 <em>owner</em> 칼럼과 <em>table_type</em> 칼럼을 함께 출력한다. <em>owner</em> 컬럼은 소유자 이름을 값으로 가진다. <em>table_type</em> 칼럼은 테이블이면 <strong>BASE TABLE</strong>, 뷰이면 <strong>VIEW</strong>를 값으로 가진다.</p>
+<p>데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 <em>tables_in_&lt;데이터베이스 이름&gt;</em> 이 되며 하나의 칼럼을 지닌다. <strong>LIKE</strong> 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, <strong>WHERE</strong> 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. <strong>SHOW FULL TABLES</strong> 는 <em>owner</em> 칼럼과 <em>table_type</em> 칼럼을 함께 출력한다. <em>owner</em> 칼럼은 소유자 이름을 값으로 가진다. <em>table_type</em> 칼럼은 테이블이면 <strong>BASE TABLE</strong>, 뷰이면 <strong>VIEW</strong>를 값으로 가진다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">SHOW</span> <span class="p">[</span> <span class="n">FULL</span> <span class="p">]</span> <span class="n">TABLES</span> <span class="p">[</span> <span class="n">LIKE</span> <span class="s1">'pattern'</span> <span class="o">|</span> <span class="n">WHERE</span> <span class="n">expr</span> <span class="p">];</span>
 </span></code></pre></div>
 </div>
@@ -760,7 +760,7 @@
 </span><span id="line-3">  <span class="s1">'public.nation'</span>       <span class="s1">'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30), CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) DONT_REUSE_OID, COLLATE iso88591_bin'</span>
 </span></code></pre></div>
 </div>
-<p><strong>SHOW CREATE TABLE</strong> 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 커멘트를 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다.</p>
+<p><strong>SHOW CREATE TABLE</strong> 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 주석을 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다.</p>
 </section>
 <section id="show-create-view">
 <span id="show-create-view-statement"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink">SHOW CREATE VIEW</a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#show-create-view" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#show-create-view'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
@@ -1124,7 +1124,7 @@ file_path에는 활성 로그 파일의 상대경로 또는 절대경로를 입�
 </tr>
 <tr class="row-even"><td><p>Shutdown</p></td>
 <td><p>INT</p></td>
-<td><p>로그 셧다운의 여부</p></td>
+<td><p>로그 종료의 여부</p></td>
 </tr>
 <tr class="row-odd"><td><p>Next_trans_id</p></td>
 <td><p>INT</p></td>
@@ -2373,7 +2373,7 @@ file_path에는 활성 로그 파일의 상대경로 또는 절대경로를 입�
 </tr>
 <tr class="row-odd"><td><p>Owner_thread_index</p></td>
 <td><p>INT</p></td>
-<td><p>CS 쓰기 소유자의 쓰레드 인덱스. 소유자 없으면 NULL</p></td>
+<td><p>CS 쓰기 소유자의 스레드 인덱스. 소유자 없으면 NULL</p></td>
 </tr>
 <tr class="row-even"><td><p>Owner_tran_index</p></td>
 <td><p>INT</p></td>
@@ -2389,7 +2389,7 @@ file_path에는 활성 로그 파일의 상대경로 또는 절대경로를 입�
 </tr>
 <tr class="row-odd"><td><p>Waiting_promoter_thread_index</p></td>
 <td><p>INT</p></td>
-<td><p>승격 대기자의 쓰레드 인덱스. 승격 대기자 없으면 NULL</p></td>
+<td><p>승격 대기자의 스레드 인덱스. 승격 대기자 없으면 NULL</p></td>
 </tr>
 <tr class="row-even"><td><p>Max_waiting_msecs</p></td>
 <td><p>NUMERIC(10,3)</p></td>
@@ -2603,7 +2603,7 @@ file_path에는 활성 로그 파일의 상대경로 또는 절대경로를 입�
 </tr>
 <tr class="row-odd"><td><p>Waiting_for_res</p></td>
 <td><p>VARCHAR(20)</p></td>
-<td><p>대기 리소스, 주소 포인터를 0x12345678 처럼 나타냄, NULL은 0x00000000 을 의미함</p></td>
+<td><p>대기 자원, 주소 포인터를 0x12345678 처럼 나타냄, NULL은 0x00000000 을 의미함</p></td>
 </tr>
 <tr class="row-even"><td><p>Has_deadlock_priority</p></td>
 <td><p>INT</p></td>
@@ -2714,27 +2714,27 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 <tbody>
 <tr class="row-even"><td><p>Index</p></td>
 <td><p>INT</p></td>
-<td><p>쓰레드 시작 인덱스</p></td>
+<td><p>스레드 시작 인덱스</p></td>
 </tr>
 <tr class="row-odd"><td><p>Jobq_index</p></td>
 <td><p>INT</p></td>
-<td><p>워커 쓰레드의 작업 큐 인덱스.  워커 쓰레드가 아닌 경우 NULL</p></td>
+<td><p>워커 스레드의 작업 큐 인덱스.  워커 스레드가 아닌 경우 NULL</p></td>
 </tr>
 <tr class="row-even"><td><p>Thread_id</p></td>
 <td><p>BIGINT</p></td>
-<td><p>쓰레드 식별자</p></td>
+<td><p>스레드 식별자</p></td>
 </tr>
 <tr class="row-odd"><td><p>Tran_index</p></td>
 <td><p>INT</p></td>
-<td><p>쓰레드가 속한 트랜잭션 인덱스. 관련 쓰레드가 없을 경우 NULL</p></td>
+<td><p>스레드가 속한 트랜잭션 인덱스. 관련 스레드가 없을 경우 NULL</p></td>
 </tr>
 <tr class="row-even"><td><p>Type</p></td>
 <td><p>VARCHAR(8)</p></td>
-<td><p>쓰레드 종류. 다음 중 하나 ‘MASTER’, ‘SERVER’, ‘WORKER’, ‘DAEMON’, ‘VACUUM_MASTER’, ‘VACUUM_WORKER’, ‘NONE’, ‘UNKNOWN’.</p></td>
+<td><p>스레드 종류. 다음 중 하나 ‘MASTER’, ‘SERVER’, ‘WORKER’, ‘DAEMON’, ‘VACUUM_MASTER’, ‘VACUUM_WORKER’, ‘NONE’, ‘UNKNOWN’.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Status</p></td>
 <td><p>VARCHAR(8)</p></td>
-<td><p>쓰레드 상태. 다음 중 하나 ‘FREE’, ‘RUN’, ‘WAIT’, ‘CHECK’.</p></td>
+<td><p>스레드 상태. 다음 중 하나 ‘FREE’, ‘RUN’, ‘WAIT’, ‘CHECK’.</p></td>
 </tr>
 <tr class="row-even"><td><p>Resume_status</p></td>
 <td><p>VARCHAR(32)</p></td>
@@ -2750,11 +2750,11 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 </tr>
 <tr class="row-even"><td><p>Conn_client_id</p></td>
 <td><p>INT</p></td>
-<td><p>쓰레드에 응답하는 클라이언트의 식별자, 클라이언트의 식별자가 없을 경우 NULL</p></td>
+<td><p>스레드에 응답하는 클라이언트의 식별자, 클라이언트의 식별자가 없을 경우 NULL</p></td>
 </tr>
 <tr class="row-odd"><td><p>Conn_request_id</p></td>
 <td><p>INT</p></td>
-<td><p>쓰레드가 처리하고 있는 요청의 식별자, 요청 식별자가 없을 경우 NULL</p></td>
+<td><p>스레드가 처리하고 있는 요청의 식별자, 요청 식별자가 없을 경우 NULL</p></td>
 </tr>
 <tr class="row-even"><td><p>Conn_index</p></td>
 <td><p>INT</p></td>
@@ -2762,15 +2762,15 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 </tr>
 <tr class="row-odd"><td><p>Last_error_code</p></td>
 <td><p>INT</p></td>
-<td><p>마지막 에러 코드</p></td>
+<td><p>마지막 오류 코드</p></td>
 </tr>
 <tr class="row-even"><td><p>Last_error_msg</p></td>
 <td><p>VARCHAR(256)</p></td>
-<td><p>마지막 에러 메세지, 메세지가 256 자 보다 클 경우 일부만 보인다. 에러 메세지가 없을 경우 NULL</p></td>
+<td><p>마지막 오류 메시지, 메시지가 256 자 보다 클 경우 일부만 보인다. 오류 메시지가 없을 경우 NULL</p></td>
 </tr>
 <tr class="row-odd"><td><p>Private_heap_id</p></td>
 <td><p>VARCHAR(20)</p></td>
-<td><p>쓰레드 내부 메모리 할당자의 주소, 예: 0x12345678. 관련 힙 id 가 없을 경우 NULL</p></td>
+<td><p>스레드 내부 메모리 할당자의 주소, 예: 0x12345678. 관련 힙 id 가 없을 경우 NULL</p></td>
 </tr>
 <tr class="row-even"><td><p>Query_entry</p></td>
 <td><p>VARCHAR(20)</p></td>
@@ -2790,7 +2790,7 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 </tr>
 <tr class="row-even"><td><p>Wait_for_latch_promote</p></td>
 <td><p>INT</p></td>
-<td><p>0 또는 1, 쓰레드가 래치 프로모션(latch promotion)을 대기하는 여/부</p></td>
+<td><p>0 또는 1, 스레드가 래치 프로모션(latch promotion)을 대기하는 여/부</p></td>
 </tr>
 <tr class="row-odd"><td><p>Lockwait_blocked_mode</p></td>
 <td><p>VARCHAR(24)</p></td>
@@ -2811,15 +2811,15 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 </tr>
 <tr class="row-odd"><td><p>Next_wait_thread_index</p></td>
 <td><p>INT</p></td>
-<td><p>다음 대기 쓰레드 인덱스, 없을 경우 NULL</p></td>
+<td><p>다음 대기 스레드 인덱스, 없을 경우 NULL</p></td>
 </tr>
 <tr class="row-even"><td><p>Next_tran_wait_thread_index</p></td>
 <td><p>INT</p></td>
-<td><p>잠금 매니저의 다음 대기 쓰레드 인덱스, 없을 경우 NULL</p></td>
+<td><p>잠금 매니저의 다음 대기 스레드 인덱스, 없을 경우 NULL</p></td>
 </tr>
 <tr class="row-odd"><td><p>Next_worker_thread_index</p></td>
 <td><p>INT</p></td>
-<td><p>css_Job_queue.worker_thrd_list 의 다음 워커 쓰레드 인덱스, 없을 경우 NULL</p></td>
+<td><p>css_Job_queue.worker_thrd_list 의 다음 워커 스레드 인덱스, 없을 경우 NULL</p></td>
 </tr>
 </tbody>
 </table>
@@ -2904,15 +2904,15 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 </tr>
 <tr class="row-odd"><td><p>Num_total_workers</p></td>
 <td><p>INT</p></td>
-<td><p>큐의 워커 쓰레드 총 개수</p></td>
+<td><p>큐의 워커 스레드 총 개수</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_busy_workers</p></td>
 <td><p>INT</p></td>
-<td><p>큐의 활성 워커 쓰레드의 개수</p></td>
+<td><p>큐의 활성 워커 스레드의 개수</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_connection_workers</p></td>
 <td><p>INT</p></td>
-<td><p>큐의 연결(connection) 워커 쓰레드의 수</p></td>
+<td><p>큐의 연결(connection) 워커 스레드의 수</p></td>
 </tr>
 </tbody>
 </table>
@@ -3006,7 +3006,7 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 </tr>
 <tr class="row-even"><td><p>Num_flusher_waiting_threads</p></td>
 <td><p>INT</p></td>
-<td><p>데이터 버퍼의 페이지 할당을 대기하는 쓰레드 수 (사용 중단(deprecated), 항상 NULL)</p></td>
+<td><p>데이터 버퍼의 페이지 할당을 대기하는 스레드 수 (사용 중단(deprecated), 항상 NULL)</p></td>
 </tr>
 </tbody>
 </table>
@@ -3110,7 +3110,7 @@ SA MODE일 경우 이 구문은 아무런 결과도 출력하지 않는다.</p>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

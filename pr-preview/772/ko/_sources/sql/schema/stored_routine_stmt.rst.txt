@@ -36,14 +36,14 @@ CREATE PROCEDURE
 *   *sql_type*: 인자의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`pl-arg-type-restriction`\을 참고한다.
 *   *default_arg*: 인자의 기본값을 지정한다. :ref:`pl-arg-default`\를 참고한다.
 *   *authid*: 저장 프로시저의 실행 권한을 지정한다. 자세한 내용은 :ref:`pl-authid`\을 참고한다.
-*   *parameter_comment_string*: 인자 커멘트 문자열을 지정한다.
+*   *parameter_comment_string*: 인자 주석 문자열을 지정한다.
 *   *body*: 저장 프로시저의 본문을 지정한다.
-*   *procedure_comment*: 저장 프로시저의 커멘트 문자열을 지정한다.
+*   *procedure_comment*: 저장 프로시저의 주석 문자열을 지정한다.
 
-저장 프로시저의 커멘트
+저장 프로시저의 주석
 ----------------------------------
 
-저장 프로시저의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
+저장 프로시저의 주석을 다음과 같이 제일 뒤에 지정할 수 있다. 
 
 .. code-block:: sql
 
@@ -60,13 +60,13 @@ CREATE PROCEDURE
     CREATE OR REPLACE FUNCTION test(i in int COMMENT 'arg i') 
     RETURN int AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
-저장 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+저장 프로시저의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
 
     SELECT sp_name, comment FROM db_stored_procedure; 
 
-저장 프로시저 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+저장 프로시저 인자의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
           
@@ -132,23 +132,23 @@ CREATE FUNCTION
 *   *schema_name*: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *function_name*: 생성할 저장 함수의 이름을 지정한다(최대 222바이트).
 *   *parameter_name*: 인자의 이름을 지정한다(최대 254바이트).
-*   *sql_type*: 인자 또는 리턴 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`pl-arg-type-restriction`\을 참고한다.
+*   *sql_type*: 인자 또는 반환 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`pl-arg-type-restriction`\을 참고한다.
 *   *default_arg*: 인자의 기본값을 지정한다. :ref:`pl-arg-default`\를 참고한다.
-*   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
+*   *param_comment_string*: 인자 주석 문자열을 지정한다.
 *   *authid*: 저장 함수의 실행 권한을 지정한다. 자세한 내용은 :ref:`pl-authid`\을 참고한다.
 *   *deterministic*: 저장 함수가 결정적 함수인지 여부를 지정한다. 자세한 내용은 :ref:`pl-deterministic`\을 참고한다.
 *   **PARALLEL_ENABLE**: 저장 함수의 병렬 실행을 허용한다. 자세한 내용은 :ref:`pl-parallel-enable`\을 참고한다.
 *   *body*: 저장 함수의 본문을 지정한다.
-*   *function_comment*: 저장 함수의 커멘트 문자열을 지정한다.
+*   *function_comment*: 저장 함수의 주석 문자열을 지정한다.
 
 AUTHID, DETERMINISTIC, PARALLEL_ENABLE은 순서와 관계없이 지정할 수 있으며, 같은 속성을 두 번 이상 지정할 수 없다.
 
 Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입 뒤에 속성을 지정하려면 ``SET(INTEGER)``\와 같이 원소 타입을 명시해야 한다.
 
-저장 함수의 커멘트
+저장 함수의 주석
 ----------------------------------
 
-저장 함수의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
+저장 함수의 주석을 다음과 같이 제일 뒤에 지정할 수 있다. 
 
 .. code-block:: sql
 
@@ -164,13 +164,13 @@ Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입
     CREATE OR REPLACE FUNCTION test(i in int COMMENT 'arg i') 
     RETURN int AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
-저장 함수의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+저장 함수의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
 
     SELECT sp_name, comment FROM db_stored_procedure; 
 
-함수 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+함수 인자의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
           
@@ -378,7 +378,7 @@ PL/CSQL에 Static SQL을 사용하는 저장 프로시저를 생성한 후 정�
     ====
     code :30140
 
-stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 프로시저를 실행하면 아래와 같은 에러가 발생한다.
+stadium 테이블의 code 칼럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 프로시저를 실행하면 아래와 같은 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -391,7 +391,7 @@ stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 �
     ERROR: Stored procedure execute error: 
       (line 4, column 3) internal server error
 
-컬럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 프로시저를 재컴파일해야 정상적으로 실행할 수 있다.
+칼럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 프로시저를 재컴파일해야 정상적으로 실행할 수 있다.
 
 .. code-block:: sql
 
@@ -448,7 +448,7 @@ PL/CSQL에 Static SQL을 사용하는 저장 함수를 생성한 후 정상적�
     =============
     30140
 
-stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 함수를 실행하면 아래와 같은 에러가 발생한다.
+stadium 테이블의 code 칼럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 함수를 실행하면 아래와 같은 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -461,7 +461,7 @@ stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 �
     ERROR: Stored procedure execute error: 
       (line 4, column 3) internal server error
 
-컬럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 함수를 재컴파일을 수행해야 정상적으로 실행할 수 있다.
+칼럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 함수를 재컴파일을 수행해야 정상적으로 실행할 수 있다.
 
 .. code-block:: sql
 

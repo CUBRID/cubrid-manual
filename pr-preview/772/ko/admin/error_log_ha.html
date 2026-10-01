@@ -257,7 +257,7 @@
 </ul>
 <p id="error-990"><strong>ERROR CODE: -990, ‘Command execution: %1$s. %2$s’</strong></p>
 <ul class="simple">
-<li><p>이 메시지는 CUBRID HA(High Availability) 시스템 내부에서 특정 명령을 실행하는 과정에서 문제가 발생 했음을 나타냅니다. 특히, 이 에러는 CUBRID 마스터 프로세스의 핵심 기능인 heartbeat 관리 또는 요청 처리 중에 명령 실행 실패가 발생 했음을 시사합니다, 실제 오류 발생 시 구체적인 명령 내용이나 실패 원인에 대한 추가 정보를 제공되며, 이는 시스템 내부의 중요한 프로세스가 정상적으로 작동하지 못했음을 의미하고, 데이터베이스의 안정성과 가용성에 직접적인 영향을 미칠 가능성이 있습니다.</p></li>
+<li><p>이 메시지는 CUBRID HA(High Availability) 시스템 내부에서 특정 명령을 실행하는 과정에서 문제가 발생 했음을 나타냅니다. 특히, 이 오류는 CUBRID 마스터 프로세스의 핵심 기능인 heartbeat 관리 또는 요청 처리 중에 명령 실행 실패가 발생 했음을 시사합니다, 실제 오류 발생 시 구체적인 명령 내용이나 실패 원인에 대한 추가 정보를 제공되며, 이는 시스템 내부의 중요한 프로세스가 정상적으로 작동하지 못했음을 의미하고, 데이터베이스의 안정성과 가용성에 직접적인 영향을 미칠 가능성이 있습니다.</p></li>
 </ul>
 <p id="error-1023"><strong>ERROR CODE: -1023, ‘log applier filter: %1$s.’</strong></p>
 <ul class="simple">
@@ -281,7 +281,7 @@
 </ul>
 <p id="error-1028"><strong>ERROR CODE: -1028, ‘log applier: unexpected EOF record in archive log. LSA: %1$lld|%2$d.’</strong></p>
 <ul class="simple">
-<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 복제된 archive log에서 예상치 않은 로그(END of LOG)을 만나는 경우 발생하는 오류 메세지로 applylogdb 프로세스는 해당 로그 레코드를 적용하지 않고 진행됩니다.</p></li>
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경에서 복제된 archive log에서 예상치 않은 로그(END of LOG)을 만나는 경우 발생하는 오류 메시지로 applylogdb 프로세스는 해당 로그 레코드를 적용하지 않고 진행됩니다.</p></li>
 </ul>
 <p id="error-1029"><strong>ERROR CODE: -1029, ‘log applier: invalid replication log page/offset. page HDR: %1$1lld|%2$d, final: %3$lld|%4$d, append LSA: %5$lld|%6$d, EOF LSA: %7$lld|%8$d, ha file status: %9$d, is end-of-log: %10$d.’</strong></p>
 <ul class="simple">
@@ -293,7 +293,7 @@
 </ul>
 <p id="error-1031"><strong>ERROR CODE: -1031, ‘log applier: failed to apply the following statement. class: “%1$s”, statement: “%2$s”, server error: %3$d, %4$s.’</strong></p>
 <ul class="simple">
-<li><p>이 메시지는 CUBRID HA(High Availability) 환경의 스탠바이 서버에서 applylogdb 프로세스가 마스터 서버로부터 받은 변경 로그(SQL 문장 형태)를 스탠바이 데이터베이스에 실제로 적용(실행)하는 과정에서 실패했을 때 발생합니다. 즉, 로그 자체는 정상적으로 수신하고 해석했지만, 스탠바이 서버의 현재 데이터베이스 상태에서 해당 SQL(주로 DDL ) 구문을 실행할 수 없었음을 의미합니다. 실패 원인은 스키마 불일치, 데이터 충돌(예: 고유 키 위반), 제약 조건 위반, 리소스 부족 등 다양하며, 메시지에 포함된 ‘서버 오류’ 상세 오류 정보가 구체적인 실패 사유를 알려줍니다.</p></li>
+<li><p>이 메시지는 CUBRID HA(High Availability) 환경의 스탠바이 서버에서 applylogdb 프로세스가 마스터 서버로부터 받은 변경 로그(SQL 문장 형태)를 스탠바이 데이터베이스에 실제로 적용(실행)하는 과정에서 실패했을 때 발생합니다. 즉, 로그 자체는 정상적으로 수신하고 해석했지만, 스탠바이 서버의 현재 데이터베이스 상태에서 해당 SQL(주로 DDL ) 구문을 실행할 수 없었음을 의미합니다. 실패 원인은 스키마 불일치, 데이터 충돌(예: 고유 키 위반), 제약 조건 위반, 자원 부족 등 다양하며, 메시지에 포함된 ‘서버 오류’ 상세 오류 정보가 구체적인 실패 사유를 알려줍니다.</p></li>
 </ul>
 <p id="error-1032"><strong>ERROR CODE: -1032, ‘log applier: failed to apply insert replication log. class: “%1$s”, key: “%2$s”, server error: %3$d, %4$s’</strong></p>
 <ul class="simple">
@@ -329,7 +329,7 @@
 </ul>
 <p id="error-1040"><strong>ERROR CODE: -1040, ‘HA generic: %1$s.’</strong></p>
 <ul class="simple">
-<li><p>이 메시지는 CUBRID HA(High Availability) 시스템 내에서 발생한 문제 중, 특정 오류 코드로 분류되지 않은 예외적이거나 일반적인 오류 상황을 나타냅니다. 즉, HA 관련 기능(heartbeat, copylogdb, applylogdb 등)을 수행하는 도중 예상치 못한 내부 상태나 외부 요인으로 인해 더 이상 진행할 수 없을 때 사용되는 포괄적인 오류 코드입니다. 따라서 에러 메시지에 포함된 여러 상세한 오류 메시지들의 내용이 실제 오류의 원인을 진단하는데 결정적인 단서가 됩니다.</p></li>
+<li><p>이 메시지는 CUBRID HA(High Availability) 시스템 내에서 발생한 문제 중, 특정 오류 코드로 분류되지 않은 예외적이거나 일반적인 오류 상황을 나타냅니다. 즉, HA 관련 기능(heartbeat, copylogdb, applylogdb 등)을 수행하는 도중 예상치 못한 내부 상태나 외부 요인으로 인해 더 이상 진행할 수 없을 때 사용되는 포괄적인 오류 코드입니다. 따라서 오류 메시지에 포함된 여러 상세한 오류 메시지들의 내용이 실제 오류의 원인을 진단하는데 결정적인 단서가 됩니다.</p></li>
 </ul>
 <p id="error-1105"><strong>ERROR CODE: -1105, ‘Internal error: partially failed to flush dirty object.’</strong></p>
 <ul class="simple">
@@ -400,7 +400,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -263,7 +263,7 @@
 <li><p><em>user_name</em>: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.</p></li>
 <li><p><em>password_string</em>: 원격 접속할 데이터베이스에 접속할 때 사용하는 <em>user_name</em>에 대한 패스워드 문자열.</p></li>
 <li><p><em>properties_string</em>: 원격 데이터베이스 사용을 위해 broker(또는 gateway)에 접속시 사용하는 property 정보 문자열 (최대 2047 바이트).  상세한 정보는 <a class="reference internal" href="../../api/cciapi.html#cci-connect-with-url"><span class="std std-ref">cci_connect_with_url</span></a>를 참고한다.</p></li>
-<li><p><em>server_comment_string</em>: 서버 정보에 대한 커멘트를 지정한다.(최대 1023바이트)</p></li>
+<li><p><em>server_comment_string</em>: 서버 정보에 대한 주석을 지정한다.(최대 1023바이트)</p></li>
 </ul>
 </li>
 </ul>
@@ -408,7 +408,7 @@ srv1, srv2, srv3는 동일한 의미이다.</p>
 </section>
 <section id="drop-server">
 <h2>DROP SERVER<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#drop-server" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#drop-server'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p><strong>DROP SERVER</strong> 구문을 이용하여 기존의 서버를 제거할 수 있다. <strong>IF EXISTS</strong> 절을 함께 사용하면 해당 서버가 존재하지 않더라도 에러가 발생하지 않는다.</p>
+<p><strong>DROP SERVER</strong> 구문을 이용하여 기존의 서버를 제거할 수 있다. <strong>IF EXISTS</strong> 절을 함께 사용하면 해당 서버가 존재하지 않더라도 오류가 발생하지 않는다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">DROP</span> <span class="n">SERVER</span> <span class="p">[</span><span class="n">IF</span> <span class="n">EXISTS</span><span class="p">]</span> <span class="p">[</span><span class="n">owner_name</span><span class="o">.</span><span class="p">]</span> <span class="n">server_name</span>  <span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -423,7 +423,7 @@ srv1, srv2, srv3는 동일한 의미이다.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>
-<p>DROP USER 구문으로 사용자를 삭제 할 때 해당 사용자가 소유하고 있는 서버가 있다면 에러 처리되고 사용자는 삭제되지 않는다.
+<p>DROP USER 구문으로 사용자를 삭제 할 때 해당 사용자가 소유하고 있는 서버가 있다면 오류 처리되고 사용자는 삭제되지 않는다.
 먼저 사용자가 소유하고 있는 서버를 DROP SERVER 구문으로 제거한 후에 사용자 계정을 삭제해야 한다.</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">--</span> <span class="n">When</span> <span class="n">the</span> <span class="n">current</span> <span class="n">account</span> <span class="ow">is</span> <span class="n">dba</span>
@@ -542,7 +542,7 @@ srv1, srv2, srv3는 동일한 의미이다.</p>
 <li><p><em>user_name</em>: 원격 접속할 데이터베이스에 접속할 때 사용할 사용자 이름.</p></li>
 <li><p><em>password_string</em>: 원격 접속할 데이터베이스에 접속할 때 사용하는 <em>user_name</em> 에 대한 패스워드 문자열.</p></li>
 <li><p><em>properties_string</em>: 원격 접속할 데이터베이스에 접속할 때 사용하는 property 정보 문자열.</p></li>
-<li><p><em>server_comment_string</em>: 서버 정보에 대한 커멘트를 지정한다.</p></li>
+<li><p><em>server_comment_string</em>: 서버 정보에 대한 주석을 지정한다.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="n">SERVER</span><span class="w"> </span><span class="n">srv1</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">HOST</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span><span class="w"> </span><span class="n">PORT</span><span class="o">=</span><span class="mi">3300</span><span class="p">,</span><span class="w"> </span><span class="n">DBNAME</span><span class="o">=</span><span class="n">demodb</span><span class="p">,</span><span class="w"> </span><span class="k">USER</span><span class="o">=</span><span class="n">dev1</span><span class="w"> </span><span class="p">);</span>
 </span><span id="line-2">
@@ -613,7 +613,7 @@ srv1, srv2, srv3는 동일한 의미이다.</p>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

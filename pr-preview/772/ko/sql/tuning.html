@@ -550,7 +550,7 @@
 </div></blockquote>
 <p><strong>수행 과정:</strong></p>
 <ol class="arabic simple">
-<li><p>nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드를 가져와 code 컬럼 값으로 정렬한다.</p></li>
+<li><p>nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드를 가져와 code 칼럼 값으로 정렬한다.</p></li>
 </ol>
 <blockquote>
 <div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">;</span>
@@ -558,7 +558,7 @@
 </div>
 </div></blockquote>
 <ol class="arabic simple" start="2">
-<li><p>athlete 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)을 만족하는 레코드를 가져와 natione_code 컬럼 값으로 정렬한다.</p></li>
+<li><p>athlete 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)을 만족하는 레코드를 가져와 natione_code 칼럼 값으로 정렬한다.</p></li>
 </ol>
 <blockquote>
 <div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
@@ -575,7 +575,7 @@
 <p>해시 조인은 해시 함수를 사용해 동일한 해시 값을 가지는 두 테이블의 레코드를 결합하는 방식이다.
 동일한 해시 값을 가지는 레코드를 효율적으로 비교하기 위해 해시 테이블이 사용된다.
 두 테이블 중 하나는 해시 테이블을 <strong>빌드(Build)</strong>하는 데 사용되고, 다른 하나는 해시 테이블을 <strong>프로브(Probe)</strong>하는 데 사용된다.
-해시 값은 조인 컬럼 값을 입력으로 사용하는 해시 함수에 의해 생성된다.
+해시 값은 조인 칼럼 값을 입력으로 사용하는 해시 함수에 의해 생성된다.
 다른 입력 값에서 동일한 해시 값이 생성될 경우 이를 해시 충돌이라고 한다.
 해시 충돌이 발생하면 동일한 해시 값을 가진 레코드를 순차적으로 조사하며 조인 조건을 확인한다.
 해시 조인은 모든 조인 조건이 동등 비교 조건인 경우에만 수행할 수 있다.</p>
@@ -1175,7 +1175,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="k">UPDATE</span><span class="w"> </span><span class="k">STATISTICS</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">CATALOG</span><span class="w"> </span><span class="n">CLASSES</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">FULLSCAN</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>통계 정보 갱신 시작과 종료 시 서버 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.</p>
+<p>통계 정보 갱신 시작과 종료 시 서버 오류 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Time: 05/07/13 15:06:25.052 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 123  CODE = -1114 Tran = 1, CLIENT = testhost:csql(21060), EID = 4
 </span><span id="line-2">Started to update statistics (class "code", oid : 0|522|3).
 </span><span id="line-3">
@@ -1249,7 +1249,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <li><p><em>Number of Distinct Values</em>: 중복이 제거된 값의 개수이다. <strong>code</strong> 칼럼은 모두 다른 값이므로 5개이다. <strong>LOB</strong> 타입과 4000자리가 넘는 <strong>VARCHAR</strong>칼럼은 해당값이 생성되지 않는다. 옵티마이저에서 선택도를 산정하는 데 사용되며 자세한 내용은 <a class="reference internal" href="#optimizer-principle"><span class="std std-ref">최적화기 원리</span></a>를 참고한다.</p></li>
 <li><p>B+tree statistics: 인덱스 통계정보이다.</p>
 <ul>
-<li><p><em>B+tree Cardinality</em>: 인덱스 key 값의 누적된 중복이 제거된 값의 개수이다. 위 예제에서 <strong>(5,5)</strong>는 인덱스 칼럼 <strong>(code,name)</strong>과 매칭된다. 첫 번째 <strong>5</strong>는 <strong>code</strong> 컬럼의 중복이 제거된 값의 개수이고, 두 번째 <strong>5</strong>는 <strong>code,name</strong> 두 컬럼의 값의 중복이 제거된 개수이다. <em>Number of Distinct Values</em>와 달리 앞 칼럼과 함께 누적된 중복이 제거된 값의 개수이므로 5개이다.</p></li>
+<li><p><em>B+tree Cardinality</em>: 인덱스 key 값의 누적된 중복이 제거된 값의 개수이다. 위 예제에서 <strong>(5,5)</strong>는 인덱스 칼럼 <strong>(code,name)</strong>과 매칭된다. 첫 번째 <strong>5</strong>는 <strong>code</strong> 칼럼의 중복이 제거된 값의 개수이고, 두 번째 <strong>5</strong>는 <strong>code,name</strong> 두 칼럼의 값의 중복이 제거된 개수이다. <em>Number of Distinct Values</em>와 달리 앞 칼럼과 함께 누적된 중복이 제거된 값의 개수이므로 5개이다.</p></li>
 <li><p><em>Total pages</em>: 인덱스 전체 페이지 개수이다.</p></li>
 <li><p><em>Leaf pages</em>: 인덱스 리프 노드의 페이지 개수이다.</p></li>
 <li><p><em>Height</em>: 리프 노드를 포함한 B+tree 인덱스의 높이이다.</p></li>
@@ -1272,7 +1272,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span></code></pre></div>
 </div>
 <ul>
-<li><p><em>opt-level</em> : 최적화 수준을 지정하는 값으로 다음과 같은 의미를 갖으며, 이 외에 값을 설정할 경우 에러를 발생한다.</p>
+<li><p><em>opt-level</em> : 최적화 수준을 지정하는 값으로 다음과 같은 의미를 갖으며, 이 외에 값을 설정할 경우 오류를 발생한다.</p>
 <ul class="simple">
 <li><p>1 : 질의 최적화를 수행한다. CUBRID에서 사용되는 기본 설정 값으로 대부분의 경우 변경할 필요가 없다.</p></li>
 <li><p>2: 질의 최적화를 수행하여 실행 계획을 생성하나 질의 자체는 수행되지 않는다. 일반적으로 사용되지 않고 다음 질의 실행 계획 보기를 위한 설정값과 같이 설정되어 사용된다.</p></li>
@@ -1426,7 +1426,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <li><p>iscan: 인덱스 스캔(index scan). 인덱스를 사용하여 스캔할 데이터의 범위를 한정한다.</p></li>
 </ul>
 </li>
-<li><p>cost: CPU, IO 등 주로 리소스의 사용과 관련하여 비용을 내부적으로 산정한다.</p></li>
+<li><p>cost: CPU, IO 등 주로 자원의 사용과 관련하여 비용을 내부적으로 산정한다.</p></li>
 <li><p>card: 카디널리티(cardinality)를 의미하며, 선택될 것으로 예측되는 행의 개수이다.</p></li>
 </ul>
 <p>다음은 USE_MERGE 힌트를 명시하여 m-join(정렬 병합 조인, sort merge join)이 적용되는 경우의 예이다. 일반적으로 정렬 병합 조인은 outer 테이블과 inner 테이블을 정렬하여 병합하는 것이 인덱스를 사용하여 중첩 루프 조인(nested loop join)을 수행하는 것보다 유리하다고 판단될 때만 사용해야 하며, 조인되는 두 테이블 모두 행의 개수가 매우 많은 경우 유리할 수 있다. 대부분의 경우 정렬 병합 조인을 수행하지 않는 것이 바람직하다.</p>
@@ -2057,7 +2057,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <li><p><strong>NO_COVERING_IDX</strong>: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 <a class="reference internal" href="#covering-index"><span class="std std-ref">커버링 인덱스</span></a>를 참고한다.</p></li>
 <li><p><strong>NO_MULTI_RANGE_OPT</strong>: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 <a class="reference internal" href="#multi-key-range-opt"><span class="std std-ref">다중 키 범위 최적화</span></a>를 참고한다.</p></li>
 <li><p><strong>NO_SORT_LIMIT</strong>: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="#sort-limit-optimization"><span class="std std-ref">SORT-LIMIT 최적화</span></a>를 참고한다.</p></li>
-<li><p><strong>NO_SUBQUERY_CACHE</strong>: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="#correlated-subquery-cache"><span class="std std-ref">서브 쿼리 캐시 (correlated)</span></a>를 참고한다.</p></li>
+<li><p><strong>NO_SUBQUERY_CACHE</strong>: SUBQUERY_CACHE 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="#correlated-subquery-cache"><span class="std std-ref">부질의 캐시 (correlated)</span></a>를 참고한다.</p></li>
 <li><p><strong>NO_PUSH_PRED</strong>: PREDICATE-PUSH 최적화를 사용하지 않기 위한 힌트이다.</p></li>
 <li><p><strong>NO_MERGE</strong>: VIEW-MERGE 최적화를 사용하지 않기 위한 힌트이다.</p></li>
 <li><p><strong>NO_ELIMINATE_JOIN</strong>: 조인 제거 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 <a class="reference internal" href="#join-elimination-optimization"><span class="std std-ref">조인 변환 최적화</span></a>를 참고한다.</p></li>
@@ -2117,7 +2117,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </ul>
 <ul class="simple" id="recompile">
 <li><p><strong>RECOMPILE</strong> : 질의 실행 계획을 리컴파일한다. 캐시에 저장된 기존 질의 실행 계획을 삭제하고 새로운 질의 실행 계획을 수립하기 위해 이 힌트를 사용한다.</p></li>
-<li><p><strong>QUERY_CACHE</strong> : 질의와 그 결과를 캐시한다. 이 힌트는 <strong>SELECT</strong> 질의에서만 사용할 수 있으며, 자세한 내용은 <a class="reference internal" href="#query-cache"><span class="std std-ref">쿼리 캐시</span></a> 를 참고한다.</p></li>
+<li><p><strong>QUERY_CACHE</strong> : 질의와 그 결과를 캐시한다. 이 힌트는 <strong>SELECT</strong> 질의에서만 사용할 수 있으며, 자세한 내용은 <a class="reference internal" href="#query-cache"><span class="std std-ref">질의 캐시</span></a> 를 참고한다.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
@@ -3753,20 +3753,20 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <section id="inner-join">
 <span id="eliminate-inner-join"></span><h3><strong>INNER JOIN</strong> 제거<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#inner-join" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#inner-join'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>기본키(<strong>PK</strong>)가 있는 테이블과 그 기본키(<strong>PK</strong>)를 참조하는 외래키(<strong>FK</strong>)가 있는 테이블 간의 관계를 부모-자식 관계라고 한다.
-부모-자식 관계의 <strong>INNER JOIN</strong>에서 조인 조건 외에 부모 테이블에 대한 참조가 없는 경우에는 부모 테이블과의 조인을 제거해도 쿼리 결과에 영향을 주지 않는다.
-이러한 경우에는 부모 테이블과의 조인을 제거하여 조인 연산을 줄이고, 쿼리 성능을 향상시킨다.</p>
+부모-자식 관계의 <strong>INNER JOIN</strong>에서 조인 조건 외에 부모 테이블에 대한 참조가 없는 경우에는 부모 테이블과의 조인을 제거해도 질의 결과에 영향을 주지 않는다.
+이러한 경우에는 부모 테이블과의 조인을 제거하여 조인 연산을 줄이고, 질의 성능을 향상시킨다.</p>
 <p><strong>INNER JOIN</strong>을 제거하기 위해서는 다음 조건을 만족해야 한다:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>부모-자식 관계의 <strong>INNER JOIN</strong>을 한다.</p></li>
-<li><p>기본키(<strong>PK</strong>)와 외래키(<strong>FK</strong>)의 모든 컬럼은 조인 조건에 사용되어야 한다.</p></li>
-<li><p>기본키(<strong>PK</strong>) 컬럼은 해당 기본키(<strong>PK</strong>) 컬럼을 참조하는 외래키(<strong>FK</strong>) 컬럼과 동일한 조인 조건에 사용되어야 한다.</p></li>
+<li><p>기본키(<strong>PK</strong>)와 외래키(<strong>FK</strong>)의 모든 칼럼은 조인 조건에 사용되어야 한다.</p></li>
+<li><p>기본키(<strong>PK</strong>) 칼럼은 해당 기본키(<strong>PK</strong>) 칼럼을 참조하는 외래키(<strong>FK</strong>) 칼럼과 동일한 조인 조건에 사용되어야 한다.</p></li>
 <li><p>모든 조인 조건은 동등(=) 비교를 사용해야 한다.</p></li>
 <li><p>조인 조건 외에 부모 테이블에 대한 참조가 없어야 한다.</p></li>
 <li><p>상속 관계가 있는 테이블을 조회하는 경우에는 <strong>ALL</strong> 키워드를 사용하지 않아야 한다.</p></li>
 </ol>
 </div></blockquote>
-<p>부모 테이블과의 조인을 제거할 때 자식 테이블의 외래키(<strong>FK</strong>) 컬럼에 <strong>NOT NULL</strong> 제약 조건이 없는 경우에는 해당 컬럼에 대한 <strong>IS NOT NULL</strong> 조건이 추가된다.</p>
+<p>부모 테이블과의 조인을 제거할 때 자식 테이블의 외래키(<strong>FK</strong>) 칼럼에 <strong>NOT NULL</strong> 제약 조건이 없는 경우에는 해당 칼럼에 대한 <strong>IS NOT NULL</strong> 조건이 추가된다.</p>
 <p>다음은 <strong>INNER JOIN</strong>을 제거하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">call</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'public'</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span><span id="line-2">
@@ -3826,7 +3826,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>parent_tbl</em> 테이블과의 조인이 제거되었고, <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 컬럼에 대한 <strong>IS NOT NULL</strong> 조건이 추가되었다.</p>
+<p><em>parent_tbl</em> 테이블과의 조인이 제거되었고, <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 칼럼에 대한 <strong>IS NOT NULL</strong> 조건이 추가되었다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -3912,8 +3912,8 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span></code></pre></div>
 </div>
 <section id="pk-fk">
-<span id="eliminate-inner-join-1"></span><h4>기본키(<strong>PK</strong>)와 외래키(<strong>FK</strong>)의 모든 컬럼은 조인 조건에 사용되어야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pk-fk"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
-<p>다음은 <em>parent_tbl</em> 테이블의 <em>id</em> 컬럼과 <em>child_tbl</em> 테이블의 <em>parent_id</em> 컬럼만 조인 조건으로 사용된 예제이다.</p>
+<span id="eliminate-inner-join-1"></span><h4>기본키(<strong>PK</strong>)와 외래키(<strong>FK</strong>)의 모든 칼럼은 조인 조건에 사용되어야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pk-fk"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>다음은 <em>parent_tbl</em> 테이블의 <em>id</em> 칼럼과 <em>child_tbl</em> 테이블의 <em>parent_id</em> 칼럼만 조인 조건으로 사용된 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -3928,7 +3928,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>parent_tbl</em> 테이블의 <em>sub_id</em> 컬럼과 <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 컬럼이 조인 조건으로 사용되지 않았기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>parent_tbl</em> 테이블의 <em>sub_id</em> 칼럼과 <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 칼럼이 조인 조건으로 사용되지 않았기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -3967,8 +3967,8 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </div>
 </section>
 <section id="pk-pk-fk">
-<span id="eliminate-inner-join-2"></span><h4>기본키(<strong>PK</strong>) 컬럼은 해당 기본키(<strong>PK</strong>)를 참조하는 외래키(<strong>FK</strong>) 컬럼과 동일한 조인 조건에 사용되어야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pk-pk-fk"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
-<p>다음은 조인 조건에서 <em>id</em> 컬럼을 <em>parent_sub_id</em> 컬럼과 비교하고, <em>sub_id</em> 컬럼을 <em>parent_id</em> 컬럼과 비교하는 예제이다.</p>
+<span id="eliminate-inner-join-2"></span><h4>기본키(<strong>PK</strong>) 칼럼은 해당 기본키(<strong>PK</strong>)를 참조하는 외래키(<strong>FK</strong>) 칼럼과 동일한 조인 조건에 사용되어야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pk-pk-fk"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>다음은 조인 조건에서 <em>id</em> 칼럼을 <em>parent_sub_id</em> 칼럼과 비교하고, <em>sub_id</em> 칼럼을 <em>parent_id</em> 칼럼과 비교하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -3983,7 +3983,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>id</em> 컬럼이 <em>parent_id</em> 컬럼과 비교되지 않았고, <em>sub_id</em> 컬럼이 <em>parent_sub_id</em> 컬럼과 비교되지 않았기 때문에 <em>parent</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>id</em> 칼럼이 <em>parent_id</em> 칼럼과 비교되지 않았고, <em>sub_id</em> 칼럼이 <em>parent_sub_id</em> 칼럼과 비교되지 않았기 때문에 <em>parent</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4028,7 +4028,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>조인 조건에서 <em>parent_tbl</em> 테이블의 <em>sub_id</em> 컬럼과 <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 컬럼을 비교할 때 동등(=) 비교를 사용하지 않았기 때문에 <em>parent</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p>조인 조건에서 <em>parent_tbl</em> 테이블의 <em>sub_id</em> 칼럼과 <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 칼럼을 비교할 때 동등(=) 비교를 사용하지 않았기 때문에 <em>parent</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4061,7 +4061,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </section>
 <section id="eliminate-inner-join-4">
 <span id="id27"></span><h4>조인 조건 외에 부모 테이블에 대한 참조가 없어야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#eliminate-inner-join-4"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
-<p>다음은 <em>parent_tbl</em> 테이블의 <em>name</em> 컬럼을 조회하는 예제이다.</p>
+<p>다음은 <em>parent_tbl</em> 테이블의 <em>name</em> 칼럼을 조회하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4076,7 +4076,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>parent_tbl</em> 테이블의 <em>name</em> 컬럼의 값을 조회하고 있기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>parent_tbl</em> 테이블의 <em>name</em> 칼럼의 값을 조회하고 있기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4113,7 +4113,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12">         <span class="mi">4905</span>  <span class="s1">'Child- 4905'</span>                   <span class="mi">5</span>            <span class="mi">5</span>            <span class="mi">100</span>  <span class="s1">'Parent- 50'</span>
 </span></code></pre></div>
 </div>
-<p>다음은 <em>parent</em> 테이블의 <em>filter</em> 컬럼에 대한 조건이 있는 예제이다.</p>
+<p>다음은 <em>parent</em> 테이블의 <em>filter</em> 칼럼에 대한 조건이 있는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4128,7 +4128,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>parent_tbl</em> 테이블의 <em>filter</em> 컬럼의 값이 5인 레코드를 조회하고 있기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>parent_tbl</em> 테이블의 <em>filter</em> 칼럼의 값이 5인 레코드를 조회하고 있기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4157,7 +4157,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-3">         <span class="mi">4405</span>  <span class="s1">'Child- 4405'</span>                   <span class="mi">5</span>            <span class="mi">5</span>             <span class="mi">50</span>
 </span></code></pre></div>
 </div>
-<p>다음은 <em>parent_tbl</em> 테이블의 <em>name</em> 컬럼을 기준으로 결과를 정렬하는 예제이다.</p>
+<p>다음은 <em>parent_tbl</em> 테이블의 <em>name</em> 칼럼을 기준으로 결과를 정렬하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="cm">/*+ recompile */</span>
 </span><span id="line-2"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">filter</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">parent_id</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">parent_sub_id</span>
 </span><span id="line-3"><span class="k">from</span>
@@ -4169,7 +4169,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-9"><span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">desc</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>parent_tbl</em> 테이블의 <em>nmae</em> 컬럼을 기준으로 결과를 내림차순 정렬하고 있기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>parent_tbl</em> 테이블의 <em>nmae</em> 칼럼을 기준으로 결과를 내림차순 정렬하고 있기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4209,9 +4209,9 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </section>
 <section id="eliminate-inner-join-5">
 <span id="id28"></span><h4>묵시적인 동등(=)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#eliminate-inner-join-5"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
-<p><strong>WHERE</strong>절에서 조인 조건 외에 부모 테이블에 대한 조건이 있더라도 조인 조건에 사용된 컬럼이 해당 조건에 사용된 경우에는 묵시적인 동등(=)에 의해 부모 테이블과의 조인을 제거할 수 있다.
+<p><strong>WHERE</strong>절에서 조인 조건 외에 부모 테이블에 대한 조건이 있더라도 조인 조건에 사용된 칼럼이 해당 조건에 사용된 경우에는 묵시적인 동등(=)에 의해 부모 테이블과의 조인을 제거할 수 있다.
 해당 조건은 동등(=) 비교를 사용해야 하고, 상수와 비교되어야 한다.</p>
-<p>다음은 <em>parent_tbl</em> 테이블의 <em>sub_id</em> 컬럼에 대한 동등(=) 비교 조건이 있는 예제이다.</p>
+<p>다음은 <em>parent_tbl</em> 테이블의 <em>sub_id</em> 칼럼에 대한 동등(=) 비교 조건이 있는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4226,7 +4226,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>parent_tbl</em> 테이블의 <em>sub_id</em> 컬럼의 값이 60인 레코드를 조회하고 있지만 조인 조건에 의해 해당 조건은 <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 컬럼의 값이 60인 조건과 동등하기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되었다.</p>
+<p><em>parent_tbl</em> 테이블의 <em>sub_id</em> 칼럼의 값이 60인 레코드를 조회하고 있지만 조인 조건에 의해 해당 조건은 <em>child_tbl</em> 테이블의 <em>parent_sub_id</em> 칼럼의 값이 60인 조건과 동등하기 때문에 <em>parent_tbl</em> 테이블과의 조인이 제거되었다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4357,14 +4357,14 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </section>
 <section id="left-outer-join">
 <span id="eliminate-left-outer-join"></span><h3><strong>LEFT OUTER JOIN</strong> 제거<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#left-outer-join" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#left-outer-join'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>N:1 관계의 <strong>LEFT OUTER JOIN</strong>에서 조인 조건 외에 오른쪽 테이블에 대한 참조가 없는 경우에는 오른쪽 테이블과의 조인을 제거해도 쿼리 결과에 영향을 주지 않는다.
-이러한 경우에는 오른쪽 테이블과의 조인을 제거하여 조인 연산을 줄이고, 쿼리 성능을 향상시킨다.</p>
+<p>N:1 관계의 <strong>LEFT OUTER JOIN</strong>에서 조인 조건 외에 오른쪽 테이블에 대한 참조가 없는 경우에는 오른쪽 테이블과의 조인을 제거해도 질의 결과에 영향을 주지 않는다.
+이러한 경우에는 오른쪽 테이블과의 조인을 제거하여 조인 연산을 줄이고, 질의 성능을 향상시킨다.</p>
 <p><strong>LEFT OUTER JOIN</strong> 제거를 하기 위해서는 다음 조건을 만족해야 한다:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p><strong>LEFT OUTER JOIN</strong>을 한다.</p></li>
 <li><p>오른쪽 테이블은 기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건이 있어야 한다.</p></li>
-<li><p>기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건의 모든 컬럼은 조인 조건에 사용되어야 한다.</p></li>
+<li><p>기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건의 모든 칼럼은 조인 조건에 사용되어야 한다.</p></li>
 <li><p>모든 조인 조건은 동등(=) 비교를 사용해야 한다.</p></li>
 <li><p>조인 조건 외에 오른쪽 테이블에 대한 참조가 없어야 한다.</p></li>
 <li><p>상속 관계가 있는 테이블을 조회하는 경우에는 <strong>ALL</strong> 키워드를 사용하지 않아야 한다.</p></li>
@@ -4512,7 +4512,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <section id="pk-unique">
 <span id="eliminate-left-outer-join-1"></span><h4>오른쪽 테이블은 기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건이 있어야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pk-unique"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
 <p>오른쪽 테이블에 기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건이 없으면 N:1 관계의 <strong>LEFT OUTER JOIN</strong>이 아니기 때문에 오른쪽 테이블과의 조인을 제거할 수 없다.</p>
-<p>다음은 <em>right_tbl</em> 테이블의 기본키(<strong>PK</strong>)를 제거하고 <em>id</em> 컬럼과 <em>sub_id</em> 컬럼으로 구성된 일반 인덱스를 생성해놓은 예제이다.</p>
+<p>다음은 <em>right_tbl</em> 테이블의 기본키(<strong>PK</strong>)를 제거하고 <em>id</em> 칼럼과 <em>sub_id</em> 칼럼으로 구성된 일반 인덱스를 생성해놓은 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4571,7 +4571,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12">           <span class="mi">10</span>           <span class="mi">20</span>          <span class="mi">200</span>  <span class="s1">'Left- 902'</span>                     <span class="mi">2</span>
 </span></code></pre></div>
 </div>
-<p>다음은 <em>right_tbl</em> 테이블의 기본키(<strong>PK</strong>)를 제거하고 <em>id</em> 컬럼과 <em>sub_id</em> 컬럼으로 구성된 <strong>UNIQUE</strong> 제약조건을 생성해놓은 예제이다.</p>
+<p>다음은 <em>right_tbl</em> 테이블의 기본키(<strong>PK</strong>)를 제거하고 <em>id</em> 칼럼과 <em>sub_id</em> 칼럼으로 구성된 <strong>UNIQUE</strong> 제약조건을 생성해놓은 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4626,8 +4626,8 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </div>
 </section>
 <section id="eliminate-left-outer-join-2">
-<span id="id29"></span><h4>기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건의 모든 컬럼을 조인 조건에 사용해야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#eliminate-left-outer-join-2"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
-<p>다음은 <em>left_tbl</em> 테이블의 <em>id</em> 컬럼과 <em>right_tbl</em> 테이블의 <em>id</em> 컬럼만 조인 조건으로 사용된 예제이다.</p>
+<span id="id29"></span><h4>기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건의 모든 칼럼을 조인 조건에 사용해야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#eliminate-left-outer-join-2"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>다음은 <em>left_tbl</em> 테이블의 <em>id</em> 칼럼과 <em>right_tbl</em> 테이블의 <em>id</em> 칼럼만 조인 조건으로 사용된 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4642,7 +4642,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="n">l</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>left_tbl</em> 테이블의 <em>sub_id</em> 컬럼과 <em>right_tbl</em> 테이블의 <em>sub_id</em> 컬럼이 조인 조건으로 사용되지 않았기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>left_tbl</em> 테이블의 <em>sub_id</em> 칼럼과 <em>right_tbl</em> 테이블의 <em>sub_id</em> 칼럼이 조인 조건으로 사용되지 않았기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4699,7 +4699,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="n">l</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>조인 조건에서 <em>left_tbl</em> 테이블의 <em>sub_id</em> 컬럼과 <em>right_tbl</em> 테이블의 <em>sub_id</em> 컬럼을 비교할 때 동등(=) 비교를 사용하지 않았기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p>조인 조건에서 <em>left_tbl</em> 테이블의 <em>sub_id</em> 칼럼과 <em>right_tbl</em> 테이블의 <em>sub_id</em> 칼럼을 비교할 때 동등(=) 비교를 사용하지 않았기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4737,7 +4737,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </section>
 <section id="eliminate-left-outer-join-4">
 <span id="id31"></span><h4>조인 조건 외에 오른쪽 테이블에 대한 참조가 없어야 한다.<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#eliminate-left-outer-join-4"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
-<p>다음은 <em>right_tbl</em> 테이블의 <em>name</em> 컬럼을 조회하는 예제이다.</p>
+<p>다음은 <em>right_tbl</em> 테이블의 <em>name</em> 칼럼을 조회하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4752,7 +4752,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="n">l</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>right_tbl</em> 테이블의 <em>name</em> 컬럼의 값을 조회하고 있기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>right_tbl</em> 테이블의 <em>name</em> 칼럼의 값을 조회하고 있기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4788,7 +4788,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12">           <span class="mi">10</span>           <span class="mi">50</span>          <span class="mi">500</span>  <span class="s1">'Left- 905'</span>                     <span class="mi">5</span>  <span class="s1">'Right- 95'</span>
 </span></code></pre></div>
 </div>
-<p>다음은 <strong>LEFT OUTER JOIN</strong>을 하기 전에 <em>right_tbl</em> 테이블의 <em>filter</em> 컬럼에 대한 조건이 있는 예제이다.</p>
+<p>다음은 <strong>LEFT OUTER JOIN</strong>을 하기 전에 <em>right_tbl</em> 테이블의 <em>filter</em> 칼럼에 대한 조건이 있는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4803,7 +4803,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="n">l</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>right_tbl</em> 테이블의 <em>filter</em> 컬럼의 값이 5인 레코드를 조회하고 있지만 <strong>LEFT OUTER JOIN</strong>을 하기 전이기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되었다.</p>
+<p><em>right_tbl</em> 테이블의 <em>filter</em> 칼럼의 값이 5인 레코드를 조회하고 있지만 <strong>LEFT OUTER JOIN</strong>을 하기 전이기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되었다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -4833,7 +4833,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12">           <span class="mi">10</span>           <span class="mi">50</span>          <span class="mi">500</span>  <span class="s1">'Left- 905'</span>                     <span class="mi">5</span>
 </span></code></pre></div>
 </div>
-<p>다음은 <em>right_tbl</em> 테이블의 <em>name</em> 컬럼으로 결과를 정렬하는 예제이다.</p>
+<p>다음은 <em>right_tbl</em> 테이블의 <em>name</em> 칼럼으로 결과를 정렬하는 예제이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="cm">/* current_user: public */</span>
 </span><span id="line-2"><span class="k">set</span><span class="w"> </span><span class="n">optimization</span><span class="w"> </span><span class="k">level</span><span class="w"> </span><span class="mi">513</span><span class="p">;</span>
 </span><span id="line-3">
@@ -4848,7 +4848,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-12"><span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">desc</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p><em>right_tbl</em> 테이블의 <em>name</em> 컬럼을 기준으로 결과를 내림차순 정렬하고 있기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
+<p><em>right_tbl</em> 테이블의 <em>name</em> 칼럼을 기준으로 결과를 내림차순 정렬하고 있기 때문에 <em>right_tbl</em> 테이블과의 조인이 제거되지 않았다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">Query plan:
 </span><span id="line-2">
 </span><span id="line-3">temp(order by)
@@ -5023,7 +5023,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <li><p>뷰에 집계함수나 분석함수를 사용하는 경우</p></li>
 <li><p>뷰에 <strong>ROWNUM, LIMIT</strong>또는 <strong>GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()</strong>을 사용하는 경우</p></li>
 <li><p><strong>Correlated Subquery</strong>를 사용하여 작성된 경우</p></li>
-<li><p>뷰가 메소드를 포함한 경우</p></li>
+<li><p>뷰가 메서드를 포함한 경우</p></li>
 <li><p>뷰가 <strong>RANDOM (), DRANDOM (), SYS_GUID ()</strong>를 포함한 경우</p></li>
 </ol>
 </div></blockquote>
@@ -5150,7 +5150,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-4"><span class="k">AND</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'KOR'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>위 질의 중 인라인 뷰 내부에는 조건절이 없다. 만약 쿼리 변환이 수행되지 않았다면,
+<p>위 질의 중 인라인 뷰 내부에는 조건절이 없다. 만약 질의 변환이 수행되지 않았다면,
 <em>athlete</em> 테이블을 full scan하여 생성된 임시 결과와 record 테이블을 조인 수행후에 <em>a.nation_code = ‘KOR’</em> 조건을
 필터링했을 것이다.</p>
 <p>하지만 <strong>Predicate Push</strong>를 통해서 다음과 같이 질의가 변환된다면, 더 적은 양의
@@ -5188,7 +5188,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 <li><p>뷰에 <strong>ROWNUM, LIMIT</strong> 또는 <strong>GROUPBY_NUM (), INST_NUM (), ORDERBY_NUM ()</strong>을 사용하는 경우</p></li>
 <li><p><strong>Correlated Subquery</strong>를 사용하여 작성된 경우</p></li>
 <li><p>조건절에 부질의가 사용된 경우</p></li>
-<li><p>뷰가 메소드를 포함한 경우</p></li>
+<li><p>뷰가 메서드를 포함한 경우</p></li>
 <li><p>푸시될 조건절이나 뷰 내부의 <strong>Predicate Push</strong> 대상에 <strong>RANDOM (), DRANDOM (), SYS_GUID ()</strong>를 사용하는 경우</p></li>
 <li><p><strong>OUTER JOIN</strong>을 수행할 때 푸시될 조건절이나 뷰 내부의 <strong>Predicate Push</strong> 대상에 다음을 사용하는 경우:</p>
 <blockquote>
@@ -5256,7 +5256,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>CUBRID 11.0 부터 <strong>IN</strong> 연산자의 인자에 여러개의 컬럼을 조회하는 부질의가 허용 된다.</p>
+<p>CUBRID 11.0 부터 <strong>IN</strong> 연산자의 인자에 여러개의 칼럼을 조회하는 부질의가 허용 된다.</p>
 </div>
 </section>
 <section id="predicate-transitivity">
@@ -5281,8 +5281,8 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </section>
 </section>
 <section id="query-cache">
-<span id="id35"></span><h1>쿼리 캐시<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#query-cache"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
-<p><strong>QUERY_CACHE</strong> 힌트는 반복적으로 실행되는 쿼리의 성능을 향상시키는 데 사용할 수 있으며, 쿼리는 전용 메모리 영역에 캐시되고 그 결과도 별도의 디스크 공간에 캐시된다. 단, 힌트는 SELECT 쿼리에만 적용된다. 그러나 다음과 같은 경우에는 쿼리에 힌트를 적용 할 수 없으며 힌트는 의미가 없어진다.</p>
+<span id="id35"></span><h1>질의 캐시<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#query-cache"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p><strong>QUERY_CACHE</strong> 힌트는 반복적으로 실행되는 질의의 성능을 향상시키는 데 사용할 수 있으며, 질의는 전용 메모리 영역에 캐시되고 그 결과도 별도의 디스크 공간에 캐시된다. 단, 힌트는 SELECT 질의에만 적용된다. 그러나 다음과 같은 경우에는 질의에 힌트를 적용 할 수 없으며 힌트는 의미가 없어진다.</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>아래와 같이 질의에 시스템 시간 또는 날짜 관련 속성이 포함된 경우.</dt><dd><p>예) SELECT SYSDATE, ADDDATE (SYSDATE, INTERVAL -24 HOUR), ADDDATE (SYSDATE, -1);</p>
@@ -5290,13 +5290,13 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </dl>
 </li>
 <li><p>SERIAL 관련 속성이 포함된 경우.</p></li>
-<li><p>컬럼 경로 관련 속성이 포함된 경우.</p></li>
+<li><p>칼럼 경로 관련 속성이 포함된 경우.</p></li>
 <li><p>메서드가 포함된 경우.</p></li>
 <li><p>저장 프로 시저 또는 저장 함수가 포함된 경우.</p></li>
 <li><p>dual, _db_attribute 등과 같은 시스템 테이블이 포함된 경우.</p></li>
 <li><p>sys_guid ()와 같은 시스템 함수가 포함된 경우.</p></li>
 </ul>
-<p>힌트가 설정되고 새 SELECT 질의가 처리될 때 질의가 캐시에서 발견되면 쿼리 캐시를 사용한다. 동일한 데이터베이스에서 동일한 질의 텍스트와 동일한 바인딩 값을 사용하는 경우 질의는 동일한 것으로 간주된다. 캐시된 질의를 찾을 수 없는 경우 질의가 처리된 다음 결과와 함께 캐시가 생성된다. 질의가 캐시에서 발견되면 캐시된 영역에서 결과를 가져온다. CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반복적으로 실행할 때 개선된 성능을 쉽게 측정 할 수 있다. 첫번째 질의에 대한 결과는 캐시가 되어 있지 않아서 느리지만, 두 번째 질의의 결과는 캐시 된 영역에서 가져오므로 응답 시간이 이전 질의보다 훨씬 빠르다.</p>
+<p>힌트가 설정되고 새 SELECT 질의가 처리될 때 질의가 캐시에서 발견되면 질의 캐시를 사용한다. 동일한 데이터베이스에서 동일한 질의 텍스트와 동일한 바인딩 값을 사용하는 경우 질의는 동일한 것으로 간주된다. 캐시된 질의를 찾을 수 없는 경우 질의가 처리된 다음 결과와 함께 캐시가 생성된다. 질의가 캐시에서 발견되면 캐시된 영역에서 결과를 가져온다. CSQL에서는 아래 예제와 같이 COUNT 함수를 사용하여 질의를 반복적으로 실행할 때 개선된 성능을 쉽게 측정 할 수 있다. 첫번째 질의에 대한 결과는 캐시가 되어 있지 않아서 느리지만, 두 번째 질의의 결과는 캐시 된 영역에서 가져오므로 응답 시간이 이전 질의보다 훨씬 빠르다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">/*+</span> <span class="n">QUERY_CACHE</span> <span class="o">*/</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">game</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="o">===</span> <span class="o">&lt;</span><span class="n">Result</span> <span class="n">of</span> <span class="n">SELECT</span> <span class="n">Command</span> <span class="ow">in</span> <span class="n">Line</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="o">===</span>
@@ -5322,7 +5322,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </span><span id="line-23"><span class="mi">1</span> <span class="n">command</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">successfully</span> <span class="n">processed</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>다음과 같이 CSQL에 세션 명령 <em>;info qcache</em> 를 입력하여 쿼리가 캐시되는지 여부를 확인할 수 있다.</p>
+<p>다음과 같이 CSQL에 세션 명령 <em>;info qcache</em> 를 입력하여 질의가 캐시되는지 여부를 확인할 수 있다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">csql&gt; ;info qcache
 </span><span id="line-2">
 </span><span id="line-3">LIST_CACHE {
@@ -5357,7 +5357,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </div>
 <p>캐시 된 질의는 결과 화면 중간에 <strong>query_string</strong> 으로 표시되며 각 <strong>n_entries</strong> 및 <strong>n_pages</strong> 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. <strong>n_entries</strong> 는 파라미터 <strong>max_QUERY_CACHE_entries</strong> 의 값으로 제한되고 <strong>n_pages</strong> 는 <strong>QUERY_CACHE_size_in_pages</strong> 의 값으로 제한된다. <strong>n_entries</strong> 가 초과하거나 <strong>n_pages</strong> 가 초과하면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 <strong>max_QUERY_CACHE_entries</strong> 값과 <strong>QUERY_CACHE_size_in_pages</strong> 값의 약 20%이다.</p>
 <p>11.4 버전부터는 부질의 대상으로 QUERY_CACHE 힌트를 사용할 수 있으며, 힌트를 사용할 수 있는 부질의는 아래와 같다.</p>
-<p>1) CTE 쿼리
+<p>1) CTE 질의
 WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 경우</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">WITH</span>
 </span><span id="line-2"><span class="w"> </span><span class="n">of_drones</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="cm">/*+ QUERY_CACHE */</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="s1">'drones'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">parent_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span>
@@ -5377,7 +5377,7 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </span><span id="line-9"><span class="k">SELECT</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cars</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>위 UNION 쿼리에서 첫 번째 쿼리는 캐시 되지만, 두 번째 쿼리는 다른 테이블을 참조하기 때문에 캐시 되지 않는다.</p>
+<p>위 UNION 질의에서 첫 번째 질의는 캐시 되지만, 두 번째 질의는 다른 테이블을 참조하기 때문에 캐시 되지 않는다.</p>
 <ol class="arabic simple" start="2">
 <li><p>다른 테이블을 참조하지 않는 부질의에 QUERY_CACHE 힌트를 지정한 경우</p></li>
 </ol>
@@ -5399,8 +5399,8 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </span></code></pre></div>
 </div>
 <p>캐시된 질의는 결과 화면 중간에 <strong>query_string</strong> 으로 표시되며 각 <strong>n_entries</strong> 및 <strong>n_pages</strong> 는 캐시된 질의 수와 캐시 된 결과의 페이지 수를 나타낸다. <strong>n_entries</strong> 는 파라미터 <strong>max_query_cache_entries</strong> 의 값으로 제한되고 <strong>n_pages</strong> 는 <strong>query_cache_size_in_pages</strong> 의 값으로 제한된다. <strong>n_entries</strong> 가 초과되거나 <strong>n_pages</strong> 가 초과되면 캐시 항목 중 일부가 삭제될 후보로 선택되어 삭제되고, 삭제되는 캐시는 <strong>max_query_cache_entries</strong> 값과 <strong>query_cache_size_in_pages</strong> 값의 약 20% 이다.</p>
-<p><a class="reference internal" href="#query-profiling"><span class="std std-ref">질의 프로파일링</span></a> 요청과 함께 질의 수행시 비상관 서브쿼리(uncorrelated subquery) 캐시가 적용된 부질의의 하위 정보로 비상관 서브쿼리 캐시에 대한 프로파일링 정보가 출력된다.</p>
-<p>다음은 부질의 수행시 서브 쿼리 캐시 프로파일링 정보가 표시되는 예시이다.</p>
+<p><a class="reference internal" href="#query-profiling"><span class="std std-ref">질의 프로파일링</span></a> 요청과 함께 질의 수행시 비상관 부질의(uncorrelated subquery) 캐시가 적용된 부질의의 하위 정보로 비상관 부질의 캐시에 대한 프로파일링 정보가 출력된다.</p>
+<p>다음은 부질의 수행시 부질의 캐시 프로파일링 정보가 표시되는 예시이다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital</span><span class="p">,</span> <span class="nb">list</span> <span class="p">(</span>
 </span><span id="line-2">            <span class="n">SELECT</span> <span class="o">/*+</span> <span class="n">QUERY_CACHE</span> <span class="o">*/</span> <span class="n">host_city</span>
 </span><span id="line-3">            <span class="n">FROM</span> <span class="n">olympic</span>
@@ -5416,19 +5416,19 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </span><span id="line-13">        <span class="n">RESULT</span> <span class="n">CACHE</span> <span class="p">(</span><span class="n">reference</span> <span class="n">count</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
 </span></code></pre></div>
 </div>
-<p>비상관 서브쿼리 캐시의 프로파일링 항목에 대한 설명은 다음과 같다.</p>
+<p>비상관 부질의 캐시의 프로파일링 항목에 대한 설명은 다음과 같다.</p>
 <ul class="simple">
 <li><p><strong>reference count</strong>: 부질의에서 참조한 캐시의 참조 횟수.</p></li>
 </ul>
 <section id="correlated">
-<span id="correlated-subquery-cache"></span><h2>서브 쿼리 캐시 (correlated)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#correlated" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#correlated'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>서브 쿼리 캐시 최적화는 상관 부질의(correlated subquery)를 포함한 질의 성능을 향상시키는데 사용할 수 있으며, 부질의 결과는 부질의마다 독립적인 공간에 캐시된다.
-서브 쿼리 캐시 최적화는 기본적으로 적용되므로 질의 수행시 캐시를 사용하지 않으려면 <strong>NO_SUBQUERY_CACHE</strong> 힌트를 해당 부질의에 사용해야 한다.</p>
-<p>서브 쿼리 캐시 최적화는 상관 부질의가 SELECT 절에 있는 경우 적용되며, 처리 절차는 다음과 같다.
-재 실행되는 상관 부질의의 검색 조건 컬럼 값이 동일한 경우 부질의 수행 대신 캐시된 결과를 사용한다.
-만약, 캐시된 값을 찾을 수 없는 경우 부질의 수행 후 참조한 컬럼 값과 결과를 서브 쿼리 캐시에 저장한다.</p>
-<p><a class="reference internal" href="#query-profiling"><span class="std std-ref">질의 프로파일링</span></a> 요청과 함께 질의 수행시 서브 쿼리 캐시 최적화가 적용된 부질의의 하위 정보로 서브 쿼리 캐시에 대한 프로파일링 정보가 출력된다.</p>
-<p>다음은 상관 부질의 수행시 서브 쿼리 캐시 프로파일링 정보가 표시되는 예시이다</p>
+<span id="correlated-subquery-cache"></span><h2>부질의 캐시 (correlated)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#correlated" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#correlated'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>부질의 캐시 최적화는 상관 부질의(correlated subquery)를 포함한 질의 성능을 향상시키는데 사용할 수 있으며, 부질의 결과는 부질의마다 독립적인 공간에 캐시된다.
+부질의 캐시 최적화는 기본적으로 적용되므로 질의 수행시 캐시를 사용하지 않으려면 <strong>NO_SUBQUERY_CACHE</strong> 힌트를 해당 부질의에 사용해야 한다.</p>
+<p>부질의 캐시 최적화는 상관 부질의가 SELECT 절에 있는 경우 적용되며, 처리 절차는 다음과 같다.
+재 실행되는 상관 부질의의 검색 조건 칼럼 값이 동일한 경우 부질의 수행 대신 캐시된 결과를 사용한다.
+만약, 캐시된 값을 찾을 수 없는 경우 부질의 수행 후 참조한 칼럼 값과 결과를 부질의 캐시에 저장한다.</p>
+<p><a class="reference internal" href="#query-profiling"><span class="std std-ref">질의 프로파일링</span></a> 요청과 함께 질의 수행시 부질의 캐시 최적화가 적용된 부질의의 하위 정보로 부질의 캐시에 대한 프로파일링 정보가 출력된다.</p>
+<p>다음은 상관 부질의 수행시 부질의 캐시 프로파일링 정보가 표시되는 예시이다</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">/*+</span> <span class="n">RECOMPILE</span> <span class="n">NO_MERGE</span> <span class="o">*/</span>
 </span><span id="line-2">        <span class="p">(</span><span class="n">SELECT</span> <span class="n">t1_pk</span> <span class="n">FROM</span> <span class="n">t1</span> <span class="n">b</span> <span class="n">WHERE</span> <span class="n">b</span><span class="o">.</span><span class="n">t1_pk</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">c3</span><span class="p">)</span>
 </span><span id="line-3">      <span class="n">FROM</span> <span class="n">t1</span> <span class="n">a</span>
@@ -5443,21 +5443,21 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </span><span id="line-12">        <span class="n">SUBQUERY_CACHE</span> <span class="p">(</span><span class="n">hit</span><span class="p">:</span> <span class="mi">98010</span><span class="p">,</span> <span class="n">miss</span><span class="p">:</span> <span class="mi">990</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="mi">269384</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">enabled</span><span class="p">)</span>
 </span></code></pre></div>
 </div>
-<p>서브 쿼리 캐시의 프로파일링 항목에 대한 설명은 다음과 같다.</p>
+<p>부질의 캐시의 프로파일링 항목에 대한 설명은 다음과 같다.</p>
 <ul class="simple">
 <li><p><strong>hit</strong> : 질의 실행 대신 캐시된 영역에서 결과를 가져온 횟수.</p></li>
 <li><p><strong>miss</strong> : 질의를 실행한 후 결과를 캐시한 횟수.</p></li>
-<li><p><strong>size</strong> : 서브 쿼리 캐시에 사용된 메모리 크기.</p></li>
-<li><p><strong>status</strong> : 질의 종료 시 서브 쿼리 캐시의 활성화 여부.</p></li>
+<li><p><strong>size</strong> : 부질의 캐시에 사용된 메모리 크기.</p></li>
+<li><p><strong>status</strong> : 질의 종료 시 부질의 캐시의 활성화 여부.</p></li>
 </ul>
-<p><strong>size</strong>가 설정해둔 값을 초과하는 경우에는 서브 쿼리 캐시가 질의 수행 도중 비활성화 되며 SQL 트레이스 정보에서 <strong>status</strong>가 disabled로 출력된다.
-또한, <strong>hit</strong> 비율이 90% 미만일 경우, 서브 쿼리 캐시의 메모리 크기가 설정해둔 값을 초과하지 않더라도 캐시 miss가 높다고 판단해서 질의 수행 도중 캐시가 비활성화 될 수 있다.</p>
+<p><strong>size</strong>가 설정해둔 값을 초과하는 경우에는 부질의 캐시가 질의 수행 도중 비활성화 되며 SQL 트레이스 정보에서 <strong>status</strong>가 disabled로 출력된다.
+또한, <strong>hit</strong> 비율이 90% 미만일 경우, 부질의 캐시의 메모리 크기가 설정해둔 값을 초과하지 않더라도 캐시 miss가 높다고 판단해서 질의 수행 도중 캐시가 비활성화 될 수 있다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p><strong>hit</strong> 비율(hit ratio)은 다음과 같이 계산한다.</p>
 <p><span class="math notranslate nohighlight">\(\text{hit ratio} = \frac{\text{hit}}{\text{hit} + \text{miss}}\)</span></p>
 </div>
-<p>다음은 서브 쿼리 캐시의 사용 유무에 따른 성능 차이를 확인하기 위해 반복 수행되는 상관 부질의 결과를 count하는 예제 질의이다.
+<p>다음은 부질의 캐시의 사용 유무에 따른 성능 차이를 확인하기 위해 반복 수행되는 상관 부질의 결과를 count하는 예제 질의이다.
 다음은 예제 질의를 수행하기 위한 데이터를 준비하는 질의이다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Prepare data</span>
 </span><span id="line-2"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">DROP</span> <span class="n">TABLE</span> <span class="n">IF</span> <span class="n">EXISTS</span> <span class="n">t1</span><span class="p">;</span>
@@ -5488,8 +5488,8 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </span><span id="line-27"><span class="n">csql</span><span class="o">&gt;</span> <span class="p">;</span><span class="n">trace</span> <span class="n">on</span>
 </span></code></pre></div>
 </div>
-<p>질의 #1는 서브 쿼리 캐시 최적화를 사용하여 질의를 수행했고, 질의 #2는  <strong>NO_SUBQUERY_CACHE</strong> 힌트를 사용하여 서브 쿼리 캐시를 비 활성화하여 질의를 수행했다.
-두 질의의 결과를 비교해보면 서브 쿼리 캐시 최적화를 사용한 것이 응답 수행이 개선된 것을 확인할 수 있다.</p>
+<p>질의 #1는 부질의 캐시 최적화를 사용하여 질의를 수행했고, 질의 #2는  <strong>NO_SUBQUERY_CACHE</strong> 힌트를 사용하여 부질의 캐시를 비 활성화하여 질의를 수행했다.
+두 질의의 결과를 비교해보면 부질의 캐시 최적화를 사용한 것이 응답 수행이 개선된 것을 확인할 수 있다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p><strong>Query #1</strong></p></th>
@@ -5540,17 +5540,17 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </tr>
 </tbody>
 </table>
-<p>서브 쿼리 캐시는 다음과 같은 상황에 동작하지 않는다:</p>
+<p>부질의 캐시는 다음과 같은 상황에 동작하지 않는다:</p>
 <ul class="simple">
-<li><p>상관 부질의가 상관 부질의를 포함한 경우. (단, 다른 상관 하위 쿼리가 포함되지 않은 최 하단의 상관 부질의는 서브 쿼리 캐시 최적화 작업이 수행됨)</p></li>
+<li><p>상관 부질의가 상관 부질의를 포함한 경우. (단, 다른 상관 하위 질의가 포함되지 않은 최 하단의 상관 부질의는 부질의 캐시 최적화 작업이 수행됨)</p></li>
 <li><p>부질의가 단일 행 부질의가 아닌 경우.</p></li>
 <li><p>부질의가 CONNECT BY 절을 포함한 경우.</p></li>
 <li><p>부질의에 OID 관련 기능이 포함된 경우.</p></li>
 <li><p>부질의가 <strong>NO_SUBQUERY_CACHE</strong> 힌트를 포함한 경우.</p></li>
-<li><p>새로운 결과를 저장할 때 설정한 서브 쿼리 캐시 크기(기본값: 2MB)를 초과하는 경우.</p></li>
+<li><p>새로운 결과를 저장할 때 설정한 부질의 캐시 크기(기본값: 2MB)를 초과하는 경우.</p></li>
 <li><p>random (), sys_guid ()와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우.</p></li>
 </ul>
-<p>다음 예시는 상관 부질의가 상관 부질의를 포함한 경우, 최하단의 상관부질의만 서브 쿼리 캐시가 사용되고, 상단의 상관 부질의에는 서브 쿼리 캐시가 적용되지 않는 예시이다.</p>
+<p>다음 예시는 상관 부질의가 상관 부질의를 포함한 경우, 최하단의 상관부질의만 부질의 캐시가 사용되고, 상단의 상관 부질의에는 부질의 캐시가 적용되지 않는 예시이다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">/*+</span> <span class="n">recompile</span> <span class="o">*/</span>
 </span><span id="line-2">        <span class="p">(</span>
 </span><span id="line-3">            <span class="n">SELECT</span>
@@ -5577,7 +5577,7 @@ WITH절에 포함되는 비재귀적 부분에 QUERY_CACHE 힌트를 지정한 �
 </span><span id="line-24">                <span class="n">SUBQUERY_CACHE</span> <span class="p">(</span><span class="n">hit</span><span class="p">:</span> <span class="mi">99</span><span class="p">,</span> <span class="n">miss</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="mi">150704</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">enabled</span><span class="p">)</span>
 </span></code></pre></div>
 </div>
-<p>다음은 상관 부질의에 random () 와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우 서브 쿼리 캐시가 비활성화되는 예시이다.</p>
+<p>다음은 상관 부질의에 random () 와 같이 실행될 때마다 결과가 바뀌는 함수가 포함된 경우 부질의 캐시가 비활성화되는 예시이다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">csql</span><span class="o">&gt;</span> <span class="n">WITH</span> <span class="n">cte_1</span> <span class="n">AS</span>
 </span><span id="line-2">        <span class="p">(</span><span class="n">SELECT</span>
 </span><span id="line-3">            <span class="n">DISTINCT</span> <span class="p">(</span><span class="n">SELECT</span> <span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">t2</span> <span class="n">b</span> <span class="n">WHERE</span> <span class="n">b</span><span class="o">.</span><span class="n">c1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">c1</span> <span class="n">AND</span> <span class="n">b</span><span class="o">.</span><span class="n">c2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="n">v</span>
@@ -5608,27 +5608,27 @@ outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이�
 <p>MEMOIZE 최적화는 다음 조건을 모두 만족하는 스캔에 적용된다.</p>
 <ul class="simple">
 <li><p>중첩 루프 조인의 inner 테이블 스캔이다. outer 테이블에는 적용되지 않으며, 해시 조인과 정렬 병합 조인에도 적용되지 않는다.</p></li>
-<li><p>조인 조건에서 outer 테이블의 컬럼 값(조인 키)을 찾을 수 있다. 조인 조건이 없는 크로스 조인에는 적용되지 않는다.</p></li>
+<li><p>조인 조건에서 outer 테이블의 칼럼 값(조인 키)을 찾을 수 있다. 조인 조건이 없는 크로스 조인에는 적용되지 않는다.</p></li>
 <li><p>행 잠금이 필요 없는 읽기이다. <strong>UPDATE</strong> 문이나 <strong>DELETE</strong> 문의 대상 검색, <strong>SELECT … FOR UPDATE</strong> 질의에는 적용되지 않는다.</p></li>
 </ul>
 <p>inner 쪽 입력이 테이블이 아니라 부질의의 임시 결과 리스트인 경우에도 적용된다.</p>
 <p>다음과 같이 캐시된 결과의 재사용이 안전하지 않거나 캐시 키를 만들 수 없는 경우에는 적용되지 않는다.</p>
 <ul class="simple">
-<li><p>inner 테이블에 컬렉션 타입(<strong>SET</strong>, <strong>MULTISET</strong>, <strong>LIST</strong>) 컬럼이 있는 경우</p></li>
+<li><p>inner 테이블에 컬렉션 타입(<strong>SET</strong>, <strong>MULTISET</strong>, <strong>LIST</strong>) 칼럼이 있는 경우</p></li>
 <li><p>시스템 카탈로그 클래스나 MVCC 대상이 아닌 클래스(<strong>db_serial</strong> 등)를 조회하는 경우</p></li>
 <li><p>inner 쪽이 DBLink 원격 테이블, <strong>JSON_TABLE</strong>, <strong>SHOW</strong> 문, 집합·메서드 표현식인 경우</p></li>
 <li><p>inner 쪽 스캔이 순차 스캔이나 인덱스 스캔이 아닌 경우(스키마 조회 등)</p></li>
 <li><p>inner 쪽에 스캔 대상이 둘 이상 있는 경우</p></li>
 </ul>
 <p>캐시가 사용하는 메모리가 <a class="reference internal" href="../admin/config.html#memoize-memory-limit"><span class="std std-ref">memoize_memory_limit</span></a>에 설정한 값을 초과하거나, 조인 키 조회가 1,000회를 넘어선 시점에 <strong>hit</strong> 비율이 50% 미만이면 캐시 유지 비용이 더 크다고 판단하여 캐시를 즉시 해제하고, 이후에는 캐시 없이 inner 테이블을 스캔하는 방식으로 질의 실행을 계속한다.
-이때 질의는 실패하지 않으며, 에러나 경고도 발생하지 않는다.</p>
+이때 질의는 실패하지 않으며, 오류나 경고도 발생하지 않는다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p><strong>hit</strong> 비율(hit ratio)은 다음과 같이 계산한다.</p>
 <p><span class="math notranslate nohighlight">\(\text{hit ratio} = \frac{\text{hit}}{\text{hit} + \text{miss}}\)</span></p>
 </div>
 <p><a class="reference internal" href="#query-profiling"><span class="std std-ref">질의 프로파일링</span></a> 요청과 함께 질의 수행시 MEMOIZE 최적화가 적용된 스캔의 하위 정보로 MEMOIZE 캐시에 대한 프로파일링 정보가 출력된다.</p>
-<p>다음은 예제 질의를 수행하기 위한 데이터를 준비하는 질의이다. <em>orders</em> 테이블의 <em>customer_id</em> 컬럼에는 100개의 값만 반복해서 등장한다.</p>
+<p>다음은 예제 질의를 수행하기 위한 데이터를 준비하는 질의이다. <em>orders</em> 테이블의 <em>customer_id</em> 칼럼에는 100개의 값만 반복해서 등장한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">grade</span><span class="w"> </span><span class="nb">INT</span><span class="p">);</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customers</span>
@@ -5791,8 +5791,8 @@ outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이�
 <li><a :data-current="activeSection === '#join-elimination-optimization'" class="reference internal" href="#join-elimination-optimization">조인 변환 최적화</a><ul>
 <li><a :data-current="activeSection === '#outer-join-inner-join'" class="reference internal" href="#outer-join-inner-join"><strong>OUTER JOIN</strong>을 <strong>INNER JOIN</strong>으로 변환</a></li>
 <li><a :data-current="activeSection === '#inner-join'" class="reference internal" href="#inner-join"><strong>INNER JOIN</strong> 제거</a><ul>
-<li><a :data-current="activeSection === '#pk-fk'" class="reference internal" href="#pk-fk">기본키(<strong>PK</strong>)와 외래키(<strong>FK</strong>)의 모든 컬럼은 조인 조건에 사용되어야 한다.</a></li>
-<li><a :data-current="activeSection === '#pk-pk-fk'" class="reference internal" href="#pk-pk-fk">기본키(<strong>PK</strong>) 컬럼은 해당 기본키(<strong>PK</strong>)를 참조하는 외래키(<strong>FK</strong>) 컬럼과 동일한 조인 조건에 사용되어야 한다.</a></li>
+<li><a :data-current="activeSection === '#pk-fk'" class="reference internal" href="#pk-fk">기본키(<strong>PK</strong>)와 외래키(<strong>FK</strong>)의 모든 칼럼은 조인 조건에 사용되어야 한다.</a></li>
+<li><a :data-current="activeSection === '#pk-pk-fk'" class="reference internal" href="#pk-pk-fk">기본키(<strong>PK</strong>) 칼럼은 해당 기본키(<strong>PK</strong>)를 참조하는 외래키(<strong>FK</strong>) 칼럼과 동일한 조인 조건에 사용되어야 한다.</a></li>
 <li><a :data-current="activeSection === '#eliminate-inner-join-3'" class="reference internal" href="#eliminate-inner-join-3">모든 조인 조건은 동등(=) 비교를 사용해야 한다.</a></li>
 <li><a :data-current="activeSection === '#eliminate-inner-join-4'" class="reference internal" href="#eliminate-inner-join-4">조인 조건 외에 부모 테이블에 대한 참조가 없어야 한다.</a></li>
 <li><a :data-current="activeSection === '#eliminate-inner-join-5'" class="reference internal" href="#eliminate-inner-join-5">묵시적인 동등(=)</a></li>
@@ -5801,7 +5801,7 @@ outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이�
 </li>
 <li><a :data-current="activeSection === '#left-outer-join'" class="reference internal" href="#left-outer-join"><strong>LEFT OUTER JOIN</strong> 제거</a><ul>
 <li><a :data-current="activeSection === '#pk-unique'" class="reference internal" href="#pk-unique">오른쪽 테이블은 기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건이 있어야 한다.</a></li>
-<li><a :data-current="activeSection === '#eliminate-left-outer-join-2'" class="reference internal" href="#eliminate-left-outer-join-2">기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건의 모든 컬럼을 조인 조건에 사용해야 한다.</a></li>
+<li><a :data-current="activeSection === '#eliminate-left-outer-join-2'" class="reference internal" href="#eliminate-left-outer-join-2">기본키(<strong>PK</strong>) 또는 <strong>UNIQUE</strong> 제약조건의 모든 칼럼을 조인 조건에 사용해야 한다.</a></li>
 <li><a :data-current="activeSection === '#eliminate-left-outer-join-3'" class="reference internal" href="#eliminate-left-outer-join-3">모든 조인 조건은 동등(=) 비교를 사용해야 한다.</a></li>
 <li><a :data-current="activeSection === '#eliminate-left-outer-join-4'" class="reference internal" href="#eliminate-left-outer-join-4">조인 조건 외에 오른쪽 테이블에 대한 참조가 없어야 한다.</a></li>
 <li><a :data-current="activeSection === '#eliminate-left-outer-join-5'" class="reference internal" href="#eliminate-left-outer-join-5">상속 관계가 있는 테이블을 조회하는 경우에는 <strong>ALL</strong> 키워드를 사용하지 않아야 한다.</a></li>
@@ -5815,8 +5815,8 @@ outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이�
 <li><a :data-current="activeSection === '#predicate-transitivity'" class="reference internal" href="#predicate-transitivity">조건절 이행</a></li>
 </ul>
 </li>
-<li><a :data-current="activeSection === '#query-cache'" class="reference internal" href="#query-cache">쿼리 캐시</a><ul>
-<li><a :data-current="activeSection === '#correlated'" class="reference internal" href="#correlated">서브 쿼리 캐시 (correlated)</a></li>
+<li><a :data-current="activeSection === '#query-cache'" class="reference internal" href="#query-cache">질의 캐시</a><ul>
+<li><a :data-current="activeSection === '#correlated'" class="reference internal" href="#correlated">부질의 캐시 (correlated)</a></li>
 <li><a :data-current="activeSection === '#memoize'" class="reference internal" href="#memoize">MEMOIZE</a></li>
 </ul>
 </li>
@@ -5828,7 +5828,7 @@ outer 테이블에서 읽은 조인 키 값이 캐시에 있으면 inner 테이�
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

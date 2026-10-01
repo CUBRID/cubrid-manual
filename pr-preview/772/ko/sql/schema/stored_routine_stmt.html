@@ -251,13 +251,13 @@
 <li><p><em>sql_type</em>: 인자의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 <a class="reference internal" href="../../pl/pl_create.html#pl-arg-type-restriction"><span class="std std-ref">지원하는 인자와 결과 데이터 타입</span></a>을 참고한다.</p></li>
 <li><p><em>default_arg</em>: 인자의 기본값을 지정한다. <a class="reference internal" href="../../pl/pl_create.html#pl-arg-default"><span class="std std-ref">기본값 인자 지정</span></a>를 참고한다.</p></li>
 <li><p><em>authid</em>: 저장 프로시저의 실행 권한을 지정한다. 자세한 내용은 <a class="reference internal" href="../../pl/pl_auth.html#pl-authid"><span class="std std-ref">소유자 권한과 호출자 권한의 차이</span></a>을 참고한다.</p></li>
-<li><p><em>parameter_comment_string</em>: 인자 커멘트 문자열을 지정한다.</p></li>
+<li><p><em>parameter_comment_string</em>: 인자 주석 문자열을 지정한다.</p></li>
 <li><p><em>body</em>: 저장 프로시저의 본문을 지정한다.</p></li>
-<li><p><em>procedure_comment</em>: 저장 프로시저의 커멘트 문자열을 지정한다.</p></li>
+<li><p><em>procedure_comment</em>: 저장 프로시저의 주석 문자열을 지정한다.</p></li>
 </ul>
 <section id="id3">
-<h3>저장 프로시저의 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>저장 프로시저의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다.</p>
+<h3>저장 프로시저의 주석<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>저장 프로시저의 주석을 다음과 같이 제일 뒤에 지정할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">Hello</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span>
 </span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
 </span><span id="line-3"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpCubrid.HelloCubrid() return java.lang.String'</span>
@@ -269,11 +269,11 @@
 </span><span id="line-2"><span class="k">RETURN</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span><span class="w"> </span><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpTest.testInt(int) return int'</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'function test'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>저장 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.</p>
+<p>저장 프로시저의 주석은 다음 구문을 실행하여 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">sp_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>저장 프로시저 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.</p>
+<p>저장 프로시저 인자의 주석은 다음 구문을 실행하여 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">sp_name</span><span class="p">,</span><span class="w"> </span><span class="n">arg_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure_args</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -328,20 +328,20 @@
 <li><p><em>schema_name</em>: 스키마 이름을 지정한다(최대 31바이트). 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
 <li><p><em>function_name</em>: 생성할 저장 함수의 이름을 지정한다(최대 222바이트).</p></li>
 <li><p><em>parameter_name</em>: 인자의 이름을 지정한다(최대 254바이트).</p></li>
-<li><p><em>sql_type</em>: 인자 또는 리턴 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 <a class="reference internal" href="../../pl/pl_create.html#pl-arg-type-restriction"><span class="std std-ref">지원하는 인자와 결과 데이터 타입</span></a>을 참고한다.</p></li>
+<li><p><em>sql_type</em>: 인자 또는 반환 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 <a class="reference internal" href="../../pl/pl_create.html#pl-arg-type-restriction"><span class="std std-ref">지원하는 인자와 결과 데이터 타입</span></a>을 참고한다.</p></li>
 <li><p><em>default_arg</em>: 인자의 기본값을 지정한다. <a class="reference internal" href="../../pl/pl_create.html#pl-arg-default"><span class="std std-ref">기본값 인자 지정</span></a>를 참고한다.</p></li>
-<li><p><em>param_comment_string</em>: 인자 커멘트 문자열을 지정한다.</p></li>
+<li><p><em>param_comment_string</em>: 인자 주석 문자열을 지정한다.</p></li>
 <li><p><em>authid</em>: 저장 함수의 실행 권한을 지정한다. 자세한 내용은 <a class="reference internal" href="../../pl/pl_auth.html#pl-authid"><span class="std std-ref">소유자 권한과 호출자 권한의 차이</span></a>을 참고한다.</p></li>
 <li><p><em>deterministic</em>: 저장 함수가 결정적 함수인지 여부를 지정한다. 자세한 내용은 <a class="reference internal" href="../../pl/pl_tuning.html#pl-deterministic"><span class="std std-ref">결정적 함수 사용</span></a>을 참고한다.</p></li>
 <li><p><strong>PARALLEL_ENABLE</strong>: 저장 함수의 병렬 실행을 허용한다. 자세한 내용은 <a class="reference internal" href="../../pl/pl_tuning.html#pl-parallel-enable"><span class="std std-ref">병렬 실행이 가능한 함수 사용</span></a>을 참고한다.</p></li>
 <li><p><em>body</em>: 저장 함수의 본문을 지정한다.</p></li>
-<li><p><em>function_comment</em>: 저장 함수의 커멘트 문자열을 지정한다.</p></li>
+<li><p><em>function_comment</em>: 저장 함수의 주석 문자열을 지정한다.</p></li>
 </ul>
 <p>AUTHID, DETERMINISTIC, PARALLEL_ENABLE은 순서와 관계없이 지정할 수 있으며, 같은 속성을 두 번 이상 지정할 수 없다.</p>
 <p>Java 함수의 반환 타입이 SET, MULTISET, SEQUENCE인 경우, 반환 타입 뒤에 속성을 지정하려면 <code class="docutils literal notranslate"><span class="pre">SET(INTEGER)</span></code>와 같이 원소 타입을 명시해야 한다.</p>
 <section id="id6">
-<h3>저장 함수의 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>저장 함수의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다.</p>
+<h3>저장 함수의 주석<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>저장 함수의 주석을 다음과 같이 제일 뒤에 지정할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">Hello</span><span class="p">()</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">VARCHAR</span>
 </span><span id="line-2"><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span>
 </span><span id="line-3"><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpCubrid.HelloCubrid() return java.lang.String'</span>
@@ -353,11 +353,11 @@
 </span><span id="line-2"><span class="k">RETURN</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">JAVA</span><span class="w"> </span><span class="n">NAME</span><span class="w"> </span><span class="s1">'SpTest.testInt(int) return int'</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'function test'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>저장 함수의 커멘트는 다음 구문을 실행하여 확인할 수 있다.</p>
+<p>저장 함수의 주석은 다음 구문을 실행하여 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">sp_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>함수 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.</p>
+<p>함수 인자의 주석은 다음 구문을 실행하여 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">sp_name</span><span class="p">,</span><span class="w"> </span><span class="n">arg_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">db_stored_procedure_args</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -392,7 +392,7 @@ NOT DETERMINISTIC으로 설정된 함수는 부질의 결과 캐시 최적화의
 기본값은 NOT DETERMINISTIC이다.</p>
 <p>DETERMINISTIC 키워드는 저장 함수가 동일한 입력값에 대해 항상 동일한 결과를 반환하는 함수이다.
 DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) 사용 시, 질의 최적화기가 해당 함수를 부질의 결과 캐시 최적화의 대상으로 처리한다.</p>
-<p>상관 부질의 캐시 동작 방식에 대한 자세한 내용은 <a class="reference internal" href="../tuning.html#correlated-subquery-cache"><span class="std std-ref">서브 쿼리 캐시 (correlated)</span></a>을 참고한다.</p>
+<p>상관 부질의 캐시 동작 방식에 대한 자세한 내용은 <a class="reference internal" href="../tuning.html#correlated-subquery-cache"><span class="std std-ref">부질의 캐시 (correlated)</span></a>을 참고한다.</p>
 <p>다음은 DETERMINISTIC을 사용한 저장 함수의 예시이다. 이 예시에서는 상관 부질의를 사용할 때 결과를 캐시하여 성능을 최적화하는 과정을 보여준다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">dummy_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">col1</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">);</span>
 </span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">dummy_tbl</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
@@ -532,7 +532,7 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 </span><span id="line-7"><span class="n">code</span> <span class="p">:</span><span class="mi">30140</span>
 </span></code></pre></div>
 </div>
-<p>stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 프로시저를 실행하면 아래와 같은 에러가 발생한다.</p>
+<p>stadium 테이블의 code 칼럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 프로시저를 실행하면 아래와 같은 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">stadium</span><span class="w"> </span><span class="k">MODIFY</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">CALL</span><span class="w"> </span><span class="n">proc_stadium_code</span><span class="p">();</span>
@@ -542,7 +542,7 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 </span><span id="line-2">  <span class="p">(</span><span class="n">line</span> <span class="mi">4</span><span class="p">,</span> <span class="n">column</span> <span class="mi">3</span><span class="p">)</span> <span class="n">internal</span> <span class="n">server</span> <span class="n">error</span>
 </span></code></pre></div>
 </div>
-<p>컬럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 프로시저를 재컴파일해야 정상적으로 실행할 수 있다.</p>
+<p>칼럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 프로시저를 재컴파일해야 정상적으로 실행할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">proc_stadium_code</span><span class="w"> </span><span class="n">COMPILE</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">CALL</span><span class="w"> </span><span class="n">proc_stadium_code</span><span class="p">();</span>
@@ -591,7 +591,7 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 </span><span id="line-3"><span class="mi">30140</span>
 </span></code></pre></div>
 </div>
-<p>stadium 테이블의 code 컬럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 함수를 실행하면 아래와 같은 에러가 발생한다.</p>
+<p>stadium 테이블의 code 칼럼 타입을 INTEGER에서 VARCHAR로 변경한 후 저장 함수를 실행하면 아래와 같은 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">stadium</span><span class="w"> </span><span class="k">MODIFY</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">CALL</span><span class="w"> </span><span class="n">func_stadium_code</span><span class="p">();</span>
@@ -601,7 +601,7 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 </span><span id="line-2">  <span class="p">(</span><span class="n">line</span> <span class="mi">4</span><span class="p">,</span> <span class="n">column</span> <span class="mi">3</span><span class="p">)</span> <span class="n">internal</span> <span class="n">server</span> <span class="n">error</span>
 </span></code></pre></div>
 </div>
-<p>컬럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 함수를 재컴파일을 수행해야 정상적으로 실행할 수 있다.</p>
+<p>칼럼 타입 변경 정보가 기존에 컴파일된 PL/CSQL의 실행코드에 반영되지 않았기 때문에, 저장 함수를 재컴파일을 수행해야 정상적으로 실행할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">func_stadium_code</span><span class="w"> </span><span class="n">COMPILE</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">CALL</span><span class="w"> </span><span class="n">func_stadium_code</span><span class="p">();</span>
@@ -669,12 +669,12 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#create-procedure'" class="reference internal" href="#create-procedure">CREATE PROCEDURE</a><ul>
-<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">저장 프로시저의 커멘트</a></li>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">저장 프로시저의 주석</a></li>
 <li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">등록된 저장 프로시저의 정보 확인</a></li>
 </ul>
 </li>
 <li><a :data-current="activeSection === '#create-function'" class="reference internal" href="#create-function">CREATE FUNCTION</a><ul>
-<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">저장 함수의 커멘트</a></li>
+<li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">저장 함수의 주석</a></li>
 <li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">등록된 저장 함수의 정보 확인</a></li>
 <li><a :data-current="activeSection === '#create-function-deterministic'" class="reference internal" href="#create-function-deterministic">CREATE FUNCTION DETERMINISTIC</a></li>
 <li><a :data-current="activeSection === '#create-function-parallel-enable'" class="reference internal" href="#create-function-parallel-enable">CREATE FUNCTION PARALLEL_ENABLE</a></li>
@@ -692,7 +692,7 @@ DETERMINISTIC으로 설정된 함수는 상관 부질의(correlated subquery) �
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

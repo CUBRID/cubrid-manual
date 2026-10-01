@@ -839,28 +839,28 @@
 </div>
 </section>
 <section id="cci-error-codes">
-<span id="id4"></span><h2>CCI 에러 코드와 에러 메시지<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cci-error-codes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cci-error-codes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 혹은 CAS(브로커 응용 서버) 에러 코드를 반환한다. CCI 에러 코드는 CCI API 함수에서 발생하며, CAS 에러
+<span id="id4"></span><h2>CCI 오류 코드와 오류 메시지<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cci-error-codes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cci-error-codes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>CCI API 함수는 오류 발생 시 반환 값이 음수인 CCI 오류 코드 혹은 CAS(브로커 응용 서버) 오류 코드를 반환한다. CCI 오류 코드는 CCI API 함수에서 발생하며, CAS 오류
 코드는 CAS에서 발생한다.</p>
 <ul class="simple">
-<li><p>모든 에러 코드의 값은 0보다 작은 음수이다.</p></li>
-<li><p>T_CCI_ERROR err_buf를 인자로 가지는 모든 함수의 에러 코드와 에러 메시지는 err_buf.err_code와 err_buf.err_msg에서 확인할 수 있다.</p></li>
-<li><p>T_CCI_ERROR err_buf 인자가 없는 함수의 에러 메시지는 <a class="reference internal" href="cciapi.html#c.cci_get_err_msg" title="cci_get_err_msg"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_get_err_msg()</span></code></a> 함수를 이용하여 에러 코드가 나타내는 에러 메시지를 출력할 수 있다.</p></li>
-<li><p>에러 번호가 -20002부터 -20999 사이이면, CCI API 함수에서 발생하는 에러이다.</p></li>
-<li><p>에러 번호가 -10000부터 -10999 사이이면, CAS에서 발생하는 에러를 CCI API 함수가 전달받아 반환하는 에러이다. CAS 에러는 <a class="reference internal" href="../admin/control.html#cas-error"><span class="std std-ref">CAS 에러</span></a>를 참고한다.</p></li>
-<li><p>함수가 리턴하는 에러 코드의 값이 <strong>CCI_ER_DBMS</strong> (-20001)인 경우, 데이터베이스 서버에서 발생하는 에러이다. 데이터베이스 서버 에러와 관련한 내용은 <a class="reference internal" href="../admin/control.html#database-server-error"><span class="std std-ref">데이터베이스 서버 에러</span></a>를 참고한다.</p></li>
+<li><p>모든 오류 코드의 값은 0보다 작은 음수이다.</p></li>
+<li><p>T_CCI_ERROR err_buf를 인자로 가지는 모든 함수의 오류 코드와 오류 메시지는 err_buf.err_code와 err_buf.err_msg에서 확인할 수 있다.</p></li>
+<li><p>T_CCI_ERROR err_buf 인자가 없는 함수의 오류 메시지는 <a class="reference internal" href="cciapi.html#c.cci_get_err_msg" title="cci_get_err_msg"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_get_err_msg()</span></code></a> 함수를 이용하여 오류 코드가 나타내는 오류 메시지를 출력할 수 있다.</p></li>
+<li><p>오류 번호가 -20002부터 -20999 사이이면, CCI API 함수에서 발생하는 오류이다.</p></li>
+<li><p>오류 번호가 -10000부터 -10999 사이이면, CAS에서 발생하는 오류를 CCI API 함수가 전달받아 반환하는 오류이다. CAS 오류는 <a class="reference internal" href="../admin/control.html#cas-error"><span class="std std-ref">CAS 오류</span></a>를 참고한다.</p></li>
+<li><p>함수가 반환하는 오류 코드의 값이 <strong>CCI_ER_DBMS</strong> (-20001)인 경우, 데이터베이스 서버에서 발생하는 오류이다. 데이터베이스 서버 오류와 관련한 내용은 <a class="reference internal" href="../admin/control.html#database-server-error"><span class="std std-ref">데이터베이스 서버 오류</span></a>를 참고한다.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>
-<p>서버에서 에러가 발생한 경우 함수가 리턴하는 에러 코드인 <strong>CCI_ER_DBMS</strong> 와 err_buf.err_code 값이 서로 다름에 주의한다. 서버 에러 외에 err_buf에 저장되는 모든 에러 코드는 함수가 리턴하는 에러 코드와 동일하다.</p>
+<p>서버에서 오류가 발생한 경우 함수가 반환하는 오류 코드인 <strong>CCI_ER_DBMS</strong> 와 err_buf.err_code 값이 서로 다름에 주의한다. 서버 오류 외에 err_buf에 저장되는 모든 오류 코드는 함수가 반환하는 오류 코드와 동일하다.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>CUBRID 9.0 미만 버전에서의 CCI, CAS 에러 코드는 CUBRID 9.0 이상 버전의 에러 코드와 다른 값을 가진다. 따라서 에러 코드명을 사용하여 개발한 사용자는 응용 프로그램을 재컴파일하여 사용해야 하며, 에러 코드 번호를 직접 부여하여 개발한 사용자는 번호 값을 바꾼 후 응용 프로그램을 재컴파일해야 한다.</p>
+<p>CUBRID 9.0 미만 버전에서의 CCI, CAS 오류 코드는 CUBRID 9.0 이상 버전의 오류 코드와 다른 값을 가진다. 따라서 오류 코드명을 사용하여 개발한 사용자는 응용 프로그램을 재컴파일하여 사용해야 하며, 오류 코드 번호를 직접 부여하여 개발한 사용자는 번호 값을 바꾼 후 응용 프로그램을 재컴파일해야 한다.</p>
 </div>
-<p>데이터베이스 에러 버퍼(err_buf)는 <strong>cas_cci.h</strong> 헤더 파일의 <strong>T_CCI_ERROR</strong>  구조체 변수이다. 사용법은 아래의 예제 프로그램을 참고한다.</p>
-<p><strong>CCI_ER</strong> 로 시작되는 CCI 에러 코드는 <strong>$CUBRID/include/cas_cci.h</strong> 파일에 <strong>T_CCI_ERROR_CODE</strong> 라는 enum 구조체 내에 정의되어 있다. 따라서 프로그램 코드에서 이 에러 코드 명을 사용하려면 코드 상단에 <strong>#include “cas_cci.h”</strong> 를 입력하여 헤더 파일을 포함해야 한다.</p>
-<p>아래의 프로그램은 에러 메시지를 출력한다. 이때 <a class="reference internal" href="cciapi.html#c.cci_prepare" title="cci_prepare"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_prepare()</span></code></a> 가 리턴하는 에러 코드 값 req의 값은 <strong>CCI_ER_DMBS</strong> 이고, 데이터베이스 에러 버퍼의 <strong>cci_error.err_code</strong> 에는 서버 에러 코드인 -493이, <strong>cci_error.err_msg</strong> 에는 ‘Syntax: Unknown class “notable”. select * from notable’이라는 에러 메시지가 저장된다.</p>
+<p>데이터베이스 오류 버퍼(err_buf)는 <strong>cas_cci.h</strong> 헤더 파일의 <strong>T_CCI_ERROR</strong>  구조체 변수이다. 사용법은 아래의 예제 프로그램을 참고한다.</p>
+<p><strong>CCI_ER</strong> 로 시작되는 CCI 오류 코드는 <strong>$CUBRID/include/cas_cci.h</strong> 파일에 <strong>T_CCI_ERROR_CODE</strong> 라는 enum 구조체 내에 정의되어 있다. 따라서 프로그램 코드에서 이 오류 코드 명을 사용하려면 코드 상단에 <strong>#include “cas_cci.h”</strong> 를 입력하여 헤더 파일을 포함해야 한다.</p>
+<p>아래의 프로그램은 오류 메시지를 출력한다. 이때 <a class="reference internal" href="cciapi.html#c.cci_prepare" title="cci_prepare"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_prepare()</span></code></a> 가 반환하는 오류 코드 값 req의 값은 <strong>CCI_ER_DMBS</strong> 이고, 데이터베이스 오류 버퍼의 <strong>cci_error.err_code</strong> 에는 서버 오류 코드인 -493이, <strong>cci_error.err_msg</strong> 에는 ‘Syntax: Unknown class “notable”. select * from notable’이라는 오류 메시지가 저장된다.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">// gcc -o err err.c -m64 -I${CUBRID}/cci/include -lnsl ${CUBRID}/cci/lib/libcascci.so -lpthread</span>
 </span><span id="line-2"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
 </span><span id="line-3"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"cas_cci.h"</span>
@@ -902,18 +902,18 @@
 </span><span id="line-39"><span class="p">}</span>
 </span></code></pre></div>
 </div>
-<p>다음은 CCI 함수의 에러 코드를 나타낸다. CAS 에러는 <a class="reference internal" href="../admin/control.html#cas-error"><span class="std std-ref">CAS 에러</span></a>를 참고한다.</p>
+<p>다음은 CCI 함수의 오류 코드를 나타낸다. CAS 오류는 <a class="reference internal" href="../admin/control.html#cas-error"><span class="std std-ref">CAS 오류</span></a>를 참고한다.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>에러 코드명(에러 번호)</p></th>
-<th class="head"><p>에러 메시지</p></th>
+<tr class="row-odd"><th class="head"><p>오류 코드명(오류 번호)</p></th>
+<th class="head"><p>오류 메시지</p></th>
 <th class="head"><p>비고</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>CCI_ER_DBMS(-20001)</p></td>
 <td><p>CUBRID DBMS Error</p></td>
-<td><p>서버에서 에러가 발생한 경우 함수가 반환하는 에러 코드. 실패 원인은 T_CCI_ERROR 구조체에 저장되는
+<td><p>서버에서 오류가 발생한 경우 함수가 반환하는 오류 코드. 실패 원인은 T_CCI_ERROR 구조체에 저장되는
 err_code와 err_msg로 확인 가능.</p></td>
 </tr>
 <tr class="row-odd"><td><p>CCI_ER_CON_HANDLE(-20002)</p></td>
@@ -938,7 +938,7 @@ err_code와 err_msg로 확인 가능.</p></td>
 </tr>
 <tr class="row-even"><td><p>CCI_ER_STRING_PARAM(-20007)</p></td>
 <td><p>Invalid string argument</p></td>
-<td><p><a class="reference internal" href="cciapi.html#c.cci_prepare" title="cci_prepare"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_prepare()</span></code></a>, <a class="reference internal" href="cciapi.html#c.cci_prepare_and_execute" title="cci_prepare_and_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_prepare_and_execute()</span></code></a> 에서 sql_stmt가 NULL이면 발생하는 에러</p></td>
+<td><p><a class="reference internal" href="cciapi.html#c.cci_prepare" title="cci_prepare"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_prepare()</span></code></a>, <a class="reference internal" href="cciapi.html#c.cci_prepare_and_execute" title="cci_prepare_and_execute"><code class="xref c c-func docutils literal notranslate"><span class="pre">cci_prepare_and_execute()</span></code></a> 에서 sql_stmt가 NULL이면 발생하는 오류</p></td>
 </tr>
 <tr class="row-odd"><td><p>CCI_ER_TYPE_CONVERSION(-20008)</p></td>
 <td><p>Type conversion error</p></td>
@@ -1103,7 +1103,7 @@ err_code와 err_msg로 확인 가능.</p></td>
 <tr class="row-even"><td rowspan="2"><p><strong>T_CCI_ERROR</strong></p></td>
 <td rowspan="2"><p>struct</p></td>
 <td><p>char err_msg[1024]</p></td>
-<td rowspan="2"><p>데이터베이스 에러 정보 표현</p></td>
+<td rowspan="2"><p>데이터베이스 오류 정보 표현</p></td>
 </tr>
 <tr class="row-odd"><td><p>int err_code</p></td>
 </tr>
@@ -1705,7 +1705,7 @@ char</p></td>
 <li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">CCI 응용 프로그램 작성</a></li>
 <li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">라이브러리 적용</a></li>
 <li><a :data-current="activeSection === '#blob-clob'" class="reference internal" href="#blob-clob">BLOB/CLOB 사용</a></li>
-<li><a :data-current="activeSection === '#cci-error-codes'" class="reference internal" href="#cci-error-codes">CCI 에러 코드와 에러 메시지</a></li>
+<li><a :data-current="activeSection === '#cci-error-codes'" class="reference internal" href="#cci-error-codes">CCI 오류 코드와 오류 메시지</a></li>
 </ul>
 </li>
 <li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">CCI 예제 프로그램</a></li>
@@ -1717,7 +1717,7 @@ char</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -107,7 +107,7 @@ BIN
 
 .. function:: BIN (n)
 
-    **BIN** 함수는 **BIGINT** 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 **NULL** 이면 **NULL** 을 반환한다. **BIGINT**\ 로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
+    **BIN** 함수는 **BIGINT** 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 **NULL** 이면 **NULL** 을 반환한다. **BIGINT**\ 로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다.
 
     :param n: **BIGINT** 타입의 숫자
     :rtype: STRING
@@ -125,7 +125,7 @@ BIT_LENGTH
 
 .. function:: BIT_LENGTH (string)
 
-    **BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다. 유효하지 않은 값을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
+    **BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 반환 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다. 유효하지 않은 값을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다.
 
     :param string: 비트 단위로 길이를 구할 문자열 또는 비트열을 지정한다. **NULL** 이 지정된 경우는 **NULL** 값이 반환된다. 
     :rtype: INT
@@ -265,7 +265,7 @@ CHR
 
 .. function:: CHR (number_operand [USING charset_name])
 
-    **CHR** 함수는 인자로 지정된 연산식의 리턴 값에 대응하는 문자를 반환하는 함수이다. 유효하지 않은 범위의 코드 값을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
+    **CHR** 함수는 인자로 지정된 연산식의 반환 값에 대응하는 문자를 반환하는 함수이다. 유효하지 않은 범위의 코드 값을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다.
 
     :param number_operand: 수치값을 반환하는 임의의 연산식을 지정한다. 
     :param charset_name: 문자셋 이름. 지원하는 문자셋은 utf8과 iso88591이다.
@@ -437,11 +437,11 @@ ELT
 
 .. function:: ELT (N, string1, string2, ... )
 
-    **ELT** 함수는 *N*\ 이 1이면 *string1*\ 을 반환하고, *N*\ 이 2이면 *string2*\ 를 반환한다. 리턴 값은 **VARCHAR** 타입이다. 조건식은 필요에 따라 늘릴 수 있다.
+    **ELT** 함수는 *N*\ 이 1이면 *string1*\ 을 반환하고, *N*\ 이 2이면 *string2*\ 를 반환한다. 반환 값은 **VARCHAR** 타입이다. 조건식은 필요에 따라 늘릴 수 있다.
 
     문자열의 최대 바이트 길이는 33,554,432이며 이를 초과하면 **NULL**\ 을 반환한다.
 
-    *N*\ 이 0 또는 음수이면 빈 문자열을 반환한다. *N*\ 이 입력 문자열의 개수보다 크면 범위를 벗어나므로 **NULL**\ 을 반환한다. *N*\ 이 정수로 변환할 수 없는 타입이면 에러를 반환한다.
+    *N*\ 이 0 또는 음수이면 빈 문자열을 반환한다. *N*\ 이 입력 문자열의 개수보다 크면 범위를 벗어나므로 **NULL**\ 을 반환한다. *N*\ 이 정수로 변환할 수 없는 타입이면 오류를 반환한다.
 
     :param N: 문자열 리스트 중 반환할 문자열의 위치
     :param strings: 문자열 리스트
@@ -594,7 +594,7 @@ FROM_BASE64
 
 .. function:: FROM_BASE64(str) 
 
-    **FROM_BASE64** 함수는 **TO_BASE64** 함수에서 사용되는 base-64 암호화 규칙으로 암호화된 문자열을 인자로 입력받아 복호화된 결과를 바이너리 문자열로 반환한다. 입력 인자가 **NULL**\이면 **NULL**\을 반환한다. 유효하지 않은 base-64 문자열일 때 **cubrid.conf**\의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다. 
+    **FROM_BASE64** 함수는 **TO_BASE64** 함수에서 사용되는 base-64 암호화 규칙으로 암호화된 문자열을 인자로 입력받아 복호화된 결과를 바이너리 문자열로 반환한다. 입력 인자가 **NULL**\이면 **NULL**\을 반환한다. 유효하지 않은 base-64 문자열일 때 **cubrid.conf**\의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다. 
     암호화 규칙에 대한 상세 내용은 :func:`TO_BASE64`\를 참고한다. 
      
     :param str: 입력 문자열 
@@ -619,10 +619,10 @@ INSERT
 
 .. function:: INSERT ( str, pos, len, string )
 
-    **INSERT** 함수는 입력 문자열의 특정 위치부터 정해진 길이만큼 부분 문자열을 삽입한다. 리턴 값은 **VARCHAR** 타입이다. 문자열의 최대 길이는 33,554,432이며 이를 초과하면 **NULL** 을 반환한다.
+    **INSERT** 함수는 입력 문자열의 특정 위치부터 정해진 길이만큼 부분 문자열을 삽입한다. 반환 값은 **VARCHAR** 타입이다. 문자열의 최대 길이는 33,554,432이며 이를 초과하면 **NULL** 을 반환한다.
 
     :param str: 입력 문자열
-    :param pos: *str* 의 위치. 1부터 시작한다. *pos* 가 1보다 작거나 *string* 의 길이+1보다 크면, *string* 을 삽입하지 않고 *str* 을 리턴한다.
+    :param pos: *str* 의 위치. 1부터 시작한다. *pos* 가 1보다 작거나 *string* 의 길이+1보다 크면, *string* 을 삽입하지 않고 *str* 을 반환한다.
     :param len: *str* 의 *pos* 에 삽입할 *string* 의 길이. *len* 이 부분 문자열의 길이를 초과하면, *str* 의 *pos* 에서 *string* 만큼 삽입한다. *len* 이 음수이면 *str* 이 문자열의 끝이 된다.
     :param string: *str* 에 삽입할 부분 문자열
     :rtype: STRING
@@ -1190,7 +1190,7 @@ POSITION
 
     **POSITION** 함수는 문자열 *string* 내에서 문자열 *substring* 의 위치를 반환한다.
 
-    이 함수의 인자로 문자열 또는 비트열을 반환하는 임의의 연산식을 지정할 수 있으며, 리턴 값은 0 이상의 정수이다. 문자열에 대해서는 문자 개수 단위로 위치 값을 반환하고, 비트열에 대해서는 비트 단위로 위치 값을 반환한다.
+    이 함수의 인자로 문자열 또는 비트열을 반환하는 임의의 연산식을 지정할 수 있으며, 반환 값은 0 이상의 정수이다. 문자열에 대해서는 문자 개수 단위로 위치 값을 반환하고, 비트열에 대해서는 비트 단위로 위치 값을 반환한다.
 
     **POSITION** 함수는 가끔 다른 함수와 연결되어서 사용된다. 예를 들어, 특정 문자열에서 일부 문자열을 추출하고 싶은 경우에 **POSITION** 함수의 결과를 **SUBSTRING** 함수의 입력으로 사용할 수 있다.
 
@@ -1262,10 +1262,10 @@ REPEAT
 
 .. function:: REPEAT( string, count )
 
-    **REPEAT** 함수는 입력 문자열에 대해 반복 횟수만큼의 문자열을 반환한다. 리턴 값은 **VARCHAR** 타입이다. 문자열의 최대 길이는 33,554,432이며, 이를 초과하면 **NULL** 을 반환한다. 입력 인자 중 하나가 **NULL** 이면 **NULL** 을 반환한다.
+    **REPEAT** 함수는 입력 문자열에 대해 반복 횟수만큼의 문자열을 반환한다. 반환 값은 **VARCHAR** 타입이다. 문자열의 최대 길이는 33,554,432이며, 이를 초과하면 **NULL** 을 반환한다. 입력 인자 중 하나가 **NULL** 이면 **NULL** 을 반환한다.
 
     :param substring: 문자열
-    :param count: 반복 횟수. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자가 아닌 다른 데이터 타입을 입력하면 에러를 반환한다.
+    :param count: 반복 횟수. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자가 아닌 다른 데이터 타입을 입력하면 오류를 반환한다.
     :rtype: STRING
 
 .. code-block:: sql
@@ -1554,9 +1554,9 @@ SPACE
 
 .. function:: SPACE (N)
 
-    **SPACE** 함수는 지정한 숫자만큼의 공백 문자열을 반환한다. 리턴 값은 **VARCHAR** 타입이다.
+    **SPACE** 함수는 지정한 숫자만큼의 공백 문자열을 반환한다. 반환 값은 **VARCHAR** 타입이다.
 
-    :param N: 공백 개수. 시스템 파라미터 **string_max_size_bytes** 에 지정된 값보다 클 수 없으며(기본값 1048576), 이를 초과하면 **NULL** 을 반환한다. 최대값은 33,554,432이며 이를 초과하면 **NULL** 을 반환한다. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자로 변환할 수 없는 타입을 입력하면 에러를 반환한다.
+    :param N: 공백 개수. 시스템 파라미터 **string_max_size_bytes** 에 지정된 값보다 클 수 없으며(기본값 1048576), 이를 초과하면 **NULL** 을 반환한다. 최대값은 33,554,432이며 이를 초과하면 **NULL** 을 반환한다. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자로 변환할 수 없는 타입을 입력하면 오류를 반환한다.
     :rtype: STRING
 
 .. code-block:: sql
@@ -1781,11 +1781,11 @@ SUBSTRING_INDEX
 
 .. function:: SUBSTRING_INDEX (string, delim, count)
 
-    **SUBSTRING_INDEX** 함수는 문자열에 포함된 구분자를 세어 *count* 번째 구분자 앞까지의 부분 문자열을 반환한다. 리턴 값은 **VARCHAR** 타입이다.
+    **SUBSTRING_INDEX** 함수는 문자열에 포함된 구분자를 세어 *count* 번째 구분자 앞까지의 부분 문자열을 반환한다. 반환 값은 **VARCHAR** 타입이다.
 
     :param string: 입력 문자열. 최대 길이는 33,554,432이며, 이를 초과하면 **NULL** 을 반환한다.
     :param delim: 구분자. 대소문자를 구분한다.
-    :param count: 구분자가 나타나는 횟수. 양수를 입력하면 문자열의 왼쪽부터 세고, 음수를 입력하면 오른쪽부터 센다. 0이면 빈 문자열을 반환한다. 정수로 변환할 수 없는 타입을 입력하면 에러를 반환한다.
+    :param count: 구분자가 나타나는 횟수. 양수를 입력하면 문자열의 왼쪽부터 세고, 음수를 입력하면 오른쪽부터 센다. 0이면 빈 문자열을 반환한다. 정수로 변환할 수 없는 타입을 입력하면 오류를 반환한다.
     :rtype: STRING
 
 .. code-block:: sql

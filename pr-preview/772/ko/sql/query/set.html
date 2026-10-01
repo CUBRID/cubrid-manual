@@ -249,7 +249,7 @@
 <p>사용자 정의 변수는 세션당 최대 20개까지 정의할 수 있으며, 이 제한을 초과하여 새 변수를 생성하려면 <strong>DROP VARIABLE</strong> 문을 사용해 기존의 사용하지 않는 변수를 먼저 제거해야 한다.</p>
 <p>대부분의 SQL 문에서 사용자 정의 변수를 사용할 수 있지만, SELECT 문 내에서 변수의 지정과 참조 순서는 보장되지 않는다.
 예를 들어, SELECT 목록에 지정된 사용자 정의 변수를 <strong>HAVING</strong>, <strong>GROUP BY</strong>, <strong>ORDER BY</strong> 절에서 참조하면 예상한 값이 반환되지 않을 수 있다.
-또한, 사용자 정의 변수는 컬럼 이름이나 테이블 이름과 같은 식별자(identifier) 로는 사용할 수 없다.</p>
+또한, 사용자 정의 변수는 칼럼 이름이나 테이블 이름과 같은 식별자(identifier) 로는 사용할 수 없다.</p>
 <p>사용자 정의 변수는 대소문자를 구분하지 않는다. 사용자 정의 변수의 타입은 <strong>SHORT</strong>, <strong>INTEGER</strong>, <strong>BIGINT</strong>, <strong>FLOAT</strong>, <strong>DOUBLE</strong>, <strong>NUMERIC</strong>, <strong>CHAR</strong>, <strong>VARCHAR</strong>, <strong>BIT</strong>, <strong>BIT VARYING</strong> 중 하나가 될 수 있으며, 그 밖의 타입은 <strong>VARCHAR</strong> 타입으로 변환된다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="o">@</span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">v2</span><span class="o">=</span><span class="k">CAST</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">),</span><span class="w"> </span><span class="o">@</span><span class="n">v3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'123'</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">v4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">DATE</span><span class="s1">'2010-01-01'</span><span class="p">;</span>
 </span><span id="line-2">
@@ -380,7 +380,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -276,8 +276,8 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><em>stmt_name</em> : 실행하고자 하는 prepared statement에 부여된 이름을 지정한다. <em>stmt_name</em> 이 유효하지 않거나 prepared statement가 존재하지 않는 경우 에러가 출력된다.</p></li>
-<li><p><em>value</em> : 바인드 파라미터가 prepared statement에 있는 경우 바인딩할 데이터를 입력한다. 바인드 파라미터와 데이터의 개수 및 순서가 대응되어야 한다. 그렇지 않으면 에러가 출력된다.</p></li>
+<li><p><em>stmt_name</em> : 실행하고자 하는 prepared statement에 부여된 이름을 지정한다. <em>stmt_name</em> 이 유효하지 않거나 prepared statement가 존재하지 않는 경우 오류가 출력된다.</p></li>
+<li><p><em>value</em> : 바인드 파라미터가 prepared statement에 있는 경우 바인딩할 데이터를 입력한다. 바인드 파라미터와 데이터의 개수 및 순서가 대응되어야 한다. 그렇지 않으면 오류가 출력된다.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">PREPARE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT 1 + ?'</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
@@ -333,7 +333,7 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><em>stmt_name</em> : 해제하고자 하는 prepared statement에 부여된 이름을 지정한다. <em>stmt_name</em> 이 유효하지 않거나 prepared statement가 존재하지 않으면 에러가 출력된다.</p></li>
+<li><p><em>stmt_name</em> : 해제하고자 하는 prepared statement에 부여된 이름을 지정한다. <em>stmt_name</em> 이 유효하지 않거나 prepared statement가 존재하지 않으면 오류가 출력된다.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DEALLOCATE</span><span class="w"> </span><span class="k">PREPARE</span><span class="w"> </span><span class="n">stmt1</span><span class="p">;</span>
 </span></code></pre></div>
@@ -371,7 +371,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

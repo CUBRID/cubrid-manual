@@ -546,7 +546,7 @@
 </div></blockquote>
 <p><strong>수행 과정:</strong></p>
 <ol class="arabic simple">
-<li><p>nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드를 가져와 code 컬럼 값으로 정렬한다.</p></li>
+<li><p>nation 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">n.continent</span> <span class="pre">=</span> <span class="pre">'Asia'</span></code>)을 만족하는 레코드를 가져와 code 칼럼 값으로 정렬한다.</p></li>
 </ol>
 <blockquote>
 <div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">nation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">continent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Asia'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">code</span><span class="p">;</span>
@@ -554,7 +554,7 @@
 </div>
 </div></blockquote>
 <ol class="arabic simple" start="2">
-<li><p>athlete 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)을 만족하는 레코드를 가져와 natione_code 컬럼 값으로 정렬한다.</p></li>
+<li><p>athlete 테이블에서 필터 조건(<code class="docutils literal notranslate"><span class="pre">a.event</span> <span class="pre">=</span> <span class="pre">'Baseball'</span></code>)을 만족하는 레코드를 가져와 natione_code 칼럼 값으로 정렬한다.</p></li>
 </ol>
 <blockquote>
 <div><div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">select</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">athlete</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Baseball'</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nation_code</span><span class="p">;</span>
@@ -571,7 +571,7 @@
 <p>해시 조인은 해시 함수를 사용해 동일한 해시 값을 가지는 두 테이블의 레코드를 결합하는 방식이다.
 동일한 해시 값을 가지는 레코드를 효율적으로 비교하기 위해 해시 테이블이 사용된다.
 두 테이블 중 하나는 해시 테이블을 <strong>빌드(Build)</strong>하는 데 사용되고, 다른 하나는 해시 테이블을 <strong>프로브(Probe)</strong>하는 데 사용된다.
-해시 값은 조인 컬럼 값을 입력으로 사용하는 해시 함수에 의해 생성된다.
+해시 값은 조인 칼럼 값을 입력으로 사용하는 해시 함수에 의해 생성된다.
 다른 입력 값에서 동일한 해시 값이 생성될 경우 이를 해시 충돌이라고 한다.
 해시 충돌이 발생하면 동일한 해시 값을 가진 레코드를 순차적으로 조사하며 조인 조건을 확인한다.
 해시 조인은 모든 조인 조건이 동등 비교 조건인 경우에만 수행할 수 있다.</p>
@@ -1148,7 +1148,7 @@ participant 테이블의 레코드 수가 더 많지만, 우측 외부 조인의
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

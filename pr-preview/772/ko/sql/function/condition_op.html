@@ -237,7 +237,7 @@
 <tr class="row-odd"><th class="head"><p>비교 연산자</p></th>
 <th class="head"><p>설명</p></th>
 <th class="head"><p>조건식</p></th>
-<th class="head"><p>리턴 값</p></th>
+<th class="head"><p>반환 값</p></th>
 </tr>
 </thead>
 <tbody>
@@ -571,9 +571,9 @@
 <p><strong>CASE</strong> 조건식은 반드시 키워드 <strong>END</strong> 로 끝나야 하며, <em>control_expression</em> 과 데이터 타입과 <em>simple_when</em> 절 내의 <em>expression</em> 은 비교 가능한 데이터 타입이어야 한다. 또한, <strong>THEN</strong> 과 <strong>ELSE</strong> 절에 지정된 모든 <em>result</em> 의 데이터 타입은 서로 같거나, 어느 하나의 공통 데이터 타입으로 변환 가능(convertible)해야 한다.</p>
 <p><strong>CASE</strong> 수식이 반환하는 값의 데이터 타입은 다음과 같은 규칙에 따라 결정된다.</p>
 <ul class="simple">
-<li><p><strong>THEN</strong> 절에 명시된 모든 <em>result</em> 의 데이터 타입이 같으면, 해당 타입이 리턴 값의 데이터 타입이 된다.</p></li>
-<li><p>모든 <em>result</em> 의 데이터 타입이 같지 않더라도 어느 하나의 공통 데이터 타입으로 변환 가능하면, 해당 타입이 리턴 값의 데이터 타입이 된다.</p></li>
-<li><p><em>result</em> 중 어느 하나가 가변 길이 문자열인 경우, 리턴 값의 데이터 타입은 가변 길이 문자열이 된다. 또한, <em>result</em> 가 모두 고정 길이 문자열인 경우에는 가장 긴 길이를 가지는 문자열 또는 비트열이 결과로 반환된다.</p></li>
+<li><p><strong>THEN</strong> 절에 명시된 모든 <em>result</em> 의 데이터 타입이 같으면, 해당 타입이 반환 값의 데이터 타입이 된다.</p></li>
+<li><p>모든 <em>result</em> 의 데이터 타입이 같지 않더라도 어느 하나의 공통 데이터 타입으로 변환 가능하면, 해당 타입이 반환 값의 데이터 타입이 된다.</p></li>
+<li><p><em>result</em> 중 어느 하나가 가변 길이 문자열인 경우, 반환 값의 데이터 타입은 가변 길이 문자열이 된다. 또한, <em>result</em> 가 모두 고정 길이 문자열인 경우에는 가장 긴 길이를 가지는 문자열 또는 비트열이 결과로 반환된다.</p></li>
 <li><p><em>result</em> 중 어느 하나가 근사치로 표현되는 수치형이면, 근사치로 표현되고 이때 소수점 이하 자릿수는 모든 <em>result</em> 의 유효 숫자를 표현할 수 있도록 결정된다.</p></li>
 </ul>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1">--creating a table</span>
@@ -684,7 +684,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

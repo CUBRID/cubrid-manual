@@ -18,18 +18,18 @@ ADDDATE, DATE_ADD
    :noindex:
 .. function:: DATE_ADD (date, INTERVAL expr unit)
 
-    **ADDDATE** 함수와 **DATE_ADD** 함수는 동일하며, 특정 **DATE** 값에 대해 덧셈 또는 뺄셈을 실행한다. 리턴 값은 **DATE** 타입 또는 **DATETIME** 타입이다. **DATETIME** 타입을 반환하는 경우는 다음과 같다.
+    **ADDDATE** 함수와 **DATE_ADD** 함수는 동일하며, 특정 **DATE** 값에 대해 덧셈 또는 뺄셈을 실행한다. 반환 값은 **DATE** 타입 또는 **DATETIME** 타입이다. **DATETIME** 타입을 반환하는 경우는 다음과 같다.
 
     *   첫 번째 인자가 **DATETIME** 타입 또는 **TIMESTAMP** 타입인 경우
     *   첫 번째 인자가 **DATE** 타입이고 **INTERVAL** 값의 단위가 날짜 단위 미만으로 지정된 경우
 
     위의 경우 외에 **DATETIME** 타입의 결과 값을 반환하려면 :func:`CAST` 함수를 이용하여 첫 번째 인자 값의 타입을 변환해야 한다. 연산 결과의 날짜가 해당 월의 마지막 날짜를 초과하면, 해당 월의 말일을 적용하여 유효한 **DATE** 값을 반환한다.
 
-    입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 오류를 반환하며, 기본값은 **no** 이다.
 
     계산 결과가 '0000-00-00 00:00:00'과 '0001-01-01 00:00:00' 사이이면, 날짜와 시간 값이 모두 0인 **DATE** 또는 **DATETIME** 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다. JDBC의 연결 URL 속성은 :ref:`jdbc-connection-conf` \을 참고하면 된다.
 
-    :param date: **DATE**, **DATETIME** 또는 **TIMESTAMP** 타입의 연산식이며, 시작 날짜를 의미한다. 만약, '2006-07-00'와 같이 유효하지 않은 **DATE** 값이 지정되면, 에러를 반환한다.
+    :param date: **DATE**, **DATETIME** 또는 **TIMESTAMP** 타입의 연산식이며, 시작 날짜를 의미한다. 만약, '2006-07-00'와 같이 유효하지 않은 **DATE** 값이 지정되면, 오류를 반환한다.
     :param expr: 시작 날짜로부터 더할 시간 간격 값(interval value)을 의미하며, **INTERVAL** 키워드 뒤에 음수가 명시되면 시작 날짜로부터 시간 간격 값을 뺀다.
     :param unit: *expr* 수식에 명시된 시간 간격 값의 단위를 의미하며, 아래의 테이블을 참고하여 시간 간격 값 해석을 위한 형식을 지정할 수 있다. *expr* 의 단위 값이 *unit* 에서 요구하는 단위 값의 개수보다 적을 경우 가장 작은 단위부터 채운다. 예를 들어, **HOUR_SECOND** 의 경우 'HOURS:MINUTES:SECONDS'와 같이 3개의 값이 요구되는데, "1:1" 처럼 2개의 값만 주어지면 'MINUTES:SECONDS'로 간주한다.
     :rtype: **DATE** 또는 **DATETIME** 
@@ -472,7 +472,7 @@ DATE
 
 .. function:: DATE (date)
 
-    **DATE** 함수는 지정된 인자로부터 날짜 부분을 추출하여 '*MM*/*DD*/*YYYY*' 형식 문자열로 반환한다. 지정 가능한 인자는 **DATE**, **TIMESTAMP**, **DATETIME** 타입이며, 리턴 값은 **VARCHAR** 타입이다
+    **DATE** 함수는 지정된 인자로부터 날짜 부분을 추출하여 '*MM*/*DD*/*YYYY*' 형식 문자열로 반환한다. 지정 가능한 인자는 **DATE**, **TIMESTAMP**, **DATETIME** 타입이며, 반환 값은 **VARCHAR** 타입이다
 
     인자의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값을 입력한 경우에는 연, 월, 일 값이 모두 0인 문자열을 반환한다.
 
@@ -508,11 +508,11 @@ DATEDIFF
 
 .. function:: DATEDIFF (date1, date2)
 
-    **DATEDIFF** 함수는 주어진 두 개의 인자로부터 날짜 부분을 추출하여 두 값의 차이를 일 단위 정수로 반환한다. 지정 가능한 인자는 **DATE**, **TIMESTAMP**, **DATETIME** 타입이며, 리턴 값의 타입은 **INTEGER** 이다.
+    **DATEDIFF** 함수는 주어진 두 개의 인자로부터 날짜 부분을 추출하여 두 값의 차이를 일 단위 정수로 반환한다. 지정 가능한 인자는 **DATE**, **TIMESTAMP**, **DATETIME** 타입이며, 반환 값의 타입은 **INTEGER** 이다.
 
-    입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 오류를 반환하며, 기본값은 **no** 이다.
 
-    :param date1,date2: 날짜를 포함하는 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 또는 해당 타입의 값을 나타내는 문자열이 지정될 수 있다. 유효하지 않은 문자열이 지정되면 에러를 반환한다.
+    :param date1,date2: 날짜를 포함하는 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 또는 해당 타입의 값을 나타내는 문자열이 지정될 수 있다. 유효하지 않은 문자열이 지정되면 오류를 반환한다.
     :rtype: INT
 
 .. code-block:: sql
@@ -549,13 +549,13 @@ DATE_SUB, SUBDATE
 .. function:: SUBDATE(date, days)
    :noindex:
 
-    **DATE_SUB** ()와 **SUBDATE** ()는 동일하며, 특정 **DATE** 값에 대해 뺄셈 또는 덧셈을 실행한다. 리턴 값은 **DATE** 타입 또는 **DATETIME** 타입이다. 연산 결과의 날짜가 해당 월의 마지막 날짜를 초과하면, 해당 월의 말일을 적용하여 유효한 **DATE** 값을 반환한다.
+    **DATE_SUB** ()와 **SUBDATE** ()는 동일하며, 특정 **DATE** 값에 대해 뺄셈 또는 덧셈을 실행한다. 반환 값은 **DATE** 타입 또는 **DATETIME** 타입이다. 연산 결과의 날짜가 해당 월의 마지막 날짜를 초과하면, 해당 월의 말일을 적용하여 유효한 **DATE** 값을 반환한다.
 
-    입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 오류를 반환하며, 기본값은 **no** 이다.
 
     계산 결과가 '0000-00-00 00:00:00'과 '0001-01-01 00:00:00' 사이이면, 날짜와 시간 값이 모두 0인 **DATE** 또는 **DATETIME** 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다("API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정" 참고).
 
-    :param date: **DATE**, **DATETIME** 또는 **TIMESTAMP** 타입의 연산식이며, 시작 날짜를 의미한다. 만약, '2006-07-00'와 같이 유효하지 않은 **DATE** 값이 지정되면, 에러를 반환한다.
+    :param date: **DATE**, **DATETIME** 또는 **TIMESTAMP** 타입의 연산식이며, 시작 날짜를 의미한다. 만약, '2006-07-00'와 같이 유효하지 않은 **DATE** 값이 지정되면, 오류를 반환한다.
     :param expr: 시작 날짜로부터 뺄 시간 간격 값(interval value)을 의미하며, **INTERVAL** 키워드 뒤에 음수가 명시되면 시작 날짜로부터 시간 간격 값을 더한다.
     :param unit: *expr* 수식에 명시된 시간 간격 값의 단위를 의미하며, *unit* 값에 대한 *expr* 인자의 값은 :func:`ADDDATE` 의 표를 참고한다.
     :rtype: DATE or DATETIME
@@ -637,7 +637,7 @@ DAYOFWEEK
 
     **DAYOFWEEK** 함수는 지정된 인자로부터 1~7 범위의 요일(1: 일요일, 2: 월요일, ..., 7: 토요일)을 반환한다. 요일 인덱스는 ODBC 표준과 같다. 인자로 **DATE**, **TIMESTAMP**, **DATETIME** 타입의 값을 지정할 수 있으며, **INTEGER** 타입의 값을 반환한다.
 
-    입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 오류를 반환하며, 기본값은 **no** 이다.
 
     :param date: 날짜
     :rtype: INT
@@ -673,7 +673,7 @@ DAYOFYEAR
 
     **DAYOFYEAR** 함수는 지정된 인자로부터 1~366 범위의 일(day of year)을 반환한다. 인자로 **DATE**, **TIMESTAMP**, **DATETIME** 타입의 값을 지정할 수 있으며, **INTEGER** 타입의 값을 반환한다.
 
-    입력 인자의 날짜 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    입력 인자의 날짜 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 오류를 반환하며, 기본값은 **no** 이다.
 
     :param date: 날짜
     :rtype: INT
@@ -866,7 +866,7 @@ FROM_UNIXTIME
 
 .. function:: FROM_UNIXTIME ( unix_timestamp[, format] )
 
-    **FROM_UNIXTIME** 함수는 *format* 인자가 명시된 경우 **VARCHAR** 타입으로 해당 형식의 문자열을 반환하며, *format* 인자가 생략될 경우 **TIMESTASMP** 타입의 값을 반환한다. *unix_timestamp* 인자로 UNIX의 타임스탬프에 해당하는 **INTEGER** 타입을 입력한다. 리턴 값은 현재의 타임 존으로 표현된다.
+    **FROM_UNIXTIME** 함수는 *format* 인자가 명시된 경우 **VARCHAR** 타입으로 해당 형식의 문자열을 반환하며, *format* 인자가 생략될 경우 **TIMESTASMP** 타입의 값을 반환한다. *unix_timestamp* 인자로 UNIX의 타임스탬프에 해당하는 **INTEGER** 타입을 입력한다. 반환 값은 현재의 타임 존으로 표현된다.
 
     *format*\ 에 입력하는 시간 형식은 :func:`DATE_FORMAT` 의 날짜/시간 형식 2를 따른다.
 
@@ -959,7 +959,7 @@ LAST_DAY
 
     **LAST_DAY** 함수는 인자로 지정된 **DATE** 값에서 해당 월의 마지막 날짜 값을 **DATE** 타입으로 반환한다. 
     
-    입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다. 
+    입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 오류를 반환하며, 기본값은 **no** 이다. 
     
     :param date_argument: **DATE** 타입의 연산식을 지정한다. **TIMESTAMP** 나 **DATETIME** 값을 지정하려면 **DATE** 타입으로 명시적 변환을 해야 한다. 값이 **NULL** 이면 **NULL** 을 반환한다.
     :rtype: DATE
@@ -997,7 +997,7 @@ MAKEDATE
 
     **MAKEDATE** 함수는 지정된 인자로부터 날짜를 반환한다. 인자로 1~9999 범위의 연도와 일(day of year)에 해당하는 **INTEGER** 타입의 값을 지정할 수 있으며, 1/1/1~12/31/9999 범위의 **DATE** 타입의 값을 반환한다. 일(day of year)이 해당 연도를 넘어가면 다음 연도가 된다. 예를 들어, MAKEDATE(1999, 366)은 2000-01-01을 반환한다. 단, 연도에 0~69 범위의 값을 입력하면 2000년~2069년으로 처리하고, 70~99 범위의 값을 입력하면 1970년~1999년으로 처리한다.
 
-    *year* 와 *dayofyear* 가 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    *year* 와 *dayofyear* 가 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 오류를 반환하며, 기본값은 **no** 이다.
 
     :param year: 1~9999 범위의 연도
     :param dayofyear: 연도에 0~99의 값을 입력하면 예외적으로 처리하므로, 실제로는 100년 이후의 연도만 사용된다. 따라서 *dayofyear* 의 최대값은 3,615,902이며, MAKEDATE(100, 3615902)는 9999/12/31을 반환한다.
@@ -1170,7 +1170,7 @@ MONTHS_BETWEEN
 
 .. function:: MONTHS_BETWEEN (date_argument, date_argument)
 
-    **MONTHS_BETWEEN** 함수는 주어진 두 개의 **DATE** 값 간의 차이를 월 단위로 반환하며, 리턴 값은 **DOUBLE** 타입이다. 인자로 지정된 두 날짜가 동일하거나, 해당 월의 말일인 경우에는 정수 값을 반환하지만, 그 외의 경우에는 날짜 차이를 31로 나눈 값을 반환한다.
+    **MONTHS_BETWEEN** 함수는 주어진 두 개의 **DATE** 값 간의 차이를 월 단위로 반환하며, 반환 값은 **DOUBLE** 타입이다. 인자로 지정된 두 날짜가 동일하거나, 해당 월의 말일인 경우에는 정수 값을 반환하지만, 그 외의 경우에는 날짜 차이를 31로 나눈 값을 반환한다.
 
     :param date_argument:  **DATE** 타입의 값을 가지는 연산식을 지정한다. **TIMESTAMP**\나 **DATETIME** 값도 지정할 수 있다. 값이 **NULL** 이면 **NULL** 을 반환한다.
     :rtype: DOUBLE
@@ -1863,7 +1863,7 @@ TIMEDIFF
 
 .. function:: TIMEDIFF (expr1, expr2)
 
-    **TIMEDIFF** 함수는 지정된 두 개의 시간 인자의 시간 차를 반환한다. 날짜/시간 타입인 **TIME**, **DATE**, **TIMESTAMP**, **DATETIME** 타입을 인자로 입력할 수 있으며, 두 인자의 데이터 타입은 같아야 한다. **TIME** 타입을 반환하며, 따라서 두 인자의 시간 차이는 00:00:00~23:59:59 범위여야 한다. 이 범위를 벗어나면 에러를 반환한다.
+    **TIMEDIFF** 함수는 지정된 두 개의 시간 인자의 시간 차를 반환한다. 날짜/시간 타입인 **TIME**, **DATE**, **TIMESTAMP**, **DATETIME** 타입을 인자로 입력할 수 있으며, 두 인자의 데이터 타입은 같아야 한다. **TIME** 타입을 반환하며, 따라서 두 인자의 시간 차이는 00:00:00~23:59:59 범위여야 한다. 이 범위를 벗어나면 오류를 반환한다.
 
     :param expr1, expr2: 시간. 두 인자의 데이터 타입은 같아야 한다.
     :rtype: TIME
@@ -2219,7 +2219,7 @@ WEEK
     :param mode: 0~7 범위의 값
     :rtype: INT
 
-함수의 두 번째 인자인 *mode* 는 생략할 수 있으며, 0~7 범위의 값을 입력한다. 이 값으로 한 주가 일요일부터 시작하는지 월요일부터 시작하는지, 리턴 값의 범위가 0~53인지 1~53인지 설정한다. *mode* 를 생략하면 시스템 파라미터 **default_week_format** 의 값(기본값: 0)이 사용된다. *mode* 값의 의미는 다음과 같다.
+함수의 두 번째 인자인 *mode* 는 생략할 수 있으며, 0~7 범위의 값을 입력한다. 이 값으로 한 주가 일요일부터 시작하는지 월요일부터 시작하는지, 반환 값의 범위가 0~53인지 1~53인지 설정한다. *mode* 를 생략하면 시스템 파라미터 **default_week_format** 의 값(기본값: 0)이 사용된다. *mode* 값의 의미는 다음과 같다.
 
 +----------+-----------+--------+------------------------------------------+
 | mode     | 시작 요일 | 범위   | 해당 연도의 첫 번째 주                   |

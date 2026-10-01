@@ -1162,7 +1162,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="s1">'&gt;'</span> <span class="n">requires</span> <span class="n">arguments</span> <span class="k">with</span> <span class="n">compatible</span> <span class="n">collations</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>위의 예에서 칼럼 s1과 s2 는 다른 콜레이션을 가지고 있고, s1과 s2 를 비교한다는 것은 테이블 t에 있는 레코드끼리 어떤 칼럼의 값이 “더 큰지” 결정할 수 있는 문자열을 비교한다는 것을 의미한다. 콜레이션 utf8_en_cs와 utf8_tr_cs는 서로 비교할 수 없으므로 이 경우에는 에러를 출력할 것이다.</p>
+<p>위의 예에서 칼럼 s1과 s2 는 다른 콜레이션을 가지고 있고, s1과 s2 를 비교한다는 것은 테이블 t에 있는 레코드끼리 어떤 칼럼의 값이 “더 큰지” 결정할 수 있는 문자열을 비교한다는 것을 의미한다. 콜레이션 utf8_en_cs와 utf8_tr_cs는 서로 비교할 수 없으므로 이 경우에는 오류를 출력할 것이다.</p>
 <p>표현식의 타입 결정 방법의 원칙이 콜레이션 결정 방법에도 마찬가지로 적용된다.</p>
 <ol class="arabic simple">
 <li><p>표현식의 모든 인자들을 고려하여 공통 콜레이션과 문자셋을 결정한다.</p></li>
@@ -1173,7 +1173,7 @@
 <p>표현식의 인자들이 서로 다른 콜레이션을 가지면, 이들에 대한 공통 콜레이션은 각 인자들의 콜레이션과 변환도에 기반하여 결정된다.</p>
 <ol class="arabic simple">
 <li><p>높은 변환도를 가진 인자는 더 낮은 변환도를 가진 인자의 콜레이션으로 변환된다.</p></li>
-<li><p>인자들의 콜레이션이 서로 다르고 변환도가 같은 경우에는 표현식의 콜레이션을 결정할 수 없고 에러가 리턴된다. 단, 콜레이션 변환도 11(호스트 변수, 사용자 정의 변수)이고 동일한 문자셋인 두 피연산자를 비교하는 경우 둘 중 하나가 바이너리 콜레이션(utf8_bin, iso88591_bin, euckr_bin)이면 바이너리가 아닌(non-binary) 콜레이션으로 변환된다. <a class="reference internal" href="#comparison-between-session-and-or-host-variables"><span class="std std-ref">세션 변수와(또는) 호스트 변수의 비교</span></a>를 참고한다.</p></li>
+<li><p>인자들의 콜레이션이 서로 다르고 변환도가 같은 경우에는 표현식의 콜레이션을 결정할 수 없고 오류가 반환된다. 단, 콜레이션 변환도 11(호스트 변수, 사용자 정의 변수)이고 동일한 문자셋인 두 피연산자를 비교하는 경우 둘 중 하나가 바이너리 콜레이션(utf8_bin, iso88591_bin, euckr_bin)이면 바이너리가 아닌(non-binary) 콜레이션으로 변환된다. <a class="reference internal" href="#comparison-between-session-and-or-host-variables"><span class="std std-ref">세션 변수와(또는) 호스트 변수의 비교</span></a>를 참고한다.</p></li>
 </ol>
 <p>표현식 인자들의 변환도는 다음의 표와 같다.</p>
 <table class="docutils align-default" id="collation-coercibility">
@@ -1227,7 +1227,7 @@
 </table>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>9.x 버전에서는 바이너리 콜레이션을 지원하지 않았으며, 대신 iso85891_bin 콜레이션이 기본 바이너리 콜레이션 기능을 했다. 버전 10.0부터는 iso88591_bin이 포함된 컬럼의 변환도(coercibility)가 2에서 3으로 강등되었고, iso88591_bin이 포함된 표현식에서는 5에서 6으로, iso88591_bin이 포함된 상수에서는 9에서 10으로 강등되었다.</p>
+<p>9.x 버전에서는 바이너리 콜레이션을 지원하지 않았으며, 대신 iso85891_bin 콜레이션이 기본 바이너리 콜레이션 기능을 했다. 버전 10.0부터는 iso88591_bin이 포함된 칼럼의 변환도(coercibility)가 2에서 3으로 강등되었고, iso88591_bin이 포함된 표현식에서는 5에서 6으로, iso88591_bin이 포함된 상수에서는 9에서 10으로 강등되었다.</p>
 </div>
 <p>호스트 변수만을 인자로 가지는 표현식(예: 아래의 UPPER(?))에 대해서는 실행 단계에서 콜레이션 변환도를 결정할 수 있다. 즉, 파싱 단계에서는 이러한 표현식의 콜레이션 변환도를 결정할 수 없으므로 COERCIBILITY 함수는 -1을 반환한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span>
@@ -1311,7 +1311,7 @@
 </span></code></pre></div>
 </div>
 <p>위 경우 두 번째 피연산자는 표현식이기 때문에 s1의 콜레이션이 사용된다.</p>
-<p>다음 예제는 서로 다른 콜레이션을 지닌 s2와 s3에 대해 ‘+’ 연산을 수행하려고 하기 때문에 에러가 발생한다.</p>
+<p>다음 예제는 서로 다른 콜레이션을 지닌 s2와 s3에 대해 ‘+’ 연산을 수행하려고 하기 때문에 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span>
 </span><span id="line-2"><span class="w">    </span><span class="n">s1</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_en_cs</span><span class="p">,</span>
 </span><span id="line-3"><span class="w">    </span><span class="n">s2</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_tr_cs</span><span class="p">,</span>
@@ -1365,7 +1365,7 @@
 </span><span id="line-3">                    11                  11  'utf8_en_cs'          'utf8_bin'                      0
 </span></code></pre></div>
 </div>
-<p>그러나, 아래와 같이 @v1과 ‘A’의 콜레이션이 둘 다 바이너리가 아닌 콜레이션이고 두 콜레이션이 서로 다르면 에러가 발생한다.</p>
+<p>그러나, 아래와 같이 @v1과 ‘A’의 콜레이션이 둘 다 바이너리가 아닌 콜레이션이고 두 콜레이션이 서로 다르면 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">DEALLOCATE</span><span class="w"> </span><span class="k">PREPARE</span><span class="w"> </span><span class="n">stmt</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8_en_ci</span><span class="p">;</span>
 </span><span id="line-3"><span class="k">SET</span><span class="w"> </span><span class="o">@</span><span class="n">v1</span><span class="o">=</span><span class="s1">'a'</span><span class="p">;</span>
@@ -1569,7 +1569,7 @@
 </li>
 <li><p>ISO8859-2는 코드페이지 1250에 없는 문자를 일부 포함하고 있으므로, ISO8859-2의 모든 문자를 CSQL로 입력하거나 출력할 수는 없다.</p></li>
 </ul>
-<p>입력 시 콘솔 변환 프로세스는 SQL 문장을 포함한 모든 입력에 대해 변환이 필요한 문자 데이터들을 변환한다. 결과 출력과 에러 메시지 출력 시에  CSQL은 모든 텍스트를 변환하지 않고 변환이 필요한 문자들만 변환한다. 예를 들어, 숫자 텍스트들은 모두 ASCII 문자이므로 이를 출력할 때는 콘솔 변환 작업이 발생하지 않는다.</p>
+<p>입력 시 콘솔 변환 프로세스는 SQL 문장을 포함한 모든 입력에 대해 변환이 필요한 문자 데이터들을 변환한다. 결과 출력과 오류 메시지 출력 시에  CSQL은 모든 텍스트를 변환하지 않고 변환이 필요한 문자들만 변환한다. 예를 들어, 숫자 텍스트들은 모두 ASCII 문자이므로 이를 출력할 때는 콘솔 변환 작업이 발생하지 않는다.</p>
 </section>
 <section id="unicode-normalization">
 <span id="id32"></span><h3>유니코드 정규화<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#unicode-normalization" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#unicode-normalization'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
@@ -1725,7 +1725,7 @@
 <span id="id41"></span><h2>콜레이션 설정으로 인한 영향<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#collation-setting-impacted-features" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#collation-setting-impacted-features'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <section id="like">
 <h3>LIKE 조건 최적화<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#like" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#like'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p><strong>LIKE</strong> 조건은 문자열 데이터 간의 패턴을 비교하여 문자열이 패턴과 매칭되면 <strong>TRUE</strong> 를 리턴한다. 확장이 없는 콜레이션을 사용할 때에는 각 코드포인트는 가중치를 나타내는 하나의 정수 값을 갖는데, 이 가중치 값은 콜레이션 설정(세기, 대소문자 구분 등)에 기반하여 계산된다.</p>
+<p><strong>LIKE</strong> 조건은 문자열 데이터 간의 패턴을 비교하여 문자열이 패턴과 매칭되면 <strong>TRUE</strong> 를 반환한다. 확장이 없는 콜레이션을 사용할 때에는 각 코드포인트는 가중치를 나타내는 하나의 정수 값을 갖는데, 이 가중치 값은 콜레이션 설정(세기, 대소문자 구분 등)에 기반하여 계산된다.</p>
 <p>문자들은 항상 하나의 개체(entity)로 간주될 수 있기 때문에, <strong>LIKE</strong> 조건을 사용한 패턴으로 문자열을 매칭하려는 시도는 문자열이 어떤 범위 내에서 발견될 수 있는지 확인하는 것과 같다고 볼 수 있다. 예를 들어, “s LIKE ‘abc%‘“는 칼럼 s의 값은 문자열 “abc”로 시작해야 한다는 것을 의미하므로, “s LIKE ‘abc%‘“와 같은 절을 수행하기 위해 먼저 칼럼 s의 문자열에 대한 제한 범위로 구문을 재작성한다. 확장이 없는 콜레이션에서 이는 s가 “abc”보다 크거나 같지만 후속 문자열보다 작다는 의미이다. 예를 들어, 영어의 알파벳 기준으로 ‘abc’의 후속 문자열은 ‘abd’이므로 아래와 같이 변환할 수 있다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">s LIKE 'abc%' → s ≥ 'abc' AND s &lt; 'abd' (if using strictly the English alphabet)
 </span></code></pre></div>
@@ -1865,16 +1865,16 @@
 <section id="jdbc-i18n">
 <h1>JDBC에서 i18n 문자 사용<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#jdbc-i18n"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
 <p>CUBRID JDBC는 문자열 및 CUBRIDBinaryString 객체를 사용하여 서버에서 수신된 문자열 타입 값을 저장한다. 문자열 객체는 각 문자를 저장하기 위해 내부적으로 UTF-16을 사용하며, 바이너리 문자셋을 제외한 모든 문자열을 저장하는 데 사용된다. CUBRIDBinaryString은 바이트 배열을 사용하며 바이너리 문자셋의  문자열 값을 저장하는 데 사용된다.
-서버에서 수신된 각 문자열 값의 데이터 버퍼에는 서버에서 수신된 값의 문자셋이 포함된다. 이 문자셋은 컬럼의 문자셋,  표현식 결과의 문자셋, 시스템 문자셋(문자셋이 표현되지 않은 경우) 중 하나이다</p>
+서버에서 수신된 각 문자열 값의 데이터 버퍼에는 서버에서 수신된 값의 문자셋이 포함된다. 이 문자셋은 칼럼의 문자셋,  표현식 결과의 문자셋, 시스템 문자셋(문자셋이 표현되지 않은 경우) 중 하나이다</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>이전 버전에서는 JDBC 문자열 객체를 인스턴스화하는 데 연결URL의 문자셋이 사용되었다.</p>
 </div>
-<p>UTF-8 문자셋을 갖는 컬럼 한 개와 바이너리 문자셋을 갖는 다른 컬럼이 포함된 테이블 생성:</p>
+<p>UTF-8 문자셋을 갖는 칼럼 한 개와 바이너리 문자셋을 갖는 다른 칼럼이 포함된 테이블 생성:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">col1</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">CHARSET</span><span class="w"> </span><span class="n">utf8</span><span class="p">,</span><span class="w"> </span><span class="n">col2</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">CHARSET</span><span class="w"> </span><span class="nb">binary</span><span class="p">);</span>
 </span></code></pre></div>
 </div>
-<p>한 레코드 입력 (두번째 컬럼은 랜덤 값):</p>
+<p>한 레코드 입력 (두번째 칼럼은 랜덤 값):</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getConn</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
 </span><span id="line-2"><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="s">"insert into t1 values( ?, ? )"</span><span class="p">);</span>
 </span><span id="line-3"><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[]</span><span class="p">{(</span><span class="kt">byte</span><span class="p">)</span><span class="mi">161</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">byte</span><span class="p">)</span><span class="mi">224</span><span class="p">};</span>
@@ -1971,7 +1971,7 @@
 </section>
 <section id="id49">
 <h3>타임존 라이브러리 및 데이터베이스 호환성<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id49" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id49'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>CUBRID에서 빌드된 타임존 라이브러리에는 타임존 데이터의 MD5 체크섬이 포함된다. 이 해시는 해당 라이브러리에서 생성된 모든 데이터베이스의 <strong>db_root</strong> 시스템 테이블의 <strong>timezone_checksum</strong> 컬럼에 저장된다. 타임존 라이브러리가 변경되고(새로운 타임존 데이터로 다시 컴파일됨) 체크섬이 변경되면 기존 데이터베이스로 CUBRID 서버와 그 밖의 모든 CUBRID 도구를 시작할 수 없다.
+<p>CUBRID에서 빌드된 타임존 라이브러리에는 타임존 데이터의 MD5 체크섬이 포함된다. 이 해시는 해당 라이브러리에서 생성된 모든 데이터베이스의 <strong>db_root</strong> 시스템 테이블의 <strong>timezone_checksum</strong> 칼럼에 저장된다. 타임존 라이브러리가 변경되고(새로운 타임존 데이터로 다시 컴파일됨) 체크섬이 변경되면 기존 데이터베이스로 CUBRID 서버와 그 밖의 모든 CUBRID 도구를 시작할 수 없다.
 이러한 호환성 문제를 방지하는 방법 중 하나는 <strong>make_tz</strong> 도구의 <strong>extend</strong> 인자를 사용하는 것이다. extend 옵션을 사용하면 데이터베이스의 <strong>timezone_checksum</strong> 값도 새로운 타임존 라이브러리의 새로운 MD5 체크섬으로 변경된다.
 IANA 사이트에서 다른 타임존 라이브러리 버전을 사용하려는 경우 extend 기능을 사용해야 한다. 이 기능이 수행하는 두 가지 작업은 다음과 같다.</p>
 <ul class="simple">
@@ -2439,7 +2439,7 @@ Rule 2는, 30부터 39(10진수)까지의 코드포인트와 증가하는 가중
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

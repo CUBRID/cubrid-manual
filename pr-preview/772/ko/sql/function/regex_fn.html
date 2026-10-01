@@ -277,7 +277,7 @@
 <p>1. Henry Spencer의 정규식 구현은 바이트 방식으로 작동한다. 따라서 REGEXP 및 RLIKE는 멀티바이트를 지원하지 않았다.
 따라서 인자의 콜레이션을 고려하지 않고 ASCII 인코딩으로만 작동했다.</p>
 <p>2. Henry Spencer 라이브러리는 POSIX의 <em>collating sequence</em> (<em>[.character.]</em>) 표현식을 지원했지만 더 이상 지원하지 않는다.
-또한 <em>character equivalents</em> (<em>[=word=]</em>) 문법도 지원하지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 에러를 반환한다.</p>
+또한 <em>character equivalents</em> (<em>[=word=]</em>) 문법도 지원하지 않는다. 이러한 문법을 가진 표현식이 주어지면 CUBRID는 오류를 반환한다.</p>
 <p>3. Henry Spencer 라이브러리는 점 연산자 (.)로 행 종결자를 매치한다. 그러나 C++ &lt;regex&gt;는 매치되지 않는다.</p>
 <p>4. 단어-시작 경계 와 단어-끝 경계 (각각 [[:&lt;:]] 와 [[:&gt;:]]) 문법을 지원하지 않는다. 대신, 단어 경계 표기 (\b) 를 사용할 수 있다.</p>
 </div>
@@ -1224,8 +1224,8 @@ C++ &lt;regex&gt;는 하위 호환성을 지원하기 위해 남겨두었으며 
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
 <li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
-<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
 </ul>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
@@ -1296,10 +1296,10 @@ C++ &lt;regex&gt;는 하위 호환성을 지원하기 위해 남겨두었으며 
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
 <li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
-<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>return_option</strong> – 일치하는 문자열의 시작 또는 끝 지점 중 어떤 위치를 반환할지 여부를 지정한다. 만약 값이 0이면 일치하는 문자의 시작 위치를 반환한다. 값이 1이면 일치하는 문자의 끝 위치를 반환한다. 값을 생략하면 기본값 0이 적용된다. 값이 0 또는 1이 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이면 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>return_option</strong> – 일치하는 문자열의 시작 또는 끝 지점 중 어떤 위치를 반환할지 여부를 지정한다. 만약 값이 0이면 일치하는 문자의 시작 위치를 반환한다. 값이 1이면 일치하는 문자의 끝 위치를 반환한다. 값을 생략하면 기본값 0이 적용된다. 값이 0 또는 1이 아닌 경우 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
 </ul>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
@@ -1364,7 +1364,7 @@ C++ &lt;regex&gt;는 하위 호환성을 지원하기 위해 남겨두었으며 
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
 <li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
 </ul>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
@@ -1424,9 +1424,9 @@ C++ &lt;regex&gt;는 하위 호환성을 지원하기 위해 남겨두었으며 
 <li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
 <li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
 <li><p><strong>replacement_string</strong> – <em>pattern_string*과 일치하는 문자열을 대체할 문자열을 지정한다. 값이 **NULL*</em>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
-<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 만약 값을 생략하면 기본값 0이 적용된다. 값이 음수이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 1을 적용한다. 만약 값을 생략하면 기본값 0이 적용된다. 값이 음수이면 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다.  값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
 </ul>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
@@ -1498,9 +1498,9 @@ C++ &lt;regex&gt;는 하위 호환성을 지원하기 위해 남겨두었으며 
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>string</strong> – 입력 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
 <li><p><strong>pattern_string</strong> – 매칭을 수행할 정규식 패턴 문자열을 지정한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
-<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 0을 적용한다. 이 의미는 발생하는 모든 매칭을 사용한다는 의미이다. 값이 음수이면 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
-<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다. 값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 에러를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>position</strong> – 매칭을 수행할 <em>string</em>의 위치를 지정한다. 값을 생략하면 기본값 1이 적용된다. 값이 음수이거나 0이면 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다</p></li>
+<li><p><strong>occurrence</strong> – 몇 번째 매칭을 사용할 지 지정한다. 값을 생략하면 기본값 0을 적용한다. 이 의미는 발생하는 모든 매칭을 사용한다는 의미이다. 값이 음수이면 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
+<li><p><strong>match_type</strong> – 함수의 매칭 옵션을 설정할 문자열을 지정한다. 값을 생략하면 기본값 ‘i’가 적용된다. 값이 ‘c’ 또는 ‘i’가 아닌 경우 오류를 반환한다. 값이 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다.</p></li>
 </ul>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
@@ -1603,7 +1603,7 @@ C++ &lt;regex&gt;는 하위 호환성을 지원하기 위해 남겨두었으며 
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

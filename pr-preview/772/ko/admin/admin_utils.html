@@ -577,7 +577,7 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-addvoldb-n">
 <span id="cmdoption-addvoldb-volume-name"></span><span class="sig-name descname"><span class="pre">-n</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--volume-name</span></span><span class="sig-prename descclassname"><span class="pre">=NAME</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-addvoldb-n" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-addvoldb-n'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>지정된 데이터베이스에 대하여 추가될 볼륨의 이름을 지정하는 옵션이다. 볼륨명은 운영체제의 파일 이름 규약을 따라야 하고, 디렉터리 경로나 공백을 포함하지 않는 단순한 이름이어야 한다.
+<dd><p>지정된 데이터베이스에 대하여 추가될 볼륨의 이름을 지정하는 옵션이다. 볼륨명은 운영 체제의 파일 이름 규약을 따라야 하고, 디렉터리 경로나 공백을 포함하지 않는 단순한 이름이어야 한다.
 <strong>-n</strong> 옵션을 생략하면 추가되는 볼륨의 이름은 시스템에 의해 “데이터베이스 이름_볼륨 식별자”로 자동 부여된다. 예를 들어, 데이터베이스 이름이 <em>testdb</em> 이면 자동 부여된 볼륨명은 <em>testdb_x001</em> 이 된다.</p>
 <p>다음은 testdb라는 데이터베이스에 볼륨을 추가하는 예이며, 추가되는 볼륨명은 <em>testdb_v1</em> 이 된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">addvoldb</span> <span class="o">-</span><span class="n">n</span> <span class="n">testdb_v1</span>  <span class="n">testdb</span>
@@ -648,7 +648,7 @@
 </section>
 <section id="deletedb">
 <span id="deleting-database"></span><span id="id4"></span><h2>deletedb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#deletedb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#deletedb'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p><strong>cubrid deletedb</strong> 는 데이터베이스를 삭제하는 유틸리티이다. 데이터베이스가 몇 개의 상호 의존적 파일들로 만들어지기 때문에, 데이터베이스를 제거하기 위해 운영체제 파일 삭제 명령이 아닌 <strong>cubrid deletedb</strong> 유틸리티를 사용해야 한다.</p>
+<p><strong>cubrid deletedb</strong> 는 데이터베이스를 삭제하는 유틸리티이다. 데이터베이스가 몇 개의 상호 의존적 파일들로 만들어지기 때문에, 데이터베이스를 제거하기 위해 운영 체제 파일 삭제 명령이 아닌 <strong>cubrid deletedb</strong> 유틸리티를 사용해야 한다.</p>
 <p><strong>cubrid deletedb</strong> 유틸리티는 데이터베이스 위치 파일( <strong>databases.txt</strong> )에 지정된 데이터베이스에 대한 정보도 같이 삭제한다. <strong>cubrid deletedb</strong> 유틸리티는 오프라인 상에서 즉, 아무도 데이터베이스를 사용하지 않는 상태에서 독립 모드로 사용해야 한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">deletedb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
 </span></code></pre></div>
@@ -802,7 +802,7 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-copydb-F">
 <span id="cmdoption-copydb-file-path"></span><span class="sig-name descname"><span class="pre">-F</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--file-path</span></span><span class="sig-prename descclassname"><span class="pre">=PATH</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-copydb-F" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-copydb-F'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 <strong>databases.txt</strong> 의 <strong>vol-path</strong> 항목에 등록된다.</p>
+<dd><p>새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 오류를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 <strong>databases.txt</strong> 의 <strong>vol-path</strong> 항목에 등록된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">copydb</span> <span class="o">-</span><span class="n">F</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">CUBRID</span><span class="o">/</span><span class="n">databases</span> <span class="n">demodb</span> <span class="n">new_demodb</span>
 </span></code></pre></div>
 </div>
@@ -810,7 +810,7 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-copydb-L">
 <span id="cmdoption-copydb-log-path"></span><span class="sig-name descname"><span class="pre">-L</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--log-path</span></span><span class="sig-prename descclassname"><span class="pre">=PATH</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-copydb-L" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-copydb-L'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>새로운 데이터베이스 로그 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로에 로그 볼륨도 함께 생성된다. 이 경로는 <strong>databases.txt</strong> 의 <strong>log-path</strong> 항목에 등록된다.</p>
+<dd><p>새로운 데이터베이스 로그 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 오류를 출력한다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로에 로그 볼륨도 함께 생성된다. 이 경로는 <strong>databases.txt</strong> 의 <strong>log-path</strong> 항목에 등록된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">copydb</span> <span class="o">-</span><span class="n">L</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">CUBRID</span><span class="o">/</span><span class="n">databases</span><span class="o">/</span><span class="n">logs</span> <span class="n">demodb</span> <span class="n">new_demodb</span>
 </span></code></pre></div>
 </div>
@@ -847,7 +847,7 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-copydb-r">
 <span id="cmdoption-copydb-replace"></span><span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--replace</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-copydb-r" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-copydb-r'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>새로운 데이터베이스 이름이 기존 데이터베이스 이름과 중복되더라도 에러를 출력하지 않고 덮어쓴다.</p>
+<dd><p>새로운 데이터베이스 이름이 기존 데이터베이스 이름과 중복되더라도 오류를 출력하지 않고 덮어쓴다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">copydb</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">F</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">CUBRID</span><span class="o">/</span><span class="n">databases</span> <span class="n">demodb</span> <span class="n">new_demodb</span>
 </span></code></pre></div>
 </div>
@@ -863,7 +863,7 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-copydb-copy-lob-path">
 <span class="sig-name descname"><span class="pre">--copy-lob-path</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-copydb-copy-lob-path" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-copydb-copy-lob-path'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>이 옵션은 대상 데이터베이스의 LOB 디렉토리의 위치를 원본 데이터베이스의 LOB 디렉토리의 위치와 동일하게 설정한다. 이 옵션을 생략하면 기본 위치는 &lt;대상 데이터베이스 디렉토리&gt;/lob 이다. 이 옵션은 LOB 파일들을 복사하는 기능은 아니며, -B 옵션과 병행할 수 없다.</p>
+<dd><p>이 옵션은 대상 데이터베이스의 LOB 디렉터리의 위치를 원본 데이터베이스의 LOB 디렉터리의 위치와 동일하게 설정한다. 이 옵션을 생략하면 기본 위치는 &lt;대상 데이터베이스 디렉터리&gt;/lob 이다. 이 옵션은 LOB 파일들을 복사하는 기능은 아니며, -B 옵션과 병행할 수 없다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">copydb</span> <span class="o">--</span><span class="n">copy</span><span class="o">-</span><span class="n">lob</span><span class="o">-</span><span class="n">path</span> <span class="n">demodb</span> <span class="n">new_demodb</span>
 </span></code></pre></div>
 </div>
@@ -922,7 +922,7 @@
 </section>
 <section id="backupdb">
 <span id="id9"></span><h2>backupdb<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#backupdb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#backupdb'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>데이터베이스 백업은 CUBRID 데이터베이스 볼륨, 제어 파일, 로그 파일을 저장하는 작업으로 <strong>cubrid backupdb</strong> 유틸리티 또는 CUBRID 매니저를 이용하여 수행된다. <strong>DBA</strong> 는 저장 매체의 오류 또는 파일 오류 등의 장애에 대비하여 데이터베이스를 정상적으로 복구할 수 있도록 주기적으로 데이터베이스를 백업해야 한다. 이 때 복구 환경은 백업 환경과 동일한 운영체제 및 동일한 버전의 CUBRID가 설치된 환경이어야 한다. 이러한 이유로 데이터베이스를 새로운 버전으로 마이그레이션한 후에는 즉시 새로운 버전의 환경에서 백업을 수행해야 한다. 다만, CUBRID에서 사용하는 LOB(Large Object) 데이터는 데이터베이스 볼륨과 별도의 파일로 관리되므로, backupdb 유틸리티에 의해 자동으로 백업되지 않는다. 따라서 DBA는 데이터베이스 백업 시 LOB 파일이 저장된 디렉터리를 별도로 백업하여야 하며, 복구 시에도 데이터베이스 복구와 함께 해당 LOB 파일을 원래 위치에 복원해야 한다.</p>
+<p>데이터베이스 백업은 CUBRID 데이터베이스 볼륨, 제어 파일, 로그 파일을 저장하는 작업으로 <strong>cubrid backupdb</strong> 유틸리티 또는 CUBRID 매니저를 이용하여 수행된다. <strong>DBA</strong> 는 저장 매체의 오류 또는 파일 오류 등의 장애에 대비하여 데이터베이스를 정상적으로 복구할 수 있도록 주기적으로 데이터베이스를 백업해야 한다. 이 때 복구 환경은 백업 환경과 동일한 운영 체제 및 동일한 버전의 CUBRID가 설치된 환경이어야 한다. 이러한 이유로 데이터베이스를 새로운 버전으로 마이그레이션한 후에는 즉시 새로운 버전의 환경에서 백업을 수행해야 한다. 다만, CUBRID에서 사용하는 LOB(Large Object) 데이터는 데이터베이스 볼륨과 별도의 파일로 관리되므로, backupdb 유틸리티에 의해 자동으로 백업되지 않는다. 따라서 DBA는 데이터베이스 백업 시 LOB 파일이 저장된 디렉터리를 별도로 백업하여야 하며, 복구 시에도 데이터베이스 복구와 함께 해당 LOB 파일을 원래 위치에 복원해야 한다.</p>
 <p><strong>cubrid backupdb</strong> 유틸리티는 모든 데이터베이스 페이지들, 제어 파일들, 데이터베이스를 백업 시와 일치된 상태로 복구하기 위해 필요한 로그 레코드들을 복사한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span><span class="p">[</span><span class="nd">@hostname</span><span class="p">]</span>
 </span></code></pre></div>
@@ -1145,7 +1145,7 @@
 </section>
 <section id="managing-archive-logs">
 <span id="id12"></span><h3>보관 로그 관리<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#managing-archive-logs" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#managing-archive-logs'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>운영체제의 파일 삭제 명령(rm, del)을 사용하여 보관 로그(archive log)를 임의로 삭제해서는 안 되며, 시스템의 설정, <strong>cubrid backupdb</strong> 유틸리티 또는 서버 프로세스에 의해 보관 로그가 삭제되어야 한다. 보관 로그가 삭제될 수 있는 경우는 다음의 3가지이다.</p>
+<p>운영 체제의 파일 삭제 명령(rm, del)을 사용하여 보관 로그(archive log)를 임의로 삭제해서는 안 되며, 시스템의 설정, <strong>cubrid backupdb</strong> 유틸리티 또는 서버 프로세스에 의해 보관 로그가 삭제되어야 한다. 보관 로그가 삭제될 수 있는 경우는 다음의 3가지이다.</p>
 <ul>
 <li><p>HA 환경이 아닌 경우(ha_mode=off)</p>
 <p><strong>force_remove_log_archives</strong>  를 yes(기본값)로 설정하면, 최대 <strong>log_max_archives</strong> 개수만큼만 보관 로그가 유지되고 나머지는 자동으로 삭제된다. 단, 가장 오래된 보관 로그 파일에 액티브한 트랜잭션이 있다면 이 트랜잭션이 종료될 때까지 해당 로그 파일이 삭제되지 않는다.</p>
@@ -1305,7 +1305,7 @@
 </span></code></pre></div>
 </div>
 </dd></dl>
-<p>데이터베이스 서버 시작이나 백업 볼륨 복구 시 서버 에러 로그 또는 restoredb 에러 로그 파일에 로그 회복(log recovery) 시작 시간과 종료 시간에 대한 NOTIFICATION 메시지를 출력하여, 해당 작업의 소요 시간을 확인할 수 있다. 해당 메시지에는 적용(redo)해야할 로그의 개수와 로그 페이지 개수가 함께 기록된다.</p>
+<p>데이터베이스 서버 시작이나 백업 볼륨 복구 시 서버 오류 로그 또는 restoredb 오류 로그 파일에 로그 회복(log recovery) 시작 시간과 종료 시간에 대한 NOTIFICATION 메시지를 출력하여, 해당 작업의 소요 시간을 확인할 수 있다. 해당 메시지에는 적용(redo)해야할 로그의 개수와 로그 페이지 개수가 함께 기록된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">14</span><span class="o">/</span><span class="mi">13</span> <span class="mi">21</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="mf">04.059</span> <span class="o">-</span> <span class="n">NOTIFICATION</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">log_recovery</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">748</span> <span class="n">CODE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1128</span> <span class="n">Tran</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">EID</span> <span class="o">=</span> <span class="mi">1</span>
 </span><span id="line-2"><span class="n">Log</span> <span class="n">recovery</span> <span class="ow">is</span> <span class="n">started</span><span class="o">.</span> <span class="n">The</span> <span class="n">number</span> <span class="n">of</span> <span class="n">log</span> <span class="n">records</span> <span class="n">to</span> <span class="n">be</span> <span class="n">applied</span><span class="p">:</span> <span class="mf">96916.</span> <span class="n">Log</span> <span class="n">page</span><span class="p">:</span> <span class="mi">343</span> <span class="o">~</span> <span class="mf">5104.</span>
 </span><span id="line-3"><span class="o">.....</span>
@@ -1563,7 +1563,7 @@ demodb</p></td>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">O</span> <span class="o">./</span><span class="n">CUBRID</span><span class="o">/</span><span class="n">Databases</span><span class="o">/</span><span class="n">demodb</span> <span class="n">demodb</span>
 </span></code></pre></div>
 </div>
-<p>지정된 디렉터리가 존재하지 않는 경우 다음과 같은 에러 메시지가 출력된다.</p>
+<p>지정된 디렉터리가 존재하지 않는 경우 다음과 같은 오류 메시지가 출력된다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">unloaddb</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
@@ -1605,9 +1605,9 @@ demodb</p></td>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-unloaddb-t">
 <span id="cmdoption-unloaddb-thread-count"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--thread-count</span></span><span class="sig-prename descclassname"><span class="pre">=COUNT</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-unloaddb-t" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-unloaddb-t'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>사용할 쓰레드 개수를 지정하는 옵션으로, COUNT 개수 만큼의 쓰레드를 이용해서 병렬로 수행하도록 하며 COUNT는 0 이상, 127 이하의 범위여야 한다.
-설정을 생략하면 1로 지정한 것과 같고, 만약 0으로 지정되면 쓰레드 방식으로 동작하지 않는다.
-쓰레드 방식을 지정하더라도 테이블에 Object 타입 또는, Object 타입을 내재하는 Set, MultiSet, Sequence(List) 타입이 있는 경우에는 해당 테이블에 대해서는 쓰레드 방식으로 동작하지 않는다.</p>
+<dd><p>사용할 스레드 개수를 지정하는 옵션으로, COUNT 개수 만큼의 스레드를 이용해서 병렬로 수행하도록 하며 COUNT는 0 이상, 127 이하의 범위여야 한다.
+설정을 생략하면 1로 지정한 것과 같고, 만약 0으로 지정되면 스레드 방식으로 동작하지 않는다.
+스레드 방식을 지정하더라도 테이블에 Object 타입 또는, Object 타입을 내재하는 Set, MultiSet, Sequence(List) 타입이 있는 경우에는 해당 테이블에 대해서는 스레드 방식으로 동작하지 않는다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">unloaddb</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="n">demodb</span>
 </span></code></pre></div>
 </div>
@@ -1842,7 +1842,7 @@ demodb</p></td>
 <dt class="sig sig-object std" id="cmdoption-loaddb-l">
 <span id="cmdoption-loaddb-load-only"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--load-only</span></span><span class="sig-prename descclassname"></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-l" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-l'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p><strong>Stand-alone</strong> 모드는 기본적으로 데이터베이스에 로드하기 전에 전체 데이터에 대해 사전 구문 검사가 실행된다. 오류가 발생하면 데이터의 로드는 실행되지 않고 오류가 보고된다.</p>
-<p><strong>-l</strong> 옵션을 이용하면 로드 전에 전체 데이타에 대해 사전 구문 검사 실행이 생략되어 속도가 빠르다. 그러나, 각 레코드를 데이터베이스에 로드하기 전에 구문 검사가 진행된다. 이 과정에서 구문 오류가 발생하는 경우 로드는 중지되며, 결과적으로 데이터의 일부분만 로드되는 경우가 발생할 수도 있다.</p>
+<p><strong>-l</strong> 옵션을 이용하면 로드 전에 전체 데이터에 대해 사전 구문 검사 실행이 생략되어 속도가 빠르다. 그러나, 각 레코드를 데이터베이스에 로드하기 전에 구문 검사가 진행된다. 이 과정에서 구문 오류가 발생하는 경우 로드는 중지되며, 결과적으로 데이터의 일부분만 로드되는 경우가 발생할 수도 있다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">-</span><span class="n">l</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
 </span></code></pre></div>
 </div>
@@ -1935,12 +1935,12 @@ demodb</p></td>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-loaddb-error-control-file">
 <span class="sig-name descname"><span class="pre">--error-control-file</span></span><span class="sig-prename descclassname"><span class="pre">=FILE</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-loaddb-error-control-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-loaddb-error-control-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>데이터베이스 로드 작업 중에 발생하는 에러 중 특정 에러를 처리하는 방식에 관해 명세한 파일을 지정하는 옵션이다.</p>
+<dd><p>데이터베이스 로드 작업 중에 발생하는 오류 중 특정 오류를 처리하는 방식에 관해 명세한 파일을 지정하는 옵션이다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">loaddb</span> <span class="o">--</span><span class="n">error</span><span class="o">-</span><span class="n">control</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">error_test</span> <span class="o">-</span><span class="n">d</span> <span class="n">demodb_objects</span> <span class="n">newdb</span>
 </span></code></pre></div>
 </div>
-<p>서버 에러 코드 이름은 <strong>$CUBRID/include/dbi.h</strong> 파일을 참고하도록 한다.</p>
-<p>에러 코드(에러 번호) 별 에러 메시지는 <strong>$CUBRID/msg/</strong><em>&lt;문자셋 이름&gt;</em><strong>/cubrid.msg</strong> 파일의 $set 5 MSGCAT_SET_ERROR 이하에 있는 번호들을 참고하도록 한다.</p>
+<p>서버 오류 코드 이름은 <strong>$CUBRID/include/dbi.h</strong> 파일을 참고하도록 한다.</p>
+<p>오류 코드(오류 번호) 별 오류 메시지는 <strong>$CUBRID/msg/</strong><em>&lt;문자셋 이름&gt;</em><strong>/cubrid.msg</strong> 파일의 $set 5 MSGCAT_SET_ERROR 이하에 있는 번호들을 참고하도록 한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">vi $CUBRID/msg/en_US/cubrid.msg
 </span><span id="line-2">
 </span><span id="line-3">$set 5 MSGCAT_SET_ERROR
@@ -1953,19 +1953,19 @@ demodb</p></td>
 </span><span id="line-10">...
 </span></code></pre></div>
 </div>
-<p>특정 에러 명세 파일의 형식은 다음과 같다.</p>
+<p>특정 오류 명세 파일의 형식은 다음과 같다.</p>
 <ul class="simple">
-<li><p>-&lt;에러 코드&gt; : &lt;에러 코드&gt;에 해당하는 에러를 무시하도록 설정 (<strong>loaddb</strong> 수행 중 해당 에러가 발생해도 계속 수행)</p></li>
-<li><p>+&lt;에러 코드&gt; : &lt;에러 코드&gt;에 해당하는 에러를 무시하지 않도록 설정 (<strong>loaddb</strong> 수행 중 해당 에러가 발생하면 작업을 종료함)</p></li>
-<li><p>+DEFAULT : 24번부터 33번까지의 에러를 무시하지 않도록 설정</p></li>
+<li><p>-&lt;오류 코드&gt; : &lt;오류 코드&gt;에 해당하는 오류를 무시하도록 설정 (<strong>loaddb</strong> 수행 중 해당 오류가 발생해도 계속 수행)</p></li>
+<li><p>+&lt;오류 코드&gt; : &lt;오류 코드&gt;에 해당하는 오류를 무시하지 않도록 설정 (<strong>loaddb</strong> 수행 중 해당 오류가 발생하면 작업을 종료함)</p></li>
+<li><p>+DEFAULT : 24번부터 33번까지의 오류를 무시하지 않도록 설정</p></li>
 </ul>
-<p><strong>--error-control-file</strong> 옵션으로 에러 명세 파일을 설정하지 않을 경우, <strong>loaddb</strong> 유틸리티는 기본적으로 24번부터 33번까지의 에러를 무시하도록 설정되어 있다. 이들은 데이터베이스 볼륨의 여유 공간이 얼마 남지 않았다는 경고성 에러로서, 이후 할당된 데이터베이스 볼륨의 여유 공간이 없어지면 자동으로 범용 볼륨(generic volume)을 생성하게 된다.</p>
-<p>다음은 에러 명세 파일을 작성한 예이다.</p>
+<p><strong>--error-control-file</strong> 옵션으로 오류 명세 파일을 설정하지 않을 경우, <strong>loaddb</strong> 유틸리티는 기본적으로 24번부터 33번까지의 오류를 무시하도록 설정되어 있다. 이들은 데이터베이스 볼륨의 여유 공간이 얼마 남지 않았다는 경고성 오류로서, 이후 할당된 데이터베이스 볼륨의 여유 공간이 없어지면 자동으로 범용 볼륨(generic volume)을 생성하게 된다.</p>
+<p>다음은 오류 명세 파일을 작성한 예이다.</p>
 <ul>
-<li><p>+DEFAULT를 설정하여, 24번부터 33번까지의 DB 볼륨 여유 공간 경고성 에러는 무시되지 않는다.</p></li>
-<li><p>앞에서 -2를 설정했으나, 뒤에서 +2를 설정했기 때문에 2번 에러 코드는 무시되지 않는다.</p></li>
-<li><p>-670을 설정하여, 670번 에러인 고유성 위반 에러(unique violation error)는 무시된다.</p></li>
-<li><p>#-115는 앞에 #이 있어 커멘트 처리되었다.</p>
+<li><p>+DEFAULT를 설정하여, 24번부터 33번까지의 DB 볼륨 여유 공간 경고성 오류는 무시되지 않는다.</p></li>
+<li><p>앞에서 -2를 설정했으나, 뒤에서 +2를 설정했기 때문에 2번 오류 코드는 무시되지 않는다.</p></li>
+<li><p>-670을 설정하여, 670번 오류인 고유성 위반 오류(unique violation error)는 무시된다.</p></li>
+<li><p>#-115는 앞에 #이 있어 주석 처리되었다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">vi</span> <span class="n">error_file</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="o">+</span><span class="n">DEFAULT</span>
@@ -2550,7 +2550,7 @@ demodb</p></td>
 </dd>
 </dl>
 </li>
-<li><p>fix_count : 동시 사용하는 쓰레드 수</p></li>
+<li><p>fix_count : 동시 사용하는 스레드 수</p></li>
 <li><dl class="simple">
 <dt>cache flags<span class="classifier">캐시된 실행 계획의 상태정보</span></dt><dd><ul>
 <li><p>8000000 : mark_deleted</p></li>
@@ -2592,7 +2592,7 @@ demodb</p></td>
 </section>
 <section id="statdump">
 <span id="id27"></span><h2>statdump<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#statdump" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#statdump'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p><strong>cubrid statdump</strong> 유틸리티를 이용해 CUBRID 데이터베이스 서버가 실행한 통계 정보를 확인할 수 있으며, 통계 정보 항목은 크게 File I/O 관련, 페이지 버퍼 관련, 로그 관련, 트랜잭션 관련, 동시성 관련, 인덱스 관련, 쿼리 수행 관련, 네트워크 요청 관련으로 구분된다.</p>
+<p><strong>cubrid statdump</strong> 유틸리티를 이용해 CUBRID 데이터베이스 서버가 실행한 통계 정보를 확인할 수 있으며, 통계 정보 항목은 크게 File I/O 관련, 페이지 버퍼 관련, 로그 관련, 트랜잭션 관련, 동시성 관련, 인덱스 관련, 질의 수행 관련, 네트워크 요청 관련으로 구분된다.</p>
 <p>CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 세션 명령어를 이용할 수 있으며 <a class="reference internal" href="../csql.html#csql-execution-statistics"><span class="std std-ref">CSQL 실행 통계 정보 출력</span></a> 를 참고한다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">statdump</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">database_name</span>
 </span></code></pre></div>
@@ -3783,7 +3783,7 @@ demodb</p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>쿼리</strong></p>
+<p><strong>질의</strong></p>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><strong>항목</strong></p></td>
@@ -3792,19 +3792,19 @@ demodb</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_query_selects</p></td>
 <td><p>Accumulator</p></td>
-<td><p>SELECT 쿼리의 수행 횟수</p></td>
+<td><p>SELECT 질의의 수행 횟수</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_query_inserts</p></td>
 <td><p>Accumulator</p></td>
-<td><p>INSERT 쿼리의 수행 횟수</p></td>
+<td><p>INSERT 질의의 수행 횟수</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_query_deletes</p></td>
 <td><p>Accumulator</p></td>
-<td><p>DELETE 쿼리의 수행 횟수</p></td>
+<td><p>DELETE 질의의 수행 횟수</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_query_updates</p></td>
 <td><p>Accumulator</p></td>
-<td><p>UPDATE 쿼리의 수행 횟수</p></td>
+<td><p>UPDATE 질의의 수행 횟수</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_query_sscans</p></td>
 <td><p>Accumulator</p></td>
@@ -4116,11 +4116,11 @@ demodb</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_plan_cache_add</p></td>
 <td><p>Accumulator</p></td>
-<td><p>쿼리 캐시 엔트리가 새로 추가된 횟수</p></td>
+<td><p>질의 캐시 엔트리가 새로 추가된 횟수</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_plan_cache_lookup</p></td>
 <td><p>Accumulator</p></td>
-<td><p>특정 키를 사용하여 쿼리 캐시 룩업(Lookup)을 시도한 횟수</p></td>
+<td><p>특정 키를 사용하여 질의 캐시 룩업(Lookup)을 시도한 횟수</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_plan_cache_hit</p></td>
 <td><p>Accumulator</p></td>
@@ -4143,13 +4143,13 @@ demodb</p></td>
 <td><div class="line-block">
 <div class="line">xasl_id 해시 테이블에서 엔트리를 찾지 못한(miss) 횟수.</div>
 <div class="line">서버에서 특정 엔트리가 제거(victimized)되었는데, 해당 엔트리를</div>
-<div class="line">클라이언트에서 요청했을 때 발생하는 에러 횟수</div>
+<div class="line">클라이언트에서 요청했을 때 발생하는 오류 횟수</div>
 </div>
 </td>
 </tr>
 <tr class="row-odd"><td><p>Num_plan_cache_entries</p></td>
 <td><p>Snapshot</p></td>
-<td><p>쿼리 캐시 엔트리의 현재 개수</p></td>
+<td><p>질의 캐시 엔트리의 현재 개수</p></td>
 </tr>
 </tbody>
 </table>
@@ -4341,7 +4341,7 @@ demodb</p></td>
 <tr class="row-even"><td><p>Time_data_page_lock_acquire_time</p></td>
 <td><p>Complex</p></td>
 <td><div class="line-block">
-<div class="line">데이터 페이지를 로드 할 때까지 다른 쓰레드를 기다리는 시간</div>
+<div class="line">데이터 페이지를 로드 할 때까지 다른 스레드를 기다리는 시간</div>
 <div class="line">- 모듈 (system, worker, vacuum)</div>
 <div class="line">- 페이지 타입</div>
 <div class="line">- 페이지 페치/탐색 모드</div>
@@ -4469,7 +4469,7 @@ demodb</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
 <div class="line">새로 로드된 데이터 페이지를 고정하지 않고 전용 LRU 목록 중간에</div>
-<div class="line">추가한 수 (vacuum 쓰레드)</div>
+<div class="line">추가한 수 (vacuum 스레드)</div>
 </div>
 </td>
 </tr>
@@ -4477,7 +4477,7 @@ demodb</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
 <div class="line">새로 로드된 데이터 페이지를 고정하지 않고  전용/공유 LRU 영역 1에</div>
-<div class="line">보관한 수 (vacuum 쓰레드)</div>
+<div class="line">보관한 수 (vacuum 스레드)</div>
 </div>
 </td>
 </tr>
@@ -4485,7 +4485,7 @@ demodb</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
 <div class="line">새로 로드된 데이터 페이지를 고정하지 않고 전용/공유 LRU 영역 2에</div>
-<div class="line">보관한 수 (vacuum 쓰레드)</div>
+<div class="line">보관한 수 (vacuum 스레드)</div>
 </div>
 </td>
 </tr>
@@ -4493,7 +4493,7 @@ demodb</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
 <div class="line">새로 로드된 데이터 페이지를 고정하지 않고 전용/공유 LRU 영역 3에</div>
-<div class="line">보관한 수 (vacuum 쓰레드)</div>
+<div class="line">보관한 수 (vacuum 스레드)</div>
 </div>
 </td>
 </tr>
@@ -4507,11 +4507,11 @@ demodb</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_unfix_void_aout_found_vacuum</p></td>
 <td><p>Accumulator</p></td>
-<td><p>새로 로드 된 데이터 페이지가 AOUT 에서 발견된 수(vacuum 쓰레드)</p></td>
+<td><p>새로 로드 된 데이터 페이지가 AOUT 에서 발견된 수(vacuum 스레드)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_unfix_void_aout_not_found_vacuum</p></td>
 <td><p>Accumulator</p></td>
-<td><p>새로 로드 된 데이터 페이지가 AOUT 에서 발견되지 않은 수(vacuum 쓰레드)</p></td>
+<td><p>새로 로드 된 데이터 페이지가 AOUT 에서 발견되지 않은 수(vacuum 스레드)</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_data_page_unfix_ext</p></td>
 <td><p>Complex</p></td>
@@ -4568,27 +4568,27 @@ demodb</p></td>
 </tr>
 <tr class="row-even"><td><p>..wake_flush_waiter</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>BCB를 기다리는 쓰레드를 깨우기 위한 횟수와 시간</p></td>
+<td><p>BCB를 기다리는 스레드를 깨우기 위한 횟수와 시간</p></td>
 </tr>
 <tr class="row-odd"><td><p>..flush_collect</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>BCB 세트를 수집하는 플러시 쓰레드의 수와 시간</p></td>
+<td><p>BCB 세트를 수집하는 플러시 스레드의 수와 시간</p></td>
 </tr>
 <tr class="row-even"><td><p>..flush_flush</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>BCB 세트를 플러싱하는 플러시 쓰레드의 수와 시간</p></td>
+<td><p>BCB 세트를 플러싱하는 플러시 스레드의 수와 시간</p></td>
 </tr>
 <tr class="row-odd"><td><p>..flush_sleep</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>플러시 쓰레드 일시 정지 수와 시간</p></td>
+<td><p>플러시 스레드 일시 정지 수와 시간</p></td>
 </tr>
 <tr class="row-even"><td><p>..flush_collect_per_page</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>한 개의 BCB 를 수집하는 플러시 쓰레드의 수와 시간</p></td>
+<td><p>한 개의 BCB 를 수집하는 플러시 스레드의 수와 시간</p></td>
 </tr>
 <tr class="row-odd"><td><p>..flush_flush_per_page</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>한 개의 BCB 를 플러싱하는 플러시 쓰레드의 수와 시간</p></td>
+<td><p>한 개의 BCB 를 플러싱하는 플러시 스레드의 수와 시간</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_data_page_writes</p></td>
 <td><p>Accumulator</p></td>
@@ -4596,17 +4596,17 @@ demodb</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_data_page_dirty_to_post_flush</p></td>
 <td><p>Accumulator</p></td>
-<td><p>포스트 플러시 쓰레드로 보내진 플러시 된 페이지 수</p></td>
+<td><p>포스트 플러시 스레드로 보내진 플러시 된 페이지 수</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_data_page_skipped_flush</p></td>
 <td><p>Accumulator</p></td>
-<td><p>플러시 쓰레드가 생략한 BCB의 총 수</p></td>
+<td><p>플러시 스레드가 생략한 BCB의 총 수</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_data_page_skipped_flush_need_wal</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
 <div class="line">로그 데이터 페이지를 먼저 플러시해야하기 때문에</div>
-<div class="line">플러시 쓰레드가 생략한 BCB 수</div>
+<div class="line">플러시 스레드가 생략한 BCB 수</div>
 </div>
 </td>
 </tr>
@@ -4617,7 +4617,7 @@ demodb</p></td>
 </td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
-<div class="line">이미 플러시 되어서 쓰레드가 생략한 BCB 수</div>
+<div class="line">이미 플러시 되어서 스레드가 생략한 BCB 수</div>
 <div class="line"><br/></div>
 </div>
 </td>
@@ -4626,7 +4626,7 @@ demodb</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
 <div class="line">BCB가 고정되었거나 수집 된 후 고정되었기 때문에</div>
-<div class="line">플러시 쓰레드가 생략한 BCB의 수</div>
+<div class="line">플러시 스레드가 생략한 BCB의 수</div>
 </div>
 </td>
 </tr>
@@ -4677,7 +4677,7 @@ demodb</p></td>
 <tr class="row-odd"><td><p>Num_flushed_bcbs_wait_for_direct_victim</p></td>
 <td><p>Snapshot</p></td>
 <td><div class="line-block">
-<div class="line">희생자를 처리하여 즉시 할당하는 post-flush 쓰레드를 기다리는 BCB의</div>
+<div class="line">희생자를 처리하여 즉시 할당하는 post-flush 스레드를 기다리는 BCB의</div>
 <div class="line">현재 수</div>
 </div>
 </td>
@@ -4715,15 +4715,15 @@ demodb</p></td>
 </tr>
 <tr class="row-odd"><td><p>Num_victim_assign_direct_flush</p></td>
 <td><p>Accumulator</p></td>
-<td><p>플러시 쓰레드가 지정한 직접적인 희생자 수</p></td>
+<td><p>플러시 스레드가 지정한 직접적인 희생자 수</p></td>
 </tr>
 <tr class="row-even"><td><p>Num_victim_assign_direct_panic</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
 <div class="line">패닉 LRU 검색에 의해 할당 된 직접적인 희생자의 수</div>
 <div class="line">희생자를 찾기 위한 대기자가 많으면 LRU 목록을 검색하는 동안 다른</div>
-<div class="line">희생자를 찾는 쓰레드가 직접 할당하려고 시도한다.</div>
-<div class="line">페이지 버퍼 유지 쓰레드 할당도 여기에  포함된다.</div>
+<div class="line">희생자를 찾는 스레드가 직접 할당하려고 시도한다.</div>
+<div class="line">페이지 버퍼 유지 스레드 할당도 여기에  포함된다.</div>
 </div>
 </td>
 </tr>
@@ -4734,7 +4734,7 @@ demodb</p></td>
 <tr class="row-even"><td><p>Num_victim_assign_direct_adjust_lru_to_vacuum</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
-<div class="line">vacuum 쓰레드가 액세스할 것으로 예상되어 LRU 영역 3으로 이동할 때</div>
+<div class="line">vacuum 스레드가 액세스할 것으로 예상되어 LRU 영역 3으로 이동할 때</div>
 <div class="line">직접적인 희생자로 할당되지 <strong>않은</strong> BCB의 수</div>
 </div>
 </td>
@@ -4742,7 +4742,7 @@ demodb</p></td>
 <tr class="row-odd"><td><p>Num_victim_assign_direct_search_for_flush</p></td>
 <td><p>Accumulator</p></td>
 <td><div class="line-block">
-<div class="line">플러시를 위해 BCB셋(Set)을 수집하는 동안 플러시 쓰레드에 의해 할당된</div>
+<div class="line">플러시를 위해 BCB셋(Set)을 수집하는 동안 플러시 스레드에 의해 할당된</div>
 <div class="line">직접적인 희생자 수</div>
 </div>
 </td>
@@ -4862,7 +4862,7 @@ demodb</p></td>
 </tr>
 <tr class="row-even"><td><p>..DWB_flush_block_cond_wait</p></td>
 <td><p>Counter/timer</p></td>
-<td><p>DWB 쓰레드들이 기다리는 횟수와 시간</p></td>
+<td><p>DWB 스레드들이 기다리는 횟수와 시간</p></td>
 </tr>
 <tr class="row-odd"><td><p>..DWB_flush_block_sort</p></td>
 <td><p>Counter/timer</p></td>
@@ -5145,7 +5145,7 @@ demodb</p></td>
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>아래는 활성화/비활성화 할 수 있는 성능 통계 세트 목록이다. 각 세트의 값은 2의 제곱으로 표현된다.  이 세트들은 <strong>extended_statistics_activation</strong> 시스템 매개 변수 값에 의해 활성화/비활성화되며, 이 변수 값은 2진수 형식으로 설정한다</p>
+<p>아래는 활성화/비활성화 할 수 있는 성능 통계 세트 목록이다. 각 세트의 값은 2의 제곱으로 표현된다.  이 세트들은 <strong>extended_statistics_activation</strong> 시스템 파라미터 값에 의해 활성화/비활성화되며, 이 변수 값은 2진수 형식으로 설정한다</p>
 <blockquote>
 <div><table class="docutils align-default">
 <thead>
@@ -5743,7 +5743,7 @@ demodb</p></td>
 <dt class="sig sig-object std" id="cmdoption-checkdb-I">
 <span id="cmdoption-checkdb-index-name"></span><span class="sig-name descname"><span class="pre">-I</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--index-name</span></span><span class="sig-prename descclassname"><span class="pre">=INDEX_NAME</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cmdoption-checkdb-I" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cmdoption-checkdb-I'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>검사 대상 테이블에 대해 해당 옵션으로 명시한 인덱스가 유효한지 검사한다. 이 옵션을 사용하면 힙 파일에 대한 유효 검사는 하지 않는다.
-이 옵션을 사용할 때는 하나의 테이블과 하나의 인덱스만을 허용하며, 테이블 이름을 입력하지 않거나 두 개 이상의 테이블 이름을 입력하면 에러를 반환한다.</p>
+이 옵션을 사용할 때는 하나의 테이블과 하나의 인덱스만을 허용하며, 테이블 이름을 입력하지 않거나 두 개 이상의 테이블 이름을 입력하면 오류를 반환한다.</p>
 </dd></dl>
 </section>
 <section id="diagdb">
@@ -6089,7 +6089,7 @@ demodb</p></td>
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p><strong>cubrid flashback</strong> 은 복합 데이터 타입인 SET, MULTISET, LIST, JSON을 지원하지 않는다. <strong>cubrid flashback</strong> 수행 시 대상 클래스가 미지원 데이터 타입을 컬럼으로 갖는 경우 해당 컬럼값은 null로 출력된다. 또한, LOB 타입의 컬럼은 데이터가 아닌 해당 파일의 위치 정보(LOB locator)만 출력된다.</p>
+<p><strong>cubrid flashback</strong> 은 복합 데이터 타입인 SET, MULTISET, LIST, JSON을 지원하지 않는다. <strong>cubrid flashback</strong> 수행 시 대상 클래스가 미지원 데이터 타입을 칼럼으로 갖는 경우 해당 칼럼값은 null로 출력된다. 또한, LOB 타입의 칼럼은 데이터가 아닌 해당 파일의 위치 정보(LOB locator)만 출력된다.</p>
 </div>
 <p>다음은 <strong>cubrid flashback</strong> 에서 사용하는 [options]이다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="o">-</span><span class="n">o</span><span class="p">,</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span>      <span class="n">출력</span> <span class="n">메시지를</span> <span class="n">FILE로</span> <span class="n">리디렉션합니다</span><span class="o">.</span>
@@ -6212,7 +6212,7 @@ demodb</p></td>
 </span><span id="line-8">        <span class="o">...</span>
 </span></code></pre></div>
 </div>
-<p><strong>cubrid memmon</strong> 유틸리티를 실행하면 데이터베이스 이름, 힙 메모리 총 사용량, 할당된 힙 메모리를 추적 관리하기 위해 서버 내부적으로 유지되는 메타 정보의 메모리 사용량이 출력된다. 세부 항목으로는 힙 메모리 할당이 발생한 모든 파일과 라인 별[파일:라인] 메모리 사용량과 점유율이 사용량 기준으로 정렬되어 출력된다. 시스템 파라미터 <strong>enable_memory_monitoring</strong> 가 no로 설정된 경우 또는 –disable-force 옵션을 이용하여 메모리 모니터링 기능을 강제로 중지시킨 경우, 에러 메시지가 출력된다.</p>
+<p><strong>cubrid memmon</strong> 유틸리티를 실행하면 데이터베이스 이름, 힙 메모리 총 사용량, 할당된 힙 메모리를 추적 관리하기 위해 서버 내부적으로 유지되는 메타 정보의 메모리 사용량이 출력된다. 세부 항목으로는 힙 메모리 할당이 발생한 모든 파일과 라인 별[파일:라인] 메모리 사용량과 점유율이 사용량 기준으로 정렬되어 출력된다. 시스템 파라미터 <strong>enable_memory_monitoring</strong> 가 no로 설정된 경우 또는 –disable-force 옵션을 이용하여 메모리 모니터링 기능을 강제로 중지시킨 경우, 오류 메시지가 출력된다.</p>
 <p>유틸리티가 출력하는 정보는 다음과 같은 의미를 갖는다.</p>
 <blockquote>
 <div><ul class="simple">
@@ -6352,7 +6352,7 @@ demodb</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -366,7 +366,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="BIN">
 <span class="sig-name descname"><span class="pre">BIN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#BIN" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#BIN'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>BIN</strong> 함수는 <strong>BIGINT</strong> 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 <strong>NULL</strong> 이면 <strong>NULL</strong> 을 반환한다. <strong>BIGINT</strong>로 변환되지 않는 문자열을 입력할 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.</p>
+<dd><p><strong>BIN</strong> 함수는 <strong>BIGINT</strong> 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 <strong>NULL</strong> 이면 <strong>NULL</strong> 을 반환한다. <strong>BIGINT</strong>로 변환되지 않는 문자열을 입력할 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – <strong>BIGINT</strong> 타입의 숫자</p>
@@ -388,7 +388,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="BIT_LENGTH">
 <span class="sig-name descname"><span class="pre">BIT_LENGTH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#BIT_LENGTH" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#BIT_LENGTH'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>BIT_LENGTH</strong> 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, <strong>BIT_LENGTH</strong> 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 <a class="reference internal" href="../datatype.html#char-data-type"><span class="std std-ref">문자열 데이터 타입</span></a> 을 참고한다. 유효하지 않은 값을 입력할 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.</p>
+<dd><p><strong>BIT_LENGTH</strong> 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, <strong>BIT_LENGTH</strong> 함수의 반환 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 <a class="reference internal" href="../datatype.html#char-data-type"><span class="std std-ref">문자열 데이터 타입</span></a> 을 참고한다. 유효하지 않은 값을 입력할 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>string</strong> – 비트 단위로 길이를 구할 문자열 또는 비트열을 지정한다. <strong>NULL</strong> 이 지정된 경우는 <strong>NULL</strong> 값이 반환된다.</p>
@@ -533,7 +533,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="CHR">
 <span class="sig-name descname"><span class="pre">CHR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">number_operand</span> <span class="pre">[USING</span> <span class="pre">charset_name]</span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#CHR" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#CHR'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>CHR</strong> 함수는 인자로 지정된 연산식의 리턴 값에 대응하는 문자를 반환하는 함수이다. 유효하지 않은 범위의 코드 값을 입력할 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.</p>
+<dd><p><strong>CHR</strong> 함수는 인자로 지정된 연산식의 반환 값에 대응하는 문자를 반환하는 함수이다. 유효하지 않은 범위의 코드 값을 입력할 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -702,9 +702,9 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ELT">
 <span class="sig-name descname"><span class="pre">ELT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ELT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ELT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>ELT</strong> 함수는 <em>N</em>이 1이면 <em>string1</em>을 반환하고, <em>N</em>이 2이면 <em>string2</em>를 반환한다. 리턴 값은 <strong>VARCHAR</strong> 타입이다. 조건식은 필요에 따라 늘릴 수 있다.</p>
+<dd><p><strong>ELT</strong> 함수는 <em>N</em>이 1이면 <em>string1</em>을 반환하고, <em>N</em>이 2이면 <em>string2</em>를 반환한다. 반환 값은 <strong>VARCHAR</strong> 타입이다. 조건식은 필요에 따라 늘릴 수 있다.</p>
 <p>문자열의 최대 바이트 길이는 33,554,432이며 이를 초과하면 <strong>NULL</strong>을 반환한다.</p>
-<p><em>N</em>이 0 또는 음수이면 빈 문자열을 반환한다. <em>N</em>이 입력 문자열의 개수보다 크면 범위를 벗어나므로 <strong>NULL</strong>을 반환한다. <em>N</em>이 정수로 변환할 수 없는 타입이면 에러를 반환한다.</p>
+<p><em>N</em>이 0 또는 음수이면 빈 문자열을 반환한다. <em>N</em>이 입력 문자열의 개수보다 크면 범위를 벗어나므로 <strong>NULL</strong>을 반환한다. <em>N</em>이 정수로 변환할 수 없는 타입이면 오류를 반환한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -856,7 +856,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="FROM_BASE64">
 <span class="sig-name descname"><span class="pre">FROM_BASE64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#FROM_BASE64" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#FROM_BASE64'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>FROM_BASE64</strong> 함수는 <strong>TO_BASE64</strong> 함수에서 사용되는 base-64 암호화 규칙으로 암호화된 문자열을 인자로 입력받아 복호화된 결과를 바이너리 문자열로 반환한다. 입력 인자가 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다. 유효하지 않은 base-64 문자열일 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
+<dd><p><strong>FROM_BASE64</strong> 함수는 <strong>TO_BASE64</strong> 함수에서 사용되는 base-64 암호화 규칙으로 암호화된 문자열을 인자로 입력받아 복호화된 결과를 바이너리 문자열로 반환한다. 입력 인자가 <strong>NULL</strong>이면 <strong>NULL</strong>을 반환한다. 유효하지 않은 base-64 문자열일 때 <strong>cubrid.conf</strong>의 <strong>return_null_on_function_errors</strong> 파라미터의 값이 no(기본값)면 오류, yes면 NULL을 반환한다.
 암호화 규칙에 대한 상세 내용은 <a class="reference internal" href="#TO_BASE64" title="TO_BASE64"><code class="xref py py-func docutils literal notranslate"><span class="pre">TO_BASE64()</span></code></a>를 참고한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
@@ -885,12 +885,12 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="INSERT">
 <span class="sig-name descname"><span class="pre">INSERT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#INSERT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#INSERT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>INSERT</strong> 함수는 입력 문자열의 특정 위치부터 정해진 길이만큼 부분 문자열을 삽입한다. 리턴 값은 <strong>VARCHAR</strong> 타입이다. 문자열의 최대 길이는 33,554,432이며 이를 초과하면 <strong>NULL</strong> 을 반환한다.</p>
+<dd><p><strong>INSERT</strong> 함수는 입력 문자열의 특정 위치부터 정해진 길이만큼 부분 문자열을 삽입한다. 반환 값은 <strong>VARCHAR</strong> 타입이다. 문자열의 최대 길이는 33,554,432이며 이를 초과하면 <strong>NULL</strong> 을 반환한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>str</strong> – 입력 문자열</p></li>
-<li><p><strong>pos</strong> – <em>str</em> 의 위치. 1부터 시작한다. <em>pos</em> 가 1보다 작거나 <em>string</em> 의 길이+1보다 크면, <em>string</em> 을 삽입하지 않고 <em>str</em> 을 리턴한다.</p></li>
+<li><p><strong>pos</strong> – <em>str</em> 의 위치. 1부터 시작한다. <em>pos</em> 가 1보다 작거나 <em>string</em> 의 길이+1보다 크면, <em>string</em> 을 삽입하지 않고 <em>str</em> 을 반환한다.</p></li>
 <li><p><strong>len</strong> – <em>str</em> 의 <em>pos</em> 에 삽입할 <em>string</em> 의 길이. <em>len</em> 이 부분 문자열의 길이를 초과하면, <em>str</em> 의 <em>pos</em> 에서 <em>string</em> 만큼 삽입한다. <em>len</em> 이 음수이면 <em>str</em> 이 문자열의 끝이 된다.</p></li>
 <li><p><strong>string</strong> – <em>str</em> 에 삽입할 부분 문자열</p></li>
 </ul>
@@ -1440,7 +1440,7 @@
 <dt class="sig sig-object py" id="POSITION">
 <span class="sig-name descname"><span class="pre">POSITION</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">substring</span> <span class="pre">IN</span> <span class="pre">string</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#POSITION" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#POSITION'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p><strong>POSITION</strong> 함수는 문자열 <em>string</em> 내에서 문자열 <em>substring</em> 의 위치를 반환한다.</p>
-<p>이 함수의 인자로 문자열 또는 비트열을 반환하는 임의의 연산식을 지정할 수 있으며, 리턴 값은 0 이상의 정수이다. 문자열에 대해서는 문자 개수 단위로 위치 값을 반환하고, 비트열에 대해서는 비트 단위로 위치 값을 반환한다.</p>
+<p>이 함수의 인자로 문자열 또는 비트열을 반환하는 임의의 연산식을 지정할 수 있으며, 반환 값은 0 이상의 정수이다. 문자열에 대해서는 문자 개수 단위로 위치 값을 반환하고, 비트열에 대해서는 비트 단위로 위치 값을 반환한다.</p>
 <p><strong>POSITION</strong> 함수는 가끔 다른 함수와 연결되어서 사용된다. 예를 들어, 특정 문자열에서 일부 문자열을 추출하고 싶은 경우에 <strong>POSITION</strong> 함수의 결과를 <strong>SUBSTRING</strong> 함수의 입력으로 사용할 수 있다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
@@ -1507,12 +1507,12 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="REPEAT">
 <span class="sig-name descname"><span class="pre">REPEAT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#REPEAT" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#REPEAT'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>REPEAT</strong> 함수는 입력 문자열에 대해 반복 횟수만큼의 문자열을 반환한다. 리턴 값은 <strong>VARCHAR</strong> 타입이다. 문자열의 최대 길이는 33,554,432이며, 이를 초과하면 <strong>NULL</strong> 을 반환한다. 입력 인자 중 하나가 <strong>NULL</strong> 이면 <strong>NULL</strong> 을 반환한다.</p>
+<dd><p><strong>REPEAT</strong> 함수는 입력 문자열에 대해 반복 횟수만큼의 문자열을 반환한다. 반환 값은 <strong>VARCHAR</strong> 타입이다. 문자열의 최대 길이는 33,554,432이며, 이를 초과하면 <strong>NULL</strong> 을 반환한다. 입력 인자 중 하나가 <strong>NULL</strong> 이면 <strong>NULL</strong> 을 반환한다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>substring</strong> – 문자열</p></li>
-<li><p><strong>count</strong> – 반복 횟수. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자가 아닌 다른 데이터 타입을 입력하면 에러를 반환한다.</p></li>
+<li><p><strong>count</strong> – 반복 횟수. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자가 아닌 다른 데이터 타입을 입력하면 오류를 반환한다.</p></li>
 </ul>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
@@ -1804,10 +1804,10 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="SPACE">
 <span class="sig-name descname"><span class="pre">SPACE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#SPACE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#SPACE'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>SPACE</strong> 함수는 지정한 숫자만큼의 공백 문자열을 반환한다. 리턴 값은 <strong>VARCHAR</strong> 타입이다.</p>
+<dd><p><strong>SPACE</strong> 함수는 지정한 숫자만큼의 공백 문자열을 반환한다. 반환 값은 <strong>VARCHAR</strong> 타입이다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>N</strong> – 공백 개수. 시스템 파라미터 <strong>string_max_size_bytes</strong> 에 지정된 값보다 클 수 없으며(기본값 1048576), 이를 초과하면 <strong>NULL</strong> 을 반환한다. 최대값은 33,554,432이며 이를 초과하면 <strong>NULL</strong> 을 반환한다. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자로 변환할 수 없는 타입을 입력하면 에러를 반환한다.</p>
+<dd class="field-odd"><p><strong>N</strong> – 공백 개수. 시스템 파라미터 <strong>string_max_size_bytes</strong> 에 지정된 값보다 클 수 없으며(기본값 1048576), 이를 초과하면 <strong>NULL</strong> 을 반환한다. 최대값은 33,554,432이며 이를 초과하면 <strong>NULL</strong> 을 반환한다. 0 또는 음수를 입력하면 빈 문자열을 반환하고, 숫자로 변환할 수 없는 타입을 입력하면 오류를 반환한다.</p>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
 <dd class="field-even"><p>STRING</p>
@@ -2030,13 +2030,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="SUBSTRING_INDEX">
 <span class="sig-name descname"><span class="pre">SUBSTRING_INDEX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#SUBSTRING_INDEX" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#SUBSTRING_INDEX'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p><strong>SUBSTRING_INDEX</strong> 함수는 문자열에 포함된 구분자를 세어 <em>count</em> 번째 구분자 앞까지의 부분 문자열을 반환한다. 리턴 값은 <strong>VARCHAR</strong> 타입이다.</p>
+<dd><p><strong>SUBSTRING_INDEX</strong> 함수는 문자열에 포함된 구분자를 세어 <em>count</em> 번째 구분자 앞까지의 부분 문자열을 반환한다. 반환 값은 <strong>VARCHAR</strong> 타입이다.</p>
 <dl class="field-list simple">
 <dt class="field-odd">매개변수<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>string</strong> – 입력 문자열. 최대 길이는 33,554,432이며, 이를 초과하면 <strong>NULL</strong> 을 반환한다.</p></li>
 <li><p><strong>delim</strong> – 구분자. 대소문자를 구분한다.</p></li>
-<li><p><strong>count</strong> – 구분자가 나타나는 횟수. 양수를 입력하면 문자열의 왼쪽부터 세고, 음수를 입력하면 오른쪽부터 센다. 0이면 빈 문자열을 반환한다. 정수로 변환할 수 없는 타입을 입력하면 에러를 반환한다.</p></li>
+<li><p><strong>count</strong> – 구분자가 나타나는 횟수. 양수를 입력하면 문자열의 왼쪽부터 세고, 음수를 입력하면 오른쪽부터 센다. 0이면 빈 문자열을 반환한다. 정수로 변환할 수 없는 타입을 입력하면 오류를 반환한다.</p></li>
 </ul>
 </dd>
 <dt class="field-even">반환 형식<span class="colon">:</span></dt>
@@ -2501,7 +2501,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

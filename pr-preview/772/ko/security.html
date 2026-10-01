@@ -285,7 +285,7 @@ SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 <a class=
 <section id="id6">
 <h2>서버 접근제어<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id6'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>큐브리드는 브로커와 데이터베이스 서버의 2계층에서 인가된 사용자 또는 응용프로그램만 접근이 가능한 제어 기능을 지원한다.
-브로커의 접근 제어는 웹과 웹 어플리케이션 서버(Web Application Server)등과 같은 응용프로그램들의 접근을 제어하는데 주로 사용하고, 데이터베이스 서버의 접근 제어는 브로커 및 csql 인터프리터등의 접근을 제어하는데 주로 사용한다.</p>
+브로커의 접근 제어는 웹과 웹 애플리케이션 서버(Web Application Server)등과 같은 응용프로그램들의 접근을 제어하는데 주로 사용하고, 데이터베이스 서버의 접근 제어는 브로커 및 csql 인터프리터등의 접근을 제어하는데 주로 사용한다.</p>
 <p>자세한 내용은 <a class="reference internal" href="admin/control.html#limiting-broker-access"><span class="std std-ref">브로커 서버 접속 제한</span></a> 과 <a class="reference internal" href="admin/control.html#limiting-server-access"><span class="std std-ref">데이터베이스 서버 접속 제한</span></a> 을 참조한다.</p>
 </section>
 <section id="authorization">
@@ -299,7 +299,7 @@ SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 <a class=
 <section id="cubrid-tde">
 <span id="tde-overview"></span><h3>CUBRID TDE 개념<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#cubrid-tde" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#cubrid-tde'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>큐브리드는 <strong>Transparent Data Encryption (이하 TDE)</strong> 를 지원한다. TDE란 사용자의 관점에서 투명하게 (Transparent) 데이터를 암호화하는 것을 의미한다. 이를 통해 사용자는 애플리케이션의 변경을 거의 하지 않고 디스크에 저장되는 데이터를 암호화할 수 있다.</p>
-<p>큐브리드 TDE는 암호화로 인한 성능 저하를 최소화하기 위하여 엔진 레벨에서 암복호화를 제공한다. 사용자가 암호화된 테이블을 생성하면 디스크에 저장되는 관련 유저 데이터 (data at rest)는 모두 자동으로 암호화된다. 큐브리드는 TDE를 제공함으로써 사용자가 다양한 현장에서 요구되는 보안 규정 및 지침을 준수할 수 있게 한다.</p>
+<p>큐브리드 TDE는 암호화로 인한 성능 저하를 최소화하기 위하여 엔진 레벨에서 암복호화를 제공한다. 사용자가 암호화된 테이블을 생성하면 디스크에 저장되는 관련 사용자 데이터 (data at rest)는 모두 자동으로 암호화된다. 큐브리드는 TDE를 제공함으로써 사용자가 다양한 현장에서 요구되는 보안 규정 및 지침을 준수할 수 있게 한다.</p>
 <p><strong>테이블 암호화</strong></p>
 <p>큐브리드에서는 테이블을 암호화 대상으로 설정한다. TDE 기능을 사용하기 위해서는 다음과 같이 <strong>ENCRYPT</strong> 옵션을 사용하여 테이블을 생성한다. 자세한 내용은 <a class="reference internal" href="sql/schema/table_stmt.html#create-tde-table"><span class="std std-ref">테이블 암호화 (TDE)</span></a> 를 참고한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tde_tbl</span><span class="w"> </span><span class="p">(</span><span class="n">att1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">att2</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span><span class="w"> </span><span class="n">ENCRYPT</span><span class="o">=</span><span class="n">AES</span><span class="p">;</span>
@@ -317,7 +317,7 @@ SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 <a class=
 </a>
 <ul class="simple">
 <li><p><strong>마스터 키</strong>: 데이터 키를 암복호화할 때 사용되는 키로, 사용자에게 공개되어 관리되는 키</p></li>
-<li><p><strong>데이터 키</strong>: 실제 테이블 및 로그 등의 유저 데이터를 암호화할 때 사용되는 키로, 큐브리드 엔진이 사용하는 키</p></li>
+<li><p><strong>데이터 키</strong>: 실제 테이블 및 로그 등의 사용자 데이터를 암호화할 때 사용되는 키로, 큐브리드 엔진이 사용하는 키</p></li>
 </ul>
 <p>데이터 키는 데이터 볼륨 안에서 별도로 관리되며 디스크에 저장될 때에는 마스터 키를 사용해 항상 안전하게 암호화된다. 마스터 키는 별도의 파일에 저장되며 사용자의 보안 정책에 따라 안전하게 관리되어야 한다.</p>
 <p>2 계층으로 키를 관리하는 것은 키 변경 오퍼레이션을 효율적으로 수행할 수 있게 해준다. 만약 실제 데이터를 암호화하는 키만 존재한다면, 키를 변경할 경우에 모든 데이터를 다시 읽어 들여 복호화 및 재암호화하는 과정을 거쳐야 하기 때문에 작업 시간이 오래걸리고 그 과정동안 데이터베이스의 전체적인 성능 저하를 가져올 수 있다.</p>
@@ -601,7 +601,7 @@ SSL 3.0 버전은 TLS 1.0의 기초가 되고, 1999년 1월 IETF에서 <a class=
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

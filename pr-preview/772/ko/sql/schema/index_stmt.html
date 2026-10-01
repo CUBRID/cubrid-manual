@@ -261,19 +261,19 @@
 <p><em>deduplicate_level</em>은 0부터 14까지의 정수이다. 0은 <strong>DEDUPLICATE</strong> 옵션이 없었던 CUBRID 11.2 또는 이하 버전과 동일한 구성의 인덱스를 의미한다.</p>
 </div>
 <ul class="simple">
-<li><p>&lt;<em>filter_predicate</em>&gt;: 필터링된 인덱스를 만드는 조건을 명시한다. 컬럼과 상수 간 비교 조건이 여러 개인 경우 <strong>AND</strong> 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 <a class="reference internal" href="../tuning.html#filtered-index"><span class="std std-ref">필터링된 인덱스</span></a> 를 참고한다.</p></li>
+<li><p>&lt;<em>filter_predicate</em>&gt;: 필터링된 인덱스를 만드는 조건을 명시한다. 칼럼과 상수 간 비교 조건이 여러 개인 경우 <strong>AND</strong> 로 연결된 경우에만 필터링이 될 수 있다. 자세한 내용은 <a class="reference internal" href="../tuning.html#filtered-index"><span class="std std-ref">필터링된 인덱스</span></a> 를 참고한다.</p></li>
 <li><p><em>function_name</em> (<em>argument_list</em>): 함수 기반 인덱스를 만드는 조건을 명시한다. 이와 관련하여 <a class="reference internal" href="../tuning.html#function-index"><span class="std std-ref">함수 기반 인덱스</span></a>를 반드시 참고한다.</p></li>
 <li><p><strong>WITH ONLINE</strong>: 다른 트랜잭션들에 의해 테이블 데이터가 변경중에 인덱스의 생성을 허용한다. <strong>PARALLEL</strong> 이 선언되지 않은 경우, 인덱스는 동일 트랜잭션 스레드에서 생성된다. &lt;parallel_count&gt;는 인덱스를 생성하기 위해 사용되는 스레드의 개수이며 1부터 16사이의 정수이다.</p></li>
 <li><p><strong>INVISIBLE</strong>: 인덱스를 생성할 때 인덱스의 상태를 <strong>INVISIBLE</strong> 로 설정하면, 질의 실행시 해당 인덱스를 사용하지 않는다는 것을 의미한다. <strong>INVISIBLE</strong> 이 생략된 경우 생성되는 인덱스의 상태는 <strong>NORMAL_INDEX</strong> 로 설정된다.</p></li>
-<li><p><em>index_comment_string</em>: 인덱스의 커멘트를 지정한다.</p></li>
+<li><p><em>index_comment_string</em>: 인덱스의 주석을 지정한다.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <ul class="simple">
 <li><p>CUBRID 9.0 버전부터는 CREATE/ALTER INDEX 구문에서 인덱스 이름을 생략할 수 없다.</p></li>
 <li><p>prefix 인덱스 기능은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.</p></li>
-<li><p>데이터베이스의 TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE 또는 DATETIME WITH LOCAL TIME ZONE 타입 컬럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 세션 및 서버 타임존(<a class="reference internal" href="../../admin/config.html#timezone-parameters"><span class="std std-ref">타임존 파라미터</span></a>)을 변경하면 안 된다.</p></li>
-<li><p>데이터베이스의 TIMESTAMP 또는 TIMESTAMP WITH LOCAL TIME ZONE 타입 컬럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 윤초를 지원하는 파라미터(<a class="reference internal" href="../../admin/config.html#timezone-parameters"><span class="std std-ref">타임존 파라미터</span></a>)를 변경하면 안 된다.</p></li>
+<li><p>데이터베이스의 TIMESTAMP, TIMESTAMP WITH LOCAL TIME ZONE 또는 DATETIME WITH LOCAL TIME ZONE 타입 칼럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 세션 및 서버 타임존(<a class="reference internal" href="../../admin/config.html#timezone-parameters"><span class="std std-ref">타임존 파라미터</span></a>)을 변경하면 안 된다.</p></li>
+<li><p>데이터베이스의 TIMESTAMP 또는 TIMESTAMP WITH LOCAL TIME ZONE 타입 칼럼에 인덱스 또는 함수 인덱스가 포함되어 있는 경우 윤초를 지원하는 파라미터(<a class="reference internal" href="../../admin/config.html#timezone-parameters"><span class="std std-ref">타임존 파라미터</span></a>)를 변경하면 안 된다.</p></li>
 <li><p><strong>PARALLEL</strong> 옵션에 설정된 스레드의 개수는 인덱스 로드 과정에서만 적용된다. 수집 과정은 해당 트랜잭션에서 단일 스레드로 실행된다. 이 과정에서 레코드들은 특정 단위의 묶음으로 수집되고, 묶음들의 크기가 16M에 도달한 경우 인덱스 로딩 스레드에 전달하고 (또는 큐에 입력한다), 수집 프로세스는 계속 진행한다. 한 묶음의 크기는 인덱스 키 길이와 열의 식별자 길이(8 bytes)로 결정한다.</p></li>
 <li><p>stand-alone 모드에서 WITH ONLINE 옵션은 무시된다 (정상적인 인덱스가 생성된다).</p></li>
 <li><p>온라인 인덱스 생성은 다음 3 단계로 실행된다:</p>
@@ -296,8 +296,8 @@
 </span></code></pre></div>
 </div>
 <section id="id2">
-<h3>인덱스의 커멘트<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>인덱스의 커멘트를 다음과 같이 지정할 수 있다.</p>
+<h3>인덱스의 주석<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>인덱스의 주석을 다음과 같이 지정할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="nb">int</span><span class="p">);</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_tbl_b</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">tbl</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'index comment for i_tbl_b'</span><span class="p">;</span>
@@ -307,13 +307,13 @@
 </span><span id="line-7"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tbl2</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_tbl2_b</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'index comment b'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>지정된 인덱스의 커멘트는 다음 구문에서 확인할 수 있다.</p>
+<p>지정된 인덱스의 주석은 다음 구문에서 확인할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">index_name</span><span class="p">,</span><span class="w"> </span><span class="n">class_name</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">db_index</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">class_name</span><span class="w"> </span><span class="o">=</span><span class="s1">'classname'</span><span class="p">;</span>
 </span><span id="line-3"><span class="k">SHOW</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 커멘트를 확인할 수 있다.</p>
+<p>또는 CSQL 인터프리터에서 테이블의 스키마를 출력하는 ;sc 명령으로 인덱스의 주석을 확인할 수 있다.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">$<span class="w"> </span>csql<span class="w"> </span>-u<span class="w"> </span>dba<span class="w"> </span>demodb
 </span><span id="line-2">
 </span><span id="line-3">csql&gt;<span class="w"> </span><span class="p">;</span>sc<span class="w"> </span>tbl
@@ -455,7 +455,7 @@
 <p>인덱스를 생성할 때 <em>deduplicate level</em>를 지정해 주는 방법은 두 가지이다.</p>
 <p>묵시적인 방법</p>
 <blockquote>
-<div><p>SQL 구문에 명시적인 DEDUPLICATE 옵션 지정이 없는 경우에 <em>deduplicate level</em>를 자동으로 지정해 주는 방식이다. 이 방식은 시스템 파라메터 <strong>deduplicate_key_level</strong> 설정값의 영향을 받는다.
+<div><p>SQL 구문에 명시적인 DEDUPLICATE 옵션 지정이 없는 경우에 <em>deduplicate level</em>를 자동으로 지정해 주는 방식이다. 이 방식은 시스템 파라미터 <strong>deduplicate_key_level</strong> 설정값의 영향을 받는다.
 <strong>deduplicate_key_level</strong>이 1 이상이면 <em>deduplicate level</em>은 자동으로  <strong>deduplicate_key_level</strong>값으로 지정된다.</p>
 </div></blockquote>
 <p>명시적인 방법</p>
@@ -472,7 +472,7 @@
 <p class="admonition-title">경고</p>
 <ul class="simple">
 <li><p><strong>deduplicate_key_level</strong>이 <strong>-1</strong>인 경우는 명시적인 방법으로 지정을 해도 내부적으로 무시되어 적용되지 않는다. 즉 이 경우에는 모든 인덱스는 <em>deduplicate level</em>이 <strong>0</strong>으로 생성된다.</p></li>
-<li><p>“<strong>_dedup_</strong>”로 시작되는 컬럼명을 생성할 수 없다.</p></li>
+<li><p>“<strong>_dedup_</strong>”로 시작되는 칼럼명을 생성할 수 없다.</p></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -481,7 +481,7 @@
 <li><dl class="simple">
 <dt>인덱스 생성시 키 필드의 구성이 UNIQUE를 보장 받는다면 사용자가 설정한 DEDUPLICATE 설정이 무시되며  <em>deduplicate level</em>은 <strong>0</strong>으로 생성된다.</dt><dd><ul>
 <li><p>키 필드가 특정한 Primary Key 또는 Unique Index를 구성하는 키필드를 모두 포함하고 있는 경우</p></li>
-<li><p>단, 인덱스의 함수 인수로 Primary Key 또는 Unique Index의 컬럼이 사용된 경우는 제외</p></li>
+<li><p>단, 인덱스의 함수 인수로 Primary Key 또는 Unique Index의 칼럼이 사용된 경우는 제외</p></li>
 </ul>
 </dd>
 </dl>
@@ -499,7 +499,7 @@
 </span><span id="line-5"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx3</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">tbl</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">)</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">DEDUPLICATE</span><span class="o">=</span><span class="mi">7</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>위 예시에서 idx1과 idx2는 지정된 <em>deduplicate level</em>을 갖는다. 그렇지만 idx3는 b 컬럼이 idx_uk에 의해 Unique 할 것을 보장 받기 때문에 사용자의 지정을 무시하고 <em>deduplicate level</em>이 <strong>0</strong>으로 생성된다.</p>
+<p>위 예시에서 idx1과 idx2는 지정된 <em>deduplicate level</em>을 갖는다. 그렇지만 idx3는 b 칼럼이 idx_uk에 의해 Unique 할 것을 보장 받기 때문에 사용자의 지정을 무시하고 <em>deduplicate level</em>이 <strong>0</strong>으로 생성된다.</p>
 </div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
@@ -538,7 +538,7 @@
 <li><p><em>schema_name</em>: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
 <li><p><em>table_name</em>: 인덱스를 재구성할 테이블의 이름을 명시한다.</p></li>
 <li><p><strong>REBUILD</strong>: 기존과 동일한 구조의 인덱스로 재구성한다.</p></li>
-<li><p><em>index_comment_string</em>: 인덱스의 커멘트를 지정한다.</p></li>
+<li><p><em>index_comment_string</em>: 인덱스의 주석을 지정한다.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
@@ -546,7 +546,7 @@
 <li><p>CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.</p></li>
 <li><p>CUBRID 10.0 버전부터는 테이블 이름을 생략할 수 없다.</p></li>
 <li><p>CUBRID 10.0 버전부터는 테이블 이름 뒤에 칼럼 이름을 추가하더라도 이는 무시되며, 예전 인덱스와 동일한 칼럼으로 재생성된다.</p></li>
-<li><p>CUBRID 11.4 버전부터는 테이블 이름 뒤에 칼럼 이름을 추가하면 에러가 발생한다.</p></li>
+<li><p>CUBRID 11.4 버전부터는 테이블 이름 뒤에 칼럼 이름을 추가하면 오류가 발생한다.</p></li>
 </ul>
 </div>
 <p>다음은 인덱스를 재생성하는 구문이다.</p>
@@ -554,11 +554,11 @@
 </span><span id="line-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_game_medal</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">game</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'rebuild index comment'</span><span class="w"> </span><span class="n">REBUILD</span><span class="w"> </span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>인덱스를 재구성하지 않고 인덱스의 커멘트를 추가하거나 변경하려는 경우 다음과 같이 <strong>COMMENT</strong> 절을 추가하고 <strong>REBUILD</strong> 키워드를 제거한다.</p>
+<p>인덱스를 재구성하지 않고 인덱스의 주석을 추가하거나 변경하려는 경우 다음과 같이 <strong>COMMENT</strong> 절을 추가하고 <strong>REBUILD</strong> 키워드를 제거한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">index_name</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'index_comment_string'</span><span class="w"> </span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<p>다음은 인덱스 재구성 없이 커멘트만 추가 또는 변경하는 구문이다.</p>
+<p>다음은 인덱스 재구성 없이 주석만 추가 또는 변경하는 구문이다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">ALTER</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">i_game_medal</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">game</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">'change index comment'</span><span class="w"> </span><span class="p">;</span>
 </span></code></pre></div>
 </div>
@@ -611,7 +611,7 @@
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#create-index'" class="reference internal" href="#create-index">CREATE INDEX</a><ul>
-<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">인덱스의 커멘트</a></li>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">인덱스의 주석</a></li>
 <li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">온라인 인덱스 생성</a></li>
 <li><a :data-current="activeSection === '#id4'" class="reference internal" href="#id4">다른 트랜잭션에서 온라인 인덱스 출력</a></li>
 <li><a :data-current="activeSection === '#id5'" class="reference internal" href="#id5">다른 트랜잭션이 고유키 위반을 유발하는 삽입을 실행하는 도중의 온라인 인덱스</a></li>
@@ -632,7 +632,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -235,7 +235,7 @@
 <li><p>사용자는 전용(Private) 동의어만 생성할 수 있으며, 전용(Private) 동의어는 사용자의 스키마에서만 사용할 수 있다.</p></li>
 <li><p>생성된 동의어의 정보는 <a class="reference internal" href="../catalog.html#id72"><span class="std std-ref">DB_SYNONYM</span></a> 시스템 가상 클래스에서 조회할 수 있다.</p></li>
 <li><p>같은 이름의 테이블이나 뷰가 이미 존재하는 경우 해당 이름으로 동의어를 생성할 수 없다.</p></li>
-<li><p>동의어를 생성할 때 대상 객체의 스키마가 존재하는지는 확인하지만 대상 객체가 존재하는지는 확인하지 않는다. 대상 객체가 존재하지 않으면 동의어를 사용할 때 에러가 발생한다.</p></li>
+<li><p>동의어를 생성할 때 대상 객체의 스키마가 존재하는지는 확인하지만 대상 객체가 존재하는지는 확인하지 않는다. 대상 객체가 존재하지 않으면 동의어를 사용할 때 오류가 발생한다.</p></li>
 <li><p>사용자는 해당 사용자의 스키마에서만 동의어를 생성할 수 있지만 DBA와 DBA의 멤버는 스키마를 지정해서 동의어를 생성할 수 있다.</p></li>
 </ol>
 </div></blockquote>
@@ -245,7 +245,7 @@
 </span></code></pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>OR REPLACE</strong>: 스키마에 <em>synonym_name</em>이 이미 존재하더라도 에러를 출력하지 않고 기존의 동의어가 새로운 동의어로 대체된다.</p>
+<li><p><strong>OR REPLACE</strong>: 스키마에 <em>synonym_name</em>이 이미 존재하더라도 오류를 출력하지 않고 기존의 동의어가 새로운 동의어로 대체된다.</p>
 <ul>
 <li><p>새로운 동의어를 생성하기 전에 기존 동의어는 삭제된다.</p></li>
 </ul>
@@ -255,11 +255,11 @@
 <li><p><em>synonym_name</em>: 동의어의 이름을 지정한다.</p></li>
 <li><p><em>schema_name_of_target</em>: 대상 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
 <li><p><em>target_name</em>: 대상 객체의 이름을 지정한다.</p></li>
-<li><p><em>synonym_comment_string</em>: 동의어의 커멘트를 지정한다.</p></li>
+<li><p><em>synonym_comment_string</em>: 동의어의 주석을 지정한다.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>
-<p>동의어의 대상 객체는 테이블과 뷰만 지원한다. 다른 객체를 대상 객체로 사용할 수는 있지만 동의어를 사용할 때 에러가 발생한다.</p>
+<p>동의어의 대상 객체는 테이블과 뷰만 지원한다. 다른 객체를 대상 객체로 사용할 수는 있지만 동의어를 사용할 때 오류가 발생한다.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>
@@ -543,7 +543,7 @@
 </section>
 <section id="alter-synonym">
 <h2>ALTER SYNONYM<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#alter-synonym" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#alter-synonym'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p>동의어의 대상 객체나 커멘트를 변경한다. 사용 중인 동의어는 변경할 수 없다.</p>
+<p>동의어의 대상 객체나 주석을 변경한다. 사용 중인 동의어는 변경할 수 없다.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ALTER</span> <span class="p">[</span><span class="n">PRIVATE</span><span class="p">]</span> <span class="n">SYNONYM</span> <span class="p">[</span><span class="n">schema_name_of_synonym</span><span class="o">.</span><span class="p">]</span><span class="n">synonym_name</span>
 </span><span id="line-2"><span class="p">{</span>
 </span><span id="line-3">    <span class="n">FOR</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">schema_name_of_target</span><span class="o">&gt;.</span><span class="p">]</span><span class="o">&lt;</span><span class="n">target_name</span><span class="o">&gt;</span> <span class="p">[</span><span class="n">COMMENT</span> <span class="s1">'comment_string'</span><span class="p">]</span> <span class="o">|</span>
@@ -557,13 +557,13 @@
 <li><p><em>synonym_name</em>: 동의어의 이름을 지정한다.</p></li>
 <li><p><em>schema_name_of_target</em>: 대상 객체의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
 <li><p><em>target_name</em>: 대상 객체의 이름을 지정한다.</p></li>
-<li><p><em>synonym_comment_string</em>: 동의어의 커멘트를 지정한다.</p></li>
+<li><p><em>synonym_comment_string</em>: 동의어의 주석을 지정한다.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>
-<p>동의어에 대한 <strong>ALTER</strong>, <strong>DROP</strong>, <strong>RENAME</strong> 문이 실행되면 쿼리 계획 캐시에서 대상 객체를 사용하는 쿼리 계획을 모두 삭제하므로 주의해야 한다.</p>
+<p>동의어에 대한 <strong>ALTER</strong>, <strong>DROP</strong>, <strong>RENAME</strong> 문이 실행되면 질의 계획 캐시에서 대상 객체를 사용하는 질의 계획을 모두 삭제하므로 주의해야 한다.</p>
 <div class="line-block">
-<div class="line">하지만 <strong>ALTER</strong> 문을 실행할 때 같은 대상 객체로 변경하거나 커멘트만 변경하는 경우에는 쿼리 계획을 삭제하지 않는다.</div>
+<div class="line">하지만 <strong>ALTER</strong> 문을 실행할 때 같은 대상 객체로 변경하거나 주석만 변경하는 경우에는 질의 계획을 삭제하지 않는다.</div>
 </div>
 </div>
 <section id="id6">
@@ -618,8 +618,8 @@
 </div>
 </section>
 <section id="id7">
-<h3>커멘트 변경<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>아래 예제에서 사용자는 동의어의 커멘트를 변경한다.</p>
+<h3>주석 변경<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id7'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>아래 예제에서 사용자는 동의어의 주석을 변경한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">call</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'public'</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="cm">/* current_user: public */</span>
@@ -635,7 +635,7 @@
 </span><span id="line-3">  <span class="s1">'s1'</span>                  <span class="s1">'PUBLIC'</span>              <span class="s1">'NO'</span>                  <span class="s1">'It is a synonym for the t1 table.'</span>
 </span></code></pre></div>
 </div>
-<p>대상 객체를 지정하지 않고 커멘트를 변경할 수 있다.</p>
+<p>대상 객체를 지정하지 않고 주석을 변경할 수 있다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">alter</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">'the comment was changed.'</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">select</span><span class="w"> </span><span class="n">synonym_name</span><span class="p">,</span><span class="w"> </span><span class="n">synonym_owner_name</span><span class="p">,</span><span class="w"> </span><span class="n">is_public_synonym</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">db_synonym</span><span class="p">;</span>
 </span></code></pre></div>
@@ -645,14 +645,14 @@
 </span><span id="line-3">  <span class="s1">'s1'</span>                  <span class="s1">'PUBLIC'</span>              <span class="s1">'NO'</span>                  <span class="s1">'the comment was changed.'</span>
 </span></code></pre></div>
 </div>
-<p>대상 객체와 커멘트를 모두 지정하지 않으면 에러가 발생한다.</p>
+<p>대상 객체와 주석을 모두 지정하지 않으면 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">alter</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">s1</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">No</span> <span class="n">options</span> <span class="n">specified</span> <span class="k">for</span> <span class="n">ALTER</span> <span class="n">SYNONYM</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
-<p>커멘트를 <strong>NULL</strong>로 변경하려면, 커멘트를 빈 문자열로 변경하면 된다.</p>
+<p>주석을 <strong>NULL</strong>로 변경하려면, 주석을 빈 문자열로 변경하면 된다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">alter</span><span class="w"> </span><span class="n">synonym</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">''</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">select</span><span class="w"> </span><span class="n">synonym_name</span><span class="p">,</span><span class="w"> </span><span class="n">synonym_owner_name</span><span class="p">,</span><span class="w"> </span><span class="n">is_public_synonym</span><span class="p">,</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">db_synonym</span><span class="p">;</span>
 </span></code></pre></div>
@@ -681,13 +681,13 @@
 </div>
 <ul class="simple">
 <li><p><strong>PRIVATE</strong>: 전용(Private) 동의어를 삭제하도록 지정한다. 생략해도 기본값으로 전용(Private) 동의어를 생성한다.</p></li>
-<li><p><strong>IF EXISTS</strong>: 스키마에 <em>synonym_name</em>이 존재하지 않더라도 에러가 발생하지 않는다.</p></li>
+<li><p><strong>IF EXISTS</strong>: 스키마에 <em>synonym_name</em>이 존재하지 않더라도 오류가 발생하지 않는다.</p></li>
 <li><p><em>schema_name</em>: 동의어의 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.</p></li>
 <li><p><em>synonym_name</em>: 동의어의 이름을 지정한다.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>
-<p>동의어에 대한 <strong>ALTER</strong>, <strong>DROP</strong>, <strong>RENAME</strong> 문이 실행되면 쿼리 계획 캐시에서 대상 객체를 사용하는 쿼리 계획을 모두 삭제하므로 주의해야 한다.</p>
+<p>동의어에 대한 <strong>ALTER</strong>, <strong>DROP</strong>, <strong>RENAME</strong> 문이 실행되면 질의 계획 캐시에서 대상 객체를 사용하는 질의 계획을 모두 삭제하므로 주의해야 한다.</p>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">call</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'public'</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span><span id="line-2">
@@ -764,11 +764,11 @@
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">경고</p>
-<p>동의어에 대한 <strong>ALTER</strong>, <strong>DROP</strong>, <strong>RENAME</strong> 문이 실행되면 쿼리 계획 캐시에서 대상 객체를 사용하는 쿼리 계획을 모두 삭제하므로 주의해야 한다.</p>
+<p>동의어에 대한 <strong>ALTER</strong>, <strong>DROP</strong>, <strong>RENAME</strong> 문이 실행되면 질의 계획 캐시에서 대상 객체를 사용하는 질의 계획을 모두 삭제하므로 주의해야 한다.</p>
 </div>
 <section id="id8">
 <h3>1. 스키마를 변경할 수 없음<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id8'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>아래 예제에서 rename 시 스키마 이름을 다르게 지정할 때 에러가 발생한다.</p>
+<p>아래 예제에서 rename 시 스키마 이름을 다르게 지정할 때 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">call</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'dba'</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="cm">/* current_user: dba */</span>
@@ -847,7 +847,7 @@
 </section>
 <section id="id9">
 <h3>2. 이미 사용 중인 이름<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id9" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id9'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>아래 예제에서 변경할 이름이 이미 사용중이기 때문에 에러가 발생한다.</p>
+<p>아래 예제에서 변경할 이름이 이미 사용중이기 때문에 오류가 발생한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">call</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="p">(</span><span class="s1">'public'</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">db_user</span><span class="p">;</span>
 </span><span id="line-2">
 </span><span id="line-3"><span class="cm">/* current_user: public */</span>
@@ -1090,7 +1090,7 @@
 </li>
 <li><a :data-current="activeSection === '#alter-synonym'" class="reference internal" href="#alter-synonym">ALTER SYNONYM</a><ul>
 <li><a :data-current="activeSection === '#id6'" class="reference internal" href="#id6">대상 객체 변경</a></li>
-<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">커멘트 변경</a></li>
+<li><a :data-current="activeSection === '#id7'" class="reference internal" href="#id7">주석 변경</a></li>
 </ul>
 </li>
 <li><a :data-current="activeSection === '#drop-synonym'" class="reference internal" href="#drop-synonym">DROP SYNONYM</a></li>
@@ -1112,7 +1112,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -230,7 +230,7 @@
 <p>논리 연산자(logical operator)는 피연산자로 불리언(boolean) 연산식이 지정되며, 연산 결과로 <strong>TRUE</strong>, <strong>FALSE</strong>, <strong>NULL</strong> 을 반환한다. 불리언 값이 수식에 사용될 때에는 <strong>TRUE</strong> 는 1, <strong>FALSE</strong> 는 0으로 해석된다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>11.2 버전부터 논리식이 아닌 값(정수·컬럼 등)을 피연산자로 사용하면 “operand must be logical expression.” 오류가 발생한다. 비논리 값을 직접 조건절에 사용하던 구문은 명시적인 비교 연산으로 바꿔야 한다. 상수 조건 <strong>WHERE 1</strong> 은 <strong>WHERE 1=1</strong> 로, 컬럼 조건 <strong>WHERE column_name</strong> 은 <strong>WHERE column_name &lt;&gt; 0</strong> 으로 작성한다.</p>
+<p>11.2 버전부터 논리식이 아닌 값(정수·칼럼 등)을 피연산자로 사용하면 “operand must be logical expression.” 오류가 발생한다. 비논리 값을 직접 조건절에 사용하던 구문은 명시적인 비교 연산으로 바꿔야 한다. 상수 조건 <strong>WHERE 1</strong> 은 <strong>WHERE 1=1</strong> 로, 칼럼 조건 <strong>WHERE column_name</strong> 은 <strong>WHERE column_name &lt;&gt; 0</strong> 으로 작성한다.</p>
 </div>
 <p>논리 연산자의 종류 및 진리표는 아래와 같다.</p>
 <p><strong>논리 연산자</strong></p>
@@ -344,7 +344,7 @@ no이면, 이중 파이프 기호(||)를 <strong>OR</strong> 연산자로 사용
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 9월 14, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 01, 2026. </p>
 </div>
 </div>
 </footer>

@@ -52,7 +52,7 @@ If you cannot get the CPAN module, you should download the **DBD::cubrid** sourc
 
 https://www.cubrid.org/downloads#perl
 
-The file name is typically something like this: **DBD-cubrid-X.X.X.tar.gz**. After extracting the archive, enter the command line below under the **DBD-cubrid-X.X.X** directory. (On Windows, you may need to replace **make** with **nmake** or **dmake**.) ::
+The filename is typically something like this: **DBD-cubrid-X.X.X.tar.gz**. After extracting the archive, enter the command line below under the **DBD-cubrid-X.X.X** directory. (On Windows, you may need to replace **make** with **nmake** or **dmake**.) ::
 
     Perl Makefile.PL
     make

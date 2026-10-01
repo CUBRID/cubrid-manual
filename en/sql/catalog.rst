@@ -168,7 +168,7 @@ The following example shows how to retrieve all sub classes under the class owne
 
 .. note::
 
-    All examples of system catalog classes have been written in the csql utility. In this example, **\-\-no-auto-commit** (inactive mode of auto-commit) and **-u** (specifying user DBA) options are used. ::
+    All examples of system catalog classes have been written in the csql utility. In this example, **\-\-no-auto-commit** (inactive mode of autocommit) and **-u** (specifying user DBA) options are used. ::
     
         % csql --no-auto-commit -u dba demodb
 
@@ -920,7 +920,7 @@ link_name      VARCHAR(255)        Connection name
 host           VARCHAR(255)        Hostname of a server
 port           INTEGER             Connection port of a server
 db_name        VARCHAR(255)        Database name of a server
-user_name      VARCHAR(255)        Database user name of a server
+user_name      VARCHAR(255)        Database username of a server
 password       VARCHAR(1073741823) Database user password of a server
 properties     VARCHAR(2048)       Property information used for connection
 owner          db_user             The owner of this connection information
@@ -2222,7 +2222,7 @@ link_name      VARCHAR(255)  Connection name
 host           VARCHAR(255)  Hostname of a server
 port           INTEGER       Connection port of a server
 db_name        VARCHAR(255)  Database name of a server
-user_name      VARCHAR(255)  Database user name of a server
+user_name      VARCHAR(255)  Database username of a server
 properties     VARCHAR(2048) Property information used for connection
 owner          VARCHAR(256)  The name of the owner of this connection information
 comment        VARCHAR(1024) Comment to describe the server
@@ -2262,7 +2262,7 @@ Updating catalog classes/virtual classes is automatically performed by the syste
 Querying on Catalog
 ===================
 
-To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes. But, DB user name is changed as uppercases and stored into db_user system catalog table.
+To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes. But, DB username is changed as uppercases and stored into db_user system catalog table.
 
 .. code-block:: sql
 

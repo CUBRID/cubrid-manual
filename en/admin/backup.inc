@@ -211,7 +211,7 @@ One or more backup files can be created in sequence based on the size of the dat
 
 **Managing Disk Capacity during the Backup**
 
-During the backup process, if there is not enough space on the disk to store the backup files, a message saying that the backup cannot continue appears on the screen. This message contains the name and path of the database to be backed up, the backup file name, the unit number of backup files and the backup level. To continue the backup process, the administrator can choose one of the following options:
+During the backup process, if there is not enough space on the disk to store the backup files, a message saying that the backup cannot continue appears on the screen. This message contains the name and path of the database to be backed up, the backup filename, the unit number of backup files and the backup level. To continue the backup process, the administrator can choose one of the following options:
 
 *   Option 0: An administrator enters 0 to discontinue the backup.
 *   Option 1: An administrator inserts a new disk into the current device and enters 1 to continue the backup.
@@ -487,7 +487,7 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
 
     Unlike a general scenario where a backup and restore are performed on the same server, in a scenario where backup files are restored using a different server, you need to add the location information on database restore in the database location file (**databases.txt**) on server *B*. In the diagram above, it is supposed that *demodb* is restored in the /home/cubrid/data/demodb directory on server *B* (hostname: pmlinux); edit the location information file accordingly and create the directory on server *B*.
 
-    Put the database location information in one single line. Separate each item with a space. The line should be written in [database name]. [data volume path] [host name] [log volume path] format; that is, write the location information of *demodb* as follows: ::
+    Put the database location information in one single line. Separate each item with a space. The line should be written in [database name]. [data volume path] [hostname] [log volume path] format; that is, write the location information of *demodb* as follows: ::
 
         demodb /home/cubrid/data/demodb pmlinux /home/cubrid/data/demodb
 

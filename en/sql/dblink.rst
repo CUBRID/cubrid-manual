@@ -599,7 +599,7 @@ For details, refer to :ref:`gateway configuration file <gatewayconf-info>`\.
 
 
 
-How to use Cubrid DBLink
+How to use CUBRID DBLink
 ==============================================
 
 If the information on brokers of CUBRID to be connected to use DBLink has been completed or gateway settings for heterogeneous databases have been completed, let's learn how to write a query statement using DBLink.
@@ -646,7 +646,7 @@ The Query statement below is a Query statement that inquires the remote_t table 
 Notice
 ======
 
-*   Synonym creation: Local synonyms can be created for remote tables and remote synonyms. In the case of DBMSs other than CUBRID, the user name or db name must be added to the original table name.
+*   Synonym creation: Local synonyms can be created for remote tables and remote synonyms. In the case of DBMSs other than CUBRID, the username or db name must be added to the original table name.
 
 .. code-block:: sql
 
@@ -716,7 +716,7 @@ Common Constraints
 
 
 *   All functions, serial-related functions, and system constants of INSERT/UPDATE/DELETE/MERGE queries are all executed on the remote server, so be careful when using built-in functions (i.e., CUBRID's built-in functions may not be supported by the remote DBMS or have different usage instructions)
-*   Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE) queries in the remote DB are excuted as auto commits separately from transactions in the local DB.
+*   Transaction: Transactions (commit, rollback) between local DB and remote DB are not processed as one transaction. DML (INSERT/UPDATE/DELETE/MERGE) queries in the remote DB are excuted as autocommits separately from transactions in the local DB.
     As in the example below, when performing a transaction, data is inserted into the remote DB, but no data is entered into the local DB, because doing rollback.
 
 .. code-block:: sql
@@ -873,9 +873,9 @@ CUBRID Constraints
 
     *   LONG, INTERVAL DAY TO SECOND, INTERVAL YEAR TO MONTH, BLOB, and CLOB types are not supported in the select statement. For more information, refer to :ref:`Unsupported Types of Common constraints of Heterogeneous DBMS <heterogen-restrict>`
     *   The INTERVAL DAY TO SECOND and INTERVAL YEAR TO MONTH types are not supported by Oracle ODBC. For more information, see "Using the Oracle ODBC Driver" (https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/odbc-driver.html#GUID-3FE69BEF-F8D2-4152-9B1A-877186C47028).
-    *   Oracle ODBC does not support the time zone type, so when SELECTing time zone data, the time zone is calculated as a local time, converted to timestamp type, and returned.
+    *   Oracle ODBC does not support the timezone type, so when SELECTing timezone data, the timezone is calculated as a local time, converted to timestamp type, and returned.
 
-    Below is an example of converting Oracle DB's time zone data to a local time zone when querying it with ODBC. The entered time zone is "+02:00", converted to local time zone "+09:00", and output as "PM 08:00".
+    Below is an example of converting Oracle DB's timezone data to a local timezone when querying it with ODBC. The entered timezone is "+02:00", converted to local timezone "+09:00", and output as "PM 08:00".
 
     .. code-block:: sql
 

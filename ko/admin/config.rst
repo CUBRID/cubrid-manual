@@ -549,7 +549,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **cubrid_port_id**
 
-    **cubrid_port_id**\ 는 마스터 프로세스가 사용하는 포트를 설정하기 위한 파라미터로 기본값은 **1523**\ 이다. CUBRID를 설치한 서버에서 이미 1523 포트를 사용하고 있거나, 방화벽에 의해 1523 포트가 차단된 경우에는 마스터 프로세스가 정상적으로 구동할 수 없으므로, 마스터 서버와 연결할 수 없다는 에러 메시지가 나타날 수 있다. 이와 같이 포트 충돌이 발생하는 경우, 관리자는 서버 환경을 고려하여 **cubrid_port_id** 의 설정값을 변경해야 한다.
+    **cubrid_port_id**\ 는 마스터 프로세스가 사용하는 포트를 설정하기 위한 파라미터로 기본값은 **1523**\ 이다. CUBRID를 설치한 서버에서 이미 1523 포트를 사용하고 있거나, 방화벽에 의해 1523 포트가 차단된 경우에는 마스터 프로세스가 정상적으로 구동할 수 없으므로, 마스터 서버와 연결할 수 없다는 오류 메시지가 나타날 수 있다. 이와 같이 포트 충돌이 발생하는 경우, 관리자는 서버 환경을 고려하여 **cubrid_port_id** 의 설정값을 변경해야 한다.
 
 .. _check_peer_alive:
 
@@ -717,7 +717,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **data_buffer_size**\ 는 데이터베이스 서버가 메모리 내에 캐시하는 데이터 버퍼의 크기를 설정하기 위한 파라미터이다. 값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 32,768 * :ref:`db_page_size <dpg>` (db_page_size가 16K일 때 **512M**) 이고, 최소값은 1,024 * :ref:`db_page_size <dpg>` (db_page_size가 16K일 때 **16M**)이다. CUBRID 64비트 버전에서는 최대값이 INT_MAX * :ref:`db_page_size <dpg>`\ 이다. CUBRID 32비트 버전에서는 최대값이 **2G**\ 임에 주의한다.
 
-    **data_buffer_size** 파라미터의 값이 클수록 버퍼에 캐시되는 데이터 페이지가 많아지므로 디스크 I/O 비용을 줄일 수 있다는 장점이 있다. 반면, 이 파라미터의 값을 너무 크게 설정하면 과도하게 시스템 메모리가 점유되므로 운영체제에 의해 버퍼 풀이 스와핑(swapping)되는 현상이 발생할 수 있다. **data_buffer_size** 파라미터는 필요한 메모리 크기가 시스템 메모리의 2/3 이내가 되도록 설정할 것을 권장한다.
+    **data_buffer_size** 파라미터의 값이 클수록 버퍼에 캐시되는 데이터 페이지가 많아지므로 디스크 I/O 비용을 줄일 수 있다는 장점이 있다. 반면, 이 파라미터의 값을 너무 크게 설정하면 과도하게 시스템 메모리가 점유되므로 운영 체제에 의해 버퍼 풀이 스와핑(swapping)되는 현상이 발생할 수 있다. **data_buffer_size** 파라미터는 필요한 메모리 크기가 시스템 메모리의 2/3 이내가 되도록 설정할 것을 권장한다.
 
     *   필요한 메모리 크기 = 데이터 버퍼 크기(**data_buffer_size**)
 
@@ -765,7 +765,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     .. note::
 
-        병렬 질의는 충분한 CPU 코어와 메모리가 확보된 환경에서 효과적이다. **max_parallel_workers** 값이 실제 물리적 코어 수에 비해 지나치게 크면 시스템 리소스 경합으로 인해 오히려 성능이 저하될 수 있다.
+        병렬 질의는 충분한 CPU 코어와 메모리가 확보된 환경에서 효과적이다. **max_parallel_workers** 값이 실제 물리적 코어 수에 비해 지나치게 크면 시스템 자원 경합으로 인해 오히려 성능이 저하될 수 있다.
 
     .. note::
 
@@ -773,7 +773,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
     
     .. note::
 
-        모든 쿼리를 병렬로 실행할 경우 서버 자원의 과도한 점유로 인해 시스템 전체의 성능 저하가 발생할 수 있습니다. 이를 방지하기 위해 옵티마이저는 병렬 처리 효율이 높은 쿼리를 선별 허용하는 **처리량 규칙**\을 적용한다.
+        모든 질의를 병렬로 실행할 경우 서버 자원의 과도한 점유로 인해 시스템 전체의 성능 저하가 발생할 수 있다. 이를 방지하기 위해 옵티마이저는 병렬 처리 효율이 높은 질의를 선별 허용하는 **처리량 규칙**\을 적용한다.
 
 .. _parallelism:
 
@@ -783,7 +783,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     이 파라미터가 **0**\ 이나 **1**\ 로 설정하면 **PARALLEL** 힌트가 없는 모든 질의는 단일 스레드로 실행된다. **2 이상**\ 으로 설정하면 옵티마이저가 판단하기에 병렬 처리가 효율적인 연산 (scan, hash join, sort, subquery 등)에 대해 자동으로 병렬 실행을 적용한다. 
 
-    실제 쿼리 실행시 적용되는 병렬 처리 수준은 다음과 같은 규칙을 따른다.
+    실제 질의 실행시 적용되는 병렬 처리 수준은 다음과 같은 규칙을 따른다.
 
     **PARALLEL(N)** 힌트가 사용되면 해당 파라미터 값을 무시하고 N 만큼의 워커를 할당 시도한다. 단 최대 허용값(32 또는 시스템 코어 수 중 작은 값)은 초과할 수 없다.
 
@@ -806,17 +806,17 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     .. note::
 
-        병렬 처리 수준을 높게 설정하면 개별 질의의 성능은 향상될 수 있지만, 과도하게 높은 값은 리소스 경쟁으로 인해 시스템 전체의 성능이 오히려 저하될 수 있다. 
+        병렬 처리 수준을 높게 설정하면 개별 질의의 성능은 향상될 수 있지만, 과도하게 높은 값은 자원 경쟁으로 인해 시스템 전체의 성능이 오히려 저하될 수 있다. 
     
     .. note::
 
-        이 파라미터의 최대값은 물리 코어 수와 32 중 작은 값으로 자동으로 제한되어, 개별 병렬 연산이 서버 리소스를 과도하게 점유하는 것을 방지하여, 시스템 전체의 안정성을 보장한다.
+        이 파라미터의 최대값은 물리 코어 수와 32 중 작은 값으로 자동으로 제한되어, 개별 병렬 연산이 서버 자원을 과도하게 점유하는 것을 방지하여, 시스템 전체의 안정성을 보장한다.
 
 **max_subquery_cache_size**
 
-    **max_subquery_cache_size**\는 서브 쿼리 캐시의 크기를 설정하기 위한 파라미터이다. 값 뒤에 B, K, M으로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **2,097,152** (2M) 바이트, 최소값은 **0**, 그리고 최대값은 **16,777,216** (16M) 바이트이다. 서브 쿼리 캐시는 질의의 서브 쿼리 개수만큼 할당되며, 주질의가 종료될 때 할당 해제된다.
+    **max_subquery_cache_size**\는 부질의 캐시의 크기를 설정하기 위한 파라미터이다. 값 뒤에 B, K, M으로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **2,097,152** (2M) 바이트, 최소값은 **0**, 그리고 최대값은 **16,777,216** (16M) 바이트이다. 부질의 캐시는 질의의 부질의 개수만큼 할당되며, 주질의가 종료될 때 할당 해제된다.
 
-    **max_subquery_cache_size**\이 0으로 설정되거나, :ref:`NO_SUBQUERY_CACHE <correlated-subquery-cache>` 힌트가 명시되거나, 저장공간이 부족한 경우 서브 쿼리 캐시가 사용되지 않는다.
+    **max_subquery_cache_size**\이 0으로 설정되거나, :ref:`NO_SUBQUERY_CACHE <correlated-subquery-cache>` 힌트가 명시되거나, 저장공간이 부족한 경우 부질의 캐시가 사용되지 않는다.
 
 .. _memoize_memory_limit:
 
@@ -856,7 +856,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **thread_stacksize**
 
-    **thread_stacksize**\ 는 스레드의 스택 크기를 설정하기 위한 파라미터로 기본값은 **1048576** 바이트이다. **thread_stacksize** 파라미터의 설정값은 운영체제가 허용하는 스택 크기를 초과할 수 없다.
+    **thread_stacksize**\ 는 스레드의 스택 크기를 설정하기 위한 파라미터로 기본값은 **1048576** 바이트이다. **thread_stacksize** 파라미터의 설정값은 운영 체제가 허용하는 스택 크기를 초과할 수 없다.
 
 .. _disk-parameters:
 
@@ -955,7 +955,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     .. warning::
 
-        posix_fadvise 플래그와 데이터 액세스 방법을 완벽히 이해해야 한다. 파라미터 설정은 성능 향상을 도울 수도 있지만 잘못 사용할 경우 성능을 하락시킬 수도 있다. 대부분의 시나리오에서 디폴트 값을 사용하는 것이 가장 좋다.
+        posix_fadvise 플래그와 데이터 액세스 방법을 완벽히 이해해야 한다. 파라미터 설정은 성능 향상을 도울 수도 있지만 잘못 사용할 경우 성능을 하락시킬 수도 있다. 대부분의 시나리오에서 기본값을 사용하는 것이 가장 좋다.
 
 .. _error-parameters:
 
@@ -984,7 +984,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **call_stack_dump_activation_list**
 
-    **call_stack_dump_activation_list**\ 는 모든 오류에 대해 콜-스택을 서버 에러 로그 파일($CUBRID/log/server 디렉터리에 위치)에 덤프하지 않기로 설정한 상태에서, 예외적으로 콜-스택을 덤프할 특정 오류 번호를 지정하기 위한 파라미터이다. 따라서, **call_stack_dump_activation_list** 파라미터는 **call_stack_dump_on_error** 의 값이 **no** 인 경우에만 효력이 있다.
+    **call_stack_dump_activation_list**\ 는 모든 오류에 대해 콜-스택을 서버 오류 로그 파일($CUBRID/log/server 디렉터리에 위치)에 덤프하지 않기로 설정한 상태에서, 예외적으로 콜-스택을 덤프할 특정 오류 번호를 지정하기 위한 파라미터이다. 따라서, **call_stack_dump_activation_list** 파라미터는 **call_stack_dump_on_error** 의 값이 **no** 인 경우에만 효력이 있다.
 
     값을 설정하지 않을 경우 기본값은 "DEFAULT" 키워드이며, 다음 오류들을 포함한다. "DEFAULT" 키워드는 다른 오류 번호와 함께 사용될 수 있다.
 
@@ -1091,19 +1091,19 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **error_log**
 
-    **error_log**  는 데이터베이스 서버에 오류가 발생하는 경우, 에러 로그가 저장되는 파일 이름을 지정하기 위한 서버/클라이언트 파라미터이다. 에러 로그가 저장되는 파일명의 작성 규칙은 *<database_name>_<date>_<time>.err*  이다. 한편 시스템이 데이터베이스 서버 정보를 찾을 수 없는 오류에 대해서는 에러 로그 파일명의 작성 규칙을 따를 수 없다. 따라서, **cubrid.err** 파일에 오류 로그를 기록한다. **cubrid.err** 에러 로그 파일은 **$CUBRID/log/server** 디렉터리에 저장된다.
+    **error_log**  는 데이터베이스 서버에 오류가 발생하는 경우, 오류 로그가 저장되는 파일 이름을 지정하기 위한 서버/클라이언트 파라미터이다. 오류 로그가 저장되는 파일명의 작성 규칙은 *<database_name>_<date>_<time>.err*  이다. 한편 시스템이 데이터베이스 서버 정보를 찾을 수 없는 오류에 대해서는 오류 로그 파일명의 작성 규칙을 따를 수 없다. 따라서, **cubrid.err** 파일에 오류 로그를 기록한다. **cubrid.err** 오류 로그 파일은 **$CUBRID/log/server** 디렉터리에 저장된다.
 
 **error_log_level**
 
-    **error_log_level** 은 에러 심각성(severity) 수준에 따라 에러 로그 파일에 저장할 에러 메시지를 지정할 수 있는 서버 파라미터이다. 에러 심각성 수준은 가장 낮은 수준인 **WARNING** 부터 가장 심각한 수준인 **FATAL** 까지 총 5단계로 구성되며, 그에 따른 에러 메시지 포함 관계는 **FATAL** < **ERROR** < **SYNTAX** < **NOTIFICATION** < **WARNING** 이다. 기본값은 **NOTIFICATION** 이며, 이 경우 **FATAL** , **ERROR** , **SYNTAX** , **NOTIFICATION**  에 해당하는 에러 메시지가 에러 로그 파일에 기록된다.
+    **error_log_level** 은 오류 심각성(severity) 수준에 따라 오류 로그 파일에 저장할 오류 메시지를 지정할 수 있는 서버 파라미터이다. 오류 심각성 수준은 가장 낮은 수준인 **WARNING** 부터 가장 심각한 수준인 **FATAL** 까지 총 5단계로 구성되며, 그에 따른 오류 메시지 포함 관계는 **FATAL** < **ERROR** < **SYNTAX** < **NOTIFICATION** < **WARNING** 이다. 기본값은 **NOTIFICATION** 이며, 이 경우 **FATAL** , **ERROR** , **SYNTAX** , **NOTIFICATION**  에 해당하는 오류 메시지가 오류 로그 파일에 기록된다.
 
 **error_log_warning**
 
-    **error_log_warning** 은 에러 심각성(severity) 수준이 **WARNING** 인 에러 메시지의 출력 여부를 설정할 수 있는 서버 파라미터이다. 기본값은 no이다. **WARNING** 메시지가 에러 로그 파일에 저장되도록 하려면, **error_log_warning** 의 값을 **yes** 로 설정해야 한다.
+    **error_log_warning** 은 오류 심각성(severity) 수준이 **WARNING** 인 오류 메시지의 출력 여부를 설정할 수 있는 서버 파라미터이다. 기본값은 no이다. **WARNING** 메시지가 오류 로그 파일에 저장되도록 하려면, **error_log_warning** 의 값을 **yes** 로 설정해야 한다.
 
 **error_log_size**
 
-    **error_log_size**  는 에러 로그 파일에서 기록되는 파일의 크기를 지정하는 파라미터로 기본값은 **512M**  이다. 에러 로그 파일의 크기가 이 파라미터의 설정값에 도달하면 *<database_name>_<date>_<time>.err.bak* 파일이 생성된다.
+    **error_log_size**  는 오류 로그 파일에서 기록되는 파일의 크기를 지정하는 파라미터로 기본값은 **512M**  이다. 오류 로그 파일의 크기가 이 파라미터의 설정값에 도달하면 *<database_name>_<date>_<time>.err.bak* 파일이 생성된다.
 
 .. _lock-parameters:
 
@@ -1174,7 +1174,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
   
     잠금 에스컬레이션 발생 시 트랜잭션의 롤백 여부를 지정한다. 기본값은 **no**\ 이다. 
       
-    이 파라미터가 **yes**\ 로 설정되면, 잠금 에스컬레이션 발생 시점에 에스컬레이션 없이 에러 로그를 기록하고, 해당 잠금 요청은 실패하면서 트랜잭션을 롤백한다. 
+    이 파라미터가 **yes**\ 로 설정되면, 잠금 에스컬레이션 발생 시점에 에스컬레이션 없이 오류 로그를 기록하고, 해당 잠금 요청은 실패하면서 트랜잭션을 롤백한다. 
     no로 설정되면 잠금 에스컬레이션이 수행되고 트랜잭션을 계속 진행한다. 
       
     잠금 에스컬레이션이 발생하면 레코드 잠금이 테이블 잠금으로 전환되고, 잠금(lock)을 해제하는 시간이 오래 걸리면서 해당 테이블에 대한 다른 트랜잭션의 접근이 불가하게 되는 상황이 발생할 수 있다. 
@@ -1462,7 +1462,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     **add_column_update_hard_default**\ 는 **ALTER TABLE ... ADD COLUMN** 절로 새로운 칼럼을 추가할 때 이 칼럼에 입력할 값을 고정 기본값(hard_default)으로 제공할지 여부를 설정하는 파라미터로서, 기본값은 **no**\ 이다.
 
-    **NOT NULL** 제약 조건이 있고 **DEFAULT** 제약 조건이 없을 때 이 파라미터 값이 **yes**\ 이면 칼럼의 새로운 입력값을 고정 기본값(hard default value)으로 입력하며, **no**\ 이면 에러를 반환한다. 이 파라미터의 값이 **yes**\ 일 때 추가하려는 칼럼의 타입에 고정 기본값이 없으면 에러를 반환한다. 각 타입별 고정 기본값에 대해서는 **ALTER TABLE** 문의 :ref:`change-column`\ 을 참고한다.
+    **NOT NULL** 제약 조건이 있고 **DEFAULT** 제약 조건이 없을 때 이 파라미터 값이 **yes**\ 이면 칼럼의 새로운 입력값을 고정 기본값(hard default value)으로 입력하며, **no**\ 이면 오류를 반환한다. 이 파라미터의 값이 **yes**\ 일 때 추가하려는 칼럼의 타입에 고정 기본값이 없으면 오류를 반환한다. 각 타입별 고정 기본값에 대해서는 **ALTER TABLE** 문의 :ref:`change-column`\ 을 참고한다.
 
     .. code-block:: sql
                     
@@ -1537,7 +1537,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **group_concat_max_len**
 
-    **group_concat_max_len**  은 :func:`GROUP_CONCAT` 함수의 리턴 값의 크기를 제한하는 파라미터이다.
+    **group_concat_max_len**  은 :func:`GROUP_CONCAT` 함수의 반환 값의 크기를 제한하는 파라미터이다.
     값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **1,024** 바이트이며, 최소값은 4 바이트, 최대값은INT_MAX 바이트(약2G)이다. :func:`GROUP_CONCAT` 함수의 결과가 제한을 넘으면 오류가 반환된다.
 
     이 함수는 **string_max_size_bytes** 파라미터의 영향을 받으며, **group_concat_max_len** 값을 **string_max_size_bytes** 보다 크게 설정한 경우 :func:`GROUP_CONCAT` 결과가 **string_max_size_bytes** 값을 초과하면 오류가 발생한다.
@@ -1650,7 +1650,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
     이 파라미터 값이 no이면 확장된 문법이 적용되므로 **GROUP BY** 절에 명시되지 않은 칼럼을 **SELECT** 칼럼 리스트에 명시할 수 있고, 이 값이 yes이면 **GROUP BY** 절에 명시된 칼럼만 **SELECT** 칼럼 리스트에 명시할 수 있다.
 
-    기본값은 **no** 이므로, SQL 표준에 따라 질의를 수행하려면 **only_full_group_by** 파라미터 값을 yes로 설정한다. 이 경우에는 확장된 문법이 적용되지 않으므로 실행 결과로 아래와 같은 에러가 출력된다. ::
+    기본값은 **no** 이므로, SQL 표준에 따라 질의를 수행하려면 **only_full_group_by** 파라미터 값을 yes로 설정한다. 이 경우에는 확장된 문법이 적용되지 않으므로 실행 결과로 아래와 같은 오류가 출력된다. ::
 
         ERROR: Attributes exposed in aggregate queries must also appear in the group by clause.
 
@@ -1658,7 +1658,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **oracle_compat_number_behavior**
 
-    **oracle_compat_number_behavior**\는 다른 DBMS(Database Management System)와의 호환성 향상을 위한 파라미터로, NUMERIC, DOUBLE 과 FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록 하며, DOUBLE과 FLOAT인 경우 지수 형식으로 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no**\인 경우, DOUBLE 타입으로 구성된 a_double 테이블을 조회하는 쿼리의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes**\인 경우 소수점으로만 표시된다.
+    **oracle_compat_number_behavior**\는 다른 DBMS(Database Management System)와의 호환성 향상을 위한 파라미터로, NUMERIC, DOUBLE 과 FLOAT 타입에 대해 소숫점 이하 0을 출력하지 않도록 하며, DOUBLE과 FLOAT인 경우 지수 형식으로 표시하지 않는다.  예를 들면, 이 파라미터 설정 값이 **no**\인 경우, DOUBLE 타입으로 구성된 a_double 테이블을 조회하는 질의의 결과는 아래와 같이 지수 형태로 표시되지만, 파라미터 설정 값이 **yes**\인 경우 소수점으로만 표시된다.
 
     .. code-block:: sql
 
@@ -1854,7 +1854,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **return_null_on_function_errors**
 
-    **return_null_on_function_errors**  는 일부 SQL 함수에서 에러가 발생할 때의 동작을 정의하는 파라미터로서, 기본값은 **no**  이다. 이 파라미터 값이 **yes** 이면 함수에서 에러가 발생할 때 **NULL**\ 을 반환하며, **no** 이면 함수에서 에러가 발생할 때 에러를 반환하고 관련 메시지를 출력한다.
+    **return_null_on_function_errors**  는 일부 SQL 함수에서 오류가 발생할 때의 동작을 정의하는 파라미터로서, 기본값은 **no**  이다. 이 파라미터 값이 **yes** 이면 함수에서 오류가 발생할 때 **NULL**\ 을 반환하며, **no** 이면 함수에서 오류가 발생할 때 오류를 반환하고 관련 메시지를 출력한다.
 
     다음 SQL 함수가 이 시스템 파라미터의 영향을 받는다.
 
@@ -1942,13 +1942,13 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 **stored_procedure_return_numeric_size**
 
-    **stored_procedure_return_numeric_size** 는 저장 프로시저에서 NUMERIC타입으로 리턴되는 값의 정밀도와 스케일을 설정하는 파라미터이다.
+    **stored_procedure_return_numeric_size** 는 저장 프로시저에서 NUMERIC타입으로 반환되는 값의 정밀도와 스케일을 설정하는 파라미터이다.
     설정 방식은 양의 정수 리스트로, 정밀도와 스케일을 각각 지정할 수 있다. 예를 들면, 정밀도를 15, 스케일을 10으로 설정하는 경우 15,10 으로 지정하면 된다. 기본 값은 38,15 이며, 값의 지정 범위는 정밀도의 경우 1 ~ 38, 스케일은 0 ~ 38이다. 그리고 정밀도 보다 큰 스케일 값은 지정할 수 없다.
 
 **string_max_size_bytes**
 
     **string_max_size_bytes** 는 문자열 함수 또는 연산에서 문자열 인자로 사용할 수 있는 최대 바이트 크기를 정의하는 파라미터이다.
-    값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **1,048,576** 바이트(1M)이다. 최소값은 64 바이트, 최대값은 33,554,432 바이트(32M)이다. 최대값을 넘어서는 경우, REPEAT, SPACE 함수에서는 NULL이 출력되며, 그 외 함수에서는 에러를 출력한다.
+    값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **1,048,576** 바이트(1M)이다. 최소값은 64 바이트, 최대값은 33,554,432 바이트(32M)이다. 최대값을 넘어서는 경우, REPEAT, SPACE 함수에서는 NULL이 출력되며, 그 외 함수에서는 오류를 출력한다.
 
     이 파라미터에 영향을 받는 함수 및 연산식은 다음과 같다.
 
@@ -2158,7 +2158,7 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 
 .. _query-cache-parameters:
 
-질의 캐쉬 관련 파라미터
+질의 캐시 관련 파라미터
 -----------------------------------
 
 다음은 질의 결과에 대한 캐시 기능과 관련된 파라미터로 각 파라미터의 타입과 설정 가능한 값의 범위는 다음과 같다.
@@ -2398,7 +2398,7 @@ HA 관련 파라미터
 
 **stored_procedure_port**
 
-    **stored_procedure_port** 데이터베이스 서버에서 저장 프로시저를 호출하기 위한 TCP 포트 번호를 설정하는 파라미터이다. 이 값은 65,536보다 작아야한다. 기본값은 **0** 이고 이는 임시 포트 범위에서 포트 번호가 자동으로 할당됨을 의미한다. 이 파라미터의 값은 **stored_procedure** 파라미터가 **yes** 일 때에만 적용된다. cubrid.conf의 [common]에서 이 파라미터를 설정하면 에러가 발생하므로 주의한다. ::
+    **stored_procedure_port** 데이터베이스 서버에서 저장 프로시저를 호출하기 위한 TCP 포트 번호를 설정하는 파라미터이다. 이 값은 65,536보다 작아야한다. 기본값은 **0** 이고 이는 임시 포트 범위에서 포트 번호가 자동으로 할당됨을 의미한다. 이 파라미터의 값은 **stored_procedure** 파라미터가 **yes** 일 때에만 적용된다. cubrid.conf의 [common]에서 이 파라미터를 설정하면 오류가 발생하므로 주의한다. ::
 
         ..... 
         [common] 
@@ -2490,13 +2490,13 @@ HA 관련 파라미터
 
     **sql_trace_execution_plan** 은 **sql_trace_slow** 파라미터 값의 설정 시간을 초과한 장기 실행 질의(long running query)의 실행 계획을 출력할지 여부를 설정하는 파라미터이다. 기본값은 **no** 이다.
 
-    이 값이 yes이면 서버 에러 로그 파일($CUBRID/log/server 이하의 파일), CAS 로그 파일($CUBRID/log/broker/sql_log 이하의 파일)에 해당 SQL 문, 질의 실행 계획, cubrid statdump 명령의 출력 정보를 기록한다.
+    이 값이 yes이면 서버 오류 로그 파일($CUBRID/log/server 이하의 파일), CAS 로그 파일($CUBRID/log/broker/sql_log 이하의 파일)에 해당 SQL 문, 질의 실행 계획, cubrid statdump 명령의 출력 정보를 기록한다.
 
-    이 값이 no면 서버 에러 로그 파일, CAS 로그 파일에 해당 SQL문만 기록한다.
+    이 값이 no면 서버 오류 로그 파일, CAS 로그 파일에 해당 SQL문만 기록한다.
 
-    예를 들어 5초를 초과하면 느린 질의(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow** 의 값을 5,000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
+    예를 들어 5초를 초과하면 슬로우쿼리(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow** 의 값을 5,000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
         
-    단, 서버 에러 로그 파일에는 error_log_level 파라미터의 값이 NOTIFICATION인 경우에만 해당 정보를 기록한다.
+    단, 서버 오류 로그 파일에는 error_log_level 파라미터의 값이 NOTIFICATION인 경우에만 해당 정보를 기록한다.
 
 **use_orderby_sort_limit**
 
@@ -2522,7 +2522,7 @@ HA 관련 파라미터
 
 **tde_keys_file_path**
     
-  **tde_keys_file_path** 는 TDE를 위한 키 파일의 경로를 설정하는 파라미터이다. 키 파일의 이름은 [database_name]_keys 로 고정되어 있고, 해당 키 파일이 존재하는 디렉토리를 지정한다. 이 시스템 파라미터가 설정되지 않았을 경우에는 데이터베이스 볼륨과 같은 위치에서 키 파일을 찾는다. 키 파일에 대한 자세한 설명은 :ref:`tde-file-based-key` 를 참고한다.
+  **tde_keys_file_path** 는 TDE를 위한 키 파일의 경로를 설정하는 파라미터이다. 키 파일의 이름은 [database_name]_keys 로 고정되어 있고, 해당 키 파일이 존재하는 디렉터리를 지정한다. 이 시스템 파라미터가 설정되지 않았을 경우에는 데이터베이스 볼륨과 같은 위치에서 키 파일을 찾는다. 키 파일에 대한 자세한 설명은 :ref:`tde-file-based-key` 를 참고한다.
 
 **tde_default_algorithm**
     
@@ -2546,7 +2546,7 @@ HA 관련 파라미터
 
 **vacuum_ovfp_check_duration**
 
- **vacuum_ovfp_check_duration**\는 vacuum 쓰레드에 의해 수집된 인덱스 오버플로우 수와 그 관련 정보를 유지하는 기간을 지정한다. 설정한 기간 내에 업데이트되지 않은 정보는 제거된다. 값의 단위는 분이다. 
+ **vacuum_ovfp_check_duration**\는 vacuum 스레드에 의해 수집된 인덱스 오버플로우 수와 그 관련 정보를 유지하는 기간을 지정한다. 설정한 기간 내에 업데이트되지 않은 정보는 제거된다. 값의 단위는 분이다. 
 
 **deduplicate_key_level**
 
@@ -2571,7 +2571,7 @@ HA 관련 파라미터
     *   메모리 사용량 모니터링 기능은 서버에서 메모리를 할당할 때마다 사용량을 추적하는 연산이 추가되어 비용이 발생한다. 특히 HA 환경에서는 슬레이브 노드가 마스터 노드의 로그를 처리하는 과정에서 메모리 할당 비중이 높아져 성능 문제가 발생할 수 있다. 따라서 슬레이브 노드에서는 이 기능의 사용을 권장하지 않는다.
     *   큐브리드에서 추적하고 있는 메모리 사용량은 pmap -d, htop에서 표기되는 메모리 사용량과는 다를 수 있다. 이는 큐브리드의 메모리 사용량 모니터링 기능을 코드 수준으로 자동화하는 과정에서 발생한 glibc와의 충돌을 막기 위해 헤더 파일 및 glibc 내부에서 발생하는 메모리 할당을 추적하지 않기 때문이며, 다음과 같은 추가적인 차이점이 존재한다.
 
-        *   pmap -d에서 프로세스의 힙 메모리 사용량은 writeable/private 항목을 통해 확인할 수 있다. 그러나 이는 운영체제의 메모리 관리 정책에 따른 프로세스의 메모리 점유량을 보여주기 때문에 큐브리드의 메모리 사용량 모니터링 기능이 보여주는 사용량과 차이가 발생할 수 있다.
+        *   pmap -d에서 프로세스의 힙 메모리 사용량은 writeable/private 항목을 통해 확인할 수 있다. 그러나 이는 운영 체제의 메모리 관리 정책에 따른 프로세스의 메모리 점유량을 보여주기 때문에 큐브리드의 메모리 사용량 모니터링 기능이 보여주는 사용량과 차이가 발생할 수 있다.
         *   htop은 RES(Resident Size) 항목을 통해 프로세스의 메모리 사용량을 제공하나 이는 프로세스의 물리 메모리 사용량을 보여주는 것이기 때문에 프로세스의 힙 메모리 사용량 만을 확인할 수는 없다.
 
 .. _flashback_timeout:
@@ -2853,7 +2853,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **KEEP_CONNECTION**
 
-    **KEEP_CONNECTION** 은 CAS와 응용 클라이언트 사이의 연결 방식을 지정하는 파라미터로 **ON** / **AUTO** 중 하나로 설정된다. 이 파라미터가 **ON** 으로 설정되면 커넥션 단위로 CAS와 연결한다. 또한 **AUTO** 로 설정되면 CAS의 개수가 클라이언트 개수보다 많은 경우 커넥션 단위로 연결하고, CAS의 개수가 클라이언트의 개수보다 적은 경우 트랜잭션 단위로 연결한다. 기본값은 **AUTO** 이다.
+    **KEEP_CONNECTION** 은 CAS와 응용 클라이언트 사이의 연결 방식을 지정하는 파라미터로 **ON** / **AUTO** 중 하나로 설정된다. 이 파라미터가 **ON** 으로 설정되면 연결 단위로 CAS에 접속한다. 또한 **AUTO** 로 설정되면 CAS의 개수가 클라이언트 개수보다 많은 경우 연결 단위로 접속하고, CAS의 개수가 클라이언트의 개수보다 적은 경우 트랜잭션 단위로 접속한다. 기본값은 **AUTO** 이다.
 
 **MAX_NUM_DELAYED_HOSTS_LOOKUP**
 
@@ -2924,16 +2924,16 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **APPL_SERVER_PORT**
 
-    **APPL_SERVER_PORT** 는 Windows 운영체제에만 적용가능한 파라미터로, 클라이언트와 CAS의 통신 포트를 별도로 지정하기 위한 파라미터이다.
+    **APPL_SERVER_PORT** 는 Windows 운영 체제에만 적용가능한 파라미터로, 클라이언트와 CAS의 통신 포트를 별도로 지정하기 위한 파라미터이다.
 
-    Linux 운영체제에서는 클라이언트가 브로커와 연결을 하면, 브로커는 CAS를 할당한 후 클라이언트와의 네트워크 연결을 그대로 CAS에게 전달하기 때문에 클라이언트는 재 접속 과정 없이 CAS와 통신이 가능하다. 이 경우, 별도의 **APPL_SERVER_PORT** 는 사용되지 않는다.
+    Linux 운영 체제에서는 클라이언트가 브로커와 연결을 하면, 브로커는 CAS를 할당한 후 클라이언트와의 네트워크 연결을 그대로 CAS에게 전달하기 때문에 클라이언트는 재 접속 과정 없이 CAS와 통신이 가능하다. 이 경우, 별도의 **APPL_SERVER_PORT** 는 사용되지 않는다.
 
     반면 Windows에서는 모든 CAS가 독립적인 네트워크 포트를 할당받아 네트워크 연결을 기다리고 있으며, 클라이언트가 브로커에 연결하면 브로커는 가용한 CAS로 접속하기 위한 포트 번호를 클라이언트에게 전달한다. 순차적으로 클라이언트는 현재의 브로커와 네트워크 연결을 종료하고 브로커에서 전달받은 포트 번호로 CAS와 새롭게 접속을 하게된다.
 
     **APPL_SERVER_PORT** 를 별도로 설정하지 않으면 이 값은 **BROKER_PORT** 파라미터 값에 1을 더한 값이 된다.
     예를 들어, **BROKER_PORT** 의 값이 30,000이고 **APPL_SERVER_PORT** 의 값은 미설정 상태에서 **MIN_NUM_APPL_SERVER** 의 값이 5인 경우 브로커 초기 구동 시 5개의 CAS가 각각 30,001~30,005의 포트를 사용한다. 동일 조건 하에 **APPL_SERVER_PORT** 의 값만 35,000라면 브로커 초기 구동 시 5개의 CAS가 각각 35,000~35,004의 포트를 사용한다.  CAS의 최대 개수가 **cubrid_broker_conf** 의 **MAX_NUM_APPL_SERVER** 파라미터에 의해 제한되므로 설정할 수 있는 CAS의 통신 포트의 개수 역시 최대 **MAX_NUM_APPL_SERVER** 파라미터의 설정값으로 제한된다.
  
-    Windows 운영체제에서 응용 클라이언트와 CUBRID 브로커 사이에 방화벽이 존재한다면 반드시 **BROKER_PORT** 및 **APPL_SERVER_PORT** 에서 설정된 통신 포트를 열어야 한다.
+    Windows 운영 체제에서 응용 클라이언트와 CUBRID 브로커 사이에 방화벽이 존재한다면 반드시 **BROKER_PORT** 및 **APPL_SERVER_PORT** 에서 설정된 통신 포트를 열어야 한다.
  
     .. note:: 
 
@@ -3060,7 +3060,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
     **JDBC_CACHE** 와 **JDBC_CACHE_HINT_ONLY**, **JDBC_CACHE_LIFE_TIME** 파라미터 설정은
 
-    질의 캐쉬 관련 파라미터 **max_query_cache_entries** 와 **query_cache_size_in_pages** 가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
+    질의 캐시 관련 파라미터 **max_query_cache_entries** 와 **query_cache_size_in_pages** 가 0보다 큰 값으로 설정되었을 때만 의미를 가진다.
 
     JDBC 클라이언트 결과 캐시가 동작하기 위해서는 앞서 언급된 3개의 JDBC관련 파라미터 설정과 함께 SELECT 질의가 반드시 질의 힌트 /\*+ QUERY CACHE \*/를 포함하고 있어야 한다.
 
@@ -3079,7 +3079,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **ACCESS_LOG_DIR** 
      
-    **ACCESS_LOG_DIR**  은 브로커 접속 로그(**ACCESS_LOG**) 파일이 생성되는 디렉토리를 지정한다. 기본값은 **log/broker** 이다. 
+    **ACCESS_LOG_DIR**  은 브로커 접속 로그(**ACCESS_LOG**) 파일이 생성되는 디렉터리를 지정한다. 기본값은 **log/broker** 이다. 
 
 **ACCESS_LOG_MAX_SIZE**
 
@@ -3087,7 +3087,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **ERROR_LOG_DIR**
 
-    **ERROR_LOG_DIR**  은 브로커에 대한 에러 로그가 저장되는 디렉터리를 지정하는 파라미터로, 기본값은 **log/broker/error_log** 이다. 브로커 에러 로그 파일명은 *broker_ name_id.err*\ 이다.
+    **ERROR_LOG_DIR**  은 브로커에 대한 오류 로그가 저장되는 디렉터리를 지정하는 파라미터로, 기본값은 **log/broker/error_log** 이다. 브로커 오류 로그 파일명은 *broker_ name_id.err*\ 이다.
 
 **LOG_DIR**
                        
@@ -3097,7 +3097,7 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
 
 **SLOW_LOG**
 
-    SLOW SQL 로깅 여부를 지정하는 파라미터이다. 기본값은 **ON** 이다. 이 값이 **ON** 이면 **LONG_QUERY_TIME** 시간을 초과한 장기 실행(long-duration query) 질의문 또는 에러가 발생한 질의문이 SLOW SQL 로그 파일에 저장된다. 생성되는 파일의 이름은 *broker_name_id.slow.log* 이며, **SLOW_LOG_DIR** 이하에 생성된다.
+    SLOW SQL 로깅 여부를 지정하는 파라미터이다. 기본값은 **ON** 이다. 이 값이 **ON** 이면 **LONG_QUERY_TIME** 시간을 초과한 장기 실행(long-duration query) 질의문 또는 오류가 발생한 질의문이 SLOW SQL 로그 파일에 저장된다. 생성되는 파일의 이름은 *broker_name_id.slow.log* 이며, **SLOW_LOG_DIR** 이하에 생성된다.
 
 **SLOW_LOG_DIR**
 
@@ -3110,8 +3110,8 @@ CUBRID 설치 시 생성되는 기본 브로커 설정 파일인 **cubrid_broker
     **SQL_LOG** 는 응용 클라이언트의 요청에 따라 CAS가 처리한 SQL 문에 대해 어떤 로그를 기록할 것인지 결정하는 파라미터로 기본값은 **ON** 이다. 이 파라미터가 **ON** 으로 설정되면, 모든 로그를 기록한다. SQL 로그가 기록되는 파일명은 *broker_name_id.sql.log* 이며, 설치 디렉터리의 **log/broker/sql_log** 디렉터리에 생성된다. 파라미터 값은 다음과 같다.
 
     *   **OFF** : 모든 로그를 기록하지 않음
-    *   **ERROR** : 에러가 발생한 질의에 대한 로그만 기록
-    *   **NOTICE** : 설정된 시간을 초과한 장기 실행 질의/트랜잭션의 로그, 에러가 발생한 질의에 대한 로그 기록
+    *   **ERROR** : 오류가 발생한 질의에 대한 로그만 기록
+    *   **NOTICE** : 설정된 시간을 초과한 장기 실행 질의/트랜잭션의 로그, 오류가 발생한 질의에 대한 로그 기록
     *   **TIMEOUT** : 설정된 시간을 초과한 장기 실행 질의/트랜잭션의 로그 기록
     *   **ON** / **ALL** : 모든 로그 기록
 
@@ -3211,7 +3211,7 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
     *   **SCHEDULE**: 작업 할당에 대한 로그 기록
     *   **NOTICE**: 주요한 알림에 대한 로그 기록
     *   **TIMEOUT**: 임계 시간 초과에 대한 로그 기록
-    *   **ERROR**: 에러 로그 기록
+    *   **ERROR**: 오류 로그 기록
     *   **NONE**: 로그 기록하지 않음
     *   **OFF**: 로그 기록하지 않음
 
@@ -3229,7 +3229,7 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
 
 **SHARD_PROXY_TIMEOUT**
 
-    proxy에서 CAS가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 에러 처리함. 기본값: 30(초). 이 값이 0이면 시스템 파라미터 query_timeout의 값에 의해 대기 시간이 결정되며, query_timeout의 값도 0이면 무한 대기한다. SHARD_PROXY_TIMEOUT의 값이 0보다 크면 query_timeout 값과 SHARD_PROXY_TIMEOUT 값 중 큰 값에 의해 대기 시간이 결정된다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다.
+    proxy에서 CAS가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 오류 처리함. 기본값: 30(초). 이 값이 0이면 시스템 파라미터 query_timeout의 값에 의해 대기 시간이 결정되며, query_timeout의 값도 0이면 무한 대기한다. SHARD_PROXY_TIMEOUT의 값이 0보다 크면 query_timeout 값과 SHARD_PROXY_TIMEOUT 값 중 큰 값에 의해 대기 시간이 결정된다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다.
 
 .. note:: **proxy 설정을 위해 필요한 파라미터**
 
@@ -3287,7 +3287,7 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
 
 **SOURCE_ENV**
 
-    **SOURCE_ENV** 는 브로커 각각에 대해 개별적으로 운영체제 환경 변수를 설정할 수 있는 파일을 정하는 파라미터로, 파일 확장자는 반드시 **env** 여야 한다. **cubrid.conf** 에서 지정하는 모든 파라미터는 환경 변수를 통해서도 설정할 수 있다. 예를 들어, **cubrid.conf** 에서 **lock_timeout** 은 환경 변수 **CUBRID_LOCK_TIMEOUT** 으로 지정할 수 있다. 또 다른 예로, broker1에서만 데이터 정의문 수행을 차단하려면 **SOURCE_ENV** 에서 지정한 파일에 **CUBRID_BLOCK_DDL_STATEMENT** 를 1로 설정하면 된다.
+    **SOURCE_ENV** 는 브로커 각각에 대해 개별적으로 운영 체제 환경 변수를 설정할 수 있는 파일을 정하는 파라미터로, 파일 확장자는 반드시 **env** 여야 한다. **cubrid.conf** 에서 지정하는 모든 파라미터는 환경 변수를 통해서도 설정할 수 있다. 예를 들어, **cubrid.conf** 에서 **lock_timeout** 은 환경 변수 **CUBRID_LOCK_TIMEOUT** 으로 지정할 수 있다. 또 다른 예로, broker1에서만 데이터 정의문 수행을 차단하려면 **SOURCE_ENV** 에서 지정한 파일에 **CUBRID_BLOCK_DDL_STATEMENT** 를 1로 설정하면 된다.
 
     환경변수가 있으면 **cubrid.conf** 보다 우선한다. 기본값은 **cubrid.env** 이다.
 

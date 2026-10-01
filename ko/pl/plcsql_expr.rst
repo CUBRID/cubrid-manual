@@ -66,13 +66,13 @@ Static/Dynamic SQL 밖의 PL/CSQL 문에서 사용할 수 있는 식별자에는
 * 프로시저/함수의 인자
 * 묵시적으로 선언된 :ref:`For 루프<loop>`\의 iterator. integer 타입이거나 record 타입
 
-명시적 혹은 묵시적 선언 없이 식별자를 사용하면 컴파일 에러가 발생한다.
+명시적 혹은 묵시적 선언 없이 식별자를 사용하면 컴파일 오류가 발생한다.
 
 Static SQL 결과 크기
 ====================
 SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 표현식이다.
 
-* 커서와 연관되지 않은 SELECT 문의 경우 반드시 INTO 절을 사용해야 하며 조회 결과는 1개이어야 한다. 따라서, 이 SELECT 문이 정상적으로 수행되었을 때 SQL%ROWCOUNT의 값은 1이다. 조회 결과 크기가 0이거나 1을 초과해서 실행시 에러가 발생했을 때는 SQL%ROWCOUNT의 값은 정의되지 않는다.
+* 커서와 연관되지 않은 SELECT 문의 경우 반드시 INTO 절을 사용해야 하며 조회 결과는 1개이어야 한다. 따라서, 이 SELECT 문이 정상적으로 수행되었을 때 SQL%ROWCOUNT의 값은 1이다. 조회 결과 크기가 0이거나 1을 초과해서 실행시 오류가 발생했을 때는 SQL%ROWCOUNT의 값은 정의되지 않는다.
 * INSERT, UPDATE, DELETE, MERGE, REPLACE, TRUNCATE 문의 경우 영향 받은 레코드 개수가 된다.
 * COMMIT, ROLLBACK 문에 대해서는 0이 된다.
 
@@ -87,8 +87,8 @@ SQL%ROWCOUNT는 Static SQL을 실행한 직후에 결과 크기를 나타내는 
 * %NOTFOUND: 첫 번째 FETCH 이전이면 NULL. 아니면 마지막 FETCH가 0개의 ROW를 결과로 갖는지 여부 (BOOLEAN). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.
 * %ROWCOUNT: 첫 번째 FETCH 이전이면 0. 아니면 현재까지 FETCH된 ROW의 개수 (BIGINT). 열려 있지 않은 커서에 대해서 조회하면 INVALID_CURSOR Exception 발생.
 
-아래 예제에서 내부 함수 iterate_cursor()는 커서 속성을 사용하여 레코드들을 순회하고 전체 레코드 개수를 리턴한다.
-인자로 넘겨 받은 커서가 열려 있지 않을 때는 (커서의 %ISOPEN 속성이 False일 때는) -1을 리턴한다.
+아래 예제에서 내부 함수 iterate_cursor()는 커서 속성을 사용하여 레코드들을 순회하고 전체 레코드 개수를 반환한다.
+인자로 넘겨 받은 커서가 열려 있지 않을 때는 (커서의 %ISOPEN 속성이 False일 때는) -1을 반환한다.
 더 이상 조회할 레코드가 없는지는 FETCH 후 커서의 %NOTFOUND 속성을 검사해서 알아낸다.
 커서의 %ROWCOUNT 속성은 FETCH 문으로 조회된 레코드 각각마다 1씩 증가하다가
 FETCH 반복문이 종료된 후에는 조회된 전체 레코드 개수를 나타내게 된다.
@@ -229,7 +229,7 @@ PL/CSQL에서는 다음 두 가지 경우에 레코드 변수를 사용할 수 �
 이 중에서 빌트인 함수는 :ref:`연산자와 함수 <operators-and-functions>` 장에 나열된 큐브리드 내장 함수들을 말한다.
 단, 빌트인 함수들 중에서 :ref:`IF <func_if>`\는 PL/CSQL 문법과 충돌을 일으키므로 사용할 수 없다.
 
-다른 저장 함수나 빌트인 함수 호출문 실행 중에 에러가 나면 SQL_ERROR Exception이 발생한다.
+다른 저장 함수나 빌트인 함수 호출문 실행 중에 오류가 나면 SQL_ERROR Exception이 발생한다.
 
 CASE 표현식
 =================
@@ -283,7 +283,7 @@ SQLCODE, SQLERRM
 =================
 
 Exception 처리 block 안에서 SQLCODE와 SQLERRM은 각각 현재 처리 중인 Exception의 코드(INTEGER 타입)와
-에러메시지(STRING 타입)를 나타낸다.
+오류메시지(STRING 타입)를 나타낸다.
 Exception 처리 block 밖에서 SQLCODE와 SQLERRM은 각각 0과 'no error' 값을 갖는다.
 
 .. code-block:: sql

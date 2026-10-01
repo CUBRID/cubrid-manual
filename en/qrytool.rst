@@ -16,7 +16,7 @@ This section describes how to use the CSQL Interpreter on the Linux environment
 
 **Starting the CSQL Interpreter**
 
-You can start the CSQL program in the shell as shown below. At the initial installation, **PUBLIC** and **DBA** users are provided and the passwords of the users not set. If no user is specified while the CSQL Interpreter is executed, **PUBLIC** is used for log-in. ::
+You can start the CSQL program in the shell as shown below. At the initial installation, **PUBLIC** and **DBA** users are provided and the passwords of the users not set. If no user is specified while the CSQL Interpreter is executed, **PUBLIC** is used for login. ::
 
     % csql demodb
 
@@ -178,7 +178,7 @@ CUBRID Manager is the client tool that you should download and run. It is a Java
         C:\CUBRID>cubrid service start
         ++ cubrid service is running.
     
-#.  After the installation of CUBRID Manager, register host information on the [File > Add Host] menu. To register the host, you should enter host address, connection port (default: 8001), and CUBRID Manager user name/password and install the JDBC driver of the same version with DB engine (supporting auto-driver-search/auto-update).
+#.  After the installation of CUBRID Manager, register host information on the [File > Add Host] menu. To register the host, you should enter host address, connection port (default: 8001), and CUBRID Manager username/password and install the JDBC driver of the same version with DB engine (supporting auto-driver-search/auto-update).
 
 #.  Choose the host on the left tress and perform the CUBRID Manager user (=host user) authentication. The default ID/password is admin/admin.
 

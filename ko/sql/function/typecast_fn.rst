@@ -256,9 +256,9 @@ CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대�
     *   **CAST** 변환은 같은 문자셋을 가지는 데이터 타입끼리만 허용된다.
     *   근사치 데이터 타입(FLOAT, DOUBLE)이 정수형으로 변환되는 경우, 소수점 아래 자리가 반올림 처리된다.
     *   정확한 수치 데이터 타입(NUMERIC)이 정수형으로 변환되는 경우,  소수점 아래 자리가 반올림 처리된다.
-    *   수치 데이터 타입을 문자열 타입으로 변환하는 경우, 문자열의 길이가 (모든 유효 숫자 자리 + 소수점) 이상이 되도록 충분하게 지정해야 한다. 그렇지 않으면 에러가 발생한다.
+    *   수치 데이터 타입을 문자열 타입으로 변환하는 경우, 문자열의 길이가 (모든 유효 숫자 자리 + 소수점) 이상이 되도록 충분하게 지정해야 한다. 그렇지 않으면 오류가 발생한다.
     *   문자열 타입 *A*\ 를 문자열 타입 *B*\ 로 변환하는 경우, *A*\ 의 길이 이상이 되도록 충분하게 지정되지 않으면 문자열 끝 부분이 삭제(truncate)되어 저장된다.
-    *   문자열 타입 *A*\ 를 날짜/시간 데이터 타입 *B*\ 로 변환하는 경우, *A*\ 의 리터럴이 *B* 타입과 일치하는 경우에만 변환된다. 그렇지 않을 경우 에러가 발생한다.
+    *   문자열 타입 *A*\ 를 날짜/시간 데이터 타입 *B*\ 로 변환하는 경우, *A*\ 의 리터럴이 *B* 타입과 일치하는 경우에만 변환된다. 그렇지 않을 경우 오류가 발생한다.
     *   문자열로 저장된 수치 데이터는 명시적으로 타입 변환을 해주어야 산술 연산이 가능하다.
 
 DATE_FORMAT
@@ -266,7 +266,7 @@ DATE_FORMAT
 
 .. function:: DATE_FORMAT (date, format)
 
-    **DATE_FORMAT** 함수는 날짜를 포함하는 날짜/시간 타입 값을 지정된 날짜/시간 형식의 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다. 지정할 *format* 인자는 아래의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다. :ref:`날짜/시간 형식 2 <datetime-format2>` 표는 :func:`DATE_FORMAT` 함수, :func:`TIME_FORMAT` 함수, :func:`STR_TO_DATE` 함수에서 사용된다.
+    **DATE_FORMAT** 함수는 날짜를 포함하는 날짜/시간 타입 값을 지정된 날짜/시간 형식의 문자열로 출력하며, 반환 값은 **VARCHAR** 타입이다. 지정할 *format* 인자는 아래의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다. :ref:`날짜/시간 형식 2 <datetime-format2>` 표는 :func:`DATE_FORMAT` 함수, :func:`TIME_FORMAT` 함수, :func:`STR_TO_DATE` 함수에서 사용된다.
 
     :param date: DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, 또는 TIMESTAMPLTZ 타입의 값
     :param format: 출력 형식을 지정한다. '%'로 시작하는 형식 지정자(specifier)를 사용한다.
@@ -274,7 +274,7 @@ DATE_FORMAT
 
 *format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. **intl_date_lang**\ 이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
-예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "2009년 10월 3일"인 날짜를 "3 Oktober 2009"인 문자열로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "2009년 10월 3일"인 날짜를 "3 Oktober 2009"인 문자열로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 아래 :ref:`날짜/시간 형식 2 <datetime-format2>` 표에서 월 이름, 요일 이름, 일 이름, 오전/오후 이름 등은 언어에 따라 다르다.
 
@@ -489,7 +489,7 @@ STR_TO_DATE
 
 .. function:: STR_TO_DATE (string, format)
 
-    **STR_TO_DATE** 함수는 인자로 주어진 문자열을 지정된 형식에 따라 해석하여 날짜/시간 값으로 변환하며, :func:`DATE_FORMAT` 함수와 반대로 동작한다. 리턴 값은 문자열에 포함된 날짜 또는 시간 부분에 따라 타입이 결정된다.
+    **STR_TO_DATE** 함수는 인자로 주어진 문자열을 지정된 형식에 따라 해석하여 날짜/시간 값으로 변환하며, :func:`DATE_FORMAT` 함수와 반대로 동작한다. 반환 값은 문자열에 포함된 날짜 또는 시간 부분에 따라 타입이 결정된다.
     
     :param string: 문자열
     :param format: 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
@@ -497,11 +497,11 @@ STR_TO_DATE
 
 지정할 *format* 인자는 :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
 
-*string*\ 에 유효하지 않은 날짜/시간 값이 포함되거나, *format*\ 에 지정된 형식 지정자를 적용하여 문자열을 해석할 수 없으면 에러를 리턴한다.
+*string*\ 에 유효하지 않은 날짜/시간 값이 포함되거나, *format*\ 에 지정된 형식 지정자를 적용하여 문자열을 해석할 수 없으면 오류를 반환한다.
 
 *format* 인자가 지정되면 지정된 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. **intl_date_lang** 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다. 
 
-예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "3 Oktober 2009"인 문자열을 "2009년 10월 3일"인 **DATE** 타입으로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "3 Oktober 2009"인 문자열을 "2009년 10월 3일"인 **DATE** 타입으로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 인자의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값을 입력한 경우에는 날짜와 시간 값이 모두 0인 **DATE**, **DATETIME** 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다. 이에 관한 자세한 내용은 :ref:`jdbc-connection-conf`\ 을 참고하면 된다.
 
@@ -579,7 +579,7 @@ TIME_FORMAT
 
 .. function:: TIME_FORMAT (time, format)
 
-    **TIME_FORMAT** 함수는 시간을 포함하는 날짜/시간 타입 값을 지정된 시간 형식의 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다.
+    **TIME_FORMAT** 함수는 시간을 포함하는 날짜/시간 타입 값을 지정된 시간 형식의 문자열로 출력하며, 반환 값은 **VARCHAR** 타입이다.
 
     :param time: 시간을 포함하는 타입(TIME, TIMESTAMP, DATETIME, TIMESTAMPTZ 또는 DATETIMETZ)의 값.
     :param format: 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. :func:`DATE_FORMAT` 함수의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다.
@@ -587,7 +587,7 @@ TIME_FORMAT
 
 *format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. **intl_date_lang** 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
-예를 들어 언어가 "de_DE"일 때 *format* 이 "%h:%i:%s %p"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"일 때 *format* 이 "%h:%i:%s %p"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 다음은 시스템 파라미터 **intl_date_lang** 의 값이 "en_US"인 경우의 예이다.
 
@@ -647,16 +647,16 @@ TO_CHAR(date_time)
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
 
-    **TO_CHAR** (date_time) 함수는 날짜/시간 타입 값을 :ref:`날짜/시간 형식 1 <datetime-format1>` 표에 따라 문자열로 변환하여 이를 반환하며, 리턴 값의 타입은 **VARCHAR** 이다.
+    **TO_CHAR** (date_time) 함수는 날짜/시간 타입 값을 :ref:`날짜/시간 형식 1 <datetime-format1>` 표에 따라 문자열로 변환하여 이를 반환하며, 반환 값의 타입은 **VARCHAR** 이다.
 
     :param date_time: 날짜/시간 타입(TIME, DATE, TIMESTAMP, DATETIME, DATETIMETZ, DATETIMELTZ, TIMESTAMPTZ, TIMESTAMPLTZ )의 값.
-    :param format: 리턴 값의 형식
-    :param date_lang_string_literal: 리턴 값에 적용할 언어를 지정한다.
+    :param format: 반환 값의 형식
+    :param date_lang_string_literal: 반환 값에 적용할 언어를 지정한다.
     :rtype: STRING
 
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *date_time* 을 출력한다. 자세한 형식은 :ref:`날짜/시간 형식 1 <datetime-format1>` 표를 참고하면 된다. 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값이 지정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
-예를 들어 언어가 "de_DE"일 때 *format*\ 이 "HH:MI:SS AM"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"일 때 *format*\ 이 "HH:MI:SS AM"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 *format* 인자가 생략되면 "en_US"의 기본 출력 형식을 따라 *date_time*\ 을 문자열로 출력한다(아래 :ref:`날짜/시간 타입에 대한 언어별 기본 출력 형식<tochar-default-datetime-format>` 표의 en_US 참고).
 
@@ -824,7 +824,7 @@ TO_CHAR(date_time)
 | **p.m.**     | p.m.                         | 오후        |
 +--------------+------------------------------+-------------+
 
-**리턴 값 형식의 자릿수의 예**
+**반환 값 형식의 자릿수의 예**
 
 +-------------------------+---------------------------+---------------------------+
 | 형식 구성 요소          | en_US 자릿수              | ko_KR 자릿수              |
@@ -973,13 +973,13 @@ TO_CHAR(number)
     **TO_CHAR** (number) 함수는 수치형 데이터 타입을 :ref:`숫자 형식 <tochar-number-format>`\ 에 맞는 문자열로 변환하여 **VARCHAR** 타입으로 반환한다.
     
     :param number: 숫자를 반환하는 수치형 데이터 타입의 연산식을 지정한다. 입력값이 NULL이면 결과로 NULL이 반환된다. 입력값이 문자열 타입이면 해당 문자열을 그대로 반환한다.
-    :param format: 리턴 값의 형식을 지정한다. 값이 **NULL**\ 인 경우에는 **NULL**\ 이 반환된다.
+    :param format: 반환 값의 형식을 지정한다. 값이 **NULL**\ 인 경우에는 **NULL**\ 이 반환된다.
     :param number_lang_string_literal: 입력 숫자를 출력할 때 적용할 언어를 지정한다.
     :rtype: STRING
 
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *number*\ 를 출력한다. 이때 언어는 *number_lang_string_literal* 인자에 의해 정해진다. *number_lang_string_literal* 인자가 생략되면 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다. 
 
-예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 출력하고 ","를 소수점 기호로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 출력하고 ","를 소수점 기호로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 *format* 인자가 생략되면 지정된 언어의 기본 출력에 따라 *number* 를 문자열로 출력한다(:ref:`언어별 숫자의 기본 출력 <tochar-default-number-format>` 표 참고).
 
@@ -1144,7 +1144,7 @@ TO_DATE
 
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다. 
 
-예를 들어 언어가 "de_DE"일 때 *string* 이 "12.mai.2012"이고 *format* 이 "DD.mon.YYYY"인 경우 "2012년 5월 12일"로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"일 때 *string* 이 "12.mai.2012"이고 *format* 이 "DD.mon.YYYY"인 경우 "2012년 5월 12일"로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 *format* 인자가 생략되면 먼저 CUBRID 기본 형식(:ref:`cast-to-datetime-recommend` 참고)에 따라 *string*\ 을 해석하고, 실패하는 경우 **intl_date_lang**\ 에 의해 설정된 언어의 기본 출력 형식(:ref:`날짜/시간 타입에 대한 언어별 기본 출력 형식 <tochar-default-datetime-format>` 표 참고)에 따라 *string*\ 을 해석한다. **intl_date_lang**\ 이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
@@ -1223,7 +1223,7 @@ TO_DATETIME
 
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 
 
-예를 들어 언어가 "de_DE"일 때 *string*\ 이 "12/mai/2012 12:10:00 Nachm."이고 *format*\ 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다. 
+예를 들어 언어가 "de_DE"일 때 *string*\ 이 "12/mai/2012 12:10:00 Nachm."이고 *format*\ 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다. 
 
 *format* 인자가 생략되면 먼저 CUBRID 기본 형식(:ref:`cast-to-datetime-recommend` 참고)에 따라 *string*\ 을 해석하고, 실패하는 경우 **intl_date_lang**\ 에 의해 설정된 언어의 기본 출력 형식(:ref:`날짜/시간 타입에 대한 언어별 기본 출력 형식 <tochar-default-datetime-format>` 표 참고)에 따라 *string*\ 을 해석한다. **intl_date_lang**\ 이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
@@ -1307,12 +1307,12 @@ TO_NUMBER
     **TO_NUMBER** 함수는 인자로 지정된 숫자 형식을 기준으로 문자열을 해석하여, 이를 **NUMERIC** 타입으로 변환하여 반환한다.
 
     :param string: 문자열을 반환하는 임의의 연산식이다. 값이 NULL이면 결과로 NULL이 반환된다.
-    :param format: 숫자로 반환할 값의 형식을 지정하며, :ref:`숫자 형식 <tochar-number-format>` 표를 참고한다. 생략되면 NUMERIC(38,0) 값이 리턴된다.
+    :param format: 숫자로 반환할 값의 형식을 지정하며, :ref:`숫자 형식 <tochar-number-format>` 표를 참고한다. 생략되면 NUMERIC(38,0) 값이 반환된다.
     :rtype: NUMERIC
 
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.
 
-예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 *format* 인자가 생략되면 **intl_number_lang**\ 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:ref:`언어별 숫자의 기본 출력 <tochar-default-number-format>` 표 참고). **intl_number_lang**\ 이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 
@@ -1377,7 +1377,7 @@ TO_TIME
     :rtype: TIME
 
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.
-주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 예를 들어 언어가 "de_DE"일 때 *string* 이 "10:23:00 Nachm."이고 *format* 이 "HH:MI:SS AM"인 경우 "오후 10시 23분 0초"로 해석한다.
 
@@ -1463,7 +1463,7 @@ TO_TIMESTAMP
 
 *format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 DB 생성 시 지정한 언어가 적용된다.
 
-예를 들어 언어가 "de_DE"일 때 *string* 이 "12/mai/2012 12:10:00 Nachm."이고 *format* 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+예를 들어 언어가 "de_DE"일 때 *string* 이 "12/mai/2012 12:10:00 Nachm."이고 *format* 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 오류를 반환한다.
 
 *format* 인자가 생략되면 먼저 CUBRID 기본 형식(:ref:`cast-to-datetime-recommend` 참고)에 따라 *string*\ 을 해석하고, 실패하는 경우 **intl_date_lang**\ 에 의해 설정된 언어의 기본 출력 형식(:ref:`날짜/시간 타입에 대한 언어별 기본 출력 형식 <tochar-default-datetime-format>` 표 참고)에 따라 *string*\ 을 해석한다. **intl_date_lang**\ 이 설정되지 않으면 DB 생성 시 지정한 언어가 적용된다.
 

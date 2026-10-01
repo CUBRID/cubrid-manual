@@ -115,7 +115,7 @@ To have complete control on the disk space used for temporary data and to preven
 
 Once temporary temp volume is created, it is maintained until a database restarts and its size cannot be reduced. It is recommended to make temporary temp volume automatically delete by restarting a database if its size is too big.
 
-*   **File name of the temporary volumes**: The file name format of a temporary volume is *db_name*\ **_t**\ *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
+*   **File name of the temporary volumes**: The filename format of a temporary volume is *db_name*\ **_t**\ *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
 
 *   **Configuring the temporary volume size**: The number of temporary volumes to be created is determined by the system depending on the space size needed for processing transactions. However, users can limit the total temporary volume size by configuring the **temp_file_max_size_in_pages** parameter value in the system parameter configuration file (**cubrid.conf**). The default value is -1, which means it can be created as long as free space is available. If the **temp_file_max_size_in_pages** parameter value is configured to 0, no temporary volumes will be created, and the system will have to rely exclusively on permanent volumes assigned for temporary data.
 

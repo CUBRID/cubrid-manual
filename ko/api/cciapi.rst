@@ -20,7 +20,7 @@ cci_bind_param
     :param value: (IN) 바인딩될 데이터 값.
     :param u_type: (IN) 데이터베이스에 반영될 데이터 타입.
     :param flag: (IN) bind_flag(:c:type:`CCI_BIND_PTR`).
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_BIND_INDEX**
         *   **CCI_ER_CON_HANDLE**
@@ -159,7 +159,7 @@ cci_bind_param_array
     :param value: (IN) 바인딩될 데이터 값
     :param null_ind: (IN) **NULL** 식별자 배열(0 : not **NULL**, 1 : **NULL**)
     :param u_type: (IN) 데이터베이스에 반영될 데이터 타입
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_BIND_INDEX**
         *   **CCI_ER_BIND_ARRAY_SIZE**
@@ -178,7 +178,7 @@ cci_bind_param_array_size
 
     :param req_handle: (IN) prepared statement의 요청 핸들
     :param array_size: (IN) 바인딩할 배열 크기
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
@@ -199,7 +199,7 @@ cci_bind_param_ex
     :param u_type: (IN) 데이터베이스에 반영될 데이터 타입
     :param flag: (IN) bind_flag(:c:type:`CCI_BIND_PTR`)
      
-    :return: 에러 코드(0: 성공) 
+    :return: 오류 코드(0: 성공) 
   
     *length* 인자는 아래와 같이 '\\0'을 포함하는 문자열을 바인딩하기 위해 사용할 수 있다. 
      
@@ -214,7 +214,7 @@ cci_blob_free
 
     **BLOB** 구조체에 대한 메모리를 해제한다.
 
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_INVALID_LOB_HANDLE**
 
@@ -227,8 +227,8 @@ cci_blob_new
 
     :param conn_handle: (IN) 연결 핸들
     :param blob: (OUT) **LOB** Locator
-    :param error_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param error_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
@@ -251,8 +251,8 @@ cci_blob_read
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 파일로부터 가져올 **LOB** 데이터 길이
     :param buf: (IN) 데이터 읽기 버퍼
-    :param error_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param error_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
@@ -273,7 +273,7 @@ cci_blob_size
     *blob* 에 명시한 데이터 파일의 크기를 반환한다.
 
     :param blob: (IN) **LOB** Locator
-    :return: **BLOB** 데이터 파일의 크기(>=0 : 성공), 에러 코드(<0 : 에러)
+    :return: **BLOB** 데이터 파일의 크기(>=0 : 성공), 오류 코드(<0 : 오류)
 
         *   **CCI_ER_INVALID_LOB_HANDLE**
 
@@ -289,8 +289,8 @@ cci_blob_write
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 버퍼로부터 가져올 데이터 길이
     :param buf: (OUT) 데이터 쓰기 버퍼
-    :param error_buf: (OUT) 에러 버퍼
-    :return: write한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
+    :param error_buf: (OUT) 오류 버퍼
+    :return: write한 크기(>=0 : 성공), 오류 코드(<0 : 오류)
 
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
@@ -310,7 +310,7 @@ cci_cancel
     다른 스레드에서 실행 중인 질의를 취소시킨다. Java의 Statement.cancel() 메서드와 같은 기능을 수행한다.
 
     :param conn_handle: (IN) 연결 핸들
-    :return: 에러 코드
+    :return: 오류 코드
         
         *    **CCI_ER_COMMUNICATION**
         *    **CCI_ER_CON_HANDLE**
@@ -488,7 +488,7 @@ cci_clob_free
     **CLOB** 구조체에 대한 메모리를 해제한다.
 
     :param clob: (IN) **LOB** Locator
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_INVALID_LOB_HANDLE**
 
@@ -501,8 +501,8 @@ cci_clob_new
 
     :param conn_handle: (IN) 연결 핸들
     :param clob: (OUT) **LOB** Locator
-    :param error_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(<0 : 에러)
+    :param error_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(<0 : 오류)
 
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
@@ -525,8 +525,8 @@ cci_clob_read
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 파일로부터 가져올 **LOB** 데이터 길이
     :param buf: (IN) 데이터 읽기 버퍼
-    :param error_buf: (OUT) 에러 버퍼
-    :return: read한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
+    :param error_buf: (OUT) 오류 버퍼
+    :return: read한 크기(>=0 : 성공), 오류 코드(<0 : 오류)
 
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
@@ -547,7 +547,7 @@ cci_clob_size
     *clob* 에 명시한 데이터 파일의 크기를 반환한다.
 
     :param clob: (IN) **LOB** Locator
-    :return: **CLOB** 데이터 파일의 크기(>=0 : 성공), 에러 코드(<0 : 에러)
+    :return: **CLOB** 데이터 파일의 크기(>=0 : 성공), 오류 코드(<0 : 오류)
 
         *   **CCI_ER_INVALID_LOB_HANDLE**
 
@@ -563,8 +563,8 @@ cci_clob_write
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 버퍼로부터 가져올 데이터 길이
     :param buf: (OUT) 데이터 쓰기 버퍼
-    :param error_buf: (OUT) 에러 버퍼
-    :return: write한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
+    :param error_buf: (OUT) 오류 버퍼
+    :return: write한 크기(>=0 : 성공), 오류 코드(<0 : 오류)
 
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
@@ -585,8 +585,8 @@ cci_close_query_result
     요청 핸들(req_handle)의 종료 없이 :c:func:`cci_prepare`\ 를 반복 수행하는 경우 :c:func:`cci_close_req_handle` 함수를 호출하기 전에 이 함수를 호출할 것을 권장한다.
     
     :param req_handle: (IN) 요청 핸들
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드 (0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드 (0: 성공)
     
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_COMMUNICATION**
@@ -604,7 +604,7 @@ cci_close_req_handle
     :c:func:`cci_prepare`\ 로 획득한 요청 핸들을 종료(close)한다. 
 
     :param req_handle: (IN) 요청 핸들
-    :return: 에러 코드(0 : 성공)
+    :return: 오류 코드(0 : 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
@@ -631,7 +631,7 @@ cci_col_get
     :param col_attr: (IN) collection 속성 이름
     :param col_size: (OUT) collection 크기 (-1 : null)
     :param col_type: (OUT) collection 타입 (set, multiset, sequence : u_type)
-    :param err_buf: (OUT) 에러 버퍼
+    :param err_buf: (OUT) 오류 버퍼
     :return: 요청 핸들
 
         *   **CCI_ER_CON_HANDLE**
@@ -652,8 +652,8 @@ cci_col_seq_drop
     :param oid_str: (IN) oid
     :param col_attr: (IN) collection 속성 이름
     :param index: (IN) 인덱스
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -674,8 +674,8 @@ cci_col_seq_insert
     :param col_attr: (IN) collection 속성 이름
     :param index: (IN) 인덱스
     :param value: (IN) 순차적 엘리먼트(스트링)
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -696,8 +696,8 @@ cci_col_seq_put
     :param col_attr: (IN) collection 속성 이름
     :param index: (IN) 인덱스
     :param value: (IN) 순차적 값
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -717,8 +717,8 @@ cci_col_set_add
     :param oid_str: (IN) oid
     :param col_attr: (IN) collection 속성 이름
     :param value: (IN) set 엘리먼트
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -738,8 +738,8 @@ cci_col_set_drop
     :param oid_str: (IN) oid
     :param col_attr: (IN) collection 속성 이름
     :param value: (IN) set 엘리먼트(스트링)
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_QUERY_TIMEOUT**
@@ -757,8 +757,8 @@ cci_col_size
     :param oid_str: (IN) oid
     :param col_attr: (IN) collection 속성 이름
     :param col_size: (OUT) collection 크기 (-1 : NULL)
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0 : 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0 : 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -770,14 +770,14 @@ cci_connect
 
 .. c:function:: int cci_connect(char *ip, int port, char *db_name, char *db_user, char *db_password)
 
-    DB 서버에 대한 연결 핸들을 할당받고 해당 서버와 연결을 시도한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 에러 코드를 반환한다.
+    DB 서버에 대한 연결 핸들을 할당받고 해당 서버와 연결을 시도한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 오류 코드를 반환한다.
 
     :param ip: (IN) 서버 IP 문자 스트링 (호스트 이름)
     :param port: (IN) 브로커 포트( **$CUBRID/conf/cubrid_broker.conf** 파일에 설정된 포트를 사용)
     :param db_name: (IN) DB 이름
     :param db_user: (IN) DB 사용자 이름
     :param db_passwd: (IN) DB 사용자 암호
-    :return: 연결 핸들 ID(성공), 에러 코드(실패)
+    :return: 연결 핸들 ID(성공), 오류 코드(실패)
 
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_HOSTNAME**
@@ -791,15 +791,15 @@ cci_connect_ex
 
 .. c:function:: int cci_connect_ex(char *ip, int port, char *db_name, char *db_user, char *db_password, T_CCI_ERROR * err_buf)
 
-    **CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 DB 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect`\ 와 다르고 나머지는 동일하다.
+    **CCI_ER_DBMS** 오류를 반환하면 세부 오류 내용을 DB 오류 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect`\ 와 다르고 나머지는 동일하다.
 
     :param ip: (IN) 서버 IP 문자 스트링 (호스트 이름)
     :param port: (IN) 브로커 포트( **$CUBRID/conf/cubrid_broker.conf** 파일에 설정된 포트를 사용)
     :param db_name: (IN) DB 이름
     :param db_user: (IN) DB 사용자 이름
     :param db_passwd: (IN) DB 사용자 암호
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 연결 핸들 ID(성공), 에러 코드(실패)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 연결 핸들 ID(성공), 오류 코드(실패)
 
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_HOSTNAME**
@@ -815,12 +815,12 @@ cci_connect_with_url
 
 .. c:function:: int cci_connect_with_url (char *url, char *db_user, char *db_password)
 
-    *url* 인자로 전달된 접속 정보를 이용하여 데이터베이스로 연결을 시도한다. CCI에서 브로커의 HA 기능을 사용하는 경우 이 함수의 *url* 인자 내의 altHosts 속성을 이용하여, 장애 발생 시 failover할 standby 브로커 서버의 연결 정보를 명시해야 한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 에러 코드를 반환한다. 브로커의 HA 기능에 대한 자세한 내용은 :ref:`duplexing-brokers`\를 참고한다.
+    *url* 인자로 전달된 접속 정보를 이용하여 데이터베이스로 연결을 시도한다. CCI에서 브로커의 HA 기능을 사용하는 경우 이 함수의 *url* 인자 내의 altHosts 속성을 이용하여, 장애 발생 시 failover할 standby 브로커 서버의 연결 정보를 명시해야 한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 오류 코드를 반환한다. 브로커의 HA 기능에 대한 자세한 내용은 :ref:`duplexing-brokers`\를 참고한다.
     
     :param url: (IN) 서버 연결 정보 문자 스트링
     :param db_user: (IN) DB 사용자 이름. NULL이면 *url* 의 <*db_user*>가 사용된다. 이 값이 빈 문자열("")이거나 *url* 내의 <*db_user*>가 정의되지 않은 경우 DB 사용자 이름은 **PUBLIC** 이 된다.
     :param db_passwd: (IN) DB 사용자 암호. NULL이면 *url* 의 <*db_password*>가 사용된다. *url* 내의 <*db_password*>가 정의되지 않은 경우 암호는 빈 문자열("")이 된다. 
-    :return: 연결 핸들 ID(성공), 에러 코드(실패)
+    :return: 연결 핸들 ID(성공), 오류 코드(실패)
 
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_HOSTNAME**
@@ -869,20 +869,20 @@ cci_connect_with_url
 
     *   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 **altHosts**\에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false)
 
-    *   **login_timeout** | **loginTimeout**: 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **30,000**\ (30초)이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다.
+    *   **login_timeout** | **loginTimeout**: 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 오류를 반환한다. 기본값은 **30,000**\ (30초)이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다.
 
-    *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 기본값은 0이며, 0인 경우 무한 대기를 의미한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
+    *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 오류를 반환한다. 기본값은 0이며, 0인 경우 무한 대기를 의미한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
     
         .. note:: :c:func:`cci_execute`\ 에 CCI_EXEC_QUERY_ALL 플래그를 설정하거나 :c:func:`cci_execute_batch` 또는 :c:func:`cci_execute_array`\ 를 사용하여 여러 개의 질의를 한 번에 실행하는 경우, 질의 타임 아웃은 질의 하나에 대해 적용되는 것이 아니라 함수 하나에 대해 적용된다. 즉, 함수 시작 이후 타임아웃이 발생하면 함수 수행이 중단된다.
 
-    *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.) 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
+    *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 오류를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 오류가 발생한 경우 -1을 반환한다. 상세 오류를 확인하고 싶으면 "데이터베이스 오류 버퍼"의 오류 코드를 확인한다. 데이터베이스 오류 버퍼에서 오류 코드를 확인하는 방법은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.) 응용 프로그램이 질의 취소 메시지를 보낸 후 오류를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
 
     *   **logFile**: 디버깅용 로그 파일 이름(기본값: *cci_<handle_id>.log*). <*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
 
     *   **logBaseDir**: 디버깅용 로그 파일이 생성되는 디렉터리. 경로를 포함한 파일 이름의 형식은 logBaseDir/logFile이 되며, 상대 경로로 지정할 수 있다.
 
-    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: **false**)
-    *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: **60000**). 단위는 밀리 초이다.
+    *   **logSlowQueries**: 디버깅용 슬로우쿼리 로깅 여부(기본값: **false**)
+    *   **slowQueryThresholdMillis**: 디버깅용 슬로우쿼리 로깅 시 슬로우쿼리 제한 시간(기본값: **60000**). 단위는 밀리 초이다.
     *   **logTraceApi**: CCI 함수 시작과 끝의 로깅 여부
     *   **logTraceNetwork**: CCI 함수 네트워크 데이터 전송 내용의 로깅 여부
 
@@ -919,9 +919,9 @@ cci_connect_with_url_ex
 
 .. c:function:: int cci_connect_with_url_ex (char *url, char *db_user, char *db_password, T_CCI_ERROR * err_buf)
 
-    **CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 데이터베이스 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect_with_url`\ 과 다르고 나머지는 동일하다.
+    **CCI_ER_DBMS** 오류를 반환하면 세부 오류 내용을 데이터베이스 오류 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect_with_url`\ 과 다르고 나머지는 동일하다.
 
-    :param err_buf: (OUT) 에러 버퍼
+    :param err_buf: (OUT) 오류 버퍼
 
 cci_cursor
 ----------
@@ -933,8 +933,8 @@ cci_cursor
     :param req_handle: (IN) 요청 핸들
     :param offset: (IN) 이동할 오프셋
     :param origin: (IN) 커서 위치를 나타내는 변수로서, 타입은 **T_CCI_CURSOR_POS** 이다. **T_CCI_CURSOR_POS** enum은 **CCI_CURSOR_FIRST**, **CCI_CURSOR_CURRENT**, **CCI_CURSOR_LAST** 의 세 가지 값으로 구성된다.
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드 (0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드 (0: 성공)
 
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_NO_MORE_DATA**
@@ -968,8 +968,8 @@ cci_cursor_update
     :param index: (IN) 칼럼 인덱스
     :param a_type: (IN) *value* 타입
     :param value: (IN) 새로운 값
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드 (0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드 (0: 성공)
 
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
@@ -1010,7 +1010,7 @@ cci_datasource_borrow
     **T_CCI_DATASOURCE** 구조체에서 사용할 CCI 연결을 획득한다.
 
     :param datasource: (IN) CCI 연결을 획득할 **T_CCI_DATASOURCE** 구조체 포인터
-    :param err_buf: (OUT) 에러 버퍼 (에러가 발생하면 에러 코드와 메시지를 반환)
+    :param err_buf: (OUT) 오류 버퍼 (오류가 발생하면 오류 코드와 메시지를 반환)
     :return: CCI 연결 핸들 식별자 (성공), -1 (실패)
 
     .. seealso:: 
@@ -1034,7 +1034,7 @@ cci_datasource_change_property
     :param datasource: (IN) CCI 연결을 획득할 T_CCI_DATASOURCE 구조체 포인터
     :param key: (IN) 속성 이름 문자열에 대한 포인터
     :param val: (IN) 속성 값 문자열에 대한 포인터
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_NO_PROPERTY**
@@ -1087,7 +1087,7 @@ cci_datasource_create
     CCI의 DATASOURCE를 생성한다.
 
     :param properties: (IN) 설정이 저장된 **T_CCI_PROPERTIES** 구조체 포인터. :c:func:`cci_property_set`\ 으로 속성 값들을 설정한다.
-    :param err_buf: (OUT) 에러 버퍼 (에러가 발생하면 에러 코드와 메시지를 반환)
+    :param err_buf: (OUT) 오류 버퍼 (오류가 발생하면 오류 코드와 메시지를 반환)
     :return: 생성된 **T_CCI_DATASOURCE** 구조체 포인터 (성공), NULL (실패)
 
     .. seealso:: 
@@ -1131,7 +1131,7 @@ cci_datasource_release
 
     :param datasource: (IN) CCI 연결을 반환할 **T_CCI_DATASOURCE** 구조체 포인터
     :param conn: (IN) 사용을 끝낸 CCI 연결의 핸들 식별자
-    :param err_buf: (OUT) 에러 버퍼 (에러가 발생하면 에러 코드와 메시지를 반환)
+    :param err_buf: (OUT) 오류 버퍼 (오류가 발생하면 오류 코드와 메시지를 반환)
     :return: 1 (성공), 0 (실패)
 
     .. seealso:: 
@@ -1153,8 +1153,8 @@ cci_disconnect
     *conn_handle* 에 대해 생성된 모든 요청 핸들을 삭제한다. 트랜잭션이 진행 중일 경우 :c:func:`cci_end_tran`\ 을 실행한 다음 삭제된다.
 
     :param conn_handle: (IN) 연결 핸들
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0 : 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0 : 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_DBMS**
@@ -1169,8 +1169,8 @@ cci_end_tran
 
     :param conn_handle: (IN) 연결 핸들
     :param type: (IN) **CCI_TRAN_COMMIT** 또는 **CCI_TRAN_ROLLBACK**
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0 : 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0 : 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_DBMS**
@@ -1190,8 +1190,8 @@ cci_escape_string
     :param to: (OUT) 결과 문자열
     :param from: (IN) 입력 문자열
     :param length: (IN) 입력 문자열의 최대 바이트 길이
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 변경된 문자열의 바이트 길이(성공), 에러 코드(실패)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 변경된 문자열의 바이트 길이(성공), 오류 코드(실패)
     
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_COMMUNICATION**
@@ -1219,12 +1219,12 @@ cci_execute
     :param req_handle: (IN) prepared statement의 요청 핸들
     :param flag: (IN) exec flag ( **CCI_EXEC_QUERY_ALL** )
     :param max_col_size: (IN) 문자열 타입인 경우 fetch하는 칼럼의 문자열 최대 길이(단위: 바이트). 이 값이 0이면 전체 길이를 fetch한다.
-    :param err_buf: (OUT) 에러 버퍼
+    :param err_buf: (OUT) 오류 버퍼
     :return: 
         * **SELECT** : 결과 행의 개수를 반환
         * **INSERT**, **UPDATE** : 반영된 행의 개수
         * 기타 질의 : 0
-        * 실패 : 에러 코드
+        * 실패 : 오류 코드
       
             *   **CCI_ER_REQ_HANDLE**
             *   **CCI_ER_BIND**
@@ -1243,9 +1243,9 @@ cci_execute
     
     *flag*\에 **CCI_EXEC_QUERY_ALL**\ 을 설정하면 다음의 규칙이 적용된다.
 
-    *   리턴 값은 첫 번째 질의에 대한 결과이다.
-    *   어느 하나의 질의에서 에러가 발생할 경우 execute는 실패한 것으로 처리된다.
-    *   q1; q2; q3와 같이 구성된 질의에 대해서 q1을 성공하고 q2에서 에러가 발생해도 q1의 수행 결과는 유효하다. 즉, 에러가 발생했을 때, 앞서 성공한 질의 수행에 대해서 롤백하지 않는다.
+    *   반환 값은 첫 번째 질의에 대한 결과이다.
+    *   어느 하나의 질의에서 오류가 발생할 경우 execute는 실패한 것으로 처리된다.
+    *   q1; q2; q3와 같이 구성된 질의에 대해서 q1을 성공하고 q2에서 오류가 발생해도 q1의 수행 결과는 유효하다. 즉, 오류가 발생했을 때, 앞서 성공한 질의 수행에 대해서 롤백하지 않는다.
     *   질의가 성공적으로 수행된 경우 두 번째 질의에 대한 결과는 :c:func:`cci_next_result`\ 를 통해서 얻을 수 있다.
 
     *max_col_size* 는 prepared statement의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 결정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
@@ -1259,10 +1259,10 @@ cci_execute_array
 
     :param req_handle: (IN) prepared statement의 요청 핸들
     :param query_result: (OUT) 질의 결과
-    :param err_buf: (OUT) 데이터베이스 에러 버퍼
+    :param err_buf: (OUT) 데이터베이스 오류 버퍼
     :return:
         * 성공 : 수행된 질의의 개수(질의 수행 성공/실패 여부와 상관없음)
-        * 실패 : 에러 코드
+        * 실패 : 오류 코드
     
             *   **CCI_ER_REQ_HANDLE**
             *   **CCI_ER_BIND**
@@ -1278,15 +1278,15 @@ cci_execute_array
     *query_result* 변수의 사용이 끝나면 :c:func:`cci_query_result_free` 함수를 이용하여 질의 결과를 삭제해야 한다.
 
     +---------------------------------------+---------------------------------+-------------------------------+
-    | 매크로                                | 리턴 타입                       |  의미                         |
+    | 매크로                                | 반환 타입                       |  의미                         |
     +=======================================+=================================+===============================+
     | :c:macro:`CCI_QUERY_RESULT_RESULT`    | int                             | 영향을 끼친 행의 개수         |
-    |                                       |                                 | 또는 에러 식별자              |
-    |                                       |                                 | (-1: CAS 에러, -2: DBMS 에러) |    
+    |                                       |                                 | 또는 오류 식별자              |
+    |                                       |                                 | (-1: CAS 오류, -2: DBMS 오류) |    
     +---------------------------------------+---------------------------------+-------------------------------+
-    | :c:macro:`CCI_QUERY_RESULT_ERR_NO`    | int                             | 질의에 대한 에러 번호         |
+    | :c:macro:`CCI_QUERY_RESULT_ERR_NO`    | int                             | 질의에 대한 오류 번호         |
     +---------------------------------------+---------------------------------+-------------------------------+
-    | :c:macro:`CCI_QUERY_RESULT_ERR_MSG`   | char \*                         | 질의에 대한 에러 메시지       |
+    | :c:macro:`CCI_QUERY_RESULT_ERR_MSG`   | char \*                         | 질의에 대한 오류 메시지       |
     +---------------------------------------+---------------------------------+-------------------------------+
     | :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` | int(**T_CCI_CUBRID_STMT** enum) | 질의문의 타입                 |
     +---------------------------------------+---------------------------------+-------------------------------+
@@ -1383,10 +1383,10 @@ cci_execute_batch
     :param num_sql_stmt: (IN) *sql_stmt* 의 개수
     :param sql_stmt: (IN) SQL 문 array
     :param query_result: (OUT) *sql_stmt* 의 결과
-    :param err_buf: (OUT) 데이터베이스 에러 버퍼
+    :param err_buf: (OUT) 데이터베이스 오류 버퍼
     :return:
         * 성공 : 수행된 질의의 개수(질의 수행 성공/실패 여부와 상관없음)
-        * 실패 : 에러 코드
+        * 실패 : 오류 코드
          
             *   **CCI_ER_CON_HANDLE**
             *   **CCI_ER_DBMS**
@@ -1463,9 +1463,9 @@ cci_execute_result
     사용된 질의 결과의 메모리는 :c:func:`cci_query_result_free`\를 통해 해제되어야 한다.
     
     :param req_handle: (IN) prepared statement의 요청 핸들
-    :param query_result: (OUT) 쿼리 결과
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 수행된 질의의 개수(성공), 에러 코드(실패)
+    :param query_result: (OUT) 질의 결과
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 수행된 질의의 개수(성공), 오류 코드(실패)
 
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_COMMUNICATION**
@@ -1501,8 +1501,8 @@ cci_fetch
     :c:func:`cci_execute`\ 로 실행한 질의 결과를 서버 측 CAS로부터 fetch하여 클라이언트 버퍼에 저장한다. fetch된 질의 결과에서 특정 칼럼의 데이터는 :c:func:`cci_get_data` 함수를 이용해서 확인할 수 있다.
 
     :param req_handle: (IN) 요청 핸들
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_REQ_HANDLE**
         *   **CAS_ER_HOLDABLE_NOT_ALLOWED**
@@ -1520,7 +1520,7 @@ cci_fetch_buffer_clear
     클라이언트 버퍼에 임시 저장된 레코드를 삭제한다.
 
     :param req_handle: (IN) 요청 핸들
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_REQ_HANDLE**
 
@@ -1529,11 +1529,11 @@ cci_fetch_sensitive
 
 .. c:function:: int cci_fetch_sensitive(int req_handle, T_CCI_ERROR *err_buf)
 
-    서버에서 클라이언트로 **SELECT** 질의의 결과가 전송될 때 sensitive column에 대해서 변경된 값으로 전송되도록 한다. *req_handle* 에 의한 결과가 sensitive result가 아닐 경우 :c:func:`cci_fetch`\ 와 동일하다. 리턴 값이 **CCI_ER_DELETED_TUPLE**\ 일 경우 해당 레코드는 삭제된 경우이다.
+    서버에서 클라이언트로 **SELECT** 질의의 결과가 전송될 때 sensitive column에 대해서 변경된 값으로 전송되도록 한다. *req_handle* 에 의한 결과가 sensitive result가 아닐 경우 :c:func:`cci_fetch`\ 와 동일하다. 반환 값이 **CCI_ER_DELETED_TUPLE**\ 일 경우 해당 레코드는 삭제된 경우이다.
 
     :param req_handle: (IN) 요청 핸들
-    :param err_buf: (OUT) 데이터베이스 에러 버퍼
-    :return: 에러 코드 (0: 성공)
+    :param err_buf: (OUT) 데이터베이스 오류 버퍼
+    :return: 오류 코드 (0: 성공)
 
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_NO_MORE_DATA**
@@ -1584,7 +1584,7 @@ cci_get_cas_info
 
 .. c:function:: int cci_get_cas_info (int conn_handle, char *info_buf, int buf_length, T_CCI_ERROR * err_buf) 
   
-    conn_handle에 연결되어 있는 CAS 정보를 조회한다. info_buf에 아래와 같은 형식의 문자열이 리턴된다. 
+    conn_handle에 연결되어 있는 CAS 정보를 조회한다. info_buf에 아래와 같은 형식의 문자열이 반환된다. 
   
     :: 
   
@@ -1603,8 +1603,8 @@ cci_get_cas_info
     :param conn_handle: (IN) 연결 핸들 
     :param info_buf: (OUT) 연결 정보 버퍼 
     :param buf_length: (IN) 연결 정보 버퍼 길이 
-    :param err_buf: (OUT) 에러 버퍼 
-    :return: 에러 코드 
+    :param err_buf: (OUT) 오류 버퍼 
+    :return: 오류 코드 
      
         * **CCI_ER_INVALID_ARGS** 
         * **CCI_ER_CON_HANDLE** 
@@ -1621,8 +1621,8 @@ cci_get_class_num_objs
     :param flag: (IN) 0 또는 1
     :param num_objs: (OUT) 객체 수
     :param num_pages: (OUT) 페이지 수
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_COMMUNICATION**
@@ -1633,7 +1633,7 @@ CCI_GET_COLLECTION_DOMAIN
 
 .. c:macro:: CCI_GET_COLLECTION_DOMAIN(u_type)
 
-    *u_type* 이 set, multiset, sequence type인 경우 set, multiset, sequence의 domain을 가져온다. *u_type* 이 set type이 아닐 경우 리턴 값은 *u_type* 과 같다.
+    *u_type* 이 set, multiset, sequence type인 경우 set, multiset, sequence의 domain을 가져온다. *u_type* 이 set type이 아닐 경우 반환 값은 *u_type* 과 같다.
 
     :param Type u_type: (IN)
     :return: Type (CCI_U_TYPE)
@@ -1647,7 +1647,7 @@ cci_get_cur_oid
 
     :param conn_handle: (IN) 연결 핸들
     :param oid_str_buf: (OUT) OID 스트링
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_REQ_HANDLE**
 
@@ -1667,7 +1667,7 @@ cci_get_data
         *   *type* 이 **CCI_A_TYPE_STR** 인 경우: **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 *value* 에 저장된 문자열의 바이트 길이를 반환
         *   *type* 이 **CCI_A_TYPE_STR** 이 아닌 경우: **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 0을 반환
      
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
@@ -1733,8 +1733,8 @@ cci_get_db_parameter
     :param conn_handle: (IN) 연결 핸들
     :param param_name: (IN) 시스템 파라미터 이름
     :param value: (OUT) 파라미터 값
-    :param err_buf: (OUT) 에러 버퍼    
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼    
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_PARAM_NAME**
@@ -1772,7 +1772,7 @@ cci_get_db_version
     :param conn_handle: (IN) 연결 핸들
     :param out_buf: (OUT) 결과 버퍼
     :param out_buf_size: (IN) *out_buf* 크기
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_COMMUNICATION**
@@ -1783,10 +1783,10 @@ cci_get_err_msg
 
 .. c:function:: int cci_get_err_msg(int err_code, char *msg_buf, int msg_buf_size)
 
-    에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.
+    오류 코드에 대응되는 오류 메시지를 오류 메시지 버퍼에 저장한다. 오류 코드와 오류 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.
 
-    :param err_code: (IN) 에러 코드
-    :param msg_buf: (OUT) 에러 메시지 버퍼
+    :param err_code: (IN) 오류 코드
+    :param msg_buf: (OUT) 오류 메시지 버퍼
     :param msg_buf_size: (IN) *msg_buf* 크기
     :return: 0 (성공), -1 (실패)
 
@@ -1801,7 +1801,7 @@ cci_get_err_msg
                 goto handle_error;
             }
     
-        9.1 미만 버전에서는 CCI_ER_DBMS 에러가 발생했을 때만 err_buf에 에러 정보가 저장되므로 CCI_ER_DBMS에 따라 다음과 같이 분기하여 처리해야 했다.
+        9.1 미만 버전에서는 CCI_ER_DBMS 오류가 발생했을 때만 err_buf에 오류 정보가 저장되므로 CCI_ER_DBMS에 따라 다음과 같이 분기하여 처리해야 했다.
         
         .. code-block:: c
         
@@ -1839,11 +1839,11 @@ cci_get_error_msg
 
 .. c:function:: int cci_get_error_msg(int err_code, T_CCI_ERROR *err_buf, char *msg_buf, int msg_buf_size)
 
-    CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. CCI 에러 코드의 값이 **CCI_ER_DBMS** 이면 데이터베이스 서버에서 발생한 에러 메시지를 데이터베이스 에러 버퍼(*err_buf*)에서 전달받아 메시지 버퍼(*msg_buf*)에 저장한다.  에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>`\를 참고한다.
+    CCI 오류 코드에 대응되는 오류 메시지를 오류 메시지 버퍼에 저장한다. CCI 오류 코드의 값이 **CCI_ER_DBMS** 이면 데이터베이스 서버에서 발생한 오류 메시지를 데이터베이스 오류 버퍼(*err_buf*)에서 전달받아 메시지 버퍼(*msg_buf*)에 저장한다.  오류 코드와 오류 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>`\를 참고한다.
 
-    :param err_code: (IN) 에러 코드
-    :param err_buf: (IN) 데이터베이스 에러 버퍼        
-    :param msg_buf: (OUT) 에러 메시지 버퍼
+    :param err_code: (IN) 오류 코드
+    :param err_buf: (IN) 데이터베이스 오류 버퍼        
+    :param msg_buf: (OUT) 오류 메시지 버퍼
     :param msg_buf_size: (IN) *msg_buf* 크기
     :return: 0 (성공), -1 (실패)
 
@@ -1852,7 +1852,7 @@ cci_get_holdability
 
 .. c:function:: int cci_get_holdability(int conn_handle)
 
-    연결 핸들에서 결과 셋에 대한 커서 유지(cursor holdability) 설정 값을 리턴한다. 값이 1이면 커밋 여부에 관계 없이 연결이 종료되거나 결과 셋을 의도적으로 닫기 전까지 커서를 유지(holdable)하고, 0이면 커밋될 때 결과 셋이 닫히면서 커서를 유지하지 않는다(not holdable). 커서 유지에 대한 자세한 설명은 CUBRID SQL 설명서 > 트랜잭션과 잠금 > 커서 유지를 참고한다.
+    연결 핸들에서 결과 셋에 대한 커서 유지(cursor holdability) 설정 값을 반환한다. 값이 1이면 커밋 여부에 관계 없이 연결이 종료되거나 결과 셋을 의도적으로 닫기 전까지 커서를 유지(holdable)하고, 0이면 커밋될 때 결과 셋이 닫히면서 커서를 유지하지 않는다(not holdable). 커서 유지에 대한 자세한 설명은 CUBRID SQL 설명서 > 트랜잭션과 잠금 > 커서 유지를 참고한다.
 
     :param conn_handle: (IN) 연결 핸들
     :return: 0 (not holdable), 1 (holdable)
@@ -1868,9 +1868,9 @@ cci_get_last_insert_id
     
     :param conn_handle: (IN) 연결 핸들
     :param value: (OUT) 결과 버퍼 포인터의 포인터(char \*\*). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
-    :param err_buf: (OUT) 에러 버퍼
+    :param err_buf: (OUT) 오류 버퍼
 
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
@@ -1938,8 +1938,8 @@ cci_get_login_timeout
     
     :param conn_handle: (IN) 연결 핸들
     :param timeout: (OUT) 로그인 타임아웃 값(단위: 밀리 초)에 대한 포인터
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0: 성공)
  
         *   **CCI_ER_INVALID_ARGS**
         *   **CCI_ER_CON_HANDLE**
@@ -1950,7 +1950,7 @@ cci_get_query_plan
 
 .. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
 
-    cci_prepare 함수가 리턴한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. 
+    cci_prepare 함수가 반환한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. 
     cci_execute 함수의 호출 여부와 상관 없이 cci_get_query_plan 함수를 호출할 수 있다.
 
     cci_get_query_plan 함수 호출 후 결과 버퍼의 사용이 끝나면 :c:func:`cci_query_info_free` 함수를 이용하여 cci_get_query_plan 함수에서 생성된 결과 버퍼를 해제해야 한다.
@@ -1968,7 +1968,7 @@ cci_get_query_plan
         
     :param req_handle: (IN) 요청 핸들
     :param out_buf_p: (OUT) 결과 버퍼 포인터의 포인터
-    :return: 에러 코드
+    :return: 오류 코드
         
         *    **CCI_ER_REQ_HANDLE**
         *    **CCI_ER_CON_HANDLE**
@@ -1987,7 +1987,7 @@ cci_query_info_free
 
     :param req_handle: (IN) 요청 핸들
     :param out_buf: (OUT) 결과 버퍼 포인터
-    :return: 에러 코드
+    :return: 오류 코드
     
         *    **CCI_ER_NO_MORE_MEMORY**
         
@@ -2019,10 +2019,10 @@ cci_get_result_info
     :param num: (OUT) **SELECT** 문의 칼럼 개수(*stmt_type* 이 **CUBRID_STMT_SELECT** 일 경우)
     :return: result info 포인터 (성공), **NULL** (실패)
     
-    **T_CCI_COL_INFO** 구조체에서 칼럼 정보를 가져오기 위해서 구조체에 직접 접근해도 되지만, 다음과 같이 정의된 매크로를 이용하여 정보를 가져올 수 있다. 각 매크로의 인자로 **T_CCI_COL_INFO** 구조체의 주소와 칼럼 인덱스가 지정되며, 매크로는 **SELECT** 질의에 대해서만 호출할 수 있다. 매크로에서 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. 매크로 리턴 값의 타입이 char*인 경우 메모리 포인터를 해제(free)하지 않아야 한다.
+    **T_CCI_COL_INFO** 구조체에서 칼럼 정보를 가져오기 위해서 구조체에 직접 접근해도 되지만, 다음과 같이 정의된 매크로를 이용하여 정보를 가져올 수 있다. 각 매크로의 인자로 **T_CCI_COL_INFO** 구조체의 주소와 칼럼 인덱스가 지정되며, 매크로는 **SELECT** 질의에 대해서만 호출할 수 있다. 매크로에서 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. 매크로 반환 값의 타입이 char*인 경우 메모리 포인터를 해제(free)하지 않아야 한다.
 
     +--------------------------------------------+------------------+----------------------+
-    | 매크로                                     | 리턴 값 타입     | 의미                 |
+    | 매크로                                     | 반환 값 타입     | 의미                 |
     +============================================+==================+======================+
     | :c:macro:`CCI_GET_RESULT_INFO_TYPE`        | **T_CCI_U_TYPE** | 칼럼의 type          |
     +--------------------------------------------+------------------+----------------------+
@@ -2215,7 +2215,7 @@ cci_is_holdable
 
 .. c:function:: int cci_is_holdable(int req_handle)
 
-    **cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 가능 여부를 리턴한다.
+    **cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 가능 여부를 반환한다.
 
     :param req_handle: (IN) prepared statement에 대한 요청 핸들
     :return: 
@@ -2269,19 +2269,19 @@ cci_next_result
         res_col_info = cci_get_result_info (req, &cmd_type, &col_count);
 
     :param req_handle: (IN) prepared statement에 대한 요청 핸들
-    :param err_buf: (OUT) 에러 버퍼        
+    :param err_buf: (OUT) 오류 버퍼        
     :return: 
 
         *   **SELECT** : 결과 개수
         *   **INSERT**, **UPDATE** : 반영된 레코드 개수
         *   기타 : 0
-        *   실패 : 에러 코드
+        *   실패 : 오류 코드
     
             *   **CCI_ER_REQ_HANDLE**
             *   **CCI_ER_DBMS**
             *   **CCI_ER_COMMUNICATION**
 
-    에러 코드가 **CAS_ER_NO_MORE_RESULT_SET** 일 경우 더 이상의 결과 셋이 존재하지 않는다는 것을 의미한다.
+    오류 코드가 **CAS_ER_NO_MORE_RESULT_SET** 일 경우 더 이상의 결과 셋이 존재하지 않는다는 것을 의미한다.
 
 cci_oid
 -------
@@ -2298,18 +2298,18 @@ cci_oid
     :param conn_handle: (IN) 연결 핸들
     :param cmd: (IN) CCI_OID_DROP, CCI_OID_IS_INSTANCE, CCI_OID_LOCK_READ, CCI_OID_LOCK_WRITE
     :param oid_str:  (IN) oid    
-    :param err_buf: (OUT) 에러 버퍼        
+    :param err_buf: (OUT) 오류 버퍼        
     :return: 
 
         *   `cmd`\가 CCI_OID_IS_INSTANCE인 경우
         
             *   0 : 인스턴스 아님
             *   1 : 인스턴스
-            *   < 0 : 에러
+            *   < 0 : 오류
         
         *   `cmd`\가 CCI_OID_DROP, CCI_OID_LOCK_READ 또는 CCI_OID_LOCK_WRITE인 경우
       
-            에러 코드(0: 성공)
+            오류 코드(0: 성공)
         
             *   **CCI_ER_CON_HANDLE**
             *   **CCI_ER_CONNECT**
@@ -2327,8 +2327,8 @@ cci_oid_get
     :param conn_handle: (IN) 연결 핸들
     :param oid_str: (IN) oid    
     :param attr_name: (IN) 속성 목록    
-    :param err_buf: (OUT) 에러 버퍼        
-    :return: 성공 : 요청 핸들, 실패 : 에러 코드
+    :param err_buf: (OUT) 오류 버퍼        
+    :return: 성공 : 요청 핸들, 실패 : 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_NO_MORE_MEMORY**
@@ -2345,8 +2345,8 @@ cci_oid_get_class_name
     :param oid_str: (IN) oid    
     :param out_buf: (OUT) out 버퍼
     :param out_buf_len: (IN) *out_buf* 길이
-    :param err_buf: (OUT) 에러 버퍼        
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼        
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -2364,8 +2364,8 @@ cci_oid_put
     :param oid_str: (IN) oid    
     :param attr_name: (IN) 속성 이름 목록
     :param new_val_str: (IN) 새 값의 목록
-    :param err_buf: (OUT) 에러 버퍼        
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼        
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -2382,8 +2382,8 @@ cci_oid_put2
     :param attr_name: (IN) 속성 이름 목록
     :param new_val: (IN) 새 값 배열
     :param a_type: (IN) *new_val* 타입 배열
-    :param err_buf: (OUT) 에러 버퍼        
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼        
+    :return: 오류 코드(0: 성공)
     
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -2444,8 +2444,8 @@ cci_prepare
     :param conn_handle: (IN) 연결 핸들
     :param sql_stmt: (IN) SQL 문
     :param flag: (IN) prepare flag (CCI_PREPARE_UPDATABLE, CCI_PREPARE_INCLUDE_OID, CCI_PREPARE_HOLDABLE 또는 CCI_PREPARE_CALL)
-    :param err_buf: (OUT) 에러 버퍼        
-    :return: 성공 : 요청 핸들 ID , 실패 : 에러 코드
+    :param err_buf: (OUT) 오류 버퍼        
+    :return: 성공 : 요청 핸들 ID , 실패 : 오류 코드
     
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_DBMS**
@@ -2476,14 +2476,14 @@ cci_prepare_and_execute
 
 .. c:function:: int cci_prepare_and_execute(int conn_handle, char *sql_stmt, int max_col_size, int *exec_retval, T_CCI_ERROR *err_buf)
 
-    SQL 문을 즉시 실행하고 SQL 문에 대한 요청 핸들을 반환한다. 이 함수의 인자로는 연결 핸들, SQL 문, fetch하는 칼럼의 문자열 최대 길이, 에러 코드, 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다. *max_col_size* 는 SQL 문의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 설정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
+    SQL 문을 즉시 실행하고 SQL 문에 대한 요청 핸들을 반환한다. 이 함수의 인자로는 연결 핸들, SQL 문, fetch하는 칼럼의 문자열 최대 길이, 오류 코드, 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다. *max_col_size* 는 SQL 문의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 설정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
 
     :param conn_handle: (IN) 연결 핸들
     :param sql_stmt: (IN) SQL 문
     :param max_col_size: (IN) 문자열 타입인 경우 fetch하는 칼럼의 문자열 최대 길이(단위: 바이트). 이 값이 0이면 전체 길이를 fetch한다.
-    :param exec_retval: (OUT) 성공: 영향을 받은 행의 개수, 실패: 에러 코드
-    :param err_buf: (OUT) 에러 버퍼        
-    :return: 성공 : 요청 핸들 ID, 실패 : 에러 코드
+    :param exec_retval: (OUT) 성공: 영향을 받은 행의 개수, 실패: 오류 코드
+    :param err_buf: (OUT) 오류 버퍼        
+    :return: 성공 : 요청 핸들 ID, 실패 : 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_DBMS**
@@ -2680,23 +2680,23 @@ CCI_QUERY_RESULT_ERR_NO
 
     :c:func:`cci_execute_batch`, :c:func:`cci_execute_array`, 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과는 **T_CCI_QUERY_RESULT** 타입의 배열로 저장되므로 배열의 항목 별로 질의 결과를 확인해야 한다. 
     
-    **CCI_QUERY_RESULT_ERR_NO**\는 *index*\로 지정한 배열 항목에 대한 에러 번호를 가져오며, 에러가 아닌 경우 0을 반환한다.
+    **CCI_QUERY_RESULT_ERR_NO**\는 *index*\로 지정한 배열 항목에 대한 오류 번호를 가져오며, 오류가 아닌 경우 0을 반환한다.
 
     :param T_CCI_QUERY_RESULT* query_result: (IN) 조회할 질의 결과
     :param int index: (IN) 결과 배열의 인덱스(base : 1). 결과 배열 중 특정 위치를 나타냄.
     
-    :return: 에러 번호        
+    :return: 오류 번호        
 
 CCI_QUERY_RESULT_ERR_MSG
 ------------------------
 
 .. c:macro:: CCI_QUERY_RESULT_ERR_MSG(query_result, index)
 
-    :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과에 대한 에러 메시지를 가져오며, 에러 메시지가 없을 경우 ""(empty string)을 반환하는 매크로이다. 지정된 인자 *query_result* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+    :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과에 대한 오류 메시지를 가져오며, 오류 메시지가 없을 경우 ""(empty string)을 반환하는 매크로이다. 지정된 인자 *query_result* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
     
     :param T_CCI_QUERY_RESULT* query_result: (IN) 조회할 질의 결과
     :param int index: (IN) 칼럼 인덱스(base : 1)
-    :return: 에러 메시지
+    :return: 오류 메시지
 
 CCI_QUERY_RESULT_RESULT
 -----------------------
@@ -2733,7 +2733,7 @@ cci_register_out_param
     이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 **CCI_PREPARE_CALL**\ 을 설정해야 한다.
     
     :param req_handle: (IN) 요청 핸들
-    :return: 에러 코드
+    :return: 오류 코드
             
         *    **CCI_ER_BIND_INDEX**
         *    **CCI_ER_REQ_HANDLE**
@@ -2890,9 +2890,9 @@ cci_row_count
     
     :param conn_handle: (IN) 연결 핸들
     :param row_count: (OUT) 가장 최근 수행한 질의에 의해 영향을 받은 행의 개수
-    :param err_buf: (OUT) 에러 버퍼
+    :param err_buf: (OUT) 오류 버퍼
     
-    :return: 에러 코드
+    :return: 오류 코드
     
         *    **CCI_ER_COMMUNICATION**
         *    **CCI_ER_LOGIN_TIMEOUT**
@@ -2909,8 +2909,8 @@ cci_savepoint
     :param conn_handle: (IN) 연결 핸들
     :param cmd: (IN) **CCI_SP_SET** 또는 **CCI_SP_ROLLBACK**
     :param savepoint_name: (IN) 세이브포인트 이름
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_COMMUNICATION**
@@ -2943,8 +2943,8 @@ cci_schema_info
     :param class_name: (IN) 클래스 이름 또는 NULL
     :param attr_name: (IN) 속성 이름 또는 NULL
     :param flag: (IN) 패턴 매칭 flag(**CCI_CLASS_NAME_PATTERN_MATCH** 또는 **CCI_ATTR_NAME_PATTERN_MATCH)** 
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 성공 : 요청 핸들, 실패 : 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 성공 : 요청 핸들, 실패 : 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_DBMS**
@@ -3027,8 +3027,8 @@ cci_schema_info
     +--------------------------------------------------------------------------------------------------------------------+------------------+--------------------+---------------------+
     | CCI_SCH_CLASS_ATTRIBUTE                                                                                            |                  |                    |                     |
     |                                                                                                                    |                  |                    |                     |
-    | | CCI_SCH_CLASS_ATTRIBUTE 컬럼이 INSTANCE 또는 SHARED의 속성일 경우에                                              |                  |                    |                     | 
-    | | 순서와 이름 값은 CCI_SCH_ATTRIBUTE의 컬럼과 동일하다.                                                            |                  |                    |                     |
+    | | CCI_SCH_CLASS_ATTRIBUTE 칼럼이 INSTANCE 또는 SHARED의 속성일 경우에                                              |                  |                    |                     | 
+    | | 순서와 이름 값은 CCI_SCH_ATTRIBUTE의 칼럼과 동일하다.                                                            |                  |                    |                     |
     +--------------------------------------------------------------------------------------------------------------------+------------------+--------------------+---------------------+
     | CCI_SCH_CLASS_METHOD                                                                                               | 1                | NAME               | char \*             |
     |                                                                                                                    +------------------+--------------------+---------------------+
@@ -3381,7 +3381,7 @@ cci_set_allocators
     :param free_func: (IN) free에 해당하는 외부 정의 함수에 대한 포인터
     :param realloc_func: (IN) realloc에 해당하는 외부 정의 함수에 대한 포인터
     :param calloc_func: calloc에 해당하는 외부 정의 함수에 대한 포인터
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_NOT_IMPLEMENTED**
 
@@ -3557,7 +3557,7 @@ cci_set_autocommit
 
     :param conn_handle: (IN) 연결 핸들
     :param autocommit_mode: (IN) 자동 커밋모드 설정. CCI_AUTOCOMMIT_FALSE 또는 CCI_AUTOCOMMIT_TRUE 중 하나의 값을 가진다.
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
     .. note::
 
@@ -3573,8 +3573,8 @@ cci_set_db_parameter
     :param conn_handle: (IN) 연결 핸들
     :param param_name: (IN) 시스템 파라미터 이름
     :param value: (IN) 파라미터 값
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_PARAM_NAME**
@@ -3613,7 +3613,7 @@ cci_set_get
     :param a_type: (IN) 타입
     :param value: (OUT) 결과 버퍼
     :param indicator: (OUT) null 표시(indicator)
-    :return: 에러 코드
+    :return: 오류 코드
 
         *   **CCI_ER_SET_INDEX**
         *   **CCI_ER_TYPE_CONVERSION**
@@ -3650,7 +3650,7 @@ cci_set_holdability
 
     :param conn_handle: (IN) 연결 핸들
     :param holdable: (IN) 커서 유지 여부 설정 값(0: not holdable, 1: holdable)
-    :return: 에러 코드
+    :return: 오류 코드
     
         *   **CCI_ER_INVALID_HOLDABILITY**
 
@@ -3663,8 +3663,8 @@ cci_set_isolation_level
 
     :param conn_handle: (IN) 연결 핸들
     :param new_isolation_level: (IN) 격리 수준(isolation level)
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
@@ -3683,7 +3683,7 @@ cci_set_lock_timeout
     
     :param conn_handle: (IN) 연결 핸들
     :param locktimeout: (IN) 잠금 타임아웃 시간(단위: 밀리 초).
-    :return: 에러 코드(0: 성공)
+    :return: 오류 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_PARAM_NAME**
@@ -3700,8 +3700,8 @@ cci_set_login_timeout
    
     :param conn_handle: (IN) 연결 핸들
     :param timeout: (IN) 로그인 타임아웃(단위: 밀리초)
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param err_buf: (OUT) 오류 버퍼
+    :return: 오류 코드(0: 성공)
         
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
@@ -3718,7 +3718,7 @@ cci_set_make
     :param size: (IN) set 크기
     :param value: (IN) set 엘리먼트
     :param indicator: (IN) null 표시 배열(indicator array)
-    :return: 에러 코드
+    :return: 오류 코드
 
 cci_set_max_row
 ---------------
@@ -3729,7 +3729,7 @@ cci_set_max_row
 
     :param req_handle: (IN) 요청 핸들
     :param max: (IN) 최대 행
-    :return: 에러 코드
+    :return: 오류 코드
 
     .. code-block:: c
 
@@ -3746,13 +3746,13 @@ cci_set_query_timeout
 
     :param req_handle: (IN) 요청 핸들
     :param milli_sec:  타임아웃(timeout) 시간, 단위는 msec.
-    :return: 성공 : 요청 핸들 ID, 실패 : 에러 코드
+    :return: 성공 : 요청 핸들 ID, 실패 : 오류 코드
 
         *   **CCI_ER_REQ_HANDLE**
 
-    **cci_set_query_timeout** 으로 설정된 타임아웃 시간은 :c:func:`cci_prepare`, :c:func:`cci_execute`, :c:func:`cci_execute_array`, :c:func:`cci_execute_batch` 함수들에 영향을 미친다. 각 함수에서 타임아웃이 발생했을 때 :c:func:`cci_connect_with_url` 연결 URL에 설정한 **disconnect_on_query_timeout** 의 값이 yes이면 **CCI_ER_QUERY_TIMEOUT** 에러를 반환한다.
+    **cci_set_query_timeout** 으로 설정된 타임아웃 시간은 :c:func:`cci_prepare`, :c:func:`cci_execute`, :c:func:`cci_execute_array`, :c:func:`cci_execute_batch` 함수들에 영향을 미친다. 각 함수에서 타임아웃이 발생했을 때 :c:func:`cci_connect_with_url` 연결 URL에 설정한 **disconnect_on_query_timeout** 의 값이 yes이면 **CCI_ER_QUERY_TIMEOUT** 오류를 반환한다.
 
-    위 함수들은 :c:func:`cci_connect_with_url` 함수의 인자인 연결 URL에 **login_timeout** 이 설정되어 있는 경우에도 **CCI_ER_LOGIN_TIMEOUT** 에러를 반환할 수 있는데, 이는 응용 클라이언트와 브로커 응용 서버(CAS) 간 재연결 과정에서 로그인 타임아웃이 발생한 경우이다.
+    위 함수들은 :c:func:`cci_connect_with_url` 함수의 인자인 연결 URL에 **login_timeout** 이 설정되어 있는 경우에도 **CCI_ER_LOGIN_TIMEOUT** 오류를 반환할 수 있는데, 이는 응용 클라이언트와 브로커 응용 서버(CAS) 간 재연결 과정에서 로그인 타임아웃이 발생한 경우이다.
 
     응용 클라이언트와 CAS 간 재연결 과정은 CAS가 재시작하거나 재스케쥴되는 경우에 발생한다. 재스케쥴이란 CAS가 트랜잭션 단위로 응용 클라이언트를 선택하여 연결을 시작하고 종료하는 과정을 의미하는데, 브로커 파라미터인 **KEEP_CONNECTION** 이 AUTO이면 상황에 따라 발생한다. 보다 자세한 사항은 :ref:`parameter-by-broker`\의 **KEEP_CONNECTION** 설명을 참고한다.
 

@@ -22,7 +22,7 @@ Node.js는 다음의 특징을 가지고 있다.
 
 .. FIXME: *   Introducing project: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
 
-*   소스코드 메인 저장소: https://github.com/CUBRID/node-cubrid
+*   소스 코드 메인 저장소: https://github.com/CUBRID/node-cubrid
 
 Node.js 설치
 ============

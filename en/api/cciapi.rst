@@ -772,10 +772,10 @@ cci_connect
 
     A connection handle to the database server is assigned and it tries to connect to the server. If it has succeeded, the connection handle ID is returned; if fails, an error code is returned.
 
-    :param ip: (IN) A string that represents the IP address of the server (host name)
+    :param ip: (IN) A string that represents the IP address of the server (hostname)
     :param port: (IN) Broker port (The port configured in the **$CUBRID/conf/cubrid_broker.conf** file)
     :param db_name: (IN) Database name
-    :param db_user: (IN) Database user name
+    :param db_user: (IN) Database username
     :param db_passwd: (IN) Database user password
     :return: Success: Connection handle ID (int), Failure: Error code
 
@@ -793,10 +793,10 @@ cci_connect_ex
 
     The **cci_connect_ex** function returns **CCI_ER_DBMS** error and checks the error details in the database error buffer (*err_buf*) at the same time. In that point, it is different from :c:func:`cci_connect` and the others are the same as the :c:func:`cci_connect` function.
 
-    :param ip: (IN) A string that represents the IP address of the server (host name)
+    :param ip: (IN) A string that represents the IP address of the server (hostname)
     :param port: (IN) Broker port (The port configured in the **$CUBRID/conf/cubrid_broker.conf** file)
     :param db_name: (IN) Database name
-    :param db_user: (IN) Database user name
+    :param db_user: (IN) Database username
     :param db_passwd: (IN) Database user password
     :param err_buf: Database error buffer
     :return: Success: Connection handle ID (int), Failure: Error code
@@ -818,7 +818,7 @@ cci_connect_with_url
     The **cci_connect_with_url** function connects a database by using connection information passed with a *url* argument. If broker's HA feature is used in CCI, you must specify the connection information of the standby broker server with altHosts property, which is used for the failover, in the *url* argument of this function. It returns the ID of a connection handle on success; it returns an error code on failure. For details about HA features of broker, see :ref:`duplexing-brokers`.
 
     :param url: (IN) A string that contains server connection information. 
-    :param db_user: (IN) Database user name. If this is NULL, it becomes <*db_user*> in *url*. If this is an empty string ("") or <*db_user*> in *url* is not specified, DB user name becomes **PUBLIC**.
+    :param db_user: (IN) Database username. If this is NULL, it becomes <*db_user*> in *url*. If this is an empty string ("") or <*db_user*> in *url* is not specified, DB username becomes **PUBLIC**.
     :param db_passwd: (IN) Database user password. If this is NULL, <*db_password*> in *url* is used. If <*db_password*> in *url* is not specified, DB password becomes an empty string ("").
     :return: Success: Connection handle ID (int), Failure: Error code
 
@@ -855,7 +855,7 @@ cci_connect_with_url
 
     **altHosts** is the property related to connection target and **loginTimeout**, **queryTimeout**, and **disconnectOnQueryTimeout** are the properties related to timeout; **logSlowQueries**, **logTraceApi**, and **logTraceNetwork** are the properties related to log information configuration for debugging. Note that a property name which is a value to be entered in the *url* argument is not case sensitive.
 
-    *   *host*: A host name or IP address of the master database
+    *   *host*: A hostname or IP address of the master database
     *   *port*: A port number
     *   *db_name*: A name of the database
     *   *db_user*: A name of the database user
@@ -877,9 +877,9 @@ cci_connect_with_url
 
     *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout**: Whether to disconnect socket immediately after time for query request has expired. It determines whether to terminate a socket connection immediately or wait for server response after sending cancellation message for query request to a server when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. The default value is **false**, meaning that it will wait for server response. It this value is true, a socket will be closed immediately after sending a cancellation message to a server upon timeout and returns the **CCI_ER_QUERY_TIMEOUT** (-39) error. (If an error occurs on database server side, not on broker side, it returns -1. If you want to view error details, see error codes in "database error buffer." You can get information how to check error codes in :ref:`CCI Error Codes and Error Messages <cci-error-codes>`.) Please note that there is a possibility that a database server does not get a cancellation message and execute a query even after an error is returned.
 
-    *   **logFile**: A log file name for debugging (default value: **cci_** <*handle_id*> **.log**). <*handle_id*> indicates the ID of a connection handle returned by this function.
+    *   **logFile**: A log filename for debugging (default value: **cci_** <*handle_id*> **.log**). <*handle_id*> indicates the ID of a connection handle returned by this function.
     
-    *   **logBaseDir**: A directory where a debug log file is created. The file name including the path will be logBaseDir/logFile, and the relative path is possible.
+    *   **logBaseDir**: A directory where a debug log file is created. The filename including the path will be logBaseDir/logFile, and the relative path is possible.
     
     *   **logSlowQueries**: Whether to log slow query for debugging (default value: **false**)
     *   **slowQueryThresholdMillis**: Timeout for slow query logging if slow query logging is enabled (default value: **60000**, unit: milliseconds)
@@ -1040,7 +1040,7 @@ cci_datasource_change_property
     ========================= =========== ============================== =========================================================================================================================
     Property name             Type        Value                          Description
     ========================= =========== ============================== =========================================================================================================================
-    default_autocommit        bool        true/false                     Whether auto-commit or not. The default is CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf; the default of this is ON(true)
+    default_autocommit        bool        true/false                     Whether autocommit or not. The default is CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf; the default of this is ON(true)
     default_lock_timeout      msec        number                         lock timeout                                                      
     default_isolation         string      See the table of               isolation level. The default is isolation_level in cubrid.conf; the default of this is "READ COMMITTED".
                                           :c:func:`cci_property_set`                                                                     
@@ -1172,7 +1172,7 @@ cci_end_tran
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_TRAN_TYPE**
 
-    You can configure the default value of auto-commit mode by using :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` broker parameter upon startup of an application. If configuration on broker parameter is omitted, the default value is **ON**; use the :c:func:`cci_set_autocommit` function to change auto-commit mode within an application. If auto-commit mode is **OFF**, you must explicitly commit or roll back transaction by using the :c:func:`cci_end_tran` function.
+    You can configure the default value of autocommit mode by using :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` broker parameter upon startup of an application. If configuration on broker parameter is omitted, the default value is **ON**; use the :c:func:`cci_set_autocommit` function to change autocommit mode within an application. If autocommit mode is **OFF**, you must explicitly commit or roll back transaction by using the :c:func:`cci_end_tran` function.
 
 cci_escape_string
 -----------------
@@ -1552,7 +1552,7 @@ cci_get_autocommit
 
 .. c:function:: CCI_AUTOCOMMIT_MODE cci_get_autocommit(int conn_handle)
 
-    The **cci_get_autocommit** function returns the auto-commit mode currently configured.
+    The **cci_get_autocommit** function returns the autocommit mode currently configured.
 
     :param conn_handle: (IN) Connection handle
     :return: 
@@ -2564,7 +2564,7 @@ cci_property_set
     ============================= =========== =============================================== ==========================================================================================================
     Property name                 Type        Default                                         Description
     ============================= =========== =============================================== ==========================================================================================================
-    user                          string                                                      DB user name.
+    user                          string                                                      DB username.
     password                      string                                                      DB user password.
     url                           string                                                      Connection URL. For specifying connection URL string, see :c:func:`cci_connect_with_url`.
     pool_size                     int         10                                              Maximum number of connections which a connection pool can have.
@@ -3545,17 +3545,17 @@ cci_set_autocommit
 
 .. c:function:: int cci_set_autocommit (int conn_handle, CCI_AUTOCOMMIT_MODE  autocommit_mode)
 
-    The **cci_set_autocommit** function configures the auto-commit mode of current database connection. It is only used to turn ON/OFF of auto-commit mode. When this function is called, every transaction being processed is committed regardless of configured mode.
+    The **cci_set_autocommit** function configures the autocommit mode of current database connection. It is only used to turn ON/OFF of autocommit mode. When this function is called, every transaction being processed is committed regardless of configured mode.
 
     .. note:: :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` in **cubrid_broker.conf** determines the default autocommit mode upon program startup.
 
     :param conn_handle: (IN) Connection handle
-    :param autocommit_mode: (IN) Configures the auto-commit mode. It has one of the following value: CCI_AUTOCOMMIT_FALSE or CCI_AUTOCOMMIT_TRUE
+    :param autocommit_mode: (IN) Configures the autocommit mode. It has one of the following value: CCI_AUTOCOMMIT_FALSE or CCI_AUTOCOMMIT_TRUE
     :return: Error code (0: success)
 
     .. note::
     
-        **CCI_DEFAULT_AUTOCOMMIT**, a broker parameter configured in the **cubrid_broker.conf** file, determines whether it is in auto-commit mode upon program startup.
+        **CCI_DEFAULT_AUTOCOMMIT**, a broker parameter configured in the **cubrid_broker.conf** file, determines whether it is in autocommit mode upon program startup.
 
 cci_set_db_parameter
 ---------------------

@@ -162,7 +162,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: -u, --user=ARG
 
-    The following example shows how to specify the name of the user that will connect to the specified database with the **-u** option. If the **-u** option is not specified, **PUBLIC** that has the lowest level of authorization will be specified as a user. If the user name is not valid, an error message is displayed and the **csql** utility is terminated. If there is a password for the user name you specify, you will be prompted to enter the password. ::
+    The following example shows how to specify the name of the user that will connect to the specified database with the **-u** option. If the **-u** option is not specified, **PUBLIC** that has the lowest level of authorization will be specified as a user. If the username is not valid, an error message is displayed and the **csql** utility is terminated. If there is a password for the username you specify, you will be prompted to enter the password. ::
 
         csql -u DBA demodb
 
@@ -286,7 +286,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: --no-auto-commit
 
-    The following example shows how to stop the auto-commit mode with the **\-\-no-auto-commit** option. If you don't configure **\-\-no-auto-commit** option, the CSQL Interpreter runs in an auto-commit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
+    The following example shows how to stop the autocommit mode with the **\-\-no-autocommit** option. If you don't configure **\-\-no-autocommit** option, the CSQL Interpreter runs in an autocommit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
 
         csql --no-auto-commit demodb
 
@@ -589,21 +589,21 @@ This command executes SQL statements in the query buffer. The buffer will be cle
 
 **Committing transaction (;COmmit)**
 
-This command commits the current transaction. You must enter a commit command explicitly if it is not in auto-commit mode. In auto-commit mode, transactions are automatically committed whenever SQL is executed. ::
+This command commits the current transaction. You must enter a commit command explicitly if it is not in autocommit mode. In autocommit mode, transactions are automatically committed whenever SQL is executed. ::
 
     csql> ;commit
     Execute OK. (0.000192 sec)
     
 **Rolling back transaction (;ROllback)**
 
-This command rolls back the current transaction. Like a commit command (**;COmmit**), it must enter a rollback command explicitly if it is not in auto-commit mode (**OFF**). ::
+This command rolls back the current transaction. Like a commit command (**;COmmit**), it must enter a rollback command explicitly if it is not in autocommit mode (**OFF**). ::
 
     csql> ;rollback
     Execute OK. (0.000166 sec)
 
-**Setting the auto-commit mode (;AUtocommit)**
+**Setting the autocommit mode (;AUtocommit)**
 
-This command sets auto-commit mode to **ON** or **OFF**. If any value is not specified, current configured value is applied by default. The default value is **ON**. ::
+This command sets autocommit mode to **ON** or **OFF**. If any value is not specified, current configured value is applied by default. The default value is **ON**. ::
 
     csql> ;autocommit off
     AUTOCOMMIT IS OFF
@@ -649,7 +649,7 @@ The **;DATE** command displays the current date and time in the CSQL Interpreter
 
 **Displaying the database information (;DATAbase)**
 
-This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those following: active, standby, or maintenance) will be displayed as well.  ::
+This command displays the database name and hostname where the CSQL Interpreter is working. If the database is running, the HA mode (one of those following: active, standby, or maintenance) will be displayed as well.  ::
 
     csql> ;database
          demodb@cubridhost (active)

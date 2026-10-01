@@ -64,7 +64,7 @@ cub_gateway
 
 cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개하는 기능을 수행한다. 즉, CUBRID Database Server가 접근을 요청하면, cub_gateway는 공유 메모리(shared memory)를 통해 cub_cas_cgw의 상태를 파악하여 할당 가능한 cub_cas_cgw에게 요청을 전달하고, 해당 cub_cas_cgw로부터 전달받은 요청에 대한 처리 결과를 CUBRID Database Server에게 반환한다.
 
-또한, cub_gateway는 서비스 풀 내의 cub_cas_cgw 개수를 조정하여 서버 부하를 관리하고, cub_cas_cgw의 구동 상태를 모니터링 및 관리한다. 만약, CUBRID Database Server의 요청을 cub_cas_cgw 1에게 전달하였는데, 비정상적인 종료로 인해 cub_cas_cgw 1과의 연결이 실패하면, cub_gateway는 CUBRID Database Server에게 연결 실패에 관한 에러 메시지를 전송하고 cub_cas_cgw 1을 재구동한다. 새롭게 구동된 cub_cas_cgw 1은 정상적인 대기 상태가 되어, 새로운 응용 클라이언트의 요청에 의해 재연결된다.
+또한, cub_gateway는 서비스 풀 내의 cub_cas_cgw 개수를 조정하여 서버 부하를 관리하고, cub_cas_cgw의 구동 상태를 모니터링 및 관리한다. 만약, CUBRID Database Server의 요청을 cub_cas_cgw 1에게 전달하였는데, 비정상적인 종료로 인해 cub_cas_cgw 1과의 연결이 실패하면, cub_gateway는 CUBRID Database Server에게 연결 실패에 관한 오류 메시지를 전송하고 cub_cas_cgw 1을 재구동한다. 새롭게 구동된 cub_cas_cgw 1은 정상적인 대기 상태가 되어, 새로운 응용 클라이언트의 요청에 의해 재연결된다.
 
 공유 메모리
 -----------------
@@ -133,7 +133,7 @@ cub_gateway는 CUBRID Database Server와 cub_cas_cgw 사이의 연결을 중개�
 CUBRID 서비스 시작시 게이트웨이 함께 시작
 ----------------------------------------------
 
-CUBRID 서비스 시작(**cubrid service start**) 시 *게이트웨이* 를 같이 시작되게 하려면, **cubrid.conf** 파일의 **service** 파라메터에 *gateway* 를 설정한다. ::
+CUBRID 서비스 시작(**cubrid service start**) 시 *게이트웨이* 를 같이 시작되게 하려면, **cubrid.conf** 파일의 **service** 파라미터에 *gateway* 를 설정한다. ::
 
     # cubrid.conf
 
@@ -167,7 +167,7 @@ CUBRID DBLink를 사용하기 위한 설정은 동일기종 DBLink와 이기종 
 게이트웨이 설정 파일
 ------------------------------------------------
 
-CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_gateway.conf 에서 사용되는 파라메터는 브로커 파라메터와 거의 동일 하며, 추가로 반드시 변경해야 할 일부 파라메터가 포함된다. 기본으로 포함되지 않는 파라메터의 값은 직접 추가/편집해서 사용하면 된다. 다음은 설치 시 기본으로 제공되는 cubrid_gateway.conf 파일 내용이다.
+CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_gateway.conf 에서 사용되는 파라미터는 브로커 파라미터와 거의 동일 하며, 추가로 반드시 변경해야 할 일부 파라미터가 포함된다. 기본으로 포함되지 않는 파라미터의 값은 직접 추가/편집해서 사용하면 된다. 다음은 설치 시 기본으로 제공되는 cubrid_gateway.conf 파일 내용이다.
 
 
 
@@ -244,12 +244,12 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 	CGW_LINK_ODBC_DRIVER_NAME   =MariaDB_ODBC_Driver
 	CGW_LINK_CONNECT_URL_PROPERTY       =
 
-게이트웨이 파라메터
+게이트웨이 파라미터
 ------------------------
 
-이기종 데이터 베이스와 DBLink를 사용하기 위해서 설정하는 파라메터이다.
+이기종 데이터베이스와 DBLink를 사용하기 위해서 설정하는 파라미터이다.
 
-각각의 파라메터 의미는 이기종 데이터베이스 별로 약간 차이가 있다.
+각각의 파라미터 의미는 이기종 데이터베이스 별로 약간 차이가 있다.
 
 
 +-------------------------------+-------------+------------------------------------------------------------+
@@ -284,7 +284,7 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 
 .. note::
     
-    *   Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.
+    *   Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라미터는 사용하지 않는다.
     *   자세한 내용은 :ref:`Oracle Database에 연결을 위한 연결정보 설정 <tnsnames-info>`\ 을 참고한다.
         
 
@@ -294,7 +294,7 @@ CUBRID 설치 시 생성되는 기본 게이트웨이 설정 파일인 cubrid_ga
 	
 .. note::
 
-    *   Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라메터는 사용하지 않는다.
+    *   Oracle인 경우, tnsnames.ora의 net_service_name을 이용하므로 해당 파라미터는 사용하지 않는다.
     *   자세한 내용은 :ref:`Oracle Database에 연결을 위한 연결정보 설정 <tnsnames-info>`\ 을 참고한다.
 
 
@@ -444,7 +444,7 @@ tnsnames.ora 파일의 기본 형식
 
 .. note::
     
-        참고로, net_service_name 이 중복으로 작성이 되어도 에러가 발생되지 않는다. 하지만 중복된 다른 서버에 연결될 수 있으므로, net_service_name 이 반드시 중복되지 않게 설정해야 한다.
+        참고로, net_service_name 이 중복으로 작성이 되어도 오류가 발생되지 않는다. 하지만 중복된 다른 서버에 연결될 수 있으므로, net_service_name 이 반드시 중복되지 않게 설정해야 한다.
 
 
 **Oracle Database 환경변수 설정**
@@ -702,9 +702,9 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
 -----------------------
 
 *   원격 DB의 문자셋(charset)은 유니코드(utf-8) 문자셋만 지원한다.
-*   원격 DB 문자열 컬럼의 콜레이션(collation)은 바이너리(binary) 콜레이션(예: utf8_bin)으로 가정한다.
+*   원격 DB 문자열 칼럼의 콜레이션(collation)은 바이너리(binary) 콜레이션(예: utf8_bin)으로 가정한다.
     대소문자/액센트 비구분(case/accent-insensitive) 등 비-바이너리 콜레이션을 사용하는
-    원격 DB 문자열 컬럼에 대해서는 질의에 따라 결과가 달라질 수 있으므로 올바른 동작을
+    원격 DB 문자열 칼럼에 대해서는 질의에 따라 결과가 달라질 수 있으므로 올바른 동작을
     보장하지 않는다(미지원).
 *   테이블 확장 형식 (object@server) 지원
        -   테이블, 뷰, 동의어만 지원
@@ -789,7 +789,7 @@ DBLink을 사용하기 위해 연결할 CUBRID의 broker들 정보 파악 또는
              ) tbl (col1, col2)
         WHERE col1>= SYS_DATE
 
-*   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 서브쿼리, 서브쿼리 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터를 찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾는 작업을 하기 때문에 수행이 느려질 수 있다.
+*   테이블 확장 형식(@server)구문으로 co-related 조건의 스칼라 부질의, 부질의 및 EXIST 구문의 부질의 사용하는 경우, 반복되는 원격 질의 수행시 전체 데이터를 로컬 DB로 가지고 온 후 조인 조건에 맞는 데이터를 찾는 작업을 수행하게 되어 급격한 성능 저하가 발생할 수 있다. 아래 예시는 스칼라 서브 퀴리의 조건으로 T1.a를 사용하고 있어, T1.a < 4 만큼의 svr1의 tree table의 데이터를 로컬 DB로 가지고 와서 적합한 데이터를 찾는 작업을 하기 때문에 수행이 느려질 수 있다.
 
     .. code-block:: sql
     
@@ -865,7 +865,7 @@ CUBRID 제약 사항
 	|                       | INTERVAL DAY TO SECOND |                        |                        |
 	+-----------------------+------------------------+------------------------+------------------------+
 
-    *   1개 컬럼의 문자열 최대 길이는 16M이다. 아래의 표는 DBMS별 Data의 길이가 16M 이상인 Data Type 이다.
+    *   1개 칼럼의 문자열 최대 길이는 16M이다. 아래의 표는 DBMS별 Data의 길이가 16M 이상인 Data Type 이다.
 
 	+------------------+---------------------------+
 	| DBMS Name        | Data Type                 |

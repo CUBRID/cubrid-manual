@@ -189,9 +189,9 @@ JDBC 프로그래밍
         *   **convertToNull**: **NULL** 로 변환한다.
 
     *   **logOnException**: 디버깅용 예외 처리 로깅 여부(기본값: true). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 을 참고한다.
-    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 을 참고한다.
+    *   **logSlowQueries**: 디버깅용 슬로우쿼리 로깅 여부(기본값: false). 출력 위치와 레벨은 :ref:`jdbc-logging-conf`\ 을 참고한다.
 
-        *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
+        *   **slowQueryThresholdMillis**: 디버깅용 슬로우쿼리 로깅 시 슬로우쿼리 제한 시간(기본값: 60000). 단위는 밀리 초이다.
 
     .. note:: **logFile** 속성은 더 이상 사용되지 않는다. 연결 URL에 이 속성이 남아 있어도 오류 없이 무시되며, 드라이버 로그의 출력 위치는 응용 프로그램의 **java.util.logging** 설정이 결정한다(:ref:`jdbc-logging-conf` 참고).
 
@@ -301,12 +301,12 @@ JDBC 프로그래밍
 로그         레벨       내용
 ============ ========== ==============================================================
 예외 덤프    FINE       예외 클래스와 스택 트레이스
-슬로우 쿼리  FINEST     CAS 정보, 수행 시간, SQL 문장, 바인딩된 값
+슬로우쿼리   FINEST     CAS 정보, 수행 시간, SQL 문장, 바인딩된 값
 ============ ========== ==============================================================
 
 두 레벨은 모두 JDK의 기본 임계값인 **INFO** 보다 낮으므로, **cubrid.jdbc** 의 레벨을 설정하지 않으면 아무것도 출력되지 않는다.
 
-예외 덤프는 **logOnException** 의 기본값이 **true** 이므로 레벨만 설정하면 출력된다. 출력하지 않으려면 연결 URL에 **logOnException=false** 를 지정한다. 반면 슬로우 쿼리는 드라이버가 매 질의의 수행 시간을 측정해야 하므로, **logSlowQueries** 를 **true** 로 설정해야 출력된다.
+예외 덤프는 **logOnException** 의 기본값이 **true** 이므로 레벨만 설정하면 출력된다. 출력하지 않으려면 연결 URL에 **logOnException=false** 를 지정한다. 반면 슬로우쿼리는 드라이버가 매 질의의 수행 시간을 측정해야 하므로, **logSlowQueries** 를 **true** 로 설정해야 출력된다.
 
 ::
 
@@ -326,12 +326,12 @@ JDBC 프로그래밍
 
     java -Djava.util.logging.config.file=logging.properties -jar app.jar
 
-**cubrid.jdbc.level** 을 **FINE** 으로 설정하면 예외 덤프만 출력되고, **FINEST** 로 설정하면 슬로우 쿼리까지 출력된다.
+**cubrid.jdbc.level** 을 **FINE** 으로 설정하면 예외 덤프만 출력되고, **FINEST** 로 설정하면 슬로우쿼리까지 출력된다.
 
 .. note::
 
     *   **FileHandler** 의 기본 포매터는 **XMLFormatter** 이다. 위 예제와 달리 **formatter** 를 지정하지 않으면 로그가 한 줄 단위 텍스트가 아닌 XML 형식으로 기록된다.
-    *   슬로우 쿼리 로그에는 SQL 문장과 바인딩된 값이 그대로 포함된다. **cubrid.jdbc.level** 을 **FINEST** 로 설정할 때에는 로그 파일의 접근 권한을 확인해야 한다.
+    *   슬로우쿼리 로그에는 SQL 문장과 바인딩된 값이 그대로 포함된다. **cubrid.jdbc.level** 을 **FINEST** 로 설정할 때에는 로그 파일의 접근 권한을 확인해야 한다.
     *   드라이버 로그를 응용 프로그램의 로그와 분리하려면 **cubrid.jdbc.handlers** 를 지정하고 **cubrid.jdbc.useParentHandlers** 를 **false** 로 설정한다.
 
 .. _jdbc-conn-datasource:
@@ -897,7 +897,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
 
 자동 증가 특성(**AUTO_INCREMENT**)은 자동으로 각 행의 숫자 값을 증가 생성하는 칼럼에 대한 특성으로서, 보다 자세한 사항은 :ref:`column-definition` 절을 참고한다. 수치형 도메인(**SMALLINT**, **INTEGER**, **DECIMAL** (*p*, 0), **NUMERIC** (*p*, 0))에 대해서만 정의할 수 있다.
 
-자동 증가 특성은 JDBC 프로그램에서 자동 생성된 키로 인식되고, 이 키의 검색을 사용하려면 자동 생성된 키 값을 검색할 행을 삽입할 시기를 표시해야 한다. 이를 수행하기 위하여 **Connection.prepareStatement** 와 **Statement.execute** 메서드를 호출하여 플래그를 설정해야 한다. 이때, 실행된 명령문은 **INSERT** 문 또는 **INSERT** within **SELECT** 문이어야 하며, 다른 명령문의 경우 JDBC 드라이버가 플래그를 설정하는 매개변수를 무시한다.
+자동 증가 특성은 JDBC 프로그램에서 자동 생성된 키로 인식되고, 이 키의 검색을 사용하려면 자동 생성된 키 값을 검색할 행을 삽입할 시기를 표시해야 한다. 이를 수행하기 위하여 **Connection.prepareStatement** 와 **Statement.execute** 메서드를 호출하여 플래그를 설정해야 한다. 이때, 실행된 명령문은 **INSERT** 문 또는 **INSERT** within **SELECT** 문이어야 하며, 다른 명령문의 경우 JDBC 드라이버가 플래그를 설정하는 파라미터를 무시한다.
 
 **수행 단계**
 
@@ -1116,19 +1116,19 @@ prepareStatement.setBooelan(1, false) 는 다음으로 지정된다.
 
 .. _jdbc-error-codes:
 
-JDBC 에러 코드와 에러 메시지
+JDBC 오류 코드와 오류 메시지
 ----------------------------
 
-SQLException에서 발생하는 JDBC 에러 코드는 다음과 같다.
+SQLException에서 발생하는 JDBC 오류 코드는 다음과 같다.
 
-*   모든 에러 번호는 0보다 작은 음수이다.
-*   SQLException 발생 시 에러 번호는 SQLException.getErrorCode(), 에러 메시지는 SQLException.getMessage()를 통해 확인할 수 있다.
-*   에러 번호가 -21001부터 -21999 사이이면, CUBRID JDBC 메서드에서 발생하는 에러이다. 
-*   에러 번호가 -10000부터 -10999 사이이면, CAS에서 발생하는 에러를 JDBC가 전달받아 반환하는 에러이다. CAS 에러는 :ref:`cas-error`\ 를 참고한다.
-*   에러 번호가 0부터 -9999 사이이면, DB 서버에서 발생하는 에러이다. DB 서버 에러는 :ref:`database-server-error`\ 를 참고한다.
+*   모든 오류 번호는 0보다 작은 음수이다.
+*   SQLException 발생 시 오류 번호는 SQLException.getErrorCode(), 오류 메시지는 SQLException.getMessage()를 통해 확인할 수 있다.
+*   오류 번호가 -21001부터 -21999 사이이면, CUBRID JDBC 메서드에서 발생하는 오류이다. 
+*   오류 번호가 -10000부터 -10999 사이이면, CAS에서 발생하는 오류를 JDBC가 전달받아 반환하는 오류이다. CAS 오류는 :ref:`cas-error`\ 를 참고한다.
+*   오류 번호가 0부터 -9999 사이이면, DB 서버에서 발생하는 오류이다. DB 서버 오류는 :ref:`database-server-error`\ 를 참고한다.
 
 +---------------+--------------------------------------------------------------------------------------+
-| 에러 번호     | 에러 메시지                                                                          |
+| 오류 번호     | 오류 메시지                                                                          |
 +===============+======================================================================================+
 | -21001        | Index's Column is Not Object                                                         |
 +---------------+--------------------------------------------------------------------------------------+

@@ -27,14 +27,14 @@ Database Management Errors
 
 **ERROR CODE: -83, 'Length of path "%1$s" plus length of prefix logname "%2$s" is too long; the combined length must be less than %3$d.'**
 
-- This message is displayed when the total length combining the path of the log file and the log name exceeds the maximum length allowed, CUBRID enforces a limit on the total path length of log files, and this message mainly occurs when the database path or log file name is too long and the overall path exceeds the system limit.
+- This message is displayed when the total length combining the path of the log file and the log name exceeds the maximum length allowed, CUBRID enforces a limit on the total path length of log files, and this message mainly occurs when the database path or log filename is too long and the overall path exceeds the system limit.
 
 
 .. _ERROR-84:
 
 **ERROR CODE: -84, 'Length of prefix logname "%1$s" is too long; the length must be less than %2$d.'**
 
-- This message is displayed when the length of a log file name exceeds the maximum length allowed, CUBRID enforces a length limit on log file names, and this message mainly occurs when the database name is too long, or when the log file path exceeds the system limit.
+- This message is displayed when the length of a log filename exceeds the maximum length allowed, CUBRID enforces a length limit on log filenames, and this message mainly occurs when the database name is too long, or when the log file path exceeds the system limit.
 
 
 .. _ERROR-85:
@@ -111,7 +111,7 @@ Database Management Errors
 
 **ERROR CODE: -119, 'Cannot find hostname ("%1$s") in "%2$s". Please check permissions of the file or if there is the hostname.'**
 
-- This message is displayed when the CUBRID system tried to find a specific host name but failed, it mainly occurs in the process of configuring network communication or querying host information, and appears when the specified host name is invalid, or when it cannot access the file that contains host information (e.g., /etc/hosts).
+- This message is displayed when the CUBRID system tried to find a specific hostname but failed, it mainly occurs in the process of configuring network communication or querying host information, and appears when the specified hostname is invalid, or when it cannot access the file that contains host information (e.g., /etc/hosts).
 
 
 .. _ERROR-120:
@@ -342,21 +342,21 @@ Database Management Errors
 
 **ERROR CODE: -164, 'User "%1$s" already exists.'**
 
-- This message is displayed when the CUBRID system tries to create a new user, but a user with the same name already exists in the system, it means that user creation failed due to a duplicate user name when executing the CREATE USER statement.
+- This message is displayed when the CUBRID system tries to create a new user, but a user with the same name already exists in the system, it means that user creation failed due to a duplicate username when executing the CREATE USER statement.
 
 
 .. _ERROR-165:
 
 **ERROR CODE: -165, 'User "%1$s" is invalid.'**
 
-- This message is an authentication-related error that occurs when, in the CUBRID system, the specified user name is invalid or a user that does not exist in the system, it means that an incorrect user name was used in operations such as connecting to the database, changing user privileges, or specifying an owner of a specific object.
+- This message is an authentication-related error that occurs when, in the CUBRID system, the specified username is invalid or a user that does not exist in the system, it means that an incorrect username was used in operations such as connecting to the database, changing user privileges, or specifying an owner of a specific object.
 
 
 .. _ERROR-166:
 
 **ERROR CODE: -166, 'Invalid user specified.'**
 
-- This message is displayed when performing a user privilege (GRANT) operation in the CUBRID system, if the specified user is invalid or does not exist, it mainly occurs due to a user name error or when referencing a non-existent user.
+- This message is displayed when performing a user privilege (GRANT) operation in the CUBRID system, if the specified user is invalid or does not exist, it mainly occurs due to a username error or when referencing a non-existent user.
 
 
 .. _ERROR-167:
@@ -452,16 +452,16 @@ Database Management Errors
 
 .. _ERROR-189:
 
-**ERROR CODE: -189, 'Invalid host name "%1$s".'**
+**ERROR CODE: -189, 'Invalid hostname "%1$s".'**
 
-- This message is displayed when the host name provided by the CUBRID client when connecting to the server is invalid or in an incorrect format, it occurs when the host name is NULL, exceeds the maximum allowed length, or is not in a valid format, and occurs when validating the server host information during the client initialization process.
+- This message is displayed when the hostname provided by the CUBRID client when connecting to the server is invalid or in an incorrect format, it occurs when the hostname is NULL, exceeds the maximum allowed length, or is not in a valid format, and occurs when validating the server host information during the client initialization process.
 
 
 .. _ERROR-190:
 
 **ERROR CODE: -190, 'Server host not identified.'**
 
-- This message is displayed when the CUBRID client cannot find server host information, it occurs when the server host name or server name is not set or is empty during the client initialization process, and indicates a state where the client does not know which server to connect to.
+- This message is displayed when the CUBRID client cannot find server host information, it occurs when the server hostname or server name is not set or is empty during the client initialization process, and indicates a state where the client does not know which server to connect to.
 
 
 .. _ERROR-191:
@@ -871,16 +871,16 @@ Database Management Errors
 
 .. _ERROR-589:
 
-**ERROR CODE: -589, 'Invalid user name "%1$s".'**
+**ERROR CODE: -589, 'Invalid username "%1$s".'**
 
-- This message indicates that the user name is invalid or does not exist in the CUBRID database, it occurs when validating a user name in user authentication, privilege management, stored procedure creation, and so on, and it can occur when referencing a user that does not exist.
+- This message indicates that the username is invalid or does not exist in the CUBRID database, it occurs when validating a username in user authentication, privilege management, stored procedure creation, and so on, and it can occur when referencing a user that does not exist.
 
 
 .. _ERROR-595:
 
 **ERROR CODE: -595, 'The database name "%1$s" is too long. Database name should be less than %2$d characters.'**
 
-- This message is displayed in CUBRID when the database name exceeds the maximum length and it tries to create a volume file name that is the same as the database name.
+- This message is displayed in CUBRID when the database name exceeds the maximum length and it tries to create a volume filename that is the same as the database name.
 
 
 .. _ERROR-611:
@@ -978,7 +978,7 @@ Database Management Errors
 
 **ERROR CODE: -695, 'Wrong interface has been used to kill a client.'**
 
-- This message occurs when, in the CUBRID database, when trying to forcibly terminate a client session with the killtran command, the wrong interface or inappropriate parameters are used, to perform a client termination operation, information such as transaction index, user name, host name, and so on is required, but this error occurs when such information is insufficient or incorrect.
+- This message occurs when, in the CUBRID database, when trying to forcibly terminate a client session with the killtran command, the wrong interface or inappropriate parameters are used, to perform a client termination operation, information such as transaction index, username, hostname, and so on is required, but this error occurs when such information is insufficient or incorrect.
 
 
 .. _ERROR-696:
@@ -1263,7 +1263,7 @@ Such a situation generally appears when performing DML/DDL operations on a parti
 
 **ERROR CODE: -985, 'The hostname on the database connection string should be specified when multihost is set in "databases.txt". ex) csql demodb@localhost'**
 
-- This message occurs when a CUBRID database client attempts to connect to a database for which the `multihost` option is enabled in the `databases.txt` file. The `multihost` option indicates that the database can be serviced across multiple hosts, and in this case the client must explicitly specify the host name of the specific server it wants to connect to, if the client attempts to connect with only the database name, such as `csql demodb`, CUBRID cannot know which host to connect to and therefore raises this error, it is a protective error to guide the client to connect to the correct server record and prevent ambiguous connection attempts.
+- This message occurs when a CUBRID database client attempts to connect to a database for which the `multihost` option is enabled in the `databases.txt` file. The `multihost` option indicates that the database can be serviced across multiple hosts, and in this case the client must explicitly specify the hostname of the specific server it wants to connect to, if the client attempts to connect with only the database name, such as `csql demodb`, CUBRID cannot know which host to connect to and therefore raises this error, it is a protective error to guide the client to connect to the correct server record and prevent ambiguous connection attempts.
 
 
 .. _ERROR-991:
@@ -1425,7 +1425,7 @@ This error code occurs when there is already a COMPACTDB process running and you
 
 **ERROR CODE: -1095, 'User name is too long.'**
 
-- This message occurs when, in the CUBRID database system, when creating or changing a user name (User Name), the length of the entered user name exceeds the maximum length allowed by the system, that is, during the process where the CUBRID server handles user management operations, if the user name provided through commands such as `CREATE USER` or `ALTER USER` exceeds the internally defined maximum string length, it returns this error. This is a protective constraint to maintain consistency of the database schema and system metadata and to prevent potential issues such as internal buffer overflow.
+- This message occurs when, in the CUBRID database system, when creating or changing a username (User Name), the length of the entered username exceeds the maximum length allowed by the system, that is, during the process where the CUBRID server handles user management operations, if the username provided through commands such as `CREATE USER` or `ALTER USER` exceeds the internally defined maximum string length, it returns this error. This is a protective constraint to maintain consistency of the database schema and system metadata and to prevent potential issues such as internal buffer overflow.
 
 
 .. _ERROR-1099:

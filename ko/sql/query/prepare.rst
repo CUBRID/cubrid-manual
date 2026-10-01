@@ -57,9 +57,9 @@ EXECUTE 문
 
     EXECUTE stmt_name [USING value [, value] ...]
 
-*   *stmt_name* : 실행하고자 하는 prepared statement에 부여된 이름을 지정한다. *stmt_name* 이 유효하지 않거나 prepared statement가 존재하지 않는 경우 에러가 출력된다.
+*   *stmt_name* : 실행하고자 하는 prepared statement에 부여된 이름을 지정한다. *stmt_name* 이 유효하지 않거나 prepared statement가 존재하지 않는 경우 오류가 출력된다.
 
-*   *value* : 바인드 파라미터가 prepared statement에 있는 경우 바인딩할 데이터를 입력한다. 바인드 파라미터와 데이터의 개수 및 순서가 대응되어야 한다. 그렇지 않으면 에러가 출력된다.
+*   *value* : 바인드 파라미터가 prepared statement에 있는 경우 바인딩할 데이터를 입력한다. 바인드 파라미터와 데이터의 개수 및 순서가 대응되어야 한다. 그렇지 않으면 오류가 출력된다.
 
 .. code-block:: sql
 
@@ -124,7 +124,7 @@ DEALLOCATE PREPARE 문, DROP PREPARE 문
 
     {DEALLOCATE | DROP} PREPARE stmt_name
 
-*   *stmt_name* : 해제하고자 하는 prepared statement에 부여된 이름을 지정한다. *stmt_name* 이 유효하지 않거나 prepared statement가 존재하지 않으면 에러가 출력된다.
+*   *stmt_name* : 해제하고자 하는 prepared statement에 부여된 이름을 지정한다. *stmt_name* 이 유효하지 않거나 prepared statement가 존재하지 않으면 오류가 출력된다.
 
 .. code-block:: sql
 

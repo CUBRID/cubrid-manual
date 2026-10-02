@@ -552,6 +552,8 @@ The ``routines`` view contains all procedures and functions in the current datab
 +--------------------------+---------------+------------------------------------------------------------------+
 | is_deterministic         | VARCHAR(3)    | 'YES' if the routine is declared DETERMINISTIC, otherwise 'NO'   |
 +--------------------------+---------------+------------------------------------------------------------------+
+| is_parallel_enabled      | VARCHAR(3)    | 'YES' if declared PARALLEL_ENABLE, otherwise 'NO'                |
++--------------------------+---------------+------------------------------------------------------------------+
 | sql_data_access          | VARCHAR(17)   | SQL data access level (NO SQL, CONTAINS SQL, READS SQL DATA,     |
 |                          |               | MODIFIES SQL DATA)                                               |
 +--------------------------+---------------+------------------------------------------------------------------+

@@ -12,13 +12,15 @@ Supported Platforms and System Requirements
 
 The platforms supported by CUBRID and hardware/software requirements for the installation are as follows:
 
-+---------------------------------------------------------------------+------------------+---------------------+
-| Supported Platforms                                                 | Required Memory  | Required Disk Space |
-+=====================================================================+==================+=====================+
-| * Windows 64 Bit Windows 7 or higher                                | 1GB or more      | 2GB or more(\*)     |
-|                                                                     |                  |                     |
-| * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)      |                  |                     |
-+---------------------------------------------------------------------+------------------+---------------------+
++------------------------------------------------------------------------------------+------------------+---------------------+
+| Supported Platforms                                                                | Required Memory  | Required Disk Space |
++====================================================================================+==================+=====================+
+| * Windows 64 Bit Windows 7 or higher (native Windows)                              | 1GB or more      | 2GB or more(\*)     |
+|                                                                                    |                  |                     |
+| * Windows 64 Bit Windows 10 2004 (Build 19041) or Higher or Windows 11 (with WSL)  | 2GB or more      | 2GB or more(\*)     |
+|                                                                                    |                  |                     |
+| * Linux family 64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)                     | 1GB or more      | 2GB or more(\*)     |
++------------------------------------------------------------------------------------+------------------+---------------------+
 
 (\*): Requires a 500MB of free disk space on the initial installation; requires approximately 1.5GB of free disk space with a database creating with default options.
 
@@ -211,6 +213,120 @@ A simple description on each driver can be found on :doc:`/api/index`.
 You can download various tools including CUBRID Admin and CUBRID Migration Toolkit from https://www.cubrid.org/downloads.
 
 .. FIXME You can see the latest information on tools such as CUBRID Admin and install them by downloading files from http://www.cubrid.org/downloads.
+
+.. _Installing-and-Running-on-Windows-With-WSL:
+
+Installing and Running CUBRID on Windows with WSL (Windows Subsystem for Linux)
+--------------------------------------------------------------------------------
+
+CUBRID provides an installer that can install and run CUBRID in a WSL (Windows Subsystem for Linux) environment on Windows. (https://www.cubrid.org/downloads)
+To install and run CUBRID in a WSL environment, WSL must already be installed. For information on how to install WSL, see https://learn.microsoft.com/en-us/windows/wsl/install.
+
+**Checklist before Installing**
+
+You should check the below before installing CUBRID for Windows.
+
+*   Check Windows version compatibility
+
+    Windows 10 version 2004 (Build 19041) or later, or Windows 11
+
+*   Check virtualization technology support (Intel VT-x, AMD-V)
+
+    Check whether virtualization technology is enabled in the BIOS/UEFI.
+
+*   Install and enable WSL (Windows Subsystem for Linux)
+
+    Install the latest WSL2 from https://github.com/microsoft/WSL/releases and enable WSL in Windows Features.
+    The CUBRID installer does not automatically install WSL; it only checks whether WSL is enabled and provides a way to enable it.
+    If WSL needs to be installed and enabled, a reboot is required, and you must run the installer again after rebooting.
+
+*   The installer requires administrator privileges.
+
+**Installation Process**
+
+When you run the provided EXE installer, it checks the WSL environment. If the requirements are not met, it displays a message and stops the installation.
+If WSL is enabled, the installer installs a Linux distribution that includes CUBRID and a tray application for managing the CUBRID server.
+
+**Step 1: Selecting installation options**
+
+    *   Set the distribution name
+    *   Choose whether to register the tray application in the startup list
+    *   Choose whether to create a desktop shortcut
+    *   Choose whether to create a sample database
+    *   Select WSL2 mode (checked by default). When checked, CUBRID is installed in WSL2 mode; when unchecked, it is installed in WSL1 mode.
+
+        The supported platform requirements and verified behavior described above are based on WSL2 mode.
+        WSL1 mode does not use the Linux kernel directly, so some features may be limited.
+
+**Step 2: Specifying the installation directory**
+
+**Step 3: Completing the installation**
+
+    *   After installation completes, you can choose whether to run the tray application.
+    *   The installer only provides install and uninstall functions. Uninstalling removes the WSL distribution
+        and the tray application, and all databases and configuration files inside the distribution are also deleted;
+        back up your databases before uninstalling.
+
+    .. warning::
+        Copy any files backed up with backupdb or other methods to the Windows filesystem (the /mnt/c/... path) and keep them outside the distribution.
+        Files kept inside the distribution are deleted when it is removed.
+
+    *   To upgrade CUBRID, do not run the installer again. Instead, connect to the distribution and follow the same
+        procedure as on Linux using the Linux installation file.
+        For details, see the CUBRID upgrade section in :ref:`Installing-and-Running-on-Linux`.
+
+.. note::
+
+    Once installation is complete, the CUBRID WSL distribution and the CUBRID server are set to start automatically whenever the system reboots.
+    To stop this automatic startup on reboot, turn it off at "Settings > Apps > Startup > **cubrid_starter.exe**".
+    Likewise, if the tray application was registered in the startup list, turn it off at "Settings > Apps > Startup > **cubrid_tray_app.exe**" to stop it from starting automatically.
+
+**Step 4: Verifying the installation**
+
+    *   After installation, check that the distribution was installed by running ``wsl -l -v`` in the Windows Command Prompt.
+    *   After installation, check that the CUBRID server is running by running
+        ``wsl -d <distribution name> -u cubrid -- bash -l -c 'cubrid service status'`` in the Windows Command Prompt.
+    *   Run the tray application and select the About menu to check the installed distribution name, CUBRID version, and status.
+
+**About the Distribution**
+
+    *   The installer lets you set the distribution name, which you can check with the ``wsl -l`` command in the Windows Command Prompt.
+    *   CUBRID in the distribution is installed under the **cubrid** user account, whose home directory is /home/cubrid.
+    *   CUBRID is installed at /home/cubrid/CUBRID in the distribution, and the CUBRID environment variables are set in /home/cubrid/.cubrid.sh.
+    *   To access the distribution, run ``wsl -d <distribution name> -u cubrid`` in the Windows Command Prompt.
+
+**Tray Application**
+
+    *   The tray application can start, stop, and restart the CUBRID server, and provides the following menu:
+
+        *   About: Check the installed distribution name, CUBRID version, and status
+        *   CUBRID Start: Start the CUBRID server
+        *   CUBRID Stop: Stop the CUBRID server
+        *   Guide: Network configuration and upgrade guide
+        *   Exit: Exit the tray application
+
+**About WSL**
+
+    *   WSL2 offers improved performance over WSL1 and uses the Linux kernel directly, so you can use the latest Linux features.
+    *   CUBRID can be installed and run on both WSL2 and WSL1, but WSL2 is recommended whenever your environment can use it.
+    *   For more information about WSL, see https://learn.microsoft.com/en-us/windows/wsl/.
+
+**About Networking**
+
+    *   In WSL2 mode, Windows and WSL communicate over a virtual NAT network, so port forwarding may need to be configured.
+
+        Most versions support port forwarding automatically, so the server can be reached at localhost:<port>.
+        To resolve the port forwarding and distribution IP address changes caused by the NAT mode, WSL2 supports a networking option called mirrored mode.
+        Setting the following in the %USERPROFILE%\\.wslconfig file makes WSL2 directly mirror the Windows network interface, the same way WSL1 does. ::
+
+            [wsl2]
+            networkingMode=mirrored
+
+        Note:
+        In mirrored mode, Since Windows and WSL2 share the same network space, running a port that is already in use on Windows (e.g. 30000) inside WSL2 as well can cause a port conflict.
+
+    *   In WSL1 mode, Windows and WSL are host-integrated, sharing the Windows host's IP address and network stack as-is (Windows firewall rules apply).
+    *   For networking configuration, see https://learn.microsoft.com/en-us/windows/wsl/networking.
 
 .. _Installing-and-Running-on-Windows:
 

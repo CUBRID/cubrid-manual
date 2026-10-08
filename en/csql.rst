@@ -286,7 +286,7 @@ To display the option list in the prompt, execute the **csql** utilities without
 
 .. option:: --no-auto-commit
 
-    The following example shows how to stop the autocommit mode with the **\-\-no-autocommit** option. If you don't configure **\-\-no-autocommit** option, the CSQL Interpreter runs in an autocommit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
+    The following example shows how to stop the autocommit mode with the **\-\-no-auto-commit** option. If you do not configure **\-\-no-auto-commit** option, the CSQL Interpreter runs in an autocommit mode by default, and the SQL statement is committed automatically at every execution. Executing the **;AUtocommit** session command after starting the CSQL Interpreter will also have the same result. ::
 
         csql --no-auto-commit demodb
 

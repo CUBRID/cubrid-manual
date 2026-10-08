@@ -64,11 +64,11 @@ If the update is properly done, the changes can be permanently fixed. In this ti
 
 .. note:: In CUBRID, an auto-commit mode is set by default for transaction management.
 
-An auto-commit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs. Such auto commit modes are supported in any interfaces.
+An autocommit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs. Such autocommit modes are supported in any interfaces.
 
-In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change auto-commit mode, use the following functions by interface: **cci_set_autocommit** () for CCI interface and **cubrid_set_autocommit** () for PHP interface.
+In CCI, PHP, ODBC and OLE DB interfaces, you can configure autocommit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change autocommit mode, use the following functions by interface: **cci_set_autocommit** () for CCI interface and **cubrid_set_autocommit** () for PHP interface.
 
-For session command (**;AUtocommit**) which enables auto-commit configuration in CSQL Interpreter, see :ref:`csql-session-commands`.
+For session command (**;AUtocommit**) which enables autocommit configuration in CSQL Interpreter, see :ref:`csql-session-commands`.
 
 Transaction Rollback
 --------------------
@@ -228,7 +228,7 @@ The result sets that hold the cursor are closed in the following cases:
 *   Driver closes the result set, i.e. rs.close()
 *   Driver closes the statement, i.e. stmt.close()
 *   Driver disconnects the connection.
-*   Transaction aborts, for instance, application explicitly calls rollback(), auto rollback due to a query failure under auto-commit mode.
+*   Transaction aborts, for instance, application explicitly calls rollback(), auto rollback due to a query failure under autocommit mode.
 
 **Relationship with CAS**
 
@@ -301,7 +301,7 @@ Versioning, visibility and snapshot
 
 MVCC maintains multiple versions for each database row. Each version is marked by its inserter and deleter with MVCCID's - unique identifiers for writer transactions. These markers are useful to identify the author of a change and to place the change on a timeline.
 
-When a transaction *T1* inserts a new row, it creates its first version and sets its unique identifier *MVCCID1* as insert id. The MVCCID is stored as meta-data in record header:
+When a transaction *T1* inserts a new row, it creates its first version and sets its unique identifier *MVCCID1* as insert id. The MVCCID is stored as metadata in record header:
 
 +------------------+-------------+---------------+
 | OTHER META-DATA  | MVCCID1     | RECORD DATA   |

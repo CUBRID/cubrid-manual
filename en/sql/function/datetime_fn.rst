@@ -2208,6 +2208,25 @@ UTC_TIME
     ==============
       10:35:52 AM
 
+UTC_TIMESTAMP
+=============
+
+.. function:: UTC_TIMESTAMP ()
+
+    The **UTC_TIMESTAMP** function returns the UTC date and time as **TIMESTAMP** type.
+
+    :rtype: TIMESTAMP
+
+.. code-block:: sql
+
+    SELECT UTC_TIMESTAMP();
+    
+::
+
+      utc_timestamp()
+    ===========================
+      06:04:19 AM 12/23/2025
+
 WEEK
 ====
 

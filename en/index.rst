@@ -54,6 +54,7 @@ Table of Contents
     sql/index.rst
     pl/index.rst
     admin/index.rst
+    cmt/index.rst
     ha.rst
     security.rst
     shard.rst

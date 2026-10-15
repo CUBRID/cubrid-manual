@@ -26,7 +26,7 @@ Conflicts during inheritance and their resolutions will be covered in the `Resol
     *   The name of a method/attribute must be unique within a class. The name cannot contain spaces, and cannot be a reserved keyword of CUBRID. Alphabets as well as '_', '#', '%' are allowed in the class name, but the first character cannot be '_'. Class names are not case-sensitive. A class name will be stored in the system after being converted to lowercase characters.
     *   Encryption option (TDE) of the class is not inherited. For more information, see :ref:`create-tde-table`. 
 
-.. note:: A super class name can begin with the user name so that the owner of the class can be easily identified.
+.. note:: A super class name can begin with the username so that the owner of the class can be easily identified.
 
 Class Attribute and Method
 ==========================

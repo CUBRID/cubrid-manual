@@ -1557,8 +1557,8 @@ cci_get_autocommit
     :param conn_handle: (IN) Connection handle
     :return: 
     
-        *   **CCI_AUTOCOMMIT_TRUE**: Auto-commit mode is ON
-        *   **CCI_AUTOCOMMIT_FALSE**: Auto-commit mode is OFF
+        *   **CCI_AUTOCOMMIT_TRUE**: Autocommit mode is ON
+        *   **CCI_AUTOCOMMIT_FALSE**: Autocommit mode is OFF
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
 
@@ -2576,7 +2576,7 @@ cci_property_set
                                                                                               or internal timeout occurs in prepare/execute function.    
     query_timeout                 msec        0(inf.)                                         Query timeout.
     disconnect_on_query_timeout   bool        no                                              Whether to terminate connection when execution is discarded due to query execution timeout. yes or no.
-    default_autocommit            bool        CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf    Auto-commit mode specified when a datasource is created by :c:func:`cci_datasource_create` function.
+    default_autocommit            bool        CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf    Autocommit mode specified when a datasource is created by :c:func:`cci_datasource_create` function.
                                                                                               true or false.
     default_isolation             string      isolation_level in cubrid.conf                  Transaction isolation level specified when a datasource is created by :c:func:`cci_datasource_create`  
                                                                                               function. See the below table.

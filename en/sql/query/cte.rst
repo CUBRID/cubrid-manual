@@ -8,7 +8,7 @@ CTE
 
 Common Table Expressions (CTEs) are temporary tables (list of results) associated with a statement. A CTE can be referenced multiple times within the statement, and is visible only within the statement scope. It enables better separation of statement logic and may enhance execution performance. Moreover, recursive CTEs can be used to generate a hierarchical statement based on parent-child relationships, being able to reproduce **CONNECT BY** statements and other more complex queries. 
 
-A CTE is introduced using the **WITH** clause. A list of sub-queries is expected, and final query which uses the sub-queries. Each sub-query (table expression) has a name and a query definition. A table expression may refer another table expression which previously defined in the same statement.
+A CTE is introduced using the **WITH** clause. A list of subqueries is expected, and final query which uses the subqueries. Each subquery (table expression) has a name and a query definition. A table expression may refer another table expression which previously defined in the same statement.
 The general syntax is: ::
 
     WITH
@@ -19,9 +19,9 @@ The general syntax is: ::
     <final_query>
     
 
-*  *recursive_cte_name*, *cte_name1*, *cte_name2* :  identifiers for the table expressions (sub-queries)
+*  *recursive_cte_name*, *cte_name1*, *cte_name2* :  identifiers for the table expressions (subqueries)
 *  *recursive_column_names*, *cte1_column_names*, *cte2_column_names* : identifiers for the columns of the results of each table expression
-*  *sub-query1*, *sub-query2* : sub-queries which define each table expression. 
+*  *sub-query1*, *sub-query2* : subqueries which define each table expression. 
 *  *final_query* : query using table expression previously defined. Usually, the **FROM** clause of this will contain the CTEs identifiers.
 
 Simplest usage is to combine result lists of table expressions:
@@ -56,7 +56,7 @@ Simplest usage is to combine result lists of table expressions:
       'Frame'               'cars'
       'Wheel'               'cars'            
             
-A sub-query of one CTE may be referenced by other sub-query of another CTE (the referenced CTE needs to be defined before):
+A subquery of one CTE may be referenced by other subquery of another CTE (the referenced CTE needs to be defined before):
 
 .. code-block:: sql
 
@@ -109,7 +109,7 @@ Error will be prompted if:
 CTE column names
 ================
 
-The column names of each CTE result may be specified after the CTE name. The number of elements in the CTE column list must match the number of columns in the CTE sub-query.
+The column names of each CTE result may be specified after the CTE name. The number of elements in the CTE column list must match the number of columns in the CTE subquery.
 
 .. code-block:: sql
 
@@ -159,7 +159,7 @@ If no column names are given in the CTE, the column names are extracted from the
 RECURSIVE clause
 ================
 
-The **RECURSIVE** keyword allows construction recurrent queries (the table expression sub-queries definition contains its own name). A recursive table expression is composed of the non-recursive part and a recursive part (which references the sub-queries by its CTE name). The recursive and non-recursive parts **must** be combined using the **UNION ALL** query operator.
+The **RECURSIVE** keyword allows construction recurrent queries (the table expression subqueries definition contains its own name). A recursive table expression is composed of the non-recursive part and a recursive part (which references the subqueries by its CTE name). The recursive and non-recursive parts **must** be combined using the **UNION ALL** query operator.
 The recursive part should be defined in such way, that no cycle will be generated. Also if the recursive part contains aggregate functions, it should also contain a **GROUP BY** clause, because aggregate functions will return always a tuple and the recursive iterations will never stop. The recursive part will stop iterating when the conditions from **WHERE** clause are no longer true, and the current iteration return no results.
 
 .. code-block:: sql
@@ -205,7 +205,7 @@ Recursive CTEs may fall into an infinite loop. To avoid such case, set the syste
 
 .. warning::
 
-    *   Depending on the complexity of the CTE sub-queries, the result set can grow very large for sub-queries which produces large amount of data. Even the default value of **cte_max_recursions** may not be enough to avoid starvation of disk space.
+    *   Depending on the complexity of the CTE subqueries, the result set can grow very large for subqueries which produces large amount of data. Even the default value of **cte_max_recursions** may not be enough to avoid starvation of disk space.
 
 The execution algorithm of a recursive CTE may be summarized as:
  * execute the non recursive part of CTE and add its results to then final result set
@@ -214,7 +214,7 @@ The execution algorithm of a recursive CTE may be summarized as:
  * if a recursive iteration produces no results, then stop
  * if the configured maximum number of iterations is reached, also stop
  
-The recursive CTE must be referenced directly in the **FROM** clause, referencing it in sub-query will prompt an error:
+The recursive CTE must be referenced directly in the **FROM** clause, referencing it in subquery will prompt an error:
 
 .. code-block:: sql
 

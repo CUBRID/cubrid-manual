@@ -320,7 +320,7 @@ Parameter configuration
 *   **SELECT_AUTO_COMMIT** should be deleted since this parameter is no longer used.
 *   The value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** should be 2,097,151 or less since the maximum value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is 2,097,151.
 *   The minimum value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is 1024M. It is recommended that users who configure **APPL_SERVER_MAX_SIZE** configure this value less than the value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT**.
-*   Because the default value of **CCI_DEFAULT_AUTOCOMMIT** has been changed to **ON**, users who have not configured this value should change it to **OFF** if they want to keep auto commit mode.
+*   Because the default value of **CCI_DEFAULT_AUTOCOMMIT** has been changed to **ON**, users who have not configured this value should change it to **OFF** if they want to keep autocommit mode.
 
 **cubrid_ha.conf**
 

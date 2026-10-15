@@ -1,6 +1,6 @@
 
 :meta-keywords: cubrid identifier guideline, cubrid legal identifier, database identifier
-:meta-description: CUBRID Identifiers can be table names, index names, view names, column names, user names etc.
+:meta-description: CUBRID Identifiers can be table names, index names, view names, column names, usernames etc.
 
 **********
 Identifier
@@ -9,7 +9,7 @@ Identifier
 Guidelines for Creating Identifiers
 ===================================
 
-Table name, index name, view name, column name, user name etc. are included in identifier. The guidelines for creating identifiers are as follows:
+Table name, index name, view name, column name, username etc. are included in identifier. The guidelines for creating identifiers are as follows:
 
 *   An identifier must begin with a letter; it must not begin with a number or a symbol.
 *   It is not case-sensitive.

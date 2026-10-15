@@ -43,7 +43,7 @@ For how to use the prepared server, refer to :ref:`dblink-clause`.
     *   *host_string*: It is the hose name or IP address of the broker server that has DBMS information to be accessed remotely.
     *   *port_number*: The port number of the broker server that has DBMS information to be accessed remotely.
     *   *db_name*: The database name to connect to remotely.
-    *   *user_name*: The user name to use when connecting to the database to be accessed remotely.
+    *   *user_name*: The username to use when connecting to the database to be accessed remotely.
     *   *password_string*: Password string for *user_name* used to connect to the database to be accessed remotely.
     *   *properties_string*: A string of property information (up to 2047 bytes) used when connecting to a broker (or gateway) for remote database usage. For detailed attribute information, see :ref:`cci_connect_with_url`\
     *   *server_comment_string*: Specifies comments about server information. (up to 1023 bytes)
@@ -161,7 +161,7 @@ The following is an example of a poor use of the server name (<dblink_server_nam
         
 
 In the above example, creation with *"srv.1"* and *[cub].[srv.2]* names fails.
-In the case of *cub.srv1*, *cub* will be recognized as the user name and the server name will be recognized as *srv1*.
+In the case of *cub.srv1*, *cub* will be recognized as the username and the server name will be recognized as *srv1*.
         
 .. note::
 
@@ -356,12 +356,12 @@ The **CHANGE** section is used to change the values of HOST, PORT, DBNAME, USER,
                 | PROPERTIES = [properties_string] 
                 | COMMENT = [server_comment_string]
 
-*   *owner_name*: Specifies the user name of the server to be created.
+*   *owner_name*: Specifies the username of the server to be created.
 *   *server_name*: Specifies the name of the server to be created. (up to 254 bytes)
 *   *host_string*: It is the hose name or IP address of the broker server that has DBMS information to be accessed remotely.
 *   *port_number*: The port number of the broker server that has DBMS information to be accessed remotely.
 *   *db_name*: The database name to connect to remotely.
-*   *user_name*: he user name to use when connecting to the database to be accessed remotely.
+*   *user_name*: he username to use when connecting to the database to be accessed remotely.
 *   *password_string*: Password string for *user_name* used to connect to the database to be accessed remotely.
 *   *properties_string*: Property information string used when connecting to the database to be accessed remotely. (up to 2047 bytes)	
 *   *server_comment_string*: Specifies comments about server information. (up to 1023 bytes)

@@ -6,7 +6,7 @@
 REPLACE
 *******
 
-**REPLACE** 문은 :doc:`insert` 문과 유사하지만, **PRIMARY KEY** 또는 **UNIQUE** 제약 조건이 정의된 칼럼에 중복된 값을 삽입하면 에러 출력 없이 기존 레코드를 삭제한 후 새로운 레코드를 삽입한다. **REPLACE** 문은 삽입 또는 삭제 후 삽입을 수행하므로, **REPLACE** 문을 사용하기 위해서는 테이블에 대한 **INSERT**\ 와 **DELETE** 권한을 동시에 가지고 있어야 한다. 권한 설정에 관한 자세한 내용은 :ref:`granting-authorization` 절을 참고하면 된다.
+**REPLACE** 문은 :doc:`insert` 문과 유사하지만, **PRIMARY KEY** 또는 **UNIQUE** 제약 조건이 정의된 칼럼에 중복된 값을 삽입하면 오류 출력 없이 기존 레코드를 삭제한 후 새로운 레코드를 삽입한다. **REPLACE** 문은 삽입 또는 삭제 후 삽입을 수행하므로, **REPLACE** 문을 사용하기 위해서는 테이블에 대한 **INSERT**\ 와 **DELETE** 권한을 동시에 가지고 있어야 한다. 권한 설정에 관한 자세한 내용은 :ref:`granting-authorization` 절을 참고하면 된다.
 
 ::
 

@@ -213,7 +213,7 @@ Stored procedures and stored functions can use the **CALL**\ statement and OUT o
                 5
 
 If you specify the OUT or IN OUT mode for any argument in a stored procedure or stored function, 
-it can not be called within a query statement (**SELECT**, **UPDATE**, **DELETE**, etc.); it will return an error.
+it cannot be called within a query statement (**SELECT**, **UPDATE**, **DELETE**, etc.); it will return an error.
 
 .. code-block:: sql
 

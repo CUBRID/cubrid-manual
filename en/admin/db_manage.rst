@@ -70,7 +70,7 @@ For more details on volumes, see :ref:`database-volume-structure`.
 The following is an example of files related to the database when *testdb* database operates.
 
 +----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
-| File name      | Size  | Purpose         | Classification | Description                                                                                          |
+| Filename       | Size  | Purpose         | Classification | Description                                                                                          |
 +================+=======+=================+================+======================================================================================================+
 | testdb         | 512MB | | permanent     | | Database     | | The firstly created volume when DB is created.                                                     |
 |                |       | | data          | | volume       | | This volume stores permanent data (system, heap and index files).                                  |

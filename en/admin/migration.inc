@@ -154,7 +154,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --output-prefix=PREFIX
 
-    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **\-\-output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix.
+    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema filename becomes *abcd_schema* and the object filename becomes *abcd_objects*. If the **\-\-output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix.
     
     ::
 
@@ -218,7 +218,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --datafile-per-class
 
-    This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as *<Database Name>_<Table Name>*\_ **objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`).
+    This option specifies that the output file generated through unload operation creates a data file per each table. The filename is generated as *<Database Name>_<Table Name>*\_ **objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`).
     
     ::
 
@@ -568,7 +568,7 @@ The following table shows [options] available with the **cubrid loaddb** utility
 
 .. warning::
 
-    You can change the order of schema files written in this file, but loading errors may occur if the order is wrong. For example, an error may occur if the PK file is loaded first while the file with CLASS information is not loaded. Therefore, in the list, the file name for loading CLASS information must be higher than the file for loading PK.
+    You can change the order of schema files written in this file, but loading errors may occur if the order is wrong. For example, an error may occur if the PK file is loaded first while the file with CLASS information is not loaded. Therefore, in the list, the filename for loading CLASS information must be higher than the file for loading PK.
 
 .. warning::
 
@@ -616,7 +616,7 @@ A command line begins with a percent character (%) and consists of **%class** an
             integer
 
     The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference. The *class_name* uses the *schema_name* as a prefix and the *schema_name* is the name of the schema in which the class is defined.
-    The *schema_name* can be omitted, and if the *schema_name* is omitted, the user name of the database specified with the -u option is used as the schema name.
+    The *schema_name* can be omitted, and if the *schema_name* is omitted, the username of the database specified with the -u option is used as the schema name.
 
     ::
 

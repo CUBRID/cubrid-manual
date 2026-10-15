@@ -21,7 +21,7 @@ MD5
     :param string: 입력 문자열. **VARCHAR** 이 아닌 값이 입력되면 **VARCHAR** 으로 변환한다.
     :rtype: STRING
     
-리턴 값은 **VARCHAR** (32) 타입이며, 입력 인자가 **NULL** 이면 **NULL** 을 리턴한다.
+반환 값은 **VARCHAR** (32) 타입이며, 입력 인자가 **NULL** 이면 **NULL** 을 반환한다.
 
 .. code-block:: sql
 

@@ -18,7 +18,7 @@ When a specific error occurs, generally you can check SQL logs of broker applica
 
 One SQL log file is generated per each CAS; it is hard to find an SQL log in which an error occurred because SQL log files are many when CAS processes are many. However, SQL log filename includes CAS ID in the end part, you can find easily if you know the CAS ID in which an error occurred.
 
-.. note:: SQL log file name in a CAS is <broker_name>_<app_server_num>.sql.log(see :ref:`broker-logs`); <app_server_num> is CAS ID.
+.. note:: SQL log filename in a CAS is <broker_name>_<app_server_num>.sql.log(see :ref:`broker-logs`); <app_server_num> is CAS ID.
 
 Function getting CAS information
 --------------------------------
@@ -194,7 +194,7 @@ To resolve the split-brain status, one of two is dead for itself; cub_master log
 
 Above example is the information to print out into the cub_master log when testhost02 server detects split-brain status and it is dead for itself.    
      
-Detecting Fail-over, Fail-back
+Detecting Failover, Fail-back
 ------------------------------
   
 If failover or fail-back occurs, a node changes its role.

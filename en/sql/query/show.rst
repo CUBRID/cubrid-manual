@@ -1662,7 +1662,7 @@ Client_info              VARCHAR(256)    General information of client applicati
 Client_db_user           VARCHAR(40)     Current login database account from client application.
 Client_program           VARCHAR(256)    Program name of client application.
 Client_login_user        VARCHAR(16)     Current login user of OS which running the client application.
-Client_host              VARCHAR(64)     Host name of client application.
+Client_host              VARCHAR(64)     Hostname of client application.
 Client_pid               INT             Process id of client application.
 Topop_depth              INT             Depth of nested top operation.
 Num_unique_btrees        INT             Number of unique btrees contained in unique_stat_info array.

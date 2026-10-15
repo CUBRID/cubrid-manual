@@ -62,7 +62,7 @@ If the update is properly done, the changes can be permanently fixed. In this ti
 
     COMMIT [WORK];
 
-.. note:: In CUBRID, an auto-commit mode is set by default for transaction management.
+.. note:: In CUBRID, an autocommit mode is set by default for transaction management.
 
 An autocommit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs. Such autocommit modes are supported in any interfaces.
 

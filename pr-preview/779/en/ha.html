@@ -4219,9 +4219,9 @@ terminated by a specified signal.</p></td>
 <section id="determine-the-cause-of-failover">
 <span id="failover-messages"></span><h2>Determine the Cause of Failover<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#determine-the-cause-of-failover" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#determine-the-cause-of-failover'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p><strong>Failover, Failback messages</strong></p>
-<p>In an HA enviroment, messages for failover and failback are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or failback is determined, and result messages, which are logged when failover or failback is either canceled or successfully completed.</p>
+<p>In an HA environment, messages for failover and failback are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or failback is determined, and result messages, which are logged when failover or failback is either canceled or successfully completed.</p>
 <p>Diagnosis messages indicate the reason why the failover or failback was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if failover or failback is canceled, and the prefix [Success] along with the result if failover or failback is successfully completed.</p>
-<p>Failover and failback messages enable to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and failback messages that may be logged. Failover messages are logged on the slave node, while failback messages are logged on the master node.</p>
+<p>Failover and failback messages make it possible to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and failback messages that may be logged. Failover messages are logged on the slave node, while failback messages are logged on the master node.</p>
 <section id="isolation-of-master-node">
 <h3>Isolation of master node<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#isolation-of-master-node" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#isolation-of-master-node'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Isolation of master node</strong></p>
@@ -4235,10 +4235,10 @@ terminated by a specified signal.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] The master node has failed to receive heartbeat messages from all other slave nodes, resulting in a network partition.</p></td>
-<td><p>Failover has been initiated since master node failed to received heartbeat messages from every slave nodes</p></td>
+<td><p>Failback has been initiated since master node failed to receive heartbeat messages from all slave nodes</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failover] [Diagnosis] The current node has failed to receive heartbeat messages from the master node (master_node_name).</p></td>
-<td><p>Failback has been initiated since slave node failed to received heartbeat messages from master node</p></td>
+<td><p>Failover has been initiated since slave node failed to receive heartbeat messages from the master node</p></td>
 </tr>
 </tbody>
 </table>
@@ -4312,7 +4312,7 @@ terminated by a specified signal.</p></td>
 <section id="multiple-master-node-split-brain">
 <h3>Multiple master node (split-brain)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#multiple-master-node-split-brain" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#multiple-master-node-split-brain'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Multiple master node (split-brain)</strong></p>
-<p>When there is an abnormal situation where two or more servers assume the master role in an HA environment, it is referred to as a “split-brain” scenario. In such cases, all master nodes, except for the one designated to perform the master role, will failback to slave nodes to resolve the split-brain situation. Below is a list of failback messages that may be logged during a split-brain scenario.</p>
+<p>When there is an abnormal situation where two or more servers assume the master role in an HA environment, it is referred to as a “split-brain” scenario. In such cases, all master nodes, except for the one designated to perform the master role, will fail back to slave nodes to resolve the split-brain situation. Below is a list of failback messages that may be logged during a split-brain scenario.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Diagnosis Messages</p></th>

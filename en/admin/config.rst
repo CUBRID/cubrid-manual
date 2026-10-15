@@ -3178,7 +3178,7 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
     
 **SHARD_DB_USER**
 
-    The name of the backend shard DB user, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. User names on all shard DBs should be identical.
+    The name of the backend shard DB user, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. Usernames on all shard DBs should be identical.
 
     .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameters is deprecated. Therefore, it is recommended to deliver the connection information in an application.
 

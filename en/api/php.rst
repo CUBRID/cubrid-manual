@@ -223,7 +223,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
         cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
     
     *   \-\-with-cubrid=shared: Includes CUBRID support.
-    *   \-\-with-php-config=PATH: Enters an absolute path of php-config including the file name.
+    *   \-\-with-php-config=PATH: Enters an absolute path of php-config including the filename.
     
 #.  Build the project. If it is successfully compiled, the **cubrid.so** file will be created in the **/modules** directory.
     

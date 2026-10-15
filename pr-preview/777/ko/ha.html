@@ -4208,17 +4208,17 @@ committed LSA: ?|?.</p></td>
 </section>
 </section>
 </section>
-<section id="fail-over">
-<span id="failover-messages"></span><h2>Fail-over 원인 분석<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#fail-over" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#fail-over'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p><strong>Fail-over, Fail-back 메시지</strong></p>
-<p>HA 환경에서 fail-over와 fail-back과 관련된 메시지는 각각 [Failover], [Failback] 접두어를 포함한다. 이 메시지는 fail-over, fail-back이 결정될 때 남겨지는 진단 로그 메시지와, fail-over 및 fail-back이 취소되거나, 성공적으로 완료될 때 기록되는 결과 로그 메시지로 나눌 수 있다.</p>
-<p>진단 로그 메시지는 fail-over 또는 fail-back이 시작된 원인을 기록하며, [Diagnosis] 접두어를 포함하고, 결과 로그 메시지는 fail-over, fail-back이 취소된 경우 [Cancelled] 접두어와 함께 원인을 기록하며, fail-over, fail-back이 성공적으로 완료된 경우 [Success] 접두어와 함께 결과를 기록한다.</p>
-<p>Fail-over, Fail-back 메시지를 통해 Fail-over의 원인을 분석할 수 있다. 아래는 fail-over가 발생하는 상황과 그에 따라 기록될 수 있는 fail-over, fail-back 메시지의 목록이다. Fail-over 메시지는 슬레이브 노드에 기록되고, Fail-back 메시지는 마스터 노드에 기록된다.</p>
+<section id="failover">
+<span id="failover-messages"></span><h2>Failover 원인 분석<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#failover" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#failover'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p><strong>Failover, Failback 메시지</strong></p>
+<p>HA 환경에서 failover와 failback과 관련된 메시지는 각각 [Failover], [Failback] 접두어를 포함한다. 이 메시지는 failover, failback이 결정될 때 남겨지는 진단 로그 메시지와, failover 및 failback이 취소되거나, 성공적으로 완료될 때 기록되는 결과 로그 메시지로 나눌 수 있다.</p>
+<p>진단 로그 메시지는 failover 또는 failback이 시작된 원인을 기록하며, [Diagnosis] 접두어를 포함하고, 결과 로그 메시지는 failover, failback이 취소된 경우 [Cancelled] 접두어와 함께 원인을 기록하며, failover, failback이 성공적으로 완료된 경우 [Success] 접두어와 함께 결과를 기록한다.</p>
+<p>Failover, Failback 메시지를 통해 Failover의 원인을 분석할 수 있다. 아래는 failover가 발생하는 상황과 그에 따라 기록될 수 있는 failover, failback 메시지의 목록이다. Failover 메시지는 슬레이브 노드에 기록되고, Failback 메시지는 마스터 노드에 기록된다.</p>
 <section id="id56">
 <h3>마스터 노드의 고립<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id56" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id56'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>마스터 노드의 고립</strong></p>
-<p>마스터 노드가 모든 슬레이브 노드로 부터 heartbeat 메시지를 수신하지 못하여 네트워크 고립이 되었다고 판단될 때, 마스터 노드의 fail-back과 슬레이브 노드의 fail-over가 결정된다. <strong>ha_ping_hosts</strong> 에 등록된 호스트를 통해 실제로 마스터 노드의 네트워크가 파티션 되었는지를 확인하고, 실제 마스터 노드의 네트워크 파티션이 확인된 경우에만 fail-back이 성공적으로 완료된다.</p>
-<p>슬레이브 노드 또한 <strong>ha_ping_hosts</strong> 를 통해 ping 체크를 한 결과, 현재 네트워크 파티션이 없는 경우에만 fail-over가 성공적으로 완료된다. 아래는 마스터 노드가 고립된 상황에서 로깅될 수 있는 fail-over, fail-back 메시지의 목록이다.</p>
+<p>마스터 노드가 모든 슬레이브 노드로 부터 heartbeat 메시지를 수신하지 못하여 네트워크 고립이 되었다고 판단될 때, 마스터 노드의 failback과 슬레이브 노드의 failover가 결정된다. <strong>ha_ping_hosts</strong> 에 등록된 호스트를 통해 실제로 마스터 노드의 네트워크가 파티션 되었는지를 확인하고, 실제 마스터 노드의 네트워크 파티션이 확인된 경우에만 failback이 성공적으로 완료된다.</p>
+<p>슬레이브 노드 또한 <strong>ha_ping_hosts</strong> 를 통해 ping 체크를 한 결과, 현재 네트워크 파티션이 없는 경우에만 failover가 성공적으로 완료된다. 아래는 마스터 노드가 고립된 상황에서 로깅될 수 있는 failover, failback 메시지의 목록이다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>진단 메시지</p></th>
@@ -4227,10 +4227,10 @@ committed LSA: ?|?.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] The master node has failed to receive heartbeat messages from all other slave nodes, resulting in a network partition.</p></td>
-<td><p>마스터 노드가 모든 슬레이브 노드로 부터 heartbeat 메시지를 수신하지 못하여 fail-back이 결정됨</p></td>
+<td><p>마스터 노드가 모든 슬레이브 노드로 부터 heartbeat 메시지를 수신하지 못하여 failback이 결정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failover] [Diagnosis] The current node has failed to receive heartbeat messages from the master node (master_node_name).</p></td>
-<td><p>마스터 노드로 부터 heartbeat 메시지를 수신하지 못하여 슬레이브 노드의 fail-over가 결정됨</p></td>
+<td><p>마스터 노드로 부터 heartbeat 메시지를 수신하지 못하여 슬레이브 노드의 failover가 결정됨</p></td>
 </tr>
 </tbody>
 </table>
@@ -4242,19 +4242,19 @@ committed LSA: ?|?.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Cancelled] Ping check succeeded for the hosts registered in ha_ping_hosts, determining that it is not a network partition.</p></td>
-<td><p>마스터 노드가 ping 체크에 성공하여 네트워크 파티션이 없다고 판단하고, fail-back이 취소됨</p></td>
+<td><p>마스터 노드가 ping 체크에 성공하여 네트워크 파티션이 없다고 판단하고, failback이 취소됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failback] [Cancelled] No hosts are registered in ha_ping_hosts, or all registered hosts are invalid, making it impossible to determine the network partition.</p></td>
-<td><p>ha_ping_hosts에 등록된 호스트가 없거나 유효하지 않아서, 마스터 노드의 네트워크 파티션 여부를 판단하는 것이 불가능하기에 fail-back이 취소됨</p></td>
+<td><p>ha_ping_hosts에 등록된 호스트가 없거나 유효하지 않아서, 마스터 노드의 네트워크 파티션 여부를 판단하는 것이 불가능하기에 failback이 취소됨</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failback] [Success] Current node has been successfully demoted to slave.</p></td>
-<td><p>Fail-back이 성공적으로 완료되어, 마스터 노드가 슬레이브 노드로 변경됨</p></td>
+<td><p>Failback이 성공적으로 완료되어, 마스터 노드가 슬레이브 노드로 변경됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failover] [Cancelled] Ping check has been failed to all hosts registered in ha_ping_hosts, indicating a network partition.</p></td>
-<td><p>슬레이브 노드가 ping check 실패로 네트워크 파티션이 있다고 판단하고, 마스터 역할을 수행할 수 없기 때문에 fail-over가 취소됨</p></td>
+<td><p>슬레이브 노드가 ping check 실패로 네트워크 파티션이 있다고 판단하고, 마스터 역할을 수행할 수 없기 때문에 failover가 취소됨</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failover] [Success] Current node has been successfully promoted to master.</p></td>
-<td><p>Fail-over가 성공적으로 완료되어, 슬레이브 노드가 마스터 노드로 변경됨</p></td>
+<td><p>Failover가 성공적으로 완료되어, 슬레이브 노드가 마스터 노드로 변경됨</p></td>
 </tr>
 </tbody>
 </table>
@@ -4262,8 +4262,8 @@ committed LSA: ?|?.</p></td>
 <section id="id57">
 <h3>마스터 노드의 기능 상실<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id57" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id57'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>마스터 노드의 기능 상실</strong></p>
-<p>마스터 노드가 <strong>cub_server</strong> 재구동의 실패나, 디스크 이상 등의 이유로 인해 마스터 노드로서의 기능을 상실할 때, 마스터 노드의 fail-back과 슬레이브 노드의 fail-over가 결정된다. 디스크 이상이라고 판단된 경우, 서버 오류 로그에 “Disk failure has been occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)”와 같은 오류 메시지를 남긴다.</p>
-<p>슬레이브 노드는 <strong>ha_ping_hosts</strong> 를 통해 ping 체크를 한 결과, 현재 네트워크 파티션이 없는 경우에만 fail-over가 성공적으로 완료된다. 아래는 마스터 노드의 기능 상실 상황에서 로깅될 수 있는 fail-over, fail-back 메시지의 목록이다.</p>
+<p>마스터 노드가 <strong>cub_server</strong> 재구동의 실패나, 디스크 이상 등의 이유로 인해 마스터 노드로서의 기능을 상실할 때, 마스터 노드의 failback과 슬레이브 노드의 failover가 결정된다. 디스크 이상이라고 판단된 경우, 서버 오류 로그에 “Disk failure has been occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)”와 같은 오류 메시지를 남긴다.</p>
+<p>슬레이브 노드는 <strong>ha_ping_hosts</strong> 를 통해 ping 체크를 한 결과, 현재 네트워크 파티션이 없는 경우에만 failover가 성공적으로 완료된다. 아래는 마스터 노드의 기능 상실 상황에서 로깅될 수 있는 failover, failback 메시지의 목록이다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>진단 메시지</p></th>
@@ -4272,13 +4272,13 @@ committed LSA: ?|?.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] The master node failed to restart the server process.</p></td>
-<td><p>마스터 노드가 비정상 종료된 cub_server 프로세스를 재구동하는데 실패하여 fail-back이 결졍됨</p></td>
+<td><p>마스터 노드가 비정상 종료된 cub_server 프로세스를 재구동하는데 실패하여 failback이 결정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failback] [Diagnosis] The master node has lost its role due to server process problem, such as disk failure.</p></td>
-<td><p>마스터 노드가 disk 이상 등의 사유로 마스터 노드로서의 기능을 상실하여 fail-back이 결정됨</p></td>
+<td><p>마스터 노드가 disk 이상 등의 사유로 마스터 노드로서의 기능을 상실하여 failback이 결정됨</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failover] [Diagnosis] The master node (master_node_name) has lost its role due to server process problem, such as disk failure.</p></td>
-<td><p>슬레이브 노드는 마스터 노드가 disk 이상 등의 사유로 마스터 노드로서의 기능을 상실하였다고 판단하고, 슬레이브 노드의 fail-over를 결정함</p></td>
+<td><p>슬레이브 노드는 마스터 노드가 disk 이상 등의 사유로 마스터 노드로서의 기능을 상실하였다고 판단하고, 슬레이브 노드의 failover를 결정함</p></td>
 </tr>
 </tbody>
 </table>
@@ -4290,13 +4290,13 @@ committed LSA: ?|?.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Success] Current node has been successfully demoted to slave.</p></td>
-<td><p>Fail-back이 성공적으로 완료되어, 마스터 노드가 슬레이브 노드로 변경됨</p></td>
+<td><p>Failback이 성공적으로 완료되어, 마스터 노드가 슬레이브 노드로 변경됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failover] [Cancelled] Ping check has been failed to all hosts registered in ha_ping_hosts, indicating a network partition.</p></td>
-<td><p>슬레이브 노드가 ping check에 실패하여 네트워크 파티션이 있다고 판단하고, fail-over가 취소됨</p></td>
+<td><p>슬레이브 노드가 ping check에 실패하여 네트워크 파티션이 있다고 판단하고, failover가 취소됨</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failover] [Success] Current node has been successfully promoted to master.</p></td>
-<td><p>Fail-over가 성공적으로 완료되어, 슬레이브 노드가 마스터 노드로 변경됨</p></td>
+<td><p>Failover가 성공적으로 완료되어, 슬레이브 노드가 마스터 노드로 변경됨</p></td>
 </tr>
 </tbody>
 </table>
@@ -4304,7 +4304,7 @@ committed LSA: ?|?.</p></td>
 <section id="split-brain">
 <h3>복수의 마스터 노드 탐지 (split-brain)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#split-brain" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#split-brain'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>복수의 마스터 노드 탐지 (split-brain)</strong></p>
-<p>HA 환경에서 복제 구성된 두 개 이상의 서버 모두 마스터 역할을 맡게 되는 비정상적인 상황이 발생하는 것을 split-brain 라고 한다. 이러한 상황에서 마스터 노드 역할을 수행하기 위한 하나의 노드를 제외한 다른 마스터 노드는 split-brain 상황을 해소하기 위해 슬레이브 노드로 fail-back 된다. Split-brain 상황에 남을 수 있는 메시지는 아래와 같다.</p>
+<p>HA 환경에서 복제 구성된 두 개 이상의 서버 모두 마스터 역할을 맡게 되는 비정상적인 상황이 발생하는 것을 split-brain 라고 한다. 이러한 상황에서 마스터 노드 역할을 수행하기 위한 하나의 노드를 제외한 다른 마스터 노드는 split-brain 상황을 해소하기 위해 슬레이브 노드로 failback된다. Split-brain 상황에 남을 수 있는 메시지는 아래와 같다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>진단 메시지</p></th>
@@ -4313,7 +4313,7 @@ committed LSA: ?|?.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] Multiple master nodes (master_node_name1, master_node_name2) are detected.</p></td>
-<td><p>복수의 마스터 노드가 감지되어서 split-brain을 해소하기 위해 마스터 노드의 fail-back이 결정됨</p></td>
+<td><p>복수의 마스터 노드가 감지되어서 split-brain을 해소하기 위해 마스터 노드의 failback이 결정됨</p></td>
 </tr>
 </tbody>
 </table>
@@ -4325,7 +4325,7 @@ committed LSA: ?|?.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Success]  Current node has been successfully demoted to slave.</p></td>
-<td><p>Fail-back이 성공적으로 완료되어, 마스터 노드가 슬레이브 노드로 변경됨</p></td>
+<td><p>Failback이 성공적으로 완료되어, 마스터 노드가 슬레이브 노드로 변경됨</p></td>
 </tr>
 </tbody>
 </table>
@@ -4534,7 +4534,7 @@ committed LSA: ?|?.</p></td>
 </li>
 </ul>
 </li>
-<li><a :data-current="activeSection === '#fail-over'" class="reference internal" href="#fail-over">Fail-over 원인 분석</a><ul>
+<li><a :data-current="activeSection === '#failover'" class="reference internal" href="#failover">Failover 원인 분석</a><ul>
 <li><a :data-current="activeSection === '#id56'" class="reference internal" href="#id56">마스터 노드의 고립</a></li>
 <li><a :data-current="activeSection === '#id57'" class="reference internal" href="#id57">마스터 노드의 기능 상실</a></li>
 <li><a :data-current="activeSection === '#split-brain'" class="reference internal" href="#split-brain">복수의 마스터 노드 탐지 (split-brain)</a></li>
@@ -4552,7 +4552,7 @@ committed LSA: ?|?.</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 08, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 15, 2026. </p>
 </div>
 </div>
 </footer>

@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid failover, cubrid fail-back
+:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid failover, cubrid failback
 :meta-description: Troubleshoot CUBRID database and High Availability nodes by consulting logs.
 
 ***************
@@ -200,18 +200,18 @@ To resolve the split-brain status, one of two is dead for itself; cub_master log
 
 Above example is the information to print out into the cub_master log when testhost02 server detects split-brain status and it is dead for itself.    
      
-Detecting Failover, Fail-back
+Detecting Failover, Failback
 ------------------------------
   
-If failover or fail-back occurs, a node changes its role.
+If failover or failback occurs, a node changes its role.
   
-The following is the log file of the cub_master that changes to a slave node after fail-back or to a master node after failover; log messages for failover and fail-back are prefixed with [Failover] or [Failback].
+The following is the log file of the cub_master that changes to a slave node after failback or to a master node after failover; log messages for failover and failback are prefixed with [Failover] or [Failback].
 
-The log messages for failover and fail-back include both diagnosis and result messages.
+The log messages for failover and failback include both diagnosis and result messages.
 
-A diagnosis message is logged when a failover or fail-back is triggered for a specific reason. These messages indicate the reason why the failover or fail-back was initiated and are prefixed with [Diagnosis].
+A diagnosis message is logged when a failover or failback is triggered for a specific reason. These messages indicate the reason why the failover or failback was initiated and are prefixed with [Diagnosis].
 
-A result message is logged when a failover or fail-back is either canceled or successfully completed. If the failover or fail-back is canceled, the result message logs the reason for the cancellation and is prefixed with [Canceled]. If the failover or fail-back is completed successfully, the result message logs the outcome and is prefixed with [Success]. For details, see :ref:`failover-messages`.
+A result message is logged when a failover or failback is either canceled or successfully completed. If the failover or failback is canceled, the result message logs the reason for the cancellation and is prefixed with [Canceled]. If the failover or failback is completed successfully, the result message logs the outcome and is prefixed with [Success]. For details, see :ref:`failover-messages`.
   
 :: 
   

@@ -2145,7 +2145,7 @@ comparing to a multiple-slave node structure. Note that replica nodes do not fai
 <p>To enhance performance, a serial cache does not access Heap and does not generate replication logs when retrieving or updating serial information. Therefore, if you use a serial cache, the current values of serial caches will be inconsistent among the nodes within CUBRID HA groups.</p>
 <p><strong>cubrid backupdb -r</strong></p>
 <p>This command is used to back up a specified database. If the <strong>-r</strong> option is used, logs that are not required for recovery will be deleted. This deletion may result in data inconsistency among nodes within CUBRID HA groups. Therefore, you must not use the <strong>-r</strong> option.</p>
-<p><strong>On-line backup</strong></p>
+<p><strong>Online backup</strong></p>
 <p>If you want to perform online backup in HA environment, add @<em>hostname</em>after the database name. <em>hostname</em>is a name defined in $CUBRID_DATABASES/databases.txt. Specify “@localhost” because you generally perform online backup on the local database.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">cubrid</span> <span class="n">backupdb</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">D</span> <span class="o">./</span> <span class="o">-</span><span class="n">l</span> <span class="mi">0</span> <span class="o">-</span><span class="n">z</span> <span class="n">testdb</span><span class="nd">@localhost</span>
 </span></code></pre></div>
@@ -4213,15 +4213,15 @@ terminated by a specified signal.</p></td>
 </section>
 <section id="determine-the-cause-of-failover">
 <span id="failover-messages"></span><h2>Determine the Cause of Failover<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#determine-the-cause-of-failover" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#determine-the-cause-of-failover'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<p><strong>Fail-over, Fail-back messages</strong></p>
-<p>In an HA enviroment, messages for failover and fail-back are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or fail-back is determined, and result messages, which are logged when failover or fail-back is either canceled or successfully completed.</p>
-<p>Diagnosis messages indicate the reason why the failover or fail-back was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if failover or fail-back is canceled, and the prefix [Success] along with the result if failover or fail-back is successfully completed.</p>
-<p>Fail-over and fail-back messages enable to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and fail-back messages that may be logged. Fail-over messages are logged on the slave node, while fail-back messages are logged on the master node.</p>
+<p><strong>Failover, Failback messages</strong></p>
+<p>In an HA environment, messages for failover and failback are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or failback is determined, and result messages, which are logged when failover or failback is either canceled or successfully completed.</p>
+<p>Diagnosis messages indicate the reason why the failover or failback was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if failover or failback is canceled, and the prefix [Success] along with the result if failover or failback is successfully completed.</p>
+<p>Failover and failback messages make it possible to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and failback messages that may be logged. Failover messages are logged on the slave node, while failback messages are logged on the master node.</p>
 <section id="isolation-of-master-node">
 <h3>Isolation of master node<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#isolation-of-master-node" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#isolation-of-master-node'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Isolation of master node</strong></p>
-<p>When the master node determines that it is isolated from the network due to failing to receive heartbeat messages from all slave nodes, the fail-back of the master node and the failover of the slave nodes are decided. The <strong>ha_ping_hosts</strong> are used to verify whether the network of the master node is truly partitioned. Fail-back is successfully completed only if the master node’s network partition is confirmed through this verification.</p>
-<p>Similarly, for slave nodes, failover is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of failover and fail-back messages that could be logged when the master node is isolated.</p>
+<p>When the master node determines that it is isolated from the network due to failing to receive heartbeat messages from all slave nodes, the failback of the master node and the failover of the slave nodes are decided. The <strong>ha_ping_hosts</strong> are used to verify whether the network of the master node is truly partitioned. Failback is successfully completed only if the master node’s network partition is confirmed through this verification.</p>
+<p>Similarly, for slave nodes, failover is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of failover and failback messages that could be logged when the master node is isolated.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Diagnosis Messages</p></th>
@@ -4230,10 +4230,10 @@ terminated by a specified signal.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] The master node has failed to receive heartbeat messages from all other slave nodes, resulting in a network partition.</p></td>
-<td><p>Fail-over has been initiated since master node failed to received heartbeat messages from every slave nodes</p></td>
+<td><p>Failback has been initiated since master node failed to receive heartbeat messages from all slave nodes</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failover] [Diagnosis] The current node has failed to receive heartbeat messages from the master node (master_node_name).</p></td>
-<td><p>Fail-back has been initiated since slave node failed to received heartbeat messages from master node</p></td>
+<td><p>Failover has been initiated since slave node failed to receive heartbeat messages from the master node</p></td>
 </tr>
 </tbody>
 </table>
@@ -4245,19 +4245,19 @@ terminated by a specified signal.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Cancelled] Ping check succeeded for the hosts registered in ha_ping_hosts, determining that it is not a network partition.</p></td>
-<td><p>Fail-back has been cancelled since master node succeeded ping check to ha_ping_hosts</p></td>
+<td><p>Failback has been cancelled since master node succeeded ping check to ha_ping_hosts</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failback] [Cancelled] No hosts are registered in ha_ping_hosts, or all registered hosts are invalid, making it impossible to determine the network partition.</p></td>
-<td><p>Fail-back has been cancelled due to the inability to determine the network partition of the master node, as the hosts registered in ha_ping_hosts are either empty or invalid.</p></td>
+<td><p>Failback has been cancelled due to the inability to determine the network partition of the master node, as the hosts registered in ha_ping_hosts are either empty or invalid.</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failback] [Success] Current node has been successfully demoted to slave.</p></td>
-<td><p>Fail-back is successfully completed, and the master node has been demoted to a slave node</p></td>
+<td><p>Failback is successfully completed, and the master node has been demoted to a slave node</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failover] [Cancelled] Ping check has been failed to all hosts registered in ha_ping_hosts, indicating a network partition.</p></td>
-<td><p>Fail-over has been cancelled because the slave node determined a network partition due to a failed ping check and is unable to assume the master role.</p></td>
+<td><p>Failover has been cancelled because the slave node determined a network partition due to a failed ping check and is unable to assume the master role.</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failover] [Success] Current node has been successfully promoted to master.</p></td>
-<td><p>Fail-over is successfully completed, and the slave node has been promoted to a master node</p></td>
+<td><p>Failover is successfully completed, and the slave node has been promoted to a master node</p></td>
 </tr>
 </tbody>
 </table>
@@ -4265,8 +4265,8 @@ terminated by a specified signal.</p></td>
 <section id="loss-of-the-master-node-s-role">
 <h3>Loss of the master node’s role<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#loss-of-the-master-node-s-role" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#loss-of-the-master-node-s-role'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Loss of the master node’s role</strong></p>
-<p>When the master node loses its role due to reasons such as the failure to restart cub_server or disk errors, a fail-back of the master node and a failover of the slave node are initiated. If a disk failure has been detected, an error message like “Disk failure has occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)” is logged in the server error log.</p>
-<p>For the slave node, failover is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of failover and fail-back messages that could be logged when the master node loses its role.</p>
+<p>When the master node loses its role due to reasons such as the failure to restart cub_server or disk errors, a failback of the master node and a failover of the slave node are initiated. If a disk failure has been detected, an error message like “Disk failure has occurred: prev_eof_lsa(4096, 128), eof_lsa(4096, 128)” is logged in the server error log.</p>
+<p>For the slave node, failover is successfully completed only when a ping check using <strong>ha_ping_hosts</strong> confirms that there is no current network partition. Below is a list of failover and failback messages that could be logged when the master node loses its role.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Diagnosis Messages</p></th>
@@ -4275,13 +4275,13 @@ terminated by a specified signal.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] The master node failed to restart the server process.</p></td>
-<td><p>Fail-back has been initiated since the master node failed to restart a cub_server process that has been terminated abnormally</p></td>
+<td><p>Failback has been initiated since the master node failed to restart a cub_server process that has been terminated abnormally</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failback] [Diagnosis] The master node has lost its role due to server process problem, such as disk failure.</p></td>
-<td><p>Fail-back has been initiated since the master node lost its role due to a disk failure or similar reasons.</p></td>
+<td><p>Failback has been initiated since the master node lost its role due to a disk failure or similar reasons.</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failover] [Diagnosis] The master node (master_node_name) has lost its role due to server process problem, such as disk failure.</p></td>
-<td><p>Fail-over has been initiated as the slave node determined that the master node has lost its role due to a disk failure or similar reasons.</p></td>
+<td><p>Failover has been initiated as the slave node determined that the master node has lost its role due to a disk failure or similar reasons.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4293,13 +4293,13 @@ terminated by a specified signal.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Success] Current node has been successfully demoted to slave.</p></td>
-<td><p>Fail-back is successfully completed, and the master node has been demoted to a slave node</p></td>
+<td><p>Failback is successfully completed, and the master node has been demoted to a slave node</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failover] [Cancelled] Ping check has been failed to all hosts registered in ha_ping_hosts, indicating a network partition.</p></td>
-<td><p>Fail-over has been cancelled because the slave node determined a network partition due to a failed ping check and is unable to assume the master role.</p></td>
+<td><p>Failover has been cancelled because the slave node determined a network partition due to a failed ping check and is unable to assume the master role.</p></td>
 </tr>
 <tr class="row-even"><td><p>[Failover] [Success] Current node has been successfully promoted to master.</p></td>
-<td><p>Fail-over is successfully completed, and the slave node has been promoted to a master node</p></td>
+<td><p>Failover is successfully completed, and the slave node has been promoted to a master node</p></td>
 </tr>
 </tbody>
 </table>
@@ -4307,7 +4307,7 @@ terminated by a specified signal.</p></td>
 <section id="multiple-master-node-split-brain">
 <h3>Multiple master node (split-brain)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#multiple-master-node-split-brain" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#multiple-master-node-split-brain'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>Multiple master node (split-brain)</strong></p>
-<p>When there is an abnormal situation where two or more servers assume the master role in an HA environment, it is referred to as a “split-brain” scenario. In such cases, all master nodes, except for the one designated to perform the master role, will fail-back to slave nodes to resolve the split-brain situation. Below is a list of fail-back messages that may be logged during a split-brain scenario.</p>
+<p>When there is an abnormal situation where two or more servers assume the master role in an HA environment, it is referred to as a “split-brain” scenario. In such cases, all master nodes, except for the one designated to perform the master role, will fail back to slave nodes to resolve the split-brain situation. Below is a list of failback messages that may be logged during a split-brain scenario.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Diagnosis Messages</p></th>
@@ -4316,7 +4316,7 @@ terminated by a specified signal.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] Multiple master nodes (master_node_name1, master_node_name2) are detected.</p></td>
-<td><p>Fail-back of the master nodes has been initiated to resolve the split-brain situation caused by the detection of multiple master nodes.</p></td>
+<td><p>Failback of the master nodes has been initiated to resolve the split-brain situation caused by the detection of multiple master nodes.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4328,7 +4328,7 @@ terminated by a specified signal.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Success]  Current node has been successfully demoted to slave.</p></td>
-<td><p>Fail-back is successfully completed, and the master node has been demoted to a slave node</p></td>
+<td><p>Failback is successfully completed, and the master node has been demoted to a slave node</p></td>
 </tr>
 </tbody>
 </table>
@@ -4555,7 +4555,7 @@ terminated by a specified signal.</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 08, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 15, 2026. </p>
 </div>
 </div>
 </footer>

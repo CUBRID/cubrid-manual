@@ -973,7 +973,7 @@ For more details, see <a class="reference internal" href="admin/control.html#bro
 <li><p>Parameter: <strong>ACCESS_LOG</strong></p></li>
 <li><p>Description: Log the client access (the existing broker logs at the CAS).</p></li>
 <li><p>Default directory: $CUBRID/log/broker/</p></li>
-<li><p>File name: &lt;broker_name&gt;_&lt;proxy_index&gt;.access</p></li>
+<li><p>Filename: &lt;broker_name&gt;_&lt;proxy_index&gt;.access</p></li>
 <li><p>Log type: All strings, except the access log and the cas_index at the CAS, are identical</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mf">10.24.18.67</span> <span class="o">-</span> <span class="o">-</span> <span class="mf">1340243427.828</span> <span class="mf">1340243427.828</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">27</span> <span class="o">~</span> <span class="mi">2012</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">27</span> <span class="mi">23377</span> <span class="o">-</span> <span class="o">-</span><span class="mi">1</span> <span class="n">shard1</span>     <span class="n">shard1</span>
@@ -987,7 +987,7 @@ For more details, see <a class="reference internal" href="admin/control.html#bro
 <li><p>Parameter: <strong>SHARD_PROXY_LOG_DIR</strong></p></li>
 <li><p>Description: Log the behavior of the inner proxy.</p></li>
 <li><p>Default directory: $CUBRID/log/broker/proxy_log</p></li>
-<li><p>File name: &lt;broker_name&gt;_&lt;proxy_index&gt;log</p></li>
+<li><p>Filename: &lt;broker_name&gt;_&lt;proxy_index&gt;log</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">46.822</span> <span class="p">[</span><span class="n">SRD</span><span class="p">]</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">shard_proxy_io</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">1045</span><span class="p">):</span> <span class="n">New</span> <span class="n">socket</span> <span class="n">io</span> <span class="n">created</span><span class="o">.</span> <span class="p">(</span><span class="n">fd</span><span class="p">:</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span>
 </span><span id="line-2"><span class="mi">06</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">46.822</span> <span class="p">[</span><span class="n">SRD</span><span class="p">]</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">broker</span><span class="o">/</span><span class="n">shard_proxy_io</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">2517</span><span class="p">):</span> <span class="n">New</span> <span class="n">client</span> <span class="n">connected</span><span class="o">.</span> <span class="n">client</span><span class="p">(</span><span class="n">client_id</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="n">is_busy</span><span class="p">:</span><span class="n">Y</span><span class="p">,</span> <span class="n">fd</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span> <span class="n">ctx_cid</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="n">ctx_uid</span><span class="p">:</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span>
@@ -1023,7 +1023,7 @@ For more details, see <a class="reference internal" href="admin/control.html#bro
 <li><p>Parameter: <strong>SQL_LOG</strong></p></li>
 <li><p>Description: Log queries such as prepare/execute/fetch and other cas information.</p></li>
 <li><p>Default directory: $CUBRID/log/broker/sql_log</p></li>
-<li><p>File name: %broker_name%_%proxy_index%_%shard_index%_%as_index%.sql.log</p></li>
+<li><p>Filename: %broker_name%_%proxy_index%_%shard_index%_%as_index%.sql.log</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">00.005</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">STATE</span> <span class="n">idle</span>
 </span><span id="line-2"><span class="mi">13</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">01.035</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">CAS</span> <span class="n">TERMINATED</span> <span class="n">pid</span> <span class="mi">31595</span>
@@ -1040,7 +1040,7 @@ For more details, see <a class="reference internal" href="admin/control.html#bro
 <li><p>Parameter: <strong>ERROR_LOG_DIR</strong></p></li>
 <li><p>Description: For CUBRID, the cs library logs EID and error strings to the corresponding file.</p></li>
 <li><p>Default directory: $CUBRID/log/broker/error_log</p></li>
-<li><p>File name: %broker_name%_%proxy_index%_%shard_index%_%cas_index%.err</p></li>
+<li><p>Filename: %broker_name%_%proxy_index%_%shard_index%_%cas_index%.err</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Time</span><span class="p">:</span> <span class="mi">06</span><span class="o">/</span><span class="mi">21</span><span class="o">/</span><span class="mi">12</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mf">27.776</span> <span class="o">-</span> <span class="n">DEBUG</span> <span class="o">***</span> <span class="n">file</span> <span class="o">../../</span><span class="n">src</span><span class="o">/</span><span class="n">transaction</span><span class="o">/</span><span class="n">boot_cl</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1409</span>
 </span><span id="line-2"><span class="n">trying</span> <span class="n">to</span> <span class="n">connect</span> <span class="s1">'shard1@localhost'</span>
@@ -1141,7 +1141,7 @@ For more details, see <a class="reference internal" href="admin/control.html#bro
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 08, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 15, 2026. </p>
 </div>
 </div>
 </footer>

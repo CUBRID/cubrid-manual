@@ -4013,11 +4013,11 @@ Determine the Cause of Failover
 
 **Failover, Failback messages**
 
-In an HA enviroment, messages for failover and failback are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or failback is determined, and result messages, which are logged when failover or failback is either canceled or successfully completed.
+In an HA environment, messages for failover and failback are prefixed with [Failover], [Failback], respectively. These messages can be categorized into diagnosis messages, which are logged when failover or failback is determined, and result messages, which are logged when failover or failback is either canceled or successfully completed.
 
 Diagnosis messages indicate the reason why the failover or failback was initiated and are prefixed with [Diagnosis]. Result messages include the prefix [Cancelled] along with the reason if failover or failback is canceled, and the prefix [Success] along with the result if failover or failback is successfully completed.
 
-Failover and failback messages enable to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and failback messages that may be logged. Failover messages are logged on the slave node, while failback messages are logged on the master node.
+Failover and failback messages make it possible to determine the cause of failover. Below is a list of situations in which failover occurs and the corresponding failover and failback messages that may be logged. Failover messages are logged on the slave node, while failback messages are logged on the master node.
 
 Isolation of master node
 -----------------------------
@@ -4031,9 +4031,9 @@ Similarly, for slave nodes, failover is successfully completed only when a ping 
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | Diagnosis Messages                                                                                                                                              | Description                                                                                                    |
 +=================================================================================================================================================================+================================================================================================================+
-| [Failback] [Diagnosis] The master node has failed to receive heartbeat messages from all other slave nodes, resulting in a network partition.                   | Failover has been initiated since master node failed to received heartbeat messages from every slave nodes     |
+| [Failback] [Diagnosis] The master node has failed to receive heartbeat messages from all other slave nodes, resulting in a network partition.                   | Failback has been initiated since master node failed to receive heartbeat messages from all slave nodes        |
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| [Failover] [Diagnosis] The current node has failed to receive heartbeat messages from the master node (master_node_name).                                       | Failback has been initiated since slave node failed to received heartbeat messages from master node            |
+| [Failover] [Diagnosis] The current node has failed to receive heartbeat messages from the master node (master_node_name).                                       | Failover has been initiated since slave node failed to receive heartbeat messages from the master node         |
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------+
 
 
@@ -4086,7 +4086,7 @@ Multiple master node (split-brain)
 
 **Multiple master node (split-brain)**
 
-When there is an abnormal situation where two or more servers assume the master role in an HA environment, it is referred to as a "split-brain" scenario. In such cases, all master nodes, except for the one designated to perform the master role, will failback to slave nodes to resolve the split-brain situation. Below is a list of failback messages that may be logged during a split-brain scenario.
+When there is an abnormal situation where two or more servers assume the master role in an HA environment, it is referred to as a "split-brain" scenario. In such cases, all master nodes, except for the one designated to perform the master role, will fail back to slave nodes to resolve the split-brain situation. Below is a list of failback messages that may be logged during a split-brain scenario.
 
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+
 | Diagnosis Messages                                                                                                                                              | Description                                                                                                                              |

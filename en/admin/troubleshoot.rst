@@ -205,7 +205,7 @@ The log messages for failover and failback include both diagnosis and result mes
 
 A diagnosis message is logged when a failover or failback is triggered for a specific reason. These messages indicate the reason why the failover or failback was initiated and are prefixed with [Diagnosis].
 
-A result message is logged when a failover or failback is either canceled or successfully completed. If the failover or failback is canceled, the result message logs the reason for the cancellation and is prefixed with [Canceled]. If the failover or failback is completed successfully, the result message logs the outcome and is prefixed with [Success]. For details, see :ref:`failover-messages`.
+A result message is logged when a failover or failback is either canceled or successfully completed. If the failover or failback is canceled, the result message logs the reason for the cancellation and is prefixed with [Cancelled]. If the failover or failback is completed successfully, the result message logs the outcome and is prefixed with [Success]. For details, see :ref:`failover-messages`.
   
 :: 
   

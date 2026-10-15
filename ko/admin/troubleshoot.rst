@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid fail-over, cubrid fail-back
+:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid failover, cubrid failback
 :meta-description: Troubleshoot CUBRID database and High Availability nodes by consulting logs.
 
 **********
@@ -199,18 +199,18 @@ split-brain 상태를 해소하기 위해 스스로 종료하는 마스터 노�
   
 위의 예는 testhost02 서버가 split-brain을 감지하고 스스로 종료될 때 cub_master 로그에 출력하는 정보이다. 
      
-Fail-over, Fail-back 감지 
+Failover, Failback 감지 
 ------------------------- 
   
-Fail-over 혹은 Fail-back이 발생하면 노드는 역할을 변경하게 된다. 
+Failover 혹은 Failback이 발생하면 노드는 역할을 변경하게 된다. 
   
-Fail-over 후 마스터로 변경되는 노드 혹은 Fail-back 후 슬레이브로 변경되는 노드의 cub_master 로그 메시지는 [Failover] 또는 [Failback] 접두어로 시작한다.
+Failover 후 마스터로 변경되는 노드 혹은 Failback 후 슬레이브로 변경되는 노드의 cub_master 로그 메시지는 [Failover] 또는 [Failback] 접두어로 시작한다.
 
-Fail-over 및 Fail-back 로그 메시지는 진단 로그 메시지와 결과 로그 메시지를 포함한다.
+Failover 및 Failback 로그 메시지는 진단 로그 메시지와 결과 로그 메시지를 포함한다.
 
-진단 로그 메시지는 fail-over 및 fail-back이 결정되는 경우 기록된다. 이 메시지는 fail-over 또는 fail-back이 시작된 원인을 기록하며, [Diagnosis] 접두어를 포함한다.
+진단 로그 메시지는 failover 및 failback이 결정되는 경우 기록된다. 이 메시지는 failover 또는 failback이 시작된 원인을 기록하며, [Diagnosis] 접두어를 포함한다.
 
-결과 로그 메시지는 fail-over 및 fail-back이 취소되거나, 성공적으로 완료될 때 기록된다. Fail-over 또는 Fail-back이 취소된 경우, 결과 메시지는 취소된 이유를 기록하며, [Canceled] 접두어를 포함한다. Fail-over 및 Fail-back이 성공적으로 완료된 경우, 결과 메시지는 결과를 기록하며, [Success] 접두어를 포함한다. 자세한 내용은 :ref:`failover-messages` 를 참고한다.
+결과 로그 메시지는 failover 및 failback이 취소되거나, 성공적으로 완료될 때 기록된다. Failover 또는 Failback이 취소된 경우, 결과 메시지는 취소된 이유를 기록하며, [Canceled] 접두어를 포함한다. Failover 및 Failback이 성공적으로 완료된 경우, 결과 메시지는 결과를 기록하며, [Success] 접두어를 포함한다. 자세한 내용은 :ref:`failover-messages` 를 참고한다.
   
 :: 
   
@@ -231,7 +231,7 @@ Fail-over 및 Fail-back 로그 메시지는 진단 로그 메시지와 결과 �
     testhost01           1          unknown         32767      1
     ================================================================================
   
-위의 예는 Fail-over로 인해 testhost02 서버가 슬레이브에서 마스터로 역할을 변경하는 도중 cub_master 로그에 출력하는 정보이다. 
+위의 예는 Failover로 인해 testhost02 서버가 슬레이브에서 마스터로 역할을 변경하는 도중 cub_master 로그에 출력하는 정보이다. 
 
 HA 구동 실패
 ============

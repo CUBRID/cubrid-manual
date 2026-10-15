@@ -4277,7 +4277,7 @@ committed LSA: ?|?.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[Failback] [Diagnosis] The master node failed to restart the server process.</p></td>
-<td><p>마스터 노드가 비정상 종료된 cub_server 프로세스를 재구동하는데 실패하여 failback이 결졍됨</p></td>
+<td><p>마스터 노드가 비정상 종료된 cub_server 프로세스를 재구동하는데 실패하여 failback이 결정됨</p></td>
 </tr>
 <tr class="row-odd"><td><p>[Failback] [Diagnosis] The master node has lost its role due to server process problem, such as disk failure.</p></td>
 <td><p>마스터 노드가 disk 이상 등의 사유로 마스터 노드로서의 기능을 상실하여 failback이 결정됨</p></td>
@@ -4309,7 +4309,7 @@ committed LSA: ?|?.</p></td>
 <section id="split-brain">
 <h3>복수의 마스터 노드 탐지 (split-brain)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#split-brain" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#split-brain'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p><strong>복수의 마스터 노드 탐지 (split-brain)</strong></p>
-<p>HA 환경에서 복제 구성된 두 개 이상의 서버 모두 마스터 역할을 맡게 되는 비정상적인 상황이 발생하는 것을 split-brain 라고 한다. 이러한 상황에서 마스터 노드 역할을 수행하기 위한 하나의 노드를 제외한 다른 마스터 노드는 split-brain 상황을 해소하기 위해 슬레이브 노드로 failback 된다. Split-brain 상황에 남을 수 있는 메시지는 아래와 같다.</p>
+<p>HA 환경에서 복제 구성된 두 개 이상의 서버 모두 마스터 역할을 맡게 되는 비정상적인 상황이 발생하는 것을 split-brain 라고 한다. 이러한 상황에서 마스터 노드 역할을 수행하기 위한 하나의 노드를 제외한 다른 마스터 노드는 split-brain 상황을 해소하기 위해 슬레이브 노드로 failback된다. Split-brain 상황에 남을 수 있는 메시지는 아래와 같다.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>진단 메시지</p></th>

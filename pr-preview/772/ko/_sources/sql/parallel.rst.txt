@@ -65,7 +65,7 @@ CUBRID는 대량의 데이터를 효율적으로 처리하기 위해 병렬 질�
 *   동시성 처리를 지원하지 않는 구문이 포함된 경우
 
     *    조건절에서 **PARALLEL_ENABLE**\을 지정하지 않은 저장 함수(JavaSP, PL/CSQL)를 평가하는 경우. 부질의(인라인 뷰 포함)에서도 적용 여부는 각 스캔별로 판단한다. 선언된 함수의 제약은 :ref:`pl-parallel-enable`\을 참고한다.
-    *    Serial을 사용하는 경우
+    *    Serial 사용시
     *    세션 변수를 참조시
     *    Recursive CTE 또는 Connect By 구문 사용시
     *    CUBRID 오브젝트 DBMS 전용 기능 사용시

@@ -227,7 +227,7 @@ CUBRID는 함수 본문이 병렬 실행에 안전한지 검사하지 않는다.
 
 이 속성을 지정한 함수는 서버측 SQL과 **DBMS_OUTPUT**\을 사용할 수 없다. 실제로 병렬 실행이 선택되지 않은 경우와 **CALL**\로 직렬 호출한 경우에도 동일한 제한이 적용된다.
 
-*   **PL/CSQL**: 서버 연결이 필요한 구문과 **DBMS_OUTPUT** 호출을 **CREATE FUNCTION** 또는 **CREATE OR REPLACE FUNCTION** 컴파일 시점에 거절한다. 서버에서 평가하는 내장 함수, 커서, 시리얼, 정적 SQL, 동적 SQL, 다른 저장 함수 및 프로시저 호출, **COMMIT**, **ROLLBACK**\을 사용할 수 없다. 실행되지 않는 분기나 예외 처리부에 있어도 허용하지 않는다.
+*   **PL/CSQL**: 서버 연결이 필요한 구문과 **DBMS_OUTPUT** 호출을 **CREATE FUNCTION** 또는 **CREATE OR REPLACE FUNCTION** 컴파일 시점에 거절한다. PL/CSQL의 내장 함수 호출은 모두 서버에서 평가하므로, **SUBSTR**, **NVL**\처럼 괄호로 호출하는 함수, **SYSDATE**\처럼 괄호 없이 호출하는 함수, **CAST**, **EXTRACT**, **TRIM**\처럼 전용 구문을 쓰는 함수를 모두 사용할 수 없다. 커서, 시리얼, 정적 SQL, 동적 SQL, 다른 저장 함수 및 프로시저 호출, **COMMIT**, **ROLLBACK**\도 사용할 수 없다. 실행되지 않는 분기나 예외 처리부에 있어도 허용하지 않는다. 산술·비교·논리 연산자, 문자열 연결(``||``), **CASE**, **LIKE**, **BETWEEN**, **IN**, **IS NULL**\은 사용할 수 있다.
 *   **Java**: ``jdbc:default:connection``\으로 서버측 기본 연결을 얻거나 OID를 통해 서버에 접근하면 **SQLException**\이 발생한다. **DBMS_OUTPUT**\을 직접 호출하면 **RuntimeException**\이 발생한다. 예외를 처리하지 않으면 함수 호출이 실패한다. 함수가 예외를 처리하고 값을 반환하면 그 반환값을 사용한다.
 
 Java 함수에서 OID를 인자나 반환값으로 전달하거나 ``getOidString()``\으로 문자열을 얻는 것은 허용한다. 그러나 OID가 가리키는 객체를 조회하거나 변경하는 서버 접근은 허용하지 않는다.

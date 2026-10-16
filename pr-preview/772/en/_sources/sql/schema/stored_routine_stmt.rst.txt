@@ -215,8 +215,6 @@ The **PARALLEL_ENABLE** property allows Java and PL/CSQL stored functions to run
 
 To change this property, redefine the function with **CREATE OR REPLACE FUNCTION**. It cannot be changed with **ALTER FUNCTION**. When checking the execution plan after changing the declaration, recompile the query with the **RECOMPILE** hint.
 
-**unloaddb** writes this property to the schema file.
-
 The following example declares a PL/CSQL stored function that performs a pure calculation with **PARALLEL_ENABLE** and checks the declaration in :ref:`db-stored-procedure`.
 
 .. code-block:: sql
@@ -238,6 +236,15 @@ The following example declares a PL/CSQL stored function that performs a pure ca
       sp_name               is_parallel_enabled
     ============================================
       'parallel_inc'        'YES'
+
+:ref:`unloaddb` writes this property after the **AUTHID** clause of the function definition in the schema file (*database-name*\ **_schema**); for a function that also declares **DETERMINISTIC**, it is written after **DETERMINISTIC**. The following is the schema file produced by unloading the database that contains the parallel_inc function from the example above with the :option:`unloaddb -s` option. A PL/CSQL function is written twice, as a **CREATE FUNCTION** statement that creates it with a temporary body and a **CREATE OR REPLACE FUNCTION** statement that redefines it with the actual body, and both statements include this property. ::
+
+    CREATE FUNCTION [dba].[parallel_inc] ([n] IN integer) RETURN integer AUTHID OWNER PARALLEL_ENABLE AS LANGUAGE PLCSQL BEGIN RAISE_APPLICATION_ERROR(1001, '[dba].[parallel_inc]: incomplete during loaddb'); /* __CUBRID_NO_BODY__ */ END;
+
+    CREATE OR REPLACE FUNCTION [dba].[parallel_inc]([n] IN integer) RETURN integer AUTHID OWNER PARALLEL_ENABLE AS
+    BEGIN
+        RETURN n + 1;
+    END;
 
 .. note::
 

@@ -434,7 +434,7 @@ It is recommended to specify the <strong>DETERMINISTIC</strong> option consideri
 <p><strong>Server Access Restrictions</strong></p>
 <p>Functions declared with this property cannot use server-side SQL or <strong>DBMS_OUTPUT</strong>. The same restrictions apply when parallel execution is not selected and when the function is called serially with <strong>CALL</strong>.</p>
 <ul class="simple">
-<li><p><strong>PL/CSQL</strong>: Statements requiring a server connection and <strong>DBMS_OUTPUT</strong> calls are rejected at compilation time during <strong>CREATE FUNCTION</strong> or <strong>CREATE OR REPLACE FUNCTION</strong>. Built-in functions evaluated by the server, cursors, serials, static SQL, dynamic SQL, calls to other stored functions and procedures, <strong>COMMIT</strong>, and <strong>ROLLBACK</strong> are not allowed. These constructs are rejected even in branches that are not executed or in exception handlers.</p></li>
+<li><p><strong>PL/CSQL</strong>: Statements requiring a server connection and <strong>DBMS_OUTPUT</strong> calls are rejected at compilation time during <strong>CREATE FUNCTION</strong> or <strong>CREATE OR REPLACE FUNCTION</strong>. All built-in function calls in PL/CSQL are evaluated by the server, so none of them are allowed: functions called with parentheses such as <strong>SUBSTR</strong> and <strong>NVL</strong>, functions called without parentheses such as <strong>SYSDATE</strong>, and functions with dedicated syntax such as <strong>CAST</strong>, <strong>EXTRACT</strong>, and <strong>TRIM</strong>. Cursors, serials, static SQL, dynamic SQL, calls to other stored functions and procedures, <strong>COMMIT</strong>, and <strong>ROLLBACK</strong> are not allowed either. These constructs are rejected even in branches that are not executed or in exception handlers. Arithmetic, comparison, and logical operators, string concatenation (<code class="docutils literal notranslate"><span class="pre">||</span></code>), <strong>CASE</strong>, <strong>LIKE</strong>, <strong>BETWEEN</strong>, <strong>IN</strong>, and <strong>IS NULL</strong> are allowed.</p></li>
 <li><p><strong>Java</strong>: Obtaining the server-side default connection through <code class="docutils literal notranslate"><span class="pre">jdbc:default:connection</span></code> or accessing the server through an OID raises <strong>SQLException</strong>. Calling <strong>DBMS_OUTPUT</strong> directly raises <strong>RuntimeException</strong>. If the exception is not handled, the function call fails. If the function handles the exception and returns a value, that value is used.</p></li>
 </ul>
 <p>Java functions can pass OIDs as arguments or return values and obtain their string representations with <code class="docutils literal notranslate"><span class="pre">getOidString()</span></code>. However, server access to read or modify the objects referenced by OIDs is not allowed.</p>
@@ -579,7 +579,7 @@ It is recommended to specify the <strong>DETERMINISTIC</strong> option consideri
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 01, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 16, 2026. </p>
 </div>
 </div>
 </footer>

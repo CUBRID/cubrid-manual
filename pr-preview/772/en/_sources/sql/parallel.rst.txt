@@ -64,7 +64,7 @@ Regardless of the scan flavor, parallel scan is not applied and falls back to si
 
 *   Statements that do not support concurrent processing
 
-    *    Stored functions (JavaSP, PL/CSQL) without **PARALLEL_ENABLE** are evaluated in predicates. Applicability is determined for each scan, including scans in subqueries and inline views. For constraints on declared functions, refer to :ref:`pl-parallel-enable`.
+    *    A stored function (JavaSP, PL/CSQL) without **PARALLEL_ENABLE** evaluated in a predicate. Applicability is determined for each scan, including scans in subqueries and inline views. For constraints on declared functions, refer to :ref:`pl-parallel-enable`.
     *    Serial usage
     *    References to session variables
     *    Recursive CTE or Connect By clauses

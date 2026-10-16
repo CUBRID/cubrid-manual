@@ -49,7 +49,7 @@ CUBRID 는 절차적 언어 확장 기능으로 저장 프로시저와 저장 �
     pl_auth
     pl_tcl
     pl_tuning
-    pl_package
     plcsql
+    plcsql_package
     jsp
     method

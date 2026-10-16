@@ -306,8 +306,6 @@ CREATE FUNCTION PARALLEL_ENABLE
 
 이 속성을 변경하려면 **CREATE OR REPLACE FUNCTION** 문으로 함수를 다시 정의한다. **ALTER FUNCTION** 문으로는 변경할 수 없다. 선언을 변경한 뒤 실행 계획을 확인할 때는 **RECOMPILE** 힌트로 질의를 재컴파일한다.
 
-**unloaddb**\는 이 속성을 스키마 파일에 출력한다.
-
 다음은 순수 계산을 수행하는 PL/CSQL 저장 함수에 **PARALLEL_ENABLE**\을 지정하고, :ref:`db-stored-procedure`\에서 선언 여부를 확인하는 예이다.
 
 .. code-block:: sql
@@ -329,6 +327,15 @@ CREATE FUNCTION PARALLEL_ENABLE
       sp_name               is_parallel_enabled
     ============================================
       'parallel_inc'        'YES'
+
+:ref:`unloaddb`\는 스키마 파일(*database-name*\ **_schema**)의 함수 정의에서 **AUTHID** 절 다음에 이 속성을 출력하며, **DETERMINISTIC**\을 함께 지정한 함수는 **DETERMINISTIC** 다음에 출력한다. 다음은 위 예제의 parallel_inc 함수가 있는 데이터베이스를 :option:`unloaddb -s` 옵션으로 언로드한 스키마 파일의 내용이다. PL/CSQL 함수는 임시 본문으로 생성하는 **CREATE FUNCTION** 문과 실제 본문으로 다시 정의하는 **CREATE OR REPLACE FUNCTION** 문으로 두 번 출력되며, 두 문 모두 이 속성을 포함한다. ::
+
+    CREATE FUNCTION [dba].[parallel_inc] ([n] IN integer) RETURN integer AUTHID OWNER PARALLEL_ENABLE AS LANGUAGE PLCSQL BEGIN RAISE_APPLICATION_ERROR(1001, '[dba].[parallel_inc]: incomplete during loaddb'); /* __CUBRID_NO_BODY__ */ END;
+
+    CREATE OR REPLACE FUNCTION [dba].[parallel_inc]([n] IN integer) RETURN integer AUTHID OWNER PARALLEL_ENABLE AS
+    BEGIN
+        RETURN n + 1;
+    END;
 
 .. note::
 

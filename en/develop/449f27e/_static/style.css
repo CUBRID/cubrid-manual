@@ -1,0 +1,197 @@
+/*
+Copyright (c) 2021 Kil Hyung-jin, with Reserved Font Name Pretendard.
+https://github.com/orioncactus/pretendard
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+*/
+
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('fonts//PretendardVariable.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'D2CodingLigature Nerd Font';
+  src: url('fonts/D2CodingLigatureNF.woff2') format('woff2'),
+       url('fonts/D2CodingLigatureNF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'D2CodingLigature Nerd Font';
+  src: url('fonts/D2CodingLigatureNF-Bold.woff2') format('woff2'),
+       url('fonts/D2CodingLigatureNF-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-mono: 'D2CodingLigature Nerd Font','JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+  --accent-foreground: 191 49% 42% !important;
+  --foreground: 222 48% 11% !important;
+  --primary: hsl(var(--accent-foreground));
+  --sd-color-primary: hsl(var(--accent-foreground)) !important;
+}
+
+:root.dark {
+    --accent-foreground: 180 70% 54% !important;
+    --foreground: 200 16% 78% !important;
+    --sd-color-primary: hsl(var(--accent-foreground)) !important;
+}
+
+pre code, code, samp {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1rem;
+    font-variation-settings: normal;
+    margin-top: calc(var(--spacing) * 2);
+    padding-block: calc(var(--spacing) * 2);
+}
+
+.highlight pre {
+    background: #292A39;
+    border-color: #A1A6AD;
+}
+
+.dark .highlight pre {
+    background: #2E3440; /*#2E3440*/
+    border-color: #4E5255; /* 47494d;*/
+}
+
+#left-sidebar a:hover {
+  color: hsl(var(--accent-foreground));
+}
+
+#left-sidebar ul li[class*="toctree-l"].current > a {
+  border-left: 2px solid hsl(var(--accent-foreground));
+  background-color: hsl(var(--accent));
+}
+
+#left-sidebar a.expanded {
+  background-color: hsl(var(--accent));
+  border-color: hsl(var(--border));
+  color: inherit;
+}
+
+#left-sidebar ul a {
+  border-left: 2px solid transparent; /* 아래 2px와 맞추기 위해 2px 권장 (1px 유지시 1px로 수정 가능) */
+  color: inherit;
+  word-break: keep-all;
+  font-weight: 480;
+  font-size: .875rem;
+  line-height: 1rem;
+}
+
+#page > header > div > div.flex.items-center.justify-between.flex-1.gap-2.sm\:gap-4.md\:justify-end > nav {
+  gap: .615rem;
+}
+
+#searchbox > kbd {
+  font-family: 'JetBrains Mono';
+}
+
+#right-sidebar ul li a[data-current=true] {
+  border-bottom: 2px solid hsl(var(--accent-foreground));
+}
+
+.container {
+  max-width: 96%;
+}
+
+table {
+  word-break: auto-phrase;
+  word-wrap: break-word;
+  table-layout: fixed;
+  zoom: 0.86;
+  overflow-wrap: anywhere;
+  max-width: -webkit-fill-available;
+}
+
+table tbody td:first-child {
+    padding-left: calc(var(--spacing)*2)
+}
+
+#content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 2.5rem;
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#content h2 {
+    border-bottom-width: 1px;
+    border-color: hsl(var(--border));
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin-top: 1.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+#content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 2rem;
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#content .rubric,#content h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.75rem;
+    margin-top: 1.25rem;
+    padding-bottom: 0.5rem;
+}
+
+#content section>p {
+    line-height: inherit;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#content ul:not(.search),
+#content ul:not(.search) > li,
+#content ul:not(.search) p {
+    margin-top: 0.3rem !important;
+}
+
+blockquote {
+  border-left-width: 0px;
+  font-style: normal;
+}
+
+.highlight > .err {
+    border: none;
+}
+
+.highlighted {
+    background-color: var(--sd-color-danger-bg);
+}
+
+span.search-score-badge {
+  display: none;
+}
+
+/* 그리드 마우스 오버 */
+.sd-card:hover .sd-material-icon {
+  fill: hsl(var(--accent-foreground));
+}
+
+/* 768px 이하(모바일)에서 download 버튼 숨기기 */
+@media only screen and (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+}

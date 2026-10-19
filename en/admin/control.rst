@@ -2348,7 +2348,7 @@ This utility can be used to compare the performance between two different hosts;
 *   *broker_port*: Port number of the CUBRID broker
 *   *db_name*: The name of database to run the query
 *   *sql_log_file*: SQL log file of the CUBRID broker($CUBRID/log/broker/sql_log/\*.log, \*.log.bak) 
-*   *output_file*: File name to save the execution result
+*   *output_file*: Filename to save the execution result
   
 The following is [options] used in **cubrid_replay**.
 

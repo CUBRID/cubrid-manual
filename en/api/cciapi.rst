@@ -1242,6 +1242,7 @@ cci_execute
     *   If an error occurs in any query, the execution is processed as a failure.
     *   For a query composed of in a query composed of q1; q2; q3, even if an error occurs in q2 after q1 succeeds the execution, the result of q1 remains valid. That is, the previous successful query executions are not rolled back when an error occurs.
     *   If a query is executed successfully, the result of the second query can be obtained using :c:func:`cci_next_result`.
+    *   If the queries passed at prepare have a bind parameter (?) or a query reads or assigns a user-defined variable, :c:func:`cci_prepare` returns an error (-435, "Multiple statements not allowed.").
 
     *max_col_size* is a value that is used to determine the maximum length of a column to be sent to a client when the columns of the prepared statement are **CHAR**, **VARCHAR**, **BIT** or **VARBIT**. If this value is 0, full length is fetched.
 
@@ -2434,7 +2435,7 @@ cci_prepare
 
 .. c:function:: int cci_prepare(int conn_handle, char *sql_stmt, char flag,T_CCI_ERROR *err_buf)
 
-    The :c:func:`cci_prepare` function prepares SQL execution by acquiring request handle for SQL statements. If a SQL statement consists of multiple queries, the preparation is performed only for the first query. With the parameter of this function, an address to **T_CCI_ERROR** where connection handle, SQL statement, *flag*, and error information are stored.
+    The :c:func:`cci_prepare` function prepares SQL execution by acquiring request handle for SQL statements. If a SQL statement consists of multiple queries, the preparation is performed only for the first query. If a SQL statement consists of multiple queries and has a bind parameter (?) or a query that reads or assigns a user-defined variable, an error (-435) is returned. With the parameter of this function, an address to **T_CCI_ERROR** where connection handle, SQL statement, *flag*, and error information are stored.
 
     :param conn_handle: (IN) Connection handle
     :param sql_stmt: (IN) SQL statement

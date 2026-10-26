@@ -2660,6 +2660,32 @@ INSERT와 UPDATE
         ===================
              '1'
 
+*   **수치형 타입과 문자열 타입 호스트 변수 피연산자**
+
+    문자열 타입 호스트 변수가 **DOUBLE** 로 변환된다. 바인딩한 값을 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다.
+
+    .. code-block:: sql
+
+        PREPARE s FROM 'SELECT i FROM t1 WHERE i < ?';
+        EXECUTE s USING '3';
+
+    ::
+
+                    i
+        =============
+                    1
+                    2
+
+    .. code-block:: sql
+
+        EXECUTE s USING 'abc';
+
+    ::
+
+        ERROR: Semantic: Cannot coerce host var to type double (?:0 of type character).
+
+    호스트 변수의 타입은 바인딩한 값의 타입으로 정해지며, 실행 계획은 그 타입마다 따로 만들어진다. 자세한 내용은 :ref:`execute-statement`\ 를 참고한다.
+
 *   **문자열 타입 칼럼과 수치형 타입 값 피연산자**
 
     수치형 타입 값이 문자열 타입으로 변환된다.
@@ -2791,6 +2817,21 @@ INSERT와 UPDATE
 *   **수치형 타입 피연산자**
 
     수치형 타입의 피연산자가 주어지고 타입이 서로 다르면, 두 타입을 비교하여 우선순위가 높은 쪽의 타입으로 변환된다.
+
+*   **문자열 타입 피연산자**
+
+    수치형 타입 피연산자와 함께 산술 연산자(+, -, \*, /)에 주어지거나 **MOD**, **ROUND**, **TRUNC** 함수에 주어진 문자열 타입 피연산자는 숫자로 변환되며, 변환할 수 없는 값이면 오류가 반환된다. 문자열 타입 피연산자가 왼쪽 피연산자(함수는 첫 번째 인자)이면 다른 피연산자의 값이 **NULL** 이어도 변환을 먼저 수행하므로 오류가 반환된다.
+
+    .. code-block:: sql
+
+        CREATE TABLE tn (id INT, n INT);
+        INSERT INTO tn VALUES (1, NULL);
+        SET @b = 'abc';
+        SELECT @b + n FROM tn;
+
+    ::
+
+        ERROR: Cannot coerce value of domain "character" to domain "double".
 
 *   **날짜/시간 타입과 수치형 타입 피연산자**
 

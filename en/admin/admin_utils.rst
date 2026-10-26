@@ -1054,22 +1054,24 @@ By default, it examines the query plans stored in the plan cache if no options a
     Entries:
 
     XASL_ID = {
-              sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
-              time_stored = 1750657813 sec, 784232 usec
-            }
+                sha1 = { 3e16775c ca640bf9 5d7c7f98 aceb5095 726c5ede },
+                    time_stored = 1792990910 sec, 929029 usec
+              }
+    Memory Usage: 3818.00 Bytes (0.0% of total cache)
+    Clone Memory Usage: 14272.00 Bytes (0.0% of total cache)
     fix_count = 0
     cache flags = 00000000
-    reference count = 4
-    time second last used = 1750657814
+    reference count = 8
+    time second last used = 1792990910
     clone count = 1
     sql info:
-    	SQL_ID = 67d47c14f637a
-        sql user text = select * from game where host_year > '2004'
-        sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] w          here ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
-		sql plan text =
-    Sequential scan(public.game dba.game)
+      SQL_ID = e795d733f6f20
+      sql user text = select * from game where host_year > '2004'
+      sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] where ([dba.game].[host_year]> ?:0:3 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|833|1;bind_var_cnt=1
+      sql plan text =
+    Index scan(public.game dba.game, pk_game_host_year_event_code_athlete_code, ([dba.game].host_year> ?:0 ))
     OID_LIST (count = 1):
-		OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
+      OID = 0|204|9, LOCK =    IS_LOCK, TCARD =       33
 
 CUBRID supports the reuse of SQL execution plans through the Plan Cache feature. The Plan Cache is managed on the server side and operates through cooperation between the Common Application Server (CAS) and the database server. The main processing steps are as follows:
 
@@ -1099,10 +1101,10 @@ The following describes **the detailed fields** included in the output of plandu
 * time second last used: The UNIX timestamp indicating when this plan was last used. You can convert it to human-readable format using:date -d @<timestamp>
     * ex) $> date -d @1750657814 (Mon Jun 23 14:50:14 KST 2025)
 * clone count: The number of clone instances created from this plan.When an execution plan is stored in memory as a stream format, it must be converted to an XASL (eXtended Access Specification Language) structure before execution.To reduce this transformation cost, a clone cache is used.The clone cache holds reusable XASL structures.If a thread requests a clone and none are available, a new clone is created and added to the cache. Each time this happens, the clone count increases.
-* SQL_ID: A unique identifier generated from the original SQL statement using the MD5 hash function.From the resulting 32-character hexadecimal hash, the last 13 hexadecimal characters are used as the SQL_ID.
+* SQL_ID: A unique identifier generated from the sql hash text using the MD5 hash function.From the resulting 32-character hexadecimal hash, the last 13 hexadecimal characters are used as the SQL_ID.
     * If the MD5 hash value is e1faffb3e614e6c2fba74296962386b7, the corresponding SQL ID is the last 13 characters of the hash: 74296962386b7.
 * sql user text : The original SQL query submitted by the user.
-* sql hash text : The rewritten form of the SQL statement used for caching and plan reuse.
+* sql hash text : The rewritten form of the SQL statement used for caching and plan reuse. After each host variable and constant position (?:N), a number that represents the type of that position is recorded (e.g., ?:0:3). Therefore, the same query is stored as a different entry if the types of the bound values or constants differ. A query that uses a user-defined variable is not stored in the plan cache.
 * sql plan text : The text representation of the execution plan generated for the SQL.
 * OID_LIST : A list of Object ID for database objects (e.g., tables, serials) referenced by this execution plan.
 

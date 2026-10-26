@@ -170,6 +170,8 @@ To view a query plan for a CUBRID SQL query, you can use following methods.
 
     .. note:: If you configure the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.
 
+    .. note:: The query plan is printed when the query plan is created. If a prepared statement has a position whose type is determined only by the type of a value, such as a bind parameter compared with a numeric column or a bind parameter in the SELECT list, the query plan is printed by the first **EXECUTE** statement instead of the **PREPARE** statement, and is printed again whenever the statement is executed with a value of a different type from before. For details, see :ref:`execute-statement`.
+
 The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referring to the optimization level value set by the user. 
 
 The following shows the result which ran the query after inputting ";plan simple" or "SET OPTIMIZATION LEVEL 257;" in CSQL.

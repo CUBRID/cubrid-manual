@@ -28,6 +28,21 @@ COALESCE
 
 예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT**, c의 타입이 **SHORT**, d의 타입이 **FLOAT** 이면 **COALESCE** (a, b, c, d)는 **FLOAT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **DOUBLE**, c의 타입이 **FLOAT**, d의 타입이 **TIMESTAMP** 이면 **COALESCE** (a, b, c, d)는 **VARCHAR** 타입을 반환한다.
 
+인자에 호스트 변수가 있어도 결과 타입은 반환되는 값이 아니라 인자의 타입으로 정해진다. 호스트 변수 인자의 타입은 바인딩한 값의 타입이다.
+
+다음 예에서 첫 번째 인자의 값은 **NULL** 이지만, 결과 타입은 **DATETIME** 과 **INTEGER** 인자에 따라 **VARCHAR** 이다.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT COALESCE(CAST(? AS DATETIME), ?) AS c, TYPEOF(COALESCE(CAST(? AS DATETIME), ?)) AS t';
+    EXECUTE st USING NULL, 1, NULL, 1;
+
+::
+
+      c                     t                   
+    ============================================
+      '1'                   'character varying (1073741823)'
+
 **COALESCE** (*a, b*)는 다음의 **CASE** 조건식과 같은 의미를 가진다. ::
 
     CASE WHEN a IS NOT NULL
@@ -243,6 +258,8 @@ IFNULL, NVL
 
 예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT** 이면 **IFNULL** (a, b)은 **BIGINT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **TIMESTAMP** 이면 **IFNULL** (a, b)은 **VARCHAR** 타입을 반환한다.
 
+인자에 호스트 변수가 있어도 결과 타입은 반환되는 값이 아니라 인자의 타입으로 정해진다. 호스트 변수 인자의 타입은 바인딩한 값의 타입이다.
+
 **IFNULL**\(*a*, *b*) 또는 **NVL**\(*a*, *b*)는 다음의 **CASE** 조건식과 같은 의미를 가진다. ::
 
     CASE WHEN a IS NULL THEN b
@@ -429,6 +446,8 @@ NVL2
 *   **DATE** < **TIMESTAMP** < **DATETIME**
 
 예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT**, c의 타입이 **SHORT** 이면 **NVL2** (a, b, c)는 **BIGINT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **DOUBLE**, c의 타입이 **TIMESTAMP** 이면 **NVL2** (a, b, c)는 **VARCHAR** 타입을 반환한다.
+
+인자에 호스트 변수가 있어도 결과 타입은 반환되는 값이 아니라 인자의 타입으로 정해진다. 호스트 변수 인자의 타입은 바인딩한 값의 타입이다.
 
 .. code-block:: sql
 

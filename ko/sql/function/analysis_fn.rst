@@ -961,6 +961,29 @@ MEDIAN
     :param expression: 숫자 또는 날짜로 변환될 수 있는 값을 가진 칼럼 또는 연산식
     :rtype: **DOUBLE** 또는 **DATETIME**
 
+*expression*\ 이 문자열(문자열 칼럼, 문자열 상수, 호스트 변수, 사용자 정의 변수)이면 값을 **DOUBLE** 로 변환하여 계산하므로 결과 타입은 **DOUBLE** 이다. 날짜 형식의 문자열처럼 숫자로 변환할 수 없는 값이 있으면 오류가 반환되므로, 날짜 형식 문자열의 중앙값을 구하려면 *expression*\ 을 날짜/시간 타입으로 변환한다.
+
+.. code-block:: sql
+
+    CREATE TABLE ms (s VARCHAR(30));
+    INSERT INTO ms VALUES ('2024-01-01 10:00:00'), ('2024-01-03 10:00:00');
+
+    SELECT MEDIAN(s) FROM ms;
+
+::
+
+    ERROR: The argument of "MEDIAN" can not be coerced to desired domain "double".
+
+.. code-block:: sql
+
+    SELECT MEDIAN(CAST(s AS DATETIME)) FROM ms;
+
+::
+
+      median( cast(s as datetime))
+    ======================
+      10:00:00.000 AM 01/02/2024
+
 다음은 예제 질의를 실행하기 위한 테이블 스키마 및 데이터이다.
 
 .. code-block:: sql
@@ -1378,6 +1401,8 @@ PERCENTILE_CONT
     
     이 함수는 입력 인자로 숫자형 타입 또는 숫자로 변환될 수 있는 문자열이 사용되며, 반환하는 값의 타입은 DOUBLE이다.
     
+    입력 값이 문자열이면 **DOUBLE** 로 변환하여 계산하며, 날짜 형식의 문자열처럼 숫자로 변환할 수 없는 값이 있으면 오류가 반환된다.
+    
     :param expression1: 백분위 값. 0과 1사이의 숫자여야 한다.
     :param expression2: ORDER BY 절에 뒤따르는 칼럼 이름. 칼럼 개수는 *expression1*\의 칼럼 개수와 동일해야 한다. 
     :rtype: **DOUBLE**
@@ -1492,6 +1517,8 @@ PERCENTILE_DISC
     **PERCENTILE_DISC** 함수는 집계 함수 또는 분석 함수로 사용되며, 이산 분포(discrete distribution) 모델을 가정한 역 분포 함수이다. 백분위 값을 입력 받아 정렬된 값들 중 백분위에 해당하는 이산 값(discrete value)을 반환한다. 계산 시 NULL 값은 무시된다.
     
     이 함수는 입력 인자로 숫자형 타입 또는 숫자로 변환될 수 있는 문자열이 사용되며, 반환 타입은 입력 값의 타입과 동일하다.
+    
+    입력 값이 문자열이면 **DOUBLE** 로 변환하므로 반환 타입은 **DOUBLE** 이며, 날짜 형식의 문자열처럼 숫자로 변환할 수 없는 값이 있으면 오류가 반환된다.
      
     :param expression1: 백분위 값. 0과 1사이의 숫자여야 한다.
     :param expression2: ORDER BY 절에 뒤따르는 칼럼 이름. 칼럼 개수는 *expression1*\의 칼럼 개수와 동일해야 한다. 

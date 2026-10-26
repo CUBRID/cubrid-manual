@@ -1048,22 +1048,24 @@ plandump
     Entries:
 
     XASL_ID = {
-              sha1 = { 939db0ab 7ead8a87 2a1ed142 67e2f059 36a3e601 },
-              time_stored = 1750657813 sec, 784232 usec
-            }
+                sha1 = { 3e16775c ca640bf9 5d7c7f98 aceb5095 726c5ede },
+                    time_stored = 1792990910 sec, 929029 usec
+              }
+    Memory Usage: 3818.00 Bytes (0.0% of total cache)
+    Clone Memory Usage: 14272.00 Bytes (0.0% of total cache)
     fix_count = 0
     cache flags = 00000000
-    reference count = 4
-    time second last used = 1750657814
+    reference count = 8
+    time second last used = 1792990910
     clone count = 1
     sql info:
-        SQL_ID = 67d47c14f637a
-        sql user text = select * from game where host_year > '2004'
-        sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] w     here ([dba.game].[host_year]> ?:0 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|897|1;bind_var_cnt=1
-        sql plan text =
-    Sequential scan(public.game dba.game)
+      SQL_ID = e795d733f6f20
+      sql user text = select * from game where host_year > '2004'
+      sql hash text = select [dba.game].[host_year], [dba.game].[event_code], [dba.game].[athlete_code], [dba.game].[stadium_code], [dba.game].[nation_code], [dba.game].[medal], [dba.game].[game_date] from [dba.game] [dba.game] where ([dba.game].[host_year]> ?:0:3 )?193="en_US";194="en_US";249="Asia/Seoul";user=0|833|1;bind_var_cnt=1
+      sql plan text =
+    Index scan(public.game dba.game, pk_game_host_year_event_code_athlete_code, ([dba.game].host_year> ?:0 ))
     OID_LIST (count = 1):
-        OID = 0|208|10, LOCK =     IS_LOCK, TCARD =       31
+      OID = 0|204|9, LOCK =    IS_LOCK, TCARD =       33
 
 
 CUBRID는 플랜 캐시 기능을 통해 SQL 질의의 실행 계획을 재사용할 수 있도록 지원한다.
@@ -1096,10 +1098,10 @@ plandump 결과의 **상세항목** 은 다음과 같다.
 * time second last used : 최종 사용된 시간(unix timestamp)
     * 예제) $> date -d @1750657814 (Mon Jun 23 14:50:14 KST 2025)
 * clone count : 사용된 클론(clone) 개수 (서버에는 실행계획이 메모리 스트림 형태로 저장되어 있으며, 실제 실행 시에는 이를 XASL 구조체로 변환한다. 이 변환 비용을 줄이기 위해 클론 캐시(clone cache)를 사용하게된다. 클론 캐시는 변환된 XASL 구조체를 보관하여 재 사용하며, 동시에 여러 스레드가 요청할 경우 사용할 클론이 없으면 새로 생성하여 사용 후 클론 캐시에 등록한다. 이때 해당값이 증가 한다.)
-* SQL_ID : 원문 질의를 MD5 변환하여 32자리(16진수) 문자열 중 마지막 13자리의 16진수 값(hexa-digit) 을 SQL ID로 사용한다.
+* SQL_ID : sql hash text를 MD5 변환하여 32자리(16진수) 문자열 중 마지막 13자리의 16진수 값(hexa-digit) 을 SQL ID로 사용한다.
     * MD5결과값이 'e1faffb3e614e6c2fba74296962386b7' 인 경우, SQL_ID는 **74296962386b7** 이다.
 * sql user text : 원문 질의문
-* sql hash text : 재작성된 질의문
+* sql hash text : 재작성된 질의문. 호스트 변수와 상수 자리(?:N) 뒤에는 그 자리의 타입을 나타내는 번호가 기록된다(예: ?:0:3). 따라서 같은 질의도 바인딩한 값이나 상수의 타입이 다르면 다른 항목으로 저장된다. 사용자 정의 변수를 사용하는 질의는 플랜 캐시에 저장되지 않는다.
 * sql plan text : 실행계획
 * OID_LIST : 참조하고 있는 객체(table, serial 등)의 OID 정보
 

@@ -1247,6 +1247,7 @@ cci_execute
     *   어느 하나의 질의에서 오류가 발생할 경우 execute는 실패한 것으로 처리된다.
     *   q1; q2; q3와 같이 구성된 질의에 대해서 q1을 성공하고 q2에서 오류가 발생해도 q1의 수행 결과는 유효하다. 즉, 오류가 발생했을 때, 앞서 성공한 질의 수행에 대해서 롤백하지 않는다.
     *   질의가 성공적으로 수행된 경우 두 번째 질의에 대한 결과는 :c:func:`cci_next_result`\ 를 통해서 얻을 수 있다.
+    *   prepare 시에 전달된 여러 개의 질의문에 바인드 파라미터(?)가 있거나 사용자 정의 변수를 읽거나 값을 지정하는 질의문이 있으면 :c:func:`cci_prepare`\ 가 오류(-435, "Multiple statements not allowed.")를 반환한다.
 
     *max_col_size* 는 prepared statement의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 결정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
 
@@ -2439,7 +2440,7 @@ cci_prepare
 
 .. c:function:: int cci_prepare(int conn_handle, char *sql_stmt, char flag,T_CCI_ERROR *err_buf)
 
-    SQL 문에 관한 요청 핸들을 획득하여 SQL 실행을 준비한다. 단, SQL 문이 여러 개의 질의로 구성된 경우, 첫 번째 질의에 대해서만 실행을 준비한다. 이 함수의 인자로 연결 핸들, SQL문,    *flag*    , 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다.
+    SQL 문에 관한 요청 핸들을 획득하여 SQL 실행을 준비한다. 단, SQL 문이 여러 개의 질의로 구성된 경우, 첫 번째 질의에 대해서만 실행을 준비한다. SQL 문이 여러 개의 질의로 구성되고 바인드 파라미터(?)가 있거나 사용자 정의 변수를 읽거나 값을 지정하는 질의가 있으면 오류(-435)를 반환한다. 이 함수의 인자로 연결 핸들, SQL문,    *flag*    , 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다.
 
     :param conn_handle: (IN) 연결 핸들
     :param sql_stmt: (IN) SQL 문

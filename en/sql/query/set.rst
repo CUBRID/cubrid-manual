@@ -53,13 +53,48 @@ The user-defined variables can be changed when you define values.
     SET @v = 'a'; 
     SET @v1 = 10;
 
-    SELECT @v := 1, typeof(@v1), @v1:='1', typeof(@v1);
+    SELECT @v := 1, typeof(@v), typeof(@v1);
      
 ::
 
-      @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
-    ======================================================================================
-      1                     'integer'             '1'                    'character (-1)'
+      @v := 1                typeof(@v)            typeof(@v1)        
+    ==================================================================
+      1                     'integer'             'integer'           
+
+.. code-block:: sql
+
+    SET @v1 = '1';
+
+    SELECT typeof(@v1);
+
+::
+
+       typeof(@v1)        
+    ======================
+      'character (-1)'    
+
+However, a user-defined variable has a single type within one SQL statement. If the SQL statement assigns a value to the variable with the ':=' operator, the type of the assigned expression is the type of the variable in that SQL statement; otherwise, it is the type of the value that the variable holds when the SQL statement is executed. If one SQL statement assigns expressions of different types to the same variable, an error is returned, and if it reads a value whose type differs from the type in that SQL statement, an error is returned. Strings with different character sets are regarded as different types. Assigning a value of another type with a separate **SET** statement is allowed.
+
+.. code-block:: sql
+
+    SET @c = 1;
+
+    -- The type of @c in this SQL statement is VARCHAR, so reading the INTEGER value 1 returns an error.
+    SELECT @c, @c := 'x' FROM db_root;
+
+    -- An INTEGER expression and a VARCHAR expression are assigned to the same variable, so an error is returned.
+    SELECT @c := @c + 1, @c := 'x' FROM db_root;
+
+::
+
+    In the command from line 4,
+
+    ERROR: Session variable @c has the type character varying charset utf8 in this statement, not integer.
+
+    In line 9, column 32,
+
+    ERROR: before '  FROM db_root; '
+    Session variable @c has the type integer in this statement, not character varying charset utf8.
 
 ::
 
@@ -149,3 +184,29 @@ The following example shows how to delete the user-defined variable *a* and *use
     The user-defined variables that are defined by the **SET** statement start by connecting an application to a server and will be maintained until the application terminates the connection. The connection maintained during this period is called a session. When an application terminates the connection or when there are no requests for a certain period of time, the session will expire, and the user-defined variables will be deleted as a result. You can set the session time with the **session_state_timeout** parameter of **cubrid.conf**; the default value is **21600** seconds (=6 hours).
 
     The data managed by the session includes **PREPARE** statements, the user-defined variables, the last ID inserted (**LAST_INSERT_ID**) and the number of rows affected by the statement that you execute at the end (**ROW_COUNT**).
+
+.. note::
+
+    An SQL statement that reads or assigns a user-defined variable (except the **SET** statement and the **DROP VARIABLE** statement) does not use the query plan stored in the plan cache and is compiled at every execution, because the type of the variable can change between executions. Because such an SQL statement does not replace its constants with ?:N to share the query plan with the same query of other values, the constants are shown as they are in the rewritten query of the trace.
+
+    .. code-block:: sql
+
+        SET @c = 0;
+        SET TRACE ON;
+        SELECT COUNT(*) FROM t WHERE i > 2 AND @c = 0;
+        SHOW TRACE;
+
+    ::
+
+          trace
+        ======================
+          '
+        Query Plan:
+          TABLE SCAN (dba.t)
+
+          rewritten query: select count(*) from [dba.t] [dba.t] where ([dba.t].i>2) and @c=0
+
+        Trace Statistics:
+          SELECT (time: 0, fetch: 2, fetch_time: 0, ioread: 0)
+            SCAN (table: dba.t), (heap time: 0, fetch: 2, ioread: 0, readrows: 4, rows: 3)
+        '

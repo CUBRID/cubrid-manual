@@ -11,6 +11,20 @@ UNION, DIFFERENCE, INTERSECTION
 
 Statement set operators are used to get union, difference or intersection on the result of more than one query statement specified as an operand. Note that the data types of the data to be retrieved from the target tables of the two query statements must be identical or implicitly castable.
 
+A host variable in an operand query is converted by the same rule as a constant of the same type as the bound value. For example, the union of a **TIMESTAMP** type and a string host variable is of the **TIMESTAMP** type, like the union of a **TIMESTAMP** and a string constant.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT TIMESTAMP''2009-10-31 23:15:45'' AS ts UNION ALL SELECT ?';
+    EXECUTE st USING '2010-01-01 10:00:00';
+
+::
+
+      ts                  
+    ======================
+      11:15:45 PM 10/31/2009
+      10:00:00 AM 01/01/2010
+
 ::
 
     query_term statement_set_operator [qualifier] <query_term>

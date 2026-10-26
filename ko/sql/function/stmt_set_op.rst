@@ -11,6 +11,20 @@ UNION, DIFFERENCE, INTERSECTION
 
 피연산자로 지정된 하나 이상의 질의문의 결과에 대해 합집합(**UNION**), 차집합(**DIFFERENCE**), 교집합(**INTERSECTION**)을 구하기 위하여 문장 집합 연산자(Statement Set Operator)를 이용한다. 단, 두 질의문의 대상 테이블에서 조회하고자 하는 데이터 타입이 동일하거나, 묵시적으로 변환 가능해야 한다. 
 
+피연산자 질의문의 호스트 변수는 바인딩한 값과 같은 타입의 상수와 같은 규칙으로 변환된다. 예를 들어 **TIMESTAMP** 타입과 문자열 호스트 변수의 합집합은 **TIMESTAMP** 와 문자열 상수의 합집합처럼 **TIMESTAMP** 타입이다.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT TIMESTAMP''2009-10-31 23:15:45'' AS ts UNION ALL SELECT ?';
+    EXECUTE st USING '2010-01-01 10:00:00';
+
+::
+
+      ts                  
+    ======================
+      11:15:45 PM 10/31/2009
+      10:00:00 AM 01/01/2010
+
 ::
 
     query_term statement_set_operator [qualifier] <query_term>

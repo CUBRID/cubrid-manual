@@ -57,9 +57,9 @@ The user-defined variables can be changed when you define values.
      
 ::
 
-      @v := 1                typeof(@v)            typeof(@v1)        
+      @v := 1                typeof(@v)            typeof(@v1)
     ==================================================================
-      1                     'integer'             'integer'           
+      1                     'integer'             'integer'
 
 .. code-block:: sql
 
@@ -69,11 +69,11 @@ The user-defined variables can be changed when you define values.
 
 ::
 
-       typeof(@v1)        
+       typeof(@v1)
     ======================
-      'character (-1)'    
+      'character (-1)'
 
-However, a user-defined variable has a single type within one SQL statement. If the SQL statement assigns a value to the variable with the ':=' operator, the type of the assigned expression is the type of the variable in that SQL statement; otherwise, it is the type of the value that the variable holds when the SQL statement is executed. If one SQL statement assigns expressions of different types to the same variable, an error is returned, and if it reads a value whose type differs from the type in that SQL statement, an error is returned. Strings with different character sets are regarded as different types. Assigning a value of another type with a separate **SET** statement is allowed.
+However, a user-defined variable has a single type within one SQL statement. If the SQL statement assigns a value to the variable with the ':=' operator, the type of the assigned expression is the type of the variable in that SQL statement; otherwise, it is the type of the value that the variable holds when the SQL statement is executed. An error is returned if one SQL statement assigns expressions of different types to the same variable, or if it reads a value whose type differs from the variable's type in that SQL statement. Strings with different character sets are regarded as different types. Assigning a value of another type with a separate **SET** statement is allowed.
 
 .. code-block:: sql
 
@@ -187,7 +187,7 @@ The following example shows how to delete the user-defined variable *a* and *use
 
 .. note::
 
-    An SQL statement that reads or assigns a user-defined variable (except the **SET** statement and the **DROP VARIABLE** statement) does not use the query plan stored in the plan cache and is compiled at every execution, because the type of the variable can change between executions. Because such an SQL statement does not replace its constants with ?:N to share the query plan with the same query of other values, the constants are shown as they are in the rewritten query of the trace.
+    An SQL statement that reads or assigns a user-defined variable (except the **SET** statement and the **DROP VARIABLE** statement) is neither stored in nor looked up from the plan cache, and is compiled at every execution, because the type of the variable can change between executions. Such a statement does not replace its constants with ?:N (the replacement that lets the same query with different constant values share one query plan), so the constants appear unchanged in the rewritten query shown in the trace.
 
     .. code-block:: sql
 

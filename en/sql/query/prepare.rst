@@ -117,7 +117,7 @@ The **EXECUTE** statement executes the prepared statement. You can bind the data
     ==========================
        3.000000000000000e+000
 
-If a bound value cannot be converted to the type of its bind parameter position, an error is returned before the query is executed. The error message shows which bind parameter it is (?:N, counted from 0) and the type of the bound value. This also applies to a bind parameter in a condition that is not evaluated. For the conversion rules, see :ref:`implicit-type-conversion`.
+If a bound value cannot be converted to the type required at its bind parameter position, an error is returned before the query is executed. The error message identifies the bind parameter (?:N, counted from 0) and shows the type of the bound value. This also applies to a bind parameter in a condition that is never evaluated at run time, such as a condition that follows an always-false condition in an AND. For the conversion rules, see :ref:`implicit-type-conversion`.
 
 .. code-block:: sql
 
@@ -135,8 +135,8 @@ If a bound value cannot be converted to the type of its bind parameter position,
 
 .. note::
 
-    *   The query plan of a prepared statement is created for each type of the bound values. When the statement is executed again with values of the same type, the query plan of that type is reused; when it is executed with a value of a different type (e.g., a **DOUBLE** value after an **INTEGER** value), the query is compiled again for that type. Therefore, an application whose bound value types change between executions compiles once more for each type.
-    *   If a statement has a position whose type is determined only by the type of a value, such as a bind parameter compared with a numeric column or a bind parameter in the SELECT list, the **PREPARE** statement does not create the query plan, and the first **EXECUTE** statement creates it. As a result, the query plan output (:ref:`optimization level <viewing-query-plan>` 513 and others) and the errors raised while creating the query plan are reported by the first **EXECUTE** statement instead of the **PREPARE** statement, and session settings changed between the **PREPARE** statement and the first **EXECUTE** statement (**SET NAMES**) are applied. Syntax errors and errors that refer to a table or column that does not exist are returned by the **PREPARE** statement.
+    *   The query plan of a prepared statement is created for each type of the bound values. When the statement is executed again with values of a type already used, the query plan of that type is reused; when it is executed with a value of a type used for the first time (e.g., a **DOUBLE** value after an **INTEGER** value), the query is compiled again for that type. Therefore, an application whose bound value types change between executions compiles once more for each type.
+    *   If a statement has a position whose type is determined only by the type of the bound value (e.g., a bind parameter compared with a numeric column, a bind parameter in the SELECT list, a bind parameter compared with a **CHAR** column), the **PREPARE** statement does not create the query plan, and the first **EXECUTE** statement creates it. As a result, the query plan output (:ref:`optimization level <viewing-query-plan>` 513, for example) and the errors raised while creating the query plan are reported by the first **EXECUTE** statement instead of the **PREPARE** statement, and session settings changed between the **PREPARE** statement and the first **EXECUTE** statement (**SET NAMES**) take effect when the query plan is created. Syntax errors and errors that refer to a table or column that does not exist are returned by the **PREPARE** statement.
 
         .. code-block:: sql
 

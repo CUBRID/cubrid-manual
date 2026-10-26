@@ -30,7 +30,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
 
 Even if an argument is a host variable, the result type is determined by the types of the arguments, not by the returned value. The type of a host variable argument is the type of the bound value.
 
-In the following example, the value of the first argument is **NULL**, but the result type is **VARCHAR** according to the **DATETIME** and **INTEGER** arguments.
+In the following example, the first argument is **NULL**, so **COALESCE** returns the second argument, the **INTEGER** value 1. However, the result type is **VARCHAR**, because it is determined by the argument types (**DATETIME** and **INTEGER**), not by the returned value.
 
 .. code-block:: sql
 

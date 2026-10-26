@@ -1517,7 +1517,7 @@ PERCENTILE_DISC
     
     This function's input value is a number or a string which can be converted into a number, and the type of returned value is the same as the type of input value.
     
-    If the input value is a string, it is converted to **DOUBLE**, so the return type is **DOUBLE**, and if there is a value that cannot be converted to a number, such as a string in a date format, an error is returned.
+    However, if the input value is a string, it is converted to **DOUBLE**, so the return type is **DOUBLE**. If there is a value that cannot be converted to a number, such as a string in a date format, an error is returned.
 
     :param expression1: Percentile value. This must be between 0 and 1.
     :param expression2: The column names followed by an **ORDER BY** clause. The number of columns should be the same with the number of columns in *expression1*. 

@@ -1104,7 +1104,7 @@ The following describes **the detailed fields** included in the output of plandu
 * SQL_ID: A unique identifier generated from the sql hash text using the MD5 hash function.From the resulting 32-character hexadecimal hash, the last 13 hexadecimal characters are used as the SQL_ID.
     * If the MD5 hash value is e1faffb3e614e6c2fba74296962386b7, the corresponding SQL ID is the last 13 characters of the hash: 74296962386b7.
 * sql user text : The original SQL query submitted by the user.
-* sql hash text : The rewritten form of the SQL statement used for caching and plan reuse. After each host variable and constant position (?:N), a number that represents the type of that position is recorded (e.g., ?:0:3). Therefore, the same query is stored as a different entry if the types of the bound values or constants differ. A query that uses a user-defined variable is not stored in the plan cache.
+* sql hash text : The rewritten form of the SQL statement used for caching and plan reuse. Each host variable and constant position (?:N) is followed by numbers that represent the type of that position (for a string, also its character set and collation) (e.g., ?:0:3). Therefore, the same query is stored as separate entries if the types of the bound values or constants differ. A query that uses a user-defined variable is not stored in the plan cache.
 * sql plan text : The text representation of the execution plan generated for the SQL.
 * OID_LIST : A list of Object ID for database objects (e.g., tables, serials) referenced by this execution plan.
 

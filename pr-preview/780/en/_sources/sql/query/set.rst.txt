@@ -82,16 +82,16 @@ However, a user-defined variable has a single type within one SQL statement. If 
     -- The type of @c in this SQL statement is VARCHAR, so reading the INTEGER value 1 returns an error.
     SELECT @c, @c := 'x' FROM db_root;
 
+::
+
+    ERROR: Session variable @c has the type character varying charset utf8 in this statement, not integer.
+
+.. code-block:: sql
+
     -- An INTEGER expression and a VARCHAR expression are assigned to the same variable, so an error is returned.
     SELECT @c := @c + 1, @c := 'x' FROM db_root;
 
 ::
-
-    In the command from line 4,
-
-    ERROR: Session variable @c has the type character varying charset utf8 in this statement, not integer.
-
-    In line 9, column 32,
 
     ERROR: before '  FROM db_root; '
     Session variable @c has the type integer in this statement, not character varying charset utf8.
@@ -190,6 +190,9 @@ The following example shows how to delete the user-defined variable *a* and *use
     An SQL statement that reads or assigns a user-defined variable (except the **SET** statement and the **DROP VARIABLE** statement) is neither stored in nor looked up from the plan cache, and is compiled at every execution, because the type of the variable can change between executions. Such a statement does not replace its constants with ?:N (the replacement that lets the same query with different constant values share one query plan), so the constants appear unchanged in the rewritten query shown in the trace.
 
     .. code-block:: sql
+
+        CREATE TABLE t (i INT);
+        INSERT INTO t VALUES (1), (3), (4), (5);
 
         SET @c = 0;
         SET TRACE ON;

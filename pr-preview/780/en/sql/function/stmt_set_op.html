@@ -239,6 +239,15 @@
 </span><span id="line-4">  <span class="mi">10</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="n">AM</span> <span class="mi">01</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2010</span>
 </span></code></pre></div>
 </div>
+<p>However, if the types of the bound values cannot be converted to each other, an error is returned before the query is executed. A combination that returns an error with constants also returns an error with host variables. For example, binding a <strong>DATE</strong> value to one query and an <strong>INTEGER</strong> value to the other returns an error because the two types cannot be unified into one. Multiple rows of a <strong>VALUES</strong> clause follow the same rule: binding NULL in the first row and a typed value in a later row returns an error, because the first row sets the column type to NULL.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">PREPARE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT ? FROM db_root UNION ALL SELECT ? FROM db_root'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="nb">DATE</span><span class="s1">'2024-01-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Semantic</span><span class="p">:</span> <span class="n">before</span> <span class="s1">'  FROM db_root UNION ALL SELECT ? FROM db_root'</span>
+</span><span id="line-2"><span class="s1">' ?:0 '</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">union</span> <span class="n">compatible</span> <span class="k">with</span> <span class="s1">' ?:1 '</span><span class="o">.</span>
+</span></code></pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">query_term</span> <span class="n">statement_set_operator</span> <span class="p">[</span><span class="n">qualifier</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">query_term</span><span class="o">&gt;</span>
 </span><span id="line-2"><span class="p">[{</span><span class="n">statement_set_operator</span> <span class="p">[</span><span class="n">qualifier</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">query_term</span><span class="o">&gt;</span><span class="p">}];</span>
 </span><span id="line-3">

@@ -2472,7 +2472,7 @@ cci_prepare_and_execute
 
 .. c:function:: int cci_prepare_and_execute(int conn_handle, char *sql_stmt, int max_col_size, int *exec_retval, T_CCI_ERROR *err_buf)
 
-    The **cci_prepare_and_execute** function executes the SQL statement immediately and returns a request handle for the SQL statement. A request handle, SQL statement, the maximum length of a column to be fetched, error code, and the address of a **T_CCI_ERROR** construct variable in which error information being stored are specified as arguments. *max_col_size* is a value to configure the maximum length of a column to be sent to a client when the column of a SQL statement is **CHAR**, **VARCHAR**, **BIT**, or **VARBIT**. If this value is 0, full length is fetched.
+    The **cci_prepare_and_execute** function executes the SQL statement immediately and returns a request handle for the SQL statement. However, if any of the queries in a multi-query SQL statement contains a bind parameter (?) or reads or assigns a user-defined variable, an error (-435) is returned. A request handle, SQL statement, the maximum length of a column to be fetched, error code, and the address of a **T_CCI_ERROR** construct variable in which error information being stored are specified as arguments. *max_col_size* is a value to configure the maximum length of a column to be sent to a client when the column of a SQL statement is **CHAR**, **VARCHAR**, **BIT**, or **VARBIT**. If this value is 0, full length is fetched.
 
     :param conn_handle: (IN) Connection handle
     :param sql_stmt: (IN) SQL statement

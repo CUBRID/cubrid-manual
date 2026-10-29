@@ -483,6 +483,7 @@
 </ul>
 </dd>
 </dl>
+<p>If the first argument is a string host variable, the bound value is handled in the same way as a date/time string in the table above, and <strong>VARCHAR</strong> is returned. To get a date/time result, convert the value to <strong>DATETIME</strong> or another date/time type before binding it, or wrap the host variable in <strong>CAST</strong>.</p>
 </dd></dl>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">SELECT</span><span class="w"> </span><span class="n">ADDTIME</span><span class="p">(</span><span class="n">datetime</span><span class="s1">'2007-12-31 23:59:59'</span><span class="p">,</span><span class="w"> </span><span class="k">time</span><span class="s1">'1:1:2'</span><span class="p">);</span>
 </span></code></pre></div>
@@ -494,6 +495,24 @@
 </span></code></pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="mi">03</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">AM</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">PREPARE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT ADDTIME(?, ''01:00:00'')'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="s1">'2024-01-01 10:00:00'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   addtime( ?:0 , '01:00:00')
+</span><span id="line-2">======================
+</span><span id="line-3">  '11:00:00.000 AM 01/01/2024'
+</span></code></pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">PREPARE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT ADDTIME(CAST(? AS DATETIME), ''01:00:00'')'</span><span class="p">;</span>
+</span><span id="line-2"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="s1">'2024-01-01 10:00:00'</span><span class="p">;</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">   addtime( cast( ?:0  as datetime), '01:00:00')
+</span><span id="line-2">================================================
+</span><span id="line-3">  11:00:00.000 AM 01/01/2024
 </span></code></pre></div>
 </div>
 </section>

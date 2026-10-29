@@ -2590,7 +2590,7 @@ If the <strong>-S</strong> option is not specified, system recognizes that the j
 </dl>
 </li>
 <li><p>sql user text : The original SQL query submitted by the user.</p></li>
-<li><p>sql hash text : The rewritten form of the SQL statement used for caching and plan reuse. Each host variable and constant position (?:N) is followed by numbers that represent the type of that position (for a string, also its character set and collation) (e.g., ?:0:3). Therefore, the same query is stored as separate entries if the types of the bound values or constants differ. A query that uses a user-defined variable is not stored in the plan cache.</p></li>
+<li><p>sql hash text : The rewritten form of the SQL statement used for caching and plan reuse. Each host variable and constant position (?:N) is followed by numbers that represent the type of that position (for a string, also its character set and collation) (e.g., ?:0:3). Therefore, the same query is stored as separate entries if the types of those positions differ. If a bound value or constant is converted for its position, the type after the conversion is recorded; in the example above, the string constant ‘2004’ is recorded as DOUBLE (3). A query that uses a user-defined variable is not stored in the plan cache.</p></li>
 <li><p>sql plan text : The text representation of the execution plan generated for the SQL.</p></li>
 <li><p>OID_LIST : A list of Object ID for database objects (e.g., tables, serials) referenced by this execution plan.</p></li>
 </ul>

@@ -117,7 +117,7 @@ The **EXECUTE** statement executes the prepared statement. You can bind the data
     ==========================
        3.000000000000000e+000
 
-If a bound value cannot be converted to the type required at its bind parameter position, an error is returned before the query is executed. The error message identifies the bind parameter (?:N, counted from 0) and shows the type of the bound value. This also applies to a bind parameter in a condition that is never evaluated at run time, such as a condition that follows an always-false condition in an AND. For the conversion rules, see :ref:`implicit-type-conversion`.
+If a bound value cannot be converted to the type required at its bind parameter position, an error is returned before the query is executed. The error message identifies the bind parameter (?:N, counted from 0) and shows the type of the bound value. This also applies to a bind parameter in a condition that is never evaluated at run time (in the example below, no row satisfies i = 0, so i < ? is never evaluated). For the conversion rules, see :ref:`implicit-type-conversion`.
 
 .. code-block:: sql
 
@@ -128,8 +128,6 @@ If a bound value cannot be converted to the type required at its bind parameter 
     EXECUTE st USING 'abc';
 
 ::
-
-    In the command from line 4,
 
     ERROR: Semantic: Cannot coerce host var to type double (?:0 of type character).
 
@@ -146,8 +144,6 @@ If a bound value cannot be converted to the type required at its bind parameter 
             EXECUTE st USING 1;
 
         ::
-
-            In the command from line 3,
 
             ERROR: Missing value for attribute "b" with the NOT NULL constraint.
 

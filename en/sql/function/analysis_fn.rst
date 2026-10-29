@@ -957,8 +957,8 @@ MEDIAN
 
     **MEDIAN** function is used as an aggregate function or an analytic function. It returns the median value. The median value is the value which is located on the middle between the minimum value and the maximum value.
     
-    :param expression: column with value or expression which can be converted as number or date
-    :rtype: **DOUBLE** or **DATETIME**
+    :param expression: column or expression that returns a numeric type, a date/time type, or a string that can be converted to a number
+    :rtype: **DOUBLE**; the type of *expression* if *expression* is a date/time type
 
 If *expression* is a string (a string column, a string constant, a host variable or a user-defined variable), its values are converted to **DOUBLE** for the calculation, so the result type is **DOUBLE**. If there is a value that cannot be converted to a number, such as a string in a date format, an error is returned; to get the median of strings in a date format, convert *expression* to a date/time type.
 
@@ -1398,13 +1398,13 @@ PERCENTILE_CONT
 
     **PERCENTILE_CONT** is used as an aggregate or analytic function, and is a reverse distribution function to assume a continuous distribution model. This takes a percentile value and returns a interpolated value within a set of sorted values. NULLs are ignored when calculating.
     
-    This function's input value is a number or a string which can be converted into a number, and the type of returned value is DOUBLE.
+    This function's input value is a number, a date/time value or a string which can be converted into a number, and the type of returned value is DOUBLE. However, if the input value is a date/time type, the type of returned value is the same as the type of input value.
     
     If the input value is a string, it is converted to **DOUBLE** for the calculation, and if there is a value that cannot be converted to a number, such as a string in a date format, an error is returned.
     
     :param expression1: Percentile value. This must be between 0 and 1.
     :param expression2: The column names followed by an **ORDER BY** clause. The number of columns should be the same with the number of columns in *expression1*. 
-    :rtype: **DOUBLE**
+    :rtype: **DOUBLE**; the type of *expression2* if *expression2* is a date/time type
 
     .. seealso:: 
     
@@ -1515,7 +1515,7 @@ PERCENTILE_DISC
 
     **PERCENTILE_DISC** is used as an aggregate or analytic function, and is a reverse distribution function to assume a discrete distribution model. This takes a percentile value and returns a discrete value within a set of sorted values. NULLs are ignored when calculating.
     
-    This function's input value is a number or a string which can be converted into a number, and the type of returned value is the same as the type of input value.
+    This function's input value is a number, a date/time value or a string which can be converted into a number, and the type of returned value is the same as the type of input value.
     
     However, if the input value is a string, it is converted to **DOUBLE**, so the return type is **DOUBLE**. If there is a value that cannot be converted to a number, such as a string in a date format, an error is returned.
 

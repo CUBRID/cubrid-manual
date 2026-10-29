@@ -94,16 +94,16 @@ SQL 문을 이용하여 CSQL 인터프리터나 CUBRID 매니저의 질의 편�
     -- 이 SQL 문에서 @c의 타입은 VARCHAR이므로 INTEGER 값 1을 읽을 때 오류가 반환된다.
     SELECT @c, @c := 'x' FROM db_root;
 
+::
+
+    ERROR: Session variable @c has the type character varying charset utf8 in this statement, not integer.
+
+.. code-block:: sql
+
     -- 같은 변수에 INTEGER 연산식과 VARCHAR 연산식을 지정하므로 오류가 반환된다.
     SELECT @c := @c + 1, @c := 'x' FROM db_root;
 
 ::
-
-    In the command from line 4,
-
-    ERROR: Session variable @c has the type character varying charset utf8 in this statement, not integer.
-
-    In line 9, column 32,
 
     ERROR: before '  FROM db_root; '
     Session variable @c has the type integer in this statement, not character varying charset utf8.
@@ -202,6 +202,9 @@ SQL 문 내에서 ':=' 연산자를 사용하여 사용자 정의 변수를 선�
     사용자 정의 변수를 읽거나 값을 지정하는 SQL 문(**SET** 문과 **DROP VARIABLE** 문 제외)은 플랜 캐시에 저장되지 않고 플랜 캐시의 실행 계획을 사용하지도 않으며, 실행할 때마다 컴파일된다. 변수의 타입이 실행 사이에 바뀔 수 있기 때문이다. 이러한 SQL 문은 상수를 ?:N으로 바꾸어 다른 값의 같은 질의와 실행 계획을 공유하지 않으므로, trace의 rewritten query에 상수가 그대로 출력된다.
 
     .. code-block:: sql
+
+        CREATE TABLE t (i INT);
+        INSERT INTO t VALUES (1), (3), (4), (5);
 
         SET @c = 0;
         SET TRACE ON;

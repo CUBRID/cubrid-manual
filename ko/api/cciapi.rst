@@ -2477,7 +2477,7 @@ cci_prepare_and_execute
 
 .. c:function:: int cci_prepare_and_execute(int conn_handle, char *sql_stmt, int max_col_size, int *exec_retval, T_CCI_ERROR *err_buf)
 
-    SQL 문을 즉시 실행하고 SQL 문에 대한 요청 핸들을 반환한다. 이 함수의 인자로는 연결 핸들, SQL 문, fetch하는 칼럼의 문자열 최대 길이, 오류 코드, 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다. *max_col_size* 는 SQL 문의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 설정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
+    SQL 문을 즉시 실행하고 SQL 문에 대한 요청 핸들을 반환한다. SQL 문이 여러 개의 질의로 구성되고 바인드 파라미터(?)가 있거나 사용자 정의 변수를 읽거나 값을 지정하는 질의가 있으면 오류(-435)를 반환한다. 이 함수의 인자로는 연결 핸들, SQL 문, fetch하는 칼럼의 문자열 최대 길이, 오류 코드, 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다. *max_col_size* 는 SQL 문의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 설정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
 
     :param conn_handle: (IN) 연결 핸들
     :param sql_stmt: (IN) SQL 문

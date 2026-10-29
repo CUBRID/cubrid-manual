@@ -117,7 +117,7 @@ EXECUTE 문
     ==========================
        3.000000000000000e+000
 
-바인딩한 값을 바인드 파라미터 자리의 타입으로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 오류 메시지에는 몇 번째 바인드 파라미터인지(?:0부터 센다)와 바인딩한 값의 타입이 출력된다. 실행되지 않는 조건에 있는 바인드 파라미터도 마찬가지이다. 변환 규칙은 :ref:`implicit-type-conversion`\ 을 참고한다.
+바인딩한 값을 바인드 파라미터 자리의 타입으로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 오류 메시지에는 몇 번째 바인드 파라미터인지(?:0부터 센다)와 바인딩한 값의 타입이 출력된다. 실행 중에 계산되지 않는 조건에 있는 바인드 파라미터도 마찬가지이다(아래 예에서는 i = 0을 만족하는 행이 없으므로 i < ?는 계산되지 않는다). 변환 규칙은 :ref:`implicit-type-conversion`\ 을 참고한다.
 
 .. code-block:: sql
 
@@ -128,8 +128,6 @@ EXECUTE 문
     EXECUTE st USING 'abc';
 
 ::
-
-    In the command from line 4,
 
     ERROR: Semantic: Cannot coerce host var to type double (?:0 of type character).
 
@@ -146,8 +144,6 @@ EXECUTE 문
             EXECUTE st USING 1;
 
         ::
-
-            In the command from line 3,
 
             ERROR: Missing value for attribute "b" with the NOT NULL constraint.
 

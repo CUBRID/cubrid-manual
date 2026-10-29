@@ -143,6 +143,8 @@ ADDTIME
     :param expr1: **DATE**, **DATETIME**, **TIME** or **TIMESTAMP** type
     :param expr2: **DATETIME**, **TIMESTAMP**, **TIME** type or date/time string
 
+    If the first argument is a string host variable, the bound value is handled in the same way as a date/time string in the table above, and **VARCHAR** is returned. To get a date/time result, convert the value to **DATETIME** or another date/time type before binding it, or wrap the host variable in **CAST**.
+
 .. code-block:: sql
 
     SELECT ADDTIME(datetime'2007-12-31 23:59:59', time'1:1:2');
@@ -158,6 +160,28 @@ ADDTIME
 ::
 
     03:00:01 AM
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ADDTIME(?, ''01:00:00'')';
+    EXECUTE st USING '2024-01-01 10:00:00';
+
+::
+
+       addtime( ?:0 , '01:00:00')
+    ======================
+      '11:00:00.000 AM 01/01/2024'
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ADDTIME(CAST(? AS DATETIME), ''01:00:00'')';
+    EXECUTE st USING '2024-01-01 10:00:00';
+
+::
+
+       addtime( cast( ?:0  as datetime), '01:00:00')
+    ================================================
+      11:00:00.000 AM 01/01/2024
 
 
 

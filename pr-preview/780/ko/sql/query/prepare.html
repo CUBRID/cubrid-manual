@@ -325,7 +325,7 @@
 </span><span id="line-3">   3.000000000000000e+000
 </span></code></pre></div>
 </div>
-<p>바인딩한 값을 바인드 파라미터 자리의 타입으로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 오류 메시지에는 몇 번째 바인드 파라미터인지(?:0부터 센다)와 바인딩한 값의 타입이 출력된다. 실행되지 않는 조건에 있는 바인드 파라미터도 마찬가지이다. 변환 규칙은 <a class="reference internal" href="../datatype.html#implicit-type-conversion"><span class="std std-ref">묵시적 타입 변환</span></a>을 참고한다.</p>
+<p>바인딩한 값을 바인드 파라미터 자리의 타입으로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 오류 메시지에는 몇 번째 바인드 파라미터인지(?:0부터 센다)와 바인딩한 값의 타입이 출력된다. 실행 중에 계산되지 않는 조건에 있는 바인드 파라미터도 마찬가지이다(아래 예에서는 i = 0을 만족하는 행이 없으므로 i &lt; ?는 계산되지 않는다). 변환 규칙은 <a class="reference internal" href="../datatype.html#implicit-type-conversion"><span class="std std-ref">묵시적 타입 변환</span></a>을 참고한다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">STRING</span><span class="p">);</span>
 </span><span id="line-2"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'1'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'2'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'3'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'4'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="s1">'12'</span><span class="p">);</span>
 </span><span id="line-3">
@@ -333,9 +333,7 @@
 </span><span id="line-5"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="s1">'abc'</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">In the command from line 4,
-</span><span id="line-2">
-</span><span id="line-3">ERROR: Semantic: Cannot coerce host var to type double (?:0 of type character).
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">ERROR: Semantic: Cannot coerce host var to type double (?:0 of type character).
 </span></code></pre></div>
 </div>
 <div class="admonition note">
@@ -349,9 +347,7 @@
 </span><span id="line-4"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span></code></pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">In</span> <span class="n">the</span> <span class="n">command</span> <span class="kn">from</span><span class="w"> </span><span class="nn">line</span> <span class="mi">3</span><span class="p">,</span>
-</span><span id="line-2">
-</span><span id="line-3"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Missing</span> <span class="n">value</span> <span class="k">for</span> <span class="n">attribute</span> <span class="s2">"b"</span> <span class="k">with</span> <span class="n">the</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">constraint</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">ERROR</span><span class="p">:</span> <span class="n">Missing</span> <span class="n">value</span> <span class="k">for</span> <span class="n">attribute</span> <span class="s2">"b"</span> <span class="k">with</span> <span class="n">the</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">constraint</span><span class="o">.</span>
 </span></code></pre></div>
 </div>
 </li>

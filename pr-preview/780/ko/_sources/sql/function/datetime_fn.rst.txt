@@ -144,6 +144,8 @@ ADDTIME
     :param expr1: **DATE**, **DATETIME**, **TIMESTAMP**, **TIME** 타입 또는 날짜/시간 문자열
     :param expr2: **DATETIME**, **TIMESTAMP**, **TIME** 타입 또는 시간 문자열
 
+    첫 번째 인자가 문자열 호스트 변수이면 바인딩한 값은 위 표의 날짜/시간 문자열과 같게 처리되어 **VARCHAR** 를 반환한다. 날짜/시간 타입의 결과가 필요하면 바인딩하기 전에 값을 **DATETIME** 등으로 변환하거나, 호스트 변수를 **CAST** 로 감싼다.
+
 .. code-block:: sql
 
     SELECT ADDTIME(datetime'2007-12-31 23:59:59', time'1:1:2');
@@ -159,6 +161,28 @@ ADDTIME
 ::
 
     03:00:01 AM
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ADDTIME(?, ''01:00:00'')';
+    EXECUTE st USING '2024-01-01 10:00:00';
+
+::
+
+       addtime( ?:0 , '01:00:00')
+    ======================
+      '11:00:00.000 AM 01/01/2024'
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ADDTIME(CAST(? AS DATETIME), ''01:00:00'')';
+    EXECUTE st USING '2024-01-01 10:00:00';
+
+::
+
+       addtime( cast( ?:0  as datetime), '01:00:00')
+    ================================================
+      11:00:00.000 AM 01/01/2024
 
 
 

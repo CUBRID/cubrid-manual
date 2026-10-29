@@ -1521,7 +1521,7 @@ PERCENTILE_DISC
 
     :param expression1: Percentile value. This must be between 0 and 1.
     :param expression2: The column names followed by an **ORDER BY** clause. The number of columns should be the same with the number of columns in *expression1*. 
-    :rtype: the same with the *expression2*\'s type.
+    :rtype: the same with the *expression2*\'s type; **DOUBLE** if *expression2* is a string
 
     .. seealso:: 
     

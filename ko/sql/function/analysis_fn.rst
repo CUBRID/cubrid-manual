@@ -1522,7 +1522,7 @@ PERCENTILE_DISC
      
     :param expression1: 백분위 값. 0과 1사이의 숫자여야 한다.
     :param expression2: ORDER BY 절에 뒤따르는 칼럼 이름. 칼럼 개수는 *expression1*\의 칼럼 개수와 동일해야 한다. 
-    :rtype: *expression2* 의 타입과 동일.
+    :rtype: *expression2* 의 타입과 동일. *expression2*\ 가 문자열이면 **DOUBLE**
 
     .. seealso:: 
     

@@ -25,6 +25,18 @@ A host variable in an operand query is converted according to the same rule as a
       11:15:45 PM 10/31/2009
       10:00:00 AM 01/01/2010
 
+However, if the types of the bound values cannot be converted to each other, an error is returned before the query is executed. A combination that returns an error with constants also returns an error with host variables. For example, binding a **DATE** value to one query and an **INTEGER** value to the other returns an error because the two types cannot be unified into one. Multiple rows of a **VALUES** clause follow the same rule: binding NULL in the first row and a typed value in a later row returns an error, because the first row sets the column type to NULL.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ? FROM db_root UNION ALL SELECT ? FROM db_root';
+    EXECUTE st USING DATE'2024-01-01', 1;
+
+::
+
+    ERROR: Semantic: before '  FROM db_root UNION ALL SELECT ? FROM db_root'
+    ' ?:0 ' is not union compatible with ' ?:1 '.
+
 ::
 
     query_term statement_set_operator [qualifier] <query_term>

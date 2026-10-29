@@ -25,6 +25,18 @@ UNION, DIFFERENCE, INTERSECTION
       11:15:45 PM 10/31/2009
       10:00:00 AM 01/01/2010
 
+단, 바인딩한 값의 타입을 서로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 상수로 썼을 때 오류가 나는 조합은 호스트 변수로 써도 오류가 난다. 예를 들어 한쪽에 **DATE** 값, 다른 쪽에 **INTEGER** 값을 바인딩하면 두 타입을 하나로 맞출 수 없으므로 오류이다. **VALUES** 절의 여러 행도 같은 규칙을 따르며, 첫 행에 NULL을 바인딩하고 뒤 행에 타입이 있는 값을 바인딩하면 첫 행이 칼럼 타입을 NULL로 정하므로 오류이다.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ? FROM db_root UNION ALL SELECT ? FROM db_root';
+    EXECUTE st USING DATE'2024-01-01', 1;
+
+::
+
+    ERROR: Semantic: before '  FROM db_root UNION ALL SELECT ? FROM db_root'
+    ' ?:0 ' is not union compatible with ' ?:1 '.
+
 ::
 
     query_term statement_set_operator [qualifier] <query_term>

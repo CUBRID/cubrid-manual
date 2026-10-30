@@ -333,6 +333,8 @@ CREATE TABLE
     CREATE TABLE t1(id1 INT, id2 VARCHAR(20) DEFAULT TO_CHAR(12345,'S999999'), id3 VARCHAR(20) DEFAULT TO_CHAR(SYS_TIME, 'HH24:MI:SS'));
     ALTER TABLE t1 add column id4 varchar (20) default TO_CHAR(SYS_DATETIME, 'yyyy/mm/dd hh:mi:ss'), id5 DATE DEFAULT SYSDATE;
 
+.. _auto-increment:
+
 자동 증가
 ^^^^^^^^^
 
@@ -416,6 +418,9 @@ CREATE TABLE
         .. code-block:: sql
           
             CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
+
+    *   **AUTO_INCREMENT** 칼럼은 칼럼을 만들 때의 :ref:`auto_increment_cache_size <auto_increment_cache_size>` 값(기본값 **20**)만큼 값을 캐시한다. 칼럼의 캐시 크기는 **_db_serial** 의 *cached_num* 으로 확인할 수 있다.
+    *   캐시를 사용하는 칼럼은 데이터베이스 서버가 비정상 종료하거나, HA 환경에서 마스터가 비정상 종료해 failover 가 일어나면 캐시에서 발급하지 않은 값(최대 *cached_num* 개)을 건너뛸 수 있다. 데이터베이스 서버를 정상 종료한 뒤 재시작하면 마지막으로 발급한 값의 다음 값부터 발급한다. 연속된 번호가 필요하면 칼럼을 만들기 전에 **auto_increment_cache_size** 를 0 으로 설정한다.
 
 .. _constraint-definition:
 

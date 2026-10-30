@@ -2120,7 +2120,9 @@ The replication logs are not generated as for tasks performed in standalone mode
 
 **Serial Cache**
 
-To enhance performance, a serial cache does not access Heap and does not generate replication logs when retrieving or updating serial information. Therefore, if you use a serial cache, the current values of serial caches will be inconsistent among the nodes within CUBRID HA groups.
+To enhance performance, a serial cache does not access Heap and does not generate replication logs when it issues the serial values that it has fetched into the cache. Therefore, if you use a serial cache, the current values of serial caches will be inconsistent among the nodes within CUBRID HA groups. An **AUTO_INCREMENT** column also uses a serial cache by default (see :ref:`auto_increment_cache_size <auto_increment_cache_size>`).
+
+When the server of the master node shuts down normally, it hands the values in the cache that have not been issued to the new master node. When a failover occurs because the server of the master node terminates abnormally, the new master node can skip the values in the cache that have not been issued (up to *cached_num* values).
 
 **cubrid backupdb -r**
 

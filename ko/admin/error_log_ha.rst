@@ -263,3 +263,10 @@ CUBRID HA 오류
 
 - 이 메시지는 CUBRID HA(High Availability) 환경에서 데이터베이스의 복제(replication) 과정에서 복제 항목, 즉 마스터 데이터베이스에서 발생한 변경 사항들을 슬레이브(replica) 데이터베이스에 적용하기 위해 버퍼에서 디스크로 쓰거나 다음 단계로 전달하는 작업이 실패했음을 나타냅니다. 이는 네트워크 문제, 디스크 I/O 문제, 슬레이브 데이터베이스의 내부 상태 문제, 또는 복제 항목 자체의 문제 등 다양한 원인으로 발생할 수 있습니다.
 
+
+.. _ERROR-1386:
+
+**ERROR CODE: -1386, 'HA repl info: A replicated _db_serial image of serial "%1$s" was not applied on this node (%2$s), which keeps its own row: current_val %3$s, image %4$s, block end %5$s.'**
+
+- 이 메시지는 CUBRID HA(High Availability) 환경에서 노드가 복제받은 **_db_serial** 행을 적용하지 않고 그 노드의 행을 그대로 두었을 때 그 노드의 서버 오류 로그에 남는 알림이다. 그 노드가 해당 시리얼의 캐시를 사용하고 있거나 복제받은 행을 적용하면 시리얼의 현재 값이 뒤로 돌아가는 경우처럼, 적용하면 이미 발급한 값을 다시 발급할 수 있을 때 행을 적용하지 않는다. 이 알림이 남아도 복제는 실패로 처리되지 않고 계속된다.
+

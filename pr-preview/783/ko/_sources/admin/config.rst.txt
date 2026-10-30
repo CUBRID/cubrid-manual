@@ -1531,14 +1531,19 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
         SET SYSTEM PARAMETERS 'auto_increment_cache_size=20';
         CREATE TABLE ai_tbl2 (id INT AUTO_INCREMENT, name VARCHAR(10));
 
-        SELECT class_name, attr_name, cached_num FROM _db_serial WHERE class_name IN ('ai_tbl1', 'ai_tbl2') ORDER BY class_name;
+        INSERT INTO ai_tbl1 (name) VALUES ('a'), ('b'), ('c');
+        INSERT INTO ai_tbl2 (name) VALUES ('a'), ('b'), ('c');
+
+        SELECT table_name, auto_increment FROM information_schema.tables WHERE table_name IN ('ai_tbl1', 'ai_tbl2') ORDER BY table_name;
 
     ::
 
-          class_name            attr_name              cached_num
-        =========================================================
-          'ai_tbl1'             'id'                            0
-          'ai_tbl2'             'id'                           20
+          table_name            auto_increment
+        ============================================
+          'ai_tbl1'             4
+          'ai_tbl2'             21
+
+    캐시를 쓰는 ai_tbl2 는 첫 값을 발급할 때 값 20 개를 캐시에 가져오므로 *auto_increment* 가 21 이다. 다음에 발급되는 값은 두 테이블 모두 4 이다. 이 조회는 DBA가 아닌 사용자도 자신의 테이블에 대해 실행할 수 있다. 캐시 크기 자체는 DBA가 **_db_serial** 의 *cached_num* 으로 확인할 수 있다.
 
 .. _block_ddl_statement:
 

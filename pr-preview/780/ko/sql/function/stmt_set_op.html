@@ -241,7 +241,7 @@
 </span><span id="line-4">  <span class="mi">10</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="n">AM</span> <span class="mi">01</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2010</span>
 </span></code></pre></div>
 </div>
-<p>단, 바인딩한 값의 타입을 서로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 상수로 썼을 때 오류가 나는 조합은 호스트 변수로 써도 오류가 난다. 예를 들어 한쪽에 <strong>DATE</strong> 값, 다른 쪽에 <strong>INTEGER</strong> 값을 바인딩하면 두 타입을 하나로 맞출 수 없으므로 오류이다. <strong>VALUES</strong> 절의 여러 행도 같은 규칙을 따르며, 첫 행에 NULL을 바인딩하고 뒤 행에 타입이 있는 값을 바인딩하면 첫 행이 칼럼 타입을 NULL로 정하므로 오류이다.</p>
+<p>단, 바인딩한 값의 타입을 서로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 상수로 썼을 때 오류가 나는 조합은 호스트 변수로 써도 오류가 난다. 예를 들어 한쪽에 <strong>DATE</strong> 값, 다른 쪽에 <strong>INTEGER</strong> 값을 바인딩하면 두 타입을 하나로 맞출 수 없으므로 오류이다. <strong>VALUES</strong> 절에서는 첫 행이 NULL(상수 NULL 또는 NULL을 바인딩한 호스트 변수)이고 뒤 행이 호스트 변수이면, 상수만 쓴 <code class="docutils literal notranslate"><span class="pre">VALUES</span> <span class="pre">(NULL),</span> <span class="pre">(1)</span></code> 과 달리 오류가 반환된다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">PREPARE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT ? FROM db_root UNION ALL SELECT ? FROM db_root'</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="nb">DATE</span><span class="s1">'2024-01-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span></code></pre></div>
@@ -428,7 +428,7 @@
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 29, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 10월 30, 2026. </p>
 </div>
 </div>
 </footer>

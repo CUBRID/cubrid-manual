@@ -1535,14 +1535,19 @@ The following are parameters related to SQL statements and data types supported 
         SET SYSTEM PARAMETERS 'auto_increment_cache_size=20';
         CREATE TABLE ai_tbl2 (id INT AUTO_INCREMENT, name VARCHAR(10));
 
-        SELECT class_name, attr_name, cached_num FROM _db_serial WHERE class_name IN ('ai_tbl1', 'ai_tbl2') ORDER BY class_name;
+        INSERT INTO ai_tbl1 (name) VALUES ('a'), ('b'), ('c');
+        INSERT INTO ai_tbl2 (name) VALUES ('a'), ('b'), ('c');
+
+        SELECT table_name, auto_increment FROM information_schema.tables WHERE table_name IN ('ai_tbl1', 'ai_tbl2') ORDER BY table_name;
 
     ::
 
-          class_name            attr_name              cached_num
-        =========================================================
-          'ai_tbl1'             'id'                            0
-          'ai_tbl2'             'id'                           20
+          table_name            auto_increment
+        ============================================
+          'ai_tbl1'             4
+          'ai_tbl2'             21
+
+    Because ai_tbl2 uses a cache, it takes 20 values into the cache when it issues the first value, so *auto_increment* is 21. In both tables, the next value to be issued is 4. A user who is not DBA can run this query on their own tables. A DBA can check the cache size itself in *cached_num* of **_db_serial**.
 
 .. _block_ddl_statement:
 

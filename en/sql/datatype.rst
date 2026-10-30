@@ -2569,7 +2569,9 @@ The following are the conversion rules according to an operand type of the compa
 +-------------------+-------------------+----------------------------------------------+----------------+
 | operand1 Type     | operand2 Type     | Conversion                                   | Comparison     |
 +===================+===================+==============================================+================+
-| Numeric Type      | Numeric Type      | None                                         | NUMERIC        |
+| Numeric Type      | Numeric Type      | Converts the exact numeric operand to the    | DOUBLE/FLOAT   |
+|                   |                   | approximate numeric type when the other is   | or NUMERIC     |
+|                   |                   | **DOUBLE** or **FLOAT**; otherwise none      |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | Converts operand2 to **DOUBLE**              | NUMERIC        |
 |                   +-------------------+----------------------------------------------+----------------+

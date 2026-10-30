@@ -239,7 +239,7 @@
 </span><span id="line-4">  <span class="mi">10</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="n">AM</span> <span class="mi">01</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2010</span>
 </span></code></pre></div>
 </div>
-<p>However, if the types of the bound values cannot be converted to each other, an error is returned before the query is executed. A combination that returns an error with constants also returns an error with host variables. For example, binding a <strong>DATE</strong> value to one query and an <strong>INTEGER</strong> value to the other returns an error because the two types cannot be unified into one. Multiple rows of a <strong>VALUES</strong> clause follow the same rule: binding NULL in the first row and a typed value in a later row returns an error, because the first row sets the column type to NULL.</p>
+<p>However, if the types of the bound values cannot be converted to each other, an error is returned before the query is executed. A combination that returns an error with constants also returns an error with host variables. For example, binding a <strong>DATE</strong> value to one query and an <strong>INTEGER</strong> value to the other returns an error because the two types cannot be unified into one. In a <strong>VALUES</strong> clause, if the first row is NULL (a NULL constant or a host variable bound to NULL) and a later row is a host variable, an error is returned, unlike <code class="docutils literal notranslate"><span class="pre">VALUES</span> <span class="pre">(NULL),</span> <span class="pre">(1)</span></code> written with constants only.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">PREPARE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT ? FROM db_root UNION ALL SELECT ? FROM db_root'</span><span class="p">;</span>
 </span><span id="line-2"><span class="k">EXECUTE</span><span class="w"> </span><span class="n">st</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="nb">DATE</span><span class="s1">'2024-01-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span></code></pre></div>
@@ -426,7 +426,7 @@ Outputs all instance results containing duplicates with
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 29, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: Oct 30, 2026. </p>
 </div>
 </div>
 </footer>

@@ -1119,7 +1119,8 @@ Represents serial information. An index for unique_name and an index for name an
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 | attr_name         | VARCHAR(1073741823)  | AUTO_INCREMENT In case of serial, the column name is stored. or **NULL**.                           |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
-| cached_num        | INTEGER              | The number of serial values to pre-create in memory to improve performance. Default is 0.           |
+| cached_num        | INTEGER              | The number of serial values to pre-create in memory to improve performance. Default is 0. For an    |
+|                   |                      | AUTO_INCREMENT serial, the value of **auto_increment_cache_size** when the column is created.       |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+
 | comment           | VARCHAR (1024)       | Comment to describe the serial.                                                                     |
 +-------------------+----------------------+-----------------------------------------------------------------------------------------------------+

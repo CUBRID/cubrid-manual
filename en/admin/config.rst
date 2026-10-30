@@ -249,6 +249,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | ansi_quotes                         | client parameter        |         | bool     | yes                            |                       |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | auto_increment_cache_size           | client/server parameter | O       | int      | 20                             | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | block_ddl_statement                 | client parameter        | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | block_nowhere_statement             | client parameter        | O       | bool     | no                             | available             |
@@ -1409,6 +1411,8 @@ The following are parameters related to SQL statements and data types supported 
 +--------------------------------------+--------+------------+------------+------------+
 | ansi_quotes                          | bool   | yes        |            |            |
 +--------------------------------------+--------+------------+------------+------------+
+| auto_increment_cache_size            | int    | 20         | 0          | 1,000      |
++--------------------------------------+--------+------------+------------+------------+
 | block_ddl_statement                  | bool   | no         |            |            |
 +--------------------------------------+--------+------------+------------+------------+
 | block_nowhere_statement              | bool   | no         |            |            |
@@ -1508,6 +1512,37 @@ The following are parameters related to SQL statements and data types supported 
 **ansi_quotes**
 
     **ansi_quotes** is a parameter used to enclose symbols and character string to handle identifiers. The default value is **yes**. If this parameter value is set to **yes**, double quotations are handled as identifier symbols and single quotations are handled as character string symbols. If it is set to **no**, both double and single quotations are handled as character string symbols.
+
+.. _auto_increment_cache_size:
+
+**auto_increment_cache_size**
+
+    **auto_increment_cache_size** is a parameter to specify the number of values that an **AUTO_INCREMENT** column caches, at the time the column is created. The default value is **20**. You can specify a value from 0 to 1,000. If the value is 0 or 1, the column does not use a cache. A column that uses a cache can skip values when the database server terminates abnormally. For details, see :ref:`auto-increment`.
+
+    The value is read when an **AUTO_INCREMENT** column is created, and it is stored as the cache size of the column (*cached_num* of **_db_serial**). This applies to **CREATE TABLE**, **ALTER TABLE** ... **ADD COLUMN**, and **ALTER TABLE** ... **CHANGE** / **MODIFY** that newly specifies **AUTO_INCREMENT** or specifies (*seed*, *increment*). A change of the value does not change the cache size of the columns that already exist, and **CHANGE** / **MODIFY** that changes only the type of the column keeps the cache size. You cannot change the cache size of an **AUTO_INCREMENT** column with **ALTER SERIAL**. Thus, set this value before you create the column.
+
+    If the value range of the column type is narrower than the values that one cache holds (this parameter value × the increment), the column is created without a cache, and no error occurs.
+
+    Because this is a session parameter, a user who is not DBA can change the value for the session with the **SET SYSTEM PARAMETERS** statement. The new value applies, without a restart, to the columns that the session creates after the change. In an HA environment, when a slave creates a column from a replicated statement, it uses the value of the session that ran the statement on the master.
+
+    **unloaddb** does not export the cache size of a column. An **AUTO_INCREMENT** column that is moved with **loaddb** is created again with the value of this parameter at the time **loaddb** runs.
+
+    .. code-block:: sql
+
+        SET SYSTEM PARAMETERS 'auto_increment_cache_size=0';
+        CREATE TABLE ai_tbl1 (id INT AUTO_INCREMENT, name VARCHAR(10));
+
+        SET SYSTEM PARAMETERS 'auto_increment_cache_size=20';
+        CREATE TABLE ai_tbl2 (id INT AUTO_INCREMENT, name VARCHAR(10));
+
+        SELECT class_name, attr_name, cached_num FROM _db_serial WHERE class_name IN ('ai_tbl1', 'ai_tbl2') ORDER BY class_name;
+
+    ::
+
+          class_name            attr_name              cached_num
+        =========================================================
+          'ai_tbl1'             'id'                            0
+          'ai_tbl2'             'id'                           20
 
 .. _block_ddl_statement:
 

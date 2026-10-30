@@ -847,7 +847,9 @@ The ``tables`` view contains all tables and views defined in the current databas
 +---------------------+---------------+------------------------------------------------------------------+
 | auto_increment      | NUMERIC(38,0) | Next AUTO_INCREMENT value (NULL if not applicable). For a column |
 |                     |               | that uses a serial cache, this value can be larger than the      |
-|                     |               | value that is issued next                                        |
+|                     |               | value that is issued next, and it can be NULL when the cache     |
+|                     |               | reaches the maximum value of the type, even if values are left   |
+|                     |               | to issue                                                         |
 +---------------------+---------------+------------------------------------------------------------------+
 | table_collation     | VARCHAR(32)   | Default collation of the table                                   |
 +---------------------+---------------+------------------------------------------------------------------+

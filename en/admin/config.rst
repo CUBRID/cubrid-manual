@@ -1521,11 +1521,11 @@ The following are parameters related to SQL statements and data types supported 
 
     The value is read when an **AUTO_INCREMENT** column is created, and it is stored as the cache size of the column (*cached_num* of **_db_serial**). This applies to **CREATE TABLE**, **ALTER TABLE** ... **ADD COLUMN**, and **ALTER TABLE** ... **CHANGE** / **MODIFY** that newly specifies **AUTO_INCREMENT** or specifies (*seed*, *increment*). A change of the value does not change the cache size of the columns that already exist, and **CHANGE** / **MODIFY** that changes only the type of the column keeps the cache size. You cannot change the cache size of an **AUTO_INCREMENT** column with **ALTER SERIAL**. Thus, set this value before you create the column.
 
-    If the value range of the column type is narrower than the values that one cache holds (this parameter value × the increment), the column is created without a cache, and no error occurs.
+    If the range from the seed to the maximum value of the column type is narrower than the values that one cache holds (this parameter value × the increment), the column is created without a cache (*cached_num* is 0), and no error occurs.
 
     Because this is a session parameter, a user who is not DBA can change the value for the session with the **SET SYSTEM PARAMETERS** statement. The new value applies, without a restart, to the columns that the session creates after the change. In an HA environment, when a slave creates a column from a replicated statement, it uses the value of the session that ran the statement on the master.
 
-    **unloaddb** does not export the cache size of a column. An **AUTO_INCREMENT** column that is moved with **loaddb** is created again with the value of this parameter at the time **loaddb** runs.
+    **unloaddb** does not export the cache size of a column. An **AUTO_INCREMENT** column that is moved with **loaddb** is created again with the value of this parameter at the time **loaddb** runs. If you export a column that uses a cache with **unloaddb** while the server is running, the column can skip up to *cached_num* values after it is moved with **loaddb**. A column that you export after the server shuts down normally continues from the last issued value.
 
     .. code-block:: sql
 

@@ -2569,7 +2569,9 @@ The following are the conversion rules according to an operand type of the compa
 +-------------------+-------------------+----------------------------------------------+----------------+
 | operand1 Type     | operand2 Type     | Conversion                                   | Comparison     |
 +===================+===================+==============================================+================+
-| Numeric Type      | Numeric Type      | None                                         | NUMERIC        |
+| Numeric Type      | Numeric Type      | Converts the exact numeric operand to the    | DOUBLE/FLOAT   |
+|                   |                   | approximate numeric type when the other is   | or NUMERIC     |
+|                   |                   | **DOUBLE** or **FLOAT**; otherwise none      |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | Converts operand2 to **DOUBLE**              | NUMERIC        |
 |                   +-------------------+----------------------------------------------+----------------+
@@ -2733,6 +2735,171 @@ The following is examples of implicit type conversion in comparison operations.
             '01/01/1998'
             '01/01/1999'
             '01/01/2000'
+
+*   **Exact Numeric Type & Approximate Numeric Type Operands**
+
+    The exact numeric type operand will be converted to the approximate numeric type: to **DOUBLE** when compared with a **DOUBLE**, and to **FLOAT** when compared with a **FLOAT**. A difference in digits that the converted type cannot represent is therefore not reflected in the comparison result. The following values can be judged equal even when they differ.
+
+    *   Compared with a **DOUBLE**: a **BIGINT** value whose absolute value is 9007199254740992 (2 to the power of 53) or greater, and a **NUMERIC** value with 16 or more significant digits
+
+    *   Compared with a **FLOAT**: an **INTEGER** or **BIGINT** value whose absolute value is 16777216 (2 to the power of 24) or greater, and a **NUMERIC** value with 7 or more significant digits
+
+    This does not occur when a **SHORT** or **INTEGER** value is compared with a **DOUBLE**, or when a **SHORT** value is compared with a **FLOAT**.
+
+    .. code-block:: sql
+
+        SELECT CAST(9007199254740993 AS BIGINT) = 9007199254740992e0;
+
+    ::
+
+           cast(9007199254740993 as bigint)=9007199254740992e0
+        ======================================================
+                                                             1
+
+    .. code-block:: sql
+
+        SELECT CAST(16777217 AS INTEGER) = CAST(16777216 AS FLOAT);
+
+    ::
+
+           cast(16777217 as integer)= cast(16777216 as float)
+        =====================================================
+                                                            1
+
+    A query that compares such values can return different rows depending on its execution plan, because the key range that an index scan searches and the partitions that :ref:`partition-pruning` selects may not agree with the comparison result above. For performance, CUBRID still uses the index scan and partition pruning in this case.
+
+    .. code-block:: sql
+
+        -- Results differ with and without a multi-column index
+        CREATE TABLE ti (g INT, b BIGINT, c INT);
+        INSERT INTO ti VALUES (1, 9007199254740992, 5), (1, 9007199254740993, 1), (1, 9007199254740993, 5);
+        CREATE INDEX idx_ti_gbc ON ti (g, b, c);
+
+        SELECT b, c FROM ti WHERE g = 1 AND b = 9007199254740992e0 AND c = 5 USING INDEX NONE ORDER BY 1, 2;
+
+    ::
+
+                             b            c
+        ===================================
+              9007199254740992            5
+              9007199254740993            5
+
+    .. code-block:: sql
+
+        SELECT b, c FROM ti WHERE g = 1 AND b = 9007199254740992e0 AND c = 5 USING INDEX idx_ti_gbc ORDER BY 1, 2;
+
+    ::
+
+                             b            c
+        ===================================
+              9007199254740993            5
+
+    The sequential scan returns two rows, but the index scan returns only the row whose b is 9007199254740993.
+
+    .. code-block:: sql
+
+        -- Results differ with and without partition pruning
+        CREATE TABLE tp (id INT, b BIGINT) PARTITION BY RANGE (b) (
+            PARTITION p0 VALUES LESS THAN (9007199254740993),
+            PARTITION p1 VALUES LESS THAN MAXVALUE);
+        INSERT INTO tp VALUES (1, 9007199254740992), (2, 9007199254740993), (3, 9007199254740994);
+
+        SELECT id, b FROM tp WHERE b = 9007199254740992e0 ORDER BY id;
+
+    ::
+
+                   id                     b
+        ===================================
+                    2      9007199254740993
+
+    .. code-block:: sql
+
+        SELECT id, b FROM tp WHERE b + 0 = 9007199254740992e0 ORDER BY id;
+
+    ::
+
+                   id                     b
+        ===================================
+                    1      9007199254740992
+                    2      9007199254740993
+
+    The first query reads only partition p1 because of partition pruning, and returns only the row whose id is 2. The second query applies an operation to the partition key, so partition pruning is not applied and both partitions are read.
+
+    To make the result independent of the execution plan, use one of the following methods. The first and the third methods return only the rows whose column value is exactly equal to the compared value, and the second method returns the same rows as the floating-point comparison, so choose by the result you want.
+
+    *   Convert the constant or the host variable to the column type.
+
+        .. code-block:: sql
+
+            SELECT id, b FROM tp WHERE b = CAST(9007199254740992e0 AS BIGINT) ORDER BY id;
+
+        ::
+
+                       id                     b
+            ===================================
+                        1      9007199254740992
+
+        .. code-block:: sql
+
+            PREPARE s FROM 'SELECT id, b FROM tp WHERE b = CAST(? AS BIGINT) ORDER BY id';
+            EXECUTE s USING 9007199254740992e0;
+
+        ::
+
+                       id                     b
+            ===================================
+                        1      9007199254740992
+
+        Converting a **DOUBLE** value to **NUMERIC** keeps only 16 significant digits, so bind the value to be compared with a **NUMERIC** column as an integer or a string, and convert it.
+
+        .. code-block:: sql
+
+            SELECT CAST(12345678901234567e0 AS NUMERIC(20));
+
+        ::
+
+               cast(12345678901234567e0 as numeric(20,0))
+            ======================
+              12345678901234560
+
+        .. code-block:: sql
+
+            CREATE TABLE tn (id INT, n NUMERIC(20));
+            INSERT INTO tn VALUES (1, 12345678901234567), (2, 12345678901234568);
+
+            PREPARE s FROM 'SELECT id, n FROM tn WHERE n = CAST(? AS NUMERIC(20)) ORDER BY id';
+            EXECUTE s USING '12345678901234568';
+
+        ::
+
+                       id  n
+            ===================================
+                        2  12345678901234568
+
+    *   Specify the range of column values that are judged equal to the floating-point value directly with **BETWEEN**.
+
+        .. code-block:: sql
+
+            SELECT id, b FROM tp WHERE b BETWEEN 9007199254740992 AND 9007199254740993 ORDER BY id;
+
+        ::
+
+                       id                     b
+            ===================================
+                        1      9007199254740992
+                        2      9007199254740993
+
+    *   Write the constant as an integer or **NUMERIC** literal instead of a floating-point literal.
+
+        .. code-block:: sql
+
+            SELECT id, b FROM tp WHERE b = 9007199254740992 ORDER BY id;
+
+        ::
+
+                       id                     b
+            ===================================
+                        1      9007199254740992
 
 Range Operation
 ^^^^^^^^^^^^^^^

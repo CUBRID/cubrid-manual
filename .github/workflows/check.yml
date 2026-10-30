@@ -28,11 +28,18 @@ jobs:
     container:
       image: rockylinux:9.3
     steps:
+      # Without git in the container, actions/checkout downloads the files with no .git,
+      # and the change preview needs git to find the merge base.
+      - name: Install git
+        run: |
+          for i in {1..3}; do dnf install -y git && break || sleep 5; done
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           allow-unsafe-pr-checkout: true
+          fetch-depth: 0  # the change preview diffs against the merge base
           
       - name: Compute short SHA
         id: sha
@@ -60,8 +67,9 @@ jobs:
           update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 2
           update-alternatives --set python3 /usr/bin/python3.12
           # PIP Retry Logic
+          # lxml is pinned for the change preview: htmldiff in lxml 6.0-6.1.3 repeats and nests changed words.
           for i in {1..3}; do
-            pip3.12 install 'urllib3<2.0' Sphinx==9.1.0 \
+            pip3.12 install 'urllib3<2.0' Sphinx==9.1.0 lxml==5.4.0 \
               sphinx_design sphinxext-rediraffe sphinxawesome-theme==6.0.0 \
               weasyprint==68.0 sphinx-simplepdf==1.7 sphinx-rtd-theme && break || sleep 5;
           done
@@ -77,6 +85,34 @@ jobs:
           if [ -f "_build/simplepdf/CUBRID.pdf" ]; then
             cp _build/simplepdf/CUBRID.pdf _build/html/CUBRID.pdf
           fi
+
+      # Change preview: marks what the PR adds and deletes on the rendered pages.
+      # The script comes from the default branch (github.sha for pull_request_target), the
+      # same source as this workflow, so the reviewed copy runs, not the PR's. This adds no
+      # isolation: the PR's own code has already run in this job through make html.
+      # A failure here must not fail the build, the deploy or the comment.
+      - name: Checkout preview script (default branch)
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: base-tools
+          sparse-checkout: .github/scripts
+
+      - name: Mark changes (change preview)
+        if: github.event_name == 'pull_request_target'
+        continue-on-error: true
+        env:
+          LANG: ko_KR.utf8
+        run: |
+          if [ ! -f base-tools/.github/scripts/manual_preview.py ]; then
+            echo "The default branch has no change preview script yet; skipping."
+            exit 0
+          fi
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          python3 base-tools/.github/scripts/manual_preview.py --repo . \
+            --base ${{ github.event.pull_request.base.sha }} \
+            --lang ${{ matrix.lang }} --head-html ${{ matrix.lang }}/_build/html --inplace
 
       - name: Check link
         env:
@@ -165,21 +201,52 @@ jobs:
       pull-requests: write
     steps:
       # --- Case A: PR Preview Link ---
+      # The change list comes from the _changes.json each language build wrote; the
+      # script that renders it comes from the default branch, as in the build job.
+      - name: Download build artifacts (change lists)
+        if: github.event_name == 'pull_request_target'
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-artifact-*
+          path: ./artifacts
+
+      - name: Checkout preview script (default branch)
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: base-tools
+          sparse-checkout: .github/scripts
+
+      - name: Compose PR preview comment
+        if: github.event_name == 'pull_request_target'
+        env:
+          URL_BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}
+        run: |
+          {
+            echo "✅ **CUBRID Manual Preview is Ready!**"
+            echo
+            echo "All docs (KO/EN) are successfully built and deployed."
+            echo
+            echo "| Type | 🇰🇷 Korean (KO) | 🇺🇸 English (EN) |"
+            echo "| :--- | :--- | :--- |"
+            echo "| 🌐 **Web** | [View Docs]($URL_BASE/ko/index.html) | [View Docs]($URL_BASE/en/index.html) |"
+            echo "| 📄 **PDF** | [Download]($URL_BASE/ko/CUBRID.pdf) | [Download]($URL_BASE/en/CUBRID.pdf) |"
+          } > comment.md
+          if [ -f base-tools/.github/scripts/manual_preview.py ]; then
+            python3 base-tools/.github/scripts/manual_preview.py --comment-md changes.md \
+              --changes-json artifacts/build-artifact-ko/_changes.json artifacts/build-artifact-en/_changes.json \
+              --url-base "$URL_BASE" && { echo; cat changes.md; } >> comment.md \
+              || echo "Change list unavailable; posting the comment without it."
+          fi
+
       - name: Comment PR Preview Link
         if: github.event_name == 'pull_request_target'
         uses: thollander/actions-comment-pull-request@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_number: ${{ github.event.pull_request.number }}
-          message: |
-            ✅ **CUBRID Manual Preview is Ready!**
-
-            All docs (KO/EN) are successfully built and deployed.
-
-            | Type | 🇰🇷 Korean (KO) | 🇺🇸 English (EN) |
-            | :--- | :--- | :--- |
-            | 🌐 **Web** | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/index.html) | [View Docs](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/index.html) |
-            | 📄 **PDF** | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/ko/CUBRID.pdf) | [Download](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/${{ github.event.pull_request.number }}/en/CUBRID.pdf) |
+          filePath: comment.md
           comment_tag: cubrid-manual-preview
           mode: recreate
 

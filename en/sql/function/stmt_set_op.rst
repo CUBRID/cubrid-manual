@@ -25,7 +25,7 @@ A host variable in an operand query is converted according to the same rule as a
       11:15:45 PM 10/31/2009
       10:00:00 AM 01/01/2010
 
-However, if the types of the bound values cannot be converted to each other, an error is returned before the query is executed. A combination that returns an error with constants also returns an error with host variables. For example, binding a **DATE** value to one query and an **INTEGER** value to the other returns an error because the two types cannot be unified into one. Multiple rows of a **VALUES** clause follow the same rule: binding NULL in the first row and a typed value in a later row returns an error, because the first row sets the column type to NULL.
+However, if the types of the bound values cannot be converted to each other, an error is returned before the query is executed. A combination that returns an error with constants also returns an error with host variables. For example, binding a **DATE** value to one query and an **INTEGER** value to the other returns an error because the two types cannot be unified into one. In a **VALUES** clause, if the first row is NULL (a NULL constant or a host variable bound to NULL) and a later row is a host variable, an error is returned, unlike ``VALUES (NULL), (1)`` written with constants only.
 
 .. code-block:: sql
 

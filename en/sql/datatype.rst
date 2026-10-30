@@ -2673,6 +2673,32 @@ The following is examples of implicit type conversion in comparison operations.
         ===================
              '1'
 
+*   **Numeric Type & String Type Host Variable Operands**
+
+    The string type host variable will be converted to **DOUBLE**. If the bound value cannot be converted, an error is returned before the query is executed.
+
+    .. code-block:: sql
+
+        PREPARE s FROM 'SELECT i FROM t1 WHERE i < ?';
+        EXECUTE s USING '3';
+
+    ::
+
+                    i
+        =============
+                    1
+                    2
+
+    .. code-block:: sql
+
+        EXECUTE s USING 'abc';
+
+    ::
+
+        ERROR: Semantic: Cannot coerce host var to type double (?:0 of type character).
+
+    The type of a host variable is determined by the type of the bound value, and a query plan is created for each type. For details, see :ref:`execute-statement`.
+
 *   **String Type & Numeric Type value Operands**
 
     The numeric type value will be converted to the string type.
@@ -2804,6 +2830,21 @@ Arithmetic Operation
 *   **Numeric Type Operand**
 
     If the numeric type operands are given and the types are different from each other, it will be converted to the type with the higher priority.
+
+*   **String Type Operand**
+
+    A string type operand given to an arithmetic operator (+, -, \*, /) together with a numeric type operand, or given to the **MOD**, **ROUND** or **TRUNC** function, is converted to a number, and if the value cannot be converted, an error is returned. If the string type operand is the left operand (the first argument for a function), the conversion is performed first, so an error is returned even if the value of the other operand is **NULL**.
+
+    .. code-block:: sql
+
+        CREATE TABLE tn (id INT, n INT);
+        INSERT INTO tn VALUES (1, NULL);
+        SET @b = 'abc';
+        SELECT @b + n FROM tn;
+
+    ::
+
+        ERROR: Cannot coerce value of domain "character" to domain "double".
 
 *   **Date/Time Type & Numeric Type Operands**
 

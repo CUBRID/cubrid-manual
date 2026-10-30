@@ -26,7 +26,22 @@ Operation is performed by converting the type of every argument into that with t
 *   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 *   **DATE** < **TIMESTAMP** < **DATETIME**
 
-For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FLOAT**, then **COALESCE** (a, b, c, d) returns a **FLOAT** type. If a type of a is **INTEGER**, b, **DOULBE** , c, **FLOAT**, and d, **TIMESTAMP**, then **COALESCE** (a, b, c, d) returns a **VARCHAR** type.
+For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FLOAT**, then **COALESCE** (a, b, c, d) returns a **FLOAT** type. If a type of a is **INTEGER**, b, **DOUBLE** , c, **FLOAT**, and d, **TIMESTAMP**, then **COALESCE** (a, b, c, d) returns a **VARCHAR** type.
+
+Even if an argument is a host variable, the result type is determined by the types of the arguments, not by the returned value. The type of a host variable argument is the type of the bound value.
+
+In the following example, the first argument is **NULL**, so **COALESCE** returns the second argument, the **INTEGER** value 1. However, the result type is **VARCHAR**, because it is determined by the argument types (**DATETIME** and **INTEGER**), not by the returned value.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT COALESCE(CAST(? AS DATETIME), ?) AS c, TYPEOF(COALESCE(CAST(? AS DATETIME), ?)) AS t';
+    EXECUTE st USING NULL, 1, NULL, 1;
+
+::
+
+      c                     t                   
+    ============================================
+      '1'                   'character varying (1073741823)'
 
 **COALESCE** (*a, b*) works the same as the **CASE** expression as follows: ::
 
@@ -243,6 +258,8 @@ Operation is performed by converting the type of every argument into that with t
 
 For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
 
+Even if an argument is a host variable, the result type is determined by the types of the arguments, not by the returned value. The type of a host variable argument is the type of the bound value.
+
 **IFNULL**\(*a*, *b*) or **NVL**\(*a*, *b*) has the same meaning as the **CASE** expression below. ::
 
     CASE WHEN a IS NULL THEN b
@@ -429,6 +446,8 @@ Operation is performed by converting the type of every argument into that with t
 *   **DATE** < **TIMESTAMP** < **DATETIME**
 
 For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **NVL2** (a, b, c) returns a **BIGINT** type. If a type of a is **INTEGER**, b, **DOUBLE**, and c, **TIMESTAMP**, then **NVL2** (a, b, c) returns a **VARCHAR** type.
+
+Even if an argument is a host variable, the result type is determined by the types of the arguments, not by the returned value. The type of a host variable argument is the type of the bound value.
 
 .. code-block:: sql
 

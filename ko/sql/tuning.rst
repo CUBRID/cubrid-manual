@@ -169,6 +169,8 @@ CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 다
 
     .. note:: 2, 258, 514와 같이 질의를 실행하지 않게 최적화 수준을 설정하는 경우 SELECT 문 뿐만 아니라 INSERT, UPDATE, DELETE, REPLACE,  TRIGGER, SERIAL  문 등 모든 질의문이 실행되지 않는다.
 
+    .. note:: 질의 실행 계획은 실행 계획을 만들 때 출력된다. prepared statement에 값의 타입이 있어야 타입이 정해지는 자리(예: 수치형 칼럼과 비교하는 바인드 파라미터, SELECT 목록의 바인드 파라미터, **CHAR** 칼럼과 비교하는 바인드 파라미터)가 있으면, 실행 계획은 **PREPARE** 문이 아니라 첫 번째 **EXECUTE** 문에서 출력되고, 처음 쓰는 타입의 값으로 실행할 때마다 다시 출력된다. 자세한 내용은 :ref:`execute-statement`\ 를 참고한다.
+
 CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값을 참조하여 최적화 여부와 질의 실행 계획의 출력 여부를 결정한다. 
 
 다음은 CSQL에서 ";plan simple" 명령 입력 또는 "SET OPTIMIZATION LEVEL 257;"을 입력 후 질의를 수행한 결과이다.

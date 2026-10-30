@@ -62,16 +62,51 @@ SQL 문을 이용하여 CSQL 인터프리터나 CUBRID 매니저의 질의 편�
 
 .. code-block:: sql
 
-    SET @v = 'a'; 
+    SET @v = 'a';
     SET @v1 = 10;
 
-    SELECT @v := 1, typeof(@v1), @v1:='1', typeof(@v1);
-     
+    SELECT @v := 1, typeof(@v), typeof(@v1);
+
 ::
 
-      @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
-    ======================================================================================
-      1                     'integer'             '1'                    'character (-1)'
+      @v := 1                typeof(@v)            typeof(@v1)
+    ==================================================================
+      1                     'integer'             'integer'
+
+.. code-block:: sql
+
+    SET @v1 = '1';
+
+    SELECT typeof(@v1);
+
+::
+
+       typeof(@v1)
+    ======================
+      'character (-1)'
+
+단, 하나의 SQL 문 안에서 사용자 정의 변수의 타입은 하나이다. SQL 문이 ':=' 연산자로 변수에 값을 지정하면 지정하는 연산식의 타입이 그 SQL 문에서의 변수 타입이고, 값을 지정하지 않으면 SQL 문을 실행할 때 변수가 가진 값의 타입이다. 하나의 SQL 문에서 같은 변수에 타입이 다른 연산식을 지정하면 오류가 반환되고, 그 SQL 문에서의 타입과 다른 타입의 값을 읽으면 오류가 반환된다. 문자열은 문자셋이 다르면 다른 타입으로 본다. 별도의 **SET** 문으로 다른 타입의 값을 지정하는 것은 허용된다.
+
+.. code-block:: sql
+
+    SET @c = 1;
+
+    -- 이 SQL 문에서 @c의 타입은 VARCHAR이므로 INTEGER 값 1을 읽을 때 오류가 반환된다.
+    SELECT @c, @c := 'x' FROM db_root;
+
+::
+
+    ERROR: Session variable @c has the type character varying charset utf8 in this statement, not integer.
+
+.. code-block:: sql
+
+    -- 같은 변수에 INTEGER 연산식과 VARCHAR 연산식을 지정하므로 오류가 반환된다.
+    SELECT @c := @c + 1, @c := 'x' FROM db_root;
+
+::
+
+    ERROR: before '  FROM db_root; '
+    Session variable @c has the type integer in this statement, not character varying charset utf8.
 
 ::
 
@@ -161,3 +196,32 @@ SQL 문 내에서 ':=' 연산자를 사용하여 사용자 정의 변수를 선�
     **SET** 문에 의해 정의되는 사용자 정의 변수는 응용 프로그램이 서버에 연결하면서 시작되어 응용 프로그램이 연결을 종료할 때까지 유지되며, 이 기간동안 유지되는 연결을 세션(session)이라고 한다. 사용자 정의 변수는 응용 프로그램이 연결을 종료하거나 일정 기간 동안 요청이 없어 세션 기간이 만료될(expired) 때 삭제된다. 세션 기간은 **cubrid.conf** 의 **session_state_timeout** 파라미터로 설정할 수 있으며, 기본값은 **21600** 초(=6시간)이다.
 
     세션에서 관리하는 데이터에는 **PREPARE** 문 외에 사용자 정의 변수, 가장 마지막에 삽입한 ID(**LAST_INSERT_ID**), 그리고 가장 마지막에 실행한 문장으로 인해 영향을 받은 레코드의 개수(**ROW_COUNT**)가 포함한다.
+
+.. note::
+
+    사용자 정의 변수를 읽거나 값을 지정하는 SQL 문(**SET** 문과 **DROP VARIABLE** 문 제외)은 플랜 캐시에 저장되지 않고 플랜 캐시의 실행 계획을 사용하지도 않으며, 실행할 때마다 컴파일된다. 변수의 타입이 실행 사이에 바뀔 수 있기 때문이다. 이러한 SQL 문은 상수를 ?:N으로 바꾸어 다른 값의 같은 질의와 실행 계획을 공유하지 않으므로, trace의 rewritten query에 상수가 그대로 출력된다.
+
+    .. code-block:: sql
+
+        CREATE TABLE t (i INT);
+        INSERT INTO t VALUES (1), (3), (4), (5);
+
+        SET @c = 0;
+        SET TRACE ON;
+        SELECT COUNT(*) FROM t WHERE i > 2 AND @c = 0;
+        SHOW TRACE;
+
+    ::
+
+          trace
+        ======================
+          '
+        Query Plan:
+          TABLE SCAN (dba.t)
+
+          rewritten query: select count(*) from [dba.t] [dba.t] where ([dba.t].i>2) and @c=0
+
+        Trace Statistics:
+          SELECT (time: 0, fetch: 2, fetch_time: 0, ioread: 0)
+            SCAN (table: dba.t), (heap time: 0, fetch: 2, ioread: 0, readrows: 4, rows: 3)
+        '

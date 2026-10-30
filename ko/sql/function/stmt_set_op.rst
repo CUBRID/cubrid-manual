@@ -11,6 +11,32 @@ UNION, DIFFERENCE, INTERSECTION
 
 피연산자로 지정된 하나 이상의 질의문의 결과에 대해 합집합(**UNION**), 차집합(**DIFFERENCE**), 교집합(**INTERSECTION**)을 구하기 위하여 문장 집합 연산자(Statement Set Operator)를 이용한다. 단, 두 질의문의 대상 테이블에서 조회하고자 하는 데이터 타입이 동일하거나, 묵시적으로 변환 가능해야 한다. 
 
+피연산자 질의문의 호스트 변수는 바인딩한 값과 같은 타입의 상수와 같은 규칙으로 변환된다. 예를 들어 **TIMESTAMP** 타입과 문자열 호스트 변수의 합집합은 **TIMESTAMP** 와 문자열 상수의 합집합처럼 **TIMESTAMP** 타입이다.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT TIMESTAMP''2009-10-31 23:15:45'' AS ts UNION ALL SELECT ?';
+    EXECUTE st USING '2010-01-01 10:00:00';
+
+::
+
+      ts                  
+    ======================
+      11:15:45 PM 10/31/2009
+      10:00:00 AM 01/01/2010
+
+단, 바인딩한 값의 타입을 서로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 상수로 썼을 때 오류가 나는 조합은 호스트 변수로 써도 오류가 난다. 예를 들어 한쪽에 **DATE** 값, 다른 쪽에 **INTEGER** 값을 바인딩하면 두 타입을 하나로 맞출 수 없으므로 오류이다. **VALUES** 절에서는 첫 행이 NULL(상수 NULL 또는 NULL을 바인딩한 호스트 변수)이고 뒤 행이 호스트 변수이면, 상수만 쓴 ``VALUES (NULL), (1)`` 과 달리 오류가 반환된다.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ? FROM db_root UNION ALL SELECT ? FROM db_root';
+    EXECUTE st USING DATE'2024-01-01', 1;
+
+::
+
+    ERROR: Semantic: before '  FROM db_root UNION ALL SELECT ? FROM db_root'
+    ' ?:0 ' is not union compatible with ' ?:1 '.
+
 ::
 
     query_term statement_set_operator [qualifier] <query_term>

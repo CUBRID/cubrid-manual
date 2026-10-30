@@ -117,6 +117,36 @@ EXECUTE 문
     ==========================
        3.000000000000000e+000
 
+바인딩한 값을 바인드 파라미터 자리의 타입으로 변환할 수 없으면 질의를 실행하기 전에 오류가 반환된다. 오류 메시지에는 몇 번째 바인드 파라미터인지(?:0부터 센다)와 바인딩한 값의 타입이 출력된다. 실행 중에 계산되지 않는 조건에 있는 바인드 파라미터도 마찬가지이다(아래 예에서는 i = 0을 만족하는 행이 없으므로 i < ?는 계산되지 않는다). 변환 규칙은 :ref:`implicit-type-conversion`\ 을 참고한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t1 (i INT, s STRING);
+    INSERT INTO t1 VALUES (1, '1'), (2, '2'), (3, '3'), (4, '4'), (12, '12');
+
+    PREPARE st FROM 'SELECT i FROM t1 WHERE i = 0 AND i < ?';
+    EXECUTE st USING 'abc';
+
+::
+
+    ERROR: Semantic: Cannot coerce host var to type double (?:0 of type character).
+
+.. note::
+
+    *   prepared statement의 실행 계획은 바인딩한 값의 타입마다 따로 만들어진다. 이미 실행한 타입의 값으로 다시 실행하면 그 타입의 실행 계획을 재사용하고, 처음 쓰는 타입의 값(예: **INTEGER** 값 다음에 **DOUBLE** 값)으로 실행하면 그 타입으로 질의를 다시 컴파일한다. 따라서 바인딩하는 값의 타입이 실행마다 바뀌는 응용 프로그램은 타입마다 컴파일을 한 번씩 더 수행한다.
+    *   값의 타입이 있어야 타입이 정해지는 자리(예: 수치형 칼럼과 비교하는 바인드 파라미터, SELECT 목록의 바인드 파라미터, **CHAR** 칼럼과 비교하는 바인드 파라미터)가 있으면, **PREPARE** 문은 실행 계획을 만들지 않고 첫 번째 **EXECUTE** 문에서 실행 계획을 만든다. 그래서 실행 계획 출력(:ref:`최적화 수준 <viewing-query-plan>` 513 등)과 실행 계획을 만들 때 발생하는 오류는 **PREPARE** 문이 아니라 첫 번째 **EXECUTE** 문에서 출력되며, **PREPARE** 문과 첫 번째 **EXECUTE** 문 사이에 변경한 세션 설정(**SET NAMES**)이 적용된다. 문법 오류와 존재하지 않는 테이블이나 칼럼을 참조하는 오류는 **PREPARE** 문에서 반환된다.
+
+        .. code-block:: sql
+
+            -- NOT NULL 칼럼 b의 값을 지정하지 않은 INSERT 문의 오류가 EXECUTE 문에서 반환되는 예
+            CREATE TABLE tn (a INT NOT NULL, b INT NOT NULL);
+            PREPARE st FROM 'INSERT INTO tn (a) SELECT ? FROM db_root';
+            EXECUTE st USING 1;
+
+        ::
+
+            ERROR: Missing value for attribute "b" with the NOT NULL constraint.
+
 DEALLOCATE PREPARE 문, DROP PREPARE 문
 ======================================
 

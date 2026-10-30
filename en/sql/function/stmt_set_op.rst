@@ -11,6 +11,32 @@ UNION, DIFFERENCE, INTERSECTION
 
 Statement set operators are used to get union, difference or intersection on the result of more than one query statement specified as an operand. Note that the data types of the data to be retrieved from the target tables of the two query statements must be identical or implicitly castable.
 
+A host variable in an operand query is converted according to the same rule as a constant of the same type as the bound value. For example, if one query returns a **TIMESTAMP** value and the other returns a string host variable, the result column is of the **TIMESTAMP** type, just as it is when the other query returns a string constant.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT TIMESTAMP''2009-10-31 23:15:45'' AS ts UNION ALL SELECT ?';
+    EXECUTE st USING '2010-01-01 10:00:00';
+
+::
+
+      ts                  
+    ======================
+      11:15:45 PM 10/31/2009
+      10:00:00 AM 01/01/2010
+
+However, if the types of the bound values cannot be converted to each other, an error is returned before the query is executed. A combination that returns an error with constants also returns an error with host variables. For example, binding a **DATE** value to one query and an **INTEGER** value to the other returns an error because the two types cannot be unified into one. In a **VALUES** clause, if the first row is NULL (a NULL constant or a host variable bound to NULL) and a later row is a host variable, an error is returned, unlike ``VALUES (NULL), (1)`` written with constants only.
+
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT ? FROM db_root UNION ALL SELECT ? FROM db_root';
+    EXECUTE st USING DATE'2024-01-01', 1;
+
+::
+
+    ERROR: Semantic: before '  FROM db_root UNION ALL SELECT ? FROM db_root'
+    ' ?:0 ' is not union compatible with ' ?:1 '.
+
 ::
 
     query_term statement_set_operator [qualifier] <query_term>

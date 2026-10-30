@@ -93,6 +93,7 @@ jobs:
       # A failure here must not fail the build, the deploy or the comment.
       - name: Checkout preview script (default branch)
         if: github.event_name == 'pull_request_target'
+        continue-on-error: true
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -106,7 +107,7 @@ jobs:
           LANG: ko_KR.utf8
         run: |
           if [ ! -f base-tools/.github/scripts/manual_preview.py ]; then
-            echo "The default branch has no change preview script yet; skipping."
+            echo "No change preview script from the default branch; skipping."
             exit 0
           fi
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -205,6 +206,7 @@ jobs:
       # script that renders it comes from the default branch, as in the build job.
       - name: Download build artifacts (change lists)
         if: github.event_name == 'pull_request_target'
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           pattern: build-artifact-*
@@ -212,6 +214,7 @@ jobs:
 
       - name: Checkout preview script (default branch)
         if: github.event_name == 'pull_request_target'
+        continue-on-error: true
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}

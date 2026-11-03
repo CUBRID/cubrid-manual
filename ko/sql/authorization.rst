@@ -466,6 +466,26 @@ ALTER ... OWNER
     소유자 변경 시, 이전 소유자가 부여한 권한은 변경된 소유자에게 이관된다.
     **단, 이전 소유자가 변경된 소유자에게 부여했던 해당 객체의 권한은 자동으로 해지된다.**
 
+.. note::
+
+    PL/CSQL 저장 프로시저/함수와 실행 영역이 PL/CSQL 블록인 트리거는 소유자를 변경할 때 새 소유자의 권한으로 다시 컴파일된다.
+
+    *   PL 서버가 실행 중이어야 한다. 다시 컴파일하지 못하면 소유자 변경은 실패하고 원래 상태로 남는다.
+    *   스키마 이름을 붙이지 않은 테이블 이름은 새 소유자를 기준으로 다시 해석된다. 새 소유자의 스키마에 해당 테이블이 없으면 소유자 변경은 실패한다.
+    *   실행 영역이 **INSERT** 등의 문장이거나 **CALL** 로 별도의 저장 프로시저를 호출하는 트리거는 이와 다르다. 소유자를 변경해도 처음 해석한 테이블을 계속 사용한다.
+
+    .. code-block:: sql
+
+        -- u1 스키마에 log_t 테이블이 없으면 두 ALTER 문은 모두 실패한다.
+        CREATE PROCEDURE p () AS BEGIN INSERT INTO log_t VALUES (1); END;
+        ALTER PROCEDURE p OWNER TO u1;
+
+        CREATE TRIGGER trg AFTER INSERT ON t EXECUTE
+        BEGIN
+          INSERT INTO log_t VALUES (1);
+        END;
+        ALTER TRIGGER trg OWNER TO u1;
+
 .. _authorization-method:
 
 사용자 권한 관리 메서드

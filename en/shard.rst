@@ -838,7 +838,7 @@ SHARD PROXY Log
 *   Parameter: **ACCESS_LOG**
 *   Description: Log the client access (the existing broker logs at the CAS).
 *   Default directory: $CUBRID/log/broker/
-*   File name: <broker_name>_<proxy_index>.access
+*   Filename: <broker_name>_<proxy_index>.access
 *   Log type: All strings, except the access log and the cas_index at the CAS, are identical
 
 ::
@@ -853,7 +853,7 @@ SHARD PROXY Log
 *   Parameter: **SHARD_PROXY_LOG_DIR**
 *   Description: Log the behavior of the inner proxy.
 *   Default directory: $CUBRID/log/broker/proxy_log
-*   File name: <broker_name>_<proxy_index>log
+*   Filename: <broker_name>_<proxy_index>log
 
 ::
 
@@ -887,7 +887,7 @@ SHARD CAS Log
 *   Parameter: **SQL_LOG**
 *   Description: Log queries such as prepare/execute/fetch and other cas information.
 *   Default directory: $CUBRID/log/broker/sql_log
-*   File name: %broker_name%_%proxy_index%_%shard_index%_%as_index%.sql.log
+*   Filename: %broker_name%_%proxy_index%_%shard_index%_%as_index%.sql.log
 
 ::
 
@@ -905,7 +905,7 @@ SHARD CAS Log
 *   Parameter: **ERROR_LOG_DIR**
 *   Description: For CUBRID, the cs library logs EID and error strings to the corresponding file.
 *   Default directory: $CUBRID/log/broker/error_log
-*   File name: %broker_name%_%proxy_index%_%shard_index%_%cas_index%.err
+*   Filename: %broker_name%_%proxy_index%_%shard_index%_%cas_index%.err
 
 ::
 

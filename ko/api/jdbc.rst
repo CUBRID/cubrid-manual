@@ -160,7 +160,7 @@ JDBC 프로그래밍
 
 *   <*property*>
 
-    *   **altHosts**: HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
+    *   **altHosts**: HA 환경에서 장애 시 failover할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
 
         .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
 

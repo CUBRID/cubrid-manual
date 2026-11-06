@@ -410,6 +410,8 @@ On the below table, if "Applied" is "server parameter", that parameter affects t
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | print_index_detail                  | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
+|                               | index_sort_method                   | client/server parameter | O       | string   | compare                        | available             |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | enable_memory_monitoring            | client/server parameter | O       | bool     | no                             | available             |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------------+
 |                               | flashback_timeout                   | client parameter        |         | int      | 300                            |                       |
@@ -2361,6 +2363,8 @@ The following are other parameters. The type and value range for each parameter 
 +-------------------------------------+--------+----------------+----------------+----------------+
 | print_index_detail                  | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
+| index_sort_method                   | string | compare        |                |                |
++-------------------------------------+--------+----------------+----------------+----------------+
 | enable_memory_monitoring            | bool   | no             |                |                |
 +-------------------------------------+--------+----------------+----------------+----------------+
 | flashback_timeout                   | int    | 300            | 0              | 3600           |
@@ -2586,6 +2590,33 @@ The following are other parameters. The type and value range for each parameter 
 **print_index_detail**
 
  It specifies whether option information in the **WITH** clause is displayed when index syntax information is displayed, such as in the SHOW CREATE TABLE statement. Default is NO. However, the unloaddb tool is not affected by this setting.
+
+**index_sort_method**
+
+    **index_sort_method** is a parameter to specify how keys are sorted when an index is created. **compare**, **radix**, or **auto** can be set, and the default value is **compare**.
+
+    *   **compare**: Sorts keys by comparison sort.
+    *   **radix**: Sorts keys by radix sort.
+    *   **auto**: Sorts keys by radix sort if the type of the key meets the conditions below; otherwise, sorts keys by comparison sort.
+
+    The created index is the same regardless of the sort method.
+
+    The following types of keys can be sorted by radix sort. For a multi-column index, keys can be sorted by radix sort if the type of the first column meets the following conditions.
+
+    *   SMALLINT, INTEGER, BIGINT, FLOAT, DOUBLE, MONETARY, NUMERIC
+    *   DATE, TIME, TIMESTAMP, TIMESTAMPLTZ, TIMESTAMPTZ, DATETIME, DATETIMELTZ, DATETIMETZ
+    *   ENUM, OBJECT, BIT, BIT VARYING
+    *   CHAR, VARCHAR: The collation is one of **binary**, **iso88591_bin**, **iso88591_en_cs**, **iso88591_en_ci**, **utf8_bin**, **utf8_en_cs**, and **utf8_en_ci**, and the length is 254 or less (63 or less if the charset is UTF-8).
+
+    Even if **radix** is specified, keys of a type that cannot be sorted by radix sort are sorted by comparison sort.
+
+    The following example sets the current session to use radix sort. ::
+
+        SET SYSTEM PARAMETERS 'index_sort_method=auto';
+
+    .. note::
+
+       This parameter does not apply to online index creation. It applies when an index is created as a normal index even though the **WITH ONLINE** option is specified (for example, in stand-alone mode).
 
 **enable_memory_monitoring**
 

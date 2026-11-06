@@ -341,6 +341,8 @@ The **DEFAULT** value of the pseudocolumn can be specified as one or more column
     CREATE TABLE t1(id1 INT, id2 VARCHAR(20) DEFAULT TO_CHAR(12345,'S999999'), id3 VARCHAR(20) DEFAULT TO_CHAR(SYS_TIME, 'HH24:MI:SS'));
     ALTER TABLE t1 add column id4 varchar (20) default TO_CHAR(SYS_DATETIME, 'yyyy/mm/dd hh:mi:ss'), id5 DATE DEFAULT SYSDATE;
 
+.. _auto-increment:
+
 AUTO INCREMENT
 ^^^^^^^^^^^^^^
 
@@ -424,6 +426,9 @@ When you use the **CREATE TABLE** *[schema_name.]table_name* (id INT **AUTO_INCR
         .. code-block:: sql
           
             CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
+
+    *   An **AUTO_INCREMENT** column caches as many values as the value of :ref:`auto_increment_cache_size <auto_increment_cache_size>` (default **20**) at the time the column is created. However, if the range from the seed to the maximum value of the type is narrower than one cache (this value × the increment), the column does not use a cache. A DBA can check the cache size of a column in *cached_num* of **_db_serial**.
+    *   A column that uses a cache can skip the values in the cache that have not been issued (up to *cached_num* values) when the database server terminates abnormally, or when a failover occurs in an HA environment because the master terminates abnormally. If you move a table with **loaddb** after you export it with **unloaddb** while the server is running, the column can also skip up to *cached_num* values. When the database server shuts down normally and restarts, the next value is the one after the last issued value. A column that is created with **auto_increment_cache_size** set to 0 does not use a cache, so it does not skip values in these cases. Even then, a value that a rolled-back **INSERT** received is not used again.
 
 .. _constraint-definition:
 

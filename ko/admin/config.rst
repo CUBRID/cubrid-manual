@@ -249,6 +249,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | ansi_quotes                         | 클라이언트              |         | bool     | yes                            |                 |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
+|                               | auto_increment_cache_size           | 클라이언트/서버         | O       | int      | 20                             | 가능            |
+|                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | block_ddl_statement                 | 클라이언트              | O       | bool     | no                             | 가능            |
 |                               +-------------------------------------+-------------------------+---------+----------+--------------------------------+-----------------+
 |                               | block_nowhere_statement             | 클라이언트              | O       | bool     | no                             | 가능            |
@@ -1405,6 +1407,8 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 +--------------------------------------+--------+------------+------------+------------+
 | ansi_quotes                          | bool   | yes        |            |            |
 +--------------------------------------+--------+------------+------------+------------+
+| auto_increment_cache_size            | int    | 20         | 0          | 1,000      |
++--------------------------------------+--------+------------+------------+------------+
 | block_ddl_statement                  | bool   | no         |            |            |
 +--------------------------------------+--------+------------+------------+------------+
 | block_nowhere_statement              | bool   | no         |            |            |
@@ -1504,6 +1508,42 @@ CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**
 **ansi_quotes**
 
     **ansi_quotes**  는 식별자 처리를 위한 기호 또는 문자열을 감싸는 기호에 관한 파라미터로 기본값은 **yes**  이다. 이 파라미터 값이 yes이면 큰따옴표는 식별자 처리 기호로 해석되고, 작은따옴표는 문자열 처리 기호로 해석된다. 이 값이 no이면 큰 따옴표와 작은 따옴표 모두 문자열 처리 기호로 해석된다.
+
+.. _auto_increment_cache_size:
+
+**auto_increment_cache_size**
+
+    **auto_increment_cache_size**\ 는 **AUTO_INCREMENT** 칼럼이 캐시할 값의 개수를 칼럼을 만들 때 지정하는 파라미터로, 기본값은 **20**\ 이다. 0 이상 1,000 이하의 값을 지정할 수 있으며, 0 또는 1 이면 캐시를 사용하지 않는다. 캐시를 사용하는 칼럼은 데이터베이스 서버가 비정상 종료하면 값을 건너뛸 수 있다. 자세한 내용은 :ref:`auto-increment`\ 를 참고한다.
+
+    이 값은 **AUTO_INCREMENT** 칼럼을 만들 때 읽어 그 칼럼의 캐시 크기(**_db_serial** 의 *cached_num*)로 저장한다. **CREATE TABLE**, **ALTER TABLE** ... **ADD COLUMN**, 그리고 **ALTER TABLE** ... **CHANGE** / **MODIFY** 로 **AUTO_INCREMENT** 를 새로 지정하거나 (*seed*, *increment*)를 지정할 때가 여기에 해당한다. 값을 바꿔도 이미 만든 칼럼의 캐시 크기는 바뀌지 않으며, 칼럼의 타입만 바꾸는 **CHANGE** / **MODIFY** 도 캐시 크기를 유지한다. **AUTO_INCREMENT** 칼럼의 캐시 크기는 **ALTER SERIAL** 로 바꿀 수 없으므로, 칼럼을 만들기 전에 이 값을 설정한다.
+
+    시작값(*seed*)부터 칼럼 타입의 최대값까지의 범위가 캐시 하나에 담을 값(이 파라미터 값 × 증가값)보다 좁으면 오류 없이 캐시를 사용하지 않는 칼럼으로 만든다(*cached_num* 은 0).
+
+    세션 파라미터이므로 DBA가 아닌 사용자도 **SET SYSTEM PARAMETERS** 구문으로 자신의 세션에서 이 값을 바꿀 수 있으며, 바꾼 값은 재시작 없이 그 세션이 이후에 만드는 칼럼에 적용된다. HA 환경에서 슬레이브는 복제된 구문으로 칼럼을 만들 때 마스터에서 그 구문을 실행한 세션의 값을 사용한다.
+
+    **unloaddb** 는 칼럼의 캐시 크기를 내보내지 않는다. **loaddb** 로 옮긴 **AUTO_INCREMENT** 칼럼은 **loaddb** 를 실행할 때의 이 파라미터 값으로 다시 만들어진다. 서버가 운용 중일 때 **unloaddb** 로 내보낸 캐시 사용 칼럼은 **loaddb** 로 옮긴 뒤 최대 *cached_num* 개의 값을 건너뛰고 발급할 수 있다. 서버를 정상 종료한 뒤 내보낸 칼럼은 마지막으로 발급한 값에 이어서 발급한다.
+
+    .. code-block:: sql
+
+        SET SYSTEM PARAMETERS 'auto_increment_cache_size=0';
+        CREATE TABLE ai_tbl1 (id INT AUTO_INCREMENT, name VARCHAR(10));
+
+        SET SYSTEM PARAMETERS 'auto_increment_cache_size=20';
+        CREATE TABLE ai_tbl2 (id INT AUTO_INCREMENT, name VARCHAR(10));
+
+        INSERT INTO ai_tbl1 (name) VALUES ('a'), ('b'), ('c');
+        INSERT INTO ai_tbl2 (name) VALUES ('a'), ('b'), ('c');
+
+        SELECT table_name, auto_increment FROM information_schema.tables WHERE table_name IN ('ai_tbl1', 'ai_tbl2') ORDER BY table_name;
+
+    ::
+
+          table_name            auto_increment
+        ============================================
+          'ai_tbl1'             4
+          'ai_tbl2'             21
+
+    캐시를 쓰는 ai_tbl2 는 첫 값을 발급할 때 값 20 개를 캐시에 가져오므로 *auto_increment* 가 21 이다. 다음에 발급되는 값은 두 테이블 모두 4 이다. 이 조회는 DBA가 아닌 사용자도 자신의 테이블에 대해 실행할 수 있다. 캐시 크기 자체는 DBA가 **_db_serial** 의 *cached_num* 으로 확인할 수 있다.
 
 .. _block_ddl_statement:
 

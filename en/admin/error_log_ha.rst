@@ -260,3 +260,10 @@ CUBRID HA Errors
 **ERROR CODE: -1170, 'Failed to flush replication items (error code : %1$d).'**
 
 - This message indicates that a failure occurred while flushing replication items, that is, changes generated in the master database, to the slave (replica) database during the replication process in a CUBRID HA (High Availability) environment. This can occur due to various causes such as network problems, disk I/O problems, internal state issues of the slave database, or problems with the replication items themselves.
+
+
+.. _ERROR-1386:
+
+**ERROR CODE: -1386, 'HA repl info: A replicated _db_serial image of serial "%1$s" was not applied on this node (%2$s), which keeps its own row: current_val %3$s, image %4$s, block end %5$s.'**
+
+- This message is a notification that is written to the server error log of a node in a CUBRID HA (High Availability) environment when the node does not apply a replicated **_db_serial** row and keeps its own row. The node does not apply the row when applying it could issue a value that was already issued again, for example when the node uses the cache of the serial, or when the replicated row would move the current value of the serial backwards. Replication does not fail because of this notification and continues.

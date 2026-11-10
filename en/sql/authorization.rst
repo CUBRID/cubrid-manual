@@ -400,6 +400,26 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
     When the owner changes, privileges granted by the previous owner are transferred to the new owner.
     **However, privileges on the object that were previously granted to the new owner by the previous owner are automatically revoked.**
 
+.. note::
+
+    When the owner of a PL/CSQL stored procedure/function or of a trigger whose action is a PL/CSQL block changes, the PL/CSQL code is compiled again with the privileges of the new owner.
+
+    *   The PL server must be running. If the code cannot be compiled again, the owner change fails and the object stays as it was.
+    *   Table names without a schema name are resolved again against the new owner. If the schema of the new owner does not have the table, the owner change fails.
+    *   A trigger whose action is not a PL/CSQL block is not compiled again. If the action is a statement such as **INSERT**, its table names stay as they were resolved when the trigger was created.
+
+    .. code-block:: sql
+
+        -- If the schema u1 does not have the table log_t, both ALTER statements fail.
+        CREATE PROCEDURE p () AS BEGIN INSERT INTO log_t VALUES (1); END;
+        ALTER PROCEDURE p OWNER TO u1;
+
+        CREATE TRIGGER trg AFTER INSERT ON t EXECUTE
+        BEGIN
+          INSERT INTO log_t VALUES (1);
+        END;
+        ALTER TRIGGER trg OWNER TO u1;
+
 .. _authorization-method:
 
 User Authorization Management METHOD

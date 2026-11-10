@@ -406,7 +406,7 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 
     *   The PL server must be running. If the code cannot be compiled again, the owner change fails and the object stays as it was.
     *   Table names without a schema name are resolved again against the new owner. If the schema of the new owner does not have the table, the owner change fails.
-    *   A trigger whose action is a statement such as **INSERT**, or which calls a separate stored procedure with **CALL**, behaves differently. It keeps using the tables resolved first, even after its owner changes.
+    *   A trigger whose action is not a PL/CSQL block is not compiled again. If the action is a statement such as **INSERT**, its table names stay as they were resolved when the trigger was created.
 
     .. code-block:: sql
 

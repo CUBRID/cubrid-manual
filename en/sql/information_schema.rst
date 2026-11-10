@@ -899,7 +899,8 @@ The ``triggers`` view contains all triggers defined in the current database on t
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_condition           | STRING        | WHEN/IF condition of the trigger (NULL if none)                  |
 +----------------------------+---------------+------------------------------------------------------------------+
-| action_statement           | STRING        | Statement that is executed by the trigger                        |
+| action_statement           | STRING        | Statement that is executed by the trigger. For a PL/CSQL block,  |
+|                            |               | the block.                                                       |
 +----------------------------+---------------+------------------------------------------------------------------+
 | action_orientation         | VARCHAR(9)    | Identifies whether the trigger fires once for each processed row |
 |                            |               | or once for each statement (ROW, STATEMENT)                      |

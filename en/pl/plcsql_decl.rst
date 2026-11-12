@@ -8,14 +8,14 @@ Each declared item can be referenced within the *body* that follows the declarat
 
 ::
 
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
     <declare_spec> ::=
-          <variable_decl>
-        | <constant_decl>
+          <variable_def>
+        | <constant_def>
         | <exception_decl>
-        | <cursor_decl>
-        | <inner_procedure_decl>
-        | <inner_function_decl>
+        | <cursor_def>
+        | <procedure_def>
+        | <function_def>
 
 See the sections below for descriptions of each declaration type.
 
@@ -85,12 +85,12 @@ This results in a compile error message stating that the name has already been u
     ERROR: In line 5, column 9
     Stored procedure compile error: name A has already been used at line 4 and column 18 in the same declaration block
 
-Variable Declarations
+Variable Definitions
 =====================
 
 ::
 
-    <variable_decl> ::=
+    <variable_def> ::=
         <identifier> <type_spec> [ [ NOT NULL ] <initial_value_part> ] ;
 
     <type_spec> ::=
@@ -103,7 +103,7 @@ Variable Declarations
 
 * *builtin_type*: system-defined types as described in :ref:`Data Types <types>`
 
-When declaring variables, you may optionally specify a `NOT NULL` constraint and an initial value.
+When defining variables, you may optionally specify a `NOT NULL` constraint and an initial value.
 If `NOT NULL` is specified, a non-null initial value must also be provided.
 If no initializer is provided, the variable will implicitly be assigned `NULL`.
 
@@ -118,11 +118,11 @@ If no initializer is provided, the variable will implicitly be assigned `NULL`.
         ...
     END;
 
-Constant Declarations
+Constant Definitions
 =====================
 ::
 
-    <constant_decl> ::=
+    <constant_def> ::=
         <identifier> CONSTANT <type_spec> [ NOT_NULL ] <value_part> ;
 
     <type_spec> ::=
@@ -135,7 +135,7 @@ Constant Declarations
 
 * *builtin_type*: system-defined types as described in :ref:`Data Types <types>`
 
-Constant declarations must always include a value.
+Constant definitions must always include a value.
 If `NOT NULL` is specified, the value must not be `NULL`.
 
 .. code-block:: sql
@@ -186,16 +186,16 @@ The declared exceptions can be used in the :ref:`RAISE <raise>` statement and in
             RETURN -2;
     END;
 
-.. _cursor_decl:
+.. _cursor_def:
 
-Cursor Declarations
+Cursor Definitions
 ===================
 ::
 
-    <cursor_decl> ::=
+    <cursor_def> ::=
         CURSOR <identifier> [ ( <seq_of_cursor_parameters> ) ] IS <select_statement> ;
 
-    <seq_of_cursor_parameters> ::= <cursor_parameter> [, <cursor_parameter>, ...]
+    <seq_of_cursor_parameters> ::= <cursor_parameter> { , <cursor_parameter> }...
     <cursor_parameter> ::= <identifier> [ IN ] <type_spec>
     <type_spec> ::=
           <builtin_type>
@@ -261,12 +261,12 @@ modularizing it as a local procedure/function improves code readability and reus
 
 ::
 
-    <inner_procedure_decl> ::=
+    <procedure_def> ::=
         PROCEDURE <identifier> [ ( <seq_of_parameters> ) ] { IS | AS } [ <seq_of_declare_specs> ] <body> ;
-    <inner_function_decl> ::=
+    <function_def> ::=
         FUNCTION <identifier> [ ( <seq_of_parameters> ) ] RETURN <type_spec> { IS | AS } [ <seq_of_declare_specs> ] <body> ;
 
-    <seq_of_parameters> ::= [ <parameter> [, <parameter> ...] ]
+    <seq_of_parameters> ::= [ <parameter> { , <parameter> }... ]
     <parameter> ::= <identifier> [ { IN | IN OUT | INOUT | OUT } ] <type_spec> [ COMMENT 'param_comment_string' ]
     <type_spec> ::=
           <builtin_type>
@@ -275,9 +275,9 @@ modularizing it as a local procedure/function improves code readability and reus
         | <table>%ROWTYPE
         | <cursor>%ROWTYPE
     <body> ::= BEGIN <seq_of_statements> [ EXCEPTION <seq_of_handlers> ] END [ <label_name> ]
-    <seq_of_declare_specs> ::= <declare_spec> [ <declare_spec> ... ]
-    <seq_of_statements> ::= <statement> ; [ <statement> ; ... ]
-    <seq_of_handlers> ::= <handler> [ <handler> ... ]
+    <seq_of_declare_specs> ::= <declare_spec> { <declare_spec> }...
+    <seq_of_statements> ::= <statement> ; { <statement> ; }...
+    <seq_of_handlers> ::= <handler> { <handler> }...
     <handler> ::= WHEN <exception_name> [ OR <exception_name> OR ... ] THEN <seq_of_statements>
     <exception_name> ::= identifier | OTHERS
 

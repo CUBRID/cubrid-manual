@@ -655,7 +655,7 @@ The following log is created in the file of a server error log if an IP address 
     Time: 10/29/10 17:32:42.360 - ERROR *** ERROR CODE = -1022, Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 2
     Address(10.24.18.66) is not authorized.
 
-An error log of the database server is saved into **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.err*. The extension is ".err".
+An error log of the database server is saved into **$CUBRID/log/server** directory, and the format of the filename is *<db_name>_<yyyymmdd>_<hhmi>.err*. The extension is ".err".
  
 ::
  
@@ -674,7 +674,7 @@ If an event which affects on the query performance occurs, this is saved into th
 
 The events which are saved on the event log are *SLOW_QUERY*, *MANY_IOREADS*, *LOCK_TIMEOUT*, *DEADLOCK* and *TEMP_VOLUME_EXPAND*.
 
-This log file is saved into the **$CUBRID/log/server** directory, and the format of the file name is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
+This log file is saved into the **$CUBRID/log/server** directory, and the format of the filename is *<db_name>_<yyyymmdd>_<hhmi>.event*. The extension is ".event".
  
 ::
  
@@ -695,7 +695,7 @@ If a slow query occurs, this event is written. If **sql_trace_slow** parameter v
       buffer: fetch=48, ioread=2, iowrite=0
       wait: cs=1, lock=1010, latch=0
  
-*   client: <DB user>@<application client host name>|<program name>(<process ID>)
+*   client: <DB user>@<application client hostname>|<program name>(<process ID>)
 *   sql: slow query
 *   bind: binding value. it is printed out as the number of <num> in the sql item, "?:<num>". The value of "?:0" is 5, and the value of "?:1" is 200.
 *   time: execution time(ms)
@@ -727,7 +727,7 @@ Queries which brought many I/O reads are written on the event log. If I/O reads 
       time: 528
       ioreads: 15648 
  
-*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+*   client: <DB user>@<application client hostname>|<process name>(<process ID>)
 *   sql: an SQL which brought many I/O reads
 *   bind: binding value. it is printed out as the number of <num> in the sql item, "?:<num>". The value of "?:0" is 8, and the value of "?:1" is 100.
 *   time: execution time(ms)
@@ -811,7 +811,7 @@ When a deadlock occurs, lock information of that transaction is written into the
       bind: 6
       bind: 1
  
-*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+*   client: <DB user>@<application client hostname>|<process name>(<process ID>)
 
     *   hold: an object which is acquiring a lock
     
@@ -842,7 +842,7 @@ When a temporary volumes are expanded, this time is written to the event log. By
       time: 44
       pages: 24399
  
-*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+*   client: <DB user>@<application client hostname>|<process name>(<process ID>)
 *   sql: SQL which requires a more space for temporary data. All INSERT statement except for INSERT ... SELECT syntax, and DDL statement are not delivered to the DB server, so it is shown as EMPTY
     SELECT, UPDATE and DELETE statements are shown on this item
 *   bind: binding value
@@ -860,7 +860,7 @@ Database server error processes use the server error code when an error has occu
 
 *   Every data definition statement starting with **#define ER_** in the **$CUBRID/include/error_code.h** file indicate the server error codes.
 
-*   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **CUBRID/msg/en_US (in Korean, ko_KR.eucKR** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
+*   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **CUBRID/msg/en_US (in Korean, ko_KR.euckr** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
 
 When you write a C code with CCI driver, we recommend you to write a code with an error code name than with an error code number. For example, the error code number for violating the unique key is -670 or -886, but users can easily recognize the error when it is written as **ER_BTREE_UNIQUE_FAILED** or **ER_UNIQUE_VIOLATION_WITHKEY**\.
 
@@ -1464,7 +1464,7 @@ The following example and description show an access log file created in the log
 *   192.168.56.4: IP address of the application client
 *   2020/11/10 14:41:55: Time when the client's request processing started
 *   testdb: The name of the database that the client requested to connect to
-*   dba: The user name of the database that the client requested to connect to
+*   dba: The username of the database that the client requested to connect to
 *   NEW: Connection type
 
     *   NEW: New connection
@@ -1613,7 +1613,7 @@ The part where the time format is omitted is set to 0 by default. This means tha
 
     broker_log_top -F "13-01-19" -T "13-01-20" log1.log
 
-The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th 2013, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows. 
+The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th 2013, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a hyphen (-) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a whitespace on Windows. 
 
 ::
 
@@ -1670,11 +1670,11 @@ This utility can be used to compare the performance between two different hosts;
   
     cubrid_replay -I <broker_host> -P <broker_port> -d <db_name> [options] <sql_log_file> <output_file> 
      
-*   *broker_host*: IP address or host name of the CUBRID broker
+*   *broker_host*: IP address or hostname of the CUBRID broker
 *   *broker_port*: Port number of the CUBRID broker
 *   *db_name*: The name of database to run the query
 *   *sql_log_file*: SQL log file of the CUBRID broker($CUBRID/log/broker/sql_log/\*.log, \*.log.bak) 
-*   *output_file*: File name to save the execution result
+*   *output_file*: Filename to save the execution result
   
 The following is [options] used in **cubrid_replay**.
 
@@ -2134,7 +2134,7 @@ The logs of CUBRID Manager server are stored in the log/manager directory under 
 Configuring CUBRID Manager Server
 ---------------------------------
 
-The configuration file name for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
+The configuration filename for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
 In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). 
     
 This page describes parameters that are specified in the **cm.conf** file.
@@ -2149,7 +2149,7 @@ This page describes parameters that are specified in the **cm.conf** file.
 
 **allow_user_multi_connection**
 
-    **allow_user_multi_connection** is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is **YES** . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same user name.
+    **allow_user_multi_connection** is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is **YES** . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same username.
 
 **server_long_query_time**
 
@@ -2290,7 +2290,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **viewuser**: A command to display the CM user information
-    *   *cmuser-name*: A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
+    *   *cmuser-name*: A CM username. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
 
     The following example shows how to display information of a CM user named *testcm* . 
     
@@ -2406,7 +2406,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **adddbinfo**: A command to add database information to a CM user
-    *   *cmuser-name*: CM user name
+    *   *cmuser-name*: CM username
     *   *database-name*: The name of a database to be added
 
     The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* . 
@@ -2449,7 +2449,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **deldbinfo**: A command to delete database information of a CM user
-    *   *cmuser-name*: CM user name
+    *   *cmuser-name*: CM username
     *   *database-name*: The name of a database to be deleted
 
     The following example shows how to delete database information whose name is *testdb* from a CM user named *testcm*.
@@ -2468,7 +2468,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **changedbinfo**: A command to change database information of a CM user
-    *   *cmuser-name*: CM user name
+    *   *cmuser-name*: CM username
     *   *database-name*: The name of a database to be changed
 
     The following is [options] of **cm_admin changedbinfo**.
@@ -2739,7 +2739,7 @@ The logs of CUBRID Java SP server are stored in the **log/** directory under the
 Error Log
 ^^^^^^^^^
 
-An error log of the Java SP server for each database is saved into **$CUBRID/log** directory, and and the format of the file name is **<db_name>_java.err**. The extension is **.err**.
+An error log of the Java SP server for each database is saved into **$CUBRID/log** directory, and and the format of the filename is **<db_name>_java.err**. The extension is **.err**.
 
 ::
 
@@ -2764,7 +2764,7 @@ If any error occurs during starting the Java SP server, the error message is sav
 Java Log
 ^^^^^^^^^
 
-An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and the format of the file name is **<db_name>_java.log**. The extension is **.log**.
+An Java log of the JVM in the Java SP server is saved into **$CUBRID/log** directory, and the format of the filename is **<db_name>_java.log**. The extension is **.log**.
 
 ::
 
@@ -2793,7 +2793,7 @@ Error messages are written to **$CUBRID/log**/\ *<db_name>_java*\ **.err**.
 | Error | Error Message                    | Description                                         | Solution                                                                          |
 | Code  |                                  |                                                     |                                                                                   |
 +=======+==================================+=====================================================+===================================================================================+
-| -900  | Java VM library is not found: ?  | CUBRID can't find the JVM library                   | Make sure JAVA_HOME or JVM_PATH variable is set properly.                         |
+| -900  | Java VM library is not found: ?  | CUBRID cannot find the JVM library                  | Make sure JAVA_HOME or JVM_PATH variable is set properly.                         |
 |       |                                  | from the JAVA_HOME or JVM_PATH variables            | see :ref:`cubrid-javasp-environment-configuration`.                               |
 +-------+----------------------------------+-----------------------------------------------------+-----------------------------------------------------------------------------------+
 | -901  | Java VM can not be started: ?    | Unexpected internal error occured in JVM library.   | Try installing the JRE again. If you keep getting the error,                      |

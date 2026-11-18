@@ -269,15 +269,15 @@ DBLINK
         <dblink_identifier_col_attrs> ::= dblink_table_alias ( <dblink_column_definition_list> ) 
         <dblink_column_definition_list> ::= dblink_column_alias <primitive_type> [{, dblink_column_alias <primitive_type>} ...]
 
-*   *remote_query_sting*: 원격지 DBMS에 전달할 질의문으로 SELECT 쿼리만 지정 할 수 있다.
+*   *remote_query_sting*: 원격지 DBMS에 전달할 질의문으로 SELECT 질의만 지정 할 수 있다.
 *   *server_name*: :doc:`/sql/schema/server_stmt`\을 사용해서 생성한 서버 이름.
 *   *dblink_conn_string*: 문자열로 표현된 원격지 접속 정보.
 *   *dblink_table_alias*: DBLINK를 이용하여 생성하는 유도테이블(derived table) 이름.
-*   *dblink_column_alias*: DBLINK의 *remote_query_sting* 의 select list에 대응하는 가상의 컬럼명.
+*   *dblink_column_alias*: DBLINK의 *remote_query_sting* 의 select list에 대응하는 가상의 칼럼명.
 
 .. note::
 
-    DBLINK에서 지원하는 컬럼의 속성은 다음과 같다.
+    DBLINK에서 지원하는 칼럼의 속성은 다음과 같다.
     
     * INT, BIGINT, SHORT, FLOAT, DOUBLE, MONETARY, NUMERIC
     * VARCHAR, CHAR
@@ -286,7 +286,7 @@ DBLINK
 
 .. warning::
 
-    DBLINK에서는 다음과 같은 속성의 컬럼은 지원하지 않는다.
+    DBLINK에서는 다음과 같은 속성의 칼럼은 지원하지 않는다.
     
     * COLLECTION TYPE ( SET, MULTISET, SEQUENCE )
     * OBJECT
@@ -1053,7 +1053,7 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
 단일 행 부질의
 --------------
 
-단일 행 부질의는 하나의 칼럼을 갖는 하나의 행을 만든다. 부질의에 의해 행이 반환되지 않을 경우에 부질의 표현식은 **NULL** 을 가진다. 만약 부질의가 두 개 이상의 행을 반환하도록 만들어진 경우에는 에러가 발생한다.
+단일 행 부질의는 하나의 칼럼을 갖는 하나의 행을 만든다. 부질의에 의해 행이 반환되지 않을 경우에 부질의 표현식은 **NULL** 을 가진다. 만약 부질의가 두 개 이상의 행을 반환하도록 만들어진 경우에는 오류가 발생한다.
 
 다음은 역대 기록 테이블을 조회하는데, 신기록을 수립한 올림픽이 개최된 국가도 함께 조회하는 예제이다. 이 예제는 표현식으로 사용된 단일 행 부질의를 보여준다. 이 예에서 부질의는 *olympic* 테이블에서 *host_year* 칼럼 값이 *history* 테이블의 *host_year* 칼럼 값과 같은 행에 대해 *host_nation* 값을 반환한다. 조건에 일치되는 값이 없을 경우 부질의 결과는 **NULL** 이 표시된다.
 

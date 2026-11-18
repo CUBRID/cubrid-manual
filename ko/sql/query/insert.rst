@@ -196,7 +196,7 @@ INSERT ... SELECT 문
 ON DUPLICATE KEY UPDATE 절
 ==========================
 
-**INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다. 
+**INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 오류를 출력하지 않고 새로운 값으로 갱신할 수 있다. 
 
 .. note::
 

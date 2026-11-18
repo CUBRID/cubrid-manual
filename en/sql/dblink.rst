@@ -520,7 +520,7 @@ For details, refer to :ref:`gateway configuration file <gatewayconf-info>`\.
 
 
 
-How to use Cubrid DBLink
+How to use CUBRID DBLink
 ==============================================
 
 If the information on brokers of CUBRID to be connected to use DBLink has been completed or gateway settings for heterogeneous databases have been completed, let's learn how to write a query statement using DBLink.

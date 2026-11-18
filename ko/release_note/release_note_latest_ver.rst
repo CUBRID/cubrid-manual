@@ -45,7 +45,7 @@ CUBRID 11.2은 **더 빨라졌다**. 이 버전은 조건절 푸시다운(predic
 
 CUBRID 11.2는 트랜잭션별로 변경된 데이터의 원복 질의를 추출할 수 있는 플래시백(flashback) 기능을 제공하여 **관리자 편의성을 개선** 하였다.
 
-CUBRID 11.2는 데이터베이스 링크, User Schema, Synonym을 위한 **SQL이 확장**\되었고, 동일한 컬럼에 대해 여러 개의 필터 인덱스 (filtered index)를 지원한다.
+CUBRID 11.2는 데이터베이스 링크, User Schema, Synonym을 위한 **SQL이 확장**\되었고, 동일한 칼럼에 대해 여러 개의 필터 인덱스 (filtered index)를 지원한다.
 
 CUBRID 11.2의 데이터베이스 볼륨은 CUBRID 11.1 및 그 이전 버전의 볼륨과 호환되지 않는다. 따라서, CUBRID 11.1 또는 이전 버전을 사용하는 경우 반드시 **데이터베이스 마이그레이션**\을  해야 한다. 이와 관련하여 :doc:`/upgrade` 절을 참고한다.
 
@@ -97,16 +97,16 @@ JavaSP의 "jdbc\:default\:connection\:" 또는 getDefaultConnection()  사용 �
 
 Truncate table 수행 시 FK의 set null 또는 cascade가 있는 경우 동작이 변경됨 (:doc:`/sql/query/truncate` 참조)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Alter change/modify 시 기입하지 않은 컬럼 속성은 유지되게 변경되었으며, alter 구문으로 auto_increment, on update property를 제거할 수 없게 변경됨 (:ref:`change-column` 참조)
+Alter change/modify 시 기입하지 않은 칼럼 속성은 유지되게 변경되었으며, alter 구문으로 auto_increment, on update property를 제거할 수 없게 변경됨 (:ref:`change-column` 참조)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-조건절에 컬럼명만 존재하는 경우 오류 처리되도록 변경됨
+조건절에 칼럼명만 존재하는 경우 오류 처리되도록 변경됨
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * UPDATE t1 SET c1 = 9 WHERE c1; 형태로 사용하면 오류 발생한다.
 
 Multiple SQL는 반드시 세미콜론으로 구분하도록 변경됨
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-CUBRID 패키지내의 CCI Driver 디렉토리가 $CUBRID/lib, $CUBRID/include에서 $CUBRID/cci/lib, $CUBRID/cci/include로 각각 변경됨 (:ref:`CCI 개요 <cci-overview>` 참조)
+CUBRID 패키지내의 CCI Driver 디렉터리가 $CUBRID/lib, $CUBRID/include에서 $CUBRID/cci/lib, $CUBRID/cci/include로 각각 변경됨 (:ref:`CCI 개요 <cci-overview>` 참조)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * CCI 사용 시 환경변수 LD_LIBRARY_PATH에 $CUBRID/cci/lib를 추가해야 한다.

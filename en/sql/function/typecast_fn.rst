@@ -354,7 +354,7 @@ In the following :ref:`Date/Time Format 2 <datetime-format2>` table, the month/d
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %x               | Output an arbitrary character x as a string out of English letters that are not used as format specifiers.        |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
-| %TZR             | Time zone region information.  e.g. US/Pacific.                                                                   |
+| %TZR             | Timezone region information.  e.g. US/Pacific.                                                                    |
 +------------------+-------------------------------------------------------------------------------------------------------------------+
 | %TZD             | Daylight saving information. e.g. KST, KT, EET                                                                    |
 +------------------+-------------------------------------------------------------------------------------------------------------------+

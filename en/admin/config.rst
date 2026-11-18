@@ -486,7 +486,7 @@ The following are parameters related to the database server. The type and value 
 
 **db_hosts**
 
-    **db_hosts** is a parameter to configure a list of the database server hosts to which clients can connect, and the connection order. The server host list consists of multiple server host names, and host names are separated by spaces or colons (:). Duplicate or non-existent names are ignored.
+    **db_hosts** is a parameter to configure a list of the database server hosts to which clients can connect, and the connection order. The server host list consists of multiple server hostnames, and hostnames are separated by spaces or colons (:). Duplicate or non-existent names are ignored.
 
     The following example shows the values of the **db_hosts** parameter. In this example, connections are attempted in the order of **host1** > **host2** > **host3**. ::
 
@@ -1775,7 +1775,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **access_ip_control_file**
 
-    **access_ip_control_file** is a parameter to configure the file name in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
+    **access_ip_control_file** is a parameter to configure the filename in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
 
 .. _agg_hash_respect_order:
     
@@ -2090,7 +2090,7 @@ Access
 
 **ACCESS_LIST**
 
-    **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access 210.192.33.* and 210.194.34.*, store them to a file (ip_lists.txt) and then assign the file name with the value of this parameter.
+    **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access 210.192.33.* and 210.194.34.*, store them to a file (ip_lists.txt) and then assign the filename with the value of this parameter.
 
 **ACCESS_MODE**
 
@@ -2228,7 +2228,7 @@ Transaction & Query
 
     .. note::
 
-        The **CCI_DEFAULT_AUTOCOMMIT** parameter has been supported from 2008 R4.0, and the default value is **OFF** for the version. Therefore, if you use CUBRID 2008 R4.1 or later versions and want to keep the configuration **OFF**, you should manually change it to **OFF** to avoid auto-commit of unexpected transaction.
+        The **CCI_DEFAULT_AUTOCOMMIT** parameter has been supported from 2008 R4.0, and the default value is **OFF** for the version. Therefore, if you use CUBRID 2008 R4.1 or later versions and want to keep the configuration **OFF**, you should manually change it to **OFF** to avoid autocommit of unexpected transaction.
 
     .. warning::
 
@@ -2309,11 +2309,11 @@ Logging
 
 **ERROR_LOG_DIR**
 
-    **ERROR_LOG_DIR** is a parameter to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id.err*.
+    **ERROR_LOG_DIR** is a parameter to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log filename for the broker error is *broker_ name_id.err*.
 
 **LOG_DIR**
 
-    **LOG_DIR** is a parameter to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The file name of the SQL logs is *broker_name_id.sql.log*.
+    **LOG_DIR** is a parameter to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The filename of the SQL logs is *broker_name_id.sql.log*.
 
 .. _slow-log:
 
@@ -2327,7 +2327,7 @@ Logging
 
 **SQL_LOG**
 
-    **SQL_LOG** is a parameter to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log file name becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
+    **SQL_LOG** is a parameter to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log filename becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
 
     *   **OFF** : Does not leave any logs.
     *   **ERROR** : Stores logs for queries which occur an error. only queries where an error occurs.

@@ -107,7 +107,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --output-prefix=PREFIX
 
-    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema file name becomes *abcd_schema* and the object file name becomes *abcd_objects*. If the **--output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix. ::
+    This option specifies the prefix for the names of schema and object files created by the unload operation. Once the example is executed, the schema filename becomes *abcd_schema* and the object filename becomes *abcd_objects*. If the **--output-prefix** option is not specified, the name of the database to be unloaded is used as the prefix. ::
 
         cubrid unloaddb --output-prefix abcd demodb
 
@@ -139,7 +139,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --datafile-per-class
 
-    This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as *<Database Name>_<Table Name>*\_ **objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`). ::
+    This option specifies that the output file generated through unload operation creates a data file per each table. The filename is generated as *<Database Name>_<Table Name>*\_ **objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`). ::
 
         cubrid unloaddb --datafile-per-class demodb
 

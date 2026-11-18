@@ -158,7 +158,7 @@ Now that the table is empty, insert data for the test. First, you have to obtain
     cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
     conn.commit()
 
-The auto-commit in CUBRID Python driver is disabled by default. Therefore, you have to manually perform commit by using the `commit <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () function after executing any SQL statement. This is equivalent to executing **cur.execute("COMMIT")** . The opposite to executing commit() is executing `rollback <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ (), which aborts the current transaction.
+The autocommit in CUBRID Python driver is disabled by default. Therefore, you have to manually perform commit by using the `commit <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () function after executing any SQL statement. This is equivalent to executing **cur.execute("COMMIT")** . The opposite to executing commit() is executing `rollback <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ (), which aborts the current transaction.
 
 Another way to insert data is to use prepared statements. You can safely insert data into the database by defining a row that contains the parameters and passing it to the `execute <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#execute>`_ () function.
 

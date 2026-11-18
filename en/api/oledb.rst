@@ -123,7 +123,7 @@ When you do programming with the CUBRID OLE DB Provider, you should write connec
 +-----------------------------+----------------+---------------------------------------------------------+
 | Data Source                 | demodb         | Database name                                           |
 +-----------------------------+----------------+---------------------------------------------------------+
-| Location                    | 127.0.0.1      | The IP address or host name of the CUBRID broker server |
+| Location                    | 127.0.0.1      | The IP address or hostname of the CUBRID broker server  |
 +-----------------------------+----------------+---------------------------------------------------------+
 | User ID                     | PUBLIC         | User ID                                                 |
 +-----------------------------+----------------+---------------------------------------------------------+

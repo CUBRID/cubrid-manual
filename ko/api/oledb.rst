@@ -45,7 +45,7 @@ CUBRID를 이용하는 응용 프로그램을 개발하려면 CUBRID OLE DB 공�
 
 .. FIXME:    http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer
 
-    CUBRID OLED DB Data Provider Installer를 이용하지 않는 경우에는 운영체제 버전에 따라 다음 명령어를 실행하여 드라이버를 등록해야 한다. 이때 32비트 Windows에서는 **C:\Windows\system32** 디렉터리의 regsvr32가 실행되어야 하고, 64비트 Windows에서는 **C:\Windows\SysWOW64** 디렉터리의 regsvr32가 실행되어야 한다. ::
+    CUBRID OLED DB Data Provider Installer를 이용하지 않는 경우에는 운영 체제 버전에 따라 다음 명령어를 실행하여 드라이버를 등록해야 한다. 이때 32비트 Windows에서는 **C:\Windows\system32** 디렉터리의 regsvr32가 실행되어야 하고, 64비트 Windows에서는 **C:\Windows\SysWOW64** 디렉터리의 regsvr32가 실행되어야 한다. ::
 
         regsvr32 CUBRIDProvider.dll
 

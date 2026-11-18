@@ -28,18 +28,18 @@ CUBRID는 Java를 제외한 다른 언어에서는 저장 프로시저를 지원
 *   *procedure_name*: 생성할 저장 프로시저의 이름을 지정한다(최대 254바이트).
 *   *parameter_name*: 인자의 이름을 지정한다(최대 254바이트).
 *   *sql_type*: 인자의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`jsp-type-mapping`\을 참고한다.
-*   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
-*   *sp_comment_string*: 저장 프로시저의 커멘트 문자열을 지정한다.
-*   *java_method_name*: 자바의 클래스 이름을 포함하여 자바의 메소드 이름을 지정한다.
+*   *param_comment_string*: 인자 주석 문자열을 지정한다.
+*   *sp_comment_string*: 저장 프로시저의 주석 문자열을 지정한다.
+*   *java_method_name*: 자바의 클래스 이름을 포함하여 자바의 메서드 이름을 지정한다.
 *   *java_type*: 자바의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`jsp-type-mapping`\을 참고한다.
 
 로드한 자바 클래스에 대해 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Java Call Specification (<*java_call_specification*>)를 사용하여 등록해야 한다.
 Java Call Specification 작성 방법에 대해서는 :ref:`call-specification`\을 참조한다.
 
-저장 프로시저의 커멘트
+저장 프로시저의 주석
 ----------------------------------
 
-저장 프로시저의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
+저장 프로시저의 주석을 다음과 같이 제일 뒤에 지정할 수 있다. 
 
 .. code-block:: sql
 
@@ -56,13 +56,13 @@ Java Call Specification 작성 방법에 대해서는 :ref:`call-specification`\
     CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
     RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
-저장 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+저장 프로시저의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
 
     SELECT sp_name, comment FROM db_stored_procedure; 
 
-저장 프로시저 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+저장 프로시저 인자의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
           
@@ -139,19 +139,19 @@ CUBRID는 Java를 제외한 다른 언어에서는 저장 함수를 지원하지
 
 *   *function_name*: 생성할 저장 함수의 이름을 지정한다(최대 254바이트).
 *   *parameter_name*: 인자의 이름을 지정한다(최대 254바이트).
-*   *sql_type*: 인자 또는 리턴 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`jsp-type-mapping`\을 참고한다.
-*   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
-*   *sp_comment_string*: 저장 프로시저의 커멘트 문자열을 지정한다.
-*   *java_method_name*: 자바의 클래스 이름을 포함하여 자바의 메소드 이름을 지정한다.
+*   *sql_type*: 인자 또는 반환 값의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`jsp-type-mapping`\을 참고한다.
+*   *param_comment_string*: 인자 주석 문자열을 지정한다.
+*   *sp_comment_string*: 저장 프로시저의 주석 문자열을 지정한다.
+*   *java_method_name*: 자바의 클래스 이름을 포함하여 자바의 메서드 이름을 지정한다.
 *   *java_type*: 자바의 데이터 타입을 지정한다. 지정할 수 있는 데이터 타입은 :ref:`jsp-type-mapping`\을 참고한다.
 
 로드한 자바 클래스에 대해 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 Java Call Specification (<*java_call_specification*>)를 사용하여 등록해야 한다.
 Java Call Specification 작성 방법에 대해서는 :ref:`call-specification`\을 참조한다.
 
-저장 함수의 커멘트
+저장 함수의 주석
 ----------------------------------
 
-저장 함수의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
+저장 함수의 주석을 다음과 같이 제일 뒤에 지정할 수 있다. 
 
 .. code-block:: sql
 
@@ -167,13 +167,13 @@ Java Call Specification 작성 방법에 대해서는 :ref:`call-specification`\
     CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
     RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
-저장 함수의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+저장 함수의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
 
     SELECT sp_name, comment FROM db_stored_procedure; 
 
-함수 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+함수 인자의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
           
@@ -238,7 +238,7 @@ Java Call Specification
 Java 클래스를 로딩했을 때 SQL 문이나 Java 응용 프로그램에서 클래스 내의 함수를 어떻게 호출할지 모르기 때문에 
 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specification를 사용하여 등록해야 한다.
 
-Call Specification는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다.
+Call Specification는 Java 함수 이름과 인자 타입 그리고 반환 값과 반환 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다.
 Call Specification를 작성하는 구문은 :ref:`create-procedure` 또는 :ref:`create-function` 구문을 사용하여 작성한다.
 
 * Java 저장 함수/프로시저의 이름은 대소문자를 구별하지 않는다. 
@@ -262,7 +262,7 @@ Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길
 Java 저장 함수/프로시저를 등록할 때, Java 저장 함수/프로시저의 반환 정의와 Java 파일의 선언부의 반환 정의가 일치하는지에 대해서는 검사하지 않는다.
 따라서, Java 저장 함수/프로시저의 경우 등록할 때의 반환 정의를 따르고, Java 파일 선언부의 반환 정의는 사용자 정의 정보로서만 의미를 가지게 된다.
 
-Call Specification에서는 SQL의 데이터 타입과 Java의 매개변수, 리턴 값의 데이터 타입이 맞게 대응되어야 한다.
+Call Specification에서는 SQL의 데이터 타입과 Java의 파라미터, 반환 값의 데이터 타입이 맞게 대응되어야 한다.
 또한 Java 저장함수/프로시저 구현 시, 질의 결과 (ResultSet)의 데이터 타입과 Java의 데이터 타입이 맞게 대응되어야 한다.
 CUBRID에서 허용되는 SQL과 Java의 데이터 타입의 관계는 다음의 표와 같다.
 

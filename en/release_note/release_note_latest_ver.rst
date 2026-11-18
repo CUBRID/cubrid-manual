@@ -29,13 +29,13 @@ CUBRID 10.2 is the latest stable version that includes new features, significant
 CUBRID 10.2
 
 * is a significantly improved version.
-* is more reliable, faster and scalable: Online parallel data loading, optimizes auto-commit workloads
+* is more reliable, faster and scalable: Online parallel data loading, optimizes autocommit workloads
 * fixes a large number of critical bugs.
 * includes useful SQL extensions: JSON data type and CTE(Common Table Expressions) extensions.
 * includes many enhancements to index management: Online parallel index loading, Faster foreign key loading, Invisible Index.
 * includes huge scale of code refactoring and modernization.
 
-CUBRID 10.2 is **faster**. It optimizes auto-commit workloads, for instance, YCSB Workload A (140%: 10.1) and YCSB Workload B (130%: 10.1). For faster bulk data loading, CUBRID 10.2 has online parallel loader which shows x10 performance to CUBRID 10.1.
+CUBRID 10.2 is **faster**. It optimizes autocommit workloads, for instance, YCSB Workload A (140%: 10.1) and YCSB Workload B (130%: 10.1). For faster bulk data loading, CUBRID 10.2 has online parallel loader which shows x10 performance to CUBRID 10.1.
 
 CUBRID 10.2 is also **better**, bringing new features. CUBRID 10.2 supports built-in JSON data types, path, functions and operators. Common Table Expression is now allowed for INSERT, REPLACE, DELETE, UPDATE, CREATE TABLE AS SELECT as well as SELECT. \
 Index management is greatly improved. To load a secondary key is no more painful. It supports online index loading which allows other select and DMLs without loosing throughputs. It even provides parallel option to load an online index, which greatly speeds up index loading. \
@@ -219,7 +219,7 @@ To make STRCMP case-insensitive, you should use case-insensitive collation(e.g.:
 Since the 2008 R4.1 version, the Default value of CCI_DEFAULT_AUTOCOMMIT has been ON(CUBRIDSUS-5879)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's auto commit mode is suitable for this.
+The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the autocommit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's autocommit mode is suitable for this.
 
 From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size(CUBRIDSUS-5136)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -371,4 +371,4 @@ When entering connection information as a URL string in JDBC, property informati
 Not allowed to include @ in a database name(CUBRIDSUS-2828)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.
+If @ is included in a database name, it can be interpreted that a hostname has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.

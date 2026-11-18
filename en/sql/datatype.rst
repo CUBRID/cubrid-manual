@@ -683,7 +683,7 @@ Date/Time types with timezone are date/time types which can be input or output b
 Timezone information are considered in the Date/Time types if TZ or LTZ is followed after the existing Date/Time types; TZ means timezone, and LTZ means local timezone.
 
 *   TZ type can be represented as <date/time type> WITH TIME ZONE. This stores UTC time and timezone information (decided by a user or session timezone) when this is created. TZ type requires 4 bytes more to store timezone information.
-*   LTZ type can be represented as <date/time type> WITH LOCAL TIME ZONE. This stores UTC time internally; when this value is output, this is  converted as a value of a local (current session) time zone.
+*   LTZ type can be represented as <date/time type> WITH LOCAL TIME ZONE. This stores UTC time internally; when this value is output, this is  converted as a value of a local (current session) timezone.
 
 This table describes date/time types to compare date/time types with timezone together.
 
@@ -963,7 +963,7 @@ IANA Timezone
 
 In IANA(Internet Assigned Numbers Authority) timezone database, there are lots of codes and data which represent the history of localtime for many representative locations around the globe.
 
-This database is periodically updated to reflect changes made by political bodies to time zone boundaries, UTC offsets, and daylight-saving rules. Its management procedure is described in `BCP 175: Procedures for Maintaining the Time Zone Database <https://tools.ietf.org/html/rfc6557>`_. For more details, see http://www.iana.org/time-zones.
+This database is periodically updated to reflect changes made by political bodies to timezone boundaries, UTC offsets, and daylight-saving rules. Its management procedure is described in `BCP 175: Procedures for Maintaining the Time Zone Database <https://tools.ietf.org/html/rfc6557>`_. For more details, see http://www.iana.org/time-zones.
 
 CUBRID supports IANA timezone, and a user can use the IANA timezone library in the CUBRID installation package as it is. If you want to update as the recent timezone, update timezone first, compile timezone library, and restart the database. 
 

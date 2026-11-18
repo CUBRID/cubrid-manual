@@ -329,7 +329,7 @@ Bug Fixes
 * `[493] <https://github.com/CUBRID/cubrid/pull/493>`_ `[CBRD-20839] <http://jira.cubrid.org/browse/CBRD-20839>`_ handle vacuum interruption  
 * `[492] <https://github.com/CUBRID/cubrid/pull/492>`_ `[CBRD-20916] <http://jira.cubrid.org/browse/CBRD-20916>`_ Solving CTEs with the same name  
 * `[491] <https://github.com/CUBRID/cubrid/pull/491>`_ `[CBRD-20829] <http://jira.cubrid.org/browse/CBRD-20829>`_ Consider donot_fold argument when folding constants  
-* `[490] <https://github.com/CUBRID/cubrid/pull/490>`_ `[CBRD-20918] <http://jira.cubrid.org/browse/CBRD-20918>`_ order_by can not be removed if query has limit  
+* `[490] <https://github.com/CUBRID/cubrid/pull/490>`_ `[CBRD-20918] <http://jira.cubrid.org/browse/CBRD-20918>`_ order_by cannot be removed if query has limit  
 * `[489] <https://github.com/CUBRID/cubrid/pull/489>`_ `[CBRD-20906] <http://jira.cubrid.org/browse/CBRD-20906>`_ fix vacuum recovery of log_Gl.hdr  
 * `[488] <https://github.com/CUBRID/cubrid/pull/488>`_ `[CBRD-20697] <http://jira.cubrid.org/browse/CBRD-20697>`_ Ordered fix: prevent unfixed page from being deallocated  
 * `[487] <https://github.com/CUBRID/cubrid/pull/487>`_ `[CBRD-20911] <http://jira.cubrid.org/browse/CBRD-20911>`_ ehash_create_helper: fix initializing temporary page  

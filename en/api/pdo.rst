@@ -462,7 +462,7 @@ The `PDO::getAttribute <http://docs.php.net/manual/en/pdo.getattribute.php>`_ ()
 
 *   Driver name
 *   Database version
-*   Auto-commit state
+*   Autocommit state
 *   Error mode
 
 Note that if you want to set attributes values (assuming that they are writable), you should use the `PDO::setAttribute <http://docs.php.net/manual/en/pdo.setattribute.php>`_ function.

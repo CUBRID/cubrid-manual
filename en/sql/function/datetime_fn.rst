@@ -239,7 +239,7 @@ CURDATE, CURRENT_DATE
 .. c:macro:: CURRENT_DATE
 
     **CURDATE** (), **CURRENT_DATE** and **CURRENT_DATE** () are used interchangeably and they return the current date of session as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
-    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_DATE`, :c:macro:`SYSDATE`. Please refer :c:macro:`SYS_DATE`, :c:macro:`SYSDATE` and the following examples to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    When the timezone of the current session is same as that of server, these functions are same as :c:macro:`SYS_DATE`, :c:macro:`SYSDATE`. Please refer :c:macro:`SYS_DATE`, :c:macro:`SYSDATE` and the following examples to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
     If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
@@ -304,7 +304,7 @@ CURRENT_DATETIME, NOW
 .. function:: NOW ()
 
     **CURRENT_DATETIME**, **CURRENT_DATETIME** () and **NOW** () are used interchangeably, and they return the current date and time of session in **DATETIME** type. The unit is millisecond.
-    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_DATETIME`, :c:macro:`SYSDATETIME`. Please also refer :c:macro:`SYS_DATETIME`, :c:macro:`SYSDATETIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    When the timezone of the current session is same as that of server, these functions are same as :c:macro:`SYS_DATETIME`, :c:macro:`SYSDATETIME`. Please also refer :c:macro:`SYS_DATETIME`, :c:macro:`SYSDATETIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
     :rtype: DATETIME
     
@@ -366,7 +366,7 @@ CURTIME, CURRENT_TIME
 .. function:: CURRENT_TIME ()
 
     **CURTIME** (), **CURRENT_TIME** and **CURRENT_TIME** () are used interchangeably and they return the current time of session as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
-    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_TIME`, :c:macro:`SYSTIME`. Please also refer :c:macro:`SYS_TIME`, :c:macro:`SYSTIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    When the timezone of the current session is same as that of server, these functions are same as :c:macro:`SYS_TIME`, :c:macro:`SYSTIME`. Please also refer :c:macro:`SYS_TIME`, :c:macro:`SYSTIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
     :rtype: TIME
     
@@ -422,7 +422,7 @@ CURRENT_TIMESTAMP, LOCALTIME, LOCALTIMESTAMP
 .. function:: LOCALTIMESTAMP ()
 
     **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** () are used interchangeably and they return the current date and time of session as **TIMESTAMP** type. The unit is second.
-    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`SYS_TIMESTAMP`, :c:macro:`SYSTIMESTAMP`.  Please also refer :c:macro:`SYS_TIMESTAMP`, :c:macro:`SYSTIMESTAMP` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    When the timezone of the current session is same as that of server, these functions are same as :c:macro:`SYS_TIMESTAMP`, :c:macro:`SYSTIMESTAMP`.  Please also refer :c:macro:`SYS_TIMESTAMP`, :c:macro:`SYSTIMESTAMP` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
     :rtype: TIMESTAMP
     
@@ -866,7 +866,7 @@ FROM_UNIXTIME
 
 .. function:: FROM_UNIXTIME ( unix_timestamp[, format] )
 
-    The **FROM_UNIXTIME** function returns the string of the specified format in **VARCHAR** type if the argument *format* is specified; if the argument *format* is omitted, it returns a value of **TIMESTAMP** type. Specify the arguement *unix_timestamp* as an **INTEGER** type that corresponds to the UNIX timestamp. The returned value is displayed in the current time zone.
+    The **FROM_UNIXTIME** function returns the string of the specified format in **VARCHAR** type if the argument *format* is specified; if the argument *format* is omitted, it returns a value of **TIMESTAMP** type. Specify the arguement *unix_timestamp* as an **INTEGER** type that corresponds to the UNIX timestamp. The returned value is displayed in the current timezone.
     
     It displays the result according to the format that you specified, and the date/time format, *format* follows the Date/Time Format 2 table of :func:`DATE_FORMAT`.
 
@@ -1515,7 +1515,7 @@ SYS_DATE, SYSDATE
 .. c:macro:: SYSDATE
 
     **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date of server as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.  
-    When the time zone of the current session is same as that of server, these functions are same as :func:`CURDATE`, :func:`CURRENT_DATE` and :c:macro:`CURRENT_DATE`. Please also refer :func:`CURDATE`, :func:`CURRENT_DATE` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions. 
+    When the timezone of the current session is same as that of server, these functions are same as :func:`CURDATE`, :func:`CURRENT_DATE` and :c:macro:`CURRENT_DATE`. Please also refer :func:`CURDATE`, :func:`CURRENT_DATE` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions. 
 
     If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
@@ -1579,7 +1579,7 @@ SYS_DATETIME, SYSDATETIME
 .. c:macro:: SYSDATETIME
 
     **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time of server in **DATETIME** type. The unit is millisecond.
-    When the time zone of the current session is same as that of server, these functions are same as :func:`CURRENT_DATETIME`, :c:macro:`CURRENT_DATETIME`, :func:`NOW`. Please also refer :func:`CURRENT_DATETIME`, :func:`NOW` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    When the timezone of the current session is same as that of server, these functions are same as :func:`CURRENT_DATETIME`, :c:macro:`CURRENT_DATETIME`, :func:`NOW`. Please also refer :func:`CURRENT_DATETIME`, :func:`NOW` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
 
     :rtype: DATETIME
     
@@ -1640,7 +1640,7 @@ SYS_TIME, SYSTIME
 .. c:macro:: SYSTIME
 
     **SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time of server as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
-    When the time zone of the current session is same as that of server, these functions are same as :func:`CURTIME`, :c:macro:`CURRENT_TIME`, :func:`CURRENT_TIME`. Please also refer :func:`CURTIME`, :func:`CURRENT_TIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    When the timezone of the current session is same as that of server, these functions are same as :func:`CURTIME`, :c:macro:`CURRENT_TIME`, :func:`CURRENT_TIME`. Please also refer :func:`CURTIME`, :func:`CURRENT_TIME` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
     :rtype: TIME
     
@@ -1692,7 +1692,7 @@ SYS_TIMESTAMP, SYSTIMESTAMP
 .. c:macro:: SYSTIMESTAMP
 
     **SYS_TIMESTAMP** and **SYSTIMESTAMP** are used interchangeably and they return the current date and time of server as **TIMESTAMP** type. The unit is second.
-    When the time zone of the current session is same as that of server, these functions are same as :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP`. Please also refer :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
+    When the timezone of the current session is same as that of server, these functions are same as :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP`. Please also refer :c:macro:`CURRENT_TIMESTAMP`, :func:`CURRENT_TIMESTAMP`, :c:macro:`LOCALTIME`, :func:`LOCALTIME`, :c:macro:`LOCALTIMESTAMP`, :func:`LOCALTIMESTAMP` to find a difference and :func:`DBTIMEZONE`, :func:`SESSIONTIMEZONE` for details of the functions.
     
     :rtype: TIMESTAMP
     

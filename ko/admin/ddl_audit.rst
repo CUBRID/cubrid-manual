@@ -14,7 +14,7 @@ DDL Audit Log
 CUBRID는 테이블 생성/삭제/수정 등 데이터베이스 시스템 구성 및 테이블 액세스 권한을 변경하는 DDL(Data Definition Language)을 기록하는 기능을 가지고있다.
 CAS, csql 및 loaddb를 통해 수행된 DDL은 필요에 따라 실행 된 파일의 복사본과 함께 로그 파일에 기록 될 수 있다.
 
-시스템 파라미터의 ddl_audit_log가 yes 이면 $CUBRID/log/ddl_audit 디렉토리에 DDL Audit log가 생성된다. 각 로그 파일의 크기는 ddl_audit_log_size 매개 변수에 지정된 값을 초과 할 수 없다. DDL Audit와 관련된 시스템 매개 변수는 CUBRID 운영의  :doc:`/admin/config` 을 참조 한다.
+시스템 파라미터의 ddl_audit_log가 yes 이면 $CUBRID/log/ddl_audit 디렉터리에 DDL Audit log가 생성된다. 각 로그 파일의 크기는 ddl_audit_log_size 파라미터에 지정된 값을 초과 할 수 없다. DDL Audit와 관련된 시스템 파라미터는 CUBRID 운영의  :doc:`/admin/config` 을 참조 한다.
 
 .. note::
 

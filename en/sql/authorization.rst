@@ -9,7 +9,7 @@ User Management
 Database User
 =============
 
-To know the user name's writing rule, see :doc:`identifier`.
+To know the username's writing rule, see :doc:`identifier`.
 
 CUBRID has two types of users by default: **DBA** and **PUBLIC**. At the initial installation of the product, no passwords are set for these users.
 
@@ -34,7 +34,7 @@ You can create a user using the CREATE USER statement. The default DBA, PUBLIC u
     [MEMBERS user_name [{, user_name } ... ]] 
     [COMMENT 'comment_string'];
 
-*   *user_name*: specifies the user name to create.
+*   *user_name*: specifies the username to create.
 *   *password*: specifies the user password to create.
 *   *comment_string*: specifies the user comment to create.
 
@@ -102,7 +102,7 @@ You can use the ALTER USER statement to change the password, members and comment
     [DROP MEMBERS user_name [{, user_name } ... ]]
     [COMMENT 'comment_string'];
 
-*   *user_name*: specifies the user name to change.
+*   *user_name*: specifies the username to change.
 *   *password*: specifies the user password to change.
 *   *comment_string*: specifies the user comment to change.
 
@@ -162,7 +162,7 @@ You can delete a user using the DROP USER statement. Users who own objects in ta
 
     DROP USER user_name;
 
-*   *user_name*: specifies the user name to delete.
+*   *user_name*: specifies the username to delete.
 
 .. note::
 
@@ -372,7 +372,7 @@ As a class method of **db_user** class, this method is used to change the users 
 
 **add_user( ) method**
 
-As a class method of **db_user** class, this method is used to add a new user. The name and password of a new user to add are given as arguments, and they must be string type. At this time, the new user name should not duplicate any user name already registered in a database. The **add_user( )** can be called only by **DBA** or members of **DBA** group.
+As a class method of **db_user** class, this method is used to add a new user. The name and password of a new user to add are given as arguments, and they must be string type. At this time, the new username should not duplicate any username already registered in a database. The **add_user( )** can be called only by **DBA** or members of **DBA** group.
 
 .. code-block:: sql
 
@@ -384,7 +384,7 @@ As a class method of **db_user** class, this method is used to add a new user. T
 
 **drop_user( ) method**
 
-As a class method of **db_user** class, this method is used to drop an existing user. Only the user name to be dropped is given as an argument, and it must be a string type. However, the owner of a class cannot be dropped thus **DBA** needs to specify a new owner of the class before dropping the user. The **drop_user( )** method can be also called only by **DBA** or members of **DBA**.
+As a class method of **db_user** class, this method is used to drop an existing user. Only the username to be dropped is given as an argument, and it must be a string type. However, the owner of a class cannot be dropped thus **DBA** needs to specify a new owner of the class before dropping the user. The **drop_user( )** method can be also called only by **DBA** or members of **DBA**.
 
 .. code-block:: sql
 

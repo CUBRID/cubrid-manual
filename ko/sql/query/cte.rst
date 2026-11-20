@@ -21,7 +21,7 @@ CTE는 **WITH** 절로 시작한다. 부질의 목록과 부질의를 사용하�
     
 
 *  *recursive_cte_name*, *cte_name1*, *cte_name2* : 테이블 표현식(부질의)의 식별자
-*  *recursive_column_names*, *cte1_column_names*, *cte2_column_names* : 각 테이블 표현식 결과 컬럼에 대한 식별자
+*  *recursive_column_names*, *cte1_column_names*, *cte2_column_names* : 각 테이블 표현식 결과 칼럼에 대한 식별자
 *  *sub-query1*, *sub-query2* : 각 테이블 표현식을 정의하는 부질의
 *  *final_query* : 이전에 정의된 테이블 표현식을 사용하는 질의. 일반적으로 **FROM** 절은 CTE 식별자를 포함한다.
 
@@ -107,10 +107,10 @@ CTE는 **WITH** 절로 시작한다. 부질의 목록과 부질의를 사용하�
     '
     Nested WITH clauses are not supported.
 
-CTE 컬럼명 
+CTE 칼럼명 
 ==========
 
-각 CTE 결과의 컬럼명은 CTE 이름 다음에 지정할 수 있다. CTE 컬럼 목록의 요소 수는 CTE 부질의의 컬럼 수와 일치해야 한다.
+각 CTE 결과의 칼럼명은 CTE 이름 다음에 지정할 수 있다. CTE 칼럼 목록의 요소 수는 CTE 부질의의 칼럼 수와 일치해야 한다.
 
 .. code-block:: sql
 
@@ -140,7 +140,7 @@ CTE 컬럼명
      'Wheel'               'cars'                       4700
      'Blade'               'drones'                       50
 
-CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼명을 가져온다. 원본 구문에 따라 표현식 결과 컬럼명이 결정된다.
+CTE에 칼럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 칼럼명을 가져온다. 원본 구문에 따라 표현식 결과 칼럼명이 결정된다.
 
 .. code-block:: sql
 
@@ -206,7 +206,7 @@ CTE에 컬럼명이 없으면 CTE의 첫 번째 내부 Select 문에서 컬럼�
 
 .. warning::
 
-    *    CTE 부질의의 복잡도에 따라, 많은 량의 데이타가 생산되며, 심지어 **cte_max_recursions** 의 기본값만으로도 디스크 공간 부족을 발생할 수 있다.
+    *    CTE 부질의의 복잡도에 따라, 많은 량의 데이터가 생산되며, 심지어 **cte_max_recursions** 의 기본값만으로도 디스크 공간 부족을 발생할 수 있다.
 
 
 재귀적 CTE의 실행 알고리즘은 다음과 같이 요약될 수 있다:

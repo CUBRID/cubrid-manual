@@ -265,7 +265,7 @@ MERGE 문을 실행하기 위해서는 원본 테이블에 대해 SELECT 권한�
 
 .. warning::
 
-    아래의 예처럼 target이 remote이고 source가 local인 경우는 에러가 발생한다.
+    아래의 예처럼 target이 remote이고 source가 local인 경우는 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -275,7 +275,7 @@ MERGE 문을 실행하기 위해서는 원본 테이블에 대해 SELECT 권한�
          DELETE WHERE tt.c = 1
     WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
 
-또한 아래의 예처럼 target과 source가 각각 다른 서버인 경우도 에러가 발생한다.
+또한 아래의 예처럼 target과 source가 각각 다른 서버인 경우도 오류가 발생한다.
 
 .. code-block:: sql
 

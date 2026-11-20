@@ -223,7 +223,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
         cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
     
     *   \-\-with-cubrid=shared: Includes CUBRID support.
-    *   \-\-with-php-config=PATH: Enters an absolute path of php-config including the file name.
+    *   \-\-with-php-config=PATH: Enters an absolute path of php-config including the filename.
     
 #.  Build the project. If it is successfully compiled, the **cubrid.so** file will be created in the **/modules** directory.
     
@@ -482,14 +482,14 @@ The first step of database applications is to use `cubrid_connect <https://www.p
     *   The database connection in thread-based programming must be used independently each other.
     *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
-Transactions and Auto-Commit
+Transactions and Autocommit
 ----------------------------
 
-CUBRID PHP supports transaction and auto-commit mode. Auto-commit mode means that every query that you run has its own implicit transaction. You can use the `cubrid_get_autocommit <https://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () function to get the status of current connection auto-commit mode and use the `cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function to enable/disable auto-commit mode of current connection. In auto-commit mode, any transactions being executed are committed regardless of whether it is set to **ON** or **OFF**.
+CUBRID PHP supports transaction and autocommit mode. Autocommit mode means that every query that you run has its own implicit transaction. You can use the `cubrid_get_autocommit <https://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () function to get the status of current connection autocommit mode and use the `cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function to enable/disable autocommit mode of current connection. In autocommit mode, any transactions being executed are committed regardless of whether it is set to **ON** or **OFF**.
 
-The default value of auto-commit mode upon application startup is configured by the **CCI_DEFAULT_AUTOCOMMIT** (broker parameter). If the broker parameter value is not configured, the default value is set to **ON**. 
+The default value of autocommit mode upon application startup is configured by the **CCI_DEFAULT_AUTOCOMMIT** (broker parameter). If the broker parameter value is not configured, the default value is set to **ON**. 
 
-If you set auto-commit mode to **OFF** in the `cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <https://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <https://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
+If you set autocommit mode to **OFF** in the `cubrid_set_autocommit <https://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <https://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <https://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <https://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
 
 Processing Queries
 ------------------

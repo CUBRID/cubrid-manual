@@ -219,6 +219,21 @@ DBA 권한이 있는 사용자는 다른 사용자의 스키마에 저장 프로
     In the command from line 1,
     ERROR: Semantic: Stored procedure/function 'u1.test_func' has OUT or IN OUT arguments
 
+OUT 또는 IN OUT 모드의 인자에는 값을 돌려받을 수 있도록 호스트 변수(? 또는 :name)만 지정할 수 있다.
+상수, **NULL**, 표현식, 함수 호출, 서브 질의, 세션 변수를 지정하면 오류를 반환하며 저장 프로시저와 저장 함수는 실행되지 않는다.
+**PREPARE** 문으로 준비하는 **CALL** 문은 준비할 때 오류를 반환하고, 트리거의 실행 영역에 쓴 **CALL** 문은 **CREATE TRIGGER** 문을 수행할 때 오류를 반환한다. 트리거의 상관명(**obj**, **new**, **old**)으로 접근한 칼럼 값도 지정할 수 없다.
+PL/CSQL의 :ref:`EXECUTE IMMEDIATE <exec_imme>`\에서 USING 절로 넘긴 값도 OUT 또는 IN OUT 모드의 인자에 쓸 수 없다.
+
+.. code-block:: sql
+
+    CALL test_proc(1);
+
+::
+
+    In line 1, column 16,
+    ERROR: before ' ); '
+    Argument 1 of u1.test_proc must be a bind variable (? or :name) because it is passed to an OUT parameter.
+
 .. _pl-arg-default:
 
 기본값 인자 지정

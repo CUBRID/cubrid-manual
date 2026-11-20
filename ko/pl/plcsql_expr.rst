@@ -283,7 +283,7 @@ SQLCODE, SQLERRM
 =================
 
 Exception 처리 block 안에서 SQLCODE와 SQLERRM은 각각 현재 처리 중인 Exception의 코드(INTEGER 타입)와
-오류메시지(STRING 타입)를 나타낸다.
+오류 메시지(STRING 타입)를 나타낸다.
 Exception 처리 block 밖에서 SQLCODE와 SQLERRM은 각각 0과 'no error' 값을 갖는다.
 
 .. code-block:: sql

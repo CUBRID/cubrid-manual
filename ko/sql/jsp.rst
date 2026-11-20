@@ -28,7 +28,7 @@ Java 저장 함수/프로시저 환경 설정
 
 CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`https://www.oracle.com/java/technologies <https://www.oracle.com/java/technologies>`_)에서 다운로드할 수 있다.
 
-CUBRID 환경 설정 파일(cubrid.conf)에 java_stored_procedure 파라미터가 yes로 설정되어 있으면, CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비트 버전에는 JRE 32비트 버전이 필요하다. JRE 32비트 버전이 설치된 컴퓨터에서 CUBRID 64비트 버전을 실행하면 아래와 같은 에러 메시지가 출력된다. ::
+CUBRID 환경 설정 파일(cubrid.conf)에 java_stored_procedure 파라미터가 yes로 설정되어 있으면, CUBRID 64비트 버전에는 JRE 64비트 버전이 필요하고, CUBRID 32비트 버전에는 JRE 32비트 버전이 필요하다. JRE 32비트 버전이 설치된 컴퓨터에서 CUBRID 64비트 버전을 실행하면 아래와 같은 오류 메시지가 출력된다. ::
 
     % cubrid server start demodb
      
@@ -290,9 +290,9 @@ CUBRID는 클라이언트나 SQL 문이나 Java 응용 프로그램에서 Java �
 Call Specifications
 -------------------
 
-CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specifications를 작성해야 한다. Call Specifications는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다. Call Specifications를 작성하는 구문은 **CREATE FUNCTION** 또는 **CREATE PROCEDURE** 구문을 사용하여 작성한다. Java 저장 함수/프로시저의 이름은 대소문자를 구별하지 않는다. Java 저장 함수/프로시저 이름의 최대 길이는 254바이트이다. 또한 하나의 Java 저장 함수/프로시저가 가질 수 있는 인자의 최대 개수는 64개이다. 
+CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specifications를 작성해야 한다. Call Specifications는 Java 함수 이름과 인자 타입 그리고 반환 값과 반환 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다. Call Specifications를 작성하는 구문은 **CREATE FUNCTION** 또는 **CREATE PROCEDURE** 구문을 사용하여 작성한다. Java 저장 함수/프로시저의 이름은 대소문자를 구별하지 않는다. Java 저장 함수/프로시저 이름의 최대 길이는 254바이트이다. 또한 하나의 Java 저장 함수/프로시저가 가질 수 있는 인자의 최대 개수는 64개이다. 
 
-리턴 값이 있으면 함수, 없으면 프로시저로 구분한다.
+반환 값이 있으면 함수, 없으면 프로시저로 구분한다.
 
 .. CREATE OR REPLACE FUNCTION is allowed from 10.0: CUBRIDSUS-6542
 
@@ -311,8 +311,8 @@ CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call S
     parameter_name [IN|OUT|IN OUT|INOUT] sql_type
        (default IN)
 
-*   *param_comment_string*: 인자 커멘트 문자열을 지정한다.
-*   *sp_comment_string*: 자바 저장 함수/프로시저의 커멘트 문자열을 지정한다.
+*   *param_comment_string*: 인자 주석 문자열을 지정한다.
+*   *sp_comment_string*: 자바 저장 함수/프로시저의 주석 문자열을 지정한다.
 
 Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
 
@@ -339,7 +339,7 @@ Java 저장 함수/프로시저를 등록할 때, Java 저장 함수/프로시�
 데이터 타입 매핑
 ----------------
 
-Call Specifications에는 SQL의 데이터 타입과 Java의 매개변수와 리턴 값의 데이터 타입이 맞게 대응되어야 한다. CUBRID에서 허용되는 SQL과 Java의 데이터 타입의 관계는 다음의 표와 같다.
+Call Specifications에는 SQL의 데이터 타입과 Java의 파라미터와 반환 값의 데이터 타입이 맞게 대응되어야 한다. CUBRID에서 허용되는 SQL과 Java의 데이터 타입의 관계는 다음의 표와 같다.
 
 **데이터 타입 매핑**
 
@@ -411,10 +411,10 @@ Java 저장 함수/프로시저의 삭제는 Java 저장 함수/프로시저를 
     DROP FUNCTION hello, sp_int;
     DROP PROCEDURE Athlete_Add;
 
-Java 저장 함수/프로시저의 커멘트
+Java 저장 함수/프로시저의 주석
 --------------------------------
 
-저장 함수 또는 프로시저의 커멘트를 다음과 같이 제일 뒤에 지정할 수 있다. 
+저장 함수 또는 프로시저의 주석을 다음과 같이 제일 뒤에 지정할 수 있다. 
 
 .. code-block:: sql
 
@@ -431,13 +431,13 @@ Java 저장 함수/프로시저의 커멘트
     CREATE OR REPLACE FUNCTION test(i in number COMMENT 'arg i') 
     RETURN NUMBER AS LANGUAGE JAVA NAME 'SpTest.testInt(int) return int' COMMENT 'function test';
 
-저장 함수 또는 프로시저의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+저장 함수 또는 프로시저의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
 
     SELECT sp_name, comment FROM db_stored_procedure; 
 
-함수 인자의 커멘트는 다음 구문을 실행하여 확인할 수 있다.
+함수 인자의 주석은 다음 구문을 실행하여 확인할 수 있다.
 
 .. code-block:: sql
           
@@ -466,7 +466,7 @@ CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용
 *   **CALL** 문에 대상 클래스가 없는 경우 먼저 Java 저장 함수/프로시저 수행 여부를 검사하고 Java 저장 함수/프로시저가 존재하면 Java 저장 함수/프로시저를 수행한다.
 *   2에서 Java 저장 함수/프로시저가 존재하지 않으면 메서드 수행 여부를 검사하여 같은 이름이 존재하면 수행한다.
 
-만약 존재하지 않는 Java 저장 함수/프로시저를 호출하는 경우에는 다음과 같은 에러가 나타난다.
+만약 존재하지 않는 Java 저장 함수/프로시저를 호출하는 경우에는 다음과 같은 오류가 나타난다.
 
 .. code-block:: sql
 
@@ -486,7 +486,7 @@ CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용
 
 **CALL** 문에 인자가 없는 경우는 메서드와 구분되므로 "ERROR: Stored procedure/function 'deposit' does not exist."라는 오류 메시지가 나타난다. 하지만, **CALL** 문에 인자가 있는 경우에는 메서드와 구분할 수 없기 때문에 "ERROR: Methods require an object as their target."이라는 메시지가 나타난다.
 
-그리고, 아래와 같이 Java 저장 함수/프로시저를 호출하는 **CALL** 문 안에 **CALL** 문이 중첩되는 경우와 **CALL** 문을 사용하여 Java 저장 함수/프로시저 호출 시 인자로 서브 질의를 사용할 경우 **CALL** 문은 수행이 되지 않는다.
+그리고, 아래와 같이 Java 저장 함수/프로시저를 호출하는 **CALL** 문 안에 **CALL** 문이 중첩되는 경우와 **CALL** 문을 사용하여 Java 저장 함수/프로시저 호출 시 인자로 부질의를 사용할 경우 **CALL** 문은 수행이 되지 않는다.
 
 .. code-block:: sql
 
@@ -610,10 +610,10 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 주의 사항
 =========
 
-Java 저장 함수/프로시저의 리턴 값 및 IN/OUT에 대한 타입 자릿수
+Java 저장 함수/프로시저의 반환 값 및 IN/OUT에 대한 타입 자릿수
 --------------------------------------------------------------
 
-Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우, CUBRID에서는 다음과 같이 처리한다.
+Java 저장 함수/프로시저의 반환 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우, CUBRID에서는 다음과 같이 처리한다.
 
 *   Java 저장 함수/프로시저의 sql_type을 기준으로 확인한다.
 
@@ -722,7 +722,7 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
         }
     }
 
-**ResultSet** 은 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 에러가 발생한다. Java가 아닌 환경에서 **ResultSet** 을 반환하는 함수를 호출할 경우에도 에러가 발생한다.
+**ResultSet** 은 입력 인자로 사용할 수 없으며, 이를 IN 인자로 전달할 경우에는 오류가 발생한다. Java가 아닌 환경에서 **ResultSet** 을 반환하는 함수를 호출할 경우에도 오류가 발생한다.
 
 Java 저장 함수/프로시저에서 Set 타입의 IN/OUT
 ---------------------------------------------

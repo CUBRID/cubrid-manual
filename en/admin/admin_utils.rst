@@ -188,7 +188,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
         [NAME volname] [COMMENTS volcmnts] [PURPOSE volpurp] NPAGES volnpgs
 
-    *   *volname*: The name of the volume to be created. It must follow the UNIX file name conventions and be a simple name not including the directory path. The specification of a volume name can be omitted. If it is, the "database name to be created by the system_volume identifier" becomes the volume name.
+    *   *volname*: The name of the volume to be created. It must follow the UNIX filename conventions and be a simple name not including the directory path. The specification of a volume name can be omitted. If it is, the "database name to be created by the system_volume identifier" becomes the volume name.
 
     *   *volcmnts*: Comment to be written in the volume header. It contains information on the additional volume to be created. The specification of the comment on a volume can also be omitted.
 
@@ -297,7 +297,7 @@ The following example shows how to create a database, with additional volumes, i
 addvoldb
 --------
 
-If you want to micromanage CUBRID storage volumes, addvoldb is the tool for you. You can finely tune each file name, path, purpose, and size. The database system can handle all storage by itself, but it uses default values to configure each new volume.
+If you want to micromanage CUBRID storage volumes, addvoldb is the tool for you. You can finely tune each filename, path, purpose, and size. The database system can handle all storage by itself, but it uses default values to configure each new volume.
 
 The command for manually adding a database volume is as follows.
 
@@ -331,7 +331,7 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. option:: -n, --volume-name=NAME
 
-    This option specifies the name of the volume to be added to a specified database. The volume name must follow the file name protocol of the operating system and be a simple one without including the directory path or spaces. 
+    This option specifies the name of the volume to be added to a specified database. The volume name must follow the filename protocol of the operating system and be a simple one without including the directory path or spaces. 
     If the **-n** option is omitted, the name of the volume to be added is configured by the system automatically as "database name_volume identifier". For example, if the database name is *testdb*, the volume name *testdb_x001* is automatically configured.
     
     The following example shows how to specify a different name, *testdb_v1*, to newly added volume. ::
@@ -416,7 +416,7 @@ The following shows [options] available with the **cubrid deletedb** utility.
 
 .. option:: -o, --output-file=FILE
 
-    This option specifies the file name for writing messages::
+    This option specifies the filename for writing messages::
 
         cubrid deletedb -o deleted_db.out testdb
 
@@ -438,7 +438,7 @@ renamedb
 
 The **cubrid renamedb** utility renames a database. The names of information volumes, log volumes and control files are also renamed to conform to the new database one.
 
-In contrast, the **cubrid alterdbhost** utility configures or changes the host name of the specified database. In other words, it changes the host name configuration in the **databases.txt** file. ::
+In contrast, the **cubrid alterdbhost** utility configures or changes the hostname of the specified database. In other words, it changes the hostname configuration in the **databases.txt** file. ::
 
     cubrid renamedb [options] src_database_name dest_database_name
 
@@ -499,13 +499,13 @@ The following shows [options] available with the **cubrid renamedb** utility.
 alterdbhost
 -----------
 
-The **cubrid alterdbhost** utility sets or changes the host name of the specified database. It changes the host name set in the **databases.txt** file. ::
+The **cubrid alterdbhost** utility sets or changes the hostname of the specified database. It changes the hostname set in the **databases.txt** file. ::
 
     cubrid alterdbhost [option] database_name
 
 *   **cubrid**: An integrated utility for the CUBRID service and database management
 
-*   **alterdbhost**: A command used to change the host name of the current database
+*   **alterdbhost**: A command used to change the hostname of the current database
 
 The following shows the option available with the **cubrid alterdbhost** utility.
 
@@ -513,7 +513,7 @@ The following shows the option available with the **cubrid alterdbhost** utility
 
 .. option:: -h, --host=HOST
 
-    The *-h* option specifies the host name to be changed. When this option is omitted, specifies the host name to localhost.
+    The *-h* option specifies the hostname to be changed. When this option is omitted, specifies the hostname to localhost.
 
 .. _copydb:
 
@@ -542,7 +542,7 @@ The following shows [options] available with the **cubrid copydb** utility.
 
 .. option:: --server-name=HOST
 
-    The *--server-name* option specifies a host name of new database. The host name is registered in the **databases.txt** file. If this option is omitted, a local host is registered. ::
+    The *--server-name* option specifies a hostname of new database. The hostname is registered in the **databases.txt** file. If this option is omitted, a local host is registered. ::
     
         cubrid copydb --server-name=cub_server1 demodb new_demodb
 
@@ -633,7 +633,7 @@ The following shows [options] available with the **cubrid installdb** utility.
 
 .. option:: --server-name=HOST
 
-    This option registers the server host information of a database to **databases.txt** with a specific host name. If this is not specified, the current host information is registered. ::
+    This option registers the server host information of a database to **databases.txt** with a specific hostname. If this is not specified, the current host information is registered. ::
 
         cubrid installdb --server-name=cub_server1 testdb
 
@@ -819,7 +819,7 @@ The following options can be used in client/server mode only.
 
 .. option:: -i, --input-class-file=FILE
 
-    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option.
+    You can specify an input filename that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option.
 
 .. option:: -p, --pages-commited-once=NUMBER
 
@@ -2709,7 +2709,7 @@ For a description of the related system parameters, **lock_escalation** and **de
 
 **Clients that are accessing the database**
 
-The second section of the output of **cubrid lockdb** includes information on all clients that are connected to the database. This includes the transaction index, program name, user ID, host name, process ID, isolation level and lock timeout settings of each client.
+The second section of the output of **cubrid lockdb** includes information on all clients that are connected to the database. This includes the transaction index, program name, user ID, hostname, process ID, isolation level and lock timeout settings of each client.
 
 ::
 
@@ -2717,7 +2717,7 @@ The second section of the output of **cubrid lockdb** includes information on al
     Isolation COMMITTED READ
     Timeout_period : Infinite wait
 
-Here, the transaction index is 1, the program name is csql, the user ID is dba, the host name is cubriddb, the client process identifier is 12854, the isolation level is COMMITTED READ and the lock timeout is unlimited.
+Here, the transaction index is 1, the program name is csql, the user ID is dba, the hostname is cubriddb, the client process identifier is 12854, the isolation level is COMMITTED READ and the lock timeout is unlimited.
 
 A client for which transaction index is 0 is the internal system transaction. It can obtain the lock at a specific time, such as the processing of a checkpoint by a database. In most cases, however, this transaction will not obtain any locks.
 
@@ -2823,7 +2823,7 @@ Each column's meaning is as following.
 
     *   Tran index : the index of transaction
     *   User name: database user's name
-    *   Host name: host name of CAS which running this transaction
+    *   Host name: hostname of CAS which running this transaction
     *   Process id :  client's process id
     *   Program name : program name of a client
     *   Query time : total execution time for the running query (unit: second)
@@ -2847,7 +2847,7 @@ The following shows [options] available with the **cubrid tranlist** utility.
 
 .. option:: -u, --user=USER
 
-    *USER* is DB user's ID to log-in. It only allows DBA and DBA group users.(The default: DBA)
+    *USER* is DB user's ID to login. It only allows DBA and DBA group users.(The default: DBA)
     
 .. option:: -p, --password=PASSWORD
 

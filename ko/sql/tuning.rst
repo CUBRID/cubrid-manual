@@ -43,7 +43,7 @@
     UPDATE STATISTICS ON CATALOG CLASSES; 
     UPDATE STATISTICS ON CATALOG CLASSES WITH FULLSCAN; 
 
-통계 정보 갱신 시작과 종료 시 서버 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.
+통계 정보 갱신 시작과 종료 시 서버 오류 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.
 
 ::
     
@@ -259,7 +259,7 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
     *   sscan: 순차 스캔(sequential scan). 풀 테이블 스캔(full table scan)이라고도 하며 인덱스를 사용하지 않고 테이블 전체를 스캔한다.
     *   iscan: 인덱스 스캔(index scan). 인덱스를 사용하여 스캔할 데이터의 범위를 한정한다.
     
-*   cost: CPU, IO 등 주로 리소스의 사용과 관련하여 비용을 내부적으로 산정한다. 
+*   cost: CPU, IO 등 주로 자원의 사용과 관련하여 비용을 내부적으로 산정한다. 
 
 *   card: 카디널리티(cardinality)를 의미하며, 선택될 것으로 예측되는 행의 개수이다.
     

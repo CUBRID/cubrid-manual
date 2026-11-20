@@ -26,15 +26,15 @@ CREATE VIEW
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} [schema_name.]superclass_name, ...
         <resolution> ::= [CLASS | TABLE] {column_name} OF [schema_name.]superclass_name [AS alias]
 
-*   **OR REPLACE**: **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name*\ 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
+*   **OR REPLACE**: **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name*\ 이 기존의 뷰와 이름이 중복되더라도 오류를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
 
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name*: 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
 *   *view_column_name*: 생성하려는 뷰의 칼럼 이름을 지정한다.
 *   **AS** <*select_statement*>: 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
 *   **WITH CHECK OPTION**: 이 옵션이 명시되면 <*select_statement*> 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
-*   *view_comment_string*: 뷰의 커멘트를 지정한다.
-*   *column_comment_string*: 칼럼의 커멘트를 지정한다.
+*   *view_comment_string*: 뷰의 주석을 지정한다.
+*   *column_comment_string*: 칼럼의 주석을 지정한다.
 
 .. code-block:: sql
 
@@ -65,7 +65,7 @@ CREATE VIEW
 
     ERROR: Check option exception on view b_view.
 
-다음은 기존 뷰의 정의를 갱신한다. 이와 함께 뷰에 커멘트를 추가하고 있다.
+다음은 기존 뷰의 정의를 갱신한다. 이와 함께 뷰에 주석을 추가하고 있다.
 
 .. code-block:: sql
 
@@ -85,7 +85,7 @@ CREATE VIEW
                 2  '222-2222'
                 1  '111-1111'
 
-다음은 뷰의 칼럼에 커멘트를 추가한다.
+다음은 뷰의 칼럼에 주석을 추가한다.
 
 .. code-block:: sql
 
@@ -117,23 +117,23 @@ CREATE VIEW
 
 뷰에 정의된 칼럼이 업데이트 가능하더라도 **FROM** 구문에 포함된 테이블에 대해 업데이트를 위한 적절한 권한이 있어야 하며 뷰에 대한 접근 권한이 있어야 한다. 뷰에 접근 권한을 부여하는 방법은 테이블에 접근 권한을 부여하는 방식과 동일하다. 권한 부여에 대한 자세한 내용은 :ref:`granting-authorization` 를 참조한다.
 
-뷰의 커멘트
+뷰의 주석
 -----------
 
-뷰의 커멘트를 다음과 같이 명시할 수 있다. 
+뷰의 주석을 다음과 같이 명시할 수 있다. 
 
 .. code-block:: sql
 
     CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'changed view';
 
-명시된 뷰의 커멘트는 다음 구문에서 확인할 수 있다.
+명시된 뷰의 주석은 다음 구문에서 확인할 수 있다.
 
 .. code-block:: sql
 
     SHOW CREATE VIEW view_name;
     SELECT vclass_name, comment from db_vclass;
 
-또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 뷰의 커멘트를 확인할 수 있다.
+또는 CSQL 인터프리터에서 스키마를 출력하는 ;sc 명령으로 뷰의 주석을 확인할 수 있다.
 
 .. code-block:: sql
 
@@ -141,14 +141,14 @@ CREATE VIEW
     
     csql> ;sc b_view
 
-뷰의 각 칼럼에도 커멘트 추가가 가능하다.
+뷰의 각 칼럼에도 주석 추가가 가능하다.
 
 .. code-block:: sql
 
     CREATE OR REPLACE VIEW b_view (a COMMENT 'a comment', b COMMENT 'b comment') 
     AS SELECT * FROM a_tbl ORDER BY id DESC COMMENT 'view comment';
     
-뷰 커멘트의 변경은 아래의 ALTER VIEW 구문을 참고한다.
+뷰 주석의 변경은 아래의 ALTER VIEW 구문을 참고한다.
 
 ALTER VIEW
 ==========
@@ -298,7 +298,7 @@ DROP QUERY 절
 COMMENT 절
 ----------
 
-**ALTER VIEW** 문의 **COMMENT** 절을 이용하여 뷰와 칼럼들, 어트리뷰트들의 커멘트를 변경할 수 있다.
+**ALTER VIEW** 문의 **COMMENT** 절을 이용하여 뷰와 칼럼들, 어트리뷰트들의 주석을 변경할 수 있다.
 
 ::
 
@@ -311,25 +311,25 @@ COMMENT 절
 *   *schema_name*: 스키마 이름을 지정한다. 생략하면 현재 세션의 스키마 이름을 사용한다.
 *   *view_name*: 변경할 뷰의 이름을 명시한다.
 *   *column_name*: 변경할 칼럼의 이름을 명시한다.
-*   *view_comment_string*: 뷰의 커멘트를 지정한다.
-*   *column_comment_string*: 칼럼의 커멘트를 지정한다.
+*   *view_comment_string*: 뷰의 주석을 지정한다.
+*   *column_comment_string*: 칼럼의 주석을 지정한다.
 
-다음은 뷰의 커멘트를 변경하는 예제이다.
+다음은 뷰의 주석을 변경하는 예제이다.
 
 .. code-block:: sql
 
     ALTER VIEW v1 COMMENT = 'changed view v1 comment';
 
-ON COLUMN 키워드 뒤에 하나 이상의 칼럼을 지정하여 칼럼의 커멘트를 변경할 수 있다.
-다음은 칼럼의 커멘트를 변경하는 예제이다.
+ON COLUMN 키워드 뒤에 하나 이상의 칼럼을 지정하여 칼럼의 주석을 변경할 수 있다.
+다음은 칼럼의 주석을 변경하는 예제이다.
 
 .. code-block:: sql
 
     ALTER VIEW v1 COMMENT ON COLUMN c1 = 'changed view column c1 comment';
     ALTER VIEW v1 COMMENT ON COLUMN c2 = 'changed view column c2 comment', c3 = 'changed view column c3 comment';
 
-다음은 뷰와 칼럼의 커멘트를 확인하는 예제이다.
-하지만 SHOW CREATE VIEW 구문에서는 뷰 커멘트만 확인할 수 있다.
+다음은 뷰와 칼럼의 주석을 확인하는 예제이다.
+하지만 SHOW CREATE VIEW 구문에서는 뷰 주석만 확인할 수 있다.
 
 .. code-block:: sql
 
@@ -352,7 +352,7 @@ CSQL 인터프리터에서 ";sc view_name" 명령으로도 확인할 수 있다.
 DROP VIEW
 =========
 
-뷰는 **DROP VIEW** 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을 삭제하는 방법과 동일하다. IF EXISTS 절을 함께 사용하면 해당 뷰가 존재하지 않더라도 에러가 발생하지 않는다. ::
+뷰는 **DROP VIEW** 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을 삭제하는 방법과 동일하다. IF EXISTS 절을 함께 사용하면 해당 뷰가 존재하지 않더라도 오류가 발생하지 않는다. ::
 
     DROP [VIEW | VCLASS] [IF EXISTS] [schema_name.]view_name [{, [schema_name.]view_name}] ;
 

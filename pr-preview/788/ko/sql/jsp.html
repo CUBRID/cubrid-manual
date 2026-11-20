@@ -593,7 +593,7 @@ SEQUENCE</p></td>
 </span></code></pre></div>
 </div>
 <p><strong>CALL</strong> 문에 인자가 없는 경우는 메서드와 구분되므로 “ERROR: Stored procedure/function ‘deposit’ does not exist.”라는 오류 메시지가 나타난다. 하지만, <strong>CALL</strong> 문에 인자가 있는 경우에는 메서드와 구분할 수 없기 때문에 “ERROR: Methods require an object as their target.”이라는 메시지가 나타난다.</p>
-<p>그리고, 아래와 같이 Java 저장 함수/프로시저를 호출하는 <strong>CALL</strong> 문 안에 <strong>CALL</strong> 문이 중첩되는 경우와 <strong>CALL</strong> 문을 사용하여 Java 저장 함수/프로시저 호출 시 인자로 서브 질의를 사용할 경우 <strong>CALL</strong> 문은 수행이 되지 않는다.</p>
+<p>그리고, 아래와 같이 Java 저장 함수/프로시저를 호출하는 <strong>CALL</strong> 문 안에 <strong>CALL</strong> 문이 중첩되는 경우와 <strong>CALL</strong> 문을 사용하여 Java 저장 함수/프로시저 호출 시 인자로 부질의를 사용할 경우 <strong>CALL</strong> 문은 수행이 되지 않는다.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">CALL</span><span class="w"> </span><span class="n">phone_info</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">,</span><span class="w"> </span><span class="k">CALL</span><span class="w"> </span><span class="n">sp_int</span><span class="p">(</span><span class="mi">999</span><span class="p">));</span>
 </span><span id="line-2"><span class="k">CALL</span><span class="w"> </span><span class="n">phone_info</span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Phone</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="s1">'Tom'</span><span class="p">));</span>
 </span></code></pre></div>
@@ -940,7 +940,7 @@ SEQUENCE</p></td>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 11월 18, 2026. </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2016, CUBRID Corparation Last updated: 11월 20, 2026. </p>
 </div>
 </div>
 </footer>

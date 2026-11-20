@@ -224,6 +224,21 @@ it cannot be called within a query statement (**SELECT**, **UPDATE**, **DELETE**
     In the command from line 1,
     ERROR: Semantic: Stored procedure/function 'u1.test_func' has OUT or IN OUT arguments
 
+Only a host variable (? or :name) can be specified for an argument of OUT or IN OUT mode, so that the value can be returned.
+If a constant, **NULL**, an expression, a function call, a subquery, or a session variable is specified, an error is returned and the stored procedure or stored function is not executed.
+A **CALL** statement prepared by the **PREPARE** statement returns the error when it is prepared, and a **CALL** statement in the action of a trigger returns the error when the **CREATE TRIGGER** statement is executed. A column value accessed through a correlation name of a trigger (**obj**, **new**, **old**) cannot be specified either.
+A value passed by the USING clause of :ref:`EXECUTE IMMEDIATE <exec_imme>` in PL/CSQL cannot be used for an argument of OUT or IN OUT mode either.
+
+.. code-block:: sql
+
+    CALL test_proc(1);
+
+::
+
+    In line 1, column 16,
+    ERROR: before ' ); '
+    Argument 1 of u1.test_proc must be a bind variable (? or :name) because it is passed to an OUT parameter.
+
 .. _pl-arg-default:
 
 Using Default Arguments

@@ -34,6 +34,7 @@ The stored routines supported by CUBRID are as follows.
 
 *   *routine_name*: Specifies the method name or stored function/procedure name. It is not case-sensitive.
 *   <*arg_value*>: Specifies the arguments of the stored routine. The argument can be a literal value, host variable, and any expression.
+    Only a host variable can be specified for an argument of OUT or IN OUT mode of a stored function/procedure. For more information, refer to :ref:`pl-arg-mode`.
 *   <*method_call_target*>: Specifies only when using a method written in C.
     Specifies an object-valued-expression containing a class name, a variable, or another method call (which returns an object).
     To call a class method for a class object, you must place the **CLASS** keyword before the <*call_target*>. 

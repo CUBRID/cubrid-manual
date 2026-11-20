@@ -251,6 +251,9 @@ if more than one row is returned, `TOO_MANY_ROWS` is raised.
 * *using_clause*: specifies the values to replace `?` placeholders in the SQL string.
   Expressions of type `BOOLEAN` or `SYS_REFCURSOR` are not allowed.
   Record-type values declared with :ref:`%ROWTYPE <percent_rowtype>` or cursors are also not allowed.
+  The values in the `USING` clause are passed in IN mode only. If *dynamic_sql* is a `CALL` statement that calls a stored procedure or function,
+  a `?` placeholder must not be at an argument of OUT or IN OUT mode.
+  In that case, a `SQL_ERROR` exception is raised and the stored procedure or function is not executed.
 * *into_clause*: specifies the variables or OUT parameters to receive result values from a `SELECT` statement.
   If *dynamic_sql* is a `SELECT` but no `INTO` clause is present, or vice versa, then a `SQL_ERROR` exception is raised.
 
@@ -267,6 +270,30 @@ Here is an example usage of `EXECUTE IMMEDIATE`:
         EXECUTE IMMEDIATE 'insert into ' || new_table || ' select * from history where athlete = ?'
         USING p_name;
     END;
+
+In the following example, the `EXECUTE IMMEDIATE` statement that passes a `USING` value to the OUT argument of *get_five* raises a `SQL_ERROR` exception.
+Calling the same procedure directly in PL/CSQL returns the value to the variable.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE get_five(n OUT INT)
+    AS
+    BEGIN
+        n := 5;
+    END;
+
+    CREATE OR REPLACE PROCEDURE call_get_five
+    AS
+        v INT := 0;
+    BEGIN
+        get_five(v);                                    -- v is 5
+        EXECUTE IMMEDIATE 'CALL get_five(?)' USING v;   -- raises SQL_ERROR
+    END;
+
+.. note::
+
+    This check is performed in the code that is generated when a PL/CSQL stored procedure or stored function is created.
+    For a stored procedure or stored function created by a version of CUBRID before this check was added, the check is applied only after it is created again with the CREATE OR REPLACE statement.
 
 Assignment
 ==========

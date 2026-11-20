@@ -213,7 +213,7 @@ EXECUTE IMMEDIATE
 =================
 
 :ref:`Dynamic SQL <dyn_sql>` 절에서 설명한 바와 같이
-실행 시간에 임의의 SQL을 문자열로 구성하여 EXECUTE IMMDIATE 문을 통해 실행할 수 있다.
+실행 시간에 임의의 SQL을 문자열로 구성하여 EXECUTE IMMEDIATE 문을 통해 실행할 수 있다.
 USING 절을 써서 프로그램의 어떤 값을 SQL문의 호스트 변수 자리에 채우는 것이 가능하다.
 INTO 절을 써서 SELECT 문의 조회 결과를 프로그램의 변수나 OUT 인자에 담아오는 것도 가능하다.
 이 때 조회 결과 값들의 개수는 INTO 절 안의 변수나 OUT 인자의 개수와 일치해야 하고
@@ -236,6 +236,8 @@ INTO 절을 포함한 경우 SELECT 문의 조회 결과는 단 한 건의 결�
   SQL 구문 내부에서 값을 필요로 하는 자리에 ?(물음표)를 대신 쓸 수 있으며 사용한 ?의 개수와 *using_clause*\에
   포함된 표현식의 개수는 일치해야 한다.
 * *using_clause*: *dynamic_sql*\을 실행할 때 문자열의 ? 자리에 채워질 값들을 지정한다. BOOLEAN이나 SYS_REFCURSOR 타입을 갖는 표현식을 가질 수 없다. :ref:`%ROWTYPE <percent_rowtype>`\으로 선언된 레코드 타입 값이나 커서도 표현식 자리에 올 수 없다.
+  USING 절의 값은 IN 모드로만 전달되므로, *dynamic_sql*\이 저장 프로시저나 저장 함수를 호출하는 CALL 문이면 ? 자리가 OUT 또는 IN OUT 모드의 인자여서는 안 된다.
+  이 경우 SQL_ERROR Exception이 발생하고 저장 프로시저나 저장 함수는 실행되지 않는다.
 * *into_clause*: *dynamic_sql*\이 SELECT문을 나타내는 경우에 조회 결과를 담을 변수나 OUT 인자를 지정한다. *dynamic_sql*\이 SELECT문을 나타내는데 INTO 절이 없거나 *dynamic_sql*\이 SELECT문을 나타내지 않는데 INTO 절이 있으면 SQL_ERROR Exception이 발생한다.
 
 다음은 EXECUTE IMMEDIATE의 사용 예이다.
@@ -251,6 +253,30 @@ INTO 절을 포함한 경우 SELECT 문의 조회 결과는 단 한 건의 결�
         EXECUTE IMMEDIATE 'insert into ' || new_table || ' select * from history where athlete = ?'
         USING p_name;
     END;
+
+다음 예제에서 *get_five* 의 OUT 인자에 USING 절의 값을 넘기는 EXECUTE IMMEDIATE 문은 SQL_ERROR Exception을 일으킨다.
+같은 프로시저를 PL/CSQL 안에서 직접 호출하면 변수에 값을 돌려받는다.
+
+.. code-block:: sql
+
+    CREATE OR REPLACE PROCEDURE get_five(n OUT INT)
+    AS
+    BEGIN
+        n := 5;
+    END;
+
+    CREATE OR REPLACE PROCEDURE call_get_five
+    AS
+        v INT := 0;
+    BEGIN
+        get_five(v);                                    -- v는 5
+        EXECUTE IMMEDIATE 'CALL get_five(?)' USING v;   -- SQL_ERROR Exception 발생
+    END;
+
+.. note::
+
+    이 검사는 PL/CSQL 저장 프로시저와 저장 함수를 생성할 때 만들어지는 코드에서 수행된다.
+    이 검사가 추가되기 전의 CUBRID에서 생성한 저장 프로시저와 저장 함수는 CREATE OR REPLACE 문으로 다시 생성해야 검사가 적용된다.
 
 대입문
 ======

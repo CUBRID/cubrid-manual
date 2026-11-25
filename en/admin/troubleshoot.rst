@@ -1,5 +1,5 @@
 
-:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid fail-over, cubrid fail-back
+:meta-keywords: cubrid logging, slow query, error log, deadlock detect, cubrid failover, cubrid failback
 :meta-description: Troubleshoot CUBRID database and High Availability nodes by consulting logs.
 
 ***************
@@ -16,9 +16,9 @@ SQL log of CAS
 
 When a specific error occurs, generally you can check SQL logs of broker application server(CAS)
 
-One SQL log file is generated per each CAS; it is hard to find an SQL log in which an error occurred because SQL log files are many when CAS processes are many. However, SQL log file name includes CAS ID in the end part, you can find easily if you know the CAS ID in which an error occurred.
+One SQL log file is generated per each CAS; it is hard to find an SQL log in which an error occurred because SQL log files are many when CAS processes are many. However, SQL log filename includes CAS ID in the end part, you can find easily if you know the CAS ID in which an error occurred.
 
-.. note:: SQL log file name in a CAS is <broker_name>_<app_server_num>.sql.log(see :ref:`broker-logs`); <app_server_num> is CAS ID.
+.. note:: SQL log filename in a CAS is <broker_name>_<app_server_num>.sql.log(see :ref:`broker-logs`); <app_server_num> is CAS ID.
 
 Function getting CAS information
 --------------------------------
@@ -180,12 +180,12 @@ To resolve the split-brain status, one of two is dead for itself; cub_master log
 
 Above example is the information to print out into the cub_master log when testhost02 server detects split-brain status and it is dead for itself.    
      
-Detecting Fail-over, Fail-back
+Detecting Failover, Failback
 ------------------------------
   
-If fail-over or fail-back occurs, a node changes its role.
+If failover or failback occurs, a node changes its role.
   
-The following is the log file of the cub_master that is changed as slave node after fail-back or master node after fail-over; it includes the following node information.
+The following is the log file of the cub_master that is changed as slave node after failback or master node after failover; it includes the following node information.
   
 :: 
   
@@ -204,7 +204,7 @@ The following is the log file of the cub_master that is changed as slave node af
     testhost01 1 unknown 32767 0 
     ================================================================================ 
   
-Above example is an information which is printed out to the cub_master log; it is the process that the 'testhost02' host changes the role from slave to master because of the fail-over.
+Above example is an information which is printed out to the cub_master log; it is the process that the 'testhost02' host changes the role from slave to master because of the failover.
 
 Failure on HA Start
 ===================

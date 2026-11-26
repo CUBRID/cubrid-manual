@@ -2194,3 +2194,10 @@ Level 2 (Small Incremental): Level 1 백업을 기반으로 한 증분 백업
 
 - 이 메시지는 CUBRID가 문자열을 날짜/시간로 변경시 서버에 로딩되지 않은 로케일 정보를 사용해 발생합니다,
 
+
+.. _ERROR-1423:
+
+**ERROR CODE: -1423, 'A restore of database %1$s did not finish. Run restoredb again: the database cannot be used until a restore of it ends without an error. If the restore fails again with the same backup, use another backup or restore up to an earlier time (-d).'**
+
+- 이 메시지는 **cubrid restoredb** 가 대상 데이터베이스의 파일을 쓰기 시작한 뒤 오류로 끝나거나 중단되어 일부만 복구된 데이터베이스를, 데이터베이스 서버를 시작하거나 SA 모드 유틸리티(예: **csql -S**, **cubrid checkdb -S**)로 열려고 할 때 오류 로그 파일에 기록되는 오류이다. 이때 콘솔에는 ``LOG FATAL ERROR: log_init`` 이 출력된다. 일부만 복구된 데이터베이스를 복구를 마치지 않은 채 사용하지 않도록, 오류 없이 끝나는 **cubrid restoredb** 를 다시 실행할 때까지 데이터베이스를 열지 않는다. 같은 백업으로 다시 실패하면 다른 백업을 사용하거나 **-d** 옵션으로 더 이른 시점까지 복구한다. **cubrid deletedb** 는 이 상태의 데이터베이스도 삭제할 수 있다. 자세한 내용은 :ref:`restoredb` 의 "복구가 끝나지 않은 데이터베이스"를 참고한다.
+

@@ -404,6 +404,27 @@ NOTIFICATION messages, log recovery starting time and ending time are written in
     Time: 06/14/13 21:29:05.170 - NOTIFICATION *** file ../../src/transaction/log_recovery.c, line 843 CODE = -1129 Tran = -1, EID = 4 
     Log recovery is finished.
 
+Database Whose Restore Did Not Finish
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**cubrid restoredb** writes the volumes and the log files in the backup over the files of the target database, and then applies the log to restore the database. If the restore ends with an error or is stopped after it starts to write the files (for example, when the process is killed or the disk runs out of space), the database is left partly restored.
+
+Such a database cannot be used until **cubrid restoredb** is run again and ends without an error. Starting the database server, or opening the database with a utility in SA mode (for example, **csql -S** or **cubrid checkdb -S**), fails. The console shows ``LOG FATAL ERROR: log_init``, and the following message (:ref:`error code -1423 <ERROR-1423>`) is written to the error log file. ::
+
+    A restore of database /local1/testing/demodb did not finish. Run restoredb again: the database cannot be used until a restore of it ends without an error. If the restore fails again with the same backup, use another backup or restore up to an earlier time (-d).
+
+To use the database again, do the following.
+
+*   Fix the cause of the failure (the cause in the error message, the disk space, and so on), and run **cubrid restoredb** again.
+*   If the restore fails again with the same backup, use another backup, or restore up to an earlier time with the **-d** option.
+*   If the database is no longer needed, you can delete it with **cubrid deletedb**.
+
+A restore that fails before it writes a file of the target database (for example, when the **-d** option gives a time earlier than the backup) does not change the database, so the database can still be used.
+
+.. warning::
+
+   If the target database exists, **cubrid restoredb** overwrites its files with the contents of the backup. If the restore does not finish, the database cannot be returned to its state before the restore. Back up the database before the restore if you need that state.
+
 Restoring Strategy and Procedure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -403,6 +403,27 @@ restoredb
     Time: 06/14/13 21:29:05.170 - NOTIFICATION *** file ../../src/transaction/log_recovery.c, line 843 CODE = -1129 Tran = -1, EID = 4 
     Log recovery is finished.
 
+복구가 끝나지 않은 데이터베이스
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**cubrid restoredb** 는 백업에 담긴 볼륨과 로그 파일을 대상 데이터베이스의 파일 위에 쓴 뒤, 로그를 적용하여 데이터베이스를 복구한다. 파일을 쓰기 시작한 뒤에 복구가 오류로 끝나거나 중단되면(예: 프로세스가 강제로 종료되거나 디스크 공간이 부족한 경우), 데이터베이스는 일부만 복구된 상태로 남는다.
+
+이 상태의 데이터베이스는 오류 없이 끝나는 **cubrid restoredb** 를 다시 실행할 때까지 사용할 수 없다. 데이터베이스 서버를 시작하거나, SA 모드로 실행하는 유틸리티(예: **csql -S**, **cubrid checkdb -S**)로 데이터베이스를 열면 실패한다. 이때 콘솔에는 ``LOG FATAL ERROR: log_init`` 이 출력되고, 오류 로그 파일에는 다음 메시지(:ref:`오류 코드 -1423 <ERROR-1423>`)가 기록된다. ::
+
+    A restore of database /local1/testing/demodb did not finish. Run restoredb again: the database cannot be used until a restore of it ends without an error. If the restore fails again with the same backup, use another backup or restore up to an earlier time (-d).
+
+데이터베이스를 다시 사용하려면 다음과 같이 한다.
+
+*   복구가 실패한 원인(오류 메시지에 나온 원인, 디스크 공간 등)을 해결한 뒤 **cubrid restoredb** 를 다시 실행한다.
+*   같은 백업으로 다시 실패하면 다른 백업을 사용하거나, **-d** 옵션으로 더 이른 시점까지 복구한다.
+*   데이터베이스가 더 이상 필요하지 않으면 **cubrid deletedb** 로 삭제할 수 있다.
+
+대상 데이터베이스의 파일을 쓰기 전에 실패한 복구(예: **-d** 옵션으로 백업 시점보다 이른 시점을 지정한 경우)는 데이터베이스를 바꾸지 않으므로, 데이터베이스를 그대로 사용할 수 있다.
+
+.. warning::
+
+   대상 데이터베이스가 이미 있으면 **cubrid restoredb** 는 그 파일을 백업의 내용으로 덮어쓴다. 복구가 끝나지 않으면 복구 전의 데이터베이스로 되돌릴 수 없으므로, 필요하면 복구 전에 데이터베이스를 백업한다.
+
 복구 정책과 절차
 ^^^^^^^^^^^^^^^^
 

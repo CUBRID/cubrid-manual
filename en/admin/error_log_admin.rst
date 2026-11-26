@@ -2192,3 +2192,10 @@ This error code occurs when there is already a COMPACTDB process running and you
 
 - This message occurs when CUBRID uses locale information that has not been loaded on the server when converting a string to date/time,
 
+
+.. _ERROR-1423:
+
+**ERROR CODE: -1423, 'A restore of database %1$s did not finish. Run restoredb again: the database cannot be used until a restore of it ends without an error. If the restore fails again with the same backup, use another backup or restore up to an earlier time (-d).'**
+
+- This error is written to the error log file when the database server is started, or a utility in SA mode (for example, **csql -S** or **cubrid checkdb -S**) opens the database, after **cubrid restoredb** started to write the files of the database and then ended with an error or was stopped, so that the database is partly restored. The console shows ``LOG FATAL ERROR: log_init``. So that a partly restored database is not used before its restore finishes, the database is not opened until **cubrid restoredb** is run again and ends without an error. If the restore fails again with the same backup, use another backup or restore up to an earlier time with the **-d** option. **cubrid deletedb** can still delete the database. For details, see "Database Whose Restore Did Not Finish" in :ref:`restoredb`.
+

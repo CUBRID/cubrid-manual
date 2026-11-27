@@ -605,7 +605,7 @@ The following are parameters related to the database server. The type and value 
 
 **use_user_hosts** 
 
-    **use_user_hosts** is a system parameter that is used to select the host look up between **hostname** and **IP address**, required by the CUBRID service from the services below. The default value is **OFF**.
+    **use_user_hosts** is a system parameter that is used to select the host lookup between **hostname** and **IP address**, required by the CUBRID service from the services below. The default value is **OFF**.
 
     * The host/IP address lookup library that **OS** provides. (**glibc**, Linux)
     * **The host/IP address lookup library** that **CUBRID** provides.
